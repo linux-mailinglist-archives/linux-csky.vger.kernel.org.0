@@ -2,65 +2,113 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1EFA988B
-	for <lists+linux-csky@lfdr.de>; Thu,  5 Sep 2019 04:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C69CA98FC
+	for <lists+linux-csky@lfdr.de>; Thu,  5 Sep 2019 05:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730518AbfIECto (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 4 Sep 2019 22:49:44 -0400
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:33532 "EHLO
+        id S1730892AbfIEDqo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 4 Sep 2019 23:46:44 -0400
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:36994 "EHLO
         smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730074AbfIECto (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 4 Sep 2019 22:49:44 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08002193|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0740845-0.00454813-0.921367;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03278;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=4;RT=4;SR=0;TI=SMTPD_---.FOyO4sV_1567651782;
-Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.FOyO4sV_1567651782)
-          by smtp.aliyun-inc.com(10.147.42.253);
-          Thu, 05 Sep 2019 10:49:42 +0800
-Date:   Thu, 5 Sep 2019 10:49:41 +0800
+        by vger.kernel.org with ESMTP id S1730112AbfIEDqo (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 4 Sep 2019 23:46:44 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07439447|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.453906-0.11693-0.429164;FP=0|0|0|0|0|-1|-1|-1;HT=e01l10434;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.FP-7udU_1567655200;
+Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.FP-7udU_1567655200)
+          by smtp.aliyun-inc.com(10.147.40.44);
+          Thu, 05 Sep 2019 11:46:40 +0800
 From:   Mao Han <han_mao@c-sky.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org
-Subject: Re: [PATCH V6 3/3] riscv: Add support for libdw
-Message-ID: <20190905024940.GB3949@vmh-VirtualBox>
-References: <cover.1567060834.git.han_mao@c-sky.com>
- <4cba2dfb6b1ef0df01185c6bce78a0a2867d0a7d.1567060834.git.han_mao@c-sky.com>
- <alpine.DEB.2.21.9999.1909041422220.13502@viisi.sifive.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.9999.1909041422220.13502@viisi.sifive.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+To:     linux-riscv@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Mao Han <han_mao@c-sky.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>
+Subject: [PATCH V7 0/2] riscv: Add perf callchain support
+Date:   Thu,  5 Sep 2019 11:46:34 +0800
+Message-Id: <cover.1567653632.git.han_mao@c-sky.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Sep 04, 2019 at 02:24:57PM -0700, Paul Walmsley wrote:
-> Hello Mao Han,
-> 
-> On Thu, 29 Aug 2019, Mao Han wrote:
-> 
-> > This patch add support for DWARF register mappings and libdw registers
-> > initialization, which is used by perf callchain analyzing when
-> > --call-graph=dwarf is given.
-> 
-> > diff --git a/tools/arch/riscv/include/uapi/asm/perf_regs.h b/tools/arch/riscv/include/uapi/asm/perf_regs.h
-> > new file mode 100644
-> > index 0000000..df1a581
-> > --- /dev/null
-> > +++ b/tools/arch/riscv/include/uapi/asm/perf_regs.h
-> > @@ -0,0 +1,42 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> 
-> As with 
-> 
-> https://lore.kernel.org/linux-riscv/CAJF2gTRXH_bx0rwsTZMTnX+umZfVTL_iVnewPtVM50sLaqJPTg@mail.gmail.com/T/#t
-> 
-> is it possible to change this license string to "GPL-2.0 WITH 
-> Linux-syscall-note" to match the other Linux architectures? 
->
-Thanks for suggestion. I didn't notice the UAPI headers are supposed to 
-have the exception notes. I'll update the license string and resend them.
+This patchset adds perf callchain(FP/DWARF) support for RISC-V.
+It comes from the csky version callchain support with some
+slight modifications. The patchset base on Linux 5.3-rc6.
 
-Thanks,
-Mao Han
+The patchset has some 'checkpatch.pl --strict' warnings:
+WARNING: Use #include <linux/perf_regs.h> instead of <asm/perf_regs.h>
+#141: FILE: tools/perf/arch/riscv/include/perf_regs.h:9:
++#include <asm/perf_regs.h>
+
+CHECK: Avoid CamelCase: <Dwfl_Thread>
+#329: FILE: tools/perf/arch/riscv/util/unwind-libdw.c:9:
++bool libdw__arch_set_initial_registers(Dwfl_Thread *thread, void *arg)
+
+CHECK: Avoid CamelCase: <Dwarf_Word>
+#333: FILE: tools/perf/arch/riscv/util/unwind-libdw.c:13:
++	Dwarf_Word dwarf_regs[32];
+As all the other Linux architectures use asm/perf_regs.h directly and
+get these camelcases, I didn't try to fix them.
+
+Changes since v6:
+  - add "WITH Linux-syscall-note" for uapi headers.
+
+Changes since v5:
+  - use walk_stackframe from stacktrace.c to handle
+    kernel callchain unwinding(fix invalid mem access)
+
+Changes since v4:
+  - Add missing PERF_HAVE_ARCH_REGS_QUERY_REGISTER_OFFSET
+    verified with extra CFLAGS(-Wall -Werror)
+
+Changes since v3:
+  - Add more strict check for unwind_frame_kernel
+  - update for kernel 5.3
+
+Changes since v2:
+  - fix inconsistent comment
+  - force to build kernel with -fno-omit-frame-pointer if perf
+    event is enabled
+
+Changes since v1:
+  - simplify implementation and code convention
+
+Signed-off-by: Mao Han <han_mao@c-sky.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+Cc: Palmer Dabbelt <palmer@sifive.com>
+Cc: linux-riscv <linux-riscv@lists.infradead.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Guo Ren <guoren@kernel.org>
+
+Mao Han (2):
+  riscv: Add support for perf registers sampling
+  riscv: Add support for libdw
+
+ arch/riscv/Kconfig                            |  2 +
+ arch/riscv/include/uapi/asm/perf_regs.h       | 42 ++++++++++++
+ arch/riscv/kernel/Makefile                    |  1 +
+ arch/riscv/kernel/perf_regs.c                 | 44 ++++++++++++
+ tools/arch/riscv/include/uapi/asm/perf_regs.h | 42 ++++++++++++
+ tools/perf/Makefile.config                    |  6 +-
+ tools/perf/arch/riscv/Build                   |  1 +
+ tools/perf/arch/riscv/Makefile                |  4 ++
+ tools/perf/arch/riscv/include/perf_regs.h     | 96 +++++++++++++++++++++++++++
+ tools/perf/arch/riscv/util/Build              |  2 +
+ tools/perf/arch/riscv/util/dwarf-regs.c       | 72 ++++++++++++++++++++
+ tools/perf/arch/riscv/util/unwind-libdw.c     | 57 ++++++++++++++++
+ 12 files changed, 368 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/include/uapi/asm/perf_regs.h
+ create mode 100644 arch/riscv/kernel/perf_regs.c
+ create mode 100644 tools/arch/riscv/include/uapi/asm/perf_regs.h
+ create mode 100644 tools/perf/arch/riscv/Build
+ create mode 100644 tools/perf/arch/riscv/Makefile
+ create mode 100644 tools/perf/arch/riscv/include/perf_regs.h
+ create mode 100644 tools/perf/arch/riscv/util/Build
+ create mode 100644 tools/perf/arch/riscv/util/dwarf-regs.c
+ create mode 100644 tools/perf/arch/riscv/util/unwind-libdw.c
+
+-- 
+2.7.4
+
