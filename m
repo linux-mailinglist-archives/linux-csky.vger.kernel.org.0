@@ -2,68 +2,117 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8CEBFD71
-	for <lists+linux-csky@lfdr.de>; Fri, 27 Sep 2019 05:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D80C1EE8
+	for <lists+linux-csky@lfdr.de>; Mon, 30 Sep 2019 12:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728876AbfI0DDQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 26 Sep 2019 23:03:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34666 "EHLO mail.kernel.org"
+        id S1730437AbfI3Kbf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 30 Sep 2019 06:31:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37150 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727794AbfI0DDP (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 26 Sep 2019 23:03:15 -0400
+        id S1729415AbfI3Kbf (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 30 Sep 2019 06:31:35 -0400
 Received: from guoren-Inspiron-7460.lan (unknown [223.93.147.148])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34447207FF;
-        Fri, 27 Sep 2019 03:03:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F2C9216F4;
+        Mon, 30 Sep 2019 10:31:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569553395;
-        bh=1xp6jXQw6QmaMFMbYAUaFcPgQ6zsmGdlTLA/DF77qmE=;
+        s=default; t=1569839493;
+        bh=0HeOPYXdrIrODY+4Ljv3JDbm2MSyawGhlpS79Ws8AAI=;
         h=From:To:Cc:Subject:Date:From;
-        b=0xunrN9hh2ukZUHvWT5t+tXHyS3+GAgeBCeL+3BZqrrlvxgJcdtrFf5By1GhhvQUw
-         k+fL0GAO3xkl0dGDWVZMPVbCbCkWj+5q8vg4r6NLRS7cXHIF0ZALIMhtAioKhEmSey
-         T3P/e6+DvxdNKsTaxqpqCiHRsh2WKo7gnw3Hx7T4=
+        b=dpJ3mz6FATbQOKH3zBlIwGqbdSid4M2BOw1F9yGM16iiplhNYGQUTY4044OWw2GU8
+         /1lYxQBW373+RanCN6q3P3bX6Le+CUZvoiavND/LRwp3ROFzjFJ8cImq7YaFjX9yAU
+         dVOd4MIlNpyj3ws3Zfe0+DV6wyQudVBuZtsQWJCQ=
 From:   guoren@kernel.org
-To:     arnd@arndb.de
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, Mao Han <han_mao@c-sky.com>,
-        Guo Ren <ren_guo@c-sky.com>
-Subject: [PATCH] csky: Fixup csky_pmu.max_period assignment
-Date:   Fri, 27 Sep 2019 11:02:59 +0800
-Message-Id: <1569553379-11327-1-git-send-email-guoren@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky changes for v5.3-rc1
+Date:   Mon, 30 Sep 2019 18:31:24 +0800
+Message-Id: <1569839484-28170-1-git-send-email-guoren@kernel.org>
 X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Mao Han <han_mao@c-sky.com>
+Hi Linus,
 
-The csky_pmu.max_period has type u64, and BIT() can only return
-32 bits unsigned long on C-SKY. The initialization for max_period
-will be incorrect when count_width is bigger than 32.
+The following changes since commit 609488bc979f99f805f34e9a32c1e3b71179d10b:
 
-Use BIG_ULL()
+  Linux 5.3-rc2 (2019-07-28 12:47:02 -0700)
 
-Signed-off-by: Mao Han <han_mao@c-sky.com>
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
----
- arch/csky/kernel/perf_event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+are available in the git repository at:
 
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index 4c1a193..7570109 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -1306,7 +1306,7 @@ int csky_pmu_device_probe(struct platform_device *pdev,
- 				 &csky_pmu.count_width)) {
- 		csky_pmu.count_width = DEFAULT_COUNT_WIDTH;
- 	}
--	csky_pmu.max_period = BIT(csky_pmu.count_width) - 1;
-+	csky_pmu.max_period = BIT_ULL(csky_pmu.count_width) - 1;
- 
- 	csky_pmu.plat_device = pdev;
- 
--- 
-2.7.4
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.4-rc1
 
+for you to fetch changes up to 9af032a30172e119a5935f802b066631f8ded2d6:
+
+  csky: Move static keyword to the front of declaration (2019-09-30 11:50:49 +0800)
+
+----------------------------------------------------------------
+csky-for-linus-5.4-rc1: arch/csky patches for 5.4-rc1
+
+This round of csky subsystem just some fixups.
+
+Fixup:
+ - Fixup mb() synchronization problem
+ - Fixup dma_alloc_coherent with PAGE_SO attribute
+ - Fixup cache_op failed when cross memory ZONEs
+ - Optimize arch_sync_dma_for_cpu/device with dma_inv_range
+ - Fixup ioremap function losing
+ - Fixup arch_get_unmapped_area() implementation
+ - Fixup defer cache flush for 610
+ - Support kernel non-aligned access
+ - Fixup 610 vipt cache flush mechanism
+ - Fixup add zero_fp fixup perf backtrace panic
+ - Move static keyword to the front of declaration
+ - Fixup csky_pmu.max_period assignment
+ - Use generic free_initrd_mem()
+ - entry: Remove unneeded need_resched() loop
+
+CI-Tested: https://gitlab.com/c-sky/buildroot/pipelines/77689888
+
+----------------------------------------------------------------
+Guo Ren (10):
+      csky: Fixup mb() synchronization problem
+      csky: Fixup dma_alloc_coherent with PAGE_SO attribute
+      csky/dma: Fixup cache_op failed when cross memory ZONEs
+      csky: Optimize arch_sync_dma_for_cpu/device with dma_inv_range
+      csky: Fixup ioremap function losing
+      csky: Fixup arch_get_unmapped_area() implementation
+      csky: Fixup defer cache flush for 610
+      csky: Support kernel non-aligned access
+      csky: Fixup 610 vipt cache flush mechanism
+      csky: Fixup add zero_fp fixup perf backtrace panic
+
+Krzysztof Wilczynski (1):
+      csky: Move static keyword to the front of declaration
+
+Mao Han (1):
+      csky: Fixup csky_pmu.max_period assignment
+
+Mike Rapoport (1):
+      csky: Use generic free_initrd_mem()
+
+Valentin Schneider (1):
+      csky: entry: Remove unneeded need_resched() loop
+
+ arch/csky/abiv1/alignment.c          | 62 +++++++++++++++++++++--------
+ arch/csky/abiv1/cacheflush.c         | 70 ++++++++++++++++++++++-----------
+ arch/csky/abiv1/inc/abi/cacheflush.h | 45 ++++++++++++++-------
+ arch/csky/abiv1/inc/abi/page.h       |  5 ++-
+ arch/csky/abiv1/mmap.c               | 75 ++++++++++++++++++-----------------
+ arch/csky/include/asm/barrier.h      | 15 ++++---
+ arch/csky/include/asm/cache.h        |  1 +
+ arch/csky/include/asm/io.h           | 23 +++++------
+ arch/csky/include/asm/pgtable.h      | 10 +++++
+ arch/csky/kernel/entry.S             | 54 +++++++++++++------------
+ arch/csky/kernel/perf_event.c        |  4 +-
+ arch/csky/kernel/process.c           |  2 +-
+ arch/csky/mm/cachev1.c               |  7 +++-
+ arch/csky/mm/cachev2.c               | 11 +++++-
+ arch/csky/mm/dma-mapping.c           | 76 +++++++++++++-----------------------
+ arch/csky/mm/init.c                  | 16 --------
+ arch/csky/mm/ioremap.c               | 27 ++++++++-----
+ 17 files changed, 291 insertions(+), 212 deletions(-)
