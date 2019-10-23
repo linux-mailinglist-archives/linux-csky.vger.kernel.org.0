@@ -2,146 +2,58 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86243D4E45
-	for <lists+linux-csky@lfdr.de>; Sat, 12 Oct 2019 10:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC13E1CC3
+	for <lists+linux-csky@lfdr.de>; Wed, 23 Oct 2019 15:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728782AbfJLI0T (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 12 Oct 2019 04:26:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42468 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728259AbfJLI0T (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 12 Oct 2019 04:26:19 -0400
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 239F2206A1
-        for <linux-csky@vger.kernel.org>; Sat, 12 Oct 2019 08:26:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570868778;
-        bh=aubyP9gSP7lFm7cUQQCZt/rsziAndkFQdXv181VLZ2Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:From;
-        b=QKIKQdmqAUieh1ZsNkheYeNAnlPk4Q5MNZw9lkOSvd+UpcXhR/o+yGgzxsBDnMyLu
-         ri/mFS2QrzqaO9/gteRsOn2eDapjyWUVWEN+uLKgtJ0gCYun7gKYj3gdwH1zkOnWr7
-         qW9zBz5cekG2moGExKH23Oa5OyOBf/QQ00gXPXDQ=
-Received: by mail-wm1-f41.google.com with SMTP id r17so10879896wme.0
-        for <linux-csky@vger.kernel.org>; Sat, 12 Oct 2019 01:26:18 -0700 (PDT)
-X-Gm-Message-State: APjAAAUftJ9SDboCTkoMFE4Ug7Dy84d9y1My7lzml0WBgZ27AuC2SSU7
-        Ceg+Q4VGYU4GxXobanK59d0mIT/2R730ojuzMGw=
-X-Google-Smtp-Source: APXvYqypIsYqxs//J6qRRKBL9y7Q+HWMJ/BivhZNuuDrBCSRMSaP9TDyHlEF0HwfQX9PjFGRIvEay/3Cf+SfSXx7Ea4=
-X-Received: by 2002:a1c:20d8:: with SMTP id g207mr6546915wmg.79.1570868776604;
- Sat, 12 Oct 2019 01:26:16 -0700 (PDT)
+        id S2405906AbfJWNgK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 23 Oct 2019 09:36:10 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55778 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392073AbfJWNgK (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Oct 2019 09:36:10 -0400
+Received: by mail-wm1-f68.google.com with SMTP id g24so12111923wmh.5
+        for <linux-csky@vger.kernel.org>; Wed, 23 Oct 2019 06:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=dVgB2gHwyu9BrwAHrTVrhxxTLMnU+GjkCtVmW3QXNgU=;
+        b=Zp1rNYOb7wPsdMPdMbYe//+9NYjGitazC3K4MBrZR7qVyf3SurlVK/iVTX8rXrD1MV
+         duJiT6vf8/dVRyCoGAADOWO6mdvdO7LXMGSTBsL1aPHRptzHVSr6EVhNUNTbTuXzEcJM
+         CBCb+Jmcnci8Xj7Z+C2D9+RBLni3QkUE+aLyNfm640DulCjNSyCQlNWPphsu43/xiaCJ
+         jGtO0Rf565kxFLQCtlztfZCV3214dAbiLSZKIvSf0BlByQ/4iOlt67agx4AGUfiCjZMI
+         RoTZ6xCVKLtvHbzydaTmcuGrVnWq27zH7gygGQ2YGfnHqhgxkVmC2lGKxGSiWzVcr6KU
+         QN9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=dVgB2gHwyu9BrwAHrTVrhxxTLMnU+GjkCtVmW3QXNgU=;
+        b=Wv9l0CmPLBnc++8YFheGykF4dueKlqSXiYNf+mZIS3jBIVgYAdl2NwbqIiAv+kDCd7
+         kY9LZUgTqb7urdi/7VFo6sFWH/QxgLfGe/Btln36cXIBE4d/5glm0MWTZlMfmWdY7Oqz
+         ps+U8rByTMLgkIctMiS9k6pJLR6CuZB5J5hQ4w/s2JyuqCK1m1osHSOPZ17aOSkR90IB
+         Zr15Fqajzhu0rdZl8NnIQ19Ws2kKhLR2OxOH0Ey/aAPI6cht+7q5GQkw7P38TbaiP51J
+         L+Ga9spTRZj3KMNepHmyziW0PBIOVUQVEGruJ0Q4G/ePlxqP7lc6X17pPVoOA1pPRVHQ
+         pRbQ==
+X-Gm-Message-State: APjAAAWcJerWTkQS89r05YVVa4x2RMXhKVEoUArhmO79R4r1/BC69Uh3
+        Hbbl/+0LJ8/leIaw2k+2JR9ZzcYGpiVP4FBlX3E=
+X-Google-Smtp-Source: APXvYqzu60dP5ZzLHoNcR4C1Z90wK3ujHk4eIk60CblS8nkYpWGmu8JElmh7udCx+t1YVbQaCRFZhRaASS5NgAdsuk0=
+X-Received: by 2002:a7b:ce84:: with SMTP id q4mr4860246wmj.36.1571837768313;
+ Wed, 23 Oct 2019 06:36:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <1570762615-4256-1-git-send-email-han_mao@c-sky.com>
-In-Reply-To: <1570762615-4256-1-git-send-email-han_mao@c-sky.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 12 Oct 2019 16:26:05 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ8b_EH=fozH7RXwXGp7-yaVLGPnd-1DSKUp=K_xiHZcg@mail.gmail.com>
-Message-ID: <CAJF2gTQ8b_EH=fozH7RXwXGp7-yaVLGPnd-1DSKUp=K_xiHZcg@mail.gmail.com>
-Subject: Fwd: [PATCH] csky: Initial stack protector support
-To:     linux-csky@vger.kernel.org
+Received: by 2002:a5d:400a:0:0:0:0:0 with HTTP; Wed, 23 Oct 2019 06:36:07
+ -0700 (PDT)
+Reply-To: mrs.lisarobinson746@gmail.com
+From:   "Mrs. Lisa" <helpdesk.eit.ac.nz@gmail.com>
+Date:   Wed, 23 Oct 2019 06:36:07 -0700
+Message-ID: <CAK7Er8aKyL3H-yzE3WwHqgdy-pvjcQoKmcraD43WMg3fDh48xQ@mail.gmail.com>
+Subject: Mrs. Lisa Charity Donation
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
----------- Forwarded message ---------
-From: Mao Han <han_mao@c-sky.com>
-Date: Fri, Oct 11, 2019 at 10:59 AM
-Subject: [PATCH] csky: Initial stack protector support
-To: <linux-kernel@vger.kernel.org>
-Cc: Mao Han <han_mao@c-sky.com>, Guo Ren <guoren@kernel.org>
-
-
-This is a basic -fstack-protector support without per-task canary
-switching. The protector will report something like when stack
-corruption is detected:
-
-stack-protector: Kernel stack is corrupted in: sys_kill+0x23c/0x23c
-
-Tested with a local array overflow in kill system call.
-
-Signed-off-by: Mao Han <han_mao@c-sky.com>
-Cc: Guo Ren <guoren@kernel.org>
----
- arch/csky/Kconfig                      |  1 +
- arch/csky/include/asm/stackprotector.h | 29 +++++++++++++++++++++++++++++
- arch/csky/kernel/process.c             |  6 ++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 arch/csky/include/asm/stackprotector.h
-
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 3973847..2852343 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -48,6 +48,7 @@ config CSKY
-        select HAVE_PERF_USER_STACK_DUMP
-        select HAVE_DMA_API_DEBUG
-        select HAVE_DMA_CONTIGUOUS
-+       select HAVE_STACKPROTECTOR
-        select HAVE_SYSCALL_TRACEPOINTS
-        select MAY_HAVE_SPARSE_IRQ
-        select MODULES_USE_ELF_RELA if MODULES
-diff --git a/arch/csky/include/asm/stackprotector.h
-b/arch/csky/include/asm/stackprotector.h
-new file mode 100644
-index 0000000..d7cd4e5
---- /dev/null
-+++ b/arch/csky/include/asm/stackprotector.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_STACKPROTECTOR_H
-+#define _ASM_STACKPROTECTOR_H 1
-+
-+#include <linux/random.h>
-+#include <linux/version.h>
-+
-+extern unsigned long __stack_chk_guard;
-+
-+/*
-+ * Initialize the stackprotector canary value.
-+ *
-+ * NOTE: this must only be called from functions that never return,
-+ * and it must always be inlined.
-+ */
-+static __always_inline void boot_init_stack_canary(void)
-+{
-+       unsigned long canary;
-+
-+       /* Try to get a semi random initial value. */
-+       get_random_bytes(&canary, sizeof(canary));
-+       canary ^= LINUX_VERSION_CODE;
-+       canary &= CANARY_MASK;
-+
-+       current->stack_canary = canary;
-+       __stack_chk_guard = current->stack_canary;
-+}
-+
-+#endif /* __ASM_SH_STACKPROTECTOR_H */
-diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-index f320d92..5349cd8 100644
---- a/arch/csky/kernel/process.c
-+++ b/arch/csky/kernel/process.c
-@@ -16,6 +16,12 @@
-
- struct cpuinfo_csky cpu_data[NR_CPUS];
-
-+#ifdef CONFIG_STACKPROTECTOR
-+#include <linux/stackprotector.h>
-+unsigned long __stack_chk_guard __read_mostly;
-+EXPORT_SYMBOL(__stack_chk_guard);
-+#endif
-+
- asmlinkage void ret_from_fork(void);
- asmlinkage void ret_from_kernel_thread(void);
-
---
-2.7.4
-
-
-
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+I am Lisa Robinson, you have a donation of $1,200,000.00 USD. Contact
+me now for more information.
