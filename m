@@ -2,58 +2,88 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC13E1CC3
-	for <lists+linux-csky@lfdr.de>; Wed, 23 Oct 2019 15:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7DE10CFC8
+	for <lists+linux-csky@lfdr.de>; Thu, 28 Nov 2019 23:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405906AbfJWNgK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 23 Oct 2019 09:36:10 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:55778 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392073AbfJWNgK (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Oct 2019 09:36:10 -0400
-Received: by mail-wm1-f68.google.com with SMTP id g24so12111923wmh.5
-        for <linux-csky@vger.kernel.org>; Wed, 23 Oct 2019 06:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=dVgB2gHwyu9BrwAHrTVrhxxTLMnU+GjkCtVmW3QXNgU=;
-        b=Zp1rNYOb7wPsdMPdMbYe//+9NYjGitazC3K4MBrZR7qVyf3SurlVK/iVTX8rXrD1MV
-         duJiT6vf8/dVRyCoGAADOWO6mdvdO7LXMGSTBsL1aPHRptzHVSr6EVhNUNTbTuXzEcJM
-         CBCb+Jmcnci8Xj7Z+C2D9+RBLni3QkUE+aLyNfm640DulCjNSyCQlNWPphsu43/xiaCJ
-         jGtO0Rf565kxFLQCtlztfZCV3214dAbiLSZKIvSf0BlByQ/4iOlt67agx4AGUfiCjZMI
-         RoTZ6xCVKLtvHbzydaTmcuGrVnWq27zH7gygGQ2YGfnHqhgxkVmC2lGKxGSiWzVcr6KU
-         QN9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=dVgB2gHwyu9BrwAHrTVrhxxTLMnU+GjkCtVmW3QXNgU=;
-        b=Wv9l0CmPLBnc++8YFheGykF4dueKlqSXiYNf+mZIS3jBIVgYAdl2NwbqIiAv+kDCd7
-         kY9LZUgTqb7urdi/7VFo6sFWH/QxgLfGe/Btln36cXIBE4d/5glm0MWTZlMfmWdY7Oqz
-         ps+U8rByTMLgkIctMiS9k6pJLR6CuZB5J5hQ4w/s2JyuqCK1m1osHSOPZ17aOSkR90IB
-         Zr15Fqajzhu0rdZl8NnIQ19Ws2kKhLR2OxOH0Ey/aAPI6cht+7q5GQkw7P38TbaiP51J
-         L+Ga9spTRZj3KMNepHmyziW0PBIOVUQVEGruJ0Q4G/ePlxqP7lc6X17pPVoOA1pPRVHQ
-         pRbQ==
-X-Gm-Message-State: APjAAAWcJerWTkQS89r05YVVa4x2RMXhKVEoUArhmO79R4r1/BC69Uh3
-        Hbbl/+0LJ8/leIaw2k+2JR9ZzcYGpiVP4FBlX3E=
-X-Google-Smtp-Source: APXvYqzu60dP5ZzLHoNcR4C1Z90wK3ujHk4eIk60CblS8nkYpWGmu8JElmh7udCx+t1YVbQaCRFZhRaASS5NgAdsuk0=
-X-Received: by 2002:a7b:ce84:: with SMTP id q4mr4860246wmj.36.1571837768313;
- Wed, 23 Oct 2019 06:36:08 -0700 (PDT)
+        id S1726609AbfK1WkZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 28 Nov 2019 17:40:25 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:48154 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726582AbfK1WkZ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 28 Nov 2019 17:40:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=8s4OV8QdxGuKeWypyj3UNsLPvMPu6eIU4B1rnNMiCVk=; b=UIBQKkwYlA9v9WMMmXJQwIW3o
+        ul8DnxLBsDJcre9bnLzGrSbi3mx4Hrc9IwLNHl7BmkY3gOMJsrwqpHYRy7bj6oh9QnSNjd5sRPbfe
+        7GwbMXtP1MLrFuWld0bcdKHTX8az7ijTNuN2Ix0Z7xx+2dmWbXcVx9SAhkAPsTIHWe1jfD3l/Ip40
+        QuvBSD53+5bYSoo5afxJImzsvt0m1moQSXnjWNtw2/s3Wr8iQdYmYnnnLaiP8vQkvzgm6aoC0Nexh
+        zNGfjcjuyytb51YVH3guxoPn2C/V6yKfLLV7qI+nyXFbez6nI9bpxWqW4I1XNAzY7ED2Bd5+i7a1y
+        FeyKGkpxg==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iaSSW-0000OZ-D3; Thu, 28 Nov 2019 22:40:24 +0000
+To:     LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>, Guo Ren <guoren@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] clocksource: minor Kconfig help text fixes
+Message-ID: <87922baa-223a-345d-38ac-be5a94d15b34@infradead.org>
+Date:   Thu, 28 Nov 2019 14:40:22 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Received: by 2002:a5d:400a:0:0:0:0:0 with HTTP; Wed, 23 Oct 2019 06:36:07
- -0700 (PDT)
-Reply-To: mrs.lisarobinson746@gmail.com
-From:   "Mrs. Lisa" <helpdesk.eit.ac.nz@gmail.com>
-Date:   Wed, 23 Oct 2019 06:36:07 -0700
-Message-ID: <CAK7Er8aKyL3H-yzE3WwHqgdy-pvjcQoKmcraD43WMg3fDh48xQ@mail.gmail.com>
-Subject: Mrs. Lisa Charity Donation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
--- 
-I am Lisa Robinson, you have a donation of $1,200,000.00 USD. Contact
-me now for more information.
+From: Randy Dunlap <rdunlap@infradead.org>
+
+Minor cleanups in Kconfig help text:
+
+- End a sentence with a period.
+- Fix verb grammar.
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: John Stultz <john.stultz@linaro.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+---
+ drivers/clocksource/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- lnx-54.orig/drivers/clocksource/Kconfig
++++ lnx-54/drivers/clocksource/Kconfig
+@@ -312,7 +312,7 @@ config ARC_TIMERS_64BIT
+ 	depends on ARC_TIMERS
+ 	select TIMER_OF
+ 	help
+-	  This enables 2 different 64-bit timers: RTC (for UP) and GFRC (for SMP)
++	  This enables 2 different 64-bit timers: RTC (for UP) and GFRC (for SMP).
+ 	  RTC is implemented inside the core, while GFRC sits outside the core in
+ 	  ARConnect IP block. Driver automatically picks one of them for clocksource
+ 	  as appropriate.
+@@ -666,7 +666,7 @@ config CSKY_MP_TIMER
+ 	  Say yes here to enable C-SKY SMP timer driver used for C-SKY SMP
+ 	  system.
+ 	  csky,mptimer is not only used in SMP system, it also could be used
+-	  single core system. It's not a mmio reg and it use mtcr/mfcr instruction.
++	  single core system. It's not a mmio reg and it uses mtcr/mfcr instruction.
+ 
+ config GX6605S_TIMER
+ 	bool "Gx6605s SOC system timer driver" if COMPILE_TEST
+
+
