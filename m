@@ -2,70 +2,73 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C6412CD9C
-	for <lists+linux-csky@lfdr.de>; Mon, 30 Dec 2019 09:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B976412E22D
+	for <lists+linux-csky@lfdr.de>; Thu,  2 Jan 2020 05:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727299AbfL3IYW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 30 Dec 2019 03:24:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48094 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727270AbfL3IYW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 30 Dec 2019 03:24:22 -0500
-Received: from localhost.localdomain (unknown [223.93.147.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C41020748;
-        Mon, 30 Dec 2019 08:24:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577694261;
-        bh=dZYipzOSUcOEk9sfT5ToHwqu/RSsPyWAHSF4AdVtwWw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pox84xeZtTNfsPPYNYWGefD5VzWKiC7mlqPOoqoc5PWxgyA8UDzH7o/CywB3Yno23
-         CHqmI8voeuMo4w1nYvcaUePx2qHK/oMeDtrRndw+T3jffYKKIDD4kNdDgwyKEw4xYH
-         4ZzuECbY/hd/gHo7UDLb7obbazTsP7ItNv0R12J0=
-From:   guoren@kernel.org
-To:     linux-csky@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        arnd@arndb.de, Guo Ren <ren_guo@c-sky.com>,
-        Mo Qihui <qihui.mo@verisilicon.com>,
-        Zhange Jian <zhang_jian5@dahuatech.com>
-Subject: [PATCH 5/5] csky/mm: Fixup export invalid_pte_table symbol
-Date:   Mon, 30 Dec 2019 16:23:31 +0800
-Message-Id: <20191230082331.30976-5-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20191230082331.30976-1-guoren@kernel.org>
-References: <20191230082331.30976-1-guoren@kernel.org>
+        id S1727509AbgABEKY (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 1 Jan 2020 23:10:24 -0500
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:44972 "EHLO
+        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726234AbgABEKY (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 1 Jan 2020 23:10:24 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07627742|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.679564-0.0209353-0.2995;DS=||;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03305;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.GUW-h81_1577938218;
+Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.GUW-h81_1577938218)
+          by smtp.aliyun-inc.com(10.147.42.16);
+          Thu, 02 Jan 2020 12:10:18 +0800
+From:   Mao Han <han_mao@c-sky.com>
+To:     buildroot@buildroot.org
+Cc:     linux-csky@vger.kernel.org, Mao Han <han_mao@c-sky.com>,
+        Qu Xianmiao <xianmiao_qu@c-sky.com>,
+        Chen Hongdeng <hongdeng_chen@c-sky.com>,
+        Guo Ren <ren_guo@c-sky.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Mark Corbin <mark.corbin@embecosm.com>
+Subject: [PATCH 1/2] package/toolchain-external: ensure ARCH_LIB_DIR exist
+Date:   Thu,  2 Jan 2020 11:57:20 +0800
+Message-Id: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <ren_guo@c-sky.com>
+Different architecture may have different arch library folder structure
+for their multilib toolchain. RISC-V toolchain has folder structure
+like:
+/sysroot/lib64/
+/sysroot/lib64/lp64
+/sysroot/lib64/lp64d
+The first level is for ISA and the second level is for ABI.
+Current buildroot only creat lib and lib64, some error is reported
+while installing the external toolchain:
+>>> toolchain-external-custom  Installing to staging directory
+/usr/bin/install -D -m 0755 /.../build/toolchain-external-custom/toolchain-wrapper /.../host/bin/toolchain-wrapper
+ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/lib64/lp64': No such file or directory
+ln: failed to create symbolic link '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib64/lp64': No such file or directory
 
-There is no present bit in csky pmd hardware, so we need to prepare invalid_pte_table
-for empty pmd entry and the functions (pmd_none & pmd_present) in pgtable.h need
-invalid_pte_talbe to get result. If a module use these functions, we need export the
-symbol for it.
-
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Mo Qihui <qihui.mo@verisilicon.com>
-Cc: Zhange Jian <zhang_jian5@dahuatech.com>
+Signed-off-by: Qu Xianmiao <xianmiao_qu@c-sky.com>
+Signed-off-by: Chen Hongdeng <hongdeng_chen@c-sky.com>
+Signed-off-by: Guo Ren<ren_guo@c-sky.com>
+Signed-off-by: Mao Han <han_mao@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Mark Corbin <mark.corbin@embecosm.com>
 ---
- arch/csky/mm/init.c | 1 +
- 1 file changed, 1 insertion(+)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
-index 322eb7bd7962..dbb4b2dfe4b7 100644
---- a/arch/csky/mm/init.c
-+++ b/arch/csky/mm/init.c
-@@ -31,6 +31,7 @@
- 
- pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
- pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
-+EXPORT_SYMBOL(invalid_pte_table);
- unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
- 						__page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index baf719a..13b2468 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -454,6 +454,8 @@ create_lib_symlinks = \
+ 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+ 	if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
+ 		relpath="$(call relpath_prefix,$${ARCH_LIB_DIR})" ; \
++		mkdir -p "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
++		mkdir -p "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+ 		ln -snf $${relpath}lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
+ 		ln -snf $${relpath}lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
+ 	fi
 -- 
-2.17.0
+2.7.4
 
