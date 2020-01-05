@@ -2,110 +2,68 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4874712E22E
-	for <lists+linux-csky@lfdr.de>; Thu,  2 Jan 2020 05:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C48113058C
+	for <lists+linux-csky@lfdr.de>; Sun,  5 Jan 2020 03:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727509AbgABEKb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 1 Jan 2020 23:10:31 -0500
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:39412 "EHLO
-        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726234AbgABEKa (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 1 Jan 2020 23:10:30 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07638919|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.734873-0.0107833-0.254344;DS=||;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03303;MF=han_mao@c-sky.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.GUW09RE_1577938226;
-Received: from localhost(mailfrom:han_mao@c-sky.com fp:SMTPD_---.GUW09RE_1577938226)
-          by smtp.aliyun-inc.com(10.147.42.22);
-          Thu, 02 Jan 2020 12:10:26 +0800
-From:   Mao Han <han_mao@c-sky.com>
-To:     buildroot@buildroot.org
-Cc:     linux-csky@vger.kernel.org, Mao Han <han_mao@c-sky.com>,
-        Qu Xianmiao <xianmiao_qu@c-sky.com>,
-        Chen Hongdeng <hongdeng_chen@c-sky.com>,
-        Guo Ren <ren_guo@c-sky.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Mark Corbin <mark.corbin@embecosm.com>
-Subject: [PATCH 2/2] toolchain: Get ld.so name if available
-Date:   Thu,  2 Jan 2020 11:57:21 +0800
-Message-Id: <1577937441-18703-2-git-send-email-han_mao@c-sky.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
-References: <1577937441-18703-1-git-send-email-han_mao@c-sky.com>
+        id S1726275AbgAECw0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 4 Jan 2020 21:52:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726240AbgAECw0 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 4 Jan 2020 21:52:26 -0500
+Received: from localhost.localdomain (89.208.247.74.16clouds.com [89.208.247.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2DA31215A4;
+        Sun,  5 Jan 2020 02:52:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578192746;
+        bh=14ajwVbMlY0SfFFuMpMoc9Aw5UqL29m6fRijmZpEQCY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UYYAYWFGK/QyuziUyK+QU8wQ1n3K8ToZplVGhLa2n2Kc2aqyLcQp92Cheif2CajGy
+         X7XGulwYMsGiiu7Z1JRaA8xujippXhXXxmeu3i4X73zfrZbMvFW/sUwwWdiKCr5RE0
+         20JZhuQv664UIt1DPTDMGmiLsIwyCiZuOjuACS7M=
+From:   guoren@kernel.org
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, Anup.Patel@wdc.com, vincent.chen@sifive.com,
+        zong.li@sifive.com, greentime.hu@sifive.com, bmeng.cn@gmail.com,
+        atish.patra@wdc.com
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        arnd@arndb.de, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH 1/2] riscv: Fixup obvious bug for fp-regs reset
+Date:   Sun,  5 Jan 2020 10:52:14 +0800
+Message-Id: <20200105025215.2522-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-RISC-V multilib toolchain(github.com/riscv/riscv-gnu-toolchain.git) put
-multi ld.so with different ABI under sysroot/lib:
-sysroot/lib/ld-linux-riscv32-ilp32d.so.1
-sysroot/lib/ld-linux-riscv32-ilp32.so.1
-sysroot/lib/ld-linux-riscv64-lp64d.so.1
-sysroot/lib/ld-linux-riscv64-lp64.so.1
-Current buildroot script can't handle multi ld.so and report:
->>> toolchain-external-custom  Copying external toolchain sysroot to staging...
-/bin/bash: line 0: [: too many arguments
-This patch try to get the exact name for ld.so and avoid multi ld.so check in
-the script.
+From: Guo Ren <ren_guo@c-sky.com>
 
-Signed-off-by: Qu Xianmiao <xianmiao_qu@c-sky.com>
-Signed-off-by: Chen Hongdeng <hongdeng_chen@c-sky.com>
-Signed-off-by: Guo Ren<ren_guo@c-sky.com>
-Signed-off-by: Mao Han <han_mao@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mark Corbin <mark.corbin@embecosm.com>
+CSR_MISA is defined in Privileged Architectures' spec: 3.1.1 Machine
+ISA Register misa. Every bit:1 indicate a feature, so we should beqz
+reset_done when there is no F/D bit in csr_msia register.
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- toolchain/helpers.mk                                   | 10 ++++++++--
- toolchain/toolchain-external/pkg-toolchain-external.mk |  3 ++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ arch/riscv/kernel/head.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 03355f5..cc581fc 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -104,6 +104,7 @@ copy_toolchain_sysroot = \
- 	ARCH_SUBDIR="$(strip $3)"; \
- 	ARCH_LIB_DIR="$(strip $4)" ; \
- 	SUPPORT_LIB_DIR="$(strip $5)" ; \
-+	SPECIFIC_LD_NAME="$(strip $6)" ; \
- 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
- 			continue ; \
-@@ -136,8 +137,13 @@ copy_toolchain_sysroot = \
- 		done ; \
- 	fi ; \
- 	if [ ! -e $(STAGING_DIR)/lib/ld*.so.* ]; then \
--		if [ -e $${ARCH_SYSROOT_DIR}/lib/ld*.so.* ]; then \
--			cp -a $${ARCH_SYSROOT_DIR}/lib/ld*.so.* $(STAGING_DIR)/lib/ ; \
-+		if [ "$${SPECIFIC_LD_NAME}" != "" ]; then \
-+			LD_NAME=$${SPECIFIC_LD_NAME}; \
-+		else \
-+			LD_NAME="ld*.so.*"; \
-+		fi; \
-+		if [ -e $${ARCH_SYSROOT_DIR}/lib/$${LD_NAME} ]; then \
-+			cp -a $${ARCH_SYSROOT_DIR}/lib/$${LD_NAME} $(STAGING_DIR)/lib/ ; \
- 		fi ; \
- 	fi ; \
- 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 13b2468..19cf7d6 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -425,6 +425,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
- 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
- 	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	SPECIFIC_LD_NAME=`$(TOOLCHAIN_EXTERNAL_READELF) -d $${ARCH_SYSROOT_DIR}$${ARCH_LIB_DIR}/libc*.so|grep ld|grep so|awk '{print $$NF}'|sed "s/\[//g"|sed "s/\]//g"`;\
- 	SUPPORT_LIB_DIR="" ; \
- 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
- 		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-@@ -441,7 +442,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
- 		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
- 	fi ; \
- 	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
--	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
-+	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR},$${SPECIFIC_LD_NAME})
- endef
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 797802c73dee..2227db63f895 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -251,7 +251,7 @@ ENTRY(reset_regs)
+ #ifdef CONFIG_FPU
+ 	csrr	t0, CSR_MISA
+ 	andi	t0, t0, (COMPAT_HWCAP_ISA_F | COMPAT_HWCAP_ISA_D)
+-	bnez	t0, .Lreset_regs_done
++	beqz	t0, .Lreset_regs_done
  
- # Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
+ 	li	t1, SR_FS
+ 	csrs	CSR_STATUS, t1
 -- 
-2.7.4
+2.17.0
 
