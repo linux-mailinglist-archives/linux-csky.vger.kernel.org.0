@@ -2,94 +2,85 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6C313D8BF
-	for <lists+linux-csky@lfdr.de>; Thu, 16 Jan 2020 12:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBA413DD68
+	for <lists+linux-csky@lfdr.de>; Thu, 16 Jan 2020 15:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbgAPLLY (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 16 Jan 2020 06:11:24 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:51303 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbgAPLLY (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 16 Jan 2020 06:11:24 -0500
-Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1is33A-00050C-K7; Thu, 16 Jan 2020 12:10:56 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 3D46D101B66; Thu, 16 Jan 2020 12:10:56 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Aaro Koskinen <aaro.koskinen@nokia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list\:ARM\/FREESCALE IMX \/ MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v5] reboot: support offline CPUs before reboot
-In-Reply-To: <CAJMQK-jDi+AACE1Cv_hKSMq8VhGTBeh+kyHO2U4sx9w=9bO2mA@mail.gmail.com>
-References: <20200115063410.131692-1-hsinyi@chromium.org> <8736cgxmxi.fsf@nanos.tec.linutronix.de> <CAJMQK-jDi+AACE1Cv_hKSMq8VhGTBeh+kyHO2U4sx9w=9bO2mA@mail.gmail.com>
-Date:   Thu, 16 Jan 2020 12:10:56 +0100
-Message-ID: <87h80vwta7.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1726362AbgAPOa7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 16 Jan 2020 09:30:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54824 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726088AbgAPOa7 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 16 Jan 2020 09:30:59 -0500
+Received: from localhost.localdomain (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C9A742051A;
+        Thu, 16 Jan 2020 14:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579185058;
+        bh=YnoMx65waDlqCAWBp+HLYyjnIwPrVPKKVblM5KJe+Og=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QHeMZKrecedwDEUTE0C+T0YhnJRr1m/SU4lsRwIy0nw9A8DavtqtVig1FIjwbbQXy
+         GMICkkhgHeh8sAfdi4yn4exsOghSx1N8AZRtlw4oeaJBldcoVojVVrp1/CX2hGrtrT
+         /eSJEBmLESxQ5Wx7HGK0I8q5YuQk6DFMzQ1uAfQ0=
+From:   guoren@kernel.org
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, Anup.Patel@wdc.com, vincent.chen@sifive.com,
+        zong.li@sifive.com, greentime.hu@sifive.com, bmeng.cn@gmail.com,
+        atish.patra@wdc.com, schwab@linux-m68k.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        arnd@arndb.de, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <ren_guo@c-sky.com>
+Subject: [PATCH V2 1/4] riscv: Separate patch for cflags and aflags
+Date:   Thu, 16 Jan 2020 22:30:26 +0800
+Message-Id: <20200116143029.31441-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hsin-Yi Wang <hsinyi@chromium.org> writes:
-> On Thu, Jan 16, 2020 at 8:30 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> We saw this issue on regular reboot (not panic) on arm64: If tick
-> broadcast and smp_send_stop() happen together and the first broadcast
-> arrives to some idled CPU that hasn't already executed reboot ipi to
-> run in spinloop, it would try to broadcast to another CPU, but that
-> target CPU is already marked as offline by set_cpu_online() in reboot
-> ipi, and a warning comes out since tick_handle_oneshot_broadcast()
-> would check if it tries to broadcast to offline cpus. Most of the time
-> the CPU getting the broadcast interrupt is already in the spinloop and
-> thus isn't going to receive interrupts from the broadcast timer.
+From: Guo Ren <ren_guo@c-sky.com>
 
-The timer broadcasting is obviously broken by the existing reboot unplug
-mechanism as the outgoing CPU should remove itself from the broadcast.
+Use "subst fd" in Makefile is a hack way and it's not convenient
+to add new ISA feature. Just separate them into riscv-march-cflags
+and riscv-march-aflags.
 
-Just addressing the broadcast issue is not sufficient as there are tons
-of other places which rely on consistency of the various cpu masks.
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Anup Patel <Anup.Patel@wdc.com>
+---
+ arch/riscv/Makefile | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-> If system supports hotplug, _cpu_down() would properly handle tasks
-> termination such as remove CPU from timer broadcasting by
-> tick_offline_cpu()...etc, as well as some interrupt handling.
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index b9009a2fbaf5..6d09b53cf106 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -35,12 +35,18 @@ else
+ endif
+ 
+ # ISA string setting
+-riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
+-riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
+-riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
+-riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+-KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+-KBUILD_AFLAGS += -march=$(riscv-march-y)
++riscv-march-cflags-$(CONFIG_ARCH_RV32I)		:= rv32ima
++riscv-march-cflags-$(CONFIG_ARCH_RV64I)		:= rv64ima
++riscv-march-$(CONFIG_FPU)			:= $(riscv-march-y)fd
++riscv-march-cflags-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-cflags-y)c
++
++riscv-march-aflags-$(CONFIG_ARCH_RV32I)		:= rv32ima
++riscv-march-aflags-$(CONFIG_ARCH_RV64I)		:= rv64ima
++riscv-march-aflags-$(CONFIG_FPU)		:= $(riscv-march-aflags-y)fd
++riscv-march-aflags-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-aflags-y)c
++
++KBUILD_CFLAGS += -march=$(riscv-march-cflags-y)
++KBUILD_AFLAGS += -march=$(riscv-march-aflags-y)
+ 
+ KBUILD_CFLAGS += -mno-save-restore
+ KBUILD_CFLAGS += -DCONFIG_PAGE_OFFSET=$(CONFIG_PAGE_OFFSET)
+-- 
+2.17.0
 
-Well, emphasis on 'if system supports hotplug'. If not, then you are
-back to square one. On ARM64 hotplug is selectable by a config option.
-
-So either we mandate HOTPLUG_CPU for SMP and get rid of all the
-ifdeffery or we need to have a mechanism which works on !HOTPLUG_CPU as
-well.
-
-That whole reboot/shutdown stuff is an unpenetrable mess of notifiers
-and architecture hackery, so something generic and understandable is
-really required.
-
-Thanks,
-
-        tglx
