@@ -2,26 +2,25 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C2B13BEAF
-	for <lists+linux-csky@lfdr.de>; Wed, 15 Jan 2020 12:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BBC13D128
+	for <lists+linux-csky@lfdr.de>; Thu, 16 Jan 2020 01:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730097AbgAOLlX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 15 Jan 2020 06:41:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:35530 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729900AbgAOLlW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 15 Jan 2020 06:41:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1E1931B;
-        Wed, 15 Jan 2020 03:41:21 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2ABE23F6C4;
-        Wed, 15 Jan 2020 03:41:18 -0800 (PST)
-Date:   Wed, 15 Jan 2020 11:41:12 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
+        id S1729144AbgAPAbG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 15 Jan 2020 19:31:06 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:49671 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729110AbgAPAbG (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 15 Jan 2020 19:31:06 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1irt3S-0004QP-Qv; Thu, 16 Jan 2020 01:30:35 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id B7BBB10121C; Thu, 16 Jan 2020 01:30:33 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
 To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Jiri Kosina <jkosina@suse.cz>,
@@ -41,40 +40,78 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Sudeep Holla <sudeep.holla@arm.com>,
-        linux-pm@vger.kernel.org
+        linux-xtensa@linux-xtensa.org, linux-pm@vger.kernel.org
 Subject: Re: [PATCH v5] reboot: support offline CPUs before reboot
-Message-ID: <20200115114112.GA3663@bogus>
-References: <20200115063410.131692-1-hsinyi@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20200115063410.131692-1-hsinyi@chromium.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200115063410.131692-1-hsinyi@chromium.org>
+Date:   Thu, 16 Jan 2020 01:30:33 +0100
+Message-ID: <8736cgxmxi.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 02:34:10PM +0800, Hsin-Yi Wang wrote:
+Hsin-Yi Wang <hsinyi@chromium.org> writes:
+
 > Currently system reboots uses architecture specific codes (smp_send_stop)
 > to offline non reboot CPUs. Most architecture's implementation is looping
 > through all non reboot online CPUs and call ipi function to each of them. Some
 > architecture like arm64, arm, and x86... would set offline masks to cpu without
 > really offline them. This causes some race condition and kernel warning comes
 > out sometimes when system reboots.
->
-> This patch adds a config ARCH_OFFLINE_CPUS_ON_REBOOT, which would offline cpus in
+
+'some race condition and kernel warning' is pretty useless information.
+Please describe exactly which kind of issues are caused by the current
+mechanism. Especially the race conditions are the interesting part (the
+warnings are just a consequence).
+
+> This patch adds a config ARCH_OFFLINE_CPUS_ON_REBOOT, which would
+> offline cpus in
+
+Please read Documentation/process/submitting-patches.rst and search for
+'This patch'.
+
 > migrate_to_reboot_cpu(). If non reboot cpus are all offlined here, the loop for
-> checking online cpus would be an empty loop. If architecture don't enable this
-> config, or some cpus somehow fails to offline, it would fallback to ipi
-> function.
->
+> checking online cpus would be an empty loop.
 
-What's the timing impact on systems with large number of CPUs(say 256 or
-more) ? I remember we added some change to reduce the wait times for
-offlining CPUs in system suspend path on arm64, still not negligible.
+This does not make any sense. The issues which you are trying to solve
+are going to be still there when CONFIG_HOTPLUG_CPU is disabled.
 
---
-Regards,
-Sudeep
+> If architecture don't enable this config, or some cpus somehow fails
+> to offline, it would fallback to ipi function.
+
+This is really a half baken solution which keeps the various pointlessly
+different pseudo reboot/kexec offlining implementations around. So with
+this we have yet more code which only works depending on kernel
+configuration and has the issue of potentially not being able to offline
+a CPU. IOW this is going to fail completely in cases where a system is
+in a state which prevents regular hotplug.
+
+The existing pseudo-offline functions have timeouts and eventually a
+fallback, e.g. the NMI fallback on x86. With this proposed regular
+offline solution this will just get stuck w/o a chance to force
+recovery.
+
+While I like the idea and surely agree that the ideal solution is to
+properly shutdown the CPUs on reboot, we need to take a step back and
+look at the minimum requirements for a regular shutdown/reboot and at
+the same time have a look at the requirements for emergency shutdown and
+kexec/kcrash. Having proper information about the race conditions and
+warnings you mentioned would be a good starting point.
+
+> Opt in this config for architectures that support CONFIG_HOTPLUG_CPU.
+
+This is not opt-in. You force that on all architectures which support
+CONFIG_HOTPLUG_CPU. The way we do this normally is to provide the
+infrastructure first and then have separate patches (one per
+architecture) enabling this, which allows the architecture maintainers
+to decide individually.
+
+Thanks,
+
+        tglx
