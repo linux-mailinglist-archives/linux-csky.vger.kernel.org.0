@@ -2,111 +2,86 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD66414A729
-	for <lists+linux-csky@lfdr.de>; Mon, 27 Jan 2020 16:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEABA14C499
+	for <lists+linux-csky@lfdr.de>; Wed, 29 Jan 2020 03:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729422AbgA0P0M (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 27 Jan 2020 10:26:12 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:36216 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729146AbgA0P0M (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 27 Jan 2020 10:26:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07488;MF=guoren@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0TociXAZ_1580138757;
-Received: from localhost(mailfrom:guoren@linux.alibaba.com fp:SMTPD_---0TociXAZ_1580138757)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 27 Jan 2020 23:25:57 +0800
-Date:   Mon, 27 Jan 2020 23:25:57 +0800
-From:   Guo Ren <guoren@linux.alibaba.com>
-To:     paul.walmsley@sifive.com, andrew@sifive.com, palmer@dabbelt.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH V2] riscv: Use flush_icache_mm for flush_icache_user_range
-Message-ID: <20200127152557.GA8980@parallels-Parallels-Virtual-Platform>
-References: <20200127145008.2850-1-guoren@linux.alibaba.com>
+        id S1726442AbgA2CZT (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 28 Jan 2020 21:25:19 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:51242 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726446AbgA2CZS (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 28 Jan 2020 21:25:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=HILDSvPRsZHmEArR0PMVzasAJNRt38VzhSWvR3P31I8=; b=ZWtwK76SjN81h5GhxumXa8bsQ
+        XgdeUzY/KSYDm/q34/e4zgf2vnyBKI/RqSnCiuwWJXwxwZ9zGRXs2pbZJLsCpVjxhOA8um5Wah1e5
+        A0iFEokIQrfAYUccC17FH+fz8Yo004XrAJbI2jis8/cpJoTZo7Tgr7inPXs1erEOi5OOW9hkNHjEq
+        zSS3OSJiqXeRKnEsBZ0Xuz9nbzNhYsDKCNg5G47oB0PRu6Pz3GyVfFod3FVVEy/a1ZrTSErORl2rJ
+        iESp08qFEDIwz/eaJ3eOPeYclmwqM78jfLm+CS/0qLTBzg7O4n2i4AazbbnOARFTwtGPUhdIAeCD7
+        z8nSqS27Q==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iwd2a-0000Ro-63; Wed, 29 Jan 2020 02:25:16 +0000
+To:     LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH RESEND] irqchip: some Kconfig cleanup for C-SKY
+Message-ID: <d44baeee-cceb-7c02-7249-e6b4817f0847@infradead.org>
+Date:   Tue, 28 Jan 2020 18:25:14 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200127145008.2850-1-guoren@linux.alibaba.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi all,
+From: Randy Dunlap <rdunlap@infradead.org>
 
-No ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1 in this patch, I'll remove it
-in V3.
+Fixes to Kconfig help text:
 
-The update_mmu_cache() is wrong with sfence.vma and I'll give another
-patch to fixup it with ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1.
+- spell out "hardware"
+- fix verb usage
 
-Best Regards
- Guo Ren
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Jason Cooper <jason@lakedaemon.net>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Acked-by: Guo Ren <guoren@kernel.org>
+---
+ drivers/irqchip/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Jan 27, 2020 at 10:50:08PM +0800, Guo Ren wrote:
-> The patch is the fixup for the commit 08f051eda33b by Andrew.
-> 
-> For copy_to_user_page, the only call path is:
-> __access_remote_vm -> copy_to_user_page -> flush_icache_user_range
-> 
-> Seems it's ok to use flush_icache_mm instead of flush_icache_all and
-> it could reduce flush_icache_all called on other harts.
-> 
-> Add (vma->vm_flags & VM_EXEC) condition to flush icache only for
-> executable vma area.
-> 
-> ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE is used in a lot of fs/block codes.
-> We need it to make their pages dirty and defer sync i/dcache in
-> update_mmu_cache().
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Andrew Waterman <andrew@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> 
-> ---
-> Changelog V2:
->  - Add VM_EXEC condition.
->  - Remove flush_icache_user_range definition.
->  - define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
-> ---
->  arch/riscv/include/asm/cacheflush.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> index b69aecbb36d3..ae57d6ce63a9 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -8,7 +8,7 @@
->  
->  #include <linux/mm.h>
->  
-> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-> +#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  
->  /*
->   * The cache doesn't need to be flushed when TLB entries change when
-> @@ -62,7 +62,8 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
->  #define copy_to_user_page(vma, page, vaddr, dst, src, len) \
->  	do { \
->  		memcpy(dst, src, len); \
-> -		flush_icache_user_range(vma, page, vaddr, len); \
-> +		if (vma->vm_flags & VM_EXEC) \
-> +			flush_icache_mm(vma->vm_mm, 0); \
->  	} while (0)
->  #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
->  	memcpy(dst, src, len)
-> @@ -85,7 +86,6 @@ static inline void flush_dcache_page(struct page *page)
->   * so instead we just flush the whole thing.
->   */
->  #define flush_icache_range(start, end) flush_icache_all()
-> -#define flush_icache_user_range(vma, pg, addr, len) flush_icache_all()
->  
->  void dma_wbinv_range(unsigned long start, unsigned long end);
->  void dma_wb_range(unsigned long start, unsigned long end);
-> -- 
-> 2.17.0
+--- linux-next-20200128.orig/drivers/irqchip/Kconfig
++++ linux-next-20200128/drivers/irqchip/Kconfig
+@@ -438,7 +438,7 @@ config CSKY_MPINTC
+ 	help
+ 	  Say yes here to enable C-SKY SMP interrupt controller driver used
+ 	  for C-SKY SMP system.
+-	  In fact it's not mmio map in hw and it use ld/st to visit the
++	  In fact it's not mmio map in hardware and it uses ld/st to visit the
+ 	  controller's register inside CPU.
+ 
+ config CSKY_APB_INTC
+@@ -446,7 +446,7 @@ config CSKY_APB_INTC
+ 	depends on CSKY
+ 	help
+ 	  Say yes here to enable C-SKY APB interrupt controller driver used
+-	  by C-SKY single core SOC system. It use mmio map apb-bus to visit
++	  by C-SKY single core SOC system. It uses mmio map apb-bus to visit
+ 	  the controller's register.
+ 
+ config IMX_IRQSTEER
+
