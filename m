@@ -2,86 +2,104 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEABA14C499
-	for <lists+linux-csky@lfdr.de>; Wed, 29 Jan 2020 03:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B036E14CAAE
+	for <lists+linux-csky@lfdr.de>; Wed, 29 Jan 2020 13:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbgA2CZT (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 28 Jan 2020 21:25:19 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:51242 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726446AbgA2CZS (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 28 Jan 2020 21:25:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=HILDSvPRsZHmEArR0PMVzasAJNRt38VzhSWvR3P31I8=; b=ZWtwK76SjN81h5GhxumXa8bsQ
-        XgdeUzY/KSYDm/q34/e4zgf2vnyBKI/RqSnCiuwWJXwxwZ9zGRXs2pbZJLsCpVjxhOA8um5Wah1e5
-        A0iFEokIQrfAYUccC17FH+fz8Yo004XrAJbI2jis8/cpJoTZo7Tgr7inPXs1erEOi5OOW9hkNHjEq
-        zSS3OSJiqXeRKnEsBZ0Xuz9nbzNhYsDKCNg5G47oB0PRu6Pz3GyVfFod3FVVEy/a1ZrTSErORl2rJ
-        iESp08qFEDIwz/eaJ3eOPeYclmwqM78jfLm+CS/0qLTBzg7O4n2i4AazbbnOARFTwtGPUhdIAeCD7
-        z8nSqS27Q==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iwd2a-0000Ro-63; Wed, 29 Jan 2020 02:25:16 +0000
-To:     LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH RESEND] irqchip: some Kconfig cleanup for C-SKY
-Message-ID: <d44baeee-cceb-7c02-7249-e6b4817f0847@infradead.org>
-Date:   Tue, 28 Jan 2020 18:25:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726192AbgA2MSJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 29 Jan 2020 07:18:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59566 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726128AbgA2MSJ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 29 Jan 2020 07:18:09 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D83682071E;
+        Wed, 29 Jan 2020 12:18:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580300289;
+        bh=3Wt7wzJqut3lLvWETWHOk3WmRL0r/qJdKTJe7GZKl8k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tr50Kz68WnPJfmWahLHjF0GJ3Q2ZxxRqnIH++Xna1nSFvT2W/0JFg8ZJy4MFakh5o
+         aSupCEk+D4GsXiHo1FPlINDYYUDdiclzF2Eh71vWo7sWFWKDqZpAIqYhHlEwvS6nJD
+         rVBfIfnHXUN3OU2QnmW959cQqAh0sYKfvCckN5Qg=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1iwmII-0020uL-Vq; Wed, 29 Jan 2020 12:18:07 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Wed, 29 Jan 2020 12:18:06 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH RESEND] irqchip: some Kconfig cleanup for C-SKY
+In-Reply-To: <d44baeee-cceb-7c02-7249-e6b4817f0847@infradead.org>
+References: <d44baeee-cceb-7c02-7249-e6b4817f0847@infradead.org>
+Message-ID: <f85f31ce562e3eb1d7f6c99d73fe3de8@kernel.org>
+X-Sender: maz@kernel.org
+User-Agent: Roundcube Webmail/1.3.8
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: rdunlap@infradead.org, linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, tglx@linutronix.de, jason@lakedaemon.net, guoren@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On 2020-01-29 02:25, Randy Dunlap wrote:
+> From: Randy Dunlap <rdunlap@infradead.org>
+> 
+> Fixes to Kconfig help text:
+> 
+> - spell out "hardware"
+> - fix verb usage
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jason Cooper <jason@lakedaemon.net>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: linux-csky@vger.kernel.org
+> Acked-by: Guo Ren <guoren@kernel.org>
+> ---
+>  drivers/irqchip/Kconfig |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- linux-next-20200128.orig/drivers/irqchip/Kconfig
+> +++ linux-next-20200128/drivers/irqchip/Kconfig
+> @@ -438,7 +438,7 @@ config CSKY_MPINTC
+>  	help
+>  	  Say yes here to enable C-SKY SMP interrupt controller driver used
+>  	  for C-SKY SMP system.
+> -	  In fact it's not mmio map in hw and it use ld/st to visit the
+> +	  In fact it's not mmio map in hardware and it uses ld/st to visit 
+> the
+>  	  controller's register inside CPU.
+> 
+>  config CSKY_APB_INTC
+> @@ -446,7 +446,7 @@ config CSKY_APB_INTC
+>  	depends on CSKY
+>  	help
+>  	  Say yes here to enable C-SKY APB interrupt controller driver used
+> -	  by C-SKY single core SOC system. It use mmio map apb-bus to visit
+> +	  by C-SKY single core SOC system. It uses mmio map apb-bus to visit
+>  	  the controller's register.
+> 
+>  config IMX_IRQSTEER
 
-Fixes to Kconfig help text:
+I'll queue that as part of the next batch of fixes.
 
-- spell out "hardware"
-- fix verb usage
+Thanks,
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jason Cooper <jason@lakedaemon.net>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org
-Acked-by: Guo Ren <guoren@kernel.org>
----
- drivers/irqchip/Kconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
---- linux-next-20200128.orig/drivers/irqchip/Kconfig
-+++ linux-next-20200128/drivers/irqchip/Kconfig
-@@ -438,7 +438,7 @@ config CSKY_MPINTC
- 	help
- 	  Say yes here to enable C-SKY SMP interrupt controller driver used
- 	  for C-SKY SMP system.
--	  In fact it's not mmio map in hw and it use ld/st to visit the
-+	  In fact it's not mmio map in hardware and it uses ld/st to visit the
- 	  controller's register inside CPU.
- 
- config CSKY_APB_INTC
-@@ -446,7 +446,7 @@ config CSKY_APB_INTC
- 	depends on CSKY
- 	help
- 	  Say yes here to enable C-SKY APB interrupt controller driver used
--	  by C-SKY single core SOC system. It use mmio map apb-bus to visit
-+	  by C-SKY single core SOC system. It uses mmio map apb-bus to visit
- 	  the controller's register.
- 
- config IMX_IRQSTEER
-
+         M.
+-- 
+Jazz is not dead. It just smells funny...
