@@ -2,88 +2,110 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5F214E313
-	for <lists+linux-csky@lfdr.de>; Thu, 30 Jan 2020 20:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB95F14E6F0
+	for <lists+linux-csky@lfdr.de>; Fri, 31 Jan 2020 03:07:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbgA3TWr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 30 Jan 2020 14:22:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46078 "EHLO mail.kernel.org"
+        id S1727787AbgAaCHi (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 30 Jan 2020 21:07:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48756 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727402AbgA3TWr (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 30 Jan 2020 14:22:47 -0500
-Received: from localhost.localdomain (unknown [194.230.155.229])
+        id S1727722AbgAaCHi (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 30 Jan 2020 21:07:38 -0500
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C9A3205F4;
-        Thu, 30 Jan 2020 19:22:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2FFDA206F0;
+        Fri, 31 Jan 2020 02:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580412166;
-        bh=/ADDyZGeUBrFy1yM/2Cjxlczx2El2xTo64aBpM00OOA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mBMeleaLkrp1L5YIelNo1iiPfVr7glrgDlnpHKaAkSpQH0cBL/Y6ukaEvybMHE41r
-         hGJubOrIAWir23oxOPSQNgNm80FIkkabQ1YLqD3SRvGgmr8PFamLByTz3gRrFDjQgO
-         xwWHNilCLN1EVG4W7LVP40vRCKD42/Wv2omGPQ8s=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] csky: Cleanup old Kconfig options
-Date:   Thu, 30 Jan 2020 20:22:40 +0100
-Message-Id: <20200130192240.2881-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        s=default; t=1580436457;
+        bh=hqiUKXKZNoiGYKYkZC9NCSHGrywmOoHi9ufRwPWWNbI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ow+oZvyx4cElERghwypyC7U60uvllQkMeKZQ1tjymL3uHcr+abl1WBX7yb42PPdmQ
+         Hiz+prySUEVQoGkYyihw4wx/uKJu0GXvPbrz7yBJPCjfoX51sTyOMvxhrodUCraRun
+         1/RFHNBfP9Zb2HFj7LCtgqN2ogJV16q9X7WNtLck=
+Received: by mail-lf1-f51.google.com with SMTP id f24so3727332lfh.3;
+        Thu, 30 Jan 2020 18:07:37 -0800 (PST)
+X-Gm-Message-State: APjAAAUtAW81Xauvfn4XuqJIyDLIksgWHmh0TOJMGJGVe3xC+P12Cve9
+        Y6tzNbZwnU0oer/Vi/0CUCFY4KmRnoqOYKKQqes=
+X-Google-Smtp-Source: APXvYqypyBxwZLPkCXYpIjkPtvm6OArKiOSklB9k06uw5lAoWQsHvVy1Y3nu2zMUo8y3+ll+TW7d5sBpJbgGmfAYmkQ=
+X-Received: by 2002:a19:f519:: with SMTP id j25mr4065566lfb.41.1580436455306;
+ Thu, 30 Jan 2020 18:07:35 -0800 (PST)
+MIME-Version: 1.0
+References: <20200130192240.2881-1-krzk@kernel.org>
+In-Reply-To: <20200130192240.2881-1-krzk@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 31 Jan 2020 10:07:23 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRKni_tK5E2WMVuD2kzqG0n3vx6hyB-Z6_PdHQcsb2ayg@mail.gmail.com>
+Message-ID: <CAJF2gTRKni_tK5E2WMVuD2kzqG0n3vx6hyB-Z6_PdHQcsb2ayg@mail.gmail.com>
+Subject: Re: [PATCH] csky: Cleanup old Kconfig options
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-CONFIG_CLKSRC_OF is gone since commit bb0eb050a577
-("clocksource/drivers: Rename CLKSRC_OF to TIMER_OF").  The platform
-already selects TIMER_OF.
+Acked and queued.
 
-CONFIG_HAVE_DMA_API_DEBUG is gone since commit 6e88628d03dd ("dma-debug:
-remove CONFIG_HAVE_DMA_API_DEBUG").
+On Fri, Jan 31, 2020 at 3:22 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> CONFIG_CLKSRC_OF is gone since commit bb0eb050a577
+> ("clocksource/drivers: Rename CLKSRC_OF to TIMER_OF").  The platform
+> already selects TIMER_OF.
+>
+> CONFIG_HAVE_DMA_API_DEBUG is gone since commit 6e88628d03dd ("dma-debug:
+> remove CONFIG_HAVE_DMA_API_DEBUG").
+>
+> CONFIG_DEFAULT_DEADLINE is gone since commit f382fb0bcef4 ("block:
+> remove legacy IO schedulers").
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  arch/csky/Kconfig           | 2 --
+>  arch/csky/configs/defconfig | 1 -
+>  2 files changed, 3 deletions(-)
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 4acef4088de7..0d6a6af7751d 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -9,7 +9,6 @@ config CSKY
+>         select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
+>         select COMMON_CLK
+>         select CLKSRC_MMIO
+> -       select CLKSRC_OF
+>         select CSKY_MPINTC if CPU_CK860
+>         select CSKY_MP_TIMER if CPU_CK860
+>         select CSKY_APB_INTC
+> @@ -47,7 +46,6 @@ config CSKY
+>         select HAVE_PERF_EVENTS
+>         select HAVE_PERF_REGS
+>         select HAVE_PERF_USER_STACK_DUMP
+> -       select HAVE_DMA_API_DEBUG
+>         select HAVE_DMA_CONTIGUOUS
+>         select HAVE_STACKPROTECTOR
+>         select HAVE_SYSCALL_TRACEPOINTS
+> diff --git a/arch/csky/configs/defconfig b/arch/csky/configs/defconfig
+> index 7ef42895dfb0..3b540539dbe6 100644
+> --- a/arch/csky/configs/defconfig
+> +++ b/arch/csky/configs/defconfig
+> @@ -10,7 +10,6 @@ CONFIG_BSD_PROCESS_ACCT=y
+>  CONFIG_BSD_PROCESS_ACCT_V3=y
+>  CONFIG_MODULES=y
+>  CONFIG_MODULE_UNLOAD=y
+> -CONFIG_DEFAULT_DEADLINE=y
+>  CONFIG_CPU_CK807=y
+>  CONFIG_CPU_HAS_FPU=y
+>  CONFIG_NET=y
+> --
+> 2.17.1
+>
 
-CONFIG_DEFAULT_DEADLINE is gone since commit f382fb0bcef4 ("block:
-remove legacy IO schedulers").
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- arch/csky/Kconfig           | 2 --
- arch/csky/configs/defconfig | 1 -
- 2 files changed, 3 deletions(-)
-
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 4acef4088de7..0d6a6af7751d 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -9,7 +9,6 @@ config CSKY
- 	select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
- 	select COMMON_CLK
- 	select CLKSRC_MMIO
--	select CLKSRC_OF
- 	select CSKY_MPINTC if CPU_CK860
- 	select CSKY_MP_TIMER if CPU_CK860
- 	select CSKY_APB_INTC
-@@ -47,7 +46,6 @@ config CSKY
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
--	select HAVE_DMA_API_DEBUG
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
-diff --git a/arch/csky/configs/defconfig b/arch/csky/configs/defconfig
-index 7ef42895dfb0..3b540539dbe6 100644
---- a/arch/csky/configs/defconfig
-+++ b/arch/csky/configs/defconfig
-@@ -10,7 +10,6 @@ CONFIG_BSD_PROCESS_ACCT=y
- CONFIG_BSD_PROCESS_ACCT_V3=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
--CONFIG_DEFAULT_DEADLINE=y
- CONFIG_CPU_CK807=y
- CONFIG_CPU_HAS_FPU=y
- CONFIG_NET=y
 -- 
-2.17.1
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
