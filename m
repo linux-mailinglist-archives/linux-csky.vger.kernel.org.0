@@ -2,68 +2,83 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C8E14F5D0
-	for <lists+linux-csky@lfdr.de>; Sat,  1 Feb 2020 02:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E77B14F6C2
+	for <lists+linux-csky@lfdr.de>; Sat,  1 Feb 2020 06:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgBABwb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 31 Jan 2020 20:52:31 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:53678 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726475AbgBABwb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 31 Jan 2020 20:52:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=cWI5O2cv+SeehZ9KuYC3J+GruZ97y+6ngsaLCn03r54=; b=Q6XHR6t45O7XpvUbyEbEUFjde
-        Gma0A+VGZJ3dz7NdLu04brCnvedzP+ot5Cmm07EAcBkqSd/ezAObJ0V9tAwKZx/z2PsILNmOWySU7
-        U1p6FVo/1vYdGHJnBFG6tp+BZy5mp1aMweny5MYoPnrk22nVN6NF91k3X0WGws+P1XuOLmvhKUiws
-        xJA3svr5btcjL+e8DXr5RsTwMFzL5pe8L32PNzG1/pvizbvVypPb0z/K8MztjBLxK5WKg5YsMbp/l
-        G5QTchdlGobhev/MBrPkxpS0Z5Ufe1+1aBTR/39pXk4hxeAoINoxgkACesqcbTjJZFnNAE1vxyquo
-        zytcPJrSw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ixhxX-0005ol-8s; Sat, 01 Feb 2020 01:52:31 +0000
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] arch/csky: fix some Kconfig typos
-Message-ID: <c554f9e8-fdc7-ada3-8b6e-70a3f3aef89f@infradead.org>
-Date:   Fri, 31 Jan 2020 17:52:30 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726044AbgBAFtt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 1 Feb 2020 00:49:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39186 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726038AbgBAFtt (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 1 Feb 2020 00:49:49 -0500
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 225E420679;
+        Sat,  1 Feb 2020 05:49:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580536188;
+        bh=CG7WOtvzzyGloPtARiFMtaEJatWuWW9dB+HAs41pS48=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=p9Usk0+gm9NEW+/dTAIyo1KUr60gS2q+stHHvHeh5BWEfiKxVZ/kQixvmtBM2M9aW
+         4M8sGEKicKQwAbYYy9OuRYzBynkz9J72kitjnxW3TtX3Os+G0d1G2O8p7bKDiYc2p8
+         K8x492e3xpAleXH8WtgXd/WQDYERqDtQpZys4mlk=
+Received: by mail-lj1-f178.google.com with SMTP id d10so9291917ljl.9;
+        Fri, 31 Jan 2020 21:49:48 -0800 (PST)
+X-Gm-Message-State: APjAAAUchSStkE1LDgA3Zmly/VYZjgUzusUgc5zclVV2kWUzvd8jyHTT
+        0uP7GZUmM0mxg18U28ZkjdGesn4B8KWFQ5x0JDU=
+X-Google-Smtp-Source: APXvYqyFBrAH+CbcmP5/8pUuAJaTgeOzUsajKQ0ozV92KB6+GpKRmlYfVIPxBqQWs+eDcdzH1d2OOELLh1/+sZmNgbQ=
+X-Received: by 2002:a2e:3514:: with SMTP id z20mr7770785ljz.261.1580536186311;
+ Fri, 31 Jan 2020 21:49:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <c554f9e8-fdc7-ada3-8b6e-70a3f3aef89f@infradead.org>
+In-Reply-To: <c554f9e8-fdc7-ada3-8b6e-70a3f3aef89f@infradead.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 1 Feb 2020 13:49:34 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTM4-xJhY6Ter0n_b6Zu=yqA_N-FnHA2qL5vp5W+ZZqTw@mail.gmail.com>
+Message-ID: <CAJF2gTTM4-xJhY6Ter0n_b6Zu=yqA_N-FnHA2qL5vp5W+ZZqTw@mail.gmail.com>
+Subject: Re: [PATCH] arch/csky: fix some Kconfig typos
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-csky@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+Acked, thx
 
-Fix wording in help text for the CPU_HAS_LDSTEX symbol.
+On Sat, Feb 1, 2020 at 9:52 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> From: Randy Dunlap <rdunlap@infradead.org>
+>
+> Fix wording in help text for the CPU_HAS_LDSTEX symbol.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: linux-csky@vger.kernel.org
+> ---
+>  arch/csky/Kconfig |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- linux-next-20200131.orig/arch/csky/Kconfig
+> +++ linux-next-20200131/arch/csky/Kconfig
+> @@ -77,7 +77,7 @@ config CPU_HAS_TLBI
+>  config CPU_HAS_LDSTEX
+>         bool
+>         help
+> -         For SMP, CPU needs "ldex&stex" instrcutions to atomic operations.
+> +         For SMP, CPU needs "ldex&stex" instructions for atomic operations.
+>
+>  config CPU_NEED_TLBSYNC
+>         bool
+>
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org
----
- arch/csky/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- linux-next-20200131.orig/arch/csky/Kconfig
-+++ linux-next-20200131/arch/csky/Kconfig
-@@ -77,7 +77,7 @@ config CPU_HAS_TLBI
- config CPU_HAS_LDSTEX
- 	bool
- 	help
--	  For SMP, CPU needs "ldex&stex" instrcutions to atomic operations.
-+	  For SMP, CPU needs "ldex&stex" instructions for atomic operations.
- 
- config CPU_NEED_TLBSYNC
- 	bool
+-- 
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
