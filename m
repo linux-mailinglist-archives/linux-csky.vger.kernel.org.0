@@ -2,110 +2,68 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB95F14E6F0
-	for <lists+linux-csky@lfdr.de>; Fri, 31 Jan 2020 03:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C8E14F5D0
+	for <lists+linux-csky@lfdr.de>; Sat,  1 Feb 2020 02:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727787AbgAaCHi (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 30 Jan 2020 21:07:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48756 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727722AbgAaCHi (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 30 Jan 2020 21:07:38 -0500
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2FFDA206F0;
-        Fri, 31 Jan 2020 02:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580436457;
-        bh=hqiUKXKZNoiGYKYkZC9NCSHGrywmOoHi9ufRwPWWNbI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ow+oZvyx4cElERghwypyC7U60uvllQkMeKZQ1tjymL3uHcr+abl1WBX7yb42PPdmQ
-         Hiz+prySUEVQoGkYyihw4wx/uKJu0GXvPbrz7yBJPCjfoX51sTyOMvxhrodUCraRun
-         1/RFHNBfP9Zb2HFj7LCtgqN2ogJV16q9X7WNtLck=
-Received: by mail-lf1-f51.google.com with SMTP id f24so3727332lfh.3;
-        Thu, 30 Jan 2020 18:07:37 -0800 (PST)
-X-Gm-Message-State: APjAAAUtAW81Xauvfn4XuqJIyDLIksgWHmh0TOJMGJGVe3xC+P12Cve9
-        Y6tzNbZwnU0oer/Vi/0CUCFY4KmRnoqOYKKQqes=
-X-Google-Smtp-Source: APXvYqypyBxwZLPkCXYpIjkPtvm6OArKiOSklB9k06uw5lAoWQsHvVy1Y3nu2zMUo8y3+ll+TW7d5sBpJbgGmfAYmkQ=
-X-Received: by 2002:a19:f519:: with SMTP id j25mr4065566lfb.41.1580436455306;
- Thu, 30 Jan 2020 18:07:35 -0800 (PST)
+        id S1726548AbgBABwb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 31 Jan 2020 20:52:31 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:53678 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726475AbgBABwb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 31 Jan 2020 20:52:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=cWI5O2cv+SeehZ9KuYC3J+GruZ97y+6ngsaLCn03r54=; b=Q6XHR6t45O7XpvUbyEbEUFjde
+        Gma0A+VGZJ3dz7NdLu04brCnvedzP+ot5Cmm07EAcBkqSd/ezAObJ0V9tAwKZx/z2PsILNmOWySU7
+        U1p6FVo/1vYdGHJnBFG6tp+BZy5mp1aMweny5MYoPnrk22nVN6NF91k3X0WGws+P1XuOLmvhKUiws
+        xJA3svr5btcjL+e8DXr5RsTwMFzL5pe8L32PNzG1/pvizbvVypPb0z/K8MztjBLxK5WKg5YsMbp/l
+        G5QTchdlGobhev/MBrPkxpS0Z5Ufe1+1aBTR/39pXk4hxeAoINoxgkACesqcbTjJZFnNAE1vxyquo
+        zytcPJrSw==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ixhxX-0005ol-8s; Sat, 01 Feb 2020 01:52:31 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] arch/csky: fix some Kconfig typos
+Message-ID: <c554f9e8-fdc7-ada3-8b6e-70a3f3aef89f@infradead.org>
+Date:   Fri, 31 Jan 2020 17:52:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20200130192240.2881-1-krzk@kernel.org>
-In-Reply-To: <20200130192240.2881-1-krzk@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 31 Jan 2020 10:07:23 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRKni_tK5E2WMVuD2kzqG0n3vx6hyB-Z6_PdHQcsb2ayg@mail.gmail.com>
-Message-ID: <CAJF2gTRKni_tK5E2WMVuD2kzqG0n3vx6hyB-Z6_PdHQcsb2ayg@mail.gmail.com>
-Subject: Re: [PATCH] csky: Cleanup old Kconfig options
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Acked and queued.
+From: Randy Dunlap <rdunlap@infradead.org>
 
-On Fri, Jan 31, 2020 at 3:22 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> CONFIG_CLKSRC_OF is gone since commit bb0eb050a577
-> ("clocksource/drivers: Rename CLKSRC_OF to TIMER_OF").  The platform
-> already selects TIMER_OF.
->
-> CONFIG_HAVE_DMA_API_DEBUG is gone since commit 6e88628d03dd ("dma-debug:
-> remove CONFIG_HAVE_DMA_API_DEBUG").
->
-> CONFIG_DEFAULT_DEADLINE is gone since commit f382fb0bcef4 ("block:
-> remove legacy IO schedulers").
->
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  arch/csky/Kconfig           | 2 --
->  arch/csky/configs/defconfig | 1 -
->  2 files changed, 3 deletions(-)
->
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 4acef4088de7..0d6a6af7751d 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -9,7 +9,6 @@ config CSKY
->         select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
->         select COMMON_CLK
->         select CLKSRC_MMIO
-> -       select CLKSRC_OF
->         select CSKY_MPINTC if CPU_CK860
->         select CSKY_MP_TIMER if CPU_CK860
->         select CSKY_APB_INTC
-> @@ -47,7 +46,6 @@ config CSKY
->         select HAVE_PERF_EVENTS
->         select HAVE_PERF_REGS
->         select HAVE_PERF_USER_STACK_DUMP
-> -       select HAVE_DMA_API_DEBUG
->         select HAVE_DMA_CONTIGUOUS
->         select HAVE_STACKPROTECTOR
->         select HAVE_SYSCALL_TRACEPOINTS
-> diff --git a/arch/csky/configs/defconfig b/arch/csky/configs/defconfig
-> index 7ef42895dfb0..3b540539dbe6 100644
-> --- a/arch/csky/configs/defconfig
-> +++ b/arch/csky/configs/defconfig
-> @@ -10,7 +10,6 @@ CONFIG_BSD_PROCESS_ACCT=y
->  CONFIG_BSD_PROCESS_ACCT_V3=y
->  CONFIG_MODULES=y
->  CONFIG_MODULE_UNLOAD=y
-> -CONFIG_DEFAULT_DEADLINE=y
->  CONFIG_CPU_CK807=y
->  CONFIG_CPU_HAS_FPU=y
->  CONFIG_NET=y
-> --
-> 2.17.1
->
+Fix wording in help text for the CPU_HAS_LDSTEX symbol.
 
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+---
+ arch/csky/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Best Regards
- Guo Ren
+--- linux-next-20200131.orig/arch/csky/Kconfig
++++ linux-next-20200131/arch/csky/Kconfig
+@@ -77,7 +77,7 @@ config CPU_HAS_TLBI
+ config CPU_HAS_LDSTEX
+ 	bool
+ 	help
+-	  For SMP, CPU needs "ldex&stex" instrcutions to atomic operations.
++	  For SMP, CPU needs "ldex&stex" instructions for atomic operations.
+ 
+ config CPU_NEED_TLBSYNC
+ 	bool
 
-ML: https://lore.kernel.org/linux-csky/
