@@ -2,80 +2,69 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 672BC153DAE
-	for <lists+linux-csky@lfdr.de>; Thu,  6 Feb 2020 04:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CE4156FB0
+	for <lists+linux-csky@lfdr.de>; Mon, 10 Feb 2020 07:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727618AbgBFDsH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 5 Feb 2020 22:48:07 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:50120 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727415AbgBFDsH (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 5 Feb 2020 22:48:07 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04452;MF=majun258@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0TpFHoWM_1580960879;
-Received: from localhost(mailfrom:majun258@linux.alibaba.com fp:SMTPD_---0TpFHoWM_1580960879)
+        id S1726118AbgBJGzM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 10 Feb 2020 01:55:12 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:47209 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726061AbgBJGzM (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 10 Feb 2020 01:55:12 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04446;MF=majun258@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0TpZ72wA_1581317690;
+Received: from localhost(mailfrom:majun258@linux.alibaba.com fp:SMTPD_---0TpZ72wA_1581317690)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 06 Feb 2020 11:48:04 +0800
-From:   MaJun <majun258@linux.alibaba.com>
-To:     guoren@kernel.org
-Cc:     majun258@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-csky@vger.kernel.org
-Subject: [PATCH] arch/cksy: Support the pci in csky serial core
-Date:   Mon, 27 Jan 2020 10:56:21 +0800
-Message-Id: <1580093781-927-1-git-send-email-majun258@linux.alibaba.com>
+          Mon, 10 Feb 2020 14:55:09 +0800
+From:   Ma Jun <majun258@linux.alibaba.com>
+To:     ren_guo@c-sky.com, ldv@altlinux.org
+Cc:     majun258@linux.alibaba.com, linux-csky@vger.kernel.org
+Subject: [PATCH] arch/csky: Fix the compile error when use abiv1
+Date:   Mon, 10 Feb 2020 14:54:49 +0800
+Message-Id: <1581317689-3709-1-git-send-email-majun258@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Add the pci related code for csky serial core.
+From: MaJun <majun258@linux.alibaba.com>
 
-Signed-off-by: MaJun <majun258@linux.alibaba.com>
+Fix the bug caused by csky_regs. Because this struct
+has no member r1, only a1.
+
+Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
 ---
- arch/csky/Kconfig           |  4 ++++
- arch/csky/include/asm/pci.h | 17 +++++++++++++++++
- 2 files changed, 21 insertions(+)
- create mode 100644 arch/csky/include/asm/pci.h
+ linux/csky/get_scno.c | 2 +-
+ linux/csky/set_scno.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index cc5dc37..6ceafa3 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -62,6 +62,10 @@ config CSKY
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_KPROBES if !CPU_CK610
- 	select HAVE_KRETPROBES if !CPU_CK610
-+	select GENERIC_PCI_IOMAP
-+	select HAVE_PCI
-+	select PCI_DOMAINS_GENERIC if PCI
-+	select PCI_SYSCALL if PCI
- 
- config CPU_HAS_CACHEV2
- 	bool
-diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
-new file mode 100644
-index 0000000..ccd844e
---- /dev/null
-+++ b/arch/csky/include/asm/pci.h
-@@ -0,0 +1,17 @@
-+#ifndef __ASM_CSKY_PCI_H
-+#define __ASM_CSKY_PCI_H
-+
-+extern int isa_dma_bridge_buggy;
-+
-+#define PCIBIOS_MIN_IO      0x1000
-+#define PCIBIOS_MIN_MEM     0x10000000
-+
-+static inline int pci_proc_domain(struct pci_bus *bus)
-+{
-+	/* always show the domain in /proc/bus/pci */
-+	return 1;
-+}
-+
-+#define pcibios_assign_all_busses()	1
-+
-+#endif /* __ASM_CSKY_PCI_H */
+diff --git a/linux/csky/get_scno.c b/linux/csky/get_scno.c
+index 9efb202..9d4397a 100644
+--- a/linux/csky/get_scno.c
++++ b/linux/csky/get_scno.c
+@@ -12,7 +12,7 @@ arch_get_scno(struct tcb *tcp)
+ #if defined(__CSKYABIV2__)
+ 	tcp->scno = csky_regs.regs[3];
+ #else
+-	tcp->scno = csky_regs.r1;
++	tcp->scno = csky_regs.a1;
+ #endif
+ 	return 1;
+ }
+diff --git a/linux/csky/set_scno.c b/linux/csky/set_scno.c
+index 655d108..c1e1c18 100644
+--- a/linux/csky/set_scno.c
++++ b/linux/csky/set_scno.c
+@@ -13,7 +13,7 @@ arch_set_scno(struct tcb *tcp, kernel_ulong_t scno)
+ #if defined(__CSKYABIV2__)
+ 	csky_regs.regs[3] = scno;
+ #else
+-	csky_regs.r1 = scno;
++	csky_regs.a1 = scno;
+ #endif
+ 	return set_regs(tcp->pid);
+ }
 -- 
 1.8.3.1
 
