@@ -2,26 +2,27 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CE4156FB0
-	for <lists+linux-csky@lfdr.de>; Mon, 10 Feb 2020 07:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA87E156FB8
+	for <lists+linux-csky@lfdr.de>; Mon, 10 Feb 2020 07:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgBJGzM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 10 Feb 2020 01:55:12 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:47209 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726061AbgBJGzM (ORCPT
+        id S1726376AbgBJG77 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 10 Feb 2020 01:59:59 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:49632 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726231AbgBJG76 (ORCPT
         <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 10 Feb 2020 01:55:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04446;MF=majun258@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0TpZ72wA_1581317690;
-Received: from localhost(mailfrom:majun258@linux.alibaba.com fp:SMTPD_---0TpZ72wA_1581317690)
+        Mon, 10 Feb 2020 01:59:58 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=majun258@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0TpZ73SV_1581317991;
+Received: from localhost(mailfrom:majun258@linux.alibaba.com fp:SMTPD_---0TpZ73SV_1581317991)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 10 Feb 2020 14:55:09 +0800
+          Mon, 10 Feb 2020 14:59:55 +0800
 From:   Ma Jun <majun258@linux.alibaba.com>
 To:     ren_guo@c-sky.com, ldv@altlinux.org
-Cc:     majun258@linux.alibaba.com, linux-csky@vger.kernel.org
-Subject: [PATCH] arch/csky: Fix the compile error when use abiv1
-Date:   Mon, 10 Feb 2020 14:54:49 +0800
-Message-Id: <1581317689-3709-1-git-send-email-majun258@linux.alibaba.com>
+Cc:     majun258@linux.alibaba.com, strace-devel@lists.strace.io,
+        linux-csky@vger.kernel.org
+Subject: [RESEND PATCH] arch/csky: Fix the compile error when use abiv1
+Date:   Mon, 10 Feb 2020 14:59:48 +0800
+Message-Id: <1581317988-3826-1-git-send-email-majun258@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
