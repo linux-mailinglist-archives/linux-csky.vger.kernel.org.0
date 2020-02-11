@@ -2,102 +2,78 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F152A1588E6
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2020 04:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7B0158B57
+	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2020 09:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727952AbgBKDlM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 10 Feb 2020 22:41:12 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:60918 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727831AbgBKDlM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 10 Feb 2020 22:41:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04396;MF=guoren@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0TpeDRM7_1581392468;
-Received: from localhost(mailfrom:guoren@linux.alibaba.com fp:SMTPD_---0TpeDRM7_1581392468)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 11 Feb 2020 11:41:09 +0800
-From:   Guo Ren <guoren@linux.alibaba.com>
-To:     linux-csky@vger.kernel.org, majun258@linux.alibaba.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] csky: Add PCI support
-Date:   Tue, 11 Feb 2020 11:41:07 +0800
-Message-Id: <20200211034107.11192-1-guoren@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.0
+        id S1727121AbgBKIhF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 11 Feb 2020 03:37:05 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:58528 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727079AbgBKIhF (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 11 Feb 2020 03:37:05 -0500
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id ED77F72CCEA;
+        Tue, 11 Feb 2020 11:37:02 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+        id D294A7CC68F; Tue, 11 Feb 2020 11:37:02 +0300 (MSK)
+Date:   Tue, 11 Feb 2020 11:37:02 +0300
+From:   "Dmitry V. Levin" <ldv@altlinux.org>
+To:     Ma Jun <majun258@linux.alibaba.com>
+Cc:     ren_guo@c-sky.com, linux-csky@vger.kernel.org,
+        strace-devel@lists.strace.io
+Subject: Re: [RESEND PATCH] arch/csky: Fix the compile error when use abiv1
+Message-ID: <20200211083702.GA4026@altlinux.org>
+References: <1581317988-3826-1-git-send-email-majun258@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1581317988-3826-1-git-send-email-majun258@linux.alibaba.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: MaJun <majun258@linux.alibaba.com>
+On Mon, Feb 10, 2020 at 02:59:48PM +0800, Ma Jun wrote:
+> From: MaJun <majun258@linux.alibaba.com>
+> 
+> Fix the bug caused by csky_regs. Because this struct
+> has no member r1, only a1.
+> 
+> Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
+> ---
+>  linux/csky/get_scno.c | 2 +-
+>  linux/csky/set_scno.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/linux/csky/get_scno.c b/linux/csky/get_scno.c
+> index 9efb202..9d4397a 100644
+> --- a/linux/csky/get_scno.c
+> +++ b/linux/csky/get_scno.c
+> @@ -12,7 +12,7 @@ arch_get_scno(struct tcb *tcp)
+>  #if defined(__CSKYABIV2__)
+>  	tcp->scno = csky_regs.regs[3];
+>  #else
+> -	tcp->scno = csky_regs.r1;
+> +	tcp->scno = csky_regs.a1;
+>  #endif
+>  	return 1;
+>  }
+> diff --git a/linux/csky/set_scno.c b/linux/csky/set_scno.c
+> index 655d108..c1e1c18 100644
+> --- a/linux/csky/set_scno.c
+> +++ b/linux/csky/set_scno.c
+> @@ -13,7 +13,7 @@ arch_set_scno(struct tcb *tcp, kernel_ulong_t scno)
+>  #if defined(__CSKYABIV2__)
+>  	csky_regs.regs[3] = scno;
+>  #else
+> -	csky_regs.r1 = scno;
+> +	csky_regs.a1 = scno;
+>  #endif
+>  	return set_regs(tcp->pid);
+>  }
 
-Add the pci related code for csky arch to support basic pci virtual
-function, such as qemu virt-pci-9pfs.
+Applied, thanks.
 
-Signed-off-by: MaJun <majun258@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/csky/Kconfig           |  5 +++++
- arch/csky/include/asm/pci.h | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
- create mode 100644 arch/csky/include/asm/pci.h
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index bf246b036dee..72b2999a889a 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -58,6 +58,11 @@ config CSKY
- 	select TIMER_OF
- 	select USB_ARCH_HAS_EHCI
- 	select USB_ARCH_HAS_OHCI
-+	select GENERIC_PCI_IOMAP
-+	select HAVE_PCI
-+	select PCI_DOMAINS_GENERIC if PCI
-+	select PCI_SYSCALL if PCI
-+	select PCI_MSI if PCI
- 
- config CPU_HAS_CACHEV2
- 	bool
-diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
-new file mode 100644
-index 000000000000..ebc765b1f78b
---- /dev/null
-+++ b/arch/csky/include/asm/pci.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ASM_CSKY_PCI_H
-+#define __ASM_CSKY_PCI_H
-+
-+#include <linux/types.h>
-+#include <linux/slab.h>
-+#include <linux/dma-mapping.h>
-+
-+#include <asm/io.h>
-+
-+#define PCIBIOS_MIN_IO		0
-+#define PCIBIOS_MIN_MEM		0
-+
-+/* C-SKY shim does not initialize PCI bus */
-+#define pcibios_assign_all_busses() 1
-+
-+extern int isa_dma_bridge_buggy;
-+
-+#ifdef CONFIG_PCI
-+static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-+{
-+	/* no legacy IRQ on csky */
-+	return -ENODEV;
-+}
-+
-+static inline int pci_proc_domain(struct pci_bus *bus)
-+{
-+	/* always show the domain in /proc */
-+	return 1;
-+}
-+#endif  /* CONFIG_PCI */
-+
-+#endif  /* __ASM_CSKY_PCI_H */
 -- 
-2.17.0
-
+ldv
