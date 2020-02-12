@@ -2,92 +2,110 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A3F159F0F
-	for <lists+linux-csky@lfdr.de>; Wed, 12 Feb 2020 03:27:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541B215B7DF
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Feb 2020 04:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727671AbgBLC1B (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 11 Feb 2020 21:27:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727535AbgBLC1A (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 11 Feb 2020 21:27:00 -0500
-Received: from localhost.localdomain (89.208.247.74.16clouds.com [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 539712082F;
-        Wed, 12 Feb 2020 02:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581474420;
-        bh=FOM6ShHGfdrGYdqrB/c61jbqI2+Z0wVkTwBfSD8/QHw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IkvnqeF6dXlU0xRckeIb9ArZbAJjkV7+AqfX+Uy3t0waw6awv7aTTeJEsXE/FIo+T
-         P0/tY/fN9ss2Q0ph8qgY0s7EhBWXzTOG3qOY/iNLmeb2NtA5Dyat/aCYPhqzqq11hP
-         GVQvdOb0ejbdcom95WhSoaH2OXWqgVjWANOri1bM=
-From:   guoren@kernel.org
-To:     linux-csky@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Amanieu d'Antras <amanieu@gmail.com>
-Subject: [PATCH] csky: Implement copy_thread_tls
-Date:   Wed, 12 Feb 2020 10:26:51 +0800
-Message-Id: <20200212022651.11169-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.0
+        id S1729443AbgBMDjv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 12 Feb 2020 22:39:51 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:51262 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729432AbgBMDjv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 12 Feb 2020 22:39:51 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=majun258@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0TprKkIs_1581565175;
+Received: from localhost(mailfrom:majun258@linux.alibaba.com fp:SMTPD_---0TprKkIs_1581565175)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 13 Feb 2020 11:39:48 +0800
+From:   Ma Jun <majun258@linux.alibaba.com>
+To:     dev-tech-nspr@lists.mozilla.org
+Cc:     majun258@linux.alibaba.com, linux-csky@vger.kernel.org
+Subject: [PATCH] Add the csky architecture support
+Date:   Thu, 13 Feb 2020 03:10:25 +0800
+Message-Id: <1581534625-4066-1-git-send-email-majun258@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Support the csky architecture
 
-This is required for clone3 which passes the TLS value through a
-struct rather than a register.
-
-Cc: Amanieu d'Antras <amanieu@gmail.com>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
 ---
- arch/csky/Kconfig          | 1 +
- arch/csky/kernel/process.c | 7 ++++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ nspr/pr/include/md/_linux.cfg | 46 +++++++++++++++++++++++++++++++++++++++++++
+ nspr/pr/include/md/_linux.h   |  2 ++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 72b2999a889a..047427f71d83 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -36,6 +36,7 @@ config CSKY
- 	select GX6605S_TIMER if CPU_CK610
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_AUDITSYSCALL
-+	select HAVE_COPY_THREAD_TLS
- 	select HAVE_DYNAMIC_FTRACE
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_FUNCTION_GRAPH_TRACER
-diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-index 5349cd8c0f30..f7b231ca269a 100644
---- a/arch/csky/kernel/process.c
-+++ b/arch/csky/kernel/process.c
-@@ -40,10 +40,11 @@ unsigned long thread_saved_pc(struct task_struct *tsk)
- 	return sw->r15;
- }
+diff --git a/nspr/pr/include/md/_linux.cfg b/nspr/pr/include/md/_linux.cfg
+index 547b7c8..9e2cfa0 100644
+--- a/nspr/pr/include/md/_linux.cfg
++++ b/nspr/pr/include/md/_linux.cfg
+@@ -1252,6 +1252,52 @@
+ #define PR_BYTES_PER_WORD_LOG2   2
+ #define PR_BYTES_PER_DWORD_LOG2  3
  
--int copy_thread(unsigned long clone_flags,
-+int copy_thread_tls(unsigned long clone_flags,
- 		unsigned long usp,
- 		unsigned long kthread_arg,
--		struct task_struct *p)
-+		struct task_struct *p,
-+		unsigned long tls)
- {
- 	struct switch_stack *childstack;
- 	struct pt_regs *childregs = task_pt_regs(p);
-@@ -70,7 +71,7 @@ int copy_thread(unsigned long clone_flags,
- 			childregs->usp = usp;
- 		if (clone_flags & CLONE_SETTLS)
- 			task_thread_info(p)->tp_value = childregs->tls
--						      = childregs->regs[0];
-+						      = tls;
++#elif defined(__csky__)
++
++#undef  IS_BIG_ENDIAN
++#define IS_LITTLE_ENDIAN 1
++#undef  IS_64
++
++#define PR_BYTES_PER_BYTE   1
++#define PR_BYTES_PER_SHORT  2
++#define PR_BYTES_PER_INT    4
++#define PR_BYTES_PER_INT64  8
++#define PR_BYTES_PER_LONG   4
++#define PR_BYTES_PER_FLOAT  4
++#define PR_BYTES_PER_DOUBLE 8
++#define PR_BYTES_PER_WORD   4
++#define PR_BYTES_PER_DWORD  8
++
++#define PR_BITS_PER_BYTE    8
++#define PR_BITS_PER_SHORT   16
++#define PR_BITS_PER_INT     32
++#define PR_BITS_PER_INT64   64
++#define PR_BITS_PER_LONG    32
++#define PR_BITS_PER_FLOAT   32
++#define PR_BITS_PER_DOUBLE  64
++#define PR_BITS_PER_WORD    32
++
++#define PR_BITS_PER_BYTE_LOG2   3
++#define PR_BITS_PER_SHORT_LOG2  4
++#define PR_BITS_PER_INT_LOG2    5
++#define PR_BITS_PER_INT64_LOG2  6
++#define PR_BITS_PER_LONG_LOG2   5
++#define PR_BITS_PER_FLOAT_LOG2  5
++#define PR_BITS_PER_DOUBLE_LOG2 6
++#define PR_BITS_PER_WORD_LOG2   5
++
++#define PR_ALIGN_OF_SHORT   2
++#define PR_ALIGN_OF_INT     4
++#define PR_ALIGN_OF_LONG    4
++#define PR_ALIGN_OF_INT64   8
++#define PR_ALIGN_OF_FLOAT   4
++#define PR_ALIGN_OF_DOUBLE  8
++#define PR_ALIGN_OF_POINTER 4
++#define PR_ALIGN_OF_WORD    4
++
++#define PR_BYTES_PER_WORD_LOG2  2
++#define PR_BYTES_PER_DWORD_LOG2 3
++
+ #else
  
- 		childregs->a0 = 0;
- 		childstack->r15 = (unsigned long) ret_from_fork;
+ #error "Unknown CPU architecture"
+diff --git a/nspr/pr/include/md/_linux.h b/nspr/pr/include/md/_linux.h
+index 3a7bb13..1373727 100644
+--- a/nspr/pr/include/md/_linux.h
++++ b/nspr/pr/include/md/_linux.h
+@@ -67,6 +67,8 @@
+ #define _PR_SI_ARCHITECTURE "nios2"
+ #elif defined(__nds32__)
+ #define _PR_SI_ARCHITECTURE "nds32"
++#elif defined(__csky__)
++#define _PR_SI_ARCHITECTURE "csky"
+ #else
+ #error "Unknown CPU architecture"
+ #endif
 -- 
-2.17.0
+1.8.3.1
 
