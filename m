@@ -2,110 +2,161 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 541B215B7DF
-	for <lists+linux-csky@lfdr.de>; Thu, 13 Feb 2020 04:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6AD1698A4
+	for <lists+linux-csky@lfdr.de>; Sun, 23 Feb 2020 17:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729443AbgBMDjv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 12 Feb 2020 22:39:51 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:51262 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729432AbgBMDjv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 12 Feb 2020 22:39:51 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=majun258@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0TprKkIs_1581565175;
-Received: from localhost(mailfrom:majun258@linux.alibaba.com fp:SMTPD_---0TprKkIs_1581565175)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 13 Feb 2020 11:39:48 +0800
-From:   Ma Jun <majun258@linux.alibaba.com>
-To:     dev-tech-nspr@lists.mozilla.org
-Cc:     majun258@linux.alibaba.com, linux-csky@vger.kernel.org
-Subject: [PATCH] Add the csky architecture support
-Date:   Thu, 13 Feb 2020 03:10:25 +0800
-Message-Id: <1581534625-4066-1-git-send-email-majun258@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1726490AbgBWQXh (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 23 Feb 2020 11:23:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726208AbgBWQXh (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 23 Feb 2020 11:23:37 -0500
+Received: from localhost.localdomain (89.208.247.74.16clouds.com [89.208.247.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D9B25206E0;
+        Sun, 23 Feb 2020 16:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582475017;
+        bh=tm6U0RsfbLgt6+HZ125jJ+1tmKJHn2WgIllq+q4yaXw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rY7tgvt8Od9nK6RFxOXGJBDpww6h3kgy6mXJfeQd0+nv6PoAkMXYLF9NC0D5JnVoa
+         Er1J4+DXyq7yG3Cw3culKBS4u/uv4biwxQMXTqO8bJYtdmbhkh9YaUiKukzz3ot6+p
+         Ed5wQYLykAr1hx3jgtinLdBov6fjRjKtD7WRSS8Q=
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky updates for 5.6-rc3
+Date:   Mon, 24 Feb 2020 00:23:32 +0800
+Message-Id: <20200223162332.16495-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Support the csky architecture
+Hi Linus,
 
-Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
----
- nspr/pr/include/md/_linux.cfg | 46 +++++++++++++++++++++++++++++++++++++++++++
- nspr/pr/include/md/_linux.h   |  2 ++
- 2 files changed, 48 insertions(+)
+Please pull the changes for 5.6-rc3. Sorry, I missed 5.6-rc1 merge window,
+but in this pull request the most are the fixes and the rests are between
+fixes and features. The only outside modification is the MAINTAINERS file
+update with our mailing list.
 
-diff --git a/nspr/pr/include/md/_linux.cfg b/nspr/pr/include/md/_linux.cfg
-index 547b7c8..9e2cfa0 100644
---- a/nspr/pr/include/md/_linux.cfg
-+++ b/nspr/pr/include/md/_linux.cfg
-@@ -1252,6 +1252,52 @@
- #define PR_BYTES_PER_WORD_LOG2   2
- #define PR_BYTES_PER_DWORD_LOG2  3
- 
-+#elif defined(__csky__)
-+
-+#undef  IS_BIG_ENDIAN
-+#define IS_LITTLE_ENDIAN 1
-+#undef  IS_64
-+
-+#define PR_BYTES_PER_BYTE   1
-+#define PR_BYTES_PER_SHORT  2
-+#define PR_BYTES_PER_INT    4
-+#define PR_BYTES_PER_INT64  8
-+#define PR_BYTES_PER_LONG   4
-+#define PR_BYTES_PER_FLOAT  4
-+#define PR_BYTES_PER_DOUBLE 8
-+#define PR_BYTES_PER_WORD   4
-+#define PR_BYTES_PER_DWORD  8
-+
-+#define PR_BITS_PER_BYTE    8
-+#define PR_BITS_PER_SHORT   16
-+#define PR_BITS_PER_INT     32
-+#define PR_BITS_PER_INT64   64
-+#define PR_BITS_PER_LONG    32
-+#define PR_BITS_PER_FLOAT   32
-+#define PR_BITS_PER_DOUBLE  64
-+#define PR_BITS_PER_WORD    32
-+
-+#define PR_BITS_PER_BYTE_LOG2   3
-+#define PR_BITS_PER_SHORT_LOG2  4
-+#define PR_BITS_PER_INT_LOG2    5
-+#define PR_BITS_PER_INT64_LOG2  6
-+#define PR_BITS_PER_LONG_LOG2   5
-+#define PR_BITS_PER_FLOAT_LOG2  5
-+#define PR_BITS_PER_DOUBLE_LOG2 6
-+#define PR_BITS_PER_WORD_LOG2   5
-+
-+#define PR_ALIGN_OF_SHORT   2
-+#define PR_ALIGN_OF_INT     4
-+#define PR_ALIGN_OF_LONG    4
-+#define PR_ALIGN_OF_INT64   8
-+#define PR_ALIGN_OF_FLOAT   4
-+#define PR_ALIGN_OF_DOUBLE  8
-+#define PR_ALIGN_OF_POINTER 4
-+#define PR_ALIGN_OF_WORD    4
-+
-+#define PR_BYTES_PER_WORD_LOG2  2
-+#define PR_BYTES_PER_DWORD_LOG2 3
-+
- #else
- 
- #error "Unknown CPU architecture"
-diff --git a/nspr/pr/include/md/_linux.h b/nspr/pr/include/md/_linux.h
-index 3a7bb13..1373727 100644
---- a/nspr/pr/include/md/_linux.h
-+++ b/nspr/pr/include/md/_linux.h
-@@ -67,6 +67,8 @@
- #define _PR_SI_ARCHITECTURE "nios2"
- #elif defined(__nds32__)
- #define _PR_SI_ARCHITECTURE "nds32"
-+#elif defined(__csky__)
-+#define _PR_SI_ARCHITECTURE "csky"
- #else
- #error "Unknown CPU architecture"
- #endif
--- 
-1.8.3.1
+Best Regards
+ Guo Ren
 
+The following changes since commit 11a48a5a18c63fd7621bb050228cebf13566e4d8:
+
+  Linux 5.6-rc2 (2020-02-16 13:16:59 -0800)
+
+are available in the Git repository at:
+
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.6-rc3
+
+for you to fetch changes up to 99db590b083fa2bc60adfcb5c839a62db4ef1d79:
+
+  csky: Replace <linux/clk-provider.h> by <linux/of_clk.h> (2020-02-23 12:48:55 +0800)
+
+----------------------------------------------------------------
+csky updates for 5.6-rc3
+
+ - Fix up cache flush implementations.
+
+ - Fix up ftrace modify panic.
+
+ - Fix up CONFIG_SMP boot problem.
+
+ - Fix up pt_regs saving for atomic.S.
+
+ - Fix up fixaddr_init without highmem.
+
+ - Fix up stack protector support.
+
+ - Fix up fake Tightly-Coupled Memory codes compile and use.
+
+ - Fix up some typos and coding convention.
+
+The tag is tested with [1].
+
+ 1: https://gitlab.com/c-sky/buildroot/pipelines/120268254
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      csky: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+
+Guo Ren (17):
+      MAINTAINERS: csky: Add mailing list for csky
+      csky: Tightly-Coupled Memory or Sram support
+      csky: Separate fixaddr_init from highmem
+      csky/mm: Fixup export invalid_pte_table symbol
+      csky: Set regs->usp to kernel sp, when the exception is from kernel
+      csky/smp: Fixup boot failed when CONFIG_SMP
+      csky/Kconfig: Add Kconfig.platforms to support some drivers
+      csky: Support icache flush without specific instructions
+      csky: Remove unnecessary flush_icache_* implementation
+      csky: Enable defer flush_dcache_page for abiv2 cpus (807/810/860)
+      csky: Optimize abiv2 copy_to_user_page with VM_EXEC
+      csky: Add flush_icache_mm to defer flush icache all
+      csky: Fixup ftrace modify panic
+      csky: Remove unused cache implementation
+      csky: Fixup compile warning for three unimplemented syscalls
+      csky: Add setup_initrd check code
+      csky: Implement copy_thread_tls
+
+Krzysztof Kozlowski (1):
+      csky: Cleanup old Kconfig options
+
+Ma Jun (1):
+      csky: Minimize defconfig to support buildroot config.fragment
+
+MaJun (1):
+      csky: Add PCI support
+
+Mao Han (1):
+      csky: Initial stack protector support
+
+Randy Dunlap (1):
+      arch/csky: fix some Kconfig typos
+
+ MAINTAINERS                            |   1 +
+ arch/csky/Kconfig                      |  51 +++++++++-
+ arch/csky/Kconfig.platforms            |   9 ++
+ arch/csky/abiv1/inc/abi/cacheflush.h   |   5 +-
+ arch/csky/abiv1/inc/abi/entry.h        |  19 +++-
+ arch/csky/abiv2/cacheflush.c           |  84 +++++++++++-----
+ arch/csky/abiv2/inc/abi/cacheflush.h   |  33 ++++---
+ arch/csky/abiv2/inc/abi/entry.h        |  11 +++
+ arch/csky/configs/defconfig            |   8 --
+ arch/csky/include/asm/Kbuild           |   1 -
+ arch/csky/include/asm/cache.h          |   1 +
+ arch/csky/include/asm/cacheflush.h     |   1 +
+ arch/csky/include/asm/fixmap.h         |   9 +-
+ arch/csky/include/asm/memory.h         |  25 +++++
+ arch/csky/include/asm/mmu.h            |   1 +
+ arch/csky/include/asm/mmu_context.h    |   2 +
+ arch/csky/include/asm/pci.h            |  34 +++++++
+ arch/csky/include/asm/pgtable.h        |   6 +-
+ arch/csky/include/asm/stackprotector.h |  29 ++++++
+ arch/csky/include/asm/tcm.h            |  24 +++++
+ arch/csky/include/uapi/asm/unistd.h    |   3 +
+ arch/csky/kernel/atomic.S              |   8 +-
+ arch/csky/kernel/process.c             |  13 ++-
+ arch/csky/kernel/setup.c               |   5 +-
+ arch/csky/kernel/smp.c                 |   2 +-
+ arch/csky/kernel/time.c                |   2 +-
+ arch/csky/kernel/vmlinux.lds.S         |  49 ++++++++++
+ arch/csky/mm/Makefile                  |   3 +
+ arch/csky/mm/cachev1.c                 |   5 +
+ arch/csky/mm/cachev2.c                 |  45 +++++----
+ arch/csky/mm/highmem.c                 |  64 +------------
+ arch/csky/mm/init.c                    |  92 ++++++++++++++++++
+ arch/csky/mm/syscache.c                |  13 +--
+ arch/csky/mm/tcm.c                     | 169 +++++++++++++++++++++++++++++++++
+ 34 files changed, 663 insertions(+), 164 deletions(-)
+ create mode 100644 arch/csky/Kconfig.platforms
+ create mode 100644 arch/csky/include/asm/memory.h
+ create mode 100644 arch/csky/include/asm/pci.h
+ create mode 100644 arch/csky/include/asm/stackprotector.h
+ create mode 100644 arch/csky/include/asm/tcm.h
+ create mode 100644 arch/csky/mm/tcm.c
