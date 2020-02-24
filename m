@@ -2,41 +2,24 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CA316A38C
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Feb 2020 11:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9284C16A72A
+	for <lists+linux-csky@lfdr.de>; Mon, 24 Feb 2020 14:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727325AbgBXKKE (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Feb 2020 05:10:04 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:36760 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727183AbgBXKKE (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Feb 2020 05:10:04 -0500
-Received: by mail-ot1-f67.google.com with SMTP id j20so8218131otq.3;
-        Mon, 24 Feb 2020 02:10:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Om7nrQID6FlX5mnR8/K/zRP8xkeIh57Aql009khB7UA=;
-        b=QwD/RMvhWiOiK4id1MLqkGh3lbx3VjXs8lj5y8sF6Wj3NZ20Wx6cWasU7F6I4mo5H0
-         03PLhV/GaN2Ypp7gTSQu9ZaVs9+Z1MwMY7k9PYh1B68Ph8Zj7gQeArFlthUfczMHdcl2
-         SNUG8uOc+sEDY/XX28Foia7Sxjp4hSkQqmepq39AYpi/kbFuWum0WgvmKoDVMjlijr0t
-         E2iausk9rL0Cf08R/D1YBymPGkiD6BcSXaxRt9GHcYO5ZnpBKP1rlEjnaUl+qkJo93CP
-         qqt8llm5dgp+Tbju8hEQ29uUWWuHKcGdIn70VtuXJg1BNCbGpUnpIhK5XhKO/Gu3uWfB
-         4c9A==
-X-Gm-Message-State: APjAAAWJOUl2uMmEdvUacUrUjMQKr2feoHkH3cYqT1KNca1ff8Oczsur
-        tNsSX12OXRGcjTxBQbZDJl4uCF3Bb+ODPh2yKkY=
-X-Google-Smtp-Source: APXvYqy+o+XiQlh0QOaMvapvhpar/cq7MfutM+nGBFLIiCFASeVH1V3juGWAUqxFnDRUGQgq4DrqTaiwZyWthqnvpxI=
-X-Received: by 2002:a05:6830:1d4:: with SMTP id r20mr24550265ota.107.1582539003523;
- Mon, 24 Feb 2020 02:10:03 -0800 (PST)
-MIME-Version: 1.0
-References: <1582525304-32113-1-git-send-email-anshuman.khandual@arm.com>
-In-Reply-To: <1582525304-32113-1-git-send-email-anshuman.khandual@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 24 Feb 2020 11:09:52 +0100
-Message-ID: <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/vma: Append unlikely() while testing VMA access permissions
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
+        id S1727393AbgBXNTk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 24 Feb 2020 08:19:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:36978 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727281AbgBXNTk (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 24 Feb 2020 08:19:40 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3790730E;
+        Mon, 24 Feb 2020 05:19:40 -0800 (PST)
+Received: from [10.163.1.29] (unknown [10.163.1.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD26E3F534;
+        Mon, 24 Feb 2020 05:19:35 -0800 (PST)
+Subject: Re: [PATCH] mm/vma: Append unlikely() while testing VMA access
+ permissions
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Linux MM <linux-mm@kvack.org>, Guo Ren <guoren@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
@@ -45,38 +28,64 @@ Cc:     Linux MM <linux-mm@kvack.org>, Guo Ren <guoren@kernel.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <1582525304-32113-1-git-send-email-anshuman.khandual@arm.com>
+ <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <f23b808a-d71f-de44-b31b-057ec883b92f@arm.com>
+Date:   Mon, 24 Feb 2020 18:49:34 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
+MIME-Version: 1.0
+In-Reply-To: <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Anshuman,
 
-Thanks for your patch!
+On 02/24/2020 03:39 PM, Geert Uytterhoeven wrote:
+> Hi Anshuman,
+> 
+> Thanks for your patch!
+> 
+> On Mon, Feb 24, 2020 at 7:22 AM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>> It is unlikely that an inaccessible VMA without required permission flags
+>> will get a page fault. Hence lets just append unlikely() directive to such
+> 
+> Why? Isn't it the idea that you get a page fault when the page is not
+> accessible?
 
-On Mon, Feb 24, 2020 at 7:22 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
-> It is unlikely that an inaccessible VMA without required permission flags
-> will get a page fault. Hence lets just append unlikely() directive to such
+Yeah it is. But the point here is to have a directive indicating that it is
+unlikely that such scenarios will exist frequently even though they are very
+much possible.
 
-Why? Isn't it the idea that you get a page fault when the page is not
-accessible?
+> 
+>> checks in order to improve performance while also standardizing it across
+>> various platforms.
+> 
+> Does it make a difference to add these? Have you benchmarked this?
+> https://lwn.net/Articles/420019/
 
-> checks in order to improve performance while also standardizing it across
-> various platforms.
+I dont have access to these platforms. As I had noted down previously, this
+was only build tested. The primary motivation was that the likeliness or
+rather unlikeliness for page faults on inaccessible VMAs are more workload
+specific. Hence should not be platform dependent and this change was just
+trying to make it similar in some platforms.
 
-Does it make a difference to add these? Have you benchmarked this?
-https://lwn.net/Articles/420019/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
