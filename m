@@ -2,90 +2,76 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9284C16A72A
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Feb 2020 14:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3418616BEDB
+	for <lists+linux-csky@lfdr.de>; Tue, 25 Feb 2020 11:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727393AbgBXNTk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Feb 2020 08:19:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:36978 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727281AbgBXNTk (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 24 Feb 2020 08:19:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3790730E;
-        Mon, 24 Feb 2020 05:19:40 -0800 (PST)
-Received: from [10.163.1.29] (unknown [10.163.1.29])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD26E3F534;
-        Mon, 24 Feb 2020 05:19:35 -0800 (PST)
-Subject: Re: [PATCH] mm/vma: Append unlikely() while testing VMA access
- permissions
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux MM <linux-mm@kvack.org>, Guo Ren <guoren@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1582525304-32113-1-git-send-email-anshuman.khandual@arm.com>
- <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <f23b808a-d71f-de44-b31b-057ec883b92f@arm.com>
-Date:   Mon, 24 Feb 2020 18:49:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1730242AbgBYKfP (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 25 Feb 2020 05:35:15 -0500
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:51792 "EHLO
+        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729417AbgBYKfP (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 25 Feb 2020 05:35:15 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09531976|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.170054-0.0243383-0.805608;DS=CONTINUE|ham_regular_dialog|0.0116271-0.000104934-0.988268;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03267;MF=zhiwei_liu@c-sky.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.GsFPuQz_1582626910;
+Received: from L-PF1D6DP4-1208.hz.ali.com(mailfrom:zhiwei_liu@c-sky.com fp:SMTPD_---.GsFPuQz_1582626910)
+          by smtp.aliyun-inc.com(10.147.40.44);
+          Tue, 25 Feb 2020 18:35:11 +0800
+From:   LIU Zhiwei <zhiwei_liu@c-sky.com>
+To:     richard.henderson@linaro.org, alistair23@gmail.com,
+        chihmin.chao@sifive.com, palmer@dabbelt.com
+Cc:     wenmeng_zhang@c-sky.com, wxy194768@alibaba-inc.com,
+        linux-csky@vger.kernel.org, qemu-devel@nongnu.org,
+        qemu-riscv@nongnu.org, LIU Zhiwei <zhiwei_liu@c-sky.com>
+Subject: [PATCH v4 0/5] target/riscv: support vector extension part 2
+Date:   Tue, 25 Feb 2020 18:35:03 +0800
+Message-Id: <20200225103508.7651-1-zhiwei_liu@c-sky.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+Features:
+  * support specification riscv-v-spec-0.7.1.
+  * support basic vector extension.
+  * support Zvlsseg.
+  * support Zvamo.
+  * not support Zvediv as it is changing.
+  * fixed SLEN 128bit.
+  * element width support 8bit, 16bit, 32bit, 64bit.
 
-On 02/24/2020 03:39 PM, Geert Uytterhoeven wrote:
-> Hi Anshuman,
-> 
-> Thanks for your patch!
-> 
-> On Mon, Feb 24, 2020 at 7:22 AM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->> It is unlikely that an inaccessible VMA without required permission flags
->> will get a page fault. Hence lets just append unlikely() directive to such
-> 
-> Why? Isn't it the idea that you get a page fault when the page is not
-> accessible?
+Changelog:
+v4
+  * remove check structure, use check function directly
+  * use (s->vlen / 8) as maxsz in simd_maxsz
+  * remove helper structure vext_ctx, pass args directly.
+v3
+  * move check code from execution time to translation time.
+  * probe pages before real load or store access.
+  * use probe_page_check for no-fault operations in linux user mode.
+  * add atomic and noatomic operation for vector amo instructions.
+V2
+  * use float16_compare{_quiet}
+  * only use GETPC() in outer most helper
+  * add ctx.ext_v Property
 
-Yeah it is. But the point here is to have a directive indicating that it is
-unlikely that such scenarios will exist frequently even though they are very
-much possible.
+LIU Zhiwei (5):
+  target/riscv: add vector unit stride load and store instructions
+  target/riscv: add vector stride load and store instructions
+  target/riscv: add vector index load and store instructions
+  target/riscv: add fault-only-first unit stride load
+  target/riscv: add vector amo operations
 
-> 
->> checks in order to improve performance while also standardizing it across
->> various platforms.
-> 
-> Does it make a difference to add these? Have you benchmarked this?
-> https://lwn.net/Articles/420019/
+ target/riscv/helper.h                   |  218 ++++
+ target/riscv/insn32-64.decode           |   11 +
+ target/riscv/insn32.decode              |   67 ++
+ target/riscv/insn_trans/trans_rvv.inc.c |  663 +++++++++++++
+ target/riscv/translate.c                |    2 +
+ target/riscv/vector_helper.c            | 1203 +++++++++++++++++++++++
+ 6 files changed, 2164 insertions(+)
 
-I dont have access to these platforms. As I had noted down previously, this
-was only build tested. The primary motivation was that the likeliness or
-rather unlikeliness for page faults on inaccessible VMAs are more workload
-specific. Hence should not be platform dependent and this change was just
-trying to make it similar in some platforms.
+-- 
+2.23.0
 
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-> 
