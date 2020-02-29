@@ -2,149 +2,97 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E854174705
-	for <lists+linux-csky@lfdr.de>; Sat, 29 Feb 2020 14:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D182A17478F
+	for <lists+linux-csky@lfdr.de>; Sat, 29 Feb 2020 16:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgB2NQ1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 29 Feb 2020 08:16:27 -0500
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:33673 "EHLO
+        id S1727112AbgB2PHA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 29 Feb 2020 10:07:00 -0500
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:41082 "EHLO
         smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726944AbgB2NQ1 (ORCPT
+        by vger.kernel.org with ESMTP id S1727103AbgB2PHA (ORCPT
         <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 29 Feb 2020 08:16:27 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07439639|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.420502-0.00878351-0.570714;DS=CONTINUE|ham_regular_dialog|0.0798981-0.00281304-0.917289;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03299;MF=zhiwei_liu@c-sky.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.Gu9hB46_1582982174;
-Received: from 30.0.153.10(mailfrom:zhiwei_liu@c-sky.com fp:SMTPD_---.Gu9hB46_1582982174)
-          by smtp.aliyun-inc.com(10.147.41.187);
-          Sat, 29 Feb 2020 21:16:14 +0800
-Subject: Re: [PATCH v4 5/5] target/riscv: add vector amo operations
-To:     Richard Henderson <richard.henderson@linaro.org>,
-        alistair23@gmail.com, chihmin.chao@sifive.com, palmer@dabbelt.com
+        Sat, 29 Feb 2020 10:07:00 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1036667|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.143762-0.0303341-0.825904;DS=CONTINUE|ham_system_inform|0.0467761-0.00184495-0.951379;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03278;MF=zhiwei_liu@c-sky.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.GuBq59D_1582988809;
+Received: from L-PF1D6DP4-1208.hz.ali.com(mailfrom:zhiwei_liu@c-sky.com fp:SMTPD_---.GuBq59D_1582988809)
+          by smtp.aliyun-inc.com(10.147.40.200);
+          Sat, 29 Feb 2020 23:06:49 +0800
+From:   LIU Zhiwei <zhiwei_liu@c-sky.com>
+To:     richard.henderson@linaro.org, alistair23@gmail.com,
+        chihmin.chao@sifive.com, palmer@dabbelt.com
 Cc:     wenmeng_zhang@c-sky.com, wxy194768@alibaba-inc.com,
         linux-csky@vger.kernel.org, qemu-devel@nongnu.org,
-        qemu-riscv@nongnu.org
-References: <20200225103508.7651-1-zhiwei_liu@c-sky.com>
- <20200225103508.7651-6-zhiwei_liu@c-sky.com>
- <03bf483e-d6bb-9de4-9934-12bfa7093ad3@linaro.org>
- <6d008841-4356-b0f1-ece2-df8323ad8254@c-sky.com>
- <a3a614d1-aa54-046b-2c14-b6e517f1fbf0@linaro.org>
-From:   LIU Zhiwei <zhiwei_liu@c-sky.com>
-Message-ID: <11e36778-50c8-64a9-35ab-bb3e2bdeb92e@c-sky.com>
-Date:   Sat, 29 Feb 2020 21:16:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        qemu-riscv@nongnu.org, LIU Zhiwei <zhiwei_liu@c-sky.com>
+Subject: [PATCH v6 0/4] target-riscv: support vector extension part 1 
+Date:   Sat, 29 Feb 2020 23:04:09 +0800
+Message-Id: <20200229150413.24950-1-zhiwei_liu@c-sky.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <a3a614d1-aa54-046b-2c14-b6e517f1fbf0@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+This is the first part of v6 patchset. The changelog of v6 is only coverd
+the part1.
 
+Features:
+  * support specification riscv-v-spec-0.7.1.
+  * support basic vector extension.
+  * support Zvlsseg.
+  * support Zvamo.
+  * not support Zvediv as it is changing.
+  * SLEN always equals VLEN.
+  * element width support 8bit, 16bit, 32bit, 64bit.
 
-On 2020/2/29 2:46, Richard Henderson wrote:
-> On 2/28/20 1:19 AM, LIU Zhiwei wrote:
->>>> +#define GEN_VEXT_AMO_NOATOMIC_OP(NAME, ETYPE, MTYPE, H, DO_OP, SUF)      \
->>>> +static void vext_##NAME##_noatomic_op(void *vs3, target_ulong addr,      \
->>>> +        uint32_t wd, uint32_t idx, CPURISCVState *env, uintptr_t retaddr)\
->>>> +{                                                                        \
->>>> +    ETYPE ret;                                                           \
->>>> +    target_ulong tmp;                                                    \
->>>> +    int mmu_idx = cpu_mmu_index(env, false);                             \
->>>> +    tmp = cpu_ld##SUF##_mmuidx_ra(env, addr, mmu_idx, retaddr);          \
->>>> +    ret = DO_OP((ETYPE)(MTYPE)tmp, *((ETYPE *)vs3 + H(idx)));            \
->>>> +    cpu_st##SUF##_mmuidx_ra(env, addr, ret, mmu_idx, retaddr);           \
->>>> +    if (wd) {                                                            \
->>>> +        *((ETYPE *)vs3 + H(idx)) = (target_long)(MTYPE)tmp;              \
->>> The target_long cast is wrong; should be ETYPE.
->> "If the AMO memory element width is less than SEW, the value returned from memory
->>   is sign-extended to fill SEW"
->>
->> So just use (target_long) to sign-extended. As you see, instructions like
->>
->> vamominud
->>
->> have the uint64_t as ETYPE.  And it can't sign-extend the value from memory by
->> (ETYPE)(MTYPE)tmp.
-> Casting to target_long doesn't help -- it becomes signed at a variable size,
-> possibly larger than MTYPE.
->
-> In addition, I think you're performing the operation at the wrong length.
->   The
-> text of the ISA document could be clearer, but
->
->    # If SEW > 32 bits, the value returned from memory
->    # is sign-extended to fill SEW.
->
-> You are performing the operation in ETYPE, but it should be done in MTYPE and
-> only afterward extended to ETYPE.
-Yes, I  made a mistake.It should be MTYPE.
-> For minu/maxu, you're right that you need an unsigned for the operation.  But
-> then you need a signed type of the same width for the extension.
->
-> One possibility is to *always* make MTYPE a signed type, but for the two cases
-> that require an unsigned type, provide it.  E.g.
->
-> #define GEN_VEXT_AMO_NOATOMIC_OP(NAME, ESZ, MSZ, H, DO_OP, SUF)
-> static void vext_##NAME##_noatomic_op(void *vs3,
->      target_ulong addr, uint32_t wd, uint32_t idx,
->      CPURISCVState *env, uintptr_t retaddr)
-> {
->      typedef int##ESZ##_t ETYPE;
->      typedef int##MSZ##_t MTYPE;
->      typedef uint##MSZ##_t UMTYPE;
->      ETYPE *pe3 = (ETYPE *)vs3 + H(idx);
->      MTYPE a = *pe3, b = cpu_ld##SUF##_data(env, addr);
->      a = DO_OP(a, b);
->      cpu_st##SUF##_data(env, addr, a);
->      if (wd) {
->          *pe3 = a;
->      }
-> }
->
-> /* Signed min/max */
-> #define DO_MAX(N, M)  ((N) >= (M) ? (N) : (M))
-> #define DO_MIN(N, M)  ((N) >= (M) ? (M) : (N))
->
-> /* Unsigned min/max */
-> #define DO_MAXU(N, M) DO_MAX((UMTYPE)N, (UMTYPE)M)
-> #define DO_MINU(N, M) DO_MIN((UMTYPE)N, (UMTYPE)M)
->
-> GEN_VEXT_AMO_NOATOMIC_OP(vamomaxuw_v_d, 64, 32, H8, DO_MAXU, l)
-> GEN_VEXT_AMO_NOATOMIC_OP(vamomaxud_v_d, 64, 64, H8, DO_MAXU, q)
-Perfect. I will try it.
+Changelog:
+v6
+  * keep vector CSR in read/write order
+  * define fields name of VTYPE just like specification.
+v5
+  * vector registers as direct fields in RISCVCPUState.
+  * mov the properties to last patch.
+  * check RVV in vs().
+  * check if rs1 is x0 in vsetvl/vsetvli.
+  * check VILL, EDIV, RESERVED fileds in vsetvl.
+v4
+  * adjust max vlen to 512 bits.
+  * check maximum on elen(64bits).
+  * check minimum on vlen(128bits).
+  * check if rs1 is x0 in vsetvl/vsetvli.
+  * use gen_goto_tb in vsetvli instead of exit_tb.
+  * fixup fetch vlmax from rs2, not env->vext.type.
+v3
+  * support VLEN configure from qemu command line.
+  * support ELEN configure from qemu command line.
+  * support vector specification version configure from qemu command line.
+  * only default on for "any" cpu, others turn on from command line.
+  * use a continous memory block for vector register description.
+V2
+  * use float16_compare{_quiet}
+  * only use GETPC() in outer most helper
+  * add ctx.ext_v Property
 
->
->>> The missing aligned address check is the only remaining exception that the
->>> helper_atomic_* functions would raise, since you have properly checked for
->>> read+write.  So it might be possible to get away with using the helpers, but I
->>> don't like it.
->> Do you mean write my own helpers to implement atomic operations?
->>
->> What's the meaning of " but I don't like it. "?
-> I don't like re-using helpers in an incorrect way.
->
->>> But I do think it would be better to write your own helpers for the atomic
->>> paths.  They need not check quite so much, since we have already done the
->>> validation above.  You pretty much only need to use tlb_vaddr_to_host.
->>>
->>> If that gets too ugly, we can talk about rearranging
->>> accel/tcg/atomic_template.h so that it could be reused.
->> Good idea.  Perhaps use tlb_vaddr_to_host instead of atomic_mmu_lookup
->> to define another macro like GEN_ATOMIC_HELPER?
->>> Alternately, we could simply *always* use the non-atomic helpers, and raise
->>> exit_atomic if PARALLEL.
->> Yes, it's the simplest way.
->> However I prefer try to define something like GEN_ATOMIC_HELPER in
->> vector_helper.c.
-> I'll think about this some more.
-> In the short-term, I think non-atomic is the best we can do.
-I will accept your advice. Thanks.
+LIU Zhiwei (4):
+  target/riscv: add vector extension field in CPURISCVState
+  target/riscv: implementation-defined constant parameters
+  target/riscv: support vector extension csr
+  target/riscv: add vector configure instruction
 
-Best Regards,
-Zhiwei
->
-> r~
+ target/riscv/Makefile.objs              |  2 +-
+ target/riscv/cpu.c                      |  7 +++
+ target/riscv/cpu.h                      | 78 ++++++++++++++++++++++---
+ target/riscv/cpu_bits.h                 | 15 +++++
+ target/riscv/csr.c                      | 75 +++++++++++++++++++++++-
+ target/riscv/helper.h                   |  2 +
+ target/riscv/insn32.decode              |  5 ++
+ target/riscv/insn_trans/trans_rvv.inc.c | 69 ++++++++++++++++++++++
+ target/riscv/translate.c                | 17 +++++-
+ target/riscv/vector_helper.c            | 53 +++++++++++++++++
+ 10 files changed, 311 insertions(+), 12 deletions(-)
+ create mode 100644 target/riscv/insn_trans/trans_rvv.inc.c
+ create mode 100644 target/riscv/vector_helper.c
+
+-- 
+2.23.0
 
