@@ -2,376 +2,637 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 667EE174791
-	for <lists+linux-csky@lfdr.de>; Sat, 29 Feb 2020 16:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD611751A4
+	for <lists+linux-csky@lfdr.de>; Mon,  2 Mar 2020 02:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbgB2PHH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 29 Feb 2020 10:07:07 -0500
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:35941 "EHLO
-        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727078AbgB2PHH (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 29 Feb 2020 10:07:07 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.542225-0.0239631-0.433811;DS=CONTINUE|ham_alarm|0.12094-0.00203945-0.877021;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03267;MF=zhiwei_liu@c-sky.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.GuBq59D_1582988809;
-Received: from L-PF1D6DP4-1208.hz.ali.com(mailfrom:zhiwei_liu@c-sky.com fp:SMTPD_---.GuBq59D_1582988809)
-          by smtp.aliyun-inc.com(10.147.40.200);
-          Sat, 29 Feb 2020 23:06:51 +0800
-From:   LIU Zhiwei <zhiwei_liu@c-sky.com>
-To:     richard.henderson@linaro.org, alistair23@gmail.com,
-        chihmin.chao@sifive.com, palmer@dabbelt.com
-Cc:     wenmeng_zhang@c-sky.com, wxy194768@alibaba-inc.com,
-        linux-csky@vger.kernel.org, qemu-devel@nongnu.org,
-        qemu-riscv@nongnu.org, LIU Zhiwei <zhiwei_liu@c-sky.com>
-Subject: [PATCH v6 4/4] target/riscv: add vector configure instruction
-Date:   Sat, 29 Feb 2020 23:04:13 +0800
-Message-Id: <20200229150413.24950-5-zhiwei_liu@c-sky.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200229150413.24950-1-zhiwei_liu@c-sky.com>
-References: <20200229150413.24950-1-zhiwei_liu@c-sky.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726775AbgCBB4r (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 1 Mar 2020 20:56:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:55572 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726614AbgCBB4q (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 1 Mar 2020 20:56:46 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AB8931B;
+        Sun,  1 Mar 2020 17:56:44 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.1.119])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 719B23F6CF;
+        Sun,  1 Mar 2020 17:56:32 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Guo Ren <guoren@kernel.org>, Brian Cain <bcain@codeaurora.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sam Creasey <sammy@sammy.net>, Michal Simek <monstr@monstr.eu>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, nios2-dev@lists.rocketboards.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/special: Create generic fallbacks for pte_special() and pte_mkspecial()
+Date:   Mon,  2 Mar 2020 07:26:30 +0530
+Message-Id: <1583114190-7678-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-vsetvl and vsetvli are two configure instructions for vl, vtype. TB flags
-should update after configure instructions. The (ill, lmul, sew ) of vtype
-and the bit of (VSTART == 0 && VL == VLMAX) will be placed within tb_flags.
+Currently there are many platforms that dont enable HAVE_ARCH_PTE_SPECIAL
+but required to define quite similar fallback stubs for special page table
+entry helpers such as pte_special() and pte_mkspecial(), as they get build
+in generic MM without a config check. This creates two generic fallback
+stub definitions for these helpers, eliminating much code duplication.
 
-Signed-off-by: LIU Zhiwei <zhiwei_liu@c-sky.com>
+mips platform has a special case where pte_special() and pte_mkspecial()
+visibility is wider than what HAVE_ARCH_PTE_SPECIAL enablement requires.
+This restricts those symbol visibility in order to avoid redefinitions
+which is now exposed through this new generic stubs and subsequent build
+failure. arm platform set_pte_at() definition needs to be moved into a C
+file just to prevent a build failure.
+
+Cc: Richard Henderson <rth@twiddle.net>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Brian Cain <bcain@codeaurora.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Sam Creasey <sammy@sammy.net>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Nick Hu <nickhu@andestech.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+Cc: Vincent Chen <deanbo422@gmail.com>
+Cc: Ley Foon Tan <ley.foon.tan@intel.com>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Guan Xuetao <gxt@pku.edu.cn>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: nios2-dev@lists.rocketboards.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-parisc@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- target/riscv/Makefile.objs              |  2 +-
- target/riscv/cpu.h                      | 61 +++++++++++++++++++---
- target/riscv/helper.h                   |  2 +
- target/riscv/insn32.decode              |  5 ++
- target/riscv/insn_trans/trans_rvv.inc.c | 69 +++++++++++++++++++++++++
- target/riscv/translate.c                | 17 +++++-
- target/riscv/vector_helper.c            | 53 +++++++++++++++++++
- 7 files changed, 198 insertions(+), 11 deletions(-)
- create mode 100644 target/riscv/insn_trans/trans_rvv.inc.c
- create mode 100644 target/riscv/vector_helper.c
+Build tested on multiple platforms but boot tested only for arm64.
 
-diff --git a/target/riscv/Makefile.objs b/target/riscv/Makefile.objs
-index ff651f69f6..ff38df6219 100644
---- a/target/riscv/Makefile.objs
-+++ b/target/riscv/Makefile.objs
-@@ -1,4 +1,4 @@
--obj-y += translate.o op_helper.o cpu_helper.o cpu.o csr.o fpu_helper.o gdbstub.o
-+obj-y += translate.o op_helper.o cpu_helper.o cpu.o csr.o fpu_helper.o vector_helper.o gdbstub.o
- obj-$(CONFIG_SOFTMMU) += pmp.o
+ arch/alpha/include/asm/pgtable.h         |  2 --
+ arch/arm/include/asm/pgtable-2level.h    |  2 --
+ arch/arm/include/asm/pgtable.h           | 15 ++------
+ arch/arm/mm/mmu.c                        | 14 ++++++++
+ arch/csky/include/asm/pgtable.h          |  3 --
+ arch/hexagon/include/asm/pgtable.h       |  2 --
+ arch/ia64/include/asm/pgtable.h          |  2 --
+ arch/m68k/include/asm/mcf_pgtable.h      | 10 ------
+ arch/m68k/include/asm/motorola_pgtable.h |  2 --
+ arch/m68k/include/asm/sun3_pgtable.h     |  2 --
+ arch/microblaze/include/asm/pgtable.h    |  4 ---
+ arch/mips/include/asm/pgtable.h          | 44 ++++++++++++++++--------
+ arch/nds32/include/asm/pgtable.h         |  9 -----
+ arch/nios2/include/asm/pgtable.h         |  3 --
+ arch/openrisc/include/asm/pgtable.h      |  2 --
+ arch/parisc/include/asm/pgtable.h        |  2 --
+ arch/sparc/include/asm/pgtable_32.h      |  7 ----
+ arch/um/include/asm/pgtable.h            | 10 ------
+ arch/unicore32/include/asm/pgtable.h     |  3 --
+ arch/xtensa/include/asm/pgtable.h        |  3 --
+ include/linux/mm.h                       | 12 +++++++
+ 21 files changed, 58 insertions(+), 95 deletions(-)
+
+diff --git a/arch/alpha/include/asm/pgtable.h b/arch/alpha/include/asm/pgtable.h
+index 299791ce14b6..0267aa8a4f86 100644
+--- a/arch/alpha/include/asm/pgtable.h
++++ b/arch/alpha/include/asm/pgtable.h
+@@ -268,7 +268,6 @@ extern inline void pud_clear(pud_t * pudp)	{ pud_val(*pudp) = 0; }
+ extern inline int pte_write(pte_t pte)		{ return !(pte_val(pte) & _PAGE_FOW); }
+ extern inline int pte_dirty(pte_t pte)		{ return pte_val(pte) & _PAGE_DIRTY; }
+ extern inline int pte_young(pte_t pte)		{ return pte_val(pte) & _PAGE_ACCESSED; }
+-extern inline int pte_special(pte_t pte)	{ return 0; }
  
- ifeq ($(CONFIG_SOFTMMU),y)
-diff --git a/target/riscv/cpu.h b/target/riscv/cpu.h
-index 748bd557f9..9b5daed878 100644
---- a/target/riscv/cpu.h
-+++ b/target/riscv/cpu.h
-@@ -21,6 +21,7 @@
- #define RISCV_CPU_H
+ extern inline pte_t pte_wrprotect(pte_t pte)	{ pte_val(pte) |= _PAGE_FOW; return pte; }
+ extern inline pte_t pte_mkclean(pte_t pte)	{ pte_val(pte) &= ~(__DIRTY_BITS); return pte; }
+@@ -276,7 +275,6 @@ extern inline pte_t pte_mkold(pte_t pte)	{ pte_val(pte) &= ~(__ACCESS_BITS); ret
+ extern inline pte_t pte_mkwrite(pte_t pte)	{ pte_val(pte) &= ~_PAGE_FOW; return pte; }
+ extern inline pte_t pte_mkdirty(pte_t pte)	{ pte_val(pte) |= __DIRTY_BITS; return pte; }
+ extern inline pte_t pte_mkyoung(pte_t pte)	{ pte_val(pte) |= __ACCESS_BITS; return pte; }
+-extern inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
  
- #include "hw/core/cpu.h"
-+#include "hw/registerfields.h"
- #include "exec/cpu-defs.h"
- #include "fpu/softfloat-types.h"
+ #define PAGE_DIR_OFFSET(tsk,address) pgd_offset((tsk),(address))
  
-@@ -98,6 +99,12 @@ typedef struct CPURISCVState CPURISCVState;
+diff --git a/arch/arm/include/asm/pgtable-2level.h b/arch/arm/include/asm/pgtable-2level.h
+index 0d3ea35c97fe..9e084a464a97 100644
+--- a/arch/arm/include/asm/pgtable-2level.h
++++ b/arch/arm/include/asm/pgtable-2level.h
+@@ -211,8 +211,6 @@ static inline pmd_t *pmd_offset(pud_t *pud, unsigned long addr)
+ #define pmd_addr_end(addr,end) (end)
  
- #define RV_VLEN_MAX 512
+ #define set_pte_ext(ptep,pte,ext) cpu_set_pte_ext(ptep,pte,ext)
+-#define pte_special(pte)	(0)
+-static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
  
-+FIELD(VTYPE, VLMUL, 0, 2)
-+FIELD(VTYPE, VSEW, 2, 3)
-+FIELD(VTYPE, VEDIV, 5, 2)
-+FIELD(VTYPE, RESERVED, 7, sizeof(target_ulong) * 8 - 9)
-+FIELD(VTYPE, VILL, sizeof(target_ulong) * 8 - 2, 1)
-+
- struct CPURISCVState {
-     target_ulong gpr[32];
-     uint64_t fpr[32]; /* assume both F and D extensions */
-@@ -302,16 +309,59 @@ void riscv_cpu_set_fflags(CPURISCVState *env, target_ulong);
- #define TB_FLAGS_MMU_MASK   3
- #define TB_FLAGS_MSTATUS_FS MSTATUS_FS
+ /*
+  * We don't have huge page support for short descriptors, for the moment
+diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
+index eabcb48a7840..556468240ba5 100644
+--- a/arch/arm/include/asm/pgtable.h
++++ b/arch/arm/include/asm/pgtable.h
+@@ -252,19 +252,8 @@ static inline void __sync_icache_dcache(pte_t pteval)
+ extern void __sync_icache_dcache(pte_t pteval);
+ #endif
  
-+typedef CPURISCVState CPUArchState;
-+typedef RISCVCPU ArchCPU;
-+#include "exec/cpu-all.h"
-+
-+FIELD(TB_FLAGS, VL_EQ_VLMAX, 2, 1)
-+FIELD(TB_FLAGS, LMUL, 3, 2)
-+FIELD(TB_FLAGS, SEW, 5, 3)
-+FIELD(TB_FLAGS, VILL, 8, 1)
-+
-+/*
-+ * A simplification for VLMAX
-+ * = (1 << LMUL) * VLEN / (8 * (1 << SEW))
-+ * = (VLEN << LMUL) / (8 << SEW)
-+ * = (VLEN << LMUL) >> (SEW + 3)
-+ * = VLEN >> (SEW + 3 - LMUL)
-+ */
-+static inline uint32_t vext_get_vlmax(RISCVCPU *cpu, target_ulong vtype)
-+{
-+    uint8_t sew, lmul;
-+
-+    sew = FIELD_EX64(vtype, VTYPE, VSEW);
-+    lmul = FIELD_EX64(vtype, VTYPE, VLMUL);
-+    return cpu->cfg.vlen >> (sew + 3 - lmul);
-+}
-+
- static inline void cpu_get_tb_cpu_state(CPURISCVState *env, target_ulong *pc,
--                                        target_ulong *cs_base, uint32_t *flags)
-+                                        target_ulong *cs_base, uint32_t *pflags)
+-static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+-			      pte_t *ptep, pte_t pteval)
+-{
+-	unsigned long ext = 0;
+-
+-	if (addr < TASK_SIZE && pte_valid_user(pteval)) {
+-		if (!pte_special(pteval))
+-			__sync_icache_dcache(pteval);
+-		ext |= PTE_EXT_NG;
+-	}
+-
+-	set_pte_ext(ptep, pteval, ext);
+-}
++void set_pte_at(struct mm_struct *mm, unsigned long addr,
++		      pte_t *ptep, pte_t pteval);
+ 
+ static inline pte_t clear_pte_bit(pte_t pte, pgprot_t prot)
  {
-+    uint32_t flags = 0;
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+index 5d0d0f86e790..16e9b041d7cf 100644
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -1672,3 +1672,17 @@ void __init early_mm_init(const struct machine_desc *mdesc)
+ 	build_mem_type_table();
+ 	early_paging_init(mdesc);
+ }
 +
-     *pc = env->pc;
-     *cs_base = 0;
++void set_pte_at(struct mm_struct *mm, unsigned long addr,
++			      pte_t *ptep, pte_t pteval)
++{
++	unsigned long ext = 0;
 +
-+    if (env->misa & RVV) {
-+        uint32_t vlmax = vext_get_vlmax(env_archcpu(env), env->vtype);
-+        bool vl_eq_vlmax = (env->vstart == 0) && (vlmax == env->vl);
-+        flags = FIELD_DP32(flags, TB_FLAGS, VILL,
-+                    FIELD_EX64(env->vtype, VTYPE, VILL));
-+        flags = FIELD_DP32(flags, TB_FLAGS, SEW,
-+                    FIELD_EX64(env->vtype, VTYPE, VSEW));
-+        flags = FIELD_DP32(flags, TB_FLAGS, LMUL,
-+                    FIELD_EX64(env->vtype, VTYPE, VLMUL));
-+        flags = FIELD_DP32(flags, TB_FLAGS, VL_EQ_VLMAX, vl_eq_vlmax);
-+    } else {
-+        flags = FIELD_DP32(flags, TB_FLAGS, VILL, 1);
-+    }
++	if (addr < TASK_SIZE && pte_valid_user(pteval)) {
++		if (!pte_special(pteval))
++			__sync_icache_dcache(pteval);
++		ext |= PTE_EXT_NG;
++	}
 +
- #ifdef CONFIG_USER_ONLY
--    *flags = TB_FLAGS_MSTATUS_FS;
-+    flags |= TB_FLAGS_MSTATUS_FS;
++	set_pte_ext(ptep, pteval, ext);
++}
+diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+index 9b7764cb7645..9ab4a445ad99 100644
+--- a/arch/csky/include/asm/pgtable.h
++++ b/arch/csky/include/asm/pgtable.h
+@@ -110,9 +110,6 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+ extern void load_pgd(unsigned long pg_dir);
+ extern pte_t invalid_pte_table[PTRS_PER_PTE];
+ 
+-static inline int pte_special(pte_t pte) { return 0; }
+-static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
+-
+ static inline void set_pte(pte_t *p, pte_t pte)
+ {
+ 	*p = pte;
+diff --git a/arch/hexagon/include/asm/pgtable.h b/arch/hexagon/include/asm/pgtable.h
+index 2fec20ad939e..d383e8bea5b2 100644
+--- a/arch/hexagon/include/asm/pgtable.h
++++ b/arch/hexagon/include/asm/pgtable.h
+@@ -158,8 +158,6 @@ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];  /* located in head.S */
+ 
+ /* Seems to be zero even in architectures where the zero page is firewalled? */
+ #define FIRST_USER_ADDRESS 0UL
+-#define pte_special(pte)	0
+-#define pte_mkspecial(pte)	(pte)
+ 
+ /*  HUGETLB not working currently  */
+ #ifdef CONFIG_HUGETLB_PAGE
+diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
+index d602e7c622db..0e7b645b76c6 100644
+--- a/arch/ia64/include/asm/pgtable.h
++++ b/arch/ia64/include/asm/pgtable.h
+@@ -298,7 +298,6 @@ extern unsigned long VMALLOC_END;
+ #define pte_exec(pte)		((pte_val(pte) & _PAGE_AR_RX) != 0)
+ #define pte_dirty(pte)		((pte_val(pte) & _PAGE_D) != 0)
+ #define pte_young(pte)		((pte_val(pte) & _PAGE_A) != 0)
+-#define pte_special(pte)	0
+ 
+ /*
+  * Note: we convert AR_RWX to AR_RX and AR_RW to AR_R by clearing the 2nd bit in the
+@@ -311,7 +310,6 @@ extern unsigned long VMALLOC_END;
+ #define pte_mkclean(pte)	(__pte(pte_val(pte) & ~_PAGE_D))
+ #define pte_mkdirty(pte)	(__pte(pte_val(pte) | _PAGE_D))
+ #define pte_mkhuge(pte)		(__pte(pte_val(pte)))
+-#define pte_mkspecial(pte)	(pte)
+ 
+ /*
+  * Because ia64's Icache and Dcache is not coherent (on a cpu), we need to
+diff --git a/arch/m68k/include/asm/mcf_pgtable.h b/arch/m68k/include/asm/mcf_pgtable.h
+index b9f45aeded25..0031cd387b75 100644
+--- a/arch/m68k/include/asm/mcf_pgtable.h
++++ b/arch/m68k/include/asm/mcf_pgtable.h
+@@ -235,11 +235,6 @@ static inline int pte_young(pte_t pte)
+ 	return pte_val(pte) & CF_PAGE_ACCESSED;
+ }
+ 
+-static inline int pte_special(pte_t pte)
+-{
+-	return 0;
+-}
+-
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
+ 	pte_val(pte) &= ~CF_PAGE_WRITABLE;
+@@ -312,11 +307,6 @@ static inline pte_t pte_mkcache(pte_t pte)
+ 	return pte;
+ }
+ 
+-static inline pte_t pte_mkspecial(pte_t pte)
+-{
+-	return pte;
+-}
+-
+ #define swapper_pg_dir kernel_pg_dir
+ extern pgd_t kernel_pg_dir[PTRS_PER_PGD];
+ 
+diff --git a/arch/m68k/include/asm/motorola_pgtable.h b/arch/m68k/include/asm/motorola_pgtable.h
+index 62bedc61f110..a6f4b96d674e 100644
+--- a/arch/m68k/include/asm/motorola_pgtable.h
++++ b/arch/m68k/include/asm/motorola_pgtable.h
+@@ -168,7 +168,6 @@ static inline void pud_set(pud_t *pudp, pmd_t *pmdp)
+ static inline int pte_write(pte_t pte)		{ return !(pte_val(pte) & _PAGE_RONLY); }
+ static inline int pte_dirty(pte_t pte)		{ return pte_val(pte) & _PAGE_DIRTY; }
+ static inline int pte_young(pte_t pte)		{ return pte_val(pte) & _PAGE_ACCESSED; }
+-static inline int pte_special(pte_t pte)	{ return 0; }
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)	{ pte_val(pte) |= _PAGE_RONLY; return pte; }
+ static inline pte_t pte_mkclean(pte_t pte)	{ pte_val(pte) &= ~_PAGE_DIRTY; return pte; }
+@@ -186,7 +185,6 @@ static inline pte_t pte_mkcache(pte_t pte)
+ 	pte_val(pte) = (pte_val(pte) & _CACHEMASK040) | m68k_supervisor_cachemode;
+ 	return pte;
+ }
+-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+ 
+ #define PAGE_DIR_OFFSET(tsk,address) pgd_offset((tsk),(address))
+ 
+diff --git a/arch/m68k/include/asm/sun3_pgtable.h b/arch/m68k/include/asm/sun3_pgtable.h
+index bc4155264810..0caa18a08437 100644
+--- a/arch/m68k/include/asm/sun3_pgtable.h
++++ b/arch/m68k/include/asm/sun3_pgtable.h
+@@ -155,7 +155,6 @@ static inline void pmd_clear (pmd_t *pmdp) { pmd_val (*pmdp) = 0; }
+ static inline int pte_write(pte_t pte)		{ return pte_val(pte) & SUN3_PAGE_WRITEABLE; }
+ static inline int pte_dirty(pte_t pte)		{ return pte_val(pte) & SUN3_PAGE_MODIFIED; }
+ static inline int pte_young(pte_t pte)		{ return pte_val(pte) & SUN3_PAGE_ACCESSED; }
+-static inline int pte_special(pte_t pte)	{ return 0; }
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)	{ pte_val(pte) &= ~SUN3_PAGE_WRITEABLE; return pte; }
+ static inline pte_t pte_mkclean(pte_t pte)	{ pte_val(pte) &= ~SUN3_PAGE_MODIFIED; return pte; }
+@@ -168,7 +167,6 @@ static inline pte_t pte_mknocache(pte_t pte)	{ pte_val(pte) |= SUN3_PAGE_NOCACHE
+ //static inline pte_t pte_mkcache(pte_t pte)	{ pte_val(pte) &= SUN3_PAGE_NOCACHE; return pte; }
+ // until then, use:
+ static inline pte_t pte_mkcache(pte_t pte)	{ return pte; }
+-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+ 
+ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
+ extern pgd_t kernel_pg_dir[PTRS_PER_PGD];
+diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
+index 2def331f9e2c..db9bdfcf46b7 100644
+--- a/arch/microblaze/include/asm/pgtable.h
++++ b/arch/microblaze/include/asm/pgtable.h
+@@ -80,10 +80,6 @@ extern pte_t *va_to_pte(unsigned long address);
+  * Undefined behaviour if not..
+  */
+ 
+-static inline int pte_special(pte_t pte)	{ return 0; }
+-
+-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+-
+ /* Start and end of the vmalloc area. */
+ /* Make sure to map the vmalloc area above the pinned kernel memory area
+    of 32Mb.  */
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index aef5378f909c..8e4e4be1ca00 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -269,6 +269,36 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+  */
+ extern pgd_t swapper_pg_dir[];
+ 
++/*
++ * Platform specific pte_special() and pte_mkspecial() definitions
++ * are required only when ARCH_HAS_PTE_SPECIAL is enabled.
++ */
++#if !defined(CONFIG_32BIT) && !defined(CONFIG_CPU_HAS_RIXI)
++#if defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
++static inline int pte_special(pte_t pte)
++{
++	return pte.pte_low & _PAGE_SPECIAL;
++}
++
++static inline pte_t pte_mkspecial(pte_t pte)
++{
++	pte.pte_low |= _PAGE_SPECIAL;
++	return pte;
++}
++#else
++static inline int pte_special(pte_t pte)
++{
++	return pte_val(pte) & _PAGE_SPECIAL;
++}
++
++static inline pte_t pte_mkspecial(pte_t pte)
++{
++	pte_val(pte) |= _PAGE_SPECIAL;
++	return pte;
++}
++#endif
++#endif
++
+ /*
+  * The following only work if pte_present() is true.
+  * Undefined behaviour if not..
+@@ -277,7 +307,6 @@ extern pgd_t swapper_pg_dir[];
+ static inline int pte_write(pte_t pte)	{ return pte.pte_low & _PAGE_WRITE; }
+ static inline int pte_dirty(pte_t pte)	{ return pte.pte_low & _PAGE_MODIFIED; }
+ static inline int pte_young(pte_t pte)	{ return pte.pte_low & _PAGE_ACCESSED; }
+-static inline int pte_special(pte_t pte) { return pte.pte_low & _PAGE_SPECIAL; }
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
+@@ -338,17 +367,10 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 	}
+ 	return pte;
+ }
+-
+-static inline pte_t pte_mkspecial(pte_t pte)
+-{
+-	pte.pte_low |= _PAGE_SPECIAL;
+-	return pte;
+-}
  #else
--    *flags = cpu_mmu_index(env, 0) | (env->mstatus & MSTATUS_FS);
-+    flags |= cpu_mmu_index(env, 0) | (env->mstatus & MSTATUS_FS);
- #endif
-+    *pflags = flags;
+ static inline int pte_write(pte_t pte)	{ return pte_val(pte) & _PAGE_WRITE; }
+ static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & _PAGE_MODIFIED; }
+ static inline int pte_young(pte_t pte)	{ return pte_val(pte) & _PAGE_ACCESSED; }
+-static inline int pte_special(pte_t pte) { return pte_val(pte) & _PAGE_SPECIAL; }
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
+@@ -392,12 +414,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 	return pte;
  }
  
- int riscv_csrrw(CPURISCVState *env, int csrno, target_ulong *ret_value,
-@@ -352,9 +402,4 @@ void riscv_set_csr_ops(int csrno, riscv_csr_operations *ops);
- 
- void riscv_cpu_register_gdb_regs_for_features(CPUState *cs);
- 
--typedef CPURISCVState CPUArchState;
--typedef RISCVCPU ArchCPU;
+-static inline pte_t pte_mkspecial(pte_t pte)
+-{
+-	pte_val(pte) |= _PAGE_SPECIAL;
+-	return pte;
+-}
 -
--#include "exec/cpu-all.h"
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ static inline int pte_huge(pte_t pte)	{ return pte_val(pte) & _PAGE_HUGE; }
+ 
+diff --git a/arch/nds32/include/asm/pgtable.h b/arch/nds32/include/asm/pgtable.h
+index 6abc58ac406d..476cc4dd1709 100644
+--- a/arch/nds32/include/asm/pgtable.h
++++ b/arch/nds32/include/asm/pgtable.h
+@@ -286,15 +286,6 @@ PTE_BIT_FUNC(mkclean, &=~_PAGE_D);
+ PTE_BIT_FUNC(mkdirty, |=_PAGE_D);
+ PTE_BIT_FUNC(mkold, &=~_PAGE_YOUNG);
+ PTE_BIT_FUNC(mkyoung, |=_PAGE_YOUNG);
+-static inline int pte_special(pte_t pte)
+-{
+-	return 0;
+-}
 -
- #endif /* RISCV_CPU_H */
-diff --git a/target/riscv/helper.h b/target/riscv/helper.h
-index debb22a480..3c28c7e407 100644
---- a/target/riscv/helper.h
-+++ b/target/riscv/helper.h
-@@ -76,3 +76,5 @@ DEF_HELPER_2(mret, tl, env, tl)
- DEF_HELPER_1(wfi, void, env)
- DEF_HELPER_1(tlb_flush, void, env)
- #endif
-+/* Vector functions */
-+DEF_HELPER_3(vsetvl, tl, env, tl, tl)
-diff --git a/target/riscv/insn32.decode b/target/riscv/insn32.decode
-index 77f794ed70..5dc009c3cd 100644
---- a/target/riscv/insn32.decode
-+++ b/target/riscv/insn32.decode
-@@ -62,6 +62,7 @@
- @r_rm    .......   ..... ..... ... ..... ....... %rs2 %rs1 %rm %rd
- @r2_rm   .......   ..... ..... ... ..... ....... %rs1 %rm %rd
- @r2      .......   ..... ..... ... ..... ....... %rs1 %rd
-+@r2_zimm . zimm:11  ..... ... ..... ....... %rs1 %rd
+-static inline pte_t pte_mkspecial(pte_t pte)
+-{
+-	return pte;
+-}
  
- @sfence_vma ....... ..... .....   ... ..... ....... %rs2 %rs1
- @sfence_vm  ....... ..... .....   ... ..... ....... %rs1
-@@ -203,3 +204,7 @@ fcvt_w_d   1100001  00000 ..... ... ..... 1010011 @r2_rm
- fcvt_wu_d  1100001  00001 ..... ... ..... 1010011 @r2_rm
- fcvt_d_w   1101001  00000 ..... ... ..... 1010011 @r2_rm
- fcvt_d_wu  1101001  00001 ..... ... ..... 1010011 @r2_rm
-+
-+# *** RV32V Extension ***
-+vsetvli         0 ........... ..... 111 ..... 1010111  @r2_zimm
-+vsetvl          1000000 ..... ..... 111 ..... 1010111  @r
-diff --git a/target/riscv/insn_trans/trans_rvv.inc.c b/target/riscv/insn_trans/trans_rvv.inc.c
-new file mode 100644
-index 0000000000..da82c72bbf
---- /dev/null
-+++ b/target/riscv/insn_trans/trans_rvv.inc.c
-@@ -0,0 +1,69 @@
-+/*
-+ * RISC-V translation routines for the RVV Standard Extension.
-+ *
-+ * Copyright (c) 2020 C-SKY Limited. All rights reserved.
-+ *
-+ * This program is free software; you can redistribute it and/or modify it
-+ * under the terms and conditions of the GNU General Public License,
-+ * version 2 or later, as published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License along with
-+ * this program.  If not, see <http://www.gnu.org/licenses/>.
-+ */
-+
-+static bool trans_vsetvl(DisasContext *ctx, arg_vsetvl * a)
-+{
-+    TCGv s1, s2, dst;
-+    s2 = tcg_temp_new();
-+    dst = tcg_temp_new();
-+
-+    /* Using x0 as the rs1 register specifier, encodes an infinite AVL */
-+    if (a->rs1 == 0) {
-+        /* As the mask is at least one bit, RV_VLEN_MAX is >= VLMAX */
-+        s1 = tcg_const_tl(RV_VLEN_MAX);
-+    } else {
-+        s1 = tcg_temp_new();
-+        gen_get_gpr(s1, a->rs1);
-+    }
-+    gen_get_gpr(s2, a->rs2);
-+    gen_helper_vsetvl(dst, cpu_env, s1, s2);
-+    gen_set_gpr(a->rd, dst);
-+    tcg_gen_movi_tl(cpu_pc, ctx->pc_succ_insn);
-+    exit_tb(ctx);
-+    ctx->base.is_jmp = DISAS_NORETURN;
-+
-+    tcg_temp_free(s1);
-+    tcg_temp_free(s2);
-+    tcg_temp_free(dst);
-+    return true;
-+}
-+
-+static bool trans_vsetvli(DisasContext *ctx, arg_vsetvli * a)
-+{
-+    TCGv s1, s2, dst;
-+    s2 = tcg_const_tl(a->zimm);
-+    dst = tcg_temp_new();
-+
-+    /* Using x0 as the rs1 register specifier, encodes an infinite AVL */
-+    if (a->rs1 == 0) {
-+        /* As the mask is at least one bit, RV_VLEN_MAX is >= VLMAX */
-+        s1 = tcg_const_tl(RV_VLEN_MAX);
-+    } else {
-+        s1 = tcg_temp_new();
-+        gen_get_gpr(s1, a->rs1);
-+    }
-+    gen_helper_vsetvl(dst, cpu_env, s1, s2);
-+    gen_set_gpr(a->rd, dst);
-+    gen_goto_tb(ctx, 0, ctx->pc_succ_insn);
-+    ctx->base.is_jmp = DISAS_NORETURN;
-+
-+    tcg_temp_free(s1);
-+    tcg_temp_free(s2);
-+    tcg_temp_free(dst);
-+    return true;
-+}
-diff --git a/target/riscv/translate.c b/target/riscv/translate.c
-index d5de7f468a..4824d0b0e2 100644
---- a/target/riscv/translate.c
-+++ b/target/riscv/translate.c
-@@ -54,6 +54,12 @@ typedef struct DisasContext {
-        to reset this known value.  */
-     int frm;
-     bool ext_ifencei;
-+    /* vector extension */
-+    bool vill;
-+    uint8_t lmul;
-+    uint8_t sew;
-+    uint16_t vlen;
-+    bool vl_eq_vlmax;
- } DisasContext;
+ /*
+  * Mark the prot value as uncacheable and unbufferable.
+diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+index 99985d8b7166..f98b7f4519ba 100644
+--- a/arch/nios2/include/asm/pgtable.h
++++ b/arch/nios2/include/asm/pgtable.h
+@@ -113,7 +113,6 @@ static inline int pte_dirty(pte_t pte)		\
+ 	{ return pte_val(pte) & _PAGE_DIRTY; }
+ static inline int pte_young(pte_t pte)		\
+ 	{ return pte_val(pte) & _PAGE_ACCESSED; }
+-static inline int pte_special(pte_t pte)	{ return 0; }
  
- #ifdef TARGET_RISCV64
-@@ -703,6 +709,7 @@ static bool gen_shift(DisasContext *ctx, arg_r *a,
- #include "insn_trans/trans_rva.inc.c"
- #include "insn_trans/trans_rvf.inc.c"
- #include "insn_trans/trans_rvd.inc.c"
-+#include "insn_trans/trans_rvv.inc.c"
- #include "insn_trans/trans_privileged.inc.c"
+ #define pgprot_noncached pgprot_noncached
  
- /* Include the auto-generated decoder for 16 bit insn */
-@@ -737,14 +744,20 @@ static void riscv_tr_init_disas_context(DisasContextBase *dcbase, CPUState *cs)
-     DisasContext *ctx = container_of(dcbase, DisasContext, base);
-     CPURISCVState *env = cs->env_ptr;
-     RISCVCPU *cpu = RISCV_CPU(cs);
-+    uint32_t tb_flags = ctx->base.tb->flags;
- 
-     ctx->pc_succ_insn = ctx->base.pc_first;
--    ctx->mem_idx = ctx->base.tb->flags & TB_FLAGS_MMU_MASK;
--    ctx->mstatus_fs = ctx->base.tb->flags & TB_FLAGS_MSTATUS_FS;
-+    ctx->mem_idx = tb_flags & TB_FLAGS_MMU_MASK;
-+    ctx->mstatus_fs = tb_flags & TB_FLAGS_MSTATUS_FS;
-     ctx->priv_ver = env->priv_ver;
-     ctx->misa = env->misa;
-     ctx->frm = -1;  /* unknown rounding mode */
-     ctx->ext_ifencei = cpu->cfg.ext_ifencei;
-+    ctx->vlen = cpu->cfg.vlen;
-+    ctx->vill = FIELD_EX32(tb_flags, TB_FLAGS, VILL);
-+    ctx->sew = FIELD_EX32(tb_flags, TB_FLAGS, SEW);
-+    ctx->lmul = FIELD_EX32(tb_flags, TB_FLAGS, LMUL);
-+    ctx->vl_eq_vlmax = FIELD_EX32(tb_flags, TB_FLAGS, VL_EQ_VLMAX);
+@@ -168,8 +167,6 @@ static inline pte_t pte_mkdirty(pte_t pte)
+ 	return pte;
  }
  
- static void riscv_tr_tb_start(DisasContextBase *db, CPUState *cpu)
-diff --git a/target/riscv/vector_helper.c b/target/riscv/vector_helper.c
-new file mode 100644
-index 0000000000..785215b80d
---- /dev/null
-+++ b/target/riscv/vector_helper.c
-@@ -0,0 +1,53 @@
-+/*
-+ * RISC-V Vector Extension Helpers for QEMU.
-+ *
-+ * Copyright (c) 2020 C-SKY Limited. All rights reserved.
-+ *
-+ * This program is free software; you can redistribute it and/or modify it
-+ * under the terms and conditions of the GNU General Public License,
-+ * version 2 or later, as published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License along with
-+ * this program.  If not, see <http://www.gnu.org/licenses/>.
-+ */
-+
-+#include "qemu/osdep.h"
-+#include "cpu.h"
-+#include "exec/exec-all.h"
-+#include "exec/helper-proto.h"
-+#include <math.h>
-+
-+target_ulong HELPER(vsetvl)(CPURISCVState *env, target_ulong s1,
-+    target_ulong s2)
+-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+-
+ static inline pte_t pte_mkyoung(pte_t pte)
+ {
+ 	pte_val(pte) |= _PAGE_ACCESSED;
+diff --git a/arch/openrisc/include/asm/pgtable.h b/arch/openrisc/include/asm/pgtable.h
+index 248d22d8faa7..7f3fb9ceb083 100644
+--- a/arch/openrisc/include/asm/pgtable.h
++++ b/arch/openrisc/include/asm/pgtable.h
+@@ -236,8 +236,6 @@ static inline int pte_write(pte_t pte) { return pte_val(pte) & _PAGE_WRITE; }
+ static inline int pte_exec(pte_t pte)  { return pte_val(pte) & _PAGE_EXEC; }
+ static inline int pte_dirty(pte_t pte) { return pte_val(pte) & _PAGE_DIRTY; }
+ static inline int pte_young(pte_t pte) { return pte_val(pte) & _PAGE_ACCESSED; }
+-static inline int pte_special(pte_t pte) { return 0; }
+-static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
+diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
+index f0a365950536..9832c73a7021 100644
+--- a/arch/parisc/include/asm/pgtable.h
++++ b/arch/parisc/include/asm/pgtable.h
+@@ -377,7 +377,6 @@ static inline void pud_clear(pud_t *pud) {
+ static inline int pte_dirty(pte_t pte)		{ return pte_val(pte) & _PAGE_DIRTY; }
+ static inline int pte_young(pte_t pte)		{ return pte_val(pte) & _PAGE_ACCESSED; }
+ static inline int pte_write(pte_t pte)		{ return pte_val(pte) & _PAGE_WRITE; }
+-static inline int pte_special(pte_t pte)	{ return 0; }
+ 
+ static inline pte_t pte_mkclean(pte_t pte)	{ pte_val(pte) &= ~_PAGE_DIRTY; return pte; }
+ static inline pte_t pte_mkold(pte_t pte)	{ pte_val(pte) &= ~_PAGE_ACCESSED; return pte; }
+@@ -385,7 +384,6 @@ static inline pte_t pte_wrprotect(pte_t pte)	{ pte_val(pte) &= ~_PAGE_WRITE; ret
+ static inline pte_t pte_mkdirty(pte_t pte)	{ pte_val(pte) |= _PAGE_DIRTY; return pte; }
+ static inline pte_t pte_mkyoung(pte_t pte)	{ pte_val(pte) |= _PAGE_ACCESSED; return pte; }
+ static inline pte_t pte_mkwrite(pte_t pte)	{ pte_val(pte) |= _PAGE_WRITE; return pte; }
+-static inline pte_t pte_mkspecial(pte_t pte)	{ return pte; }
+ 
+ /*
+  * Huge pte definitions.
+diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
+index 6d6f44c0cad9..0de659ae0ba4 100644
+--- a/arch/sparc/include/asm/pgtable_32.h
++++ b/arch/sparc/include/asm/pgtable_32.h
+@@ -223,11 +223,6 @@ static inline int pte_young(pte_t pte)
+ 	return pte_val(pte) & SRMMU_REF;
+ }
+ 
+-static inline int pte_special(pte_t pte)
+-{
+-	return 0;
+-}
+-
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
+ 	return __pte(pte_val(pte) & ~SRMMU_WRITE);
+@@ -258,8 +253,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 	return __pte(pte_val(pte) | SRMMU_REF);
+ }
+ 
+-#define pte_mkspecial(pte)    (pte)
+-
+ #define pfn_pte(pfn, prot)		mk_pte(pfn_to_page(pfn), prot)
+ 
+ static inline unsigned long pte_pfn(pte_t pte)
+diff --git a/arch/um/include/asm/pgtable.h b/arch/um/include/asm/pgtable.h
+index 2daa58df2190..b5ddf5d98bd5 100644
+--- a/arch/um/include/asm/pgtable.h
++++ b/arch/um/include/asm/pgtable.h
+@@ -167,11 +167,6 @@ static inline int pte_newprot(pte_t pte)
+ 	return(pte_present(pte) && (pte_get_bits(pte, _PAGE_NEWPROT)));
+ }
+ 
+-static inline int pte_special(pte_t pte)
+-{
+-	return 0;
+-}
+-
+ /*
+  * =================================
+  * Flags setting section.
+@@ -247,11 +242,6 @@ static inline pte_t pte_mknewpage(pte_t pte)
+ 	return(pte);
+ }
+ 
+-static inline pte_t pte_mkspecial(pte_t pte)
+-{
+-	return(pte);
+-}
+-
+ static inline void set_pte(pte_t *pteptr, pte_t pteval)
+ {
+ 	pte_copy(*pteptr, pteval);
+diff --git a/arch/unicore32/include/asm/pgtable.h b/arch/unicore32/include/asm/pgtable.h
+index c8f7ba12f309..3b8731b3a937 100644
+--- a/arch/unicore32/include/asm/pgtable.h
++++ b/arch/unicore32/include/asm/pgtable.h
+@@ -177,7 +177,6 @@ extern struct page *empty_zero_page;
+ #define pte_dirty(pte)		(pte_val(pte) & PTE_DIRTY)
+ #define pte_young(pte)		(pte_val(pte) & PTE_YOUNG)
+ #define pte_exec(pte)		(pte_val(pte) & PTE_EXEC)
+-#define pte_special(pte)	(0)
+ 
+ #define PTE_BIT_FUNC(fn, op) \
+ static inline pte_t pte_##fn(pte_t pte) { pte_val(pte) op; return pte; }
+@@ -189,8 +188,6 @@ PTE_BIT_FUNC(mkdirty,   |= PTE_DIRTY);
+ PTE_BIT_FUNC(mkold,     &= ~PTE_YOUNG);
+ PTE_BIT_FUNC(mkyoung,   |= PTE_YOUNG);
+ 
+-static inline pte_t pte_mkspecial(pte_t pte) { return pte; }
+-
+ /*
+  * Mark the prot value as uncacheable.
+  */
+diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
+index 27ac17c9da09..8be0c0568c50 100644
+--- a/arch/xtensa/include/asm/pgtable.h
++++ b/arch/xtensa/include/asm/pgtable.h
+@@ -266,7 +266,6 @@ static inline void paging_init(void) { }
+ static inline int pte_write(pte_t pte) { return pte_val(pte) & _PAGE_WRITABLE; }
+ static inline int pte_dirty(pte_t pte) { return pte_val(pte) & _PAGE_DIRTY; }
+ static inline int pte_young(pte_t pte) { return pte_val(pte) & _PAGE_ACCESSED; }
+-static inline int pte_special(pte_t pte) { return 0; }
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)	
+ 	{ pte_val(pte) &= ~(_PAGE_WRITABLE | _PAGE_HW_WRITE); return pte; }
+@@ -280,8 +279,6 @@ static inline pte_t pte_mkyoung(pte_t pte)
+ 	{ pte_val(pte) |= _PAGE_ACCESSED; return pte; }
+ static inline pte_t pte_mkwrite(pte_t pte)
+ 	{ pte_val(pte) |= _PAGE_WRITABLE; return pte; }
+-static inline pte_t pte_mkspecial(pte_t pte)
+-	{ return pte; }
+ 
+ #define pgprot_noncached(prot) (__pgprot(pgprot_val(prot) & ~_PAGE_CA_MASK))
+ 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 52269e56c514..79ed4ad2a954 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1720,6 +1720,18 @@ static inline void sync_mm_rss(struct mm_struct *mm)
+ }
+ #endif
+ 
++#ifndef CONFIG_ARCH_HAS_PTE_SPECIAL
++static inline int pte_special(pte_t pte)
 +{
-+    int vlmax, vl;
-+    RISCVCPU *cpu = env_archcpu(env);
-+    uint16_t sew = 1 << FIELD_EX64(s2, VTYPE, VSEW);
-+    uint8_t ediv = FIELD_EX64(s2, VTYPE, VEDIV);
-+    bool vill = FIELD_EX64(s2, VTYPE, VILL);
-+    target_ulong reserved = FIELD_EX64(s2, VTYPE, RESERVED);
-+
-+    if ((sew > cpu->cfg.elen) || vill || (ediv != 0) || (reserved != 0)) {
-+        /* only set vill bit. */
-+        env->vtype = FIELD_DP64(0, VTYPE, VILL, 1);
-+        env->vl = 0;
-+        env->vstart = 0;
-+        return 0;
-+    }
-+
-+    vlmax = vext_get_vlmax(cpu, s2);
-+    if (s1 <= vlmax) {
-+        vl = s1;
-+    } else {
-+        vl = vlmax;
-+    }
-+    env->vl = vl;
-+    env->vtype = s2;
-+    env->vstart = 0;
-+    return vl;
++	return 0;
 +}
++
++static inline pte_t pte_mkspecial(pte_t pte)
++{
++	return pte;
++}
++#endif
++
+ #ifndef CONFIG_ARCH_HAS_PTE_DEVMAP
+ static inline int pte_devmap(pte_t pte)
+ {
 -- 
-2.23.0
+2.20.1
 
