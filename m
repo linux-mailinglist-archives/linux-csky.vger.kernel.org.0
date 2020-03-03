@@ -2,38 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2352D176CDF
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Mar 2020 03:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 698FD176B23
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Mar 2020 03:48:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728101AbgCCCrg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 2 Mar 2020 21:47:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42684 "EHLO mail.kernel.org"
+        id S1728535AbgCCCsp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 2 Mar 2020 21:48:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44586 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728072AbgCCCrf (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:47:35 -0500
+        id S1728527AbgCCCso (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:48:44 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1FF124684;
-        Tue,  3 Mar 2020 02:47:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8598246D5;
+        Tue,  3 Mar 2020 02:48:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203655;
-        bh=egww1Wfu3m+4RPSFeQYfw/gb9+6hKwExwbsqGir9EUs=;
+        s=default; t=1583203723;
+        bh=wy9W+fQwofwFUAdAK7CWRsY2cm5mGzcAMji3HmIrySs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PUuPcJkKdu6vVYPxbksyDV45sfvnWh4bs2XeRo1TjCsPF+gnB2aNHn6JwLpkphThL
-         GhVi7e73oRnPrQbn0KMqA2rRTAaV/ueBjBcTWKAtlcE+qPiMwtE/QeCkq+IpQAF08f
-         eHCUgkVUHlxdlM8IQxblsOeNfWwMQKorI1orYDTQ=
+        b=GTltTELmIXG/BObiEvMTL6CZ6fVorX0lDOXbL88UMJly3TfoXjfl2MNubqKqBRCk1
+         qE2A92JJJPXeWS7SVGXbqxbNCxLFzSOBrN11hPJpXTnT1/aEYCzpUygkSIo+1usqIR
+         jI5rbOJZHUNHSiky32uh65oKMmLxGLiTdN17skuE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Guo Ren <guoren@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
+        Mo Qihui <qihui.mo@verisilicon.com>,
+        Zhange Jian <zhang_jian5@dahuatech.com>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 65/66] arch/csky: fix some Kconfig typos
-Date:   Mon,  2 Mar 2020 21:46:14 -0500
-Message-Id: <20200303024615.8889-65-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 52/58] csky/mm: Fixup export invalid_pte_table symbol
+Date:   Mon,  2 Mar 2020 21:47:34 -0500
+Message-Id: <20200303024740.9511-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303024615.8889-1-sashal@kernel.org>
-References: <20200303024615.8889-1-sashal@kernel.org>
+In-Reply-To: <20200303024740.9511-1-sashal@kernel.org>
+References: <20200303024740.9511-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,33 +44,35 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-[ Upstream commit bebd26ab623616728d6e72b5c74a47bfff5287d8 ]
+[ Upstream commit 7f4a567332f035ab16b29010fbd04a0f10183c77 ]
 
-Fix wording in help text for the CPU_HAS_LDSTEX symbol.
+There is no present bit in csky pmd hardware, so we need to prepare invalid_pte_table
+for empty pmd entry and the functions (pmd_none & pmd_present) in pgtable.h need
+invalid_pte_talbe to get result. If a module use these functions, we need export the
+symbol for it.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Mo Qihui <qihui.mo@verisilicon.com>
+Cc: Zhange Jian <zhang_jian5@dahuatech.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/csky/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/csky/mm/init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index da09c884cc305..2265227b7df8f 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -75,7 +75,7 @@ config CPU_HAS_TLBI
- config CPU_HAS_LDSTEX
- 	bool
- 	help
--	  For SMP, CPU needs "ldex&stex" instrcutions to atomic operations.
-+	  For SMP, CPU needs "ldex&stex" instructions for atomic operations.
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index d4c2292ea46bc..00e96278b3776 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -31,6 +31,7 @@
  
- config CPU_NEED_TLBSYNC
- 	bool
+ pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+ pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
++EXPORT_SYMBOL(invalid_pte_table);
+ unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)]
+ 						__page_aligned_bss;
+ EXPORT_SYMBOL(empty_zero_page);
 -- 
 2.20.1
 
