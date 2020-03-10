@@ -2,51 +2,51 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C6B17F25D
-	for <lists+linux-csky@lfdr.de>; Tue, 10 Mar 2020 09:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCE817F35C
+	for <lists+linux-csky@lfdr.de>; Tue, 10 Mar 2020 10:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbgCJIyc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 10 Mar 2020 04:54:32 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:45799 "EHLO
+        id S1726202AbgCJJTw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 10 Mar 2020 05:19:52 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:47028 "EHLO
         mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgCJIyc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 10 Mar 2020 04:54:32 -0400
-Received: by mail-qk1-f195.google.com with SMTP id c145so6166433qke.12
-        for <linux-csky@vger.kernel.org>; Tue, 10 Mar 2020 01:54:31 -0700 (PDT)
+        with ESMTP id S1726486AbgCJJTv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 10 Mar 2020 05:19:51 -0400
+Received: by mail-qk1-f195.google.com with SMTP id f28so5714346qkk.13
+        for <linux-csky@vger.kernel.org>; Tue, 10 Mar 2020 02:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sifive.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nSPxA9X500mgbh9IFPNCBvtp5v+qregrP1EhmFh9wNQ=;
-        b=Q05xIIQLHRc1MoiGKDvABRgahTMFDzDQ4Ck1T7qE3LuZVcY7SjB9im3hZXh1MBO8BD
-         tQCQ5/nKjtYM51FVdSbLdKJNHTOr07CgOD7VspKmPJLSI2nKDNMYnGh+sgs9eEgdTaTz
-         UAtWopKNqaTtn6NQW1GbkupcEFOUnnuOY8xmbv1jNSClQP43hozMkqz7dq3Sywj5LGzc
-         NCBDP9dcWc9zXnyQ+e1bkqZJRb9S61qNJVSKpRfNYWkUurvYLqKtbQUUF+Ptg/TB8S2n
-         V1Z27CFKbaqbF2MARL6t8YH4yvnrl2r4smaHIfyzrRnX47CCFxgEcqGa2BT07/kWYY2N
-         bNow==
+        bh=wjCevU/DO8QcnVvhecJsNsvY/Eogkcy8Wp1LUXYrp/o=;
+        b=mODK0PqZKz4tb/WcnFSbx2LYpETCoT0ilHjfL3D+Gc1Cvs24FfABK7Y5uTG1FF7S/5
+         JSEinOAr9zNhe7uvCxyPvpWevI11zfcqBZiNkCoYR6vfGQuugG9sdnCM+4DY2C7TQ480
+         6OSyktiD8UDOJi3QuaoSvnZxqbSx2QZ+cMBlApXYeppkpZsC2T+RXqhUXbTYHytUWasy
+         UlPufV8o3KWP7hmxcibzOBnDBBS9GmbuBaWiFAwupUoCbfBxlDCV0rm3OqFkflR3qQ/v
+         afQuj4Aq1FB8n3rrZzcbJCfv7itqexXpDYdMW6HMrYr5iWEhNs6iEqjcUFjcxo1bZ07/
+         A7VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nSPxA9X500mgbh9IFPNCBvtp5v+qregrP1EhmFh9wNQ=;
-        b=JYKOUXR9jR0tY4Yey04RPGMYRMPiADi/vlshjA8K0bsc/+9g3IF4CICYyQ7zoclfoP
-         nBparb89lFSqAybPgRStppIX5ZZuwFjcnOeZJ6LMr7qo6Acg/oqBoXKKYV0FJ57dapl7
-         W9Gszph93DihL03JkYS7qGg4/UW9ctaDgploX6FNLeRzuAx5ExmLdny77FpAPqeDDc1x
-         xN7i+T8uM7QOCO7IWs7uFUUSKWTJPFCiLD6Wgil7ovbd95fP2Ldg2P6HqvtfDK4sbOUE
-         dR4+hpNVefVzMgMXKerpQWCbv2qev/Q6JqyLM1N/WnuIZDLfGJtghfn9IzYW0XkF7ZCS
-         UtsQ==
-X-Gm-Message-State: ANhLgQ2Ul7pFmIAjl3V6t6TjWhcPP8m1U3+JHuqvnphK3u5ZPyyqD5tP
-        XOnCIZ1+nD8bK4nMBNN+uUSXjjtxqniKStaMIj7faw==
-X-Google-Smtp-Source: ADFU+vtMECKg0iE77xyeveafTTIJe1NctM9ZS1gbqJZXUfdRwOkJDNRqliHHiYwApvHERLRaNfSDyKeu+F6P0l3jIE0=
-X-Received: by 2002:a37:a8d8:: with SMTP id r207mr18024852qke.123.1583830471137;
- Tue, 10 Mar 2020 01:54:31 -0700 (PDT)
+        bh=wjCevU/DO8QcnVvhecJsNsvY/Eogkcy8Wp1LUXYrp/o=;
+        b=RzwtrsTLaA93G/rwInmwcoyXLiD7egXpYM1NDnEC3CNpcmX9m+dMGFEZ0upJoiGnWZ
+         FU7CTaPSILbajEspBD2WeO5f1hxoJN39o157Z+4ln6Ije2zew713hDXpukMVoQ04uIUK
+         8Hd3om7SYHX/Go3pojT/EV+1QJL2zYShUB4oipbIaNfof+PqKI13xRyRDb0DRvjomBzU
+         l4+qG9kqs3ULMoauvcemcetRS6Wfe+pQq3SIInNg439EGX8X1uaWL4G8NhNzYtQ8ydjU
+         uWyPrr5MSxtDqNvAJFTcOVol2g0ZDC5ozljDRwiGb069TH8TaNVbhwhqvpNtM0Vj78KX
+         wayA==
+X-Gm-Message-State: ANhLgQ16B4+ikegsBlUzgg8ZU+oxhWu4t1Y1EgVrD7VUBXh0AmiyG8Vc
+        KYDeZX/OJsKROIruKNV3UnpCFOjKGX0ApqwjJtomwQ==
+X-Google-Smtp-Source: ADFU+vsmRWFj6aNZBYLKrp81MYwc1fe87ZUAz4TMoAJhlSk8+/g2pNwyYoaYHhWbyuq4lbGcnJ4gpHmmticmozr+fHI=
+X-Received: by 2002:a05:620a:1443:: with SMTP id i3mr9039808qkl.113.1583831988838;
+ Tue, 10 Mar 2020 02:19:48 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200308094954.13258-1-guoren@kernel.org> <CAHCEeh+XYD3uVmaQRGpY=VGxpO9hzMeKasNmAojhkZe9PJ9Lug@mail.gmail.com>
- <95e3bba4-65c0-8991-9523-c16977f6350f@c-sky.com>
-In-Reply-To: <95e3bba4-65c0-8991-9523-c16977f6350f@c-sky.com>
+ <95e3bba4-65c0-8991-9523-c16977f6350f@c-sky.com> <CAHCEehK0rgBpEzrWar1UTWJoOz=OQi18iw4Y+v3z5Hi=7JCEWw@mail.gmail.com>
+In-Reply-To: <CAHCEehK0rgBpEzrWar1UTWJoOz=OQi18iw4Y+v3z5Hi=7JCEWw@mail.gmail.com>
 From:   Greentime Hu <greentime.hu@sifive.com>
-Date:   Tue, 10 Mar 2020 16:54:19 +0800
-Message-ID: <CAHCEehK0rgBpEzrWar1UTWJoOz=OQi18iw4Y+v3z5Hi=7JCEWw@mail.gmail.com>
+Date:   Tue, 10 Mar 2020 17:19:36 +0800
+Message-ID: <CAHCEehLq5f+DGusL0T4ZUuJ2hTRhSyLSGRpKHhq5b4J3nXfBHg@mail.gmail.com>
 Subject: Re: [RFC PATCH V3 00/11] riscv: Add vector ISA support
 To:     LIU Zhiwei <zhiwei_liu@c-sky.com>
 Cc:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
@@ -63,41 +63,64 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Mar 9, 2020 at 6:27 PM LIU Zhiwei <zhiwei_liu@c-sky.com> wrote:
-> On 2020/3/9 11:41, Greentime Hu wrote:
-> > On Sun, Mar 8, 2020 at 5:50 PM <guoren@kernel.org> wrote:
-> >> From: Guo Ren <guoren@linux.alibaba.com>
-> >>
-> >> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
-> >> 128bit-vlen and it's based on linux-5.6-rc3 and tested with qemu [1].
-> >>
-> >> The patch implement basic context switch, sigcontext save/restore and
-> >> ptrace interface with a new regset NT_RISCV_VECTOR. Only fixed 128bit-vlen
-> >> is implemented. We need to discuss about vlen-size for libc sigcontext and
-> >> ptrace (the maximum size of vlen is unlimited in spec).
-> >>
-> >> Puzzle:
-> >> Dave Martin has talked "Growing CPU register state without breaking ABI" [2]
-> >> before, and riscv also met vlen size problem. Let's discuss the common issue
-> >> for all architectures and we need a better solution for unlimited vlen.
-> >>
-> >> Any help are welcomed :)
-> >>
-> >>   1: https://github.com/romanheros/qemu.git branch:vector-upstream-v3
-> > Hi Guo,
+On Tue, Mar 10, 2020 at 4:54 PM Greentime Hu <greentime.hu@sifive.com> wrote:
+>
+> On Mon, Mar 9, 2020 at 6:27 PM LIU Zhiwei <zhiwei_liu@c-sky.com> wrote:
+> > On 2020/3/9 11:41, Greentime Hu wrote:
+> > > On Sun, Mar 8, 2020 at 5:50 PM <guoren@kernel.org> wrote:
+> > >> From: Guo Ren <guoren@linux.alibaba.com>
+> > >>
+> > >> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
+> > >> 128bit-vlen and it's based on linux-5.6-rc3 and tested with qemu [1].
+> > >>
+> > >> The patch implement basic context switch, sigcontext save/restore and
+> > >> ptrace interface with a new regset NT_RISCV_VECTOR. Only fixed 128bit-vlen
+> > >> is implemented. We need to discuss about vlen-size for libc sigcontext and
+> > >> ptrace (the maximum size of vlen is unlimited in spec).
+> > >>
+> > >> Puzzle:
+> > >> Dave Martin has talked "Growing CPU register state without breaking ABI" [2]
+> > >> before, and riscv also met vlen size problem. Let's discuss the common issue
+> > >> for all architectures and we need a better solution for unlimited vlen.
+> > >>
+> > >> Any help are welcomed :)
+> > >>
+> > >>   1: https://github.com/romanheros/qemu.git branch:vector-upstream-v3
+> > > Hi Guo,
+> > >
+> > > Thanks for your patch.
+> > > It seems the qemu repo doesn't have this branch?
+> > Hi Greentime,
 > >
-> > Thanks for your patch.
-> > It seems the qemu repo doesn't have this branch?
-> Hi Greentime,
+> > It's a promise from me. Now it's ready.  You can turn on vector by
+> > "qemu-system-riscv64 -cpu rv64,v=true,vext_spec=v0.7.1".
+> >
+> > Zhiwei
+> >
+> >
 >
-> It's a promise from me. Now it's ready.  You can turn on vector by
-> "qemu-system-riscv64 -cpu rv64,v=true,vext_spec=v0.7.1".
+> Hi Zhiwei,
 >
-> Zhiwei
->
->
+> Thank you, I see the branch in the repo now. I will give it a try and
+> let you know if I have any problem. :)
 
-Hi Zhiwei,
+Hi Zhiwei & Guo,
 
-Thank you, I see the branch in the repo now. I will give it a try and
-let you know if I have any problem. :)
+It seems current version only support v0.7.1 in qemu but this patchset
+is verified in qemu too and it is based on 0.8.
+Would you please provide the qemu with 0.8 vector spec supported? or
+Did I miss something?
+
+489             if (cpu->cfg.vext_spec) {
+490                 if (!g_strcmp0(cpu->cfg.vext_spec, "v0.7.1")) {
+491                     vext_version = VEXT_VERSION_0_07_1;
+492                 } else {
+493                     error_setg(errp,
+494                            "Unsupported vector spec version '%s'",
+495                            cpu->cfg.vext_spec);
+496                     return;
+497                 }
+498             }
+
+By the way, can I specify vlen in Qemu?
+Thank you. :)
