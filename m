@@ -2,23 +2,24 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3AD17FD97
-	for <lists+linux-csky@lfdr.de>; Tue, 10 Mar 2020 14:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DFD17FF65
+	for <lists+linux-csky@lfdr.de>; Tue, 10 Mar 2020 14:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728936AbgCJN2d (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 10 Mar 2020 09:28:33 -0400
-Received: from elvis.franken.de ([193.175.24.41]:60394 "EHLO elvis.franken.de"
+        id S1726910AbgCJNrA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 10 Mar 2020 09:47:00 -0400
+Received: from foss.arm.com ([217.140.110.172]:37284 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728887AbgCJN2d (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 10 Mar 2020 09:28:33 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jBevd-0006Jg-00; Tue, 10 Mar 2020 14:28:13 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D9C6FC0FAF; Tue, 10 Mar 2020 14:27:47 +0100 (CET)
-Date:   Tue, 10 Mar 2020 14:27:47 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
+        id S1726444AbgCJNrA (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 10 Mar 2020 09:47:00 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8E4A30E;
+        Tue, 10 Mar 2020 06:46:58 -0700 (PDT)
+Received: from [10.163.1.203] (unknown [10.163.1.203])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 26DEA3F6CF;
+        Tue, 10 Mar 2020 06:46:44 -0700 (PDT)
+Subject: Re: [PATCH V2] mm/special: Create generic fallbacks for pte_special()
+ and pte_mkspecial()
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-mm@kvack.org, Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
@@ -54,51 +55,61 @@ Cc:     linux-mm@kvack.org, Richard Henderson <rth@twiddle.net>,
         sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
         linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] mm/special: Create generic fallbacks for
- pte_special() and pte_mkspecial()
-Message-ID: <20200310132747.GA12601@alpha.franken.de>
 References: <1583802551-15406-1-git-send-email-anshuman.khandual@arm.com>
+ <20200310132747.GA12601@alpha.franken.de>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <a8341dde-aa59-b425-ac23-b6005e0a67ec@arm.com>
+Date:   Tue, 10 Mar 2020 19:16:42 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1583802551-15406-1-git-send-email-anshuman.khandual@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200310132747.GA12601@alpha.franken.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 06:39:11AM +0530, Anshuman Khandual wrote:
-> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-> index aef5378f909c..8e4e4be1ca00 100644
-> --- a/arch/mips/include/asm/pgtable.h
-> +++ b/arch/mips/include/asm/pgtable.h
-> @@ -269,6 +269,36 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
->   */
->  extern pgd_t swapper_pg_dir[];
->  
-> +/*
-> + * Platform specific pte_special() and pte_mkspecial() definitions
-> + * are required only when ARCH_HAS_PTE_SPECIAL is enabled.
-> + */
-> +#if !defined(CONFIG_32BIT) && !defined(CONFIG_CPU_HAS_RIXI)
 
-this looks wrong.
 
-current Kconfig statement is
+On 03/10/2020 06:57 PM, Thomas Bogendoerfer wrote:
+> On Tue, Mar 10, 2020 at 06:39:11AM +0530, Anshuman Khandual wrote:
+>> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+>> index aef5378f909c..8e4e4be1ca00 100644
+>> --- a/arch/mips/include/asm/pgtable.h
+>> +++ b/arch/mips/include/asm/pgtable.h
+>> @@ -269,6 +269,36 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+>>   */
+>>  extern pgd_t swapper_pg_dir[];
+>>  
+>> +/*
+>> + * Platform specific pte_special() and pte_mkspecial() definitions
+>> + * are required only when ARCH_HAS_PTE_SPECIAL is enabled.
+>> + */
+>> +#if !defined(CONFIG_32BIT) && !defined(CONFIG_CPU_HAS_RIXI)
+> 
+> this looks wrong.
+> 
+> current Kconfig statement is
+> 
+> select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
+> 
+> so we can't use PTE_SPECIAL on 32bit _and_ CPUs with RIXI support.
 
-select ARCH_HAS_PTE_SPECIAL if !(32BIT && CPU_HAS_RIXI)
+I already had asked for clarification on this.
 
-so we can't use PTE_SPECIAL on 32bit _and_ CPUs with RIXI support.
+> 
+> Why can't we use
+> 
+> #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
+> 
+> here as the comment already suggests ?
 
-Why can't we use
+Yes, that will be easier and will automatically adjust in case
+ARCH_HAS_PTE_SPECIAL scope changes later. Will respin the patch.
 
-#if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
-
-here as the comment already suggests ?
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> 
+> Thomas.
+> 
