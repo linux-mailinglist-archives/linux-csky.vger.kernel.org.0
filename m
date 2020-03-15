@@ -2,166 +2,944 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 199B618EEB6
-	for <lists+linux-csky@lfdr.de>; Mon, 23 Mar 2020 05:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74D618F013
+	for <lists+linux-csky@lfdr.de>; Mon, 23 Mar 2020 08:04:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725807AbgCWEA1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 23 Mar 2020 00:00:27 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34294 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725208AbgCWEA1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 23 Mar 2020 00:00:27 -0400
-Received: by mail-qt1-f193.google.com with SMTP id 10so10619992qtp.1
-        for <linux-csky@vger.kernel.org>; Sun, 22 Mar 2020 21:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pd4yz+kFP7lRzD+ddVAViEtwIsYcKKu1zuZ2dDOrHSA=;
-        b=WmZMZ6NTtot5yfwyAH1h0bWrhjSlmqWTXm8Cm7gf1kUivT9FwuCF+JHOsFnTe+I1WQ
-         lCxYov3Cfv1BV67v0fWJTc4k77FvFLW6PqRgmaJYHZWp4pjpGYEsi+fR/WLRuwLOz2ua
-         48JmD39B7gMB52UjVRa3lgREpgLXfAHTTHcHsyjTTTmXbmKHDplYzqFDi5gHanLE6eXV
-         ZbUmGHqguX7sel1c9Ib3EmXLxXKrAzB1vFg79mVastEuWB7euv09dr355bwoq8j/s/PO
-         YGPKWIviu448yyg2u5pNYt0MT17F/XJH+l9rQ3up++oUgJdO+8S9aEAnA39B7NgwiG5s
-         XD+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pd4yz+kFP7lRzD+ddVAViEtwIsYcKKu1zuZ2dDOrHSA=;
-        b=HdJU23RvQYjvNH6rS3DMEnpe/R2ZClV6zOm0/qWEPYYUOPQ8lcQy9RSEEOfXRwh2Kt
-         VrYLRgv5X3Nb2TmoY++1c6xT/jhz7gLeXm/TIw3IHd/SOLGGUQFv/uzQ5QTnzcVnp8We
-         JH38NlBAC62ByRlPw3AnqqspCuV/FO0cmQzN/aq9vQdUhPuY2EbEb980ig7sCnif+MDC
-         /152azu9OIGXZHvkpntI9enNrQZvl0YpHq0lvRCFyhJ+1GxAQq5QeGiktqI1Fs9PCjy9
-         p+qtGFCwYJZA1Ec2TAVt++hpr0E61vw324M49uOzFvKG3GeJG46KQvRZTNZ8ECi1+gCw
-         VnGg==
-X-Gm-Message-State: ANhLgQ2f0nSZoXwrxZTI/H3whktVIXM09uBlACfwJvnTmlCO7OAyDP//
-        M1PgXrDHNhsgxqiWG9uG+zlEoD5RpF8qHg+YKytGXQ==
-X-Google-Smtp-Source: ADFU+vve2wwWJUjM/bzFrdZK8ZxEBDqw7JUyk/0S7m5yM0IdkahoMGOrU2lWEA0CQl0sq4C7lBM0DLganBu18/7bDhs=
-X-Received: by 2002:ac8:67cd:: with SMTP id r13mr19502310qtp.51.1584936025812;
- Sun, 22 Mar 2020 21:00:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200308094954.13258-1-guoren@kernel.org>
-In-Reply-To: <20200308094954.13258-1-guoren@kernel.org>
-From:   Greentime Hu <greentime.hu@sifive.com>
-Date:   Mon, 23 Mar 2020 12:00:10 +0800
-Message-ID: <CAHCEehKrzv0TozP7x9Vaq1t+Utpvqfgt=wo7eXXp0HRUKFO=WQ@mail.gmail.com>
-Subject: Re: [RFC PATCH V3 00/11] riscv: Add vector ISA support
-To:     guoren@kernel.org
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Anup.Patel@wdc.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org, arnd@arndb.de,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Liu Zhiwei <zhiwei_liu@c-sky.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1727341AbgCWHEo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 23 Mar 2020 03:04:44 -0400
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:51436 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727164AbgCWHEo (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 23 Mar 2020 03:04:44 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=majun258@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0TtLKPHA_1584947040;
+Received: from localhost(mailfrom:majun258@linux.alibaba.com fp:SMTPD_---0TtLKPHA_1584947040)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 23 Mar 2020 15:04:07 +0800
+From:   Ma Jun <majun258@linux.alibaba.com>
+To:     libffi-discuss@sourceware.org
+Cc:     majun258@linux.alibaba.com, linux-csky@vger.kernel.org,
+        wenmeng_zhang@c-sky.com
+Subject: [PATCH] package/libffi: Add csky cpu support
+Date:   Sun, 15 Mar 2020 17:32:01 +0800
+Message-Id: <1584264721-16318-1-git-send-email-majun258@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-<guoren@kernel.org> =E6=96=BC 2020=E5=B9=B43=E6=9C=888=E6=97=A5 =E9=80=B1=
-=E6=97=A5 =E4=B8=8B=E5=8D=885:50=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> The implementation follow the RISC-V "V" Vector Extension draft v0.8 with
-> 128bit-vlen and it's based on linux-5.6-rc3 and tested with qemu [1].
->
-> The patch implement basic context switch, sigcontext save/restore and
-> ptrace interface with a new regset NT_RISCV_VECTOR. Only fixed 128bit-vle=
-n
-> is implemented. We need to discuss about vlen-size for libc sigcontext an=
-d
-> ptrace (the maximum size of vlen is unlimited in spec).
->
-> Puzzle:
-> Dave Martin has talked "Growing CPU register state without breaking ABI" =
-[2]
-> before, and riscv also met vlen size problem. Let's discuss the common is=
-sue
-> for all architectures and we need a better solution for unlimited vlen.
->
-> Any help are welcomed :)
->
->  1: https://github.com/romanheros/qemu.git branch:vector-upstream-v3
->  2: https://blog.linuxplumbersconf.org/2017/ocw/sessions/4671.html
->
+This patch added the support for csky cpu architecture
 
-Hi Ren,
+Signed-off-by: Zhang Wenmeng <wenmeng_zhang@c-sky.com>
+Signed-off-by: Ma Jun <majun258@linux.alibaba.com>
+---
+ Makefile.am          |   2 +
+ README.md            |   1 +
+ configure.host       |   5 +
+ src/csky/ffi.c       | 395 +++++++++++++++++++++++++++++++++++++++++++
+ src/csky/ffitarget.h |  63 +++++++
+ src/csky/sysv.S      | 371 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 837 insertions(+)
+ create mode 100644 src/csky/ffi.c
+ create mode 100644 src/csky/ffitarget.h
+ create mode 100644 src/csky/sysv.S
 
-Thanks for the patch. I have some ideas about the vlen and sigcontext.
-Since vlen may not be fixed of each RISC-V cores and it could be super
-big, it means we have to allocate the memory dynamically.
-In kernel space, we may use a pointer in the context data structure.
-Something like https://github.com/torvalds/linux/blob/master/arch/arm64/ker=
-nel/fpsimd.c#L498
-In user space, we need to let user space know the length of vector
-registers. We may create a special header in sigcontext. Something
-like https://github.com/torvalds/linux/blob/master/arch/arm64/include/uapi/=
-asm/sigcontext.h#L36
-https://github.com/torvalds/linux/blob/master/arch/arm64/include/uapi/asm/s=
-igcontext.h#L127
+diff --git a/Makefile.am b/Makefile.am
+index f83e444..e528ffd 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -53,6 +53,7 @@ noinst_HEADERS = \
+ 	src/avr32/ffitarget.h						\
+ 	src/bfin/ffitarget.h						\
+ 	src/cris/ffitarget.h						\
++	src/csky/ffitarget.h						\
+ 	src/frv/ffitarget.h						\
+ 	src/ia64/ffitarget.h src/ia64/ia64_flags.h			\
+ 	src/m32r/ffitarget.h						\
+@@ -85,6 +86,7 @@ EXTRA_libffi_la_SOURCES = \
+ 	src/avr32/ffi.c src/avr32/sysv.S				\
+ 	src/bfin/ffi.c src/bfin/sysv.S					\
+ 	src/cris/ffi.c src/cris/sysv.S					\
++	src/csky/ffi.c src/csky/sysv.S					\
+ 	src/frv/ffi.c src/frv/eabi.S					\
+ 	src/ia64/ffi.c src/ia64/unix.S					\
+ 	src/m32r/ffi.c src/m32r/sysv.S					\
+diff --git a/README.md b/README.md
+index 3caf2fa..bdfe880 100644
+--- a/README.md
++++ b/README.md
+@@ -58,6 +58,7 @@ tested:
+ | ARM             | iOS              | GCC                     |
+ | AVR32           | Linux            | GCC                     |
+ | Blackfin        | uClinux          | GCC                     |
++| CSKY            | Linux            | GCC                     |
+ | HPPA            | HPUX             | GCC                     |
+ | IA-64           | Linux            | GCC                     |
+ | M68K            | FreeMiNT         | GCC                     |
+diff --git a/configure.host b/configure.host
+index 7634c3a..9201cd4 100644
+--- a/configure.host
++++ b/configure.host
+@@ -43,6 +43,11 @@ case "${host}" in
+ 	SOURCES="ffi.c sysv.S"
+ 	;;
+ 
++  csky-*-*)
++	TARGET=CSKY; TARGETDIR=csky
++	SOURCES="ffi.c sysv.S"
++	;;
++
+   frv-*-*)
+ 	TARGET=FRV; TARGETDIR=frv
+ 	SOURCES="ffi.c eabi.S"
+diff --git a/src/csky/ffi.c b/src/csky/ffi.c
+new file mode 100644
+index 0000000..eb53848
+--- /dev/null
++++ b/src/csky/ffi.c
+@@ -0,0 +1,395 @@
++/* -----------------------------------------------------------------------
++   ffi.c
++
++   CSKY Foreign Function Interface
++
++   Permission is hereby granted, free of charge, to any person obtaining
++   a copy of this software and associated documentation files (the
++   ``Software''), to deal in the Software without restriction, including
++   without limitation the rights to use, copy, modify, merge, publish,
++   distribute, sublicense, and/or sell copies of the Software, and to
++   permit persons to whom the Software is furnished to do so, subject to
++   the following conditions:
++
++   The above copyright notice and this permission notice shall be included
++   in all copies or substantial portions of the Software.
++
++   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
++   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++   NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
++   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++   DEALINGS IN THE SOFTWARE.
++   ----------------------------------------------------------------------- */
++
++#include <ffi.h>
++#include <ffi_common.h>
++
++#include <stdlib.h>
++
++/* ffi_prep_args is called by the assembly routine once stack space
++   has been allocated for the function's arguments
++*/
++void ffi_prep_args(char *stack, extended_cif *ecif)
++{
++	register unsigned int i;
++	register void **p_argv;
++	register char *argp;
++	register ffi_type **p_arg;
++
++	argp = stack;
++
++	if ( ecif->cif->flags == FFI_TYPE_STRUCT ) {
++		*(void **) argp = ecif->rvalue;
++		argp += 4;
++	}
++
++	p_argv = ecif->avalue;
++
++	for (i = ecif->cif->nargs, p_arg = ecif->cif->arg_types;
++			(i != 0);
++			i--, p_arg++)
++	{
++		size_t z;
++		size_t alignment;
++
++		/* Align if necessary */
++		alignment = (*p_arg)->alignment;
++#ifdef __CSKYABIV1__
++		/*
++		 * Adapt ABIV1 bug.
++		 * If struct's size is larger than 8 bytes, then it always alignment as 4 bytes.
++		 */
++		if (((*p_arg)->type == FFI_TYPE_STRUCT) && ((*p_arg)->size > 8) && (alignment == 8)) {
++			alignment = 4;
++		}
++#endif
++
++		if ((alignment - 1) & (unsigned) argp) {
++			argp = (char *) FFI_ALIGN(argp, alignment);
++		}
++
++		if ((*p_arg)->type == FFI_TYPE_STRUCT)
++			argp = (char *) FFI_ALIGN(argp, 4);
++
++		z = (*p_arg)->size;
++		if (z < sizeof(int))
++		{
++			z = sizeof(int);
++			switch ((*p_arg)->type)
++			{
++			case FFI_TYPE_SINT8:
++				*(signed int *) argp = (signed int)*(SINT8 *)(* p_argv);
++				break;
++
++			case FFI_TYPE_UINT8:
++				*(unsigned int *) argp = (unsigned int)*(UINT8 *)(* p_argv);
++				break;
++
++			case FFI_TYPE_SINT16:
++				*(signed int *) argp = (signed int)*(SINT16 *)(* p_argv);
++				break;
++
++			case FFI_TYPE_UINT16:
++				*(unsigned int *) argp = (unsigned int)*(UINT16 *)(* p_argv);
++				break;
++
++			case FFI_TYPE_STRUCT:
++#ifdef __CSKYBE__
++				memcpy((argp + 4 - (*p_arg)->size), *p_argv, (*p_arg)->size);
++#else
++				memcpy(argp, *p_argv, (*p_arg)->size);
++#endif
++				break;
++
++			default:
++				FFI_ASSERT(0);
++			}
++		}
++		else if (z == sizeof(int))
++		{
++			*(unsigned int *) argp = (unsigned int)*(UINT32 *)(* p_argv);
++		}
++		else
++		{
++			memcpy(argp, *p_argv, z);
++		}
++		p_argv++;
++		argp += z;
++	}
++
++	return;
++}
++
++/* Perform machine dependent cif processing */
++ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
++{
++  /* Round the stack up to a multiple of 8 bytes.  This isn't needed
++     everywhere, but it is on some platforms, and it doesn't hcsky anything
++     when it isn't needed.  */
++  cif->bytes = (cif->bytes + 7) & ~7;
++
++  /* Set the return type flag */
++  switch (cif->rtype->type)
++    {
++
++    case FFI_TYPE_DOUBLE:
++    case FFI_TYPE_SINT64:
++    case FFI_TYPE_UINT64:
++      cif->flags = (unsigned) FFI_TYPE_SINT64;
++      break;
++
++    case FFI_TYPE_STRUCT:
++      if (cif->rtype->size <= 4)
++	/* A Composite Type not larger than 4 bytes is returned in r0.  */
++	cif->flags = (unsigned)FFI_TYPE_INT;
++      else if (cif->rtype->size <= 8)
++	/* A Composite Type not larger than 8 bytes is returned in r0, r1.  */
++	cif->flags = (unsigned)FFI_TYPE_SINT64;
++      else
++	/* A Composite Type larger than 8 bytes, or whose size cannot
++	   be determined statically ... is stored in memory at an
++	   address passed [in r0].  */
++	cif->flags = (unsigned)FFI_TYPE_STRUCT;
++      break;
++
++    default:
++      cif->flags = FFI_TYPE_INT;
++      break;
++    }
++
++  return FFI_OK;
++}
++
++/* Perform machine dependent cif processing for variadic calls */
++ffi_status ffi_prep_cif_machdep_var(ffi_cif *cif,
++				    unsigned int nfixedargs,
++				    unsigned int ntotalargs)
++{
++  return ffi_prep_cif_machdep(cif);
++}
++
++/* Prototypes for assembly functions, in sysv.S */
++extern void ffi_call_SYSV (void (*fn)(void), extended_cif *, unsigned, unsigned, unsigned *);
++
++void ffi_call(ffi_cif *cif, void (*fn)(void), void *rvalue, void **avalue)
++{
++  extended_cif ecif;
++
++  int small_struct = (cif->flags == FFI_TYPE_INT
++		      && cif->rtype->type == FFI_TYPE_STRUCT);
++
++  ecif.cif = cif;
++  ecif.avalue = avalue;
++
++  unsigned int temp;
++
++  /* If the return value is a struct and we don't have a return	*/
++  /* value address then we need to make one		        */
++
++  if ((rvalue == NULL) &&
++      (cif->flags == FFI_TYPE_STRUCT))
++    {
++      ecif.rvalue = alloca(cif->rtype->size);
++    }
++  else if (small_struct)
++    ecif.rvalue = &temp;
++  else
++    ecif.rvalue = rvalue;
++
++  switch (cif->abi)
++    {
++    case FFI_SYSV:
++      ffi_call_SYSV (fn, &ecif, cif->bytes, cif->flags, ecif.rvalue);
++      break;
++
++    default:
++      FFI_ASSERT(0);
++      break;
++    }
++  if (small_struct)
++#ifdef __CSKYBE__
++    memcpy (rvalue, ((unsigned char *)&temp + (4 - cif->rtype->size)), cif->rtype->size);
++#else
++    memcpy (rvalue, &temp, cif->rtype->size);
++#endif
++}
++
++/** private members **/
++
++static void ffi_prep_incoming_args_SYSV (char *stack, void **ret,
++					 void** args, ffi_cif* cif);
++
++void ffi_closure_SYSV (ffi_closure *);
++
++/* This function is jumped to by the trampoline */
++
++unsigned int
++ffi_closure_SYSV_inner (closure, respp, args)
++     ffi_closure *closure;
++     void **respp;
++     void *args;
++{
++  // our various things...
++  ffi_cif       *cif;
++  void         **arg_area;
++
++  cif         = closure->cif;
++  arg_area    = (void**) alloca (cif->nargs * sizeof (void*));
++
++  /* this call will initialize ARG_AREA, such that each
++   * element in that array points to the corresponding
++   * value on the stack; and if the function returns
++   * a structure, it will re-set RESP to point to the
++   * structure return address.  */
++
++  ffi_prep_incoming_args_SYSV(args, respp, arg_area, cif);
++
++  (closure->fun) (cif, *respp, arg_area, closure->user_data);
++
++#ifdef __CSKYBE__
++  if (cif->flags == FFI_TYPE_INT && cif->rtype->type == FFI_TYPE_STRUCT) {
++      unsigned int tmp = 0;
++      tmp = *(unsigned int *)(*respp);
++      *(unsigned int *)(*respp) = (tmp >> ((4 - cif->rtype->size) * 8));
++  }
++#endif
++
++  return cif->flags;
++}
++
++
++static void
++ffi_prep_incoming_args_SYSV(char *stack, void **rvalue,
++			    void **avalue, ffi_cif *cif)
++{
++  register unsigned int i;
++  register void **p_argv;
++  register char *argp;
++  register ffi_type **p_arg;
++
++  argp = stack;
++
++  if ( cif->flags == FFI_TYPE_STRUCT ) {
++    *rvalue = *(void **) argp;
++    argp += 4;
++  }
++
++  p_argv = avalue;
++
++  for (i = cif->nargs, p_arg = cif->arg_types; (i != 0); i--, p_arg++)
++    {
++      size_t z;
++      size_t alignment;
++
++      alignment = (*p_arg)->alignment;
++      if (alignment < 4)
++	alignment = 4;
++
++#ifdef __CSKYABIV1__
++      /*
++       * Adapt ABIV1 bug.
++       * If struct's size is larger than 8 bytes, then it always alignment as 4 bytes.
++       */
++      if (((*p_arg)->type == FFI_TYPE_STRUCT) && ((*p_arg)->size > 8) && (alignment == 8)) {
++        alignment = 4;
++      }
++#endif
++
++      /* Align if necessary */
++      if ((alignment - 1) & (unsigned) argp) {
++	argp = (char *) FFI_ALIGN(argp, alignment);
++      }
++
++      z = (*p_arg)->size;
++
++#ifdef __CSKYBE__
++      unsigned int tmp = 0;
++      if ((*p_arg)->size < 4) {
++        tmp = *(unsigned int *)argp;
++        memcpy(argp, ((unsigned char *)&tmp + (4 - (*p_arg)->size)), (*p_arg)->size);
++      }
++#else
++      /* because we're little endian, this is what it turns into.   */
++#endif
++      *p_argv = (void*) argp;
++
++      p_argv++;
++      argp += z;
++    }
++
++  return;
++}
++
++/* How to make a trampoline.  */
++
++extern unsigned char ffi_csky_trampoline[TRAMPOLINE_SIZE];
++
++/*
++ * Since there is no __clear_cache in libgcc in csky toolchain.
++ * define ffi_csky_cacheflush in sysv.S.
++ * void ffi_csky_cacheflush(uint32 start_addr, uint32 size, int cache)
++ */
++#define CACHEFLUSH_IN_FFI 1
++#if CACHEFLUSH_IN_FFI
++extern void ffi_csky_cacheflush(unsigned char *__tramp, unsigned int k,
++		int i);
++#define FFI_INIT_TRAMPOLINE(TRAMP,FUN,CTX)                              \
++({ unsigned char *__tramp = (unsigned char*)(TRAMP);                    \
++   unsigned int  __fun = (unsigned int)(FUN);                           \
++   unsigned int  __ctx = (unsigned int)(CTX);                           \
++   unsigned char *insns = (unsigned char *)(CTX);                       \
++   memcpy (__tramp, ffi_csky_trampoline, TRAMPOLINE_SIZE);              \
++   *(unsigned int*) &__tramp[TRAMPOLINE_SIZE] = __ctx;                  \
++   *(unsigned int*) &__tramp[TRAMPOLINE_SIZE + 4] = __fun;              \
++   ffi_csky_cacheflush(&__tramp[0], TRAMPOLINE_SIZE, 3); /* Clear data mapping.  */ \
++   ffi_csky_cacheflush(insns, TRAMPOLINE_SIZE, 3);                       \
++                                                 /* Clear instruction   \
++                                                    mapping.  */        \
++ })
++#else
++#define FFI_INIT_TRAMPOLINE(TRAMP,FUN,CTX)                              \
++({ unsigned char *__tramp = (unsigned char*)(TRAMP);                    \
++   unsigned int  __fun = (unsigned int)(FUN);                           \
++   unsigned int  __ctx = (unsigned int)(CTX);                           \
++   unsigned char *insns = (unsigned char *)(CTX);                       \
++   memcpy (__tramp, ffi_csky_trampoline, TRAMPOLINE_SIZE);              \
++   *(unsigned int*) &__tramp[TRAMPOLINE_SIZE] = __ctx;                  \
++   *(unsigned int*) &__tramp[TRAMPOLINE_SIZE + 4] = __fun;              \
++   __clear_cache((&__tramp[0]), (&__tramp[TRAMPOLINE_SIZE-1])); /* Clear data mapping.  */ \
++   __clear_cache(insns, insns + TRAMPOLINE_SIZE);                       \
++                                                 /* Clear instruction   \
++                                                    mapping.  */        \
++ })
++#endif
++
++/* the cif must already be prep'ed */
++
++ffi_status
++ffi_prep_closure_loc (ffi_closure* closure,
++		      ffi_cif* cif,
++		      void (*fun)(ffi_cif*,void*,void**,void*),
++		      void *user_data,
++		      void *codeloc)
++{
++  void (*closure_func)(ffi_closure*) = NULL;
++
++  if (cif->abi == FFI_SYSV)
++    closure_func = &ffi_closure_SYSV;
++  else
++    return FFI_BAD_ABI;
++
++  FFI_INIT_TRAMPOLINE (&closure->tramp[0], \
++		       closure_func,  \
++		       codeloc);
++
++  closure->cif  = cif;
++  closure->user_data = user_data;
++  closure->fun  = fun;
++
++  return FFI_OK;
++}
++
++
+diff --git a/src/csky/ffitarget.h b/src/csky/ffitarget.h
+new file mode 100644
+index 0000000..f770aac
+--- /dev/null
++++ b/src/csky/ffitarget.h
+@@ -0,0 +1,63 @@
++/* -----------------------------------------------------------------*-C-*-
++   ffitarget.h - Copyright (c) 2012  Anthony Green
++                 Copyright (c) 2010  CodeSourcery
++                 Copyright (c) 1996-2003  Red Hat, Inc.
++
++   Target configuration macros for CSKY.
++
++   Permission is hereby granted, free of charge, to any person obtaining
++   a copy of this software and associated documentation files (the
++   ``Software''), to deal in the Software without restriction, including
++   without limitation the rights to use, copy, modify, merge, publish,
++   distribute, sublicense, and/or sell copies of the Software, and to
++   permit persons to whom the Software is furnished to do so, subject to
++   the following conditions:
++
++   The above copyright notice and this permission notice shall be included
++   in all copies or substantial portions of the Software.
++
++   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
++   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++   NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
++   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++   DEALINGS IN THE SOFTWARE.
++
++   ----------------------------------------------------------------------- */
++
++#ifndef LIBFFI_TARGET_H
++#define LIBFFI_TARGET_H
++
++#ifndef LIBFFI_H
++#error "Please do not include ffitarget.h directly into your source.  Use ffi.h instead."
++#endif
++
++#ifndef LIBFFI_ASM
++typedef unsigned long          ffi_arg;
++typedef signed long            ffi_sarg;
++
++typedef enum ffi_abi {
++  FFI_FIRST_ABI = 0,
++  FFI_SYSV,
++  FFI_LAST_ABI,
++  FFI_DEFAULT_ABI = FFI_SYSV,
++} ffi_abi;
++#endif
++
++#ifdef __CSKYABIV2__
++#define FFI_ASM_ARGREG_SIZE 16
++#define TRAMPOLINE_SIZE 16
++#define FFI_TRAMPOLINE_SIZE 24
++#else
++#define FFI_ASM_ARGREG_SIZE 24
++#define TRAMPOLINE_SIZE 20
++#define FFI_TRAMPOLINE_SIZE 28
++#endif
++
++/* ---- Definitions for closures ----------------------------------------- */
++
++#define FFI_CLOSURES 1
++#define FFI_NATIVE_RAW_API 0
++#endif
+diff --git a/src/csky/sysv.S b/src/csky/sysv.S
+new file mode 100644
+index 0000000..962a796
+--- /dev/null
++++ b/src/csky/sysv.S
+@@ -0,0 +1,371 @@
++/* -----------------------------------------------------------------------
++   sysv.S
++
++   CSKY Foreign Function Interface
++
++   Permission is hereby granted, free of charge, to any person obtaining
++   a copy of this software and associated documentation files (the
++   ``Software''), to deal in the Software without restriction, including
++   without limitation the rights to use, copy, modify, merge, publish,
++   distribute, sublicense, and/or sell copies of the Software, and to
++   permit persons to whom the Software is furnished to do so, subject to
++   the following conditions:
++
++   The above copyright notice and this permission notice shall be included
++   in all copies or substantial portions of the Software.
++
++   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
++   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++   NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
++   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++   DEALINGS IN THE SOFTWARE.
++   ----------------------------------------------------------------------- */
++
++#define LIBFFI_ASM
++#include <fficonfig.h>
++#include <ffi.h>
++
++.macro	CSKY_FUNC_START name
++	.text
++	.align 2
++	.globl \name
++	.type \name, @function
++	\name:
++.endm
++
++#ifdef __CSKYABIV2__
++
++	/*
++	 * a0:   fn
++	 * a1:   &ecif
++	 * a2:   cif->bytes
++	 * a3:   fig->flags
++	 * sp+0: ecif.rvalue
++	 */
++CSKY_FUNC_START ffi_call_SYSV
++	/* Save registers */
++	.cfi_startproc
++	subi	sp, 28
++	.cfi_def_cfa_offset 28
++	stw	a0, (sp, 0x0)
++	.cfi_offset 0, -28
++	stw	a1, (sp, 0x4)
++	.cfi_offset 1, -24
++	stw	a2, (sp, 0x8)
++	.cfi_offset 2, -20
++	stw	a3, (sp, 0xC)
++	.cfi_offset 3, -16
++	stw	l0, (sp, 0x10)
++	.cfi_offset 4, -12
++	stw	l1, (sp, 0x14)
++	.cfi_offset 5, -8
++	stw	lr, (sp, 0x18)
++	.cfi_offset 15, -4
++
++	mov	l0, sp
++	.cfi_def_cfa_register 4
++
++	/* Make room for all of the new args. */
++	subu	sp, sp, a2
++
++	/* Place all of the ffi_prep_args in position */
++	mov	a0, sp
++	/*     a1 already set */
++
++	/* Call ffi_prep_args(stack, &ecif) */
++	jsri	ffi_prep_args
++
++	/* move first 4 parameters in registers */
++	ldw	a0, (sp, 0x0)
++	ldw	a1, (sp, 0x4)
++	ldw	a2, (sp, 0x8)
++	ldw	a3, (sp, 0xC)
++
++	/* and adjust stack */
++	subu	lr, l0, sp	/* cif->bytes == l0 - sp */
++	cmphsi	lr, 16
++	movi	l1, 16
++	movt	lr, l1
++	addu	sp, sp, lr
++
++	ldw	l1, (l0, 0)	/* load fn() in advance */
++
++	/* call (fn) (...) */
++	jsr	l1
++
++	/* Remove the space we pushed for the args */
++	mov	sp, l0
++
++	/* Load r2 with the pointer to storage for the return value */
++	ldw	a2, (sp, 0x1C)
++
++	/* Load r3 with the return type code */
++	ldw	a3, (sp, 0xC)
++
++	/* If the return value pointer is NULL, assume no return value. */
++	cmpnei	a2, 0
++	bf	.Lepilogue
++
++	cmpnei	a3, FFI_TYPE_STRUCT
++	bf	.Lepilogue
++
++	/* return INT64 */
++	cmpnei	a3, FFI_TYPE_SINT64
++	bt	.Lretint
++	/* stw	a0, (a2, 0x0) at .Lretint */
++	stw	a1, (a2, 0x4)
++
++.Lretint:
++	/* return INT */
++	stw	a0, (a2, 0x0)
++
++.Lepilogue:
++	ldw	a0, (sp, 0x0)
++	ldw	a1, (sp, 0x4)
++	ldw	a2, (sp, 0x8)
++	ldw	a3, (sp, 0xC)
++	ldw	l0, (sp, 0x10)
++	ldw	l1, (sp, 0x14)
++	ldw	lr, (sp, 0x18)
++	addi	sp, sp, 28
++	rts
++	.cfi_endproc
++        .size    ffi_call_SYSV, .-ffi_call_SYSV
++
++
++	/*
++	 * unsigned int FFI_HIDDEN
++	 * ffi_closure_SYSV_inner (closure, respp, args)
++	 *      ffi_closure *closure;
++	 *      void **respp;
++	 *      void *args;
++	 */
++CSKY_FUNC_START ffi_closure_SYSV
++	.cfi_startproc
++	mov	a2, sp
++	addi	a1, sp, 16
++	subi	sp, sp, 24
++	.cfi_def_cfa_offset 40
++	stw	a1, (sp, 0x10)
++	.cfi_offset 1, -24
++	stw	lr, (sp, 0x14)
++	.cfi_offset 15, -20
++	stw	sp, (sp, 0x8)
++	addi	a1, sp, 8
++	jsri	ffi_closure_SYSV_inner
++	ldw	a0, (sp, 0x0)
++	/*
++	 * if FFI_TYPE_SINT64, need a1.
++	 * if FFI_TYPE_INT, ignore a1.
++	 */
++	ldw	a1, (sp, 0x4)
++
++	ldw	lr, (sp, 0x14)
++	addi	sp, sp, 40
++	rts
++	.cfi_endproc
++        .size    ffi_closure_SYSV, .-ffi_closure_SYSV
++
++CSKY_FUNC_START ffi_csky_trampoline
++	subi	sp, sp, 16
++	stw	a0, (sp, 0x0)
++	stw	a1, (sp, 0x4)
++	stw	a2, (sp, 0x8)
++	stw	a3, (sp, 0xC)
++	lrw	a0, [.Lctx]
++	lrw	a1, [.Lfun]
++	jmp	a1
++.Lctx:
++	mov	a0, a0
++	mov	a0, a0
++.Lfun:
++
++        .size    ffi_csky_trampoline, .-ffi_csky_trampoline
++
++CSKY_FUNC_START ffi_csky_cacheflush
++	mov	t0, r7
++	movi	r7, 123
++	trap	0
++	mov	r7, t0
++	rts
++
++        .size    ffi_csky_cacheflush, .-ffi_csky_cacheflush
++
++#else /* !__CSKYABIV2__ */
++
++	/*
++	 * a0:   fn
++	 * a1:   &ecif
++	 * a2:   cif->bytes
++	 * a3:   fig->flags
++	 * a4:   ecif.rvalue
++	 */
++CSKY_FUNC_START ffi_call_SYSV
++	/* Save registers */
++	.cfi_startproc
++	subi	sp, 32
++	subi	sp, 8
++	.cfi_def_cfa_offset 40
++	stw	a0, (sp, 0x0)
++	.cfi_offset 2, -40
++	stw	a1, (sp, 0x4)
++	.cfi_offset 3, -36
++	stw	a2, (sp, 0x8)
++	.cfi_offset 4, -32
++	stw	a3, (sp, 0xC)
++	.cfi_offset 5, -28
++	stw	a4, (sp, 0x10)
++	.cfi_offset 6, -24
++	stw	a5, (sp, 0x14)
++	.cfi_offset 7, -20
++	stw	l0, (sp, 0x18)
++	.cfi_offset 8, -16
++	stw	l1, (sp, 0x1C)
++	.cfi_offset 9, -12
++	stw	lr, (sp, 0x20)
++	.cfi_offset 15, -8
++
++	mov	l0, sp
++	.cfi_def_cfa_register 8
++
++	/* Make room for all of the new args. */
++	subu	sp, sp, a2
++
++	/* Place all of the ffi_prep_args in position */
++	mov	a0, sp
++	/*     a1 already set */
++
++	/* Call ffi_prep_args(stack, &ecif) */
++	jsri	ffi_prep_args
++
++	/* move first 4 parameters in registers */
++	ldw	a0, (sp, 0x0)
++	ldw	a1, (sp, 0x4)
++	ldw	a2, (sp, 0x8)
++	ldw	a3, (sp, 0xC)
++	ldw	a4, (sp, 0x10)
++	ldw	a5, (sp, 0x14)
++
++	/* and adjust stack */
++	mov	lr, l0
++	subu	lr, sp		/* cif->bytes == l0 - sp */
++	movi	l1, 24
++	cmphs	lr, l1
++	movt	lr, l1
++	addu	sp, sp, lr
++
++	ldw	l1, (l0, 0)	/* load fn() in advance */
++
++	/* call (fn) (...) */
++	jsr	l1
++
++	/* Remove the space we pushed for the args */
++	mov	sp, l0
++
++	/* Load r2 with the pointer to storage for the return value */
++	ldw	a2, (sp, 0x10)
++
++	/* Load r3 with the return type code */
++	ldw	a3, (sp, 0xC)
++
++	/* If the return value pointer is NULL, assume no return value. */
++	cmpnei	a2, 0
++	bf	.Lepilogue
++
++	cmpnei	a3, FFI_TYPE_STRUCT
++	bf	.Lepilogue
++
++	/* return INT64 */
++	cmpnei	a3, FFI_TYPE_SINT64
++	bt	.Lretint
++	/* stw	a0, (a2, 0x0) at .Lretint */
++	stw	a1, (a2, 0x4)
++
++.Lretint:
++	/* return INT */
++	stw	a0, (a2, 0x0)
++
++.Lepilogue:
++	ldw	a0, (sp, 0x0)
++	ldw	a1, (sp, 0x4)
++	ldw	a2, (sp, 0x8)
++	ldw	a3, (sp, 0xC)
++	ldw	a4, (sp, 0x10)
++	ldw	a5, (sp, 0x14)
++	ldw	l0, (sp, 0x18)
++	ldw	l1, (sp, 0x1C)
++	ldw	lr, (sp, 0x20)
++	addi	sp, sp, 32
++	addi	sp, sp, 8
++	rts
++	.cfi_endproc
++
++        .size    ffi_call_SYSV, .-ffi_call_SYSV
++
++
++	/*
++	 * unsigned int FFI_HIDDEN
++	 * ffi_closure_SYSV_inner (closure, respp, args)
++	 *      ffi_closure *closure;
++	 *      void **respp;
++	 *      void *args;
++	 */
++CSKY_FUNC_START ffi_closure_SYSV
++	.cfi_startproc
++	mov	a2, sp
++	mov	a1, sp
++	addi	a1, 24
++	subi	sp, sp, 24
++	.cfi_def_cfa_offset 48
++	stw	a1, (sp, 0x10)
++	.cfi_offset 3, -32
++	stw	lr, (sp, 0x14)
++	.cfi_offset 15, -28
++	stw	sp, (sp, 0x8)
++	mov	a1, sp
++	addi	a1, 8
++	jsri	ffi_closure_SYSV_inner
++	ldw	a0, (sp, 0x0)
++	/*
++	 * if FFI_TYPE_SINT64, need a1.
++	 * if FFI_TYPE_INT, ignore a1.
++	 */
++	ldw	a1, (sp, 0x4)
++
++	ldw	lr, (sp, 0x14)
++	addi	sp, sp, 24
++	addi	sp, sp, 24
++	rts
++	.cfi_endproc
++
++        .size    ffi_closure_SYSV, .-ffi_closure_SYSV
++
++CSKY_FUNC_START ffi_csky_trampoline
++	subi	sp, 24
++	stw	a0, (sp, 0x0)
++	stw	a1, (sp, 0x4)
++	stw	a2, (sp, 0x8)
++	stw	a3, (sp, 0xC)
++	stw	a4, (sp, 0x10)
++	stw	a5, (sp, 0x14)
++	lrw	a0, [.Lctx]
++	lrw	a1, [.Lfun]
++	jmp	a1
++.Lctx:
++	mov	a0, a0
++	mov	a0, a0
++.Lfun:
++
++        .size    ffi_csky_trampoline, .-ffi_csky_trampoline
++
++CSKY_FUNC_START ffi_csky_cacheflush
++	lrw	r1, 123
++	trap	0
++	rts
++
++        .size    ffi_csky_cacheflush, .-ffi_csky_cacheflush
++
++#endif /* __CSKYABIV2__ */
+-- 
+2.17.1
 
-For the implementation in makecontext, swapcontext, getcontext,
-setcontext of glibc, we may not need to port because it seems to be
-deprecated?
-https://stackoverflow.com/questions/4298986/is-there-something-to-replace-t=
-he-ucontext-h-functions
-
-For the unwinding implementation of libgcc since it needs to know the
-meaning of data structure is  changed. It also need to be port.
-
-> ---
-> Changelog V3
->  - Rebase linux-5.6-rc3 and tested with qemu
->  - Seperate patches with Anup's advice
->  - Give out a ABI puzzle with unlimited vlen
->
-> Changelog V2
->  - Fixup typo "vecotr, fstate_save->vstate_save".
->  - Fixup wrong saved registers' length in vector.S.
->  - Seperate unrelated patches from this one.
->
-> Guo Ren (11):
->   riscv: Separate patch for cflags and aflags
->   riscv: Rename __switch_to_aux -> fpu
->   riscv: Extending cpufeature.c to detect V-extension
->   riscv: Add CSR defines related to VECTOR extension
->   riscv: Add vector feature to compile
->   riscv: Add has_vector detect
->   riscv: Reset vector register
->   riscv: Add vector struct and assembler definitions
->   riscv: Add task switch support for VECTOR
->   riscv: Add ptrace support
->   riscv: Add sigcontext save/restore
->
->  arch/riscv/Kconfig                       |   9 ++
->  arch/riscv/Makefile                      |  19 ++-
->  arch/riscv/include/asm/csr.h             |  17 ++-
->  arch/riscv/include/asm/processor.h       |   1 +
->  arch/riscv/include/asm/switch_to.h       |  54 ++++++-
->  arch/riscv/include/uapi/asm/elf.h        |   1 +
->  arch/riscv/include/uapi/asm/hwcap.h      |   1 +
->  arch/riscv/include/uapi/asm/ptrace.h     |   9 ++
->  arch/riscv/include/uapi/asm/sigcontext.h |   1 +
->  arch/riscv/kernel/Makefile               |   1 +
->  arch/riscv/kernel/asm-offsets.c          | 187 +++++++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c           |  12 +-
->  arch/riscv/kernel/entry.S                |   2 +-
->  arch/riscv/kernel/head.S                 |  49 +++++-
->  arch/riscv/kernel/process.c              |  10 ++
->  arch/riscv/kernel/ptrace.c               |  41 +++++
->  arch/riscv/kernel/signal.c               |  40 +++++
->  arch/riscv/kernel/vector.S               |  84 ++++++++++
->  include/uapi/linux/elf.h                 |   1 +
->  19 files changed, 524 insertions(+), 15 deletions(-)
->  create mode 100644 arch/riscv/kernel/vector.S
->
-> --
-> 2.17.0
->
