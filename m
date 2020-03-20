@@ -2,110 +2,89 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DE8189643
-	for <lists+linux-csky@lfdr.de>; Wed, 18 Mar 2020 08:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9D518CAB7
+	for <lists+linux-csky@lfdr.de>; Fri, 20 Mar 2020 10:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727314AbgCRHgc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 18 Mar 2020 03:36:32 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49512 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726473AbgCRHgb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 18 Mar 2020 03:36:31 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02I7WsN0097010
-        for <linux-csky@vger.kernel.org>; Wed, 18 Mar 2020 03:36:30 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2yua3uhr39-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-csky@vger.kernel.org>; Wed, 18 Mar 2020 03:36:30 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-csky@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Wed, 18 Mar 2020 07:36:28 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 18 Mar 2020 07:36:25 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02I7aOS247579388
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Mar 2020 07:36:24 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9B96A4054;
-        Wed, 18 Mar 2020 07:36:24 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CDD24A4066;
-        Wed, 18 Mar 2020 07:36:23 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.148.202.35])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 18 Mar 2020 07:36:23 +0000 (GMT)
-Date:   Wed, 18 Mar 2020 09:36:22 +0200
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Wang Wenhu <wenhu.wang@vivo.com>
-Cc:     Guo Ren <guoren@kernel.org>, Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@vivo.com, trivial@kernel.org
-Subject: Re: [PATCH] csky: delete redundant micro io_remap_pfn_range
-References: <20200318044702.104793-1-wenhu.wang@vivo.com>
+        id S1726976AbgCTJtf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 20 Mar 2020 05:49:35 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:35066 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbgCTJtb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 20 Mar 2020 05:49:31 -0400
+Received: from localhost ([127.0.0.1] helo=flow.W.breakpoint.cc)
+        by Galois.linutronix.de with esmtp (Exim 4.80)
+        (envelope-from <bigeasy@linutronix.de>)
+        id 1jFEH1-0000vL-J1; Fri, 20 Mar 2020 10:49:03 +0100
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     tglx@linutronix.de
+Cc:     arnd@arndb.de, balbi@kernel.org, bhelgaas@google.com,
+        bigeasy@linutronix.de, dave@stgolabs.net, davem@davemloft.net,
+        gregkh@linuxfoundation.org, joel@joelfernandes.org,
+        kurt.schwemmer@microsemi.com, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, logang@deltatee.com,
+        mingo@kernel.org, mpe@ellerman.id.au, netdev@vger.kernel.org,
+        oleg@redhat.com, paulmck@kernel.org, peterz@infradead.org,
+        rdunlap@infradead.org, rostedt@goodmis.org,
+        torvalds@linux-foundation.org, will@kernel.org,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH 2/5] csky: Remove mm.h from asm/uaccess.h
+Date:   Fri, 20 Mar 2020 10:48:53 +0100
+Message-Id: <20200320094856.3453859-3-bigeasy@linutronix.de>
+X-Mailer: git-send-email 2.26.0.rc2
+In-Reply-To: <20200320094856.3453859-1-bigeasy@linutronix.de>
+References: <20200318204408.010461877@linutronix.de>
+ <20200320094856.3453859-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200318044702.104793-1-wenhu.wang@vivo.com>
-X-TM-AS-GCONF: 00
-x-cbid: 20031807-0020-0000-0000-000003B65568
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20031807-0021-0000-0000-0000220EBD63
-Message-Id: <20200318073622.GB17919@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-18_02:2020-03-17,2020-03-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=1 spamscore=0
- phishscore=0 priorityscore=1501 clxscore=1011 impostorscore=0 adultscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 mlxlogscore=747 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003180037
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 09:47:01PM -0700, Wang Wenhu wrote:
-> Same definition exists in "include/asm-generic/pgtable.h",
-> which is included just below the lines to be deleted.
-> 
-> #ifndef io_remap_pfn_range
-> #define io_remap_pfn_range remap_pfn_range
-> #endif
-> 
-> Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
+The defconfig compiles without linux/mm.h. With mm.h included the
+include chain leands to:
+|   CC      kernel/locking/percpu-rwsem.o
+| In file included from include/linux/huge_mm.h:8,
+|                  from include/linux/mm.h:567,
+|                  from arch/csky/include/asm/uaccess.h:,
+|                  from include/linux/uaccess.h:11,
+|                  from include/linux/sched/task.h:11,
+|                  from include/linux/sched/signal.h:9,
+|                  from include/linux/rcuwait.h:6,
+|                  from include/linux/percpu-rwsem.h:8,
+|                  from kernel/locking/percpu-rwsem.c:6:
+| include/linux/fs.h:1422:29: error: array type has incomplete element type=
+ 'struct percpu_rw_semaphore'
+|  1422 |  struct percpu_rw_semaphore rw_sem[SB_FREEZE_LEVELS];
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+once rcuwait.h includes linux/sched/signal.h.
 
-> ---
->  arch/csky/include/asm/pgtable.h | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-> index 9b7764cb7645..bde812a785c8 100644
-> --- a/arch/csky/include/asm/pgtable.h
-> +++ b/arch/csky/include/asm/pgtable.h
-> @@ -306,9 +306,6 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
->  /* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
->  #define kern_addr_valid(addr)	(1)
->  
-> -#define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
-> -	remap_pfn_range(vma, vaddr, pfn, size, prot)
-> -
->  #include <asm-generic/pgtable.h>
->  
->  #endif /* __ASM_CSKY_PGTABLE_H */
-> -- 
-> 2.17.1
-> 
+Remove the linux/mm.h include.
 
--- 
-Sincerely yours,
-Mike.
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ arch/csky/include/asm/uaccess.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/csky/include/asm/uaccess.h b/arch/csky/include/asm/uacces=
+s.h
+index eaa1c3403a424..abefa125b93cf 100644
+--- a/arch/csky/include/asm/uaccess.h
++++ b/arch/csky/include/asm/uaccess.h
+@@ -11,7 +11,6 @@
+ #include <linux/errno.h>
+ #include <linux/types.h>
+ #include <linux/sched.h>
+-#include <linux/mm.h>
+ #include <linux/string.h>
+ #include <linux/version.h>
+ #include <asm/segment.h>
+--=20
+2.26.0.rc2
 
