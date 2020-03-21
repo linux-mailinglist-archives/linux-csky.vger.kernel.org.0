@@ -2,70 +2,94 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BD318CC2E
-	for <lists+linux-csky@lfdr.de>; Fri, 20 Mar 2020 12:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3A418DFC2
+	for <lists+linux-csky@lfdr.de>; Sat, 21 Mar 2020 12:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727354AbgCTLFv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 20 Mar 2020 07:05:51 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41438 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727350AbgCTLFv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 20 Mar 2020 07:05:51 -0400
-Received: by mail-oi1-f196.google.com with SMTP id b17so6013237oic.8
-        for <linux-csky@vger.kernel.org>; Fri, 20 Mar 2020 04:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=kuhba0bbR9oJup1oQ7P5tNPZ9FqBHXE57QqcfHgaIHo=;
-        b=DhziRWS6dNTGgpNCqYJD/NLtBtHxKiCnh3R3deuE0wGf6vlCbIQKhwCBK1nJi2h+o6
-         Gg3dB90HQF74NR5h8meMI3l7Y2lC67EjFmE81UUGG+OM3gj9Zj/5whG5GvJwOcsAopCD
-         W3BrHIXPw2aSuT0/tg0+R9322Z9chtXGgY/rwSQlx7DEoYU+ntRxkD1dFoYAGRNzObWo
-         sZBx+R3bujhuOiyhMqB0EO10eyBqPlw3RStmdFoYyw8am6RJpOz5EHBxvi9E7eT8cGmm
-         zJ/fhPzTrPo1jOMIJg0i/SrjcB6wy5ard/TfKszFZwtWWYrKgicVb871ZNL9NC9m+W0M
-         zNcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=kuhba0bbR9oJup1oQ7P5tNPZ9FqBHXE57QqcfHgaIHo=;
-        b=HPgTPR6uJFtuWeqmlXSPGAhYPMyQZt+l0Gnufht2wFJ7bcvjBx2Xq7U7qwHl++mbB7
-         UMu1wX727neHI5qK0Lgu0/eeOsuEq9k+31HhaP7RLUdN6afbe7kPq16u59VkTZfJY8/T
-         2bK9gKsYQgPbCycqrdVEqFEkiHDNDVnBFW5nu7ZcY7V6zsz42KQ4NmB6MFXPEeiggpa/
-         TIX3WDo1N026DMtZYr8NcaRnys0NsIK7MxEpw9owIwmIqjonbEUPscHWAfPGOoJc3UjG
-         NasVZp5mF45wZM5CT4EY3EZ2x3RjdfsaGBF4Gd+S1M6AZJRE5nsq+hbhet3I5gp/qFqZ
-         jAhw==
-X-Gm-Message-State: ANhLgQ1n99jlAxEeNMl00+5ewZTxhLHjTe9ox8pksuc6+PCGwVTZqu99
-        Zuc+Bt6cmxPPBAS2vD98lPwrLHpm/NC0TiKcWW0=
-X-Google-Smtp-Source: ADFU+vvTME8kD2Squx5mpfQXPYZ+sSk9xQdZ2SYuPQigMysfSp1MB9ulSQTC/fzcFtBXwHwpdoou+xMbf/ViEi92JKw=
-X-Received: by 2002:aca:3255:: with SMTP id y82mr6092895oiy.44.1584702350679;
- Fri, 20 Mar 2020 04:05:50 -0700 (PDT)
+        id S1726652AbgCULXH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 21 Mar 2020 07:23:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41692 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725932AbgCULXG (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 21 Mar 2020 07:23:06 -0400
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B757820786;
+        Sat, 21 Mar 2020 11:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584789786;
+        bh=IrN8hft8egtKt9q2QCIAHGIVjoG+tI0cY9ujDNwCIRg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Mj+1sA3qyTxHp4YDj2Lx/59ZyUJ6tpiQZUSLPF2MWhNCRYMQZnERYuq6ABUR5x6BE
+         /fVXmUcRPtXRAKSKXitqslhPV6JtoMIkZniWk8DTOB76ldBL5JAuRNM678vK3NAUWR
+         NPP+qXQ9mlI1PByJeUo1B36mZPwxwrXc24YsziYY=
+Received: by mail-lf1-f44.google.com with SMTP id a28so6506847lfr.13;
+        Sat, 21 Mar 2020 04:23:05 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ0B145zTVE/GqZrLfVhDEQPtYbfr0QKebp+UiwPgZX4f4HxlKcS
+        0CZwQxij7YABmKaIvkI+xGD25QpoJHRXzj0nZko=
+X-Google-Smtp-Source: ADFU+vtBuGthZOiE/exncdFcOQotmhkxovU5FM+ioKG7kIdq/Q77KU7HLxMgNJ9KnymclfA9axDhFQpw7K0/sN7K6dk=
+X-Received: by 2002:a19:4f10:: with SMTP id d16mr6800457lfb.52.1584789783795;
+ Sat, 21 Mar 2020 04:23:03 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a4a:c897:0:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:05:50
- -0700 (PDT)
-From:   federa bureau of inteligence <federabureauofinteligence@gmail.com>
-Date:   Fri, 20 Mar 2020 11:05:50 +0000
-Message-ID: <CAE9o6LAHeNh8p2QnSN1JKM6JGQRLhHWyWBNUTUG8Hqo9XJPzRA@mail.gmail.com>
-Subject: HAPPY SURVIVAL OF CORONAVIRUS
-To:     undisclosed-recipients:;
+References: <20200318044702.104793-1-wenhu.wang@vivo.com>
+In-Reply-To: <20200318044702.104793-1-wenhu.wang@vivo.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 21 Mar 2020 19:22:52 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTp8fwy7hRCKKzmxXv9WZfh=Lhzu4_7nK52E3T6XfW8iQ@mail.gmail.com>
+Message-ID: <CAJF2gTTp8fwy7hRCKKzmxXv9WZfh=Lhzu4_7nK52E3T6XfW8iQ@mail.gmail.com>
+Subject: Re: [PATCH] csky: delete redundant micro io_remap_pfn_range
+To:     Wang Wenhu <wenhu.wang@vivo.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel@vivo.com, trivial@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dear Sir,
+Thx
 
-HAPPY SURVIVAL OF CORONAVIRUS
+Acked and queued.
 
-We are reaching for a very interesting business transaction which we
-feel will of great benefit.We the FBI unit in the western subregion of
-Africa have a fund which we confiscated and lodge it in a bank
+On Wed, Mar 18, 2020 at 12:47 PM Wang Wenhu <wenhu.wang@vivo.com> wrote:
+>
+> Same definition exists in "include/asm-generic/pgtable.h",
+> which is included just below the lines to be deleted.
+>
+> #ifndef io_remap_pfn_range
+> #define io_remap_pfn_range remap_pfn_range
+> #endif
+>
+> Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
+> ---
+>  arch/csky/include/asm/pgtable.h | 3 ---
+>  1 file changed, 3 deletions(-)
+>
+> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+> index 9b7764cb7645..bde812a785c8 100644
+> --- a/arch/csky/include/asm/pgtable.h
+> +++ b/arch/csky/include/asm/pgtable.h
+> @@ -306,9 +306,6 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+>  /* Needs to be defined here and not in linux/mm.h, as it is arch dependent */
+>  #define kern_addr_valid(addr)  (1)
+>
+> -#define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
+> -       remap_pfn_range(vma, vaddr, pfn, size, prot)
+> -
+>  #include <asm-generic/pgtable.h>
+>
+>  #endif /* __ASM_CSKY_PGTABLE_H */
+> --
+> 2.17.1
+>
 
-This fund is worth of $12.5 million dollars.We will need your
-assistance to recieve this fund into your account for investment in
-your country.
 
-We will need your urgent response for details
+-- 
+Best Regards
+ Guo Ren
 
-Inspector Greg Adams,
-For and on behalf of Cote D'Ivoire FBI
-Tel 00225 6716 6756
+ML: https://lore.kernel.org/linux-csky/
