@@ -2,54 +2,86 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AFB1A04A5
-	for <lists+linux-csky@lfdr.de>; Tue,  7 Apr 2020 03:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F5E1A1E58
+	for <lists+linux-csky@lfdr.de>; Wed,  8 Apr 2020 11:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgDGBuX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 6 Apr 2020 21:50:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45906 "EHLO mail.kernel.org"
+        id S1727009AbgDHJz4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 8 Apr 2020 05:55:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59398 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726287AbgDGBuX (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 6 Apr 2020 21:50:23 -0400
-Subject: Re: [GIT PULL] csky updates for v5.7-rc1
+        id S1726975AbgDHJz4 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 8 Apr 2020 05:55:56 -0400
+Received: from localhost.localdomain (unknown [223.93.147.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 631BF20753;
+        Wed,  8 Apr 2020 09:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586224222;
-        bh=lR50Y3wtF/OeKxF+qQaiQiXtrV2GjwUIGtv+2u8JKhw=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=dZkWGqlxw4wnY+VGMaaeS+IHQfprtxbDzy2QJ+5HJAqcvEc90K8n1/zWsjOugUwO9
-         5yr6qm1qgni378xj7nCJbvN0cCGGnfw6n2fCfEPIqp1pbwOAw1bY4sXVap5cEfEk1a
-         S1ooh+Ju4lftfcf1fhFUCDvqcYcqpOGPXSm/39gk=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200407014408.5136-1-guoren@kernel.org>
-References: <20200407014408.5136-1-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200407014408.5136-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git
- tags/csky-for-linus-5.7-rc1
-X-PR-Tracked-Commit-Id: aefd9461d34a1b0a2acad0750c43216c1c27b9d4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f183d269cc6c64481b47ecbf9d3aff128dc0978c
-Message-Id: <158622422277.7913.5910730865167073820.pr-tracker-bot@kernel.org>
-Date:   Tue, 07 Apr 2020 01:50:22 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, guoren@kernel.org
+        s=default; t=1586339755;
+        bh=QhPbt6zYiW/rTOqTjrmG+ydjpfkEi4dIPOfuNUBglQY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mboVFIO4HrA7a/NMbPHs3p55GcrNj79v1XemEP/Lc7fuSBwHinAPnCHJ2LnyRbK0t
+         BhQBdVfYhW67AnvTI3lJsOTH1JdBzC9IwkXyMi/NT/b5mAfl+Nys4BplnQxtMKFUOR
+         nvwDZYNZMd45yFCFq+zyLL1JeM2g0txQKsK9NzgE=
+From:   guoren@kernel.org
+To:     linux-csky@vger.kernel.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, guoren@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky/ftrace: Fixup error when disable CONFIG_DYNAMIC_FTRACE
+Date:   Wed,  8 Apr 2020 17:55:46 +0800
+Message-Id: <20200408095546.31763-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The pull request you sent on Tue,  7 Apr 2020 09:44:08 +0800:
+From: Guo Ren <guoren@linux.alibaba.com>
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.7-rc1
+When CONFIG_DYNAMIC_FTRACE is enabled, static ftrace will fail to
+boot up and compile. It's a carelessness when developing "dynamic
+ftrace" and "ftrace with regs".
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f183d269cc6c64481b47ecbf9d3aff128dc0978c
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+---
+ arch/csky/abiv2/mcount.S  | 2 ++
+ arch/csky/kernel/ftrace.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-Thank you!
-
+diff --git a/arch/csky/abiv2/mcount.S b/arch/csky/abiv2/mcount.S
+index 9331c7ed5958..911512bf480f 100644
+--- a/arch/csky/abiv2/mcount.S
++++ b/arch/csky/abiv2/mcount.S
+@@ -103,6 +103,8 @@ ENTRY(_mcount)
+ 	mov	a0, lr
+ 	subi	a0, 4
+ 	ldw	a1, (sp, 24)
++	lrw	a2, function_trace_op
++	ldw	a2, (a2, 0)
+ 
+ 	jsr	r26
+ 
+diff --git a/arch/csky/kernel/ftrace.c b/arch/csky/kernel/ftrace.c
+index 44628e3f7fa6..3c425b84e3be 100644
+--- a/arch/csky/kernel/ftrace.c
++++ b/arch/csky/kernel/ftrace.c
+@@ -202,6 +202,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+ 
++#ifdef CONFIG_DYNAMIC_FTRACE
+ #ifndef CONFIG_CPU_HAS_ICACHE_INS
+ struct ftrace_modify_param {
+ 	int command;
+@@ -231,6 +232,7 @@ void arch_ftrace_update_code(int command)
+ 	stop_machine(__ftrace_modify_code, &param, cpu_online_mask);
+ }
+ #endif
++#endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ /* _mcount is defined in abi's mcount.S */
+ EXPORT_SYMBOL(_mcount);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.17.0
+
