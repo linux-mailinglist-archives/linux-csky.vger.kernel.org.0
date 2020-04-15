@@ -2,34 +2,35 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE881AA296
-	for <lists+linux-csky@lfdr.de>; Wed, 15 Apr 2020 14:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDC51AA25E
+	for <lists+linux-csky@lfdr.de>; Wed, 15 Apr 2020 14:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505618AbgDOM55 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 15 Apr 2020 08:57:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56528 "EHLO mail.kernel.org"
+        id S370611AbgDOMyN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 15 Apr 2020 08:54:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57262 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897175AbgDOLgr (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:36:47 -0400
+        id S2897214AbgDOLhL (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:37:11 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB628214AF;
-        Wed, 15 Apr 2020 11:36:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DA00B20737;
+        Wed, 15 Apr 2020 11:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950599;
-        bh=sscrRof2T2gOXm1DhhLMfhcfPs75brf/YmFVxd4ypA8=;
+        s=default; t=1586950630;
+        bh=14d0vipBRsRPlRsQS2dkebED6wLV/m2MRXuuwhWQ9Mw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H9+cYo1gC+HFDkn4IvRu04Ys0wI0hZfzpP2i7G/dPDOmi0+sI8lgiamg2MjIyZZU9
-         AgiS2OMmkZKkU4Vb4S+KF6bS8cRW4xe6sqnfLGoBKFf3vb1od0arZxIDnEuWakCTiU
-         C3WJ88SZQ+W8QPVD01BiZODjTz5DmOLfaYUH/py8=
+        b=UgI4n2ykl16eDh8E9XjE2oXVwmjxmT8lbBIdS4it/sRYkQhXOp4avh2KglKww9ufU
+         ghpTtNiwnQblQ9x/pFw7jnXH+8S8JUpi03MRC8PV6GTrn9/E/M5fWJq3jH9DzI2C3Q
+         zmLkbHeoAMcbTuXTxyPwlTU6z2s8xej3XgkTAjOA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guo Ren <guoren@linux.alibaba.com>,
+        Lu Chongzhi <chongzhi.lcz@alibaba-inc.com>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 095/129] csky: Fixup get wrong psr value from phyical reg
-Date:   Wed, 15 Apr 2020 07:34:10 -0400
-Message-Id: <20200415113445.11881-95-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 121/129] csky: Fixup init_fpu compile warning with __init
+Date:   Wed, 15 Apr 2020 07:34:36 -0400
+Message-Id: <20200415113445.11881-121-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200415113445.11881-1-sashal@kernel.org>
 References: <20200415113445.11881-1-sashal@kernel.org>
@@ -44,122 +45,69 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-[ Upstream commit 9c0e343d7654a329d1f9b53d253cbf7fb6eff85d ]
+[ Upstream commit 12879bda3c2a974b7e4fe199a9c21f0c5f6bca04 ]
 
-We should get psr value from regs->psr in stack, not directly get
-it from phyiscal register then save the vector number in
-tsk->trap_no.
+WARNING: vmlinux.o(.text+0x2366): Section mismatch in reference from the
+function csky_start_secondary() to the function .init.text:init_fpu()
 
+The function csky_start_secondary() references
+the function __init init_fpu().
+This is often because csky_start_secondary lacks a __init
+annotation or the annotation of init_fpu is wrong.
+
+Reported-by: Lu Chongzhi <chongzhi.lcz@alibaba-inc.com>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/csky/include/asm/processor.h |  1 +
- arch/csky/kernel/traps.c          | 11 ++++++++++-
- arch/csky/mm/fault.c              |  7 +++++++
- 3 files changed, 18 insertions(+), 1 deletion(-)
+ arch/csky/abiv2/fpu.c         | 5 -----
+ arch/csky/abiv2/inc/abi/fpu.h | 3 ++-
+ arch/csky/kernel/smp.c        | 3 +++
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
-index 21e0bd5293dde..c6bcd7f7c720b 100644
---- a/arch/csky/include/asm/processor.h
-+++ b/arch/csky/include/asm/processor.h
-@@ -43,6 +43,7 @@ extern struct cpuinfo_csky cpu_data[];
- struct thread_struct {
- 	unsigned long  ksp;       /* kernel stack pointer */
- 	unsigned long  sr;        /* saved status register */
-+	unsigned long  trap_no;   /* saved status register */
+diff --git a/arch/csky/abiv2/fpu.c b/arch/csky/abiv2/fpu.c
+index 86d187d4e5af1..5acc5c2e544e1 100644
+--- a/arch/csky/abiv2/fpu.c
++++ b/arch/csky/abiv2/fpu.c
+@@ -10,11 +10,6 @@
+ #define MTCR_DIST	0xC0006420
+ #define MFCR_DIST	0xC0006020
  
- 	/* FPU regs */
- 	struct user_fp __aligned(16) user_fp;
-diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
-index b057480e7463c..63715cb90ee99 100644
---- a/arch/csky/kernel/traps.c
-+++ b/arch/csky/kernel/traps.c
-@@ -115,8 +115,9 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 	int sig;
- 	unsigned long vector;
- 	siginfo_t info;
-+	struct task_struct *tsk = current;
+-void __init init_fpu(void)
+-{
+-	mtcr("cr<1, 2>", 0);
+-}
+-
+ /*
+  * fpu_libc_helper() is to help libc to excute:
+  *  - mfcr %a, cr<1, 2>
+diff --git a/arch/csky/abiv2/inc/abi/fpu.h b/arch/csky/abiv2/inc/abi/fpu.h
+index 22ca3cf2794a1..09e2700a36936 100644
+--- a/arch/csky/abiv2/inc/abi/fpu.h
++++ b/arch/csky/abiv2/inc/abi/fpu.h
+@@ -9,7 +9,8 @@
  
--	vector = (mfcr("psr") >> 16) & 0xff;
-+	vector = (regs->sr >> 16) & 0xff;
- 
- 	switch (vector) {
- 	case VEC_ZERODIV:
-@@ -129,6 +130,7 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 		sig = SIGTRAP;
- 		break;
- 	case VEC_ILLEGAL:
-+		tsk->thread.trap_no = vector;
- 		die_if_kernel("Kernel mode ILLEGAL", regs, vector);
- #ifndef CONFIG_CPU_NO_USER_BKPT
- 		if (*(uint16_t *)instruction_pointer(regs) != USR_BKPT)
-@@ -146,16 +148,20 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 		sig = SIGTRAP;
- 		break;
- 	case VEC_ACCESS:
-+		tsk->thread.trap_no = vector;
- 		return buserr(regs);
- #ifdef CONFIG_CPU_NEED_SOFTALIGN
- 	case VEC_ALIGN:
-+		tsk->thread.trap_no = vector;
- 		return csky_alignment(regs);
- #endif
- #ifdef CONFIG_CPU_HAS_FPU
- 	case VEC_FPE:
-+		tsk->thread.trap_no = vector;
- 		die_if_kernel("Kernel mode FPE", regs, vector);
- 		return fpu_fpe(regs);
- 	case VEC_PRIV:
-+		tsk->thread.trap_no = vector;
- 		die_if_kernel("Kernel mode PRIV", regs, vector);
- 		if (fpu_libc_helper(regs))
- 			return;
-@@ -164,5 +170,8 @@ asmlinkage void trap_c(struct pt_regs *regs)
- 		sig = SIGSEGV;
- 		break;
- 	}
+ int fpu_libc_helper(struct pt_regs *regs);
+ void fpu_fpe(struct pt_regs *regs);
+-void __init init_fpu(void);
 +
-+	tsk->thread.trap_no = vector;
-+
- 	send_sig(sig, current, 0);
- }
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index f76618b630f91..562c7f7087490 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -179,11 +179,14 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- bad_area_nosemaphore:
- 	/* User mode accesses just cause a SIGSEGV */
- 	if (user_mode(regs)) {
-+		tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
- 		force_sig_fault(SIGSEGV, si_code, (void __user *)address);
- 		return;
- 	}
++static inline void init_fpu(void) { mtcr("cr<1, 2>", 0); }
  
- no_context:
-+	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
-+
- 	/* Are we prepared to handle this kernel fault? */
- 	if (fixup_exception(regs))
- 		return;
-@@ -198,6 +201,8 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- 	die_if_kernel("Oops", regs, write);
+ void save_to_user_fp(struct user_fp *user_fp);
+ void restore_from_user_fp(struct user_fp *user_fp);
+diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+index de61feb4b6df2..b5c5bc3afeb5c 100644
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -22,6 +22,9 @@
+ #include <asm/sections.h>
+ #include <asm/mmu_context.h>
+ #include <asm/pgalloc.h>
++#ifdef CONFIG_CPU_HAS_FPU
++#include <abi/fpu.h>
++#endif
  
- out_of_memory:
-+	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
-+
- 	/*
- 	 * We ran out of memory, call the OOM killer, and return the userspace
- 	 * (which will retry the fault, or kill us if we got oom-killed).
-@@ -206,6 +211,8 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- 	return;
- 
- do_sigbus:
-+	tsk->thread.trap_no = (regs->sr >> 16) & 0xff;
-+
- 	up_read(&mm->mmap_sem);
- 
- 	/* Kernel mode? Handle exceptions or die */
+ struct ipi_data_struct {
+ 	unsigned long bits ____cacheline_aligned;
 -- 
 2.20.1
 
