@@ -2,126 +2,102 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CA81B460C
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Apr 2020 15:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7AE1B8CBB
+	for <lists+linux-csky@lfdr.de>; Sun, 26 Apr 2020 07:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgDVNPO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Apr 2020 09:15:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53572 "EHLO mail.kernel.org"
+        id S1726101AbgDZFyV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 26 Apr 2020 01:54:21 -0400
+Received: from mga05.intel.com ([192.55.52.43]:34948 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726030AbgDVNPO (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 22 Apr 2020 09:15:14 -0400
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3978B2077D
-        for <linux-csky@vger.kernel.org>; Wed, 22 Apr 2020 13:15:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587561313;
-        bh=vblH/yZ/u73C+LzZ3aNjUcEQQynkpX3Rm9l2qj6xW5E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eQb6RbKD2meFb+lh6M/nQDH5GlXcx3U9vE22B8Lyri+UzValA6AicSpH3FH5UUh8g
-         dOaZYcEWNP71rPQSVmTTvwrbEFTSyPmWMzBtfmBwv0GcKmYoMXRWNlTZVP3R2kHn9J
-         jt5yCczn+PTbNpBZzeeUJRjle4VAYJGBWMmpDsb4=
-Received: by mail-lj1-f175.google.com with SMTP id f18so2181980lja.13
-        for <linux-csky@vger.kernel.org>; Wed, 22 Apr 2020 06:15:13 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZSU28qEW4I8/+gWkHbnA3yborrX72l8uNNDSwmtkn3GFjwiHW7
-        c9NuB+PvmeMl9oF3qO8sm9Rx6ov7JAJZvwCCPD8=
-X-Google-Smtp-Source: APiQypIE/I42H8zLFht4Z5cBFmKd+zUn7Og+wtUXWKY+HsGmopmtmjmh7mgXEUf8EhSEwmRnTnE8UOxc35QncXXkves=
-X-Received: by 2002:a05:651c:119a:: with SMTP id w26mr5697284ljo.53.1587561311339;
- Wed, 22 Apr 2020 06:15:11 -0700 (PDT)
+        id S1725468AbgDZFyV (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 26 Apr 2020 01:54:21 -0400
+IronPort-SDR: mhbP6M0vOROTf19G/v4XotjAsT4ouLrU2kIiSnOHMqit70Y+/7WaUpLvABrkzh/MUw5yK8jjAK
+ 2dcdVo/YkC0w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 22:54:21 -0700
+IronPort-SDR: /cZ3umTa8B8PLh9tjA9EP3+bxl80qczghY2Si7yQnbojuyuxqol2zAYPUansPdHYwpezKRfg9s
+ EcpTlSW8XTMQ==
+X-IronPort-AV: E=Sophos;i="5.73,319,1583222400"; 
+   d="scan'208";a="281313737"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 22:54:20 -0700
+From:   ira.weiny@intel.com
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: [PATCH 0/5] Remove duplicated kmap code
+Date:   Sat, 25 Apr 2020 22:54:01 -0700
+Message-Id: <20200426055406.134198-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1587455788-9450-1-git-send-email-yibin_liu@c-sky.com>
-In-Reply-To: <1587455788-9450-1-git-send-email-yibin_liu@c-sky.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Apr 2020 21:15:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQPOuLK5n8F7zsNgsd7fcTPOTNHFn_b4hB5dUMBQhqeJA@mail.gmail.com>
-Message-ID: <CAJF2gTQPOuLK5n8F7zsNgsd7fcTPOTNHFn_b4hB5dUMBQhqeJA@mail.gmail.com>
-Subject: Re: [PATCH] Fix MSA register operation error
-To:     Liu Yibin <yibin_liu@c-sky.com>
-Cc:     linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx for the patch.
+From: Ira Weiny <ira.weiny@intel.com>
 
-On Tue, Apr 21, 2020 at 3:56 PM Liu Yibin <yibin_liu@c-sky.com> wrote:
->
-> MSA register should shift to the right 29 for bits,
-> rather than 28 bits.
->
-> Signed-off-by: Liu Yibin <yibin_liu@c-sky.com>
-> ---
->  arch/csky/abiv1/inc/abi/entry.h | 6 ++++--
->  arch/csky/abiv2/inc/abi/entry.h | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/csky/abiv1/inc/abi/entry.h b/arch/csky/abiv1/inc/abi/entry.h
-> index 5056ebb..1dc5ed8 100644
-> --- a/arch/csky/abiv1/inc/abi/entry.h
-> +++ b/arch/csky/abiv1/inc/abi/entry.h
-> @@ -16,6 +16,8 @@
->  #define LSAVE_A4       40
->  #define LSAVE_A5       44
->
-> +#define MSA_SHIFT              29
-> +
->  #define usp ss1
->
->  .macro USPTOKSP
-> @@ -167,8 +169,8 @@
->          *   BA     Reserved  C   D   V
->          */
->         cprcr   r6, cpcr30
-> -       lsri    r6, 28
-> -       lsli    r6, 28
-> +       lsri    r6, MSA_SHIFT
-> +       lsli    r6, MSA_SHIFT
->         addi    r6, 0xe
->         cpwcr   r6, cpcr30
->
-> diff --git a/arch/csky/abiv2/inc/abi/entry.h b/arch/csky/abiv2/inc/abi/entry.h
-> index a99aff5..2507cbf 100644
-> --- a/arch/csky/abiv2/inc/abi/entry.h
-> +++ b/arch/csky/abiv2/inc/abi/entry.h
-> @@ -14,6 +14,8 @@
->  #define LSAVE_A2       32
->  #define LSAVE_A3       36
->
-> +#define MSA_SHIFT              29
-> +
->  #define KSPTOUSP
->  #define USPTOKSP
->
-> @@ -285,8 +287,8 @@
->          */
->         mfcr    r6, cr<30, 15> /* Get MSA0 */
->  2:
-> -       lsri    r6, 28
-> -       lsli    r6, 28
-> +       lsri    r6, MSA_SHIFT
-> +       lsli    r6, MSA_SHIFT
-Yes, it's 512MB align and we should only reserve highest 3 bits.
+The kmap infrastructure has been copied almost verbatim to every architecture.
+This series consolidates obvious duplicated code.  (k[un]map_atmoic has some
+additional duplication between some of the architectures but the differences
+were such to not warrant further changes.)
 
-But I'll change it to with keeping the primary author:
--       lsri    r6, 28
--       lsli    r6, 28
-+       lsri    r6, 29
-+       lsli    r6, 29
+0day built successfully to cover all the architectures I can't readily build.
 
->         addi    r6, 0x1ce
->         mtcr    r6, cr<30, 15> /* Set MSA0 */
->
-> --
-> 2.7.4
->
+Ira Weiny (5):
+  arch/kmap: Remove BUG_ON()
+  arch/kmap: Remove redundant arch specific kmaps
+  arch/kunmap: Remove duplicate kunmap implementations
+  arch/kmap_atomic: Consolidate duplicate code
+  arch/kunmap_atomic: Consolidate duplicate code
 
+ arch/arc/include/asm/highmem.h        | 11 -------
+ arch/arc/mm/highmem.c                 | 20 ++-----------
+ arch/arm/include/asm/highmem.h        |  3 --
+ arch/arm/mm/highmem.c                 | 28 ++----------------
+ arch/csky/include/asm/highmem.h       |  3 +-
+ arch/csky/mm/highmem.c                | 28 ++++--------------
+ arch/microblaze/include/asm/highmem.h | 17 -----------
+ arch/microblaze/mm/highmem.c          | 10 ++-----
+ arch/mips/include/asm/highmem.h       |  3 +-
+ arch/mips/mm/highmem.c                | 25 +++-------------
+ arch/nds32/include/asm/highmem.h      |  3 --
+ arch/nds32/mm/highmem.c               | 31 ++------------------
+ arch/parisc/include/asm/cacheflush.h  |  2 --
+ arch/powerpc/include/asm/highmem.h    | 17 -----------
+ arch/powerpc/mm/highmem.c             |  9 ++----
+ arch/sparc/include/asm/highmem.h      | 17 -----------
+ arch/sparc/mm/highmem.c               |  9 ++----
+ arch/x86/include/asm/highmem.h        |  4 ---
+ arch/x86/mm/highmem_32.c              | 30 ++------------------
+ arch/xtensa/include/asm/highmem.h     | 14 +--------
+ arch/xtensa/mm/highmem.c              | 10 ++-----
+ include/linux/highmem.h               | 41 +++++++++++++++++++++++++--
+ 22 files changed, 75 insertions(+), 260 deletions(-)
 
 -- 
-Best Regards
- Guo Ren
+2.25.1
 
-ML: https://lore.kernel.org/linux-csky/
