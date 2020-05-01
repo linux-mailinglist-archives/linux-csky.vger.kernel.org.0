@@ -2,33 +2,31 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB4E1C1011
-	for <lists+linux-csky@lfdr.de>; Fri,  1 May 2020 10:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFBD1C19A5
+	for <lists+linux-csky@lfdr.de>; Fri,  1 May 2020 17:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728373AbgEAIy7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 1 May 2020 04:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728371AbgEAIy6 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 1 May 2020 04:54:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F14DC035495;
-        Fri,  1 May 2020 01:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uWvJuIwmG8i3wQO62yF1brXrFbwf5wKrq2JLj+a3sMk=; b=AqPa33Fsw9Y3rKhPmms+1fV9JS
-        jmr/agWlYTZgYOVeoHYa4Ly+XO4JC/t6jDBANLRGmHFS0R1TYLeqqu2eOKzj8CaHQ1Ka3Bk6WR8Vj
-        tuLDsCIFrS0YeSKpUvZ3GI3C/58pZycLXMfzK11IemkycTgv2D8VAddPRhOk4cMa+thg+A1txwTyq
-        usYC8fmtqJj5y9lhVoy8Cqd9H6n9JjjKWtcP99kULdC+zbSRZhV1ElYhHM67gJEN5F6ZWIYX+yU8i
-        X8KJlIGxpwlx8Eelgq1sd/YS2+Sigds2pdvY+xhwhTFuROwRegHBf6ub1IgkngdMS0YeakRlLP61c
-        lwUXM5sQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jURRg-0007jI-Hu; Fri, 01 May 2020 08:54:56 +0000
-Date:   Fri, 1 May 2020 01:54:56 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     ira.weiny@intel.com
+        id S1729731AbgEAPfy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 1 May 2020 11:35:54 -0400
+Received: from mga07.intel.com ([134.134.136.100]:28117 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729192AbgEAPfx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 1 May 2020 11:35:53 -0400
+IronPort-SDR: om++zbgi8t0E9EUnZB7AyPCLPuQAPCjnj/zFX64x2eaBk/erR7UuRqJ1JoBXAGhiBeaoif/z1l
+ qI08VoMXuFZA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2020 08:35:52 -0700
+IronPort-SDR: eiOWyZIKI7vO19DR7OCFr64BqstCK2TpjbIFtfZ8MAqSSlMpCoVlOTcj7hUJ1GBJabMYzWffE+
+ Y8JGzvryIPoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,339,1583222400"; 
+   d="scan'208";a="460295055"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by fmsmga006.fm.intel.com with ESMTP; 01 May 2020 08:35:52 -0700
+Date:   Fri, 1 May 2020 08:35:52 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Christoph Hellwig <hch@infradead.org>
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Koenig <christian.koenig@amd.com>,
@@ -53,28 +51,54 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org,
         "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH V1 00/10] Remove duplicated kmap code
-Message-ID: <20200501085456.GL27858@infradead.org>
+Subject: Re: sparc-related comment, to Re: [PATCH V1 07/10] arch/kmap: Ensure
+ kmap_prot visibility
+Message-ID: <20200501153551.GA673107@iweiny-DESK2.sc.intel.com>
 References: <20200430203845.582900-1-ira.weiny@intel.com>
+ <20200430203845.582900-8-ira.weiny@intel.com>
+ <20200501084446.GG27858@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200430203845.582900-1-ira.weiny@intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200501084446.GG27858@infradead.org>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-In addition to the work already it the series, it seems like
-LAST_PKMAP_MASK, PKMAP_ADDR and PKMAP_NR can also be consolidated
-to common code.
+On Fri, May 01, 2020 at 01:44:46AM -0700, Christoph Hellwig wrote:
+> > --- a/arch/sparc/mm/highmem.c
+> > +++ b/arch/sparc/mm/highmem.c
+> > @@ -33,6 +33,7 @@
+> >  #include <asm/vaddrs.h>
+> >  
+> >  pgprot_t kmap_prot;
+> > +EXPORT_SYMBOL(kmap_prot);
+> 
+> Btw, I don't see why sparc needs this as a variable, as there is just
+> a single assignment to it.
 
-Also kmap_atomic_high_prot / kmap_atomic_pfn could move into common
-code, maybe keyed off a symbol selected by the actual users that
-need it.  It also seems like it doesn't actually ever need to be
-exported.
+Because sparc uses non-standard defines which I'm not familiar with.
 
-This in turn would lead to being able to allow io_mapping_map_atomic_wc
-on all architectures, which might make nouveau and qxl happy, but maybe
-that can be left for another series.
+        kmap_prot = __pgprot(SRMMU_ET_PTE | SRMMU_PRIV | SRMMU_CACHE);
+
+SRMMU_ET_PTE and friends are defined in 
+
+arch/sparc/include/asm/pgtsrmmu.h
+
+Since I can't readily test sparc this was easier to put out than let 0-day
+crank on the entire series checking if including that header in the common
+header chain would be an issue.
+
+> 
+> If sparc is sorted out we can always make it a define, and use a define
+> for kmap_prot that defaults to PAGE_KERNEL, avoiding a little
+> more duplication.
+
+Agreed.  But it seems easier as a follow up (for me with 0-day).  Perhaps
+someone from sparc can weigh in on the specifics of those defines and why they
+are different from the normal ones?  Or even provide a follow on patch?
+
+Ira
+
