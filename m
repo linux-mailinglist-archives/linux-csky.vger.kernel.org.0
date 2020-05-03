@@ -2,94 +2,105 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 853E41C1B78
-	for <lists+linux-csky@lfdr.de>; Fri,  1 May 2020 19:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0FF1C2974
+	for <lists+linux-csky@lfdr.de>; Sun,  3 May 2020 05:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729025AbgEARSa (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 1 May 2020 13:18:30 -0400
-Received: from mga03.intel.com ([134.134.136.65]:19945 "EHLO mga03.intel.com"
+        id S1726773AbgECDL3 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 2 May 2020 23:11:29 -0400
+Received: from mga11.intel.com ([192.55.52.93]:42694 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729202AbgEARSa (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 1 May 2020 13:18:30 -0400
-IronPort-SDR: ShSxVb1kpZgQ2bq7gzOdeZ6IhUReEnIjdgcM1Wj5MQ1RfeGgtXVsamZQNuboQpwKctyBI7Q3gk
- mqtOU/6lLtcg==
+        id S1726702AbgECDL3 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 2 May 2020 23:11:29 -0400
+IronPort-SDR: dQKUsn2vjoLOCdIM8uLlJ8WStZnLn9KAOd2QNzoCyEj71zYdU2PkdYq1Dk34QWc6IeVWVN+NYD
+ h8EH8UFHW97g==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2020 10:18:29 -0700
-IronPort-SDR: R2OHZlJ5m4ujiSXIVvaGSStL0azGkDVM04Moca/qctbpNzEmR/lPEzkfc2x5+KowINCeguMIHy
- 4dEJuDVXUKuw==
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2020 20:11:29 -0700
+IronPort-SDR: BDCSOhfLrIbfj7Y5Tw0emibzPffaFEcH6uyQOaSnsa+CYyRQvgFcoRzXLtMv2aSaIMshzi3s7v
+ wmHP1NS0G8+Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,340,1583222400"; 
-   d="scan'208";a="405797056"
+X-IronPort-AV: E=Sophos;i="5.73,346,1583222400"; 
+   d="scan'208";a="262468221"
 Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga004.jf.intel.com with ESMTP; 01 May 2020 10:18:28 -0700
-Date:   Fri, 1 May 2020 10:18:28 -0700
+  by orsmga006.jf.intel.com with ESMTP; 02 May 2020 20:11:28 -0700
+Date:   Sat, 2 May 2020 20:11:28 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
-To:     Christoph Hellwig <hch@infradead.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Koenig <christian.koenig@amd.com>,
         Huang Rui <ray.huang@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        dri-devel@lists.freedesktop.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Helge Deller <deller@gmx.de>, x86@kernel.org,
-        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Chris Zankel <chris@zankel.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH V1 00/10] Remove duplicated kmap code
-Message-ID: <20200501171828.GA673260@iweiny-DESK2.sc.intel.com>
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH V1 09/10] arch/kmap: Define kmap_atomic_prot() for all
+ arch's
+Message-ID: <20200503031127.GA685597@iweiny-DESK2.sc.intel.com>
 References: <20200430203845.582900-1-ira.weiny@intel.com>
- <20200501085456.GL27858@infradead.org>
+ <20200430203845.582900-10-ira.weiny@intel.com>
+ <20200501023734.GF23230@ZenIV.linux.org.uk>
+ <20200501032020.GG23230@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200501085456.GL27858@infradead.org>
+In-Reply-To: <20200501032020.GG23230@ZenIV.linux.org.uk>
 User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, May 01, 2020 at 01:54:56AM -0700, Christoph Hellwig wrote:
-> In addition to the work already it the series, it seems like
-> LAST_PKMAP_MASK, PKMAP_ADDR and PKMAP_NR can also be consolidated
-> to common code.
-
-Agreed, I mentioned in the cover letter there are similarities...
-
+On Fri, May 01, 2020 at 04:20:20AM +0100, Al Viro wrote:
+> On Fri, May 01, 2020 at 03:37:34AM +0100, Al Viro wrote:
+> > On Thu, Apr 30, 2020 at 01:38:44PM -0700, ira.weiny@intel.com wrote:
+> > 
+> > > -static inline void *kmap_atomic(struct page *page)
+> > > +static inline void *kmap_atomic_prot(struct page *page, pgprot_t prot)
+> > >  {
+> > >  	preempt_disable();
+> > >  	pagefault_disable();
+> > >  	if (!PageHighMem(page))
+> > >  		return page_address(page);
+> > > -	return kmap_atomic_high(page);
+> > > +	return kmap_atomic_high_prot(page, prot);
+> > >  }
+> > > +#define kmap_atomic(page)	kmap_atomic_prot(page, kmap_prot)
+> > 
+> > OK, so it *was* just a bisect hazard - you return to original semantics
+> > wrt preempt_disable()...
 > 
-> Also kmap_atomic_high_prot / kmap_atomic_pfn could move into common
-> code, maybe keyed off a symbol selected by the actual users that
-> need it.  It also seems like it doesn't actually ever need to be
-> exported.
-
-...  but these are not as readily obvious, at least to me.  I do see a pattern
-but the differences seemed subtle enough that it would take a while to ensure
-correctness.  So I'd like to see this series go in and build on it.
-
+> FWIW, how about doing the following: just before #5/10 have a patch
+> that would touch only microblaze, ppc and x86 splitting their
+> kmap_atomic_prot() into an inline helper + kmap_atomic_high_prot().
+> Then your #5 would leave their kmap_atomic_prot() as-is (it would
+> use kmap_atomic_prot_high() instead).  The rest of the series plays
+> out pretty much the same way it does now, and wrappers on those
+> 3 architectures would go away when an identical generic one is
+> introduced in this commit (#9/10).
 > 
-> This in turn would lead to being able to allow io_mapping_map_atomic_wc
-> on all architectures, which might make nouveau and qxl happy, but maybe
-> that can be left for another series.
+> AFAICS, that would avoid the bisect hazard and might even end
+> up with less noise in the patches...
 
-I agree, that this should be follow on patches.  I still need to fix the
-bisect-ability and I don't want to bog down 0-day with a longer series.
+This works.  V2 coming out shortly.
 
-Thanks for the review!
+Thanks for catching this,
 Ira
 
