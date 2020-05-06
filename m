@@ -2,33 +2,31 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F141C682F
-	for <lists+linux-csky@lfdr.de>; Wed,  6 May 2020 08:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367241C7B2C
+	for <lists+linux-csky@lfdr.de>; Wed,  6 May 2020 22:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgEFGON (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 6 May 2020 02:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726495AbgEFGON (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 May 2020 02:14:13 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D22AC061A0F;
-        Tue,  5 May 2020 23:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4GHTrlwGxcD7riSfw6FoiiWpv9lgWgy1e6SGI+Jf+lk=; b=YQdcPidwWxUsGPCqlsV5vlo08W
-        WE8x+MoDuXM7hVPD+/jHc3dDvfTrn9tM8b6ev+ngbwncTVqcdaxewm6WCDle9njCK90Fa6uDM8pzz
-        V1XKGx1+Kpcns1k6UZYJf5Fj5DEan46YXQrVVoWIg1pzlOvy252FRwu+V+Xz4mzIUqpwuO0rHOWQ3
-        44n+12vujyorLPu546uL9Jr9Rjc2cs3Px+jF8MGMUozOLUVhKI7jXCci3SoqI+7OPayG3rYjHx9QF
-        3xqDiBy6CDrTege8f3bj4NtjfsI9xry8OurnktjyDACV315FnjWOvzsuEqTT6dzYmPcWVFR+g3F8g
-        +dARHVUA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jWDJq-00064d-Uc; Wed, 06 May 2020 06:14:10 +0000
-Date:   Tue, 5 May 2020 23:14:10 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     ira.weiny@intel.com
+        id S1726950AbgEFUZQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 6 May 2020 16:25:16 -0400
+Received: from mga07.intel.com ([134.134.136.100]:32872 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726627AbgEFUZQ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 6 May 2020 16:25:16 -0400
+IronPort-SDR: iuyKOFRaSc5UDnIYcz6oLu/mTlBbbftpP66PZXTW2HTv2aLBgBX9vidybh/Bj2eRxHi6t8EZbY
+ i+43cy2henJw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 13:25:15 -0700
+IronPort-SDR: xSrhp4VCcSvP5bv2WtfYo6vFeSsnnsv3N44sSopWfpFOgIk9uc/zRJt3WrQM/g5MZyK9rPCoAV
+ JVwDj2vxz4ng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,360,1583222400"; 
+   d="scan'208";a="461881349"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by fmsmga006.fm.intel.com with ESMTP; 06 May 2020 13:25:14 -0700
+Date:   Wed, 6 May 2020 13:25:14 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Christoph Hellwig <hch@infradead.org>
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Koenig <christian.koenig@amd.com>,
@@ -53,37 +51,69 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH V2 10/11] arch/kmap: Define kmap_atomic_prot() for all
- arch's
-Message-ID: <20200506061410.GE5192@infradead.org>
+Subject: Re: [PATCH V2 05/11] {x86,powerpc,microblaze}/kmap: Move preempt
+ disable
+Message-ID: <20200506202514.GF1084880@iweiny-DESK2.sc.intel.com>
 References: <20200504010912.982044-1-ira.weiny@intel.com>
- <20200504010912.982044-11-ira.weiny@intel.com>
+ <20200504010912.982044-6-ira.weiny@intel.com>
+ <20200506061113.GA5192@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200504010912.982044-11-ira.weiny@intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20200506061113.GA5192@infradead.org>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, May 03, 2020 at 06:09:11PM -0700, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
+On Tue, May 05, 2020 at 11:11:13PM -0700, Christoph Hellwig wrote:
+> On Sun, May 03, 2020 at 06:09:06PM -0700, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > During this kmap() conversion series we must maintain bisect-ability.
+> > To do this, kmap_atomic_prot() in x86, powerpc, and microblaze need to
+> > remain functional.
+> > 
+> > Create a temporary inline version of kmap_atomic_prot within these
+> > architectures so we can rework their kmap_atomic() calls and then lift
+> > kmap_atomic_prot() to the core.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > ---
+> > Changes from V1:
+> > 	New patch
+> > ---
+> >  arch/microblaze/include/asm/highmem.h | 11 ++++++++++-
+> >  arch/microblaze/mm/highmem.c          | 10 ++--------
+> >  arch/powerpc/include/asm/highmem.h    | 11 ++++++++++-
+> >  arch/powerpc/mm/highmem.c             |  9 ++-------
+> >  arch/x86/include/asm/highmem.h        | 11 ++++++++++-
+> >  arch/x86/mm/highmem_32.c              | 10 ++--------
+> >  6 files changed, 36 insertions(+), 26 deletions(-)
+> > 
+> > diff --git a/arch/microblaze/include/asm/highmem.h b/arch/microblaze/include/asm/highmem.h
+> > index 0c94046f2d58..ec9954b091e1 100644
+> > --- a/arch/microblaze/include/asm/highmem.h
+> > +++ b/arch/microblaze/include/asm/highmem.h
+> > @@ -51,7 +51,16 @@ extern pte_t *pkmap_page_table;
+> >  #define PKMAP_NR(virt)  ((virt - PKMAP_BASE) >> PAGE_SHIFT)
+> >  #define PKMAP_ADDR(nr)  (PKMAP_BASE + ((nr) << PAGE_SHIFT))
+> >  
+> > -extern void *kmap_atomic_prot(struct page *page, pgprot_t prot);
+> > +extern void *kmap_atomic_high_prot(struct page *page, pgprot_t prot);
+> > +void *kmap_atomic_prot(struct page *page, pgprot_t prot)
 > 
-> To support kmap_atomic_prot(), all architectures need to support
-> protections passed to their kmap_atomic_high() function.  Pass
-> protections into kmap_atomic_high() and change the name to
-> kmap_atomic_high_prot() to match.
-> 
-> Then define kmap_atomic_prot() as a core function which calls
-> kmap_atomic_high_prot() when needed.
-> 
-> Finally, redefine kmap_atomic() as a wrapper of kmap_atomic_prot() with
-> the default kmap_prot exported by the architectures.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Shouldn't this be marked inline?
 
-Looks good,
+Yes Thanks.  Done.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+> 
+> The rest looks fine:
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+
+Thanks,
+Ira
+
