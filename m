@@ -2,31 +2,33 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 596CD1C7B57
-	for <lists+linux-csky@lfdr.de>; Wed,  6 May 2020 22:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4C61C8135
+	for <lists+linux-csky@lfdr.de>; Thu,  7 May 2020 06:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbgEFUdr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 6 May 2020 16:33:47 -0400
-Received: from mga07.intel.com ([134.134.136.100]:33389 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727102AbgEFUdq (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 6 May 2020 16:33:46 -0400
-IronPort-SDR: iwj0sBkj/cjFpBhO79fExKo6hqhTLJjIzY9/dVy0zuLVt85sGotipJ12VQOun2+EdxWQ+Lo0ZU
- iixUW2SnnWLg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 13:33:46 -0700
-IronPort-SDR: M/8biaEifOtf/KVemcKvoXhaN/dNTMq07DSDleAl9z1EKDvsLY2Gj1/J5kQQSyza0fRBg4vIeY
- Ynf/+fytsXZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,360,1583222400"; 
-   d="scan'208";a="435017008"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga005.jf.intel.com with ESMTP; 06 May 2020 13:33:40 -0700
-Date:   Wed, 6 May 2020 13:33:39 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Christoph Hellwig <hch@infradead.org>
+        id S1725862AbgEGE4m (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 7 May 2020 00:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725763AbgEGE4l (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 7 May 2020 00:56:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F38C061A0F;
+        Wed,  6 May 2020 21:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=e6F2FSy+90a4CBJo4OFpHQu5UPPeprM5/VV6nvsaHNM=; b=IlQ1KLt/gfQCNp/2YYACfzUAvM
+        X/D5zrnZbBJxt4fTTkPRbO0abBcL5UXSvP84F3pPiIKxAGFEcl0xmqfpM7SKTkfFhy+zfxZO3G62A
+        uZthWGV2OnNDMsi0cfOMM+An4MO1GRWhWTkz1lsyuUFOkgyogfeK3xhYK3nVrNJFK4P9k2YApbYLS
+        xaT/yyR80cCXHfwpXgNAv58HSFjqMIUPIpU0BCSBWczC4w2kz827bDjcqGkFfFvM6T7zRK1d2rlLh
+        YklmG0qnLg1nMAomIrEjNIjAlS1kupgS9seSUIxmvcLlYnLCQ3TeufhT7atUo69S5WcDWW83nplQQ
+        mAh83sVw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jWYaE-0001Ho-Mm; Thu, 07 May 2020 04:56:30 +0000
+Date:   Wed, 6 May 2020 21:56:30 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     ira.weiny@intel.com
 Cc:     linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Christian Koenig <christian.koenig@amd.com>,
@@ -52,49 +54,30 @@ Cc:     linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
 Subject: Re: [PATCH V2 08/11] arch/kmap: Ensure kmap_prot visibility
-Message-ID: <20200506203339.GG1084880@iweiny-DESK2.sc.intel.com>
+Message-ID: <20200507045630.GA22061@infradead.org>
 References: <20200504010912.982044-1-ira.weiny@intel.com>
  <20200504010912.982044-9-ira.weiny@intel.com>
- <20200506061326.GD5192@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200506061326.GD5192@infradead.org>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <20200504010912.982044-9-ira.weiny@intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, May 05, 2020 at 11:13:26PM -0700, Christoph Hellwig wrote:
-> On Sun, May 03, 2020 at 06:09:09PM -0700, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > We want to support kmap_atomic_prot() on all architectures and it makes
-> > sense to define kmap_atomic() to use the default kmap_prot.
-> > 
-> > So we ensure all arch's have a globally available kmap_prot either as a
-> > define or exported symbol.
+On Sun, May 03, 2020 at 06:09:09PM -0700, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> FYI, I still think a
+> We want to support kmap_atomic_prot() on all architectures and it makes
+> sense to define kmap_atomic() to use the default kmap_prot.
 > 
-> #ifndef kmap_prot
-> #define kmap_prot PAGE_KERNEL
-> #endif
+> So we ensure all arch's have a globally available kmap_prot either as a
+> define or exported symbol.
 > 
-> in linux/highmem.h would be nicer.  Then only xtensa and sparc need
-> to override it and clearly stand out.
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-That would be nice...  But...  in this particular patch kmap_prot needs to be
-in arch/microblaze/include/asm/highmem.h to preserve bisect-ability.
+Looks good,
 
-So there would be an inversion with this define and the core #ifndef...
-
-I like the change but I'm going to add this change as a follow on patch because
-at the end of the series microblaze no longer needs this.
-
-If this is reasonable could I get a review on this patch to add to the next
-series?
-
-Ira
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>
