@@ -2,39 +2,33 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4C61C8135
-	for <lists+linux-csky@lfdr.de>; Thu,  7 May 2020 06:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5B11C9329
+	for <lists+linux-csky@lfdr.de>; Thu,  7 May 2020 17:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbgEGE4m (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 7 May 2020 00:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725763AbgEGE4l (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 7 May 2020 00:56:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F38C061A0F;
-        Wed,  6 May 2020 21:56:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=e6F2FSy+90a4CBJo4OFpHQu5UPPeprM5/VV6nvsaHNM=; b=IlQ1KLt/gfQCNp/2YYACfzUAvM
-        X/D5zrnZbBJxt4fTTkPRbO0abBcL5UXSvP84F3pPiIKxAGFEcl0xmqfpM7SKTkfFhy+zfxZO3G62A
-        uZthWGV2OnNDMsi0cfOMM+An4MO1GRWhWTkz1lsyuUFOkgyogfeK3xhYK3nVrNJFK4P9k2YApbYLS
-        xaT/yyR80cCXHfwpXgNAv58HSFjqMIUPIpU0BCSBWczC4w2kz827bDjcqGkFfFvM6T7zRK1d2rlLh
-        YklmG0qnLg1nMAomIrEjNIjAlS1kupgS9seSUIxmvcLlYnLCQ3TeufhT7atUo69S5WcDWW83nplQQ
-        mAh83sVw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jWYaE-0001Ho-Mm; Thu, 07 May 2020 04:56:30 +0000
-Date:   Wed, 6 May 2020 21:56:30 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     ira.weiny@intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
+        id S1728003AbgEGPAg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 7 May 2020 11:00:36 -0400
+Received: from mga14.intel.com ([192.55.52.115]:14344 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726268AbgEGPAZ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 7 May 2020 11:00:25 -0400
+IronPort-SDR: +g5TY5L3ZD/a79EGUOM9SkMvHLm1quMEAsn3Vq+Qje1vBIUzFI7bKue4D9HZ3/HlfoCClMFOld
+ Sj/nIGRJZKBQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 08:00:07 -0700
+IronPort-SDR: b/s7ZWxVBNmG4J2I+k7yxw4bkhrO5iMaLGMsoiM7CLNhxvnQQ99q0hnTaoBLVOL1NGGxx8SlhW
+ 4VsFNQaNuTzg==
+X-IronPort-AV: E=Sophos;i="5.73,364,1583222400"; 
+   d="scan'208";a="407664102"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 08:00:06 -0700
+From:   ira.weiny@intel.com
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -52,32 +46,111 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH V2 08/11] arch/kmap: Ensure kmap_prot visibility
-Message-ID: <20200507045630.GA22061@infradead.org>
-References: <20200504010912.982044-1-ira.weiny@intel.com>
- <20200504010912.982044-9-ira.weiny@intel.com>
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH V3 00/15] Remove duplicated kmap code
+Date:   Thu,  7 May 2020 07:59:48 -0700
+Message-Id: <20200507150004.1423069-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200504010912.982044-9-ira.weiny@intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, May 03, 2020 at 06:09:09PM -0700, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> We want to support kmap_atomic_prot() on all architectures and it makes
-> sense to define kmap_atomic() to use the default kmap_prot.
-> 
-> So we ensure all arch's have a globally available kmap_prot either as a
-> define or exported symbol.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+From: Ira Weiny <ira.weiny@intel.com>
 
-Looks good,
+The kmap infrastructure has been copied almost verbatim to every architecture.
+This series consolidates obvious duplicated code by defining core functions
+which call into the architectures only when needed.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Some of the k[un]map_atomic() implementations have some similarities but the
+similarities were not sufficient to warrant further changes.
+
+In addition we remove a duplicate implementation of kmap() in DRM.
+
+Testing was done by 0day to cover all the architectures I can't readily
+build/test.
+
+---
+Changes from V2:
+	Collect review/acks
+	Add kmap_prot consolidation patch from Christoph
+	Add 3 suggested patches from Al Viro
+	Fix include for microblaze
+	Fix static inline for microblaze
+
+Changes from V1:
+	Fix bisect-ability
+	Update commit message and fix line lengths
+	Remove unneded kunmap_atomic_high() declarations
+	Remove unneded kmap_atomic_high() declarations
+	collect reviews
+	rebase to 5.7-rc4
+
+Changes from V0:
+	Define kmap_flush_tlb() and make kmap() truely arch independent.
+	Redefine the k[un]map_atomic_* code to call into the architectures for
+		high mem pages
+	Ensure all architectures define kmap_prot, use it appropriately, and
+		define kmap_atomic_prot()
+	Remove drm implementation of kmap_atomic()
+
+
+Ira Weiny (15):
+  arch/kmap: Remove BUG_ON()
+  arch/xtensa: Move kmap build bug out of the way
+  arch/kmap: Remove redundant arch specific kmaps
+  arch/kunmap: Remove duplicate kunmap implementations
+  {x86,powerpc,microblaze}/kmap: Move preempt disable
+  arch/kmap_atomic: Consolidate duplicate code
+  arch/kunmap_atomic: Consolidate duplicate code
+  arch/kmap: Ensure kmap_prot visibility
+  arch/kmap: Don't hard code kmap_prot values
+  arch/kmap: Define kmap_atomic_prot() for all arch's
+  drm: Remove drm specific kmap_atomic code
+  kmap: Remove kmap_atomic_to_page()
+  parisc/kmap: Remove duplicate kmap code
+  sparc: Remove unnecessary includes
+  kmap: Consolidate kmap_prot definitions
+
+ arch/arc/include/asm/highmem.h        | 18 -------
+ arch/arc/mm/highmem.c                 | 28 ++--------
+ arch/arm/include/asm/highmem.h        |  9 ----
+ arch/arm/mm/highmem.c                 | 35 ++-----------
+ arch/csky/include/asm/highmem.h       | 12 +----
+ arch/csky/mm/highmem.c                | 56 ++++----------------
+ arch/microblaze/include/asm/highmem.h | 27 ----------
+ arch/microblaze/mm/highmem.c          | 16 ++----
+ arch/microblaze/mm/init.c             |  3 --
+ arch/mips/include/asm/highmem.h       | 11 +---
+ arch/mips/mm/cache.c                  |  6 +--
+ arch/mips/mm/highmem.c                | 49 +++---------------
+ arch/nds32/include/asm/highmem.h      |  9 ----
+ arch/nds32/mm/highmem.c               | 39 ++------------
+ arch/parisc/include/asm/cacheflush.h  | 30 +----------
+ arch/powerpc/include/asm/highmem.h    | 28 ----------
+ arch/powerpc/mm/highmem.c             | 21 ++------
+ arch/powerpc/mm/mem.c                 |  3 --
+ arch/sparc/include/asm/highmem.h      | 25 +--------
+ arch/sparc/mm/highmem.c               | 20 ++------
+ arch/sparc/mm/io-unit.c               |  1 -
+ arch/sparc/mm/iommu.c                 |  1 -
+ arch/x86/include/asm/fixmap.h         |  1 -
+ arch/x86/include/asm/highmem.h        |  9 ----
+ arch/x86/mm/highmem_32.c              | 50 ++----------------
+ arch/xtensa/include/asm/highmem.h     | 27 ----------
+ arch/xtensa/mm/highmem.c              | 22 ++++----
+ drivers/gpu/drm/ttm/ttm_bo_util.c     | 56 ++------------------
+ drivers/gpu/drm/vmwgfx/vmwgfx_blit.c  | 16 +++---
+ include/drm/ttm/ttm_bo_api.h          |  4 --
+ include/linux/highmem.h               | 74 ++++++++++++++++++++++++---
+ 31 files changed, 150 insertions(+), 556 deletions(-)
+
+-- 
+2.25.1
+
