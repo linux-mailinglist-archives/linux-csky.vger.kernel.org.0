@@ -2,61 +2,30 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7D41C9EBF
-	for <lists+linux-csky@lfdr.de>; Fri,  8 May 2020 00:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EB41CFBBD
+	for <lists+linux-csky@lfdr.de>; Tue, 12 May 2020 19:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbgEGWwc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 7 May 2020 18:52:32 -0400
-Received: from mga01.intel.com ([192.55.52.88]:62709 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726515AbgEGWwb (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 7 May 2020 18:52:31 -0400
-IronPort-SDR: 36r47nJ8z0IKCAuz8qMWyhcpzNd7h8Th0gqY2JiQBeUy7cO3kBMykJIH6FrkZ31ddpssBo/DBb
- Jji3JOGc6bog==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 15:52:30 -0700
-IronPort-SDR: MxJUBhVCyR7ODqR4SAC58dy3GDFxRgnWilp3qEAX+uOK1O9RCcxH9eC9K66H03XK38Xa88o/WM
- V/l12tv3KYLg==
-X-IronPort-AV: E=Sophos;i="5.73,365,1583222400"; 
-   d="scan'208";a="285157663"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 15:52:30 -0700
-From:   ira.weiny@intel.com
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH V3.1] kmap: Consolidate kmap_prot definitions
-Date:   Thu,  7 May 2020 15:52:27 -0700
-Message-Id: <20200507225227.1428910-1-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200507150004.1423069-16-ira.weiny@intel.com>
-References: <20200507150004.1423069-16-ira.weiny@intel.com>
+        id S1728039AbgELRPg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 12 May 2020 13:15:36 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43884 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726300AbgELRPf (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 12 May 2020 13:15:35 -0400
+Received: from ip5f5af183.dynamic.kabel-deutschland.de ([95.90.241.131] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jYYV8-0002Ci-Hd; Tue, 12 May 2020 17:15:30 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH 0/3] sparc: port to copy_thread_tls() and struct kernel_clone_args
+Date:   Tue, 12 May 2020 19:15:24 +0200
+Message-Id: <20200512171527.570109-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
@@ -64,192 +33,150 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+Hey Dave,
 
-Most architectures define kmap_prot to be PAGE_KERNEL.
+I've tested this series with qemu-system-sparc64 and a Debian Sid image
+and it comes up no problem (Here's a little recording
+https://asciinema.org/a/329510 ). Process creation works fine for
+fork(), vfork(), and clone() afaict. For sparc 32bit I tried my best,
+but couldn't get my hands on either a compiler or a useable distro image
+for pure sparc32. The changes should be straightforward though but
+anyone who can test I'd appreciate it.
 
-Let sparc and xtensa define there own and define PAGE_KERNEL as the
-default if not overridden.
+This is more or less the explanation also present in the first patch:
 
-Suggested-by: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+This is part of ongoing work that aims at getting rid of the
+copy_thread()/copy_thread_tls() split that makes the process creation
+codepaths in the kernel more convoluted and error-prone than they need
+to be.
 
----
-Changes from V3:
-	Fix semicolon in macro
+This is the sparc specific bit and _if_ you agree with the changes here
+it'd be nice if I could get your review, and if technically correct,
+your ack so I can fold this into a larger series and move on to the next
+arch.
 
-Changes from V2:
-	New Patch for this series
----
- arch/arc/include/asm/highmem.h        | 3 ---
- arch/arm/include/asm/highmem.h        | 2 --
- arch/csky/include/asm/highmem.h       | 2 --
- arch/microblaze/include/asm/highmem.h | 1 -
- arch/mips/include/asm/highmem.h       | 2 --
- arch/nds32/include/asm/highmem.h      | 1 -
- arch/powerpc/include/asm/highmem.h    | 1 -
- arch/sparc/include/asm/highmem.h      | 3 ++-
- arch/sparc/mm/highmem.c               | 4 ----
- arch/x86/include/asm/fixmap.h         | 1 -
- include/linux/highmem.h               | 4 ++++
- 11 files changed, 6 insertions(+), 18 deletions(-)
+It also unblocks implementing clone3() on architectures not support
+copy_thread_tls(). Any architecture that wants to implement clone3()
+will need to select HAVE_COPY_THREAD_TLS and thus need to implement
+copy_thread_tls(). So both goals are connected but independently
+beneficial.
 
-diff --git a/arch/arc/include/asm/highmem.h b/arch/arc/include/asm/highmem.h
-index 70900a73bfc8..6e5eafb3afdd 100644
---- a/arch/arc/include/asm/highmem.h
-+++ b/arch/arc/include/asm/highmem.h
-@@ -25,9 +25,6 @@
- #define PKMAP_ADDR(nr)		(PKMAP_BASE + ((nr) << PAGE_SHIFT))
- #define PKMAP_NR(virt)		(((virt) - PKMAP_BASE) >> PAGE_SHIFT)
- 
--#define kmap_prot		PAGE_KERNEL
--
--
- #include <asm/cacheflush.h>
- 
- extern void kmap_init(void);
-diff --git a/arch/arm/include/asm/highmem.h b/arch/arm/include/asm/highmem.h
-index b0d4bd8dc3c1..31811be38d78 100644
---- a/arch/arm/include/asm/highmem.h
-+++ b/arch/arm/include/asm/highmem.h
-@@ -10,8 +10,6 @@
- #define PKMAP_NR(virt)		(((virt) - PKMAP_BASE) >> PAGE_SHIFT)
- #define PKMAP_ADDR(nr)		(PKMAP_BASE + ((nr) << PAGE_SHIFT))
- 
--#define kmap_prot		PAGE_KERNEL
--
- #define flush_cache_kmaps() \
- 	do { \
- 		if (cache_is_vivt()) \
-diff --git a/arch/csky/include/asm/highmem.h b/arch/csky/include/asm/highmem.h
-index ea2f3f39174d..14645e3d5cd5 100644
---- a/arch/csky/include/asm/highmem.h
-+++ b/arch/csky/include/asm/highmem.h
-@@ -38,8 +38,6 @@ extern void *kmap_atomic_pfn(unsigned long pfn);
- 
- extern void kmap_init(void);
- 
--#define kmap_prot PAGE_KERNEL
--
- #endif /* __KERNEL__ */
- 
- #endif /* __ASM_CSKY_HIGHMEM_H */
-diff --git a/arch/microblaze/include/asm/highmem.h b/arch/microblaze/include/asm/highmem.h
-index d7c55cfd27bd..284ca8fb54c1 100644
---- a/arch/microblaze/include/asm/highmem.h
-+++ b/arch/microblaze/include/asm/highmem.h
-@@ -25,7 +25,6 @@
- #include <linux/uaccess.h>
- #include <asm/fixmap.h>
- 
--#define kmap_prot		PAGE_KERNEL
- extern pte_t *kmap_pte;
- extern pte_t *pkmap_page_table;
- 
-diff --git a/arch/mips/include/asm/highmem.h b/arch/mips/include/asm/highmem.h
-index 76dec0bd4f59..f1f788b57166 100644
---- a/arch/mips/include/asm/highmem.h
-+++ b/arch/mips/include/asm/highmem.h
-@@ -54,8 +54,6 @@ extern void *kmap_atomic_pfn(unsigned long pfn);
- 
- extern void kmap_init(void);
- 
--#define kmap_prot PAGE_KERNEL
--
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_HIGHMEM_H */
-diff --git a/arch/nds32/include/asm/highmem.h b/arch/nds32/include/asm/highmem.h
-index a48a6536d41a..5717647d14d1 100644
---- a/arch/nds32/include/asm/highmem.h
-+++ b/arch/nds32/include/asm/highmem.h
-@@ -32,7 +32,6 @@
- #define LAST_PKMAP_MASK		(LAST_PKMAP - 1)
- #define PKMAP_NR(virt)		(((virt) - (PKMAP_BASE)) >> PAGE_SHIFT)
- #define PKMAP_ADDR(nr)		(PKMAP_BASE + ((nr) << PAGE_SHIFT))
--#define kmap_prot		PAGE_KERNEL
- 
- static inline void flush_cache_kmaps(void)
- {
-diff --git a/arch/powerpc/include/asm/highmem.h b/arch/powerpc/include/asm/highmem.h
-index 8d8ee3fcd800..104026f7d6bc 100644
---- a/arch/powerpc/include/asm/highmem.h
-+++ b/arch/powerpc/include/asm/highmem.h
-@@ -29,7 +29,6 @@
- #include <asm/page.h>
- #include <asm/fixmap.h>
- 
--#define kmap_prot		PAGE_KERNEL
- extern pte_t *kmap_pte;
- extern pte_t *pkmap_page_table;
- 
-diff --git a/arch/sparc/include/asm/highmem.h b/arch/sparc/include/asm/highmem.h
-index f4babe67cb5d..ddb03c04f1f3 100644
---- a/arch/sparc/include/asm/highmem.h
-+++ b/arch/sparc/include/asm/highmem.h
-@@ -25,11 +25,12 @@
- #include <asm/vaddrs.h>
- #include <asm/kmap_types.h>
- #include <asm/pgtable.h>
-+#include <asm/pgtsrmmu.h>
- 
- /* declarations for highmem.c */
- extern unsigned long highstart_pfn, highend_pfn;
- 
--extern pgprot_t kmap_prot;
-+#define kmap_prot __pgprot(SRMMU_ET_PTE | SRMMU_PRIV | SRMMU_CACHE)
- extern pte_t *pkmap_page_table;
- 
- void kmap_init(void) __init;
-diff --git a/arch/sparc/mm/highmem.c b/arch/sparc/mm/highmem.c
-index 414f578d1e57..d237d902f9c3 100644
---- a/arch/sparc/mm/highmem.c
-+++ b/arch/sparc/mm/highmem.c
-@@ -32,9 +32,6 @@
- #include <asm/pgalloc.h>
- #include <asm/vaddrs.h>
- 
--pgprot_t kmap_prot;
--EXPORT_SYMBOL(kmap_prot);
--
- static pte_t *kmap_pte;
- 
- void __init kmap_init(void)
-@@ -51,7 +48,6 @@ void __init kmap_init(void)
- 
-         /* cache the first kmap pte */
-         kmap_pte = pte_offset_kernel(dir, address);
--        kmap_prot = __pgprot(SRMMU_ET_PTE | SRMMU_PRIV | SRMMU_CACHE);
- }
- 
- void *kmap_atomic_high_prot(struct page *page, pgprot_t prot)
-diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
-index 28183ee3cc42..b9527a54db99 100644
---- a/arch/x86/include/asm/fixmap.h
-+++ b/arch/x86/include/asm/fixmap.h
-@@ -152,7 +152,6 @@ extern void reserve_top_address(unsigned long reserve);
- extern int fixmaps_set;
- 
- extern pte_t *kmap_pte;
--#define kmap_prot PAGE_KERNEL
- extern pte_t *pkmap_page_table;
- 
- void __native_set_fixmap(enum fixed_addresses idx, pte_t pte);
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index cc0c3904e501..bf470c16cecb 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -40,6 +40,10 @@ extern void kunmap_atomic_high(void *kvaddr);
- static inline void kmap_flush_tlb(unsigned long addr) { }
- #endif
- 
-+#ifndef kmap_prot
-+#define kmap_prot PAGE_KERNEL
-+#endif
-+
- void *kmap_high(struct page *page);
- static inline void *kmap(struct page *page)
- {
+HAVE_COPY_THREAD_TLS means that a given architecture supports
+CLONE_SETTLS and not setting it should usually mean that the
+architectures doesn't implement it but that's not how things are. In
+fact all architectures support CLONE_TLS it's just that they don't
+follow the calling convention that HAVE_COPY_THREAD_TLS implies. That
+means all architectures can be switched over to select
+HAVE_COPY_THREAD_TLS. Once that is done we can remove that macro (yay,
+less code), the unnecessary do_fork() export in kernel/fork.c, and also
+rename copy_thread_tls() back to copy_thread(). At this point
+copy_thread() becomes the main architecture specific part of process
+creation but it will be the same layout and calling convention for all
+architectures. (Once that is done we can probably cleanup each
+copy_thread() function even more but that's for the future.)
+
+Since sparc does support CLONE_SETTLS there's no reason to not select
+HAVE_COPY_THREAD_TLS. This brings us one step closer to getting rid of
+the copy_thread()/copy_thread_tls() split we still have and ultimately
+the HAVE_COPY_THREAD_TLS define in general. A lot of architectures have
+already converted and sparc is one of the few hat haven't yet. This also
+unblocks implementing the clone3() syscall on sparc which I will follow
+up later (if no one gets there before me). Once that is done we can get
+of another ARCH_WANTS_* macro.
+
+This patch just switches sparc64 over to HAVE_COPY_THREAD_TLS but not
+sparc32 which will be done in the next patch. Once Any architecture that
+supports HAVE_COPY_THREAD_TLS cannot call the do_fork() helper anymore.
+This is fine and intended since it should be removed in favor of the
+new, cleaner _do_fork() calling convention based on struct
+kernel_clone_args. In fact, most architectures have already switched.
+With this patch, sparc joins the other arches which can't use the
+fork(), vfork(), clone(), clone3() syscalls directly and who follow the
+new process creation calling convention that is based on struct
+kernel_clone_args which we introduced a while back. This means less
+custom assembly in the architectures entry path to set up the registers
+before calling into the process creation helper and it is easier to to
+support new features without having to adapt calling conventions. It
+also unifies all process creation paths between fork(), vfork(),
+clone(), and clone3(). (We can't fix the ABI nightmare that legacy
+clone() is but we can prevent stuff like this happening in the future.)
+
+Note that sparc can't easily call into the syscalls directly because of
+its return value conventions when a new process is created which
+needs to clobber the UREG_I1 register in copy_thread{_tls()} and it
+needs to restore it if process creation fails. That's not a big deal
+since the new process creation calling convention makes things simpler.
+
+This removes sparc_do_fork() and replaces it with 3 clean helpers,
+sparc_fork(), sparc_vfork(), and sparc_clone(). That means a little more
+C code until the next patch unifies sparc 32bit and sparc64. It has the
+advantage that we can remove quite a bit of assembler and it makes the
+whole syscall.S process creation bits easier to read.
+The follow-up patch will remove the custom sparc_do_fork() helper for
+32bi sparc and move sparc_fork(), sparc_vfork(), and sparc_clone() into
+a common process.c file. This allows us to remove quite a bit of
+custom assembly form 32bit sparc's entry.S file too and allows to remove
+even more code because now all helpers are shared between 32bit sparc
+and sparc64 instead of having to maintain two separate sparc_do_fork()
+implementations.
+
+For some more context, please see:
+commit 606e9ad20094f6d500166881d301f31a51bc8aa7
+Merge: ac61145a725a 457677c70c76
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat Jan 11 15:33:48 2020 -0800
+
+    Merge tag 'clone3-tls-v5.5-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux
+
+    Pull thread fixes from Christian Brauner:
+     "This contains a series of patches to fix CLONE_SETTLS when used with
+      clone3().
+
+      The clone3() syscall passes the tls argument through struct clone_args
+      instead of a register. This means, all architectures that do not
+      implement copy_thread_tls() but still support CLONE_SETTLS via
+      copy_thread() expecting the tls to be located in a register argument
+      based on clone() are currently unfortunately broken. Their tls value
+      will be garbage.
+
+      The patch series fixes this on all architectures that currently define
+      __ARCH_WANT_SYS_CLONE3. It also adds a compile-time check to ensure
+      that any architecture that enables clone3() in the future is forced to
+      also implement copy_thread_tls().
+
+      My ultimate goal is to get rid of the copy_thread()/copy_thread_tls()
+      split and just have copy_thread_tls() at some point in the not too
+      distant future (Maybe even renaming copy_thread_tls() back to simply
+      copy_thread() once the old function is ripped from all arches). This
+      is dependent now on all arches supporting clone3().
+
+      While all relevant arches do that now there are still four missing:
+      ia64, m68k, sh and sparc. They have the system call reserved, but not
+      implemented. Once they all implement clone3() we can get rid of
+      ARCH_WANT_SYS_CLONE3 and HAVE_COPY_THREAD_TLS.
+
+Note that in the meantime, m68k has already switched to the new calling
+convention.
+
+Christian Brauner (3):
+  sparc64: enable HAVE_COPY_THREAD_TLS
+  sparc: share process creation helpers between sparc and sparc64
+  sparc: unconditionally enable HAVE_COPY_THREAD_TLS
+
+ arch/sparc/Kconfig                |   1 +
+ arch/sparc/include/asm/syscalls.h |   7 +-
+ arch/sparc/kernel/Makefile        |   1 +
+ arch/sparc/kernel/entry.S         |  29 ++------
+ arch/sparc/kernel/kernel.h        |   7 +-
+ arch/sparc/kernel/process.c       | 111 ++++++++++++++++++++++++++++++
+ arch/sparc/kernel/process_32.c    |  34 ++-------
+ arch/sparc/kernel/process_64.c    |  41 ++---------
+ arch/sparc/kernel/syscalls.S      |  23 ++++---
+ 9 files changed, 147 insertions(+), 107 deletions(-)
+ create mode 100644 arch/sparc/kernel/process.c
+
+
+base-commit: 0e698dfa282211e414076f9dc7e83c1c288314fd
 -- 
-2.25.1
+2.26.2
 
