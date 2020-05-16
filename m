@@ -2,118 +2,110 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EF31D0F88
-	for <lists+linux-csky@lfdr.de>; Wed, 13 May 2020 12:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B221D6009
+	for <lists+linux-csky@lfdr.de>; Sat, 16 May 2020 11:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732562AbgEMKQc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 13 May 2020 06:16:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46382 "EHLO mail.kernel.org"
+        id S1726967AbgEPJdx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 16 May 2020 05:33:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729917AbgEMKQb (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 13 May 2020 06:16:31 -0400
-Received: from localhost.localdomain (unknown [42.120.72.94])
+        id S1726888AbgEPJdx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 16 May 2020 05:33:53 -0400
+Received: from localhost.localdomain (unknown [89.208.247.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 05E5C205ED;
-        Wed, 13 May 2020 10:16:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 82B7A2074D;
+        Sat, 16 May 2020 09:33:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589364990;
-        bh=VitKKeYByF8JOPCpvBM4yPr2Ywg+COvNNJJuR6fwXOc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b7fVCTf6xV+gWXfh/y2XalKbcNcHjeATBq/Ptr3/Ob7HM99plFvya2ebUBGjeDcgR
-         ZdCQExzas5WLP8P6mIPjESH4ukWKNJevhfw5rpoVOsjOeO5yifp4nxyzU8AqmzPkOx
-         YVIgxKxa0amA3gl76FZXdY5xKUcEEBmLkZFFvNKU=
+        s=default; t=1589621632;
+        bh=Xa5DKDmR3i44QerUh5QmkifSI8kySf4Dm8ZehLjC7kg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UgWaIJtsMT9RXBaxIuYN2/pFxNE2pQtFlkVoRc1I3Y+bsP4omz5+EOKEJvz5wvvkz
+         B0G7do+dn2gBOQU/OTBsklthBa6vvXyiUVzHXkOWVtFHSUSPufE69h9/ZXcbcO3spw
+         v4gxzEv0NgTmYq5N7B7tJkYZSGtgdwyLb99LqTl8=
 From:   guoren@kernel.org
-To:     linux-csky@vger.kernel.org
+To:     torvalds@linux-foundation.org
 Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, guoren@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 4/4] csky: Fixup remove unnecessary save/restore PSR code
-Date:   Wed, 13 May 2020 18:16:17 +0800
-Message-Id: <20200513101617.11588-4-guoren@kernel.org>
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        guoren@kernel.org
+Subject: [GIT PULL] csky updates for v5.7-rc6
+Date:   Sat, 16 May 2020 17:33:36 +0800
+Message-Id: <20200516093336.13886-1-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20200513101617.11588-1-guoren@kernel.org>
-References: <20200513101617.11588-1-guoren@kernel.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi Linus,
 
-All processes' PSR could success from SETUP_MMU, so need set it
-in INIT_THREAD again.
+Please pull the changes (10 fixups) for v5.7-rc6.
 
-And use a3 instead of r7 in __switch_to for code convention.
+Best Regards
+ Guo Ren
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/csky/include/asm/processor.h |  2 --
- arch/csky/kernel/asm-offsets.c    |  1 -
- arch/csky/kernel/entry.S          | 10 ++--------
- 3 files changed, 2 insertions(+), 11 deletions(-)
+The following changes since commit 2ef96a5bb12be62ef75b5828c0aab838ebb29cb8:
 
-diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
-index c6bcd7f7c720..79eaaaed3d23 100644
---- a/arch/csky/include/asm/processor.h
-+++ b/arch/csky/include/asm/processor.h
-@@ -42,7 +42,6 @@ extern struct cpuinfo_csky cpu_data[];
- 
- struct thread_struct {
- 	unsigned long  ksp;       /* kernel stack pointer */
--	unsigned long  sr;        /* saved status register */
- 	unsigned long  trap_no;   /* saved status register */
- 
- 	/* FPU regs */
-@@ -51,7 +50,6 @@ struct thread_struct {
- 
- #define INIT_THREAD  { \
- 	.ksp = sizeof(init_stack) + (unsigned long) &init_stack, \
--	.sr = DEFAULT_PSR_VALUE, \
- }
- 
- /*
-diff --git a/arch/csky/kernel/asm-offsets.c b/arch/csky/kernel/asm-offsets.c
-index f8be348df9e4..bbc259eed233 100644
---- a/arch/csky/kernel/asm-offsets.c
-+++ b/arch/csky/kernel/asm-offsets.c
-@@ -19,7 +19,6 @@ int main(void)
- 
- 	/* offsets into the thread struct */
- 	DEFINE(THREAD_KSP,        offsetof(struct thread_struct, ksp));
--	DEFINE(THREAD_SR,         offsetof(struct thread_struct, sr));
- 	DEFINE(THREAD_FESR,       offsetof(struct thread_struct, user_fp.fesr));
- 	DEFINE(THREAD_FCR,        offsetof(struct thread_struct, user_fp.fcr));
- 	DEFINE(THREAD_FPREG,      offsetof(struct thread_struct, user_fp.vr));
-diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-index 6a468ff75432..3760397fdd3d 100644
---- a/arch/csky/kernel/entry.S
-+++ b/arch/csky/kernel/entry.S
-@@ -330,9 +330,6 @@ ENTRY(__switch_to)
- 	lrw	a3, TASK_THREAD
- 	addu	a3, a0
- 
--	mfcr	a2, psr			/* Save PSR value */
--	stw	a2, (a3, THREAD_SR)	/* Save PSR in task struct */
--
- 	SAVE_SWITCH_STACK
- 
- 	stw	sp, (a3, THREAD_KSP)
-@@ -343,12 +340,9 @@ ENTRY(__switch_to)
- 
- 	ldw	sp, (a3, THREAD_KSP)	/* Set next kernel sp */
- 
--	ldw	a2, (a3, THREAD_SR)	/* Set next PSR */
--	mtcr	a2, psr
--
- #if  defined(__CSKYABIV2__)
--	addi	r7, a1, TASK_THREAD_INFO
--	ldw	tls, (r7, TINFO_TP_VALUE)
-+	addi	a3, a1, TASK_THREAD_INFO
-+	ldw	tls, (a3, TINFO_TP_VALUE)
- #endif
- 
- 	RESTORE_SWITCH_STACK
--- 
-2.17.0
+  Linux 5.7-rc5 (2020-05-10 15:16:58 -0700)
 
+are available in the Git repository at:
+
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.7-rc6
+
+for you to fetch changes up to 51bb38cb78363fdad1f89e87357b7bc73e39ba88:
+
+  csky: Fixup raw_copy_from_user() (2020-05-15 00:16:30 +0800)
+
+----------------------------------------------------------------
+csky updates for 5.7-rc6
+
+10 Fixups for this updates :P
+
+ - 1 fixup for copy_from/to_user (a hard-to-find bug, thx Viro)
+ - 1 fixup for calltrace panic without FRAME_POINT
+ - 2 fixups for perf
+ - 2 fixups for compile error
+ - 4 fixups for non-fatal bugs:
+   (msa, rm dis_irq, cleanup psr, gdbmacros.txt)
+
+----------------------------------------------------------------
+Al Viro (1):
+      csky: Fixup raw_copy_from_user()
+
+Guo Ren (6):
+      csky/ftrace: Fixup error when disable CONFIG_DYNAMIC_FTRACE
+      csky: Fixup compile error for abiv1 entry.S
+      csky: Fixup perf probe -x hungup
+      csky: Fixup calltrace panic
+      csky: Fixup remove unnecessary save/restore PSR code
+      csky: Fixup gdbmacros.txt with name sp in thread_struct
+
+Liu Yibin (2):
+      csky: Fixup msa highest 3 bits mask
+      csky: Fixup remove duplicate irq_disable
+
+Mao Han (1):
+      csky: Fixup perf callchain unwind
+
+ arch/csky/Kconfig                   |   2 +
+ arch/csky/Makefile                  |   2 +-
+ arch/csky/abiv1/inc/abi/entry.h     |   4 +-
+ arch/csky/abiv2/inc/abi/entry.h     |   4 +-
+ arch/csky/abiv2/mcount.S            |   2 +
+ arch/csky/include/asm/processor.h   |   6 +-
+ arch/csky/include/asm/ptrace.h      |  10 ++
+ arch/csky/include/asm/thread_info.h |  16 +++-
+ arch/csky/include/asm/uaccess.h     |  49 +++++-----
+ arch/csky/kernel/Makefile           |   2 +-
+ arch/csky/kernel/asm-offsets.c      |   3 +-
+ arch/csky/kernel/dumpstack.c        |  49 ----------
+ arch/csky/kernel/entry.S            |  12 +--
+ arch/csky/kernel/ftrace.c           |   2 +
+ arch/csky/kernel/perf_callchain.c   |   9 +-
+ arch/csky/kernel/probes/uprobes.c   |   5 +
+ arch/csky/kernel/process.c          |  37 +-------
+ arch/csky/kernel/ptrace.c           |   6 ++
+ arch/csky/kernel/stacktrace.c       | 176 ++++++++++++++++++++++++++++--------
+ arch/csky/lib/usercopy.c            |   8 +-
+ 20 files changed, 226 insertions(+), 178 deletions(-)
+ delete mode 100644 arch/csky/kernel/dumpstack.c
