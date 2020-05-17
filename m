@@ -2,107 +2,80 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288071D6B9D
-	for <lists+linux-csky@lfdr.de>; Sun, 17 May 2020 19:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9835C1D6DC7
+	for <lists+linux-csky@lfdr.de>; Mon, 18 May 2020 00:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726263AbgEQRwX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 17 May 2020 13:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S1726551AbgEQWN5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 17 May 2020 18:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726252AbgEQRwW (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 17 May 2020 13:52:22 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D3EC061A0C;
-        Sun, 17 May 2020 10:52:22 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id x15so3765602pfa.1;
-        Sun, 17 May 2020 10:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=+C97Gq4KJubJIcHPbkTJGpTHN9vsY4KHjuqSmBqZUeQ=;
-        b=ndeZkgTjN1/SBongK5H2lbIiQYmOG+a5nD4L7iYRU6uHmp8pLqXhtF6OGaND1s51er
-         vKXI73P5t3f0wlGe8gRig7RfkXbebj81TeHfKhiwMra8OfF783WBSg9wV8qTuv3/V2i5
-         CZ80gDsfoW601TICLNbi3icTRsochknF+1i4xtaF6o/GCUOhKhnNtuWhJslYgZ4x4QjT
-         8cBxWEEL2JbuVZ8wzq2Ee1EZeYVmsNf8djDPSeEBAArvx3FqURsum9I1Onkjqxg055a7
-         YnpPPunf/h1341hk9CLtVt4NN5q7vw7ly/v4RpiNGc5Uz7j6H+TienIz/xdLcgyAPOdi
-         lfdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=+C97Gq4KJubJIcHPbkTJGpTHN9vsY4KHjuqSmBqZUeQ=;
-        b=t6LLva9IcacceZM8eqMn63V0Yfu/fH0h9cJ2a9He+Il4cIzy2PFHKcxpcv5AGXH6AY
-         AtQAeyOryV18fdARtObxbeuNdONPn6zJfn2OGAlrcG0ta/VDBEcKkL4ilK3G+4WsumB0
-         S1OWAa1ZohygzZnxl03jMnXk38FNUqTpwHujdpp8yD+udI+yDQ6yDF3NxEB3YtQ0VT7W
-         7z5GMZwybTs3ldcVc13WdQ9JLZc3qkmseoRT1Zy2KgMhnEK2X/UkHS4a/8/PRo+wybr4
-         3XSZuFeSaGHwv44WDy/Gk8QHAp43TOpqDu0Ytl0RF/Wmuc3sAJrCXkwnpb9TMWjCuk0N
-         +dug==
-X-Gm-Message-State: AOAM530DViYt5o5HVVlxzI4Mom4Aku4/CPY23sZyJYl0ctpX3R6IadeY
-        ymvgkAMLFNLSXnLgykIY9rSdPJ2y
-X-Google-Smtp-Source: ABdhPJyZKUFY+0Vv/jG56FfsR4Kevaou7/BiaiahUsG3Ctu0HH2TxFN8/lOcCdQ1X/aTh56lI/WIJQ==
-X-Received: by 2002:a62:ed02:: with SMTP id u2mr13717273pfh.60.1589737942085;
-        Sun, 17 May 2020 10:52:22 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z18sm6734907pfj.148.2020.05.17.10.52.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 17 May 2020 10:52:21 -0700 (PDT)
-Date:   Sun, 17 May 2020 10:52:20 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] csky: Fixup calltrace panic
-Message-ID: <20200517175220.GA48379@roeck-us.net>
+        with ESMTP id S1726299AbgEQWN5 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 17 May 2020 18:13:57 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48834C061A0C;
+        Sun, 17 May 2020 15:13:57 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.93 #3 (Red Hat Linux))
+        id 1jaRXW-00Alrb-WC; Sun, 17 May 2020 22:13:47 +0000
+Date:   Sun, 17 May 2020 23:13:46 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Mark Cave-Ayland <mark.cave-ayland@ilande.co.uk>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        David Miller <davem@davemloft.net>, arnd@arndb.de,
+        guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 0/3] sparc: port to copy_thread_tls() and struct
+ kernel_clone_args
+Message-ID: <20200517221346.GL23230@ZenIV.linux.org.uk>
+References: <20200512171527.570109-1-christian.brauner@ubuntu.com>
+ <20200512.130633.293867428547074800.davem@davemloft.net>
+ <20200517150123.sl36ug27gwnyz6gf@wittgenstein>
+ <cfc07b63-29e6-cda9-c611-235e37970763@ilande.co.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <cfc07b63-29e6-cda9-c611-235e37970763@ilande.co.uk>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi,
+On Sun, May 17, 2020 at 05:34:34PM +0100, Mark Cave-Ayland wrote:
 
-On Wed, May 13, 2020 at 03:15:25PM +0800, Guo Ren wrote:
-> The implementation of show_stack will panic with wrong fp:
+> FWIW if you're running a more recent version of QEMU (>=3.1) then you can also boot
+> from the virtio-blk-pci device directly instead of having to switch back to the IDE
+> device after installation as you have done above. Should be something like:
 > 
-> addr    = *fp++;
+> qemu-system-sparc64 \
+>          -m 4096 \
+>    	-device virtio-blk-pci,bus=pciB,drive=hd \
+>  	-drive
+> file=/home/brauner/.local/share/qemu/sparc64.img,format=raw,if=none,id=hd,bootindex=0 \
+>         -net nic \
+>  	-net user \
+>  	-nographic
 > 
-> because the fp isn't checked properly.
-> 
-> The current implementations of show_stack, wchan and stack_trace
-> haven't been designed properly, so just deprecate them.
-> 
-> This patch is a reference to riscv's way, all codes are modified from
-> arm's. The patch is passed with:
-> 
->  - cat /proc/<pid>/stack
->  - cat /proc/<pid>/wchan
->  - echo c > /proc/sysrq-trigger
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Note the removal of the legacy -boot argument and the addition of "bootindex=0" to
+> the -drive argument.
 
-This patch results in:
+	Is virtio-blk-pci more resilent to lost interrupt bug introduced in 
+"sun4u: update PCI topology to include simba PCI bridges"?  I hadn't tried
+it yet (reverted to the last working mainline qemu commit for now); IDE
+definitely is screwed by that - both the Linux and NetBSD drivers, actually.
 
-gcc version: csky-linux-gcc (GCC) 9.3.0
+	A 50Mb worth of wget(1) is more than enough to trigger that crap;
 
-Building csky:defconfig ... failed
---------------
-Error log:
-csky-linux-gcc: error: unrecognized command line option '-mbacktrace'; did you mean '-fbacktrace'?
-csky-linux-gcc: error: unrecognized command line option '-mbacktrace'; did you mean '-fbacktrace'?
-make[2]: *** [scripts/mod/devicetable-offsets.s] Error 1
-make[2]: *** Waiting for unfinished jobs....
-csky-linux-gcc: error: unrecognized command line option '-mbacktrace'; did you mean '-fbacktrace'?
-make[2]: *** [scripts/mod/empty.o] Error 1
-make[1]: *** [prepare0] Error 2
-make: *** [sub-make] Error 2
+commit 063833a6ec
+Merge: d634fc0499 bcf9e2c2f2
+Author: Peter Maydell <peter.maydell@linaro.org>
+Date:   Thu Oct 19 18:42:51 2017 +0100
 
-when trying to build csky images with upstream gcc 9.3.0.
+    Merge remote-tracking branch 'remotes/mcayland/tags/qemu-sparc-signed' into staging
 
-What version of gcc is needed to build csky images ? Also, would it be
-possible to support the upstream version of gcc ?
+hangs, d634fc0499 works, bcf9e2c2f2 hangs.
 
-Thanks,
-Guenter
+I hadn't looked into details (the branch itself is only two commits long, but it
+incorporates an openbios update - 35 commits there, some obviously pci- and
+sun4u-related), but it's really easy to reproduce - -m 1024 and -hda <image>
+are probably the only relevant arguments.  Even dd if=/dev/sda of=/dev/null bs=64m
+is often enough to hang it, so I rather doubt that networking (e1000 on pciB,
+FWIW, with tap for backend) has anything to do with that.
