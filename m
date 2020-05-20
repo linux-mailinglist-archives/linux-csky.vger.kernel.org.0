@@ -2,29 +2,29 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 453F91DA99B
-	for <lists+linux-csky@lfdr.de>; Wed, 20 May 2020 07:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79BB1DA9B3
+	for <lists+linux-csky@lfdr.de>; Wed, 20 May 2020 07:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726503AbgETFCg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 20 May 2020 01:02:36 -0400
-Received: from mga07.intel.com ([134.134.136.100]:49153 "EHLO mga07.intel.com"
+        id S1726688AbgETFNR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 20 May 2020 01:13:17 -0400
+Received: from mga02.intel.com ([134.134.136.20]:41182 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726439AbgETFCg (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 20 May 2020 01:02:36 -0400
-IronPort-SDR: tBzu7XWPPHectZh84+boP5KQkGvCLVkR7x2son4wGIc2YQhj97AI3FrnJWKRmT+S6irIdN/nvJ
- JzY57JSw0T1Q==
+        id S1726403AbgETFNR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 20 May 2020 01:13:17 -0400
+IronPort-SDR: /hKXzLxNFCTuoIpY3eoyY6djwEqBYaj8/JIMHNudlPFsyorwdXViLeje7Ke4GlgFZ8Jw7nD69l
+ 6iQroEJ5VxmQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 22:02:35 -0700
-IronPort-SDR: 5mdOya4YqlgSTKO3c+IE0Bjj3/zITTGmWtyJGGPQcID/7L0ymDI6FfjftlmZFv5htpsyDfUzlC
- eVvrVdKIk9ig==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 22:13:16 -0700
+IronPort-SDR: WmoC4hUYiR7JNn8619hAjjYz7TWT9psqQxnwh045tX7/jT/bvy1RfqxhT5OjjfSF9i1OiaMvS+
+ nDNlwL0DIiCg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,412,1583222400"; 
-   d="scan'208";a="439885922"
+   d="scan'208";a="264557290"
 Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga005.jf.intel.com with ESMTP; 19 May 2020 22:02:34 -0700
-Date:   Tue, 19 May 2020 22:02:34 -0700
+  by orsmga003.jf.intel.com with ESMTP; 19 May 2020 22:13:16 -0700
+Date:   Tue, 19 May 2020 22:13:16 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org,
@@ -54,7 +54,7 @@ Cc:     linux-kernel@vger.kernel.org,
         Christoph Hellwig <hch@lst.de>
 Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
  pagefault/preempt twice
-Message-ID: <20200520050233.GB3470571@iweiny-DESK2.sc.intel.com>
+Message-ID: <20200520051315.GA3660833@iweiny-DESK2.sc.intel.com>
 References: <20200507150004.1423069-8-ira.weiny@intel.com>
  <20200518184843.3029640-1-ira.weiny@intel.com>
  <20200519165422.GA5838@roeck-us.net>
@@ -118,19 +118,23 @@ On Tue, May 19, 2020 at 12:42:15PM -0700, Guenter Roeck wrote:
 > > > ret_from_kernel_thread+0xc/0x38 ]
 > > > [00000000 :
 > > > 0x0 ]
-
-I'm really not seeing how this is related to the kmap clean up.
-
-But just to make sure I'm trying to run your environment for sparc and having
-less luck than with microblaze.
-
-Could you give me the command which is failing above?
-
-Ira
-
 > > > 
 > > > Code path leading to that message is different but always the same
 > > > from free_unref_page().
+
+Actually it occurs to me that the patch consolidating kmap_prot is odd for
+sparc 32 bit...
+
+Its a long shot but could you try reverting this patch?
+
+4ea7d2419e3f kmap: consolidate kmap_prot definitions
+
+Alternately I will need to figure out how to run the sparc on qemu here...
+
+Thanks very much for all the testing though!  :-D
+
+Ira
+
 > > > 
 > > > Still testing ppc images.
 > > > 
