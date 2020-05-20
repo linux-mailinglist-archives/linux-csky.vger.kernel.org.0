@@ -2,143 +2,105 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E79BB1DA9B3
-	for <lists+linux-csky@lfdr.de>; Wed, 20 May 2020 07:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 821801DAC92
+	for <lists+linux-csky@lfdr.de>; Wed, 20 May 2020 09:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726688AbgETFNR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 20 May 2020 01:13:17 -0400
-Received: from mga02.intel.com ([134.134.136.20]:41182 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726403AbgETFNR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 20 May 2020 01:13:17 -0400
-IronPort-SDR: /hKXzLxNFCTuoIpY3eoyY6djwEqBYaj8/JIMHNudlPFsyorwdXViLeje7Ke4GlgFZ8Jw7nD69l
- 6iQroEJ5VxmQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 22:13:16 -0700
-IronPort-SDR: WmoC4hUYiR7JNn8619hAjjYz7TWT9psqQxnwh045tX7/jT/bvy1RfqxhT5OjjfSF9i1OiaMvS+
- nDNlwL0DIiCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,412,1583222400"; 
-   d="scan'208";a="264557290"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga003.jf.intel.com with ESMTP; 19 May 2020 22:13:16 -0700
-Date:   Tue, 19 May 2020 22:13:16 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
- pagefault/preempt twice
-Message-ID: <20200520051315.GA3660833@iweiny-DESK2.sc.intel.com>
-References: <20200507150004.1423069-8-ira.weiny@intel.com>
- <20200518184843.3029640-1-ira.weiny@intel.com>
- <20200519165422.GA5838@roeck-us.net>
- <20200519184031.GB3356843@iweiny-DESK2.sc.intel.com>
- <20200519194215.GA71941@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200519194215.GA71941@roeck-us.net>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+        id S1726436AbgETHur convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-csky@lfdr.de>); Wed, 20 May 2020 03:50:47 -0400
+Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:37109 "EHLO
+        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726403AbgETHur (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 20 May 2020 03:50:47 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.03739544|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.00791156-0.00127422-0.990814;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07447;MF=ren_guo@c-sky.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.Hb479ug_1589961042;
+Received: from 192.168.43.81(mailfrom:ren_guo@c-sky.com fp:SMTPD_---.Hb479ug_1589961042)
+          by smtp.aliyun-inc.com(10.147.44.145);
+          Wed, 20 May 2020 15:50:43 +0800
+Content-Type: text/plain;
+        charset=gb2312
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH] csky: Fixup calltrace panic
+From:   Guo Ren <ren_guo@c-sky.com>
+In-Reply-To: <20200517175220.GA48379@roeck-us.net>
+Date:   Wed, 20 May 2020 15:50:42 +0800
+Cc:     Guo Ren <guoren@linux.alibaba.com>, linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <D93AFA5B-3BF1-4E11-B278-22E980C3EE36@c-sky.com>
+References: <20200517175220.GA48379@roeck-us.net>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?gb2312?B?9sTPye21?= <xianmiao_qu@c-sky.com>,
+        =?gb2312?B?ydDUxrqj?= <yunhai_shang@c-sky.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, May 19, 2020 at 12:42:15PM -0700, Guenter Roeck wrote:
-> On Tue, May 19, 2020 at 11:40:32AM -0700, Ira Weiny wrote:
-> > On Tue, May 19, 2020 at 09:54:22AM -0700, Guenter Roeck wrote:
-> > > On Mon, May 18, 2020 at 11:48:43AM -0700, ira.weiny@intel.com wrote:
-> > > > From: Ira Weiny <ira.weiny@intel.com>
-> > > > 
-> > > > The kunmap_atomic clean up failed to remove one set of pagefault/preempt
-> > > > enables when vaddr is not in the fixmap.
-> > > > 
-> > > > Fixes: bee2128a09e6 ("arch/kunmap_atomic: consolidate duplicate code")
-> > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > microblazeel works with this patch,
-> > 
-> > Awesome...  Andrew in my rush yesterday I should have put a reported by on the
-> > patch for Guenter as well.
-> > 
-> > Sorry about that Guenter,
+Hi Guenter,
+
+> 在 2020年5月18日，上午1:52，Guenter Roeck <linux@roeck-us.net> 写道：
 > 
-> No worries.
+> Hi,
 > 
-> > Ira
-> > 
-> > > as do the nosmp sparc32 boot tests,
-> > > but sparc32 boot tests with SMP enabled still fail with lots of messages
-> > > such as:
-> > > 
-> > > BUG: Bad page state in process swapper/0  pfn:006a1
-> > > page:f0933420 refcount:0 mapcount:1 mapping:(ptrval) index:0x1
-> > > flags: 0x0()
-> > > raw: 00000000 00000100 00000122 00000000 00000001 00000000 00000000 00000000
-> > > page dumped because: nonzero mapcount
-> > > Modules linked in:
-> > > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G    B             5.7.0-rc6-next-20200518-00002-gb178d2d56f29 #1
-> > > [f00e7ab8 :
-> > > bad_page+0xa8/0x108 ]
-> > > [f00e8b54 :
-> > > free_pcppages_bulk+0x154/0x52c ]
-> > > [f00ea024 :
-> > > free_unref_page+0x54/0x6c ]
-> > > [f00ed864 :
-> > > free_reserved_area+0x58/0xec ]
-> > > [f0527104 :
-> > > kernel_init+0x14/0x110 ]
-> > > [f000b77c :
-> > > ret_from_kernel_thread+0xc/0x38 ]
-> > > [00000000 :
-> > > 0x0 ]
-> > > 
-> > > Code path leading to that message is different but always the same
-> > > from free_unref_page().
-
-Actually it occurs to me that the patch consolidating kmap_prot is odd for
-sparc 32 bit...
-
-Its a long shot but could you try reverting this patch?
-
-4ea7d2419e3f kmap: consolidate kmap_prot definitions
-
-Alternately I will need to figure out how to run the sparc on qemu here...
-
-Thanks very much for all the testing though!  :-D
-
-Ira
-
-> > > 
-> > > Still testing ppc images.
-> > > 
+> On Wed, May 13, 2020 at 03:15:25PM +0800, Guo Ren wrote:
+>> The implementation of show_stack will panic with wrong fp:
+>> 
+>> addr    = *fp++;
+>> 
+>> because the fp isn't checked properly.
+>> 
+>> The current implementations of show_stack, wchan and stack_trace
+>> haven't been designed properly, so just deprecate them.
+>> 
+>> This patch is a reference to riscv's way, all codes are modified from
+>> arm's. The patch is passed with:
+>> 
+>> - cat /proc/<pid>/stack
+>> - cat /proc/<pid>/wchan
+>> - echo c > /proc/sysrq-trigger
+>> 
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > 
-> ppc image tests are passing with this patch.
+> This patch results in:
 > 
+> gcc version: csky-linux-gcc (GCC) 9.3.0
+> 
+> Building csky:defconfig ... failed
+> --------------
+> Error log:
+> csky-linux-gcc: error: unrecognized command line option '-mbacktrace'; did you mean '-fbacktrace'?
+> csky-linux-gcc: error: unrecognized command line option '-mbacktrace'; did you mean '-fbacktrace'?
+> make[2]: *** [scripts/mod/devicetable-offsets.s] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> csky-linux-gcc: error: unrecognized command line option '-mbacktrace'; did you mean '-fbacktrace'?
+> make[2]: *** [scripts/mod/empty.o] Error 1
+> make[1]: *** [prepare0] Error 2
+> make: *** [sub-make] Error 2
+> 
+> when trying to build csky images with upstream gcc 9.3.0.
+> 
+> What version of gcc is needed to build csky images ? Also, would it be
+> possible to support the upstream version of gcc ?
+> 
+
+We tested it with https://github.com/c-sky/gcc (gcc-6.3)
+
+You can fast test with:
+
+
+ wget -nc https://gitlab.com/c-sky/buildroot/-/jobs/557072746/artifacts/raw/output/images/toolchain_thead_860_compat_next_glibc_br_defconfig_8f1b5cd7d85509fbafea935ec65c48add73bba07.tar.xz
+
+ mkdir -p host
+ tar -Jxf toolchain_thead_860_compat_next_glibc_br_defconfig_8f1b5cd7d85509fbafea935ec65c48add73bba07.tar.xz -C host
+
+ cd linux-xxx
+
+ LD_LIBRARY_PATH=../host/lib make ARCH=csky CROSS_COMPILE=../host/bin/csky-linux- Image
+
+
+We will upstream -mbacktrace to gcc.org
+
+> Thanks,
 > Guenter
+
