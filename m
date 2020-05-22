@@ -2,21 +2,21 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B47F1DDCA5
-	for <lists+linux-csky@lfdr.de>; Fri, 22 May 2020 03:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172D91DDCB6
+	for <lists+linux-csky@lfdr.de>; Fri, 22 May 2020 03:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbgEVBaI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 21 May 2020 21:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S1726860AbgEVBfa (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 May 2020 21:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726693AbgEVBaI (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 21 May 2020 21:30:08 -0400
+        with ESMTP id S1726335AbgEVBf3 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 21 May 2020 21:35:29 -0400
 Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79676C061A0E;
-        Thu, 21 May 2020 18:30:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C74C061A0E;
+        Thu, 21 May 2020 18:35:29 -0700 (PDT)
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.93 #3 (Red Hat Linux))
-        id 1jbwVS-00DFOA-8Y; Fri, 22 May 2020 01:29:50 +0000
-Date:   Fri, 22 May 2020 02:29:50 +0100
+        id 1jbwap-00DFUw-Lr; Fri, 22 May 2020 01:35:23 +0000
+Date:   Fri, 22 May 2020 02:35:23 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     ira.weiny@intel.com, linux-kernel@vger.kernel.org,
@@ -45,7 +45,7 @@ Cc:     ira.weiny@intel.com, linux-kernel@vger.kernel.org,
         Christoph Hellwig <hch@lst.de>
 Subject: Re: [PATCH] arch/{mips,sparc,microblaze,powerpc}: Don't enable
  pagefault/preempt twice
-Message-ID: <20200522012950.GN23230@ZenIV.linux.org.uk>
+Message-ID: <20200522013523.GO23230@ZenIV.linux.org.uk>
 References: <20200507150004.1423069-8-ira.weiny@intel.com>
  <20200518184843.3029640-1-ira.weiny@intel.com>
  <20200519165422.GA5838@roeck-us.net>
@@ -54,24 +54,29 @@ References: <20200507150004.1423069-8-ira.weiny@intel.com>
  <20200521224612.GJ23230@ZenIV.linux.org.uk>
  <20200522004618.GA3151350@ZenIV.linux.org.uk>
  <970857bd-bb56-7b2e-833e-ca74a82fa9b5@roeck-us.net>
+ <20200522012950.GN23230@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <970857bd-bb56-7b2e-833e-ca74a82fa9b5@roeck-us.net>
+In-Reply-To: <20200522012950.GN23230@ZenIV.linux.org.uk>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, May 21, 2020 at 06:11:08PM -0700, Guenter Roeck wrote:
-
-> Mainline, with:
+On Fri, May 22, 2020 at 02:29:50AM +0100, Al Viro wrote:
+> On Thu, May 21, 2020 at 06:11:08PM -0700, Guenter Roeck wrote:
 > 
-> qemu-system-sparc -M SS-4 -kernel arch/sparc/boot/zImage -no-reboot \
-> 	-snapshot -drive file=rootfs.ext2,format=raw,if=scsi \
-> 	-append "panic=-1 slub_debug=FZPUA root=/dev/sda console=ttyS0"
-> 	-nographic -monitor none
+> > Mainline, with:
+> > 
+> > qemu-system-sparc -M SS-4 -kernel arch/sparc/boot/zImage -no-reboot \
+> > 	-snapshot -drive file=rootfs.ext2,format=raw,if=scsi \
+> > 	-append "panic=-1 slub_debug=FZPUA root=/dev/sda console=ttyS0"
+> > 	-nographic -monitor none
+> > 
+> > The machine doesn't really matter, though.
 > 
-> The machine doesn't really matter, though.
+> It does, unfortunately - try that with SS-10 and watch what happens ;-/
 
-It does, unfortunately - try that with SS-10 and watch what happens ;-/
+Ugh...  It's actually something in -m handling: -m 256 passes, -m 512
+leads to that panic.
