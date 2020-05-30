@@ -2,54 +2,66 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B60871E6D43
-	for <lists+linux-csky@lfdr.de>; Thu, 28 May 2020 23:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3B41E9442
+	for <lists+linux-csky@lfdr.de>; Sun, 31 May 2020 00:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407552AbgE1VKE (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 28 May 2020 17:10:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34194 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407447AbgE1VKD (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 28 May 2020 17:10:03 -0400
-Subject: Re: [GIT PULL] csky updates for v5.7-rc8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590700202;
-        bh=T2+HwCQHSKE7JhR9JpyK4J6DSPlOl8xIs60MqGEHHUQ=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=In4loItZM0q6evR7Sy5WlU4nUkfyP/3sgYBR9fhXiRLJ6yEFw+c8me/lSEsExP+JR
-         Tv9sgaR9iWrWcwi6cVcwWxXB/Y7P8KOza/Lm4ihbILzoNcrmA2daNy71Qtn7IGAlc/
-         G1XbsdknFR6JaDwjOYOUTMGP4qPVXNa2oiOMjGLs=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1590627572-10100-1-git-send-email-guoren@kernel.org>
-References: <1590627572-10100-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1590627572-10100-1-git-send-email-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git
- tags/csky-for-linus-5.7-rc8
-X-PR-Tracked-Commit-Id: f36e0aab6f1f78d770ce859df3f07a9c5763ce5f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6b5f25909bb8a94a0c1d1c6e9530f8fc261d1b5d
-Message-Id: <159070020283.6784.9180466553239444193.pr-tracker-bot@kernel.org>
-Date:   Thu, 28 May 2020 21:10:02 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
+        id S1729465AbgE3Wcj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 30 May 2020 18:32:39 -0400
+Received: from invention.AFNIGHTS.net ([46.166.185.243]:42268 "EHLO
+        host.acceswealthservice.xyz" rhost-flags-OK-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1729376AbgE3Wcj (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 30 May 2020 18:32:39 -0400
+Received: from acceswealthservice.xyz (2t5j.w.time4vps.cloud [212.24.97.110])
+        by host.acceswealthservice.xyz (Postfix) with ESMTPA id C7B1FE938A
+        for <linux-csky@vger.kernel.org>; Sun, 31 May 2020 00:29:19 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.acceswealthservice.xyz C7B1FE938A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=acceswealthservice.xyz; s=default; t=1590877760;
+        bh=td/1klW8T5Eyprv/u3iSt1Uq3pUK6RiW9JQei4VLqgo=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=Mbs7HLmi0eaR/51svwguFSojMQ/kY3aHdYfQmvUuK46PqYBYz0MYtRK5ffxqrwGI3
+         PYV8o0dvHz0u3QRK3lWjXl7HcWtpcYMOFAlfUjRLMO3lyeqDWMis21m8SJj2z0gfGB
+         78DS4fchdKFb3blLK9uNu2DZ7orq0gtxFLOS+sjM=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.acceswealthservice.xyz C7B1FE938A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=acceswealthservice.xyz; s=default; t=1590877759;
+        bh=td/1klW8T5Eyprv/u3iSt1Uq3pUK6RiW9JQei4VLqgo=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=ny5u8Pmtfz3P05LIKosc5E4nPEttxJ1xrfmzFH37VRz7EouEWhWFcDQIidM5KnvQJ
+         UXDTJtJnR9Qq6w8Ms0Q/RC1RpDyLI2V021TjwNjCtIqb2CZePeaUEn+FtzKrvj5XT8
+         dxi43aGz3XbR/eyGFyMwfuU08KSfGgNd1EY/obao=
+Reply-To: deanj22@accesswealthservices.online
+From:   Dean <deanj00@acceswealthservice.xyz>
+To:     linux-csky@vger.kernel.org
+Subject: Investment
+Date:   31 May 2020 01:29:19 +0300
+Message-ID: <20200531012919.4F2920B96E77D541@acceswealthservice.xyz>
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The pull request you sent on Thu, 28 May 2020 08:59:32 +0800:
+Good evening. I am Dean Johnston, a broker working with Access=20
+Wealth Services. I am contacting you because one of my high=20
+profile clients is interested in investing abroad and has asked=20
+me to look for individuals and companies with interesting=20
+business ideas and companies that he can invest in. He wants to=20
+expand his portfolio and has interest in investing a substantial=20
+amount of asset abroad. I got your contact (along with other=20
+contacts) through an online business directory and I thought I'd=20
+contact you to see if you are interested in this opportunity.
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.7-rc8
+Please indicate your interest by replying back to this email.=20
+Once I get your response, I will give you more details and we can=20
+plan a strategy that will be beneficial to all parties.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6b5f25909bb8a94a0c1d1c6e9530f8fc261d1b5d
+Best regards
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+D Johnston
+Access Wealth Services
++27319400855
