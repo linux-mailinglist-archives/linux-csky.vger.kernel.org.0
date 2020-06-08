@@ -2,39 +2,40 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1D61F2C20
-	for <lists+linux-csky@lfdr.de>; Tue,  9 Jun 2020 02:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2391F2C0F
+	for <lists+linux-csky@lfdr.de>; Tue,  9 Jun 2020 02:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731516AbgFIAVH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 8 Jun 2020 20:21:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39930 "EHLO mail.kernel.org"
+        id S1730779AbgFIAUU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 8 Jun 2020 20:20:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730544AbgFHXRy (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:17:54 -0400
+        id S1730559AbgFHXSC (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:18:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE29D20885;
-        Mon,  8 Jun 2020 23:17:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 863AC2086A;
+        Mon,  8 Jun 2020 23:18:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658274;
-        bh=y+OpidB/SxRmVMvmFkNAKPuLpPMPNyxElUHB7xdoPvY=;
+        s=default; t=1591658281;
+        bh=qOxoZU27BS4ecyYbGhcESok/bly/SpCHfZfU+pixZLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mCRo8umAMj+7VdQgyUQgLZNPswDMgiEKceqTbZRT+kau0/1UxAv2rAsLYQkVcxzcs
-         7gJ9NWKJPVf9VpZPkGu4azrgh8o29SMnpFOwY7xQ55vSjsi+OkCLlvkPE7y4LYnzVn
-         U2NOWyYu+a0SPnIdgAOtlbFIRwl1ommnVIFm6spM=
+        b=l4fpoINBFGQH4PmX1uMtS6lEwXa/qyD71QQItmVw4fpoExHrtW8/zVTktatyUvAQz
+         85W6BTPFIkuyEi7Nd8oO00Tw4zYUUdlIBzYjxcy2Dwqn9Jz6Q787OvqH/xIF5hnhiF
+         1BTA0O+dK36AQku6ElcZTM4vLI47kExq487gBnrc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mao Han <han_mao@linux.alibaba.com>,
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Guo Ren <guoren@linux.alibaba.com>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 280/606] csky: Fixup perf callchain unwind
-Date:   Mon,  8 Jun 2020 19:06:45 -0400
-Message-Id: <20200608231211.3363633-280-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 286/606] csky: Fixup raw_copy_from_user()
+Date:   Mon,  8 Jun 2020 19:06:51 -0400
+Message-Id: <20200608231211.3363633-286-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -43,91 +44,232 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Mao Han <han_mao@linux.alibaba.com>
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-[ Upstream commit 229a0ddee1108a3f82a873e6cbbe35c92c540444 ]
+[ Upstream commit 51bb38cb78363fdad1f89e87357b7bc73e39ba88 ]
 
- [ 5221.974084] Unable to handle kernel paging request at virtual address 0xfffff000, pc: 0x8002c18e
- [ 5221.985929] Oops: 00000000
- [ 5221.989488]
- [ 5221.989488] CURRENT PROCESS:
- [ 5221.989488]
- [ 5221.992877] COMM=callchain_test PID=11962
- [ 5221.995213] TEXT=00008000-000087e0 DATA=00009f1c-0000a018 BSS=0000a018-0000b000
- [ 5221.999037] USER-STACK=7fc18e20  KERNEL-STACK=be204680
- [ 5221.999037]
- [ 5222.003292] PC: 0x8002c18e (perf_callchain_kernel+0x3e/0xd4)
- [ 5222.007957] LR: 0x8002c198 (perf_callchain_kernel+0x48/0xd4)
- [ 5222.074873] Call Trace:
- [ 5222.074873] [<800a248e>] get_perf_callchain+0x20a/0x29c
- [ 5222.074873] [<8009d964>] perf_callchain+0x64/0x80
- [ 5222.074873] [<8009dc1c>] perf_prepare_sample+0x29c/0x4b8
- [ 5222.074873] [<8009de6e>] perf_event_output_forward+0x36/0x98
- [ 5222.074873] [<800497e0>] search_exception_tables+0x20/0x44
- [ 5222.074873] [<8002cbb6>] do_page_fault+0x92/0x378
- [ 5222.074873] [<80098608>] __perf_event_overflow+0x54/0xdc
- [ 5222.074873] [<80098778>] perf_swevent_hrtimer+0xe8/0x164
- [ 5222.074873] [<8002ddd0>] update_mmu_cache+0x0/0xd8
- [ 5222.074873] [<8002c014>] user_backtrace+0x58/0xc4
- [ 5222.074873] [<8002c0b4>] perf_callchain_user+0x34/0xd0
- [ 5222.074873] [<800a2442>] get_perf_callchain+0x1be/0x29c
- [ 5222.074873] [<8009d964>] perf_callchain+0x64/0x80
- [ 5222.074873] [<8009d834>] perf_output_sample+0x78c/0x858
- [ 5222.074873] [<8009dc1c>] perf_prepare_sample+0x29c/0x4b8
- [ 5222.074873] [<8009de94>] perf_event_output_forward+0x5c/0x98
- [ 5222.097846]
- [ 5222.097846] [<800a0300>] perf_event_exit_task+0x58/0x43c
- [ 5222.097846] [<8006c874>] hrtimer_interrupt+0x104/0x2ec
- [ 5222.097846] [<800a0300>] perf_event_exit_task+0x58/0x43c
- [ 5222.097846] [<80437bb6>] dw_apb_clockevent_irq+0x2a/0x4c
- [ 5222.097846] [<8006c770>] hrtimer_interrupt+0x0/0x2ec
- [ 5222.097846] [<8005f2e4>] __handle_irq_event_percpu+0xac/0x19c
- [ 5222.097846] [<80437bb6>] dw_apb_clockevent_irq+0x2a/0x4c
- [ 5222.097846] [<8005f408>] handle_irq_event_percpu+0x34/0x88
- [ 5222.097846] [<8005f480>] handle_irq_event+0x24/0x64
- [ 5222.097846] [<8006218c>] handle_level_irq+0x68/0xdc
- [ 5222.097846] [<8005ec76>] __handle_domain_irq+0x56/0xa8
- [ 5222.097846] [<80450e90>] ck_irq_handler+0xac/0xe4
- [ 5222.097846] [<80029012>] csky_do_IRQ+0x12/0x24
- [ 5222.097846] [<8002a3a0>] csky_irq+0x70/0x80
- [ 5222.097846] [<800ca612>] alloc_set_pte+0xd2/0x238
- [ 5222.097846] [<8002ddd0>] update_mmu_cache+0x0/0xd8
- [ 5222.097846] [<800a0340>] perf_event_exit_task+0x98/0x43c
+If raw_copy_from_user(to, from, N) returns K, callers expect
+the first N - K bytes starting at to to have been replaced with
+the contents of corresponding area starting at from and the last
+K bytes of destination *left* *unmodified*.
 
-The original fp check doesn't base on the real kernal stack region.
-Invalid fp address may cause kernel panic.
+What arch/sky/lib/usercopy.c is doing is broken - it can lead to e.g.
+data corruption on write(2).
 
-Signed-off-by: Mao Han <han_mao@linux.alibaba.com>
+raw_copy_to_user() is inaccurate about return value, which is a bug,
+but consequences are less drastic than for raw_copy_from_user().
+And just what are those access_ok() doing in there?  I mean, look into
+linux/uaccess.h; that's where we do that check (as well as zero tail
+on failure in the callers that need zeroing).
+
+AFAICS, all of that shouldn't be hard to fix; something like a patch
+below might make a useful starting point.
+
+I would suggest moving these macros into usercopy.c (they are never
+used anywhere else) and possibly expanding them there; if you leave
+them alive, please at least rename __copy_user_zeroing(). Again,
+it must not zero anything on failed read.
+
+Said that, I'm not sure we won't be better off simply turning
+usercopy.c into usercopy.S - all that is left there is a couple of
+functions, each consisting only of inline asm.
+
+Guo Ren reply:
+
+Yes, raw_copy_from_user is wrong, it's no need zeroing code.
+
+unsigned long _copy_from_user(void *to, const void __user *from,
+unsigned long n)
+{
+        unsigned long res = n;
+        might_fault();
+        if (likely(access_ok(from, n))) {
+                kasan_check_write(to, n);
+                res = raw_copy_from_user(to, from, n);
+        }
+        if (unlikely(res))
+                memset(to + (n - res), 0, res);
+        return res;
+}
+EXPORT_SYMBOL(_copy_from_user);
+
+You are right and access_ok() should be removed.
+
+but, how about:
+do {
+...
+        "2:     stw     %3, (%1, 0)     \n"             \
++       "       subi    %0, 4          \n"               \
+        "9:     stw     %4, (%1, 4)     \n"             \
++       "       subi    %0, 4          \n"               \
+        "10:    stw     %5, (%1, 8)     \n"             \
++       "       subi    %0, 4          \n"               \
+        "11:    stw     %6, (%1, 12)    \n"             \
++       "       subi    %0, 4          \n"               \
+        "       addi    %2, 16          \n"             \
+        "       addi    %1, 16          \n"             \
+
+Don't expand __ex_table
+
+AI Viro reply:
+
+Hey, I've no idea about the instruction scheduling on csky -
+if that doesn't slow the things down, all the better.  It's just
+that copy_to_user() and friends are on fairly hot codepaths,
+and in quite a few situations they will dominate the speed of
+e.g. read(2).  So I tried to keep the fast path unchanged.
+Up to the architecture maintainers, obviously.  Which would be
+you...
+
+As for the fixups size increase (__ex_table size is unchanged)...
+You have each of those macros expanded exactly once.
+So the size is not a serious argument, IMO - useless complexity
+would be, if it is, in fact, useless; the size... not really,
+especially since those extra subi will at least offset it.
+
+Again, up to you - asm optimizations of (essentially)
+memcpy()-style loops are tricky and can depend upon the
+fairly subtle details of architecture.  So even on something
+I know reasonably well I would resort to direct experiments
+if I can't pass the buck to architecture maintainers.
+
+It *is* worth optimizing - this is where read() from a file
+that is already in page cache spends most of the time, etc.
+
+Guo Ren reply:
+
+Thx, after fixup some typo “sub %0, 4”, apply the patch.
+
+TODO:
+ - user copy/from codes are still need optimizing.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/csky/kernel/perf_callchain.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/csky/include/asm/uaccess.h | 49 +++++++++++++++++----------------
+ arch/csky/lib/usercopy.c        |  8 ++----
+ 2 files changed, 28 insertions(+), 29 deletions(-)
 
-diff --git a/arch/csky/kernel/perf_callchain.c b/arch/csky/kernel/perf_callchain.c
-index e68ff375c8f8..ab55e98ee8f6 100644
---- a/arch/csky/kernel/perf_callchain.c
-+++ b/arch/csky/kernel/perf_callchain.c
-@@ -12,12 +12,17 @@ struct stackframe {
+diff --git a/arch/csky/include/asm/uaccess.h b/arch/csky/include/asm/uaccess.h
+index eaa1c3403a42..60f8a4112588 100644
+--- a/arch/csky/include/asm/uaccess.h
++++ b/arch/csky/include/asm/uaccess.h
+@@ -254,7 +254,7 @@ do {								\
  
- static int unwind_frame_kernel(struct stackframe *frame)
+ extern int __get_user_bad(void);
+ 
+-#define __copy_user(to, from, n)			\
++#define ___copy_to_user(to, from, n)			\
+ do {							\
+ 	int w0, w1, w2, w3;				\
+ 	asm volatile(					\
+@@ -289,31 +289,34 @@ do {							\
+ 	"       subi    %0, 4           \n"		\
+ 	"       br      3b              \n"		\
+ 	"5:     cmpnei  %0, 0           \n"  /* 1B */   \
+-	"       bf      8f              \n"		\
++	"       bf      13f             \n"		\
+ 	"       ldb     %3, (%2, 0)     \n"		\
+ 	"6:     stb     %3, (%1, 0)     \n"		\
+ 	"       addi    %2,  1          \n"		\
+ 	"       addi    %1,  1          \n"		\
+ 	"       subi    %0,  1          \n"		\
+ 	"       br      5b              \n"		\
+-	"7:     br      8f              \n"		\
++	"7:     subi	%0,  4          \n"		\
++	"8:     subi	%0,  4          \n"		\
++	"12:    subi	%0,  4          \n"		\
++	"       br      13f             \n"		\
+ 	".section __ex_table, \"a\"     \n"		\
+ 	".align   2                     \n"		\
+-	".long    2b, 7b                \n"		\
+-	".long    9b, 7b                \n"		\
+-	".long   10b, 7b                \n"		\
++	".long    2b, 13f               \n"		\
++	".long    4b, 13f               \n"		\
++	".long    6b, 13f               \n"		\
++	".long    9b, 12b               \n"		\
++	".long   10b, 8b                \n"		\
+ 	".long   11b, 7b                \n"		\
+-	".long    4b, 7b                \n"		\
+-	".long    6b, 7b                \n"		\
+ 	".previous                      \n"		\
+-	"8:                             \n"		\
++	"13:                            \n"		\
+ 	: "=r"(n), "=r"(to), "=r"(from), "=r"(w0),	\
+ 	  "=r"(w1), "=r"(w2), "=r"(w3)			\
+ 	: "0"(n), "1"(to), "2"(from)			\
+ 	: "memory");					\
+ } while (0)
+ 
+-#define __copy_user_zeroing(to, from, n)		\
++#define ___copy_from_user(to, from, n)			\
+ do {							\
+ 	int tmp;					\
+ 	int nsave;					\
+@@ -356,22 +359,22 @@ do {							\
+ 	"       addi    %1,  1          \n"		\
+ 	"       subi    %0,  1          \n"		\
+ 	"       br      5b              \n"		\
+-	"8:     mov     %3, %0          \n"		\
+-	"       movi    %4, 0           \n"		\
+-	"9:     stb     %4, (%1, 0)     \n"		\
+-	"       addi    %1, 1           \n"		\
+-	"       subi    %3, 1           \n"		\
+-	"       cmpnei  %3, 0           \n"		\
+-	"       bt      9b              \n"		\
+-	"       br      7f              \n"		\
++	"8:     stw     %3, (%1, 0)     \n"		\
++	"       subi    %0, 4           \n"		\
++	"       bf      7f              \n"		\
++	"9:     subi    %0, 8           \n"		\
++	"       bf      7f              \n"		\
++	"13:    stw     %3, (%1, 8)     \n"		\
++	"       subi    %0, 12          \n"		\
++	"       bf      7f              \n"		\
+ 	".section __ex_table, \"a\"     \n"		\
+ 	".align   2                     \n"		\
+-	".long    2b, 8b                \n"		\
++	".long    2b, 7f                \n"		\
++	".long    4b, 7f                \n"		\
++	".long    6b, 7f                \n"		\
+ 	".long   10b, 8b                \n"		\
+-	".long   11b, 8b                \n"		\
+-	".long   12b, 8b                \n"		\
+-	".long    4b, 8b                \n"		\
+-	".long    6b, 8b                \n"		\
++	".long   11b, 9b                \n"		\
++	".long   12b,13b                \n"		\
+ 	".previous                      \n"		\
+ 	"7:                             \n"		\
+ 	: "=r"(n), "=r"(to), "=r"(from), "=r"(nsave),	\
+diff --git a/arch/csky/lib/usercopy.c b/arch/csky/lib/usercopy.c
+index 647a23986fb5..3c9bd645e643 100644
+--- a/arch/csky/lib/usercopy.c
++++ b/arch/csky/lib/usercopy.c
+@@ -7,10 +7,7 @@
+ unsigned long raw_copy_from_user(void *to, const void *from,
+ 			unsigned long n)
  {
--	if (kstack_end((void *)frame->fp))
-+	unsigned long low = (unsigned long)task_stack_page(current);
-+	unsigned long high = low + THREAD_SIZE;
-+
-+	if (unlikely(frame->fp < low || frame->fp > high))
- 		return -EPERM;
--	if (frame->fp & 0x3 || frame->fp < TASK_SIZE)
-+
-+	if (kstack_end((void *)frame->fp) || frame->fp & 0x3)
- 		return -EPERM;
- 
- 	*frame = *(struct stackframe *)frame->fp;
-+
- 	if (__kernel_text_address(frame->lr)) {
- 		int graph = 0;
- 
+-	if (access_ok(from, n))
+-		__copy_user_zeroing(to, from, n);
+-	else
+-		memset(to, 0, n);
++	___copy_from_user(to, from, n);
+ 	return n;
+ }
+ EXPORT_SYMBOL(raw_copy_from_user);
+@@ -18,8 +15,7 @@ EXPORT_SYMBOL(raw_copy_from_user);
+ unsigned long raw_copy_to_user(void *to, const void *from,
+ 			unsigned long n)
+ {
+-	if (access_ok(to, n))
+-		__copy_user(to, from, n);
++	___copy_to_user(to, from, n);
+ 	return n;
+ }
+ EXPORT_SYMBOL(raw_copy_to_user);
 -- 
 2.25.1
 
