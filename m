@@ -2,37 +2,38 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EAF1EF7DD
-	for <lists+linux-csky@lfdr.de>; Fri,  5 Jun 2020 14:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB4B1F23EF
+	for <lists+linux-csky@lfdr.de>; Tue,  9 Jun 2020 01:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgFEMZf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 5 Jun 2020 08:25:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
+        id S1730551AbgFHXR4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 8 Jun 2020 19:17:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726769AbgFEMZc (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 5 Jun 2020 08:25:32 -0400
+        id S1730531AbgFHXRz (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:17:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 00513207F9;
-        Fri,  5 Jun 2020 12:25:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA64920823;
+        Mon,  8 Jun 2020 23:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591359931;
-        bh=KBOFYH+yltsllB5kxgRuQLTpngYArcwUB4vOgu0wmTM=;
+        s=default; t=1591658275;
+        bh=h18zp+cWiinCTN71tzoeaw/HPvo6f+dnoFyWsFESrDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r/TvWrfQXggN+n/l47/+usHPqC0X+3ROFUhn/QmsmBHg1B7tVRn8k6cA3v+cWfGM1
-         kjQ77GQWtF8Qh92tnjp5ZYsmOsDkZtcVU4RtNMCICl+/aM8rCTRnRxSj/s5fDJPDOf
-         elLYLmqvzidjM+qpNpp6W7ytJiCQ3Z53pQ0nx8Ag=
+        b=UgL2xKhtFF2Ltst7i+X8FWeBsf5MdbxSOMphnCekrmLLyqI4Xj8WnNcdePqrlUsUm
+         sr+wrCLVC1GRlUh7Evq7dl/793TQvyZ2/AI+IBW+rNKbjLDHQsM/TB07C2cguerN8x
+         zkvEqSLFcFHNv8RJBunnw6P50NsUo68rdxleDZ8g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Guo Ren <guoren@linux.alibaba.com>,
+Cc:     Liu Yibin <jiulong@linux.alibaba.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 11/17] csky: Fixup abiv2 syscall_trace break a4 & a5
-Date:   Fri,  5 Jun 2020 08:25:10 -0400
-Message-Id: <20200605122517.2882338-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 281/606] csky: Fixup remove duplicate irq_disable
+Date:   Mon,  8 Jun 2020 19:06:46 -0400
+Message-Id: <20200608231211.3363633-281-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200605122517.2882338-1-sashal@kernel.org>
-References: <20200605122517.2882338-1-sashal@kernel.org>
+In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
+References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,50 +43,34 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Liu Yibin <jiulong@linux.alibaba.com>
 
-[ Upstream commit e0bbb53843b5fdfe464b099217e3b9d97e8a75d7 ]
+[ Upstream commit 6633a5aa8eb6bda70eb3a9837efd28a67ccc6e0a ]
 
-Current implementation could destory a4 & a5 when strace, so we need to get them
-from pt_regs by SAVE_ALL.
+Interrupt has been disabled in __schedule() with local_irq_disable()
+and enabled in finish_task_switch->finish_lock_switch() with
+local_irq_enabled(), So needn't to disable irq here.
 
+Signed-off-by: Liu Yibin <jiulong@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/csky/abiv2/inc/abi/entry.h | 2 ++
- arch/csky/kernel/entry.S        | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ arch/csky/kernel/entry.S | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/csky/abiv2/inc/abi/entry.h b/arch/csky/abiv2/inc/abi/entry.h
-index 9023828ede97..ac8f65a3e75a 100644
---- a/arch/csky/abiv2/inc/abi/entry.h
-+++ b/arch/csky/abiv2/inc/abi/entry.h
-@@ -13,6 +13,8 @@
- #define LSAVE_A1	28
- #define LSAVE_A2	32
- #define LSAVE_A3	36
-+#define LSAVE_A4	40
-+#define LSAVE_A5	44
- 
- #define KSPTOUSP
- #define USPTOKSP
 diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-index 9718388448a4..ff908d28f0a0 100644
+index 007706328000..9718388448a4 100644
 --- a/arch/csky/kernel/entry.S
 +++ b/arch/csky/kernel/entry.S
-@@ -170,8 +170,10 @@ csky_syscall_trace:
- 	ldw	a3, (sp, LSAVE_A3)
- #if defined(__CSKYABIV2__)
- 	subi	sp, 8
--	stw	r5, (sp, 0x4)
--	stw	r4, (sp, 0x0)
-+	ldw	r9, (sp, LSAVE_A4)
-+	stw	r9, (sp, 0x0)
-+	ldw	r9, (sp, LSAVE_A5)
-+	stw	r9, (sp, 0x4)
- #else
- 	ldw	r6, (sp, LSAVE_A4)
- 	ldw	r7, (sp, LSAVE_A5)
+@@ -318,8 +318,6 @@ ENTRY(__switch_to)
+ 
+ 	mfcr	a2, psr			/* Save PSR value */
+ 	stw	a2, (a3, THREAD_SR)	/* Save PSR in task struct */
+-	bclri	a2, 6			/* Disable interrupts */
+-	mtcr	a2, psr
+ 
+ 	SAVE_SWITCH_STACK
+ 
 -- 
 2.25.1
 
