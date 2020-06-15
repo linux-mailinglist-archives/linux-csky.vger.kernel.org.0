@@ -2,106 +2,117 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EED0C1F91FA
-	for <lists+linux-csky@lfdr.de>; Mon, 15 Jun 2020 10:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56F11FA359
+	for <lists+linux-csky@lfdr.de>; Tue, 16 Jun 2020 00:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729193AbgFOInX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 15 Jun 2020 04:43:23 -0400
-Received: from sym2.noone.org ([178.63.92.236]:60434 "EHLO sym2.noone.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728852AbgFOInW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 15 Jun 2020 04:43:22 -0400
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 49llGX11CLzvjc1; Mon, 15 Jun 2020 10:43:15 +0200 (CEST)
-Date:   Mon, 15 Jun 2020 10:43:15 +0200
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Mao Han <han_mao@c-sky.com>, linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] csky: remove unusued thread_saved_pc and *_segments
- functions/macros
-Message-ID: <20200615084314.rwabrkyy7wwgwdxc@distanz.ch>
-References: <20200610153935.13794-1-tklauser@distanz.ch>
- <CAJF2gTRGVQcn5Hu+kaHfzhEpyXuMkQQYyfHkuxREYci4QJ0SoQ@mail.gmail.com>
+        id S1726559AbgFOWQc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 15 Jun 2020 18:16:32 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:44087 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726536AbgFOWQ0 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 15 Jun 2020 18:16:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592259385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KFBAGoH4m4vLgkLo1O4lKDrZPfxmEHOi/brzsSjZMGQ=;
+        b=hU4i1nePOwFBStQUl8UPBSFYz244BjLzX1JV390hJ/h9pz0DpN+iYQxkwWH8B96U82wjXc
+        0yf/nfd3m0MlBvb5VyIP8WNv9M7mKADblcaRS5OUDXqJ5bQgq364lN93dT2awcYU2oz3yw
+        1cYnZOeFN0mSDtHaGUj0IOHwwC7YNUY=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-149-tWK9OQ39M6CiN7I7GQ9Xqw-1; Mon, 15 Jun 2020 18:16:22 -0400
+X-MC-Unique: tWK9OQ39M6CiN7I7GQ9Xqw-1
+Received: by mail-qv1-f71.google.com with SMTP id s15so14098148qvo.6
+        for <linux-csky@vger.kernel.org>; Mon, 15 Jun 2020 15:16:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KFBAGoH4m4vLgkLo1O4lKDrZPfxmEHOi/brzsSjZMGQ=;
+        b=XyZhyURv+sgbi7QZPC3D0BgjtnO+AjpK0fWea5U1bVxBs3eicE/WvwD4fKWF0EgZkR
+         8254JbR9N0JXGSR6Ky9MxuJO2tJy+uru2Bni00qmIibnq+yV79PlyCTXZXbjdnBwm8fa
+         2tPWt9iqRtJeFhyYMX8vbHFBAsFq4CbqT8jp7bw2jDlVu6MzCiZFk29YMcRsoUrafpg6
+         p9R29yfD/wShsuROuq0HGYcpyDrOWUamuzs9QWQ5qh9hOjfmHlbH5qieGcaQWbwBtCaa
+         VfwMndrOFlUMiISNtnLaWENpEllQ4EPeCqWF6ZTG/oaJW/EJo2UGwOaxfzB9RDFB1hsV
+         5mtw==
+X-Gm-Message-State: AOAM531AJrvR2yPhg5A3S0t8DFo1/f4iZ+G2ZnzEl+p5TBGzr0GuBlrN
+        /jldv2ExlQwHIScJ9j5ermu3Agkyqlo/3cbXvYsTAVrk6NnmdrY73bTjzTXAfkVpGTlTas0TH/0
+        Ls5O/Rez0Q9JP0zaOksDJQw==
+X-Received: by 2002:ac8:768b:: with SMTP id g11mr18907573qtr.249.1592259381884;
+        Mon, 15 Jun 2020 15:16:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyj2u8zUEq1AVaqIVlLmmoPxXksMKXvCW3j5Sj2WjcowIx7CNdGCFxksv3E2wEYY6My624aug==
+X-Received: by 2002:ac8:768b:: with SMTP id g11mr18907553qtr.249.1592259381676;
+        Mon, 15 Jun 2020 15:16:21 -0700 (PDT)
+Received: from xz-x1.hitronhub.home ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id w13sm12351509qkb.91.2020.06.15.15.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2020 15:16:21 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Subject: [PATCH 07/25] mm/csky: Use mm_fault_accounting()
+Date:   Mon, 15 Jun 2020 18:15:49 -0400
+Message-Id: <20200615221607.7764-8-peterx@redhat.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200615221607.7764-1-peterx@redhat.com>
+References: <20200615221607.7764-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTRGVQcn5Hu+kaHfzhEpyXuMkQQYyfHkuxREYci4QJ0SoQ@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 2020-06-13 at 10:42:07 +0200, Guo Ren <guoren@kernel.org> wrote:
-> Acked-by: Guo Ren <guoren@kernel.org>
+Use the new mm_fault_accounting() helper for page fault accounting.
+Also, move the accounting to be after release of mmap_sem.
 
-Thanks for the Ack. Are you taking this patch through your own tree or
-should I directly submit to someone else?
+CC: Guo Ren <guoren@kernel.org>
+CC: linux-csky@vger.kernel.org
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ arch/csky/mm/fault.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
 
-> On Wed, Jun 10, 2020 at 11:45 PM Tobias Klauser <tklauser@distanz.ch> wrote:
-> >
-> > These are used nowhere in the tree (except for some architectures which
-> > define them for their own use) and were already removed for other
-> > architectures in:
-> >
-> > commit 6474924e2b5d ("arch: remove unused macro/function thread_saved_pc()")
-> > commit c17c02040bf0 ("arch: remove unused *_segments() macros/functions")
-> >
-> > Remove them from arch/csky as well.
-> >
-> > Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-> > ---
-> >  arch/csky/include/asm/processor.h |  6 ------
-> >  arch/csky/kernel/process.c        | 10 ----------
-> >  2 files changed, 16 deletions(-)
-> >
-> > diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
-> > index 24442d8e86f9..4800f6563abb 100644
-> > --- a/arch/csky/include/asm/processor.h
-> > +++ b/arch/csky/include/asm/processor.h
-> > @@ -82,12 +82,6 @@ static inline void release_thread(struct task_struct *dead_task)
-> >
-> >  extern int kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
-> >
-> > -#define copy_segments(tsk, mm)         do { } while (0)
-> > -#define release_segments(mm)           do { } while (0)
-> > -#define forget_segments()              do { } while (0)
-> > -
-> > -extern unsigned long thread_saved_pc(struct task_struct *tsk);
-> > -
-> >  unsigned long get_wchan(struct task_struct *p);
-> >
-> >  #define KSTK_EIP(tsk)          (task_pt_regs(tsk)->pc)
-> > diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-> > index 8b3fad062ab2..3da63cf0bfde 100644
-> > --- a/arch/csky/kernel/process.c
-> > +++ b/arch/csky/kernel/process.c
-> > @@ -30,16 +30,6 @@ asmlinkage void ret_from_kernel_thread(void);
-> >   */
-> >  void flush_thread(void){}
-> >
-> > -/*
-> > - * Return saved PC from a blocked thread
-> > - */
-> > -unsigned long thread_saved_pc(struct task_struct *tsk)
-> > -{
-> > -       struct switch_stack *sw = (struct switch_stack *)tsk->thread.sp;
-> > -
-> > -       return sw->r15;
-> > -}
-> > -
-> >  int copy_thread_tls(unsigned long clone_flags,
-> >                 unsigned long usp,
-> >                 unsigned long kthread_arg,
-> > --
-> > 2.27.0
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
-> 
+diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+index 4e6dc68f3258..8f8d34d27eca 100644
+--- a/arch/csky/mm/fault.c
++++ b/arch/csky/mm/fault.c
+@@ -111,8 +111,6 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 		return;
+ 	}
+ #endif
+-
+-	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+ 	/*
+ 	 * If we're in an interrupt or have no user
+ 	 * context, we must not take the fault..
+@@ -160,17 +158,8 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 			goto bad_area;
+ 		BUG();
+ 	}
+-	if (fault & VM_FAULT_MAJOR) {
+-		tsk->maj_flt++;
+-		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1, regs,
+-			      address);
+-	} else {
+-		tsk->min_flt++;
+-		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1, regs,
+-			      address);
+-	}
+-
+ 	up_read(&mm->mmap_sem);
++	mm_fault_accounting(tsk, regs, address, fault & VM_FAULT_MAJOR);
+ 	return;
+ 
+ 	/*
+-- 
+2.26.2
+
