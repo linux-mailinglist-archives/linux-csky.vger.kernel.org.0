@@ -2,129 +2,89 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A301FFE27
-	for <lists+linux-csky@lfdr.de>; Fri, 19 Jun 2020 00:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CD21FFE65
+	for <lists+linux-csky@lfdr.de>; Fri, 19 Jun 2020 01:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732411AbgFRW2n (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 18 Jun 2020 18:28:43 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:54134 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728416AbgFRW2m (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 18 Jun 2020 18:28:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592519319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8+pq5KNQ7cig8DZxEE8yz2Racz4jPXVsBdHBmYL2X34=;
-        b=DWUGqFzio+g08B96rqbYGu5tj2H2jvd7sDd/QcCGoWTZq6fVaFPtGTG/ZtZFkKEsEbEXny
-        OmGObvRjU3JAKYMCpUtwCbUAY2xd4Cv842c3KvEuQeTHGQsKbSDp3pShxeuJNtglW1z1rH
-        hOAoLRwh69iMwfFpzAwgB+fztkQBu3w=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-241-z4xMlbB8N0mKXSRyyVHwYg-1; Thu, 18 Jun 2020 18:28:38 -0400
-X-MC-Unique: z4xMlbB8N0mKXSRyyVHwYg-1
-Received: by mail-qt1-f200.google.com with SMTP id y5so5604854qtd.0
-        for <linux-csky@vger.kernel.org>; Thu, 18 Jun 2020 15:28:38 -0700 (PDT)
+        id S1729080AbgFRXAG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 18 Jun 2020 19:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726282AbgFRXAF (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 18 Jun 2020 19:00:05 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E1EC06174E
+        for <linux-csky@vger.kernel.org>; Thu, 18 Jun 2020 16:00:03 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id n24so9249524lji.10
+        for <linux-csky@vger.kernel.org>; Thu, 18 Jun 2020 16:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mPOiXGmVSJpnt+xtTiccAHXdSsoJkhvb/Wx3zcpBM1U=;
+        b=PpDfYxcfStgK5uFhhyAFqUOqliV/bM94+itgR4KusvVnQbmktflqDFig8LU+VmfT8U
+         Wp9ysSIcGje8X8t9l5wJHf1wL+pR3P1TqV9pMqozOt4rhHL1M31E1MehT9W8Vtcn4aBE
+         eyTJqLmTx6caiIk7i8ez/5cGcDUmrpdauZssg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=8+pq5KNQ7cig8DZxEE8yz2Racz4jPXVsBdHBmYL2X34=;
-        b=BvVXEY0NBzkNcZx8RJYdTm5DbVZq84WqffWYOcaT1pNbPr8MHaGSbgAt4mmZgeEJvV
-         TxWAnL/xq1v3sUA1gVdyCS4a6dORDaQ9rd4tPPVyLbtXMG/QpNlFh5KylJNH5RdtGZ9p
-         v9E7uMnkeahItlMZ9x81bBp225svtrCSvWQNRyCAMV3MJD6N4EsfH6IkOVD5jCW0Zoyt
-         mRMaA7BY2LF2kdDa0itSuHSsKutsGQFMpc8C74LvyVGVIsy1Ef3qcxmRKXhhgaQeBbKQ
-         MEbdW3pxEFRBDJ/+Qi+unOiChZ0UblBVsSWHMFjFuEsfnq5XC/72pFTTuT9FhW9XJyIp
-         Aizg==
-X-Gm-Message-State: AOAM530Mph/8akwGX7641cSWgfLfNzG2Ta2Qu55utjc0TTmuN4iw48cU
-        SIYCNOIszDHtE9b1pYminXPfhESkKCzEIoBnWDLd6TReNGWmu+zKwoUMMhfQPuK5BhhYm9rr547
-        p7AA8715lPt0VpyY7S3OhHQ==
-X-Received: by 2002:a0c:f78b:: with SMTP id s11mr6011562qvn.33.1592519317215;
-        Thu, 18 Jun 2020 15:28:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxbmu34+M16SgAS5U4xG/Drwrjpe5fqjxcuGoBXwT4tgVhl9fkHXVY+rIkocOe/GKWJxylauA==
-X-Received: by 2002:a0c:f78b:: with SMTP id s11mr6011543qvn.33.1592519316979;
-        Thu, 18 Jun 2020 15:28:36 -0700 (PDT)
-Received: from xz-x1 ([2607:9880:19c0:32::2])
-        by smtp.gmail.com with ESMTPSA id f3sm4003549qta.44.2020.06.18.15.28.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 15:28:36 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 18:28:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mPOiXGmVSJpnt+xtTiccAHXdSsoJkhvb/Wx3zcpBM1U=;
+        b=jzDsni6evmavkNf7GBV2Ixij2NffdWPvCkSXiyAK7dlL35UV8wGCm3l6Q9bSCh8BmA
+         /wdYnO/sp2IwQ5YzHMB3qGD879a5LuGj4uWruW0wSxegofgmpWUcvVDGRi6I1H8g/BK1
+         FLF9xAe0ivmGHJCShgyrUQ9pMrK1dcNbjOuft/ex3DwGFMy0vyCgK2hboUPBKae2HCzh
+         5qVjHp+HFP84FrZiAvRqAxNRFKHlJE14Tu7sAIa8aegcmrCbEB7/mmthIMBvTA4rOXY+
+         gbWideIo7a/p7avCyXk5v4Cw0CJanbIm3luCGYyuRyTbCXhvoaxFRpU4htFqHJ4e+j7a
+         BhuQ==
+X-Gm-Message-State: AOAM531dki81oKPaujiMTzj4+fjdFIPmZbih6Cpn+hkogARt7vRNstpm
+        k3RHci7o7vEhZJfTwkCI9v9omgISd90=
+X-Google-Smtp-Source: ABdhPJw7OT9lJlf8JWu+bJRWnNpGaODd2KHsFa8usWpm9IA+HsN0fOmfCS5A/WGN3+mhPbW4fqq1kQ==
+X-Received: by 2002:a2e:998f:: with SMTP id w15mr310816lji.463.1592521201837;
+        Thu, 18 Jun 2020 16:00:01 -0700 (PDT)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id r9sm875093ljj.127.2020.06.18.16.00.00
+        for <linux-csky@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jun 2020 16:00:01 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id x18so9286639lji.1
+        for <linux-csky@vger.kernel.org>; Thu, 18 Jun 2020 16:00:00 -0700 (PDT)
+X-Received: by 2002:a2e:8991:: with SMTP id c17mr275545lji.421.1592521200490;
+ Thu, 18 Jun 2020 16:00:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200615221607.7764-1-peterx@redhat.com> <20200615221607.7764-8-peterx@redhat.com>
+ <CAJF2gTSVSXO=phc1eeb-ZmDMrSDjSSLd3tN6ng_8n-pCSZh5zw@mail.gmail.com>
+ <20200617154925.GC76766@xz-x1> <CAHk-=wi=58J7d5iyFyYyHrU+pzjWB55cit_LQCkSkavpH-trsg@mail.gmail.com>
+ <20200617195807.GH76766@xz-x1> <CAHk-=wj_V2Tps2QrMn20_W0OJF9xqNh52XSGA42s-ZJ8Y+GyKw@mail.gmail.com>
+ <20200618143801.GK76766@xz-x1> <CAHk-=whFEZbTJZaNwEkyevUV2aqRwbeVmtp6hhk1sK2mW4vaGA@mail.gmail.com>
+ <20200618212430.GO76766@xz-x1> <20200618222834.GP76766@xz-x1>
+In-Reply-To: <20200618222834.GP76766@xz-x1>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 18 Jun 2020 15:59:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wikLPYrSty_XWQU17zvFZ+seUGOzmcuqcTzgBuKeK_LSQ@mail.gmail.com>
+Message-ID: <CAHk-=wikLPYrSty_XWQU17zvFZ+seUGOzmcuqcTzgBuKeK_LSQ@mail.gmail.com>
+Subject: Re: [PATCH 07/25] mm/csky: Use mm_fault_accounting()
+To:     Peter Xu <peterx@redhat.com>
 Cc:     Guo Ren <guoren@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Gerald Schaefer <gerald.schaefer@de.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrea Arcangeli <aarcange@redhat.com>,
         linux-csky@vger.kernel.org
-Subject: Re: [PATCH 07/25] mm/csky: Use mm_fault_accounting()
-Message-ID: <20200618222834.GP76766@xz-x1>
-References: <20200615221607.7764-1-peterx@redhat.com>
- <20200615221607.7764-8-peterx@redhat.com>
- <CAJF2gTSVSXO=phc1eeb-ZmDMrSDjSSLd3tN6ng_8n-pCSZh5zw@mail.gmail.com>
- <20200617154925.GC76766@xz-x1>
- <CAHk-=wi=58J7d5iyFyYyHrU+pzjWB55cit_LQCkSkavpH-trsg@mail.gmail.com>
- <20200617195807.GH76766@xz-x1>
- <CAHk-=wj_V2Tps2QrMn20_W0OJF9xqNh52XSGA42s-ZJ8Y+GyKw@mail.gmail.com>
- <20200618143801.GK76766@xz-x1>
- <CAHk-=whFEZbTJZaNwEkyevUV2aqRwbeVmtp6hhk1sK2mW4vaGA@mail.gmail.com>
- <20200618212430.GO76766@xz-x1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200618212430.GO76766@xz-x1>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 05:24:30PM -0400, Peter Xu wrote:
-> >         /* Major fault */
-> >         if ((ret & VM_FAULT_MAJOR) || (flags & FAULT_FLAG_TRIED)) {
-> >                 flt = &current->maj_flt;
-> >                 event_type = PERF_COUNT_SW_PAGE_FAULTS_MAJ;
-> >         } else {
-> >                 flt = &current->min_flt;
-> >                 event_type = PERF_COUNT_SW_PAGE_FAULTS_MIN;
-> >         }
-> >         *flt++;
-> >         if (regs)
-> >                 perf_sw_event(event_type, 1, regs, address);
+On Thu, Jun 18, 2020 at 3:28 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> > >         if (regs)
+> > >                 perf_sw_event(event_type, 1, regs, address);
+>
+> Sadly, this line seems to fail the compilation:
 
-Sadly, this line seems to fail the compilation:
+Yeah, I should have known that. We require a constant event ID,
+because it uses the magical static keys.
 
-  CC      mm/memory.o
-In file included from ././include/linux/compiler_types.h:68,
-                 from <command-line>:                      
-./arch/x86/include/asm/jump_label.h: In function ‘handle_mm_fault’:
-./include/linux/compiler-gcc.h:120:38: warning: ‘asm’ operand 0 probably does not match constraints
-  120 | #define asm_volatile_goto(x...) do { asm goto(x); asm (""); } while (0)
-      |                                      ^~~
-./arch/x86/include/asm/jump_label.h:25:2: note: in expansion of macro ‘asm_volatile_goto’
-   25 |  asm_volatile_goto("1:" 
-      |  ^~~~~~~~~~~~~~~~~
-./include/linux/compiler-gcc.h:120:38: error: impossible constraint in ‘asm’
-  120 | #define asm_volatile_goto(x...) do { asm goto(x); asm (""); } while (0)
-      |                                      ^~~            
-./arch/x86/include/asm/jump_label.h:25:2: note: in expansion of macro ‘asm_volatile_goto’
-   25 |  asm_volatile_goto("1:"                                                                                                
-      |  ^~~~~~~~~~~~~~~~~
-make[1]: *** [scripts/Makefile.build:267: mm/memory.o] Error 1
-make: *** [Makefile:1729: mm] Error 2
+So never mind. The perf_sw_event() calls can't be shared for two different ID's.
 
-Frankly speaking I have no solid understanding on what's the error about... But
-my gut feeling is that it's about the static keys, where perf_sw_event() may
-only support static event types (otherwise we won't be able to know whether to
-patch the instruction with no-op or a jump?).
-
-I'll go back to the simple version for now, until I know a solution..
-
-Thanks,
-
--- 
-Peter Xu
-
+           Linus
