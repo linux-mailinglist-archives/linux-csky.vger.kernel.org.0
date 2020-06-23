@@ -2,65 +2,118 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DA0205128
-	for <lists+linux-csky@lfdr.de>; Tue, 23 Jun 2020 13:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068662052E7
+	for <lists+linux-csky@lfdr.de>; Tue, 23 Jun 2020 14:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732245AbgFWLsZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 23 Jun 2020 07:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732364AbgFWLsY (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 23 Jun 2020 07:48:24 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28099C061573
-        for <linux-csky@vger.kernel.org>; Tue, 23 Jun 2020 04:48:24 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id q8so23237899iow.7
-        for <linux-csky@vger.kernel.org>; Tue, 23 Jun 2020 04:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=cfKEKQaj3bkaDEsg+4P9s9iqVMo3HtVbqT+3gqT3H9sVzRdhaa9AqK7qThHZy83pOT
-         NyeSHIuf3uq6bDK4c94cv5k2RpYMMmtWX0lnI1+GE/hi0WDenla2Vh286nzta2lpK+dd
-         uTaWQAo66oY6EATSr0C0Qbk69wVjcZrjzdBQCfoQZ95JgXt1prVajCjHdQaoS+KpCcNG
-         URtsg876b25QRIolSZ2i0qOp97+eoKHHBCXDj2uhoUVzKHm8cxALLk63pp4xNU8nqzTI
-         XZf+9kDbeOIESJbRNsybrZSfS9yhuYoOZ6jSfCYXEzbEDw55ojm8lqRx4PIbv7cX0o9d
-         jSkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=j3AWsfs9z53FwlEZUSK20YTG25QubRTkURaSaIQdwKar7BXTDKaH1ix/8rHyY/BJa5
-         8SBuoCtnoipyqCcxZ9/OSzh9rZ1bNRkgAtx8/+DtHSwLUTrWP+RQq9tl9/KiEVPSsq7z
-         6SdMFA+mby951Fpu39vx9QE23yAXkhQIxk6hnVb0PdJAXjxDXIKzhMpV9bL70ryRsyN0
-         MosDRsBHDcwBxp27eB0NkFsUbbDCC3cGbSOdWEQZR6eSZedzFr8Vt7jMm5D3UtbKBm8F
-         ArtgbNaKYVHmZC2rSfGqpATfVELJLxwipAOXnPDQrE/LUW4Wj/Zp5B40Sauwrh+VexV7
-         6dXA==
-X-Gm-Message-State: AOAM5305Na9joHbEomFbDEGHjwoWDb8h40zM3+pdA/r8pRGxM7x6yjpj
-        /0p51MqjmmB3n9RHbvw+mhs0uckVED0kmNkClZI=
-X-Google-Smtp-Source: ABdhPJyDe9Gdlb7Uwa0EeWRmSjg/eA+eTASkfa4iNCTQ4Jc6gybryjijunWzMqWg5w+B6OmrgYRmeEIb4v3jnF5QL4Q=
-X-Received: by 2002:a05:6602:2e81:: with SMTP id m1mr24679774iow.147.1592912903579;
- Tue, 23 Jun 2020 04:48:23 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a92:290e:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:48:23
- -0700 (PDT)
-Reply-To: bektery@outlook.com
-From:   YAVUZ BEKTER <bariskims@gmail.com>
-Date:   Tue, 23 Jun 2020 04:48:23 -0700
-Message-ID: <CAC21a+o+2Et1=U4WqMdmyRPQMT_PRTg2=q954RMT2nFmJVjqOw@mail.gmail.com>
-Subject: Hello.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1732542AbgFWM4G (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 23 Jun 2020 08:56:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37036 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729504AbgFWM4F (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 23 Jun 2020 08:56:05 -0400
+Received: from localhost.localdomain (unknown [42.120.72.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4C54420724;
+        Tue, 23 Jun 2020 12:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592916965;
+        bh=hLBY3T7nrxUU7besxQDrdAZvKz6an4ijUXrWT9hqieo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FkUV2lrppMP14u/EH08RKBaTNoka8k4N1nEzoFZpc56U22RmrLGmRwQtwv+tZcXAa
+         wISHX/wzw55JmEsp2LPhGJ09alvmEUpnM11s5bj/JTa4viprkAjaOPw1pWTfSSoO+1
+         QN7znxAjOg9UvDXFR4jUrsRo2Zd82k/pNzHvS3zg=
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, Guo Ren <guoren@linux.alibaba.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Alan Kao <alankao@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>
+Subject: [PATCH] riscv: Fixup __vdso_gettimeofday broke dynamic ftrace
+Date:   Tue, 23 Jun 2020 12:54:58 +0000
+Message-Id: <1592916898-63693-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-I am the foreign operations director of Bank of Turkey.
-My name is Mr, Yavuz. I have a sensitive investment project to discuss
-with you, please reply now.
-________________________
-Ik ben de directeur buitenlandse activiteiten van de Bank of Turkey.
-Mijn naam is meneer Yavuz. Ik moet een gevoelig investeringsproject bespreken
-met u, antwoord dan nu.
+From: Guo Ren <guoren@linux.alibaba.com>
+
+For linux-5.8-rc1, enable ftrace of riscv will cause boot panic:
+
+[    2.388980] Run /sbin/init as init process
+[    2.529938] init[39]: unhandled signal 4 code 0x1 at 0x0000003ff449e000
+[    2.531078] CPU: 0 PID: 39 Comm: init Not tainted 5.8.0-rc1-dirty #13
+[    2.532719] epc: 0000003ff449e000 ra : 0000003ff449e954 sp : 0000003fffedb900
+[    2.534005]  gp : 00000000000e8528 tp : 0000003ff449d800 t0 : 000000000000001e
+[    2.534965]  t1 : 000000000000000a t2 : 0000003fffedb89e s0 : 0000003fffedb920
+[    2.536279]  s1 : 0000003fffedb940 a0 : 0000003ff43d4b2c a1 : 0000000000000000
+[    2.537334]  a2 : 0000000000000001 a3 : 0000000000000000 a4 : fffffffffbad8000
+[    2.538466]  a5 : 0000003ff449e93a a6 : 0000000000000000 a7 : 0000000000000000
+[    2.539511]  s2 : 0000000000000000 s3 : 0000003ff448412c s4 : 0000000000000010
+[    2.541260]  s5 : 0000000000000016 s6 : 00000000000d0a30 s7 : 0000003fffedba70
+[    2.542152]  s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000003fffedb960
+[    2.543335]  s11: 0000000000000000 t3 : 0000000000000000 t4 : 0000003fffedb8a0
+[    2.544471]  t5 : 0000000000000000 t6 : 0000000000000000
+[    2.545730] status: 0000000000004020 badaddr: 00000000464c457f cause: 0000000000000002
+[    2.549867] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000004
+[    2.551267] CPU: 0 PID: 1 Comm: init Not tainted 5.8.0-rc1-dirty #13
+[    2.552061] Call Trace:
+[    2.552626] [<ffffffe00020374a>] walk_stackframe+0x0/0xc4
+[    2.553486] [<ffffffe0002039f4>] show_stack+0x40/0x4c
+[    2.553995] [<ffffffe00054a6ae>] dump_stack+0x7a/0x98
+[    2.554615] [<ffffffe00020b9b8>] panic+0x114/0x2f4
+[    2.555395] [<ffffffe00020ebd6>] do_exit+0x89c/0x8c2
+[    2.555949] [<ffffffe00020f930>] do_group_exit+0x3a/0x90
+[    2.556715] [<ffffffe000219e08>] get_signal+0xe2/0x6e6
+[    2.557388] [<ffffffe000202d72>] do_notify_resume+0x6a/0x37a
+[    2.558089] [<ffffffe000201c16>] ret_from_exception+0x0/0xc
+
+"ra:0x3ff449e954" is the return address of "call _mcount" in the
+prologue of __vdso_gettimeofday(). Without proper relocate, pc jmp
+to 0x0000003ff449e000 (vdso map base) with a illegal instruction
+trap.
+
+The solution comes from arch/arm64/kernel/vdso/Makefile:
+
+CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS)
+
+ - CC_FLAGS_SCS is ShadowCallStack feature in Clang and only
+   implemented for arm64, no use for riscv.
+
+The bug comes from the following commit:
+
+ad5d1122b82f ("riscv: use vDSO common flow to reduce the latency of the time-related functions")
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Vincent Chen <vincent.chen@sifive.com>
+Cc: Atish Patra <atish.patra@wdc.com>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Cc: Alan Kao <alankao@andestech.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+---
+ arch/riscv/kernel/vdso/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 38ba55b..3079935 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -27,6 +27,9 @@ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
+ obj-y += vdso.o vdso-syms.o
+ CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
+ 
++# Disable -pg to prevent insert call site
++CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os
++
+ # Disable gcov profiling for VDSO code
+ GCOV_PROFILE := n
+ 
+-- 
+2.7.4
+
