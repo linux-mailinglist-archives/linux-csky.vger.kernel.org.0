@@ -2,118 +2,96 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 068662052E7
-	for <lists+linux-csky@lfdr.de>; Tue, 23 Jun 2020 14:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E950D206FD1
+	for <lists+linux-csky@lfdr.de>; Wed, 24 Jun 2020 11:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732542AbgFWM4G (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 23 Jun 2020 08:56:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37036 "EHLO mail.kernel.org"
+        id S2389211AbgFXJPf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 24 Jun 2020 05:15:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729504AbgFWM4F (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 23 Jun 2020 08:56:05 -0400
-Received: from localhost.localdomain (unknown [42.120.72.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S2387970AbgFXJPe (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 24 Jun 2020 05:15:34 -0400
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C54420724;
-        Tue, 23 Jun 2020 12:56:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CF882082F;
+        Wed, 24 Jun 2020 09:15:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592916965;
-        bh=hLBY3T7nrxUU7besxQDrdAZvKz6an4ijUXrWT9hqieo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FkUV2lrppMP14u/EH08RKBaTNoka8k4N1nEzoFZpc56U22RmrLGmRwQtwv+tZcXAa
-         wISHX/wzw55JmEsp2LPhGJ09alvmEUpnM11s5bj/JTa4viprkAjaOPw1pWTfSSoO+1
-         QN7znxAjOg9UvDXFR4jUrsRo2Zd82k/pNzHvS3zg=
-From:   guoren@kernel.org
-To:     guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, Guo Ren <guoren@linux.alibaba.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Alan Kao <alankao@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>
-Subject: [PATCH] riscv: Fixup __vdso_gettimeofday broke dynamic ftrace
-Date:   Tue, 23 Jun 2020 12:54:58 +0000
-Message-Id: <1592916898-63693-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        s=default; t=1592990133;
+        bh=14K+VhMvuge//+mHFVRO68jMad3Xx5brMH+O3+ggBOk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IFQxL2bunzkopmfTsIvl2UbpyJSVNCbVz1tMkicOQpIhZE+i7/lWCftYg10E3XPAI
+         LleqWHI0jaKN4UcquF75OjUnAAl7OdeSI1CZUwvRqOC11GAXNdmVhHLdaOFnoVbq1E
+         XfG8K/JctUacbaPa4zvCuXENEZxWe4yQDQX+rA74=
+Received: by mail-lj1-f182.google.com with SMTP id 9so1752239ljc.8;
+        Wed, 24 Jun 2020 02:15:33 -0700 (PDT)
+X-Gm-Message-State: AOAM533UbckesswlTmbt/oQeNGmzfV1ZPmHY9ngNSAuY/zZug+mGZ68u
+        ONx4rT1rT0ygL8cH+U/nlA58qlLJp/ozW7Bl0iQ=
+X-Google-Smtp-Source: ABdhPJxbxsux7XuzN8uOjxja4hquHGy/NKFHEFBm47OMUifwg0Hc5X+Fhkw49rQCA/MTWVvIK0zPn0Jq/i3BDFjZoEY=
+X-Received: by 2002:a2e:954c:: with SMTP id t12mr13005177ljh.287.1592990131408;
+ Wed, 24 Jun 2020 02:15:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <1592902276-3969-1-git-send-email-yangtiezhu@loongson.cn> <1592902276-3969-2-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1592902276-3969-2-git-send-email-yangtiezhu@loongson.cn>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 24 Jun 2020 11:15:20 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
+Message-ID: <CAJKOXPc9QuDp+FEogVamf7x+4JEUw78MSKqSPFpRcyTYZ7HSMA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] irqchip: Fix potential resource leaks
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kukjin Kim <kgene@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, 23 Jun 2020 at 10:51, Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> There exists some potential resource leaks in the error path, fix them.
 
-For linux-5.8-rc1, enable ftrace of riscv will cause boot panic:
+This should be split per driver and per bug (although mostly in driver
+it's just one bug). Otherwise it is difficult to review, backport and
+revert.
 
-[    2.388980] Run /sbin/init as init process
-[    2.529938] init[39]: unhandled signal 4 code 0x1 at 0x0000003ff449e000
-[    2.531078] CPU: 0 PID: 39 Comm: init Not tainted 5.8.0-rc1-dirty #13
-[    2.532719] epc: 0000003ff449e000 ra : 0000003ff449e954 sp : 0000003fffedb900
-[    2.534005]  gp : 00000000000e8528 tp : 0000003ff449d800 t0 : 000000000000001e
-[    2.534965]  t1 : 000000000000000a t2 : 0000003fffedb89e s0 : 0000003fffedb920
-[    2.536279]  s1 : 0000003fffedb940 a0 : 0000003ff43d4b2c a1 : 0000000000000000
-[    2.537334]  a2 : 0000000000000001 a3 : 0000000000000000 a4 : fffffffffbad8000
-[    2.538466]  a5 : 0000003ff449e93a a6 : 0000000000000000 a7 : 0000000000000000
-[    2.539511]  s2 : 0000000000000000 s3 : 0000003ff448412c s4 : 0000000000000010
-[    2.541260]  s5 : 0000000000000016 s6 : 00000000000d0a30 s7 : 0000003fffedba70
-[    2.542152]  s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000003fffedb960
-[    2.543335]  s11: 0000000000000000 t3 : 0000000000000000 t4 : 0000003fffedb8a0
-[    2.544471]  t5 : 0000000000000000 t6 : 0000000000000000
-[    2.545730] status: 0000000000004020 badaddr: 00000000464c457f cause: 0000000000000002
-[    2.549867] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000004
-[    2.551267] CPU: 0 PID: 1 Comm: init Not tainted 5.8.0-rc1-dirty #13
-[    2.552061] Call Trace:
-[    2.552626] [<ffffffe00020374a>] walk_stackframe+0x0/0xc4
-[    2.553486] [<ffffffe0002039f4>] show_stack+0x40/0x4c
-[    2.553995] [<ffffffe00054a6ae>] dump_stack+0x7a/0x98
-[    2.554615] [<ffffffe00020b9b8>] panic+0x114/0x2f4
-[    2.555395] [<ffffffe00020ebd6>] do_exit+0x89c/0x8c2
-[    2.555949] [<ffffffe00020f930>] do_group_exit+0x3a/0x90
-[    2.556715] [<ffffffe000219e08>] get_signal+0xe2/0x6e6
-[    2.557388] [<ffffffe000202d72>] do_notify_resume+0x6a/0x37a
-[    2.558089] [<ffffffe000201c16>] ret_from_exception+0x0/0xc
+Best regards,
+Krzysztof
 
-"ra:0x3ff449e954" is the return address of "call _mcount" in the
-prologue of __vdso_gettimeofday(). Without proper relocate, pc jmp
-to 0x0000003ff449e000 (vdso map base) with a illegal instruction
-trap.
 
-The solution comes from arch/arm64/kernel/vdso/Makefile:
-
-CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS)
-
- - CC_FLAGS_SCS is ShadowCallStack feature in Clang and only
-   implemented for arm64, no use for riscv.
-
-The bug comes from the following commit:
-
-ad5d1122b82f ("riscv: use vDSO common flow to reduce the latency of the time-related functions")
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Vincent Chen <vincent.chen@sifive.com>
-Cc: Atish Patra <atish.patra@wdc.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Alan Kao <alankao@andestech.com>
-Cc: Greentime Hu <green.hu@gmail.com>
----
- arch/riscv/kernel/vdso/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-index 38ba55b..3079935 100644
---- a/arch/riscv/kernel/vdso/Makefile
-+++ b/arch/riscv/kernel/vdso/Makefile
-@@ -27,6 +27,9 @@ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
- obj-y += vdso.o vdso-syms.o
- CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
- 
-+# Disable -pg to prevent insert call site
-+CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os
-+
- # Disable gcov profiling for VDSO code
- GCOV_PROFILE := n
- 
--- 
-2.7.4
-
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  drivers/irqchip/irq-ath79-misc.c      |  3 +++
+>  drivers/irqchip/irq-csky-apb-intc.c   |  3 +++
+>  drivers/irqchip/irq-csky-mpintc.c     | 26 ++++++++++++++++++++------
+>  drivers/irqchip/irq-davinci-aintc.c   | 17 +++++++++++++----
+>  drivers/irqchip/irq-davinci-cp-intc.c | 17 ++++++++++++++---
+>  drivers/irqchip/irq-digicolor.c       |  4 ++++
+>  drivers/irqchip/irq-dw-apb-ictl.c     | 11 ++++++++---
+>  drivers/irqchip/irq-loongson-htvec.c  |  5 ++++-
+>  drivers/irqchip/irq-ls1x.c            |  4 +++-
+>  drivers/irqchip/irq-mscc-ocelot.c     |  6 ++++--
+>  drivers/irqchip/irq-nvic.c            |  2 ++
+>  drivers/irqchip/irq-omap-intc.c       |  4 +++-
+>  drivers/irqchip/irq-riscv-intc.c      |  1 +
+>  drivers/irqchip/irq-s3c24xx.c         | 20 +++++++++++++++-----
+>  drivers/irqchip/irq-xilinx-intc.c     |  1 +
+>  15 files changed, 98 insertions(+), 26 deletions(-)
