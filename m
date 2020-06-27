@@ -2,106 +2,76 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72A420C303
-	for <lists+linux-csky@lfdr.de>; Sat, 27 Jun 2020 18:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2478920C380
+	for <lists+linux-csky@lfdr.de>; Sat, 27 Jun 2020 20:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbgF0QVG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 27 Jun 2020 12:21:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45468 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725864AbgF0QVF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 27 Jun 2020 12:21:05 -0400
-Received: from localhost.localdomain (unknown [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 315E220720;
-        Sat, 27 Jun 2020 16:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593274865;
-        bh=Xk8MgSMAWg+6GPcCp7ny9qf8M1piZpQfBkx7+eVVJJc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IV+6FPCBPulGj+ZXnqXoKcI4g3Sc/sUC2/CrFbxiKWF0IYt7hqKOUX/Y1h4k8IUMf
-         TpIeeHk6iRG7noRyfYxxa4SfErUKjl+m0aA4f9w0le7KHIDReHpdHCdIjzwFglM1MU
-         zrMIPXhpkZbeGimEgHPweh2dNDWnWkcCdLb3jh6A=
-From:   guoren@kernel.org
-To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH] riscv: Fixup compile error BUILD_BUG_ON failed
-Date:   Sat, 27 Jun 2020 16:20:02 +0000
-Message-Id: <1593274802-46332-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1726618AbgF0Sbm (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 27 Jun 2020 14:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725867AbgF0Sbm (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 27 Jun 2020 14:31:42 -0400
+Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1097C061794;
+        Sat, 27 Jun 2020 11:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iUonY5tAtTgjqNbCWE5Vwbj85TqSh1tjYug5m+z4Qck=; b=MsYzlS2SipjcxBXS/jfM5VXHva
+        0MfNKJEN4Ox+ZUvZVKPtEzNZ/zLlCXy8jbjH80IN8Oo773ZG+LOVNciLsZ72OHXVwzxk8wniA3U0V
+        tIoFs0GZReQhvgYWkbnVwL19Dtx67F+f2/O0c4xdQPIiDKuRbrQdIabEJGQ0UH7dl9YfrpBoHiVgY
+        LJn5cith0pkJo77B4FDd/wIbqvCKQwOqO7uUuO1u9O+wrbWAQz/Co4K78ZNVlmHwzVD0Tbj5ZR3ox
+        rEf/WEDcRKl4UkREWSDVjoOd6pfKJAywWo3Lu/yQzI4vCUWY3bSD+SM2sePDqJoJZXsfpfI+PBruY
+        O/fqA5KQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jpFba-0004Zp-Dw; Sat, 27 Jun 2020 18:31:10 +0000
+Date:   Sat, 27 Jun 2020 19:31:10 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Joerg Roedel <joro@8bytes.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH 0/8] mm: cleanup usage of <asm/pgalloc.h>
+Message-ID: <20200627183110.GE25039@casper.infradead.org>
+References: <20200627143453.31835-1-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200627143453.31835-1-rppt@kernel.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Sat, Jun 27, 2020 at 05:34:45PM +0300, Mike Rapoport wrote:
+> Most architectures have very similar versions of pXd_alloc_one() and
+> pXd_free_one() for intermediate levels of page table. 
+> These patches add generic versions of these functions in
+> <asm-generic/pgalloc.h> and enable use of the generic functions where
+> appropriate.
 
-Unfortunately, the current code couldn't be compiled, because
-BUILD_BUG_ON needs a static defined value, not a dynamic
-variable with a0 regs. Just use it inline as a solution.
+For the series:
 
-  CC      arch/riscv/kernel/patch.o
-In file included from ./include/linux/kernel.h:11,
-                 from ./include/linux/list.h:9,
-                 from ./include/linux/preempt.h:11,
-                 from ./include/linux/spinlock.h:51,
-                 from arch/riscv/kernel/patch.c:6:
-In function ‘fix_to_virt’,
-    inlined from ‘patch_map’ at arch/riscv/kernel/patch.c:37:17:
-./include/linux/compiler.h:392:38: error: call to ‘__compiletime_assert_205’ declared with attribute error: BUILD_BUG_ON failed: idx >= __end_of_fixed_addresses
-  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-                                      ^
-./include/linux/compiler.h:373:4: note: in definition of macro ‘__compiletime_assert’
-    prefix ## suffix();    \
-    ^~~~~~
-./include/linux/compiler.h:392:2: note: in expansion of macro ‘_compiletime_assert’
-  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-  ^~~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
- #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-                                     ^~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:50:2: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
-  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-  ^~~~~~~~~~~~~~~~
-./include/asm-generic/fixmap.h:32:2: note: in expansion of macro ‘BUILD_BUG_ON’
-  BUILD_BUG_ON(idx >= __end_of_fixed_addresses);
-  ^~~~~~~~~~~~
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Zong Li <zong.li@sifive.com>
----
- arch/riscv/kernel/patch.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-index d4a64df..f8e84f2 100644
---- a/arch/riscv/kernel/patch.c
-+++ b/arch/riscv/kernel/patch.c
-@@ -20,7 +20,7 @@ struct patch_insn {
- };
- 
- #ifdef CONFIG_MMU
--static void *patch_map(void *addr, int fixmap)
-+static inline void *patch_map(void *addr, int fixmap)
- {
- 	uintptr_t uintaddr = (uintptr_t) addr;
- 	struct page *page;
-@@ -37,7 +37,6 @@ static void *patch_map(void *addr, int fixmap)
- 	return (void *)set_fixmap_offset(fixmap, page_to_phys(page) +
- 					 (uintaddr & ~PAGE_MASK));
- }
--NOKPROBE_SYMBOL(patch_map);
- 
- static void patch_unmap(int fixmap)
- {
--- 
-2.7.4
-
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
