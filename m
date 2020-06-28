@@ -2,149 +2,142 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C11A20C66B
-	for <lists+linux-csky@lfdr.de>; Sun, 28 Jun 2020 08:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900F220C694
+	for <lists+linux-csky@lfdr.de>; Sun, 28 Jun 2020 09:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgF1GMW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 28 Jun 2020 02:12:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42638 "EHLO mail.kernel.org"
+        id S1726022AbgF1HAQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 28 Jun 2020 03:00:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725913AbgF1GMV (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 28 Jun 2020 02:12:21 -0400
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725975AbgF1HAM (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 28 Jun 2020 03:00:12 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DFA68212CC;
-        Sun, 28 Jun 2020 06:12:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D042720702;
+        Sun, 28 Jun 2020 06:59:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593324741;
-        bh=MaEKsg6egy9Wkdm/kWLie4m5P0W1BsCSneDgGcQBAgA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=2pCwUgIshw5Jtg7FSTHrUAsO6kRgUWtBjQnrG4PHqZuG209tR0M/HEl7lJy/l3bZn
-         b6mh9um0+gZZzDvvMxA4eYO//saa3RTb4+A25vpywXFvYVqR8kPYzdNykzu9swHTQO
-         gAdy5TY3BWaypBMHp8CoRz+uA68e5rSHkljZb0R8=
-Received: by mail-lj1-f172.google.com with SMTP id h22so7258124lji.9;
-        Sat, 27 Jun 2020 23:12:20 -0700 (PDT)
-X-Gm-Message-State: AOAM5326eutAI0+DU9/rI++ZPbN2fZA+gIksqTst3roZmGAZ8Q+TdMS5
-        nYQUdktYzxPsRlVKlZqqZl0I1a7jr7pbfp/OxMQ=
-X-Google-Smtp-Source: ABdhPJwOLXYcVriN4WTovhjiJ8y+DUyBj9KfGoziRBbU0PTHaerO/enEPu+Wtu+nCnBa4bct3gK+/AmZ+XdmTiuWaZ4=
-X-Received: by 2002:a2e:2a42:: with SMTP id q63mr5541912ljq.265.1593324739220;
- Sat, 27 Jun 2020 23:12:19 -0700 (PDT)
+        s=default; t=1593327604;
+        bh=hu/tW2f/lIs0zzXJSvCrgwdLd0PRG2JIRHvUCcaAjqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qm3qqF3d78J/gFOwv6YVJb71itb3mymeRhGcaLrkXQY5dETAmGwNnfv+uXEMscIi2
+         mPZsATFBdJNygr2fnTWo/ejLleXfIjFaiD5KXp/1ygh8w33HlLwG0oN/C/qRCb8sbq
+         bU6JOX1KtJfeNxxfnsJIYZnBX1A1gh84k+HeVxCY=
+Date:   Sun, 28 Jun 2020 09:59:51 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Joerg Roedel <joro@8bytes.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH 9/8] mm: Account PMD tables like PTE tables
+Message-ID: <20200628065951.GB576120@kernel.org>
+References: <20200627143453.31835-1-rppt@kernel.org>
+ <20200627184642.GF25039@casper.infradead.org>
 MIME-Version: 1.0
-References: <1593274802-46332-1-git-send-email-guoren@kernel.org> <20200628115945.335b92c517cb8a8fa87be759@kernel.org>
-In-Reply-To: <20200628115945.335b92c517cb8a8fa87be759@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 28 Jun 2020 14:12:07 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTCHMHp-+RoG8DoDhbJStzmOf5AK=Z3K26FUmd_hbgR=g@mail.gmail.com>
-Message-ID: <CAJF2gTTCHMHp-+RoG8DoDhbJStzmOf5AK=Z3K26FUmd_hbgR=g@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Fixup compile error BUILD_BUG_ON failed
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200627184642.GF25039@casper.infradead.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Jun 28, 2020 at 10:59 AM Masami Hiramatsu <mhiramat@kernel.org> wro=
-te:
->
-> On Sat, 27 Jun 2020 16:20:02 +0000
-> guoren@kernel.org wrote:
->
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Unfortunately, the current code couldn't be compiled, because
-> > BUILD_BUG_ON needs a static defined value, not a dynamic
-> > variable with a0 regs. Just use it inline as a solution.
-> >
-> >   CC      arch/riscv/kernel/patch.o
-> > In file included from ./include/linux/kernel.h:11,
-> >                  from ./include/linux/list.h:9,
-> >                  from ./include/linux/preempt.h:11,
-> >                  from ./include/linux/spinlock.h:51,
-> >                  from arch/riscv/kernel/patch.c:6:
-> > In function =E2=80=98fix_to_virt=E2=80=99,
-> >     inlined from =E2=80=98patch_map=E2=80=99 at arch/riscv/kernel/patch=
-.c:37:17:
-> > ./include/linux/compiler.h:392:38: error: call to =E2=80=98__compiletim=
-e_assert_205=E2=80=99 declared with attribute error: BUILD_BUG_ON failed: i=
-dx >=3D __end_of_fixed_addresses
-> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER_=
-_)
-> >                                       ^
-> > ./include/linux/compiler.h:373:4: note: in definition of macro =E2=80=
-=98__compiletime_assert=E2=80=99
-> >     prefix ## suffix();    \
-> >     ^~~~~~
-> > ./include/linux/compiler.h:392:2: note: in expansion of macro =E2=80=98=
-_compiletime_assert=E2=80=99
-> >   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER_=
-_)
-> >   ^~~~~~~~~~~~~~~~~~~
-> > ./include/linux/build_bug.h:39:37: note: in expansion of macro =E2=80=
-=98compiletime_assert=E2=80=99
-> >  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >                                      ^~~~~~~~~~~~~~~~~~
-> > ./include/linux/build_bug.h:50:2: note: in expansion of macro =E2=80=98=
-BUILD_BUG_ON_MSG=E2=80=99
-> >   BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-> >   ^~~~~~~~~~~~~~~~
-> > ./include/asm-generic/fixmap.h:32:2: note: in expansion of macro =E2=80=
-=98BUILD_BUG_ON=E2=80=99
-> >   BUILD_BUG_ON(idx >=3D __end_of_fixed_addresses);
-> >   ^~~~~~~~~~~~
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Zong Li <zong.li@sifive.com>
-> > ---
-> >  arch/riscv/kernel/patch.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> > index d4a64df..f8e84f2 100644
-> > --- a/arch/riscv/kernel/patch.c
-> > +++ b/arch/riscv/kernel/patch.c
-> > @@ -20,7 +20,7 @@ struct patch_insn {
-> >  };
-> >
-> >  #ifdef CONFIG_MMU
-> > -static void *patch_map(void *addr, int fixmap)
-> > +static inline void *patch_map(void *addr, int fixmap)
->
-> Would we be better to use "__always_inline" as same as fix_to_virt?
-Ok
+On Sat, Jun 27, 2020 at 07:46:42PM +0100, Matthew Wilcox wrote:
+> We account the PTE level of the page tables to the process in order to
+> make smarter OOM decisions and help diagnose why memory is fragmented.
+> For these same reasons, we should account pages allocated for PMDs.
+> With larger process address spaces and ASLR, the number of PMDs in use
+> is higher than it used to be so the inaccuracy is starting to matter.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-> And also, could you add a comment why we need to make it inline?
-I've mentioned in comment:
-> > BUILD_BUG_ON needs a static defined value, not a dynamic
-> > variable with a0 regs.
+Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
 
-idx must be a const unsigned int or it will cause compile error with
-BUILD_BUG_ON.
+> ---
+>  include/linux/mm.h | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index dc7b87310c10..b283e25fcffa 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2271,7 +2271,7 @@ static inline spinlock_t *pmd_lockptr(struct mm_struct *mm, pmd_t *pmd)
+>  	return ptlock_ptr(pmd_to_page(pmd));
+>  }
+>  
+> -static inline bool pgtable_pmd_page_ctor(struct page *page)
+> +static inline bool pmd_ptlock_init(struct page *page)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  	page->pmd_huge_pte = NULL;
+> @@ -2279,7 +2279,7 @@ static inline bool pgtable_pmd_page_ctor(struct page *page)
+>  	return ptlock_init(page);
+>  }
+>  
+> -static inline void pgtable_pmd_page_dtor(struct page *page)
+> +static inline void pmd_ptlock_free(struct page *page)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  	VM_BUG_ON_PAGE(page->pmd_huge_pte, page);
+> @@ -2296,8 +2296,8 @@ static inline spinlock_t *pmd_lockptr(struct mm_struct *mm, pmd_t *pmd)
+>  	return &mm->page_table_lock;
+>  }
+>  
+> -static inline bool pgtable_pmd_page_ctor(struct page *page) { return true; }
+> -static inline void pgtable_pmd_page_dtor(struct page *page) {}
+> +static inline bool pmd_ptlock_init(struct page *page) { return true; }
+> +static inline void pmd_ptlock_free(struct page *page) {}
+>  
+>  #define pmd_huge_pte(mm, pmd) ((mm)->pmd_huge_pte)
+>  
+> @@ -2310,6 +2310,22 @@ static inline spinlock_t *pmd_lock(struct mm_struct *mm, pmd_t *pmd)
+>  	return ptl;
+>  }
+>  
+> +static inline bool pgtable_pmd_page_ctor(struct page *page)
+> +{
+> +	if (!pmd_ptlock_init(page))
+> +		return false;
+> +	__SetPageTable(page);
+> +	inc_zone_page_state(page, NR_PAGETABLE);
+> +	return true;
+> +}
+> +
+> +static inline void pgtable_pmd_page_dtor(struct page *page)
+> +{
+> +	pmd_ptlock_free(page);
+> +	__ClearPageTable(page);
+> +	dec_zone_page_state(page, NR_PAGETABLE);
+> +}
+> +
+>  /*
+>   * No scalability reason to split PUD locks yet, but follow the same pattern
+>   * as the PMD locks to make it easier if we decide to.  The VM should not be
+> -- 
+> 2.27.0
+> 
 
-/*
- * 'index to address' translation. If anyone tries to use the idx
- * directly without translation, we catch the bug with a NULL-deference
- * kernel oops. Illegal ranges of incoming indices are caught too.
- */
-static __always_inline unsigned long fix_to_virt(const unsigned int idx)
-{
-        BUILD_BUG_ON(idx >=3D __end_of_fixed_addresses);
-        return __fix_to_virt(idx);
-}
-
---=20
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+-- 
+Sincerely yours,
+Mike.
