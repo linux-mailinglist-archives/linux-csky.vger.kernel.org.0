@@ -2,104 +2,158 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B22CB20D63B
-	for <lists+linux-csky@lfdr.de>; Mon, 29 Jun 2020 22:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046C220E94B
+	for <lists+linux-csky@lfdr.de>; Tue, 30 Jun 2020 01:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732008AbgF2TSW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 29 Jun 2020 15:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S1727947AbgF2XWw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 29 Jun 2020 19:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731870AbgF2TRm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 29 Jun 2020 15:17:42 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8E7C0307A1;
-        Mon, 29 Jun 2020 08:42:39 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id t18so3124611otq.5;
-        Mon, 29 Jun 2020 08:42:39 -0700 (PDT)
+        with ESMTP id S1727027AbgF2XWv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 29 Jun 2020 19:22:51 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF047C03E979
+        for <linux-csky@vger.kernel.org>; Mon, 29 Jun 2020 16:22:51 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id u5so8561445pfn.7
+        for <linux-csky@vger.kernel.org>; Mon, 29 Jun 2020 16:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vosq3jM/Z3IP3Dh+gOgBhDGbMDQnYun30kIMF/La9o4=;
+        b=cIXvVaSaQc5ILuJaRDR/wexJyYUN6n9xmX1Wz1HZxX80qts79UYOAhmSOBvWwYqI7g
+         K9PB0H/wRCjKRAO+cLvtThHz32uLW5TIi6DgUzJTqZ9fuQUJDhotTkH9WXj6wAdvFPZE
+         mwnev4Gi9EJBfAoFdE9KkeinMzAXYcwYebrUgBNbU/saUchbLqgoZ1oKO4V680pigEzj
+         xrpYdpei+CQX0Rc5BW6sXS7yeV+GyYg2idYnOO9vrB8+HscqnaiJT0cJiUo6bv11ew4J
+         MnJ68nn/9iGBayeJds85Ayzcn8jWktIo61przQX4SFL9ddvG6d9vRq01144dk5rq0wXq
+         gwwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ByBiz3Yf8Ie7OVrqv/Mz9cEMnJyRfxViWcmC4BsTpCo=;
-        b=hE0uYABTBummnjR4Ws7/8m9VVzWu3XAHX7c2WGmbGrae6o+12esgMGqEHBl4sl73+C
-         AToMRiaGu1UVkN6DOweDnKiho6a8hv9J3XvoKydijrHEboTGALRT/TGeQckwC85r+b4J
-         2Zw18I8VuJDeNxe3bifM4EJtPrXvUqSlhjN1qO2qKunLb61XO2XoQcnD32wfqTCgt4M4
-         qD5BwJwOaUF+gQPy18XRVJlH05V+T7VbWoBAjJKR6IJZzaQwjLTk14QaP1C47epEVNId
-         N8NjARUfAf/n6uX5Qr3IgkkCHJdghf7za3mZIYyyIDv8CttxvvDCJw+1wK4I4eGBWt50
-         P2cA==
-X-Gm-Message-State: AOAM533m/nSIvlk6XUAXMgV8JRrLeMfpbqqzPNRNzbHEdYH+T3ZNHbdE
-        MVvWhQJ4846m4ksPjwoaF6YS5nNSR8//g+GmAMg=
-X-Google-Smtp-Source: ABdhPJzZv9yrcqjQPIqNSuZYxDZ0MHssHdmPppPpB4X3a0jGl41oFltbqUVWyGPYv/nioiv+o7pFkroyCV6uhkj/ZSQ=
-X-Received: by 2002:a05:6830:1451:: with SMTP id w17mr1241594otp.250.1593445359003;
- Mon, 29 Jun 2020 08:42:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200627143453.31835-1-rppt@kernel.org> <20200627143453.31835-7-rppt@kernel.org>
-In-Reply-To: <20200627143453.31835-7-rppt@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 29 Jun 2020 17:42:28 +0200
-Message-ID: <CAMuHMdWP07XqvgrXjCG+n5FssH3BwdDEWA4fD9TQgvVy93uMhQ@mail.gmail.com>
-Subject: Re: [PATCH 6/8] asm-generic: pgalloc: provide generic pgd_free()
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Joerg Roedel <joro@8bytes.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        sparclinux <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=vosq3jM/Z3IP3Dh+gOgBhDGbMDQnYun30kIMF/La9o4=;
+        b=uDqkdFaEyIkV/YhuylTy5zeRycQPTNose9LxjZ26i9U5f5gygYDju9984FJgAVkCwU
+         8BC+cmnvw4+c3Ih+p/xo/yUrnvOaUUXDHuIGcxjm6VL/3julaNF02aSnwS79BnJB6DJU
+         1G28q/A7Rlqg22nl+2gHCje4uDHzE/ByrEhdr65EjrjuK7Hx53iucv7hq4rA/ieZWFEo
+         YACNkplHEkowwy43P4U7dZgUbSGecMfhsXzjOpq+/gJieHymtBaMhGLENCHBikvWytoV
+         J0gTzOmMRvPE8O98of/DvQQ/kIoHdqwc1s15cDqcH9Nzomv2aRoHE1XJot1nmGSucZkn
+         oILw==
+X-Gm-Message-State: AOAM532SSrEoEX5gisXWcKBpHdH/sSSlcq6GUk5GF3vw7MEEQ88nQ0kk
+        hfni8q4QbEFgH3QqHoM7lshcgQ==
+X-Google-Smtp-Source: ABdhPJx3JO3u4fG6Fd9hfA+ttXXsBjo2Fr8PGnVv+moeh/cJBgY7JGWNYXy+Pe70NRofreAkTSmyaQ==
+X-Received: by 2002:a65:6883:: with SMTP id e3mr12506452pgt.5.1593472971349;
+        Mon, 29 Jun 2020 16:22:51 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id n137sm638694pfd.194.2020.06.29.16.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 16:22:50 -0700 (PDT)
+Date:   Mon, 29 Jun 2020 16:22:50 -0700 (PDT)
+X-Google-Original-Date: Mon, 29 Jun 2020 16:22:41 PDT (-0700)
+Subject:     Re: [PATCH V2] riscv: Fixup compile error BUILD_BUG_ON failed
+In-Reply-To: <20200629012524.c941a5f18aa7f312d325f714@kernel.org>
+CC:     guoren@kernel.org, greentime.hu@sifive.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
+        linux-csky@vger.kernel.org, zong.li@sifive.com,
+        guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     mhiramat@kernel.org
+Message-ID: <mhng-37e70bbc-2616-41e6-bc8a-f144ca647c97@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Jun 27, 2020 at 4:36 PM Mike Rapoport <rppt@kernel.org> wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On Sun, 28 Jun 2020 09:25:24 PDT (-0700), mhiramat@kernel.org wrote:
+> On Sun, 28 Jun 2020 16:07:37 +0000
+> guoren@kernel.org wrote:
 >
-> Most architectures define pgd_free() as a wrapper for free_page().
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> Unfortunately, the current code couldn't be compiled:
+>>
+>>   CC      arch/riscv/kernel/patch.o
+>> In file included from ./include/linux/kernel.h:11,
+>>                  from ./include/linux/list.h:9,
+>>                  from ./include/linux/preempt.h:11,
+>>                  from ./include/linux/spinlock.h:51,
+>>                  from arch/riscv/kernel/patch.c:6:
+>> In function ‘fix_to_virt’,
+>>     inlined from ‘patch_map’ at arch/riscv/kernel/patch.c:37:17:
+>> ./include/linux/compiler.h:392:38: error: call to ‘__compiletime_assert_205’ declared with attribute error: BUILD_BUG_ON failed: idx >= __end_of_fixed_addresses
+>>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>                                       ^
+>> ./include/linux/compiler.h:373:4: note: in definition of macro ‘__compiletime_assert’
+>>     prefix ## suffix();    \
+>>     ^~~~~~
+>> ./include/linux/compiler.h:392:2: note: in expansion of macro ‘_compiletime_assert’
+>>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>   ^~~~~~~~~~~~~~~~~~~
+>> ./include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+>>  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>>                                      ^~~~~~~~~~~~~~~~~~
+>> ./include/linux/build_bug.h:50:2: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+>>   BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+>>   ^~~~~~~~~~~~~~~~
+>> ./include/asm-generic/fixmap.h:32:2: note: in expansion of macro ‘BUILD_BUG_ON’
+>>   BUILD_BUG_ON(idx >= __end_of_fixed_addresses);
+>>   ^~~~~~~~~~~~
+>>
+>> Because fix_to_virt(, idx) needs a const value, not a dynamic variable of
+>> reg-a0 or BUILD_BUG_ON failed with "idx >= __end_of_fixed_addresses".
 >
-> Provide a generic version in asm-generic/pgalloc.h and enable its use for
-> most architectures.
+> Looks good to me :)
 >
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-For the m68k part:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Is there a configuration that runs into this bug?  It's not showing up for me,
+and I generally try to add regressions to my test suite.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Thanks!
+>
+>>
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+>> Cc: Zong Li <zong.li@sifive.com>
+>> ---
+>> Changelog V2:
+>>  - Use __always_inline as same as fix_to_virt
+>>  - Use const "const unsigned int" for 2th param
+>>
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> ---
+>>  arch/riscv/kernel/patch.c | 8 ++++++--
+>>  1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+>> index d4a64df..3179a4e 100644
+>> --- a/arch/riscv/kernel/patch.c
+>> +++ b/arch/riscv/kernel/patch.c
+>> @@ -20,7 +20,12 @@ struct patch_insn {
+>>  };
+>>
+>>  #ifdef CONFIG_MMU
+>> -static void *patch_map(void *addr, int fixmap)
+>> +/*
+>> + * The fix_to_virt(, idx) needs a const value (not a dynamic variable of
+>> + * reg-a0) or BUILD_BUG_ON failed with "idx >= __end_of_fixed_addresses".
+>> + * So use '__always_inline' and 'const unsigned int fixmap' here.
+>> + */
+>> +static __always_inline void *patch_map(void *addr, const unsigned int fixmap)
+>>  {
+>>  	uintptr_t uintaddr = (uintptr_t) addr;
+>>  	struct page *page;
+>> @@ -37,7 +42,6 @@ static void *patch_map(void *addr, int fixmap)
+>>  	return (void *)set_fixmap_offset(fixmap, page_to_phys(page) +
+>>  					 (uintaddr & ~PAGE_MASK));
+>>  }
+>> -NOKPROBE_SYMBOL(patch_map);
+>>
+>>  static void patch_unmap(int fixmap)
+>>  {
+>> --
+>> 2.7.4
+>>
