@@ -2,127 +2,116 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1E020EA0B
-	for <lists+linux-csky@lfdr.de>; Tue, 30 Jun 2020 02:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF7F20FE10
+	for <lists+linux-csky@lfdr.de>; Tue, 30 Jun 2020 22:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbgF3AM5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 29 Jun 2020 20:12:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34692 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727834AbgF3AM4 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 29 Jun 2020 20:12:56 -0400
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D524207E8;
-        Tue, 30 Jun 2020 00:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593475975;
-        bh=Eun4NbTfii0sW6QvTru7wRSuIGDGkkNEhp0AOlaNHNE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Py1tgRPvgo9LIcjYU1cqG1eObUlUJhT6HW0GA2FfobvWok6kLb/+5KWVyDjsHyTSt
-         zB7pyxrK37gPMIyrmt9QFrggg0sy2lBX5vDCK9CZzaaF6JQGmWiP+QIrjJ3p4GkYCl
-         eJ/RDztRABDZpB1hepOGzJ/XSimfXWB8LI/pko/o=
-Received: by mail-lj1-f172.google.com with SMTP id h22so13232700lji.9;
-        Mon, 29 Jun 2020 17:12:55 -0700 (PDT)
-X-Gm-Message-State: AOAM530tcDYHX8GbFfJ+XsMo1z4O5qRn0AHfi12neIzlzsnXsplBlYUT
-        pYmCZbXjlwc+bzTmJBB19qyPuubY8zRD5iPLBH4=
-X-Google-Smtp-Source: ABdhPJxjszLCB+6P/QOKJOqow+AAN21SNdoVF1M0w8qzY2jVobe7wqsxOnzyz9cWZ7vJYU0iobiOGI8eZIH6eqcyzyI=
-X-Received: by 2002:a2e:5344:: with SMTP id t4mr7382221ljd.79.1593475973227;
- Mon, 29 Jun 2020 17:12:53 -0700 (PDT)
+        id S1730516AbgF3Uqw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 30 Jun 2020 16:46:52 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:45357 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730076AbgF3UpZ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 30 Jun 2020 16:45:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593549923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7ODhBJEySE25lLdIL36bUDM3v/f2DyEns/dEg5PpJb4=;
+        b=X9i97eOSaM7f8AHEbT2WJuVItaQLrRsPSCpMXptIhKOZeZGy8QJ0CshukCUPOTD1Uif66r
+        kdhIDPVbxBN0dsxZxufgcwq4Buety130gEHTdEcn2h6E3XZWEGRFmdbq12x0AapI90LUd7
+        2nfhiT5xORDnXKFtjk3kLn/9Cukpk1o=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-411-cxc5n9wkOpCx2jc61pJWGQ-1; Tue, 30 Jun 2020 16:45:21 -0400
+X-MC-Unique: cxc5n9wkOpCx2jc61pJWGQ-1
+Received: by mail-qt1-f199.google.com with SMTP id c5so15275561qtv.20
+        for <linux-csky@vger.kernel.org>; Tue, 30 Jun 2020 13:45:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7ODhBJEySE25lLdIL36bUDM3v/f2DyEns/dEg5PpJb4=;
+        b=crgaaYT4cU6iWDY4o4hmUwswqlltHuJ/zFNTtGWDKaU6QhHs6Y4ieQrTLwrKo5lkXB
+         AAiPXoGCUmAKfKax1+V9rv7D0WUzDmrU2/WWTxwyHVnXNKapoWg9KNyyzVulU9d4NgZp
+         liO9A6ewoXnIzScJ6Zv2MrpZoH8uqP2hhrnsMH30QoVpQgbc2Qpo4Dsm+yKSfo8sdL8V
+         Ut2z1DvW/VN5xDYbfLg8YSSIT54prgB7ggRvTR+xAuHnSfbeqpQS8RQ5ki1T/Vy+C2F/
+         G+ZFWCovpj2EQChVIJ2fYhThSyuXVTPe/xhJDORspB9C5rgIcwlLPvU742LA1Zj7kpGv
+         t2gQ==
+X-Gm-Message-State: AOAM530yNcXSVexN74JgWKToM98QbHRnBLrvKRcRgBz5KbteIhjjWF9g
+        DUEaxrs9iKnTDYGPaTb0QE/+Kr9hq9ansIFI2bpDbafCzSyAe/yQ+yp6coZi6sddnmrzXu3uVSJ
+        oECRbFPdWyvyO5yImqvwnAg==
+X-Received: by 2002:a0c:a306:: with SMTP id u6mr8860912qvu.88.1593549920888;
+        Tue, 30 Jun 2020 13:45:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy4ZC/3hV5sZ3jrFOaj/HrUvlBV2LSVm33S24f5OpZpmLOt/vUUR0YiRw9Ypkc2T/z0QGSYbg==
+X-Received: by 2002:a0c:a306:: with SMTP id u6mr8860803qvu.88.1593549919465;
+        Tue, 30 Jun 2020 13:45:19 -0700 (PDT)
+Received: from xz-x1.redhat.com ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id y16sm4443907qty.1.2020.06.30.13.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 13:45:18 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
+        John Hubbard <jhubbard@nvidia.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org
+Subject: [PATCH v4 06/26] mm/csky: Use general page fault accounting
+Date:   Tue, 30 Jun 2020 16:45:17 -0400
+Message-Id: <20200630204517.38760-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20200629012524.c941a5f18aa7f312d325f714@kernel.org> <mhng-37e70bbc-2616-41e6-bc8a-f144ca647c97@palmerdabbelt-glaptop1>
-In-Reply-To: <mhng-37e70bbc-2616-41e6-bc8a-f144ca647c97@palmerdabbelt-glaptop1>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 30 Jun 2020 08:12:41 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ-LcZ_fxTCkHNBYqZn-C-QVeLp12FysaTjPe6PuTQYxg@mail.gmail.com>
-Message-ID: <CAJF2gTQ-LcZ_fxTCkHNBYqZn-C-QVeLp12FysaTjPe6PuTQYxg@mail.gmail.com>
-Subject: Re: [PATCH V2] riscv: Fixup compile error BUILD_BUG_ON failed
-To:     Palmer Dabbelt <palmerdabbelt@google.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, linux-csky@vger.kernel.org,
-        Zong Li <zong.li@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Palmer,
+Use the general page fault accounting by passing regs into handle_mm_fault().
+It naturally solve the issue of multiple page fault accounting when page fault
+retry happened.
 
-On Tue, Jun 30, 2020 at 7:22 AM Palmer Dabbelt <palmerdabbelt@google.com> w=
-rote:
->
-> On Sun, 28 Jun 2020 09:25:24 PDT (-0700), mhiramat@kernel.org wrote:
-> > On Sun, 28 Jun 2020 16:07:37 +0000
-> > guoren@kernel.org wrote:
-> >
-> >> From: Guo Ren <guoren@linux.alibaba.com>
-> >>
-> >> Unfortunately, the current code couldn't be compiled:
-> >>
-> >>   CC      arch/riscv/kernel/patch.o
-> >> In file included from ./include/linux/kernel.h:11,
-> >>                  from ./include/linux/list.h:9,
-> >>                  from ./include/linux/preempt.h:11,
-> >>                  from ./include/linux/spinlock.h:51,
-> >>                  from arch/riscv/kernel/patch.c:6:
-> >> In function =E2=80=98fix_to_virt=E2=80=99,
-> >>     inlined from =E2=80=98patch_map=E2=80=99 at arch/riscv/kernel/patc=
-h.c:37:17:
-> >> ./include/linux/compiler.h:392:38: error: call to =E2=80=98__compileti=
-me_assert_205=E2=80=99 declared with attribute error: BUILD_BUG_ON failed: =
-idx >=3D __end_of_fixed_addresses
-> >>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER=
-__)
-> >>                                       ^
-> >> ./include/linux/compiler.h:373:4: note: in definition of macro =E2=80=
-=98__compiletime_assert=E2=80=99
-> >>     prefix ## suffix();    \
-> >>     ^~~~~~
-> >> ./include/linux/compiler.h:392:2: note: in expansion of macro =E2=80=
-=98_compiletime_assert=E2=80=99
-> >>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER=
-__)
-> >>   ^~~~~~~~~~~~~~~~~~~
-> >> ./include/linux/build_bug.h:39:37: note: in expansion of macro =E2=80=
-=98compiletime_assert=E2=80=99
-> >>  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >>                                      ^~~~~~~~~~~~~~~~~~
-> >> ./include/linux/build_bug.h:50:2: note: in expansion of macro =E2=80=
-=98BUILD_BUG_ON_MSG=E2=80=99
-> >>   BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-> >>   ^~~~~~~~~~~~~~~~
-> >> ./include/asm-generic/fixmap.h:32:2: note: in expansion of macro =E2=
-=80=98BUILD_BUG_ON=E2=80=99
-> >>   BUILD_BUG_ON(idx >=3D __end_of_fixed_addresses);
-> >>   ^~~~~~~~~~~~
-> >>
-> >> Because fix_to_virt(, idx) needs a const value, not a dynamic variable=
- of
-> >> reg-a0 or BUILD_BUG_ON failed with "idx >=3D __end_of_fixed_addresses"=
-.
-> >
-> > Looks good to me :)
-> >
-> > Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
->
-> Is there a configuration that runs into this bug?  It's not showing up fo=
-r me,
-> and I generally try to add regressions to my test suite.
->
-> > Thanks!
+CC: Guo Ren <guoren@kernel.org>
+CC: linux-csky@vger.kernel.org
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ arch/csky/mm/fault.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-KPROBE, I'll send the patch soon.
+diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+index 7137e2e8dc57..c3f580714ee4 100644
+--- a/arch/csky/mm/fault.c
++++ b/arch/csky/mm/fault.c
+@@ -151,7 +151,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 	 * the fault.
+ 	 */
+ 	fault = handle_mm_fault(vma, address, write ? FAULT_FLAG_WRITE : 0,
+-				NULL);
++				regs);
+ 	if (unlikely(fault & VM_FAULT_ERROR)) {
+ 		if (fault & VM_FAULT_OOM)
+ 			goto out_of_memory;
+@@ -161,16 +161,6 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+ 			goto bad_area;
+ 		BUG();
+ 	}
+-	if (fault & VM_FAULT_MAJOR) {
+-		tsk->maj_flt++;
+-		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1, regs,
+-			      address);
+-	} else {
+-		tsk->min_flt++;
+-		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1, regs,
+-			      address);
+-	}
+-
+ 	mmap_read_unlock(mm);
+ 	return;
+ 
+-- 
+2.26.2
 
---=20
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
