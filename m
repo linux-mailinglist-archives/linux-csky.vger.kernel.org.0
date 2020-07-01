@@ -2,19 +2,19 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C932107EF
-	for <lists+linux-csky@lfdr.de>; Wed,  1 Jul 2020 11:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EBD210842
+	for <lists+linux-csky@lfdr.de>; Wed,  1 Jul 2020 11:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728982AbgGAJXj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 1 Jul 2020 05:23:39 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:58090 "EHLO loongson.cn"
+        id S1729278AbgGAJfo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 1 Jul 2020 05:35:44 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:33250 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728776AbgGAJXj (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 1 Jul 2020 05:23:39 -0400
+        id S1726715AbgGAJfn (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 1 Jul 2020 05:35:43 -0400
 Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx72oSVvxebJ5NAA--.6442S3;
-        Wed, 01 Jul 2020 17:23:30 +0800 (CST)
-Subject: Re: [PATCH v4 03/14] irqchip/csky-mpintc: Fix potential resource
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx72nnWPxeqKBNAA--.1635S3;
+        Wed, 01 Jul 2020 17:35:36 +0800 (CST)
+Subject: Re: [PATCH v4 02/14] irqchip/csky-apb-intc: Fix potential resource
  leaks
 To:     Markus Elfring <Markus.Elfring@web.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -22,69 +22,112 @@ To:     Markus Elfring <Markus.Elfring@web.de>,
         Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
         linux-csky@vger.kernel.org
 References: <1593569786-11500-1-git-send-email-yangtiezhu@loongson.cn>
- <1593569786-11500-4-git-send-email-yangtiezhu@loongson.cn>
- <35eae701-e6b1-96af-9be4-0993330a17dc@web.de>
+ <1593569786-11500-3-git-send-email-yangtiezhu@loongson.cn>
+ <564ffff9-6043-7191-2458-f425dd8d0c11@web.de>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <6a468fb4-74b0-4bf3-49bc-cfc62d734e24@loongson.cn>
-Date:   Wed, 1 Jul 2020 17:23:29 +0800
+Message-ID: <1a0e007a-db94-501b-4ab9-0bb479ec093b@loongson.cn>
+Date:   Wed, 1 Jul 2020 17:35:35 +0800
 User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
  Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <35eae701-e6b1-96af-9be4-0993330a17dc@web.de>
+In-Reply-To: <564ffff9-6043-7191-2458-f425dd8d0c11@web.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx72oSVvxebJ5NAA--.6442S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jr1ftryDXF4DAr4DtF43KFg_yoW3trb_u3
-        45CrWkWa18JFn5AF4Svw4Yqa4vgr4UWw13tFW3Aws7J3s8X3yDZrWxA343ta47tFyjvFsx
-        Ga17XrW2qrnFvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbI8YjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMc
-        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkI
-        ecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AK
-        xVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xU4nNVDUUUU
+X-CM-TRANSID: AQAAf9Dx72nnWPxeqKBNAA--.1635S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF1DGr4DWw1UArWkGryfJFb_yoW8Cw15pF
+        WUXrZI9rZ7t3W7Wrn7ZF97X3s8u347KFZFy34Skas7Zrn8Crn8CrW8AFnYvFn8Cw1xWa1F
+        vFs5Aa4rCa15AFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvqb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
+        c2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
+        aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07jriSQUUUUU=
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 07/01/2020 03:49 PM, Markus Elfring wrote:
->> exception handling. By the way, do some coding-style cleanups
-> I propose to consider another bit of fine-tuning.
->
->
-> …
->> +++ b/drivers/irqchip/irq-csky-mpintc.c
-> …
->> @@ -270,12 +274,24 @@ csky_mpintc_init(struct device_node *node, struct device_node *parent)
->>
->>   #ifdef CONFIG_SMP
->>   	ipi_irq = irq_create_mapping(root_domain, IPI_IRQ);
->> -	if (!ipi_irq)
->> -		return -EIO;
->> +	if (!ipi_irq) {
->> +		ret = -EIO;
->> +		goto err_domain_remove;
-> How do you think about to use the following source code variant
-> at this place?
->
-> +		irq_domain_remove(root_domain);
-> +		ret = -EIO;
-> +		goto err_iounmap;
->
->
-> Would you like to avoid the repetition of the check “#ifdef CONFIG_SMP”?
+On 07/01/2020 04:40 PM, Markus Elfring wrote:
+>> … were not released in a few error cases. …
+> Another small wording adjustment:
+>    … in two error cases. …
 
-OK, thank you, it looks good to me, I will do it in v5.
+OK
+
+>
+>
+> …
+>> +++ b/drivers/irqchip/irq-csky-apb-intc.c
+> …
+>> @@ -126,10 +127,17 @@ ck_intc_init_comm(struct device_node *node, struct device_node *parent)
+> …
+>> +err_iounmap:
+>> +	iounmap(reg_base);
+>> +	return ret;
+>>   }
+> …
+>
+> How do you think about to use the statement “return -ENOMEM;”?
+
+OK
+
+> Can the local variable “ret” be omitted in this function implementation?
+
+If remove the local variable "ret",  it will look like this:
+
+diff --git a/drivers/irqchip/irq-csky-apb-intc.c 
+b/drivers/irqchip/irq-csky-apb-intc.c
+index 5a2ec43..7e56657 100644
+--- a/drivers/irqchip/irq-csky-apb-intc.c
++++ b/drivers/irqchip/irq-csky-apb-intc.c
+@@ -101,8 +101,6 @@ static inline void setup_irq_channel(u32 magic, void 
+__iomem *reg_addr)
+  static int __init
+  ck_intc_init_comm(struct device_node *node, struct device_node *parent)
+  {
+-       int ret;
+-
+         if (parent) {
+                 pr_err("C-SKY Intc not a root irq controller\n");
+                 return -EINVAL;
+@@ -118,18 +116,23 @@ ck_intc_init_comm(struct device_node *node, struct 
+device_node *parent)
+&irq_generic_chip_ops, NULL);
+         if (!root_domain) {
+                 pr_err("C-SKY Intc irq_domain_add failed.\n");
+-               return -ENOMEM;
++               goto err_iounmap;
+         }
+
+-       ret = irq_alloc_domain_generic_chips(root_domain, 32, 1,
++       if (irq_alloc_domain_generic_chips(root_domain, 32, 1,
+                         "csky_intc", handle_level_irq,
+-                       IRQ_NOREQUEST | IRQ_NOPROBE | IRQ_NOAUTOEN, 0, 0);
+-       if (ret) {
++                       IRQ_NOREQUEST | IRQ_NOPROBE | IRQ_NOAUTOEN, 0, 0)) {
+                 pr_err("C-SKY Intc irq_alloc_gc failed.\n");
+-               return -ENOMEM;
++               goto err_domain_remove;
+         }
+
+         return 0;
++
++err_domain_remove:
++       irq_domain_remove(root_domain);
++err_iounmap:
++       iounmap(reg_base);
++       return -ENOMEM;
+  }
 
 >
 > Regards,
