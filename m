@@ -2,27 +2,27 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDCF210555
-	for <lists+linux-csky@lfdr.de>; Wed,  1 Jul 2020 09:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74494210676
+	for <lists+linux-csky@lfdr.de>; Wed,  1 Jul 2020 10:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbgGAHtx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 1 Jul 2020 03:49:53 -0400
-Received: from mout.web.de ([217.72.192.78]:41715 "EHLO mout.web.de"
+        id S1726715AbgGAIk5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 1 Jul 2020 04:40:57 -0400
+Received: from mout.web.de ([212.227.17.12]:51527 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728217AbgGAHtw (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 1 Jul 2020 03:49:52 -0400
+        id S1726670AbgGAIk4 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 1 Jul 2020 04:40:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1593589771;
-        bh=AUSAQHdZ185AAIFEsveQlxvM8o94B7vxd0p7U0M505g=;
+        s=dbaedf251592; t=1593592836;
+        bh=eoZXVuPwrXpUh4mYMbAjgn9KOvWCEAKdB4s1f+uosGU=;
         h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=LKtqTSVdcvio03D+QGvlFPp/E3FoXOd7dEgeeVAoI2FQ6IMZ4mdim6B8+qunKA1e+
-         SAiEyxd6m0q6q/I2vh7aaaAgJhHtSpuZ7KcUEG2S0IROGCT8k6/EOuwJzHZIr2DACP
-         P4npAd4kYnTFiQre1NJh7TuzbXe2o8bZzNIvy7u8=
+        b=FB17ez+wNxPIXtxU4/smdqehczCinZQgT30B/hfjz0rUde3KurLJDaHkxGHkhUNcu
+         gIIsgvbgDcJfPNK5K58zbdbRc98511Mvvq0uQTesbEUyX/+3W/QnZCUMhzT1wOtjgU
+         mFEMqWp1rrOIOzhIafIbFnIwYfJKH6xaWjBQql+k=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([78.49.41.17]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MhFhg-1jDeJN20m2-00eK7j; Wed, 01
- Jul 2020 09:49:31 +0200
-Subject: Re: [PATCH v4 03/14] irqchip/csky-mpintc: Fix potential resource
+Received: from [192.168.1.2] ([78.49.41.17]) by smtp.web.de (mrweb103
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0LxOHm-1il1O22x4c-016wFD; Wed, 01
+ Jul 2020 10:40:36 +0200
+Subject: Re: [PATCH v4 02/14] irqchip/csky-apb-intc: Fix potential resource
  leaks
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -31,7 +31,7 @@ To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         linux-csky@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 References: <1593569786-11500-1-git-send-email-yangtiezhu@loongson.cn>
- <1593569786-11500-4-git-send-email-yangtiezhu@loongson.cn>
+ <1593569786-11500-3-git-send-email-yangtiezhu@loongson.cn>
 From:   Markus Elfring <Markus.Elfring@web.de>
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
@@ -76,73 +76,66 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <35eae701-e6b1-96af-9be4-0993330a17dc@web.de>
-Date:   Wed, 1 Jul 2020 09:49:21 +0200
+Message-ID: <564ffff9-6043-7191-2458-f425dd8d0c11@web.de>
+Date:   Wed, 1 Jul 2020 10:40:35 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <1593569786-11500-4-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1593569786-11500-3-git-send-email-yangtiezhu@loongson.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:VK0SXfyvpzWFdJ0AaSP9rc2ghNhPd5/O3GG2Z8MUfriTZ56VE/t
- Ed1/i+KNfFFuIBAlA5a81ablBx7x1pMOWZodjdOxyH3b5FeV8wMBvNYX24cQI/6T2UlBvfP
- +vWKpyouZfyt6eFl9Q5u6IMtPoFM/C7LuThfTZLzt1jR3CjT0Tf3MRIXUOvEMQFh7rBd5rD
- F6GBUR9nZWMwTminvvCeg==
+X-Provags-ID: V03:K1:S4EgZBj8e7mQDOmZIsBIbSuc5Y2irbiz+K+XRonPv+1h3Cfog3Q
+ QFHSqT13LSf+AtXFFbOPHEjka0k8xKFPUIewayOUKn60RLYGGDWIlbxoPJjQ5ni9DCrA66t
+ liP9yUzT9O9V7IVa7rXI1GoQuQFkV3pT240d/NDo2zUYGsmjdjw2Nw6ZIsHkN4HbKIvV3eh
+ ksgz925KCB0/qUrs+YEjg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Gl2/AEw5Jps=:7OhERpI8F6QKhPQ9B0kPwT
- HNCCSdiaS4x01s39GuQgJagg9a9pR5fe4SiGHB3I7Y8Pt0SND2dil5M0MGbGqlLqJAjOJMtsg
- 2mgJti2aXVEjAywRXK+WCXwm++Y2Q6mvuUdyt0a4gXahV10ND1wDqF8PSE17k5AIrmUw96LRz
- VsqCgFd8l1QrSl+oYsUXeujfFUdCJnXO9XPUkWBTw6QaMZialYRhTFduoPrdbXv8O/LfhrMzx
- Qvbjba8s+fOxISMH4Yz60kEF27SzkB7jyk7DbrVneSe1ipJvFjYBRd8Z2Qd595TImqOFWUXQl
- kVkCa1RmvZ3slfpiIp5mA7UQsLao5xrJHAeiqlf/Z4Sdoi6/alVf60iFLwzDix/TUbQIrFMtH
- SBsGO9X8urbTdCw01PVjM3s9XHdt3EPPBfpdbUSn9ESRTivrRzIEpLjtTmTtJ0asVNEZIBf5C
- TvUymg8CHUBN4XtDxODCqfABiFn2eQyzDK7aJUZ2qGrBjz4fxmpC8wzfbmifwOqaurY2x5bsz
- BN/4ZxK2FurWOAH35+c/wTh+BNJOh/FxAMHTjy/fkrbpTcVwHXmwJmBmApwej+ddFNd/GZ4zK
- kIm/aiQhcpI3uTC4oQiWLG4Oc6XfiAl4YsezelsHfsXOmOZpr0Rd7aSzOmX+zogAE9xipweEE
- ziB4OBPa/zerNEXdWW9JUm4VzidPBp6MmcXy9rk24ogSSFNWo+TORoCl3KoWU7WpAINy8NAk7
- 5auqdCWOK6PvM4fK2TS/m43nhn3CQ8ToZ/lykhUCw9l3+kZ0Mk2cnBGKVuq/xmlPV1/uhap7e
- k8uKyLu8sR6EzwpayKlNXFrV9GOWw4se1YsAJtEQo1czJ830PQLJC0cFPCyUaZtNyXjXKZds8
- zycftJKLlH+JsQF2NEE2yl+1ub55D+DeYHAZuzWWBSW9oQSMVpSplQ01ztfiWD92XRXDH1M+W
- Z56C9n1xtNzAOwvaOlt2JpaRGd4VlkjFZsYiC+WbexlD33x0tjvxgpXI6HdDnMMVq2hYwGvsS
- 4jtr6tK4l3fMp/1sn716zABSEOi6jsD5TSSPZiw7XLy7aSJTNy7sXZt20vEDzFJbzH/mvfq5U
- m6HL0CudFGnjr4eSN0u/bztFFEhu7A79CiA/d7t2Ah4nI54AsRahFhYZbsl97JsYbOKP3lDlk
- N2sG60DKipDrb20WKtvoW2ND/3t4ilaXPZreB+th4plDD+7huQz8dsGaDGQA4idzU1l+ETdKz
- qPH+mM+TwbwgDb4Xj
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7GR720Ufx/U=:Tl+QK/ZoMe2Sk/Gtm+ftbW
+ 3kz6OFa3wrQIqirJAHUtiX5V+c9+kd8TwdJnBSRow0qAlRS+Gip5GW1pb+nevicDCRusoeJ3K
+ K3A4aL2Kqd0TEf1evu6n6gDeVJCgPx6CuXCtPb+vA49hA8mg4XkO+2Evcd9/oPle/R3Lm8eWv
+ e+p12oQ1hKY0phXTYEu6x3sJzgWfHRTp2Q/ZsD83q9Rcef964a9Xb0xaaHMW6vWgYjdGyTSCf
+ UYS6LAZyzn22oSfqhTHw9XZDsil73HdzwX4W+p3Gyi8WLnZrUW+dG9c+2gEiO99+g2eDrWL99
+ y3/qJV2+U062QB0zdZ/zpIT9hKRvYVwD1AuCT2RIpnNvLJi7eAiUKqZ8zUtmWvLBwo3xuBLgr
+ FAdtPaAXdV1r7UL9Raojw0NN/PziA80SG3Z+qx+EUt76vDdXCDVxx7hhjcqX3mg0UXAZMkha1
+ 6b5Mw15m0u7nUzGNjP84FldpGWGvYGsmCbR1+8ujiVGNtGfMG1b+eRKH4vBtIuersHe+LTnxO
+ zZIlhVtY54ZrRqFqwAvV4lUtIDa3b7MuxXvyMSDNR9huLwUyxFen/sy0UeXMptDgDxR5NFRuZ
+ /eI7DWZ3bnArHCAZuZMawEfL85MI38QzFqub3HFKw48/HSc1AM9aEdxKk0MNtPJkKxw6OtCfY
+ 1ntpjmAw6n6ryuI57/EFdXwGK3KEPPby4raz0dk9aphZ2CTRZ/WYel/TUstYOP85ot3nOa8Pj
+ qW0RDJSDnWZakT8dTmjUILgr2JlNduDxsl1xGmvEzAjqpw/PYvTDca5e5PrPBa/QHtoUgvYZG
+ MMqWP43YBbgLdomCimJWoiMpywr4lwY0ONJCyptMO5Aw0WaZHfxgOlp53oelF9pEgc62MhrUL
+ A2DeeThxIqSs1SV+qq7UcWn2MYteH/kl6jjTyT4XcQ+ImBE5oKQsKTsR6zcj/o/NGPnI1yAJ8
+ NnhJDH+YZt8ge/C3vHcG8O3qr+pq9o2/evbZQEET8SHkUpylhMUabzBIlRQ4sO3i3Ux5rg0ng
+ kpl2Nre+njUAW9VkCSG1/HA9v5IECkKxlZofgEMZziikc1G6x3tRu6sRV6ENEiq4vGbpc9/0k
+ GbCHuZr8Zgilz0XmYQir34oQ05XecXgxm6q5DcuCo6rLSm0WilA5AX7hIkyqKBMQ5yJosZr+m
+ ccdatjqdc/7/wsdoMz3HvkDz+6QQWqvsSvi0/RpNW2B3zoRUWH1TQ2/OhybdPfI/o1LxS4qQx
+ 5Yao0NM6WKMHF4ykF
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-> exception handling. By the way, do some coding-style cleanups
+> =E2=80=A6 were not released in a few error cases. =E2=80=A6
 
-I propose to consider another bit of fine-tuning.
+Another small wording adjustment:
+  =E2=80=A6 in two error cases. =E2=80=A6
 
 
 =E2=80=A6
-> +++ b/drivers/irqchip/irq-csky-mpintc.c
+> +++ b/drivers/irqchip/irq-csky-apb-intc.c
 =E2=80=A6
-> @@ -270,12 +274,24 @@ csky_mpintc_init(struct device_node *node, struct =
-device_node *parent)
->
->  #ifdef CONFIG_SMP
->  	ipi_irq =3D irq_create_mapping(root_domain, IPI_IRQ);
-> -	if (!ipi_irq)
-> -		return -EIO;
-> +	if (!ipi_irq) {
-> +		ret =3D -EIO;
-> +		goto err_domain_remove;
+> @@ -126,10 +127,17 @@ ck_intc_init_comm(struct device_node *node, struct=
+ device_node *parent)
+=E2=80=A6
+> +err_iounmap:
+> +	iounmap(reg_base);
+> +	return ret;
+>  }
+=E2=80=A6
 
-How do you think about to use the following source code variant
-at this place?
-
-+		irq_domain_remove(root_domain);
-+		ret =3D -EIO;
-+		goto err_iounmap;
-
-
-Would you like to avoid the repetition of the check =E2=80=9C#ifdef CONFIG=
-_SMP=E2=80=9D?
+How do you think about to use the statement =E2=80=9Creturn -ENOMEM;=E2=80=
+=9D?
+Can the local variable =E2=80=9Cret=E2=80=9D be omitted in this function i=
+mplementation?
 
 Regards,
 Markus
