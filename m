@@ -2,95 +2,99 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FC7212368
-	for <lists+linux-csky@lfdr.de>; Thu,  2 Jul 2020 14:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8372D21273A
+	for <lists+linux-csky@lfdr.de>; Thu,  2 Jul 2020 17:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728893AbgGBMgH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 2 Jul 2020 08:36:07 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:46530 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727847AbgGBMgH (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 2 Jul 2020 08:36:07 -0400
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL2uu1P1eaIZOAA--.7585S3;
-        Thu, 02 Jul 2020 20:35:59 +0800 (CST)
-Subject: Re: [v4 02/14] irqchip/csky-apb-intc: Fix potential resource leaks
-To:     Markus Elfring <Markus.Elfring@web.de>,
+        id S1729912AbgGBPBq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 2 Jul 2020 11:01:46 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:52132 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726032AbgGBPBq (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 2 Jul 2020 11:01:46 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 062EvRwS018136;
+        Thu, 2 Jul 2020 15:01:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=corp-2020-01-29;
+ bh=EovBjL/VDEJMxYfhQUs2tcfenMAKo6Sk/T/23Jbbdlc=;
+ b=YS392JwJ/K+bmWg4R2XF6a0CNZCiwJgA9p8aSAD6auJtb0SaSbKMQBCeqKYZDofftZ/3
+ NE7Mvus2/HD90se7QKJYIiJ9QhX/Ob8biOhwHlO6FD28ELUo5EkDMHLFrSQnQNoO3roN
+ nkK11EgJebSEomRiILOo2hPmwHB539A0sszif7H4qMk2LWN2bYQ+ns8SJg9Dr2G/aY4N
+ VUoZ2kW2KoQuchO1e4UGlLcwTETQ0NyNHPLUCVPGs3zzO02U75COx5S9R2wmfpxPpikx
+ BAsOu1HQloDAtl4kNakVCnXFZw98XYQUQ8Vb+aJlPGmk6u4GKfmSpbfvXn9f9QxeqlRI nw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 31ywrby6cd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 02 Jul 2020 15:01:07 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 062Ewpe0090264;
+        Thu, 2 Jul 2020 15:01:06 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 31xg19ggjs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 02 Jul 2020 15:01:04 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 062F0xVD010335;
+        Thu, 2 Jul 2020 15:00:59 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 02 Jul 2020 15:00:58 +0000
+Date:   Thu, 2 Jul 2020 18:00:51 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Markus Elfring <Markus.Elfring@web.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
         Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH v4 02/14] irqchip/csky-apb-intc: Fix potential resource
+ leaks
+Message-ID: <20200702150051.GR2549@kadam>
 References: <1593569786-11500-1-git-send-email-yangtiezhu@loongson.cn>
  <1593569786-11500-3-git-send-email-yangtiezhu@loongson.cn>
  <564ffff9-6043-7191-2458-f425dd8d0c11@web.de>
  <1a0e007a-db94-501b-4ab9-0bb479ec093b@loongson.cn>
- <971c649e-fe07-3771-6fea-f5aaeaf090ad@web.de>
- <c7cc848a-1ce0-e877-aa44-ebafe4b5985c@loongson.cn>
- <41b48aa5-e5b2-0257-8b3d-07e1b86634b4@web.de>
- <0726ddc2-6b01-2ac8-d5bf-74c3df36b6ef@loongson.cn>
- <c0093731-fa42-9d43-ebfc-208ba51a96c5@loongson.cn>
- <14cacb4e-d687-dfc4-8ad8-26f9f1050a0e@web.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <856f5c62-d731-fc3c-0e41-0c2d8b4e24a3@loongson.cn>
-Date:   Thu, 2 Jul 2020 20:35:58 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <14cacb4e-d687-dfc4-8ad8-26f9f1050a0e@web.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxL2uu1P1eaIZOAA--.7585S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrtrW5tF1DAr4DWFW5Zr4DXFb_yoW3ArX_Cr
-        n0yrs2934DJa13tFn3KwsFqFnYgr98W3Z2vayrCFZrZ3s3G3ZrZayfGFyfAw1xXFWrCr9I
-        kr1Y9r9YkFZxXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbs8YjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWxJVW8Jr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l
-        c2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
-        aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IU8bTm3UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+In-Reply-To: <1a0e007a-db94-501b-4ab9-0bb479ec093b@loongson.cn>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=1 bulkscore=0 mlxscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2007020106
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ clxscore=1011 cotscore=-2147483648 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 suspectscore=1 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2007020106
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 07/02/2020 08:24 PM, Markus Elfring wrote:
->>>>>>> +++ b/drivers/irqchip/irq-csky-apb-intc.c
-> …
->> Let us keep it as it is
-> I propose to reconsider also this view.
->
->
->> to make the code clear and to avoid the alignment issue:
->>
->> ret = foo();
->> if (ret) {
->>          ret = -ENOMEM;
-> How do you think about to delete this assignment if you would like to
-> reuse the return value from a call of the function “irq_alloc_domain_generic_chips”?
+On Wed, Jul 01, 2020 at 05:35:35PM +0800, Tiezhu Yang wrote:
+> On 07/01/2020 04:40 PM, Markus Elfring wrote:
+> > > … were not released in a few error cases. …
+> > Another small wording adjustment:
+> >    … in two error cases. …
+> 
+> OK
 
-OK, looks good to me, thank you.
+A lot of people have told Marcus over and over not to comment on commit
+messages.  Greg has an automatic bot to respond to him.
 
->
->
->>          goto ...
->> }
->
-> Please apply a known script also for the purpose to achieve consistent indentation.
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/checkpatch.pl?id=cd77006e01b3198c75fb7819b3d0ff89709539bb#n3301
+https://lkml.org/lkml/2020/6/13/25
 
-OK
+Marcus ignores us when we ask him to stop.  Some new developers have
+emailed me privately that they were confused and discouraged with his
+feedback because they assumed he was a senior developer or something.
 
->
-> Regards,
-> Markus
+regards,
+dan carpenter
 
