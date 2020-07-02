@@ -2,99 +2,259 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8372D21273A
-	for <lists+linux-csky@lfdr.de>; Thu,  2 Jul 2020 17:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87460212F0A
+	for <lists+linux-csky@lfdr.de>; Thu,  2 Jul 2020 23:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729912AbgGBPBq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 2 Jul 2020 11:01:46 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:52132 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbgGBPBq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 2 Jul 2020 11:01:46 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 062EvRwS018136;
-        Thu, 2 Jul 2020 15:01:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=corp-2020-01-29;
- bh=EovBjL/VDEJMxYfhQUs2tcfenMAKo6Sk/T/23Jbbdlc=;
- b=YS392JwJ/K+bmWg4R2XF6a0CNZCiwJgA9p8aSAD6auJtb0SaSbKMQBCeqKYZDofftZ/3
- NE7Mvus2/HD90se7QKJYIiJ9QhX/Ob8biOhwHlO6FD28ELUo5EkDMHLFrSQnQNoO3roN
- nkK11EgJebSEomRiILOo2hPmwHB539A0sszif7H4qMk2LWN2bYQ+ns8SJg9Dr2G/aY4N
- VUoZ2kW2KoQuchO1e4UGlLcwTETQ0NyNHPLUCVPGs3zzO02U75COx5S9R2wmfpxPpikx
- BAsOu1HQloDAtl4kNakVCnXFZw98XYQUQ8Vb+aJlPGmk6u4GKfmSpbfvXn9f9QxeqlRI nw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 31ywrby6cd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 02 Jul 2020 15:01:07 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 062Ewpe0090264;
-        Thu, 2 Jul 2020 15:01:06 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31xg19ggjs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Jul 2020 15:01:04 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 062F0xVD010335;
-        Thu, 2 Jul 2020 15:00:59 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 02 Jul 2020 15:00:58 +0000
-Date:   Thu, 2 Jul 2020 18:00:51 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Markus Elfring <Markus.Elfring@web.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v4 02/14] irqchip/csky-apb-intc: Fix potential resource
- leaks
-Message-ID: <20200702150051.GR2549@kadam>
-References: <1593569786-11500-1-git-send-email-yangtiezhu@loongson.cn>
- <1593569786-11500-3-git-send-email-yangtiezhu@loongson.cn>
- <564ffff9-6043-7191-2458-f425dd8d0c11@web.de>
- <1a0e007a-db94-501b-4ab9-0bb479ec093b@loongson.cn>
+        id S1726106AbgGBVrK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 2 Jul 2020 17:47:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49354 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725937AbgGBVrK (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 2 Jul 2020 17:47:10 -0400
+Received: from kernel.org (unknown [87.71.40.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E6352075D;
+        Thu,  2 Jul 2020 21:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593726429;
+        bh=gvP2zjzt3W4dfD2t75YDPObWaiQFVtNlgHUhH3gNn3c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WhfWKe7UYTpsr66NZ2WC307AcyCJ1TtI7G2OBKp9HhrsKZKhdx1w7pMdeOwPIp2/g
+         Vas6aAz3CGAbswd8kXCi7FErQYIQ1j+gLUFQSSZoQXfzuWLvKdc63AGpB15cUP2ho4
+         d9OrkMXIELqL/mKuh/FECINnwBEdop8sjE8tgdOw=
+Date:   Fri, 3 Jul 2020 00:46:54 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Joerg Roedel <joro@8bytes.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] mm: cleanup usage of <asm/pgalloc.h>
+Message-ID: <20200702214654.GB2999148@kernel.org>
+References: <20200627143453.31835-1-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a0e007a-db94-501b-4ab9-0bb479ec093b@loongson.cn>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=1 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007020106
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9670 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- clxscore=1011 cotscore=-2147483648 priorityscore=1501 lowpriorityscore=0
- malwarescore=0 mlxscore=0 adultscore=0 suspectscore=1 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007020106
+In-Reply-To: <20200627143453.31835-1-rppt@kernel.org>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Jul 01, 2020 at 05:35:35PM +0800, Tiezhu Yang wrote:
-> On 07/01/2020 04:40 PM, Markus Elfring wrote:
-> > > … were not released in a few error cases. …
-> > Another small wording adjustment:
-> >    … in two error cases. …
+Gentle ping.
+
+On Sat, Jun 27, 2020 at 05:34:45PM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> OK
+> Hi,
+> 
+> Most architectures have very similar versions of pXd_alloc_one() and
+> pXd_free_one() for intermediate levels of page table. 
+> These patches add generic versions of these functions in
+> <asm-generic/pgalloc.h> and enable use of the generic functions where
+> appropriate.
+> 
+> In addition, functions declared and defined in <asm/pgalloc.h> headers
+> are used mostly by core mm and early mm initialization in arch and there is
+> no actual reason to have the <asm/pgalloc.h> included all over the place.
+> The first patch in this series removes unneeded includes of <asm/pgalloc.h>
+> 
+> In the end it didn't work out as neatly as I hoped and moving
+> pXd_alloc_track() definitions to <asm-generic/pgalloc.h> would require
+> unnecessary changes to arches that have custom page table allocations, so
+> I've decided to move lib/ioremap.c to mm/ and make pgalloc-track.h local to
+> mm/.
+> 
+> Joerg Roedel (1):
+>   mm: move p?d_alloc_track to separate header file
+> 
+> Mike Rapoport (7):
+>   mm: remove unneeded includes of <asm/pgalloc.h>
+>   opeinrisc: switch to generic version of pte allocation
+>   xtensa: switch to generic version of pte allocation
+>   asm-generic: pgalloc: provide generic pmd_alloc_one() and pmd_free_one()
+>   asm-generic: pgalloc: provide generic pud_alloc_one() and pud_free_one()
+>   asm-generic: pgalloc: provide generic pgd_free()
+>   mm: move lib/ioremap.c to mm/
+> 
+>  arch/alpha/include/asm/pgalloc.h             | 21 +----
+>  arch/alpha/include/asm/tlbflush.h            |  1 -
+>  arch/alpha/kernel/core_irongate.c            |  1 -
+>  arch/alpha/kernel/core_marvel.c              |  1 -
+>  arch/alpha/kernel/core_titan.c               |  1 -
+>  arch/alpha/kernel/machvec_impl.h             |  2 -
+>  arch/alpha/kernel/smp.c                      |  1 -
+>  arch/alpha/mm/numa.c                         |  1 -
+>  arch/arc/mm/fault.c                          |  1 -
+>  arch/arc/mm/init.c                           |  1 -
+>  arch/arm/include/asm/pgalloc.h               | 12 +--
+>  arch/arm/include/asm/tlb.h                   |  1 -
+>  arch/arm/kernel/machine_kexec.c              |  1 -
+>  arch/arm/kernel/smp.c                        |  1 -
+>  arch/arm/kernel/suspend.c                    |  1 -
+>  arch/arm/mach-omap2/omap-mpuss-lowpower.c    |  1 -
+>  arch/arm/mm/hugetlbpage.c                    |  1 -
+>  arch/arm/mm/mmu.c                            |  1 +
+>  arch/arm64/include/asm/pgalloc.h             | 39 +---------
+>  arch/arm64/kernel/smp.c                      |  1 -
+>  arch/arm64/mm/hugetlbpage.c                  |  1 -
+>  arch/arm64/mm/ioremap.c                      |  1 -
+>  arch/arm64/mm/mmu.c                          |  1 +
+>  arch/csky/include/asm/pgalloc.h              |  7 +-
+>  arch/csky/kernel/smp.c                       |  1 -
+>  arch/hexagon/include/asm/pgalloc.h           |  7 +-
+>  arch/ia64/include/asm/pgalloc.h              | 24 ------
+>  arch/ia64/include/asm/tlb.h                  |  1 -
+>  arch/ia64/kernel/process.c                   |  1 -
+>  arch/ia64/kernel/smp.c                       |  1 -
+>  arch/ia64/kernel/smpboot.c                   |  1 -
+>  arch/ia64/mm/contig.c                        |  1 -
+>  arch/ia64/mm/discontig.c                     |  1 -
+>  arch/ia64/mm/hugetlbpage.c                   |  1 -
+>  arch/ia64/mm/tlb.c                           |  1 -
+>  arch/m68k/include/asm/mmu_context.h          |  2 +-
+>  arch/m68k/include/asm/sun3_pgalloc.h         |  7 +-
+>  arch/m68k/kernel/dma.c                       |  2 +-
+>  arch/m68k/kernel/traps.c                     |  3 +-
+>  arch/m68k/mm/cache.c                         |  2 +-
+>  arch/m68k/mm/fault.c                         |  1 -
+>  arch/m68k/mm/kmap.c                          |  2 +-
+>  arch/m68k/mm/mcfmmu.c                        |  1 +
+>  arch/m68k/mm/memory.c                        |  1 -
+>  arch/m68k/sun3x/dvma.c                       |  2 +-
+>  arch/microblaze/include/asm/pgalloc.h        |  6 --
+>  arch/microblaze/include/asm/tlbflush.h       |  1 -
+>  arch/microblaze/kernel/process.c             |  1 -
+>  arch/microblaze/kernel/signal.c              |  1 -
+>  arch/mips/include/asm/pgalloc.h              | 19 +----
+>  arch/mips/sgi-ip32/ip32-memory.c             |  1 -
+>  arch/nds32/mm/mm-nds32.c                     |  2 +
+>  arch/nios2/include/asm/pgalloc.h             |  7 +-
+>  arch/openrisc/include/asm/pgalloc.h          | 33 +-------
+>  arch/openrisc/include/asm/tlbflush.h         |  1 -
+>  arch/openrisc/kernel/or32_ksyms.c            |  1 -
+>  arch/parisc/include/asm/mmu_context.h        |  1 -
+>  arch/parisc/include/asm/pgalloc.h            | 12 +--
+>  arch/parisc/kernel/cache.c                   |  1 -
+>  arch/parisc/kernel/pci-dma.c                 |  1 -
+>  arch/parisc/kernel/process.c                 |  1 -
+>  arch/parisc/kernel/signal.c                  |  1 -
+>  arch/parisc/kernel/smp.c                     |  1 -
+>  arch/parisc/mm/hugetlbpage.c                 |  1 -
+>  arch/parisc/mm/ioremap.c                     |  2 +-
+>  arch/powerpc/include/asm/tlb.h               |  1 -
+>  arch/powerpc/mm/book3s64/hash_hugetlbpage.c  |  1 -
+>  arch/powerpc/mm/book3s64/hash_pgtable.c      |  1 -
+>  arch/powerpc/mm/book3s64/hash_tlb.c          |  1 -
+>  arch/powerpc/mm/book3s64/radix_hugetlbpage.c |  1 -
+>  arch/powerpc/mm/init_32.c                    |  1 -
+>  arch/powerpc/mm/kasan/8xx.c                  |  1 -
+>  arch/powerpc/mm/kasan/book3s_32.c            |  1 -
+>  arch/powerpc/mm/mem.c                        |  1 -
+>  arch/powerpc/mm/nohash/40x.c                 |  1 -
+>  arch/powerpc/mm/nohash/8xx.c                 |  1 -
+>  arch/powerpc/mm/nohash/fsl_booke.c           |  1 -
+>  arch/powerpc/mm/nohash/kaslr_booke.c         |  1 -
+>  arch/powerpc/mm/pgtable.c                    |  1 -
+>  arch/powerpc/mm/pgtable_64.c                 |  1 -
+>  arch/powerpc/mm/ptdump/hashpagetable.c       |  2 +-
+>  arch/powerpc/mm/ptdump/ptdump.c              |  1 -
+>  arch/powerpc/platforms/pseries/cmm.c         |  1 -
+>  arch/riscv/include/asm/pgalloc.h             | 18 +----
+>  arch/riscv/mm/fault.c                        |  1 -
+>  arch/s390/include/asm/tlb.h                  |  1 -
+>  arch/s390/include/asm/tlbflush.h             |  1 -
+>  arch/s390/kernel/machine_kexec.c             |  1 -
+>  arch/s390/kernel/ptrace.c                    |  1 -
+>  arch/s390/kvm/diag.c                         |  1 -
+>  arch/s390/kvm/priv.c                         |  1 -
+>  arch/s390/kvm/pv.c                           |  1 -
+>  arch/s390/mm/cmm.c                           |  1 -
+>  arch/s390/mm/mmap.c                          |  1 -
+>  arch/s390/mm/pgtable.c                       |  1 -
+>  arch/sh/include/asm/pgalloc.h                |  4 +
+>  arch/sh/kernel/idle.c                        |  1 -
+>  arch/sh/kernel/machine_kexec.c               |  1 -
+>  arch/sh/mm/cache-sh3.c                       |  1 -
+>  arch/sh/mm/cache-sh7705.c                    |  1 -
+>  arch/sh/mm/hugetlbpage.c                     |  1 -
+>  arch/sh/mm/init.c                            |  1 +
+>  arch/sh/mm/ioremap_fixed.c                   |  1 -
+>  arch/sh/mm/tlb-sh3.c                         |  1 -
+>  arch/sparc/include/asm/ide.h                 |  1 -
+>  arch/sparc/include/asm/tlb_64.h              |  1 -
+>  arch/sparc/kernel/leon_smp.c                 |  1 -
+>  arch/sparc/kernel/process_32.c               |  1 -
+>  arch/sparc/kernel/signal_32.c                |  1 -
+>  arch/sparc/kernel/smp_32.c                   |  1 -
+>  arch/sparc/kernel/smp_64.c                   |  1 +
+>  arch/sparc/kernel/sun4m_irq.c                |  1 -
+>  arch/sparc/mm/highmem.c                      |  1 -
+>  arch/sparc/mm/io-unit.c                      |  1 -
+>  arch/sparc/mm/iommu.c                        |  1 -
+>  arch/sparc/mm/tlb.c                          |  1 -
+>  arch/um/include/asm/pgalloc.h                |  9 +--
+>  arch/um/include/asm/pgtable-3level.h         |  3 -
+>  arch/um/kernel/mem.c                         | 17 -----
+>  arch/x86/ia32/ia32_aout.c                    |  1 -
+>  arch/x86/include/asm/mmu_context.h           |  1 -
+>  arch/x86/include/asm/pgalloc.h               | 42 +---------
+>  arch/x86/kernel/alternative.c                |  1 +
+>  arch/x86/kernel/apic/apic.c                  |  1 -
+>  arch/x86/kernel/mpparse.c                    |  1 -
+>  arch/x86/kernel/traps.c                      |  1 -
+>  arch/x86/mm/fault.c                          |  1 -
+>  arch/x86/mm/hugetlbpage.c                    |  1 -
+>  arch/x86/mm/kaslr.c                          |  1 -
+>  arch/x86/mm/pgtable_32.c                     |  1 -
+>  arch/x86/mm/pti.c                            |  1 -
+>  arch/x86/platform/uv/bios_uv.c               |  1 +
+>  arch/xtensa/include/asm/pgalloc.h            | 40 ++++------
+>  arch/xtensa/kernel/xtensa_ksyms.c            |  1 -
+>  arch/xtensa/mm/cache.c                       |  1 -
+>  arch/xtensa/mm/fault.c                       |  1 -
+>  drivers/block/xen-blkback/common.h           |  1 -
+>  drivers/iommu/ipmmu-vmsa.c                   |  1 -
+>  drivers/xen/balloon.c                        |  1 -
+>  drivers/xen/privcmd.c                        |  1 -
+>  fs/binfmt_elf_fdpic.c                        |  1 -
+>  include/asm-generic/pgalloc.h                | 80 ++++++++++++++++++++
+>  include/asm-generic/tlb.h                    |  1 -
+>  include/linux/mm.h                           | 45 -----------
+>  lib/Makefile                                 |  1 -
+>  mm/Makefile                                  |  2 +-
+>  mm/hugetlb.c                                 |  1 +
+>  {lib => mm}/ioremap.c                        |  2 +
+>  mm/pgalloc-track.h                           | 51 +++++++++++++
+>  mm/sparse.c                                  |  1 -
+>  mm/vmalloc.c                                 |  1 +
+>  151 files changed, 194 insertions(+), 451 deletions(-)
+>  rename {lib => mm}/ioremap.c (99%)
+>  create mode 100644 mm/pgalloc-track.h
+> 
+> -- 
+> 2.26.2
+> 
 
-A lot of people have told Marcus over and over not to comment on commit
-messages.  Greg has an automatic bot to respond to him.
-
-https://lkml.org/lkml/2020/6/13/25
-
-Marcus ignores us when we ask him to stop.  Some new developers have
-emailed me privately that they were confused and discouraged with his
-feedback because they assumed he was a senior developer or something.
-
-regards,
-dan carpenter
-
+-- 
+Sincerely yours,
+Mike.
