@@ -2,85 +2,139 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 611E3214457
-	for <lists+linux-csky@lfdr.de>; Sat,  4 Jul 2020 08:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1164B21469A
+	for <lists+linux-csky@lfdr.de>; Sat,  4 Jul 2020 16:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbgGDGkH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 4 Jul 2020 02:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbgGDGkH (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 4 Jul 2020 02:40:07 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520C2C061794;
-        Fri,  3 Jul 2020 23:40:07 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id z63so30552858qkb.8;
-        Fri, 03 Jul 2020 23:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3fbem6xgsUHpQEkkr1bl021QDup9/jlYvisDm0Lh+SY=;
-        b=gdNwr1QZAC91+OD3FOIx7q1FSHbrZ7YbJPutNryHLdnGL2EaDZXgg1zzgnIYPTYV4q
-         AAbRJOeNvsOa4+McC/gP+Vq/x1uKRcc4b5DSU2mpHbVBiKbsPQX+1napYFZ55jeaHpV1
-         YQu9Gnn0oySDE+iCddiHSRxkpdnWbKC60kBf4dVFWKvEF8SQlM1PYcgYMSyuzngjVOWV
-         AjtZ2fZDImi88LBn5niGQdzZK6/Ue4VjB383dhWSwHXeNIoU5Lpl42xqU9yY3Lz37g94
-         kSBboDMTJn+JGwhchUz/w8fBVekEtuEUQmG9fUl4dGeQTHQBcuyuMWxybtFDwxof3X7J
-         yHlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3fbem6xgsUHpQEkkr1bl021QDup9/jlYvisDm0Lh+SY=;
-        b=GmtbmfkzZVY4BYYzq9/oIYVBnUR2iq29XWF97dG6AQ9GkbDqYXa9SjTCkoHavOsacw
-         esRYK45hSzlyUO/gpraAceH4tCuKZooX+vyj1W/p8y0t639V/G2XejdilZAPd7sLZ6eh
-         MpRW6zX3okYf7SUZSP1cjGg77Gy4cBY7Oy7sDwC+1FWBot4P4dnflud8UrJNMhQWukVI
-         JLjbWfxteQrbCD/36lWiP1gfQrhM0u3njs3t5f+aCJfT8TRNh9JXlq7jca3YDli43KbZ
-         XsKZhmbAtEaHM+ZHvYvP1VuaJ0m0uUSuWQQosiLSTeY/A5nRSse2BD+9LKDoTo/zZbxD
-         dIUg==
-X-Gm-Message-State: AOAM533iv9kQsm1nrHFmjAJHYb/R0FEHpnfReacltKGsmsYAQKlply1s
-        i4MjRjlHB+A7N5lcWa1lRp6zEO7Wp8kjlQMIrnQ=
-X-Google-Smtp-Source: ABdhPJy7jzIt8rk0tJ5U6guhUCoxO+Lb/9yA05k7QhaWpyEYJTMhjhttaoUbaZnuIqKntrcFGwlzkq1eZ7HpYPc3mEQ=
-X-Received: by 2002:a37:4289:: with SMTP id p131mr8989609qka.28.1593844806613;
- Fri, 03 Jul 2020 23:40:06 -0700 (PDT)
+        id S1726909AbgGDOzn (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 4 Jul 2020 10:55:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37554 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726488AbgGDOzn (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 4 Jul 2020 10:55:43 -0400
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E9260208FE;
+        Sat,  4 Jul 2020 14:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593874542;
+        bh=ojbgQmjPTV7D6kXqc4BTRRhR75bviWgGGtdXVdf+q9I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Y3eSMm59oP8v1iEQ7GYqolbPktucp14jR0nXZszhUE2dTmzXPf35N2IOz91wo8Mcb
+         NnXjhBNvxqNPDHdG0mD6FLIiRVM4jtRN2rFAjqBvRz+w1k1J9cVer/BrWEzNCuYFGi
+         R2l9SCKG5o2CfKIQ0NcKo8VAYaUVPaMRsq/J44h0=
+Received: by mail-lj1-f173.google.com with SMTP id n23so40292530ljh.7;
+        Sat, 04 Jul 2020 07:55:41 -0700 (PDT)
+X-Gm-Message-State: AOAM531dss3lHWWAaDALyI1l9TEq9klAiV6Ljs43688svoa5H1mHNF+8
+        nwHG9UWMiUAZuCCAqn0XE2metTTwbJhZtt5rLXE=
+X-Google-Smtp-Source: ABdhPJzIk1tCgJjz4OUWhVlitpIkUcsZm9HDMIiZYK03ivVBzcTjfWnBMrpv0O6qL9pOvJGS1ty5yLoysAERVwX8Y94=
+X-Received: by 2002:a05:651c:2da:: with SMTP id f26mr21209299ljo.377.1593874540221;
+ Sat, 04 Jul 2020 07:55:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <1593833659-26224-1-git-send-email-guoren@kernel.org>
-In-Reply-To: <1593833659-26224-1-git-send-email-guoren@kernel.org>
-From:   Pekka Enberg <penberg@gmail.com>
-Date:   Sat, 4 Jul 2020 09:39:50 +0300
-Message-ID: <CAOJsxLFF4o8AFWzPFJgwaeuA=Lb9VsjMXXfVmbhZBwLPcG=Asg@mail.gmail.com>
+References: <1593833659-26224-1-git-send-email-guoren@kernel.org> <CAOJsxLFF4o8AFWzPFJgwaeuA=Lb9VsjMXXfVmbhZBwLPcG=Asg@mail.gmail.com>
+In-Reply-To: <CAOJsxLFF4o8AFWzPFJgwaeuA=Lb9VsjMXXfVmbhZBwLPcG=Asg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 4 Jul 2020 22:55:28 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSYyj5rTUJW-yDDrrV7T3hUssAhGc0gnCntcQpuixNJzw@mail.gmail.com>
+Message-ID: <CAJF2gTSYyj5rTUJW-yDDrrV7T3hUssAhGc0gnCntcQpuixNJzw@mail.gmail.com>
 Subject: Re: [PATCH V1 0/5] riscv: Add k/uprobe supported
-To:     guoren@kernel.org
-Cc:     palmerdabbelt@google.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>, greentime.hu@sifive.com,
-        zong.li@sifive.com, me@packi.ch, bjorn.topel@gmail.com,
-        atish.patra@wdc.com, linux-riscv@lists.infradead.org,
+To:     Pekka Enberg <penberg@gmail.com>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
+        bjorn.topel@gmail.com, Atish Patra <atish.patra@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
         Guo Ren <guoren@linux.alibaba.com>,
         LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
-> The patchset includes kprobe/uprobe support and some related fixups.
+Hi Pekka,
 
-Nice!
+On Sat, Jul 4, 2020 at 2:40 PM Pekka Enberg <penberg@gmail.com> wrote:
+>
+> On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
+> > The patchset includes kprobe/uprobe support and some related fixups.
+>
+> Nice!
+>
+> On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
+> > There is no single step exception in riscv ISA, so utilize ebreak to
+> > simulate. Some pc related instructions couldn't be executed out of line
+> > and some system/fence instructions couldn't be a trace site at all.
+> > So we give out a reject list and simulate list in decode-insn.c.
+>
+> Can you elaborate on what you mean by this? Why would you need a
+> single-step facility for kprobes? Is it for executing the instruction
+> that was replaced with a probe breakpoint?
 
-On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
-> There is no single step exception in riscv ISA, so utilize ebreak to
-> simulate. Some pc related instructions couldn't be executed out of line
-> and some system/fence instructions couldn't be a trace site at all.
-> So we give out a reject list and simulate list in decode-insn.c.
+It's the single-step exception, not single-step facility!
 
-Can you elaborate on what you mean by this? Why would you need a
-single-step facility for kprobes? Is it for executing the instruction
-that was replaced with a probe breakpoint?
+Other arches use hardware single-step exception for k/uprobe,  eg:
+ - powerpc: regs->msr |=3D MSR_SINGLESTEP
+ - arm/arm64: PSTATE.D for enabling software step exceptions
+ - s390: Set PER control regs, turns on single step for the given address
+ - x86: regs->flags |=3D X86_EFLAGS_TF
+ - csky: of course use hw single step :)
 
-Also, the "Debug Specification" [1] specifies a single-step facility
-for RISC-V -- why is that not useful for implementing kprobes?
+Yes, All the above arches use a hardware single-step exception
+mechanism to execute the instruction that was replaced with a probe
+breakpoint.
 
-1. https://riscv.org/specifications/debug-specification/
+>
+> Also, the "Debug Specification" [1] specifies a single-step facility
+> for RISC-V -- why is that not useful for implementing kprobes?
+>
+> 1. https://riscv.org/specifications/debug-specification/
+We need single-step exception not single-step by jtag, so above spec
+is not related to the patchset.
 
-- Pekka
+See riscv-Privileged spec:
+
+Interrupt Exception Code-Description
+1 0 Reserved
+1 1 Supervisor software interrupt
+1 2=E2=80=934 Reserved
+1 5 Supervisor timer interrupt
+1 6=E2=80=938 Reserved
+1 9 Supervisor external interrupt
+1 10=E2=80=9315 Reserved
+1 =E2=89=A516 Available for platform use
+0 0 Instruction address misaligned
+0 1 Instruction access fault
+0 2 Illegal instruction
+0 3 Breakpoint
+0 4 Load address misaligned
+0 5 Load access fault
+0 6 Store/AMO address misaligned
+0 7 Store/AMO access fault
+0 8 Environment call from U-mode
+0 9 Environment call from S-mode
+0 10=E2=80=9311 Reserved
+0 12 Instruction page fault
+0 13 Load page fault
+0 14 Reserved
+0 15 Store/AMO page fault
+0 16=E2=80=9323 Reserved
+0 24=E2=80=9331 Available for custom use
+0 32=E2=80=9347 Reserved
+0 48=E2=80=9363 Available for custom use
+0 =E2=89=A564 Reserved
+
+No single step!
+
+So I insert a "ebreak" instruction behind the target single-step
+instruction to simulate the same mechanism.
+
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
