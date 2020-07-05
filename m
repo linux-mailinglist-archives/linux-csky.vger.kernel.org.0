@@ -2,93 +2,140 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738632147EB
-	for <lists+linux-csky@lfdr.de>; Sat,  4 Jul 2020 20:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD43A214A94
+	for <lists+linux-csky@lfdr.de>; Sun,  5 Jul 2020 08:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbgGDSbJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 4 Jul 2020 14:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726703AbgGDSbI (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 4 Jul 2020 14:31:08 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B571C061794;
-        Sat,  4 Jul 2020 11:31:08 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id j10so26116276qtq.11;
-        Sat, 04 Jul 2020 11:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UFLUHOIJlWWk7hAI07Y9tp1o5QM5QJCYXSXyL0loMUc=;
-        b=JtMO7CWw51DLAx12Q1J7wDQrbMLhCpTUxO44RqG7IexDvBT3q/Ppj/UrQyV4iupDhg
-         /55dybi9z2Ip1geGBwWutbj91Ou1gqVieINEmiTZ/bH6CNGiPnZkVompFBiTVtuq11Hq
-         V3j3XbYzDoCXX0a1Z45umxZsJ9vTklMXVTauHc7pl28MCAE3L8ZT5oqpWlyl8kH4AqRg
-         sY9MO+xVu58iyOk1zqeUZvlJzJ6TWWPwoON8Tj0a+W1xmxpkHPpNjUrMWRiHqWzHkocH
-         Al1Zi/WqxVY6u6iAJbzeukTCQR8CoNp8vQHenRjmpMW/lwnowiYeOsefSlWsrpOpiiZH
-         ovKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UFLUHOIJlWWk7hAI07Y9tp1o5QM5QJCYXSXyL0loMUc=;
-        b=JO+jtpP4PGU2jstLM24AoZck/J2cr3X2mfi3Tkl0iziUe9zPirX2pWVNF85heLQyBX
-         iXWhaVTAvG9967PC6IYtgCD1xTOvDtOCgY3HtiKEVGBHb94/NV3ysOEfcB7+8LfZTZtY
-         XTo7gM+kYkhMRRqubdEJZP6XY8IucY2Ly4LhbBYICg/NYc1gfdnY/KFAbANAbUKS+DpX
-         5ps3eyyUH/X5OkrIpo4Bu5ETgIIgUAL3fGqghypqLA65C2awO7WvkrEwwzIQ4S62BXrO
-         Quch5if8o6cSGmP3NPpP9ZRzM0IZa8poccGVn/e7qYKtolst9q7+01EsLTjQytkoRmwl
-         PFXg==
-X-Gm-Message-State: AOAM531ytmlBdxx9Jet2AFNMRl/kSePXUOj+OIETsHff8O/AGNlXmGZm
-        wOQ/GZ8+JJt129KdW7418LN17ndg8r9Rj3chjS0=
-X-Google-Smtp-Source: ABdhPJwSRtILfOImuh8qk8haIBu/Hxgg+XL6PXWIgOMU1jKJ7Qi5EhbGfS4iXfEMEQwvOgsLA+uDBZjvovcMQpvgIRk=
-X-Received: by 2002:ac8:4b5b:: with SMTP id e27mr39335257qts.96.1593887467803;
- Sat, 04 Jul 2020 11:31:07 -0700 (PDT)
+        id S1725901AbgGEGZX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 5 Jul 2020 02:25:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46978 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725873AbgGEGZX (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 5 Jul 2020 02:25:23 -0400
+Received: from localhost.localdomain (unknown [89.208.247.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58031207CD;
+        Sun,  5 Jul 2020 06:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593930322;
+        bh=j/k1+B7wkCi8TSTAT6vwsg8IilF6kwnCgtC2Tyh8esI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IBJqT+/t6RF8oJE4tYJNDhNag1zBFY9YGGFiI1+roc5OKJAHNR5pHc67IMt+86PSL
+         ffzMSMcJL7BhRaBnmK6iWQMIWGEZ6PFlG4cjwTyDRkSKnoE9B9eU5YwUiZ25uVceED
+         BNA61f5ly40MihKlN4cTxwu+idkiuLAZ5hqt36Mc=
+From:   guoren@kernel.org
+To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
+        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
+        guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>
+Subject: [PATCH] riscv: Add STACKPROTECTOR supported
+Date:   Sun,  5 Jul 2020 06:24:15 +0000
+Message-Id: <1593930255-12378-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <1593833659-26224-1-git-send-email-guoren@kernel.org>
- <CAOJsxLFF4o8AFWzPFJgwaeuA=Lb9VsjMXXfVmbhZBwLPcG=Asg@mail.gmail.com> <CAJF2gTSYyj5rTUJW-yDDrrV7T3hUssAhGc0gnCntcQpuixNJzw@mail.gmail.com>
-In-Reply-To: <CAJF2gTSYyj5rTUJW-yDDrrV7T3hUssAhGc0gnCntcQpuixNJzw@mail.gmail.com>
-From:   Pekka Enberg <penberg@gmail.com>
-Date:   Sat, 4 Jul 2020 21:30:50 +0300
-Message-ID: <CAOJsxLFSH2_e03xo_HMqKAzVE+2Y9=hriv-Zu=GdVUHgDMgYtw@mail.gmail.com>
-Subject: Re: [PATCH V1 0/5] riscv: Add k/uprobe supported
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
-        bjorn.topel@gmail.com, Atish Patra <atish.patra@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Guo,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
-> > > There is no single step exception in riscv ISA, so utilize ebreak to
-> > > simulate. Some pc related instructions couldn't be executed out of line
-> > > and some system/fence instructions couldn't be a trace site at all.
-> > > So we give out a reject list and simulate list in decode-insn.c.
+The -fstack-protector & -fstack-protector-strong features are from
+gcc. The patch only add basic kernel support to stack-protector
+feature and some arch could have its own solution such as
+ARM64_PTR_AUTH.
 
-On Sat, Jul 4, 2020 at 2:40 PM Pekka Enberg <penberg@gmail.com> wrote:
-> > Can you elaborate on what you mean by this? Why would you need a
-> > single-step facility for kprobes? Is it for executing the instruction
-> > that was replaced with a probe breakpoint?
+After enabling STACKPROTECTOR and STACKPROTECTOR_STRONG, the .text
+size is expanded from  0x7de066 to 0x81fb32 (only 5%) to add canary
+checking code.
 
-On Sat, Jul 4, 2020 at 5:55 PM Guo Ren <guoren@kernel.org> wrote:
-> It's the single-step exception, not single-step facility!
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Björn Töpel <bjorn.topel@gmail.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+Cc: Atish Patra <atish.patra@wdc.com>
+---
+ arch/riscv/Kconfig                      |  1 +
+ arch/riscv/include/asm/stackprotector.h | 29 +++++++++++++++++++++++++++++
+ arch/riscv/kernel/process.c             |  6 ++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 arch/riscv/include/asm/stackprotector.h
 
-Aah, right, I didn't read the specification carefully enough. Thanks
-for taking the time to clarify this!
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index f927a91..4b0e308 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -63,6 +63,7 @@ config RISCV
+ 	select HAVE_PERF_EVENTS
+ 	select HAVE_PERF_REGS
+ 	select HAVE_PERF_USER_STACK_DUMP
++	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select IRQ_DOMAIN
+ 	select MODULES_USE_ELF_RELA if MODULES
+diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
+new file mode 100644
+index 00000000..5962f88
+--- /dev/null
++++ b/arch/riscv/include/asm/stackprotector.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _ASM_RISCV_STACKPROTECTOR_H
++#define _ASM_RISCV_STACKPROTECTOR_H
++
++#include <linux/random.h>
++#include <linux/version.h>
++
++extern unsigned long __stack_chk_guard;
++
++/*
++ * Initialize the stackprotector canary value.
++ *
++ * NOTE: this must only be called from functions that never return,
++ * and it must always be inlined.
++ */
++static __always_inline void boot_init_stack_canary(void)
++{
++	unsigned long canary;
++
++	/* Try to get a semi random initial value. */
++	get_random_bytes(&canary, sizeof(canary));
++	canary ^= LINUX_VERSION_CODE;
++	canary &= CANARY_MASK;
++
++	current->stack_canary = canary;
++	__stack_chk_guard = current->stack_canary;
++}
++#endif /* _ASM_RISCV_STACKPROTECTOR_H */
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 824d117..6548929 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -24,6 +24,12 @@
+ 
+ register unsigned long gp_in_global __asm__("gp");
+ 
++#ifdef CONFIG_STACKPROTECTOR
++#include <linux/stackprotector.h>
++unsigned long __stack_chk_guard __read_mostly;
++EXPORT_SYMBOL(__stack_chk_guard);
++#endif
++
+ extern asmlinkage void ret_from_fork(void);
+ extern asmlinkage void ret_from_kernel_thread(void);
+ 
+-- 
+2.7.4
 
-FWIW, for the whole series:
-
-Reviewed-by: Pekka Enberg <penberg@kernel.org>
-
-- Pekka
