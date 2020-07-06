@@ -2,148 +2,88 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C14742150B3
-	for <lists+linux-csky@lfdr.de>; Mon,  6 Jul 2020 03:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303922150D8
+	for <lists+linux-csky@lfdr.de>; Mon,  6 Jul 2020 03:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728251AbgGFBCF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 5 Jul 2020 21:02:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46778 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726760AbgGFBCF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 5 Jul 2020 21:02:05 -0400
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E8BE2082F;
-        Mon,  6 Jul 2020 01:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593997324;
-        bh=LqebZajuTrNEjjHajHRCQ35Qvk4gUVQQV87PbV+cOq8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=l67xp6bG2B1/sbk9ZohvkhFRyzXgrp3JP4RMnU1zKLntY3FskhU2EC0ds2CZldwZC
-         4bAyxkpDl8P7MwhRBGTq32TCQDTkp32+Oft3JKQVSBXUABzt8XU+VGyfblfJS+vNuj
-         3VBKolV7RHPE58mqIZxXEQWYq+V79u8Yl9j/kH4g=
-Received: by mail-lj1-f172.google.com with SMTP id n23so43429781ljh.7;
-        Sun, 05 Jul 2020 18:02:04 -0700 (PDT)
-X-Gm-Message-State: AOAM531osdLV8Wwz+ir1wWaT7VQmoZG0/JJoQMnstqw1oZK3Iav6a/vA
-        QnWxISF+su6X9eh6/DxmNfSrHucbLnIxbt1j+JM=
-X-Google-Smtp-Source: ABdhPJzNCD8oHwSnnsDE6x/2dqhk9LSDUKVA5+59CBGYitqD8IoGxpOVly7D+jGJQOvbzn+FnIezm2PT5HdT0hn9JlU=
-X-Received: by 2002:a2e:864e:: with SMTP id i14mr23462994ljj.441.1593997322637;
- Sun, 05 Jul 2020 18:02:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <1593958397-62466-1-git-send-email-guoren@kernel.org> <202007051336.C9EA0ECF65@keescook>
-In-Reply-To: <202007051336.C9EA0ECF65@keescook>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 6 Jul 2020 09:01:51 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR5Fc1wpjr1ZYZikS=hCP9rbjJVsH9b-z2nBxbBcfBoCA@mail.gmail.com>
-Message-ID: <CAJF2gTR5Fc1wpjr1ZYZikS=hCP9rbjJVsH9b-z2nBxbBcfBoCA@mail.gmail.com>
-Subject: Re: [RFC PATCH] riscv: enable per-task stack canaries
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        id S1728662AbgGFBT7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 5 Jul 2020 21:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728659AbgGFBT6 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 5 Jul 2020 21:19:58 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B79DC08C5DE
+        for <linux-csky@vger.kernel.org>; Sun,  5 Jul 2020 18:19:58 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id md7so1145917pjb.1
+        for <linux-csky@vger.kernel.org>; Sun, 05 Jul 2020 18:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hsValw4wLMzxskO9JAsxS8IlkvauPBZYj9ebYBYapKQ=;
+        b=G6q7Jud7BYrDbF5YMMzI6atIeRmAy2r3a0Dk7TutymmDTzE5dI+ipZeZ+nNejcqFhr
+         Gu0K42r8orIAVelK0CNQZTVlYc52Ivv0Rh3txYaPkTxO238GeJGlQLQjw65xP3zPLCnd
+         d1u99CnvcHMKV/razA5QrnIucnkvaXQKMLB/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hsValw4wLMzxskO9JAsxS8IlkvauPBZYj9ebYBYapKQ=;
+        b=NBXzMRHzolLarl05EmMn1arQZ6TJPDeKPusG9u50CQ5ZC9UbHbzgDhacMyr+5g4/WL
+         SDpmkEjtTRgLT/7wuMPHfUZbLxLdnZUXAIPbhqxodSnLkYG6bnpn9vcrpXv1llgZsQ4R
+         0Tp0LEAWHdjVrxsprR2MSy634yknp4b22hHsP3vnTFMtM6xPX5QD9gS7LrR4Y6vbjEXZ
+         O/fcn2z3NcM+PzArQH+2XVmut2b4A6GZkMOSsyQrFs62732XqXMUYAn6cO1Zeb69T1t7
+         G1xxKz21gHZalIBNfSVDkCN+WKE1z3lFDK+jovRhZ7rZX2OOhRSq98SbkGrPKWJzeD9+
+         pcmA==
+X-Gm-Message-State: AOAM532lOrKBX5KdjmGV7gdoCczeoat6gAzD7mFsh+fxYrdS6cgq0Uuy
+        Gv5ikiVwGg6xUNNpYqDak+WLww==
+X-Google-Smtp-Source: ABdhPJyRQMl8X2jOh3kV2RfeE5+zaKw6r/y3dmR0L3SXZayvtA4SqleWN0dDJU/g4lAJNhGdolwYwQ==
+X-Received: by 2002:a17:902:9346:: with SMTP id g6mr35985832plp.77.1593998397876;
+        Sun, 05 Jul 2020 18:19:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t137sm17967077pgc.32.2020.07.05.18.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jul 2020 18:19:57 -0700 (PDT)
+Date:   Sun, 5 Jul 2020 18:19:56 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Ramana Radhakrishnan <ramana.radhakrishnan@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>
+Subject: Re: [PATCH] riscv: Add STACKPROTECTOR supported
+Message-ID: <202007051819.0ECAD4E6@keescook>
+References: <1593930255-12378-1-git-send-email-guoren@kernel.org>
+ <202007042350.4C153C4F8@keescook>
+ <CAJF2gTQFqH7GMvRgmtb=hBwvUy6NZyM8xLqOsUTvnYhO48tQbg@mail.gmail.com>
+ <202007051328.FE9EF99@keescook>
+ <CAJF2gTTCEEoP3a9i_REXPwkJZ4Si_hYfjk_hwqHxkyfgw_xBLw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTTCEEoP3a9i_REXPwkJZ4Si_hYfjk_hwqHxkyfgw_xBLw@mail.gmail.com>
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Jul 6, 2020 at 4:40 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Sun, Jul 05, 2020 at 02:13:17PM +0000, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > After compare arm64 and x86 implementations, seems arm64's is more
-> > flexible and readable. The key point is how gcc get the offset of
-> > stack_canary from gs/el0_sp.
-> >
-> > x86: Use a fix offset from gs, not flexible.
-> >
-> > struct fixed_percpu_data {
-> >         /*
-> >          * GCC hardcodes the stack canary as %gs:40.  Since the
-> >          * irq_stack is the object at %gs:0, we reserve the bottom
-> >          * 48 bytes of the irq stack for the canary.
-> >          */
-> >         char            gs_base[40]; // :(
-> >         unsigned long   stack_canary;
-> > };
->
-> Yes, x86's compiler's implementation of "thread local" stack canary
-> isn't great for the kernel.
->
-> > arm64: Use -mstack-protector-guard-offset & guard-reg
-> >
-> > ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
-> > prepare: stack_protector_prepare
-> > stack_protector_prepare: prepare0
-> >        $(eval KBUILD_CFLAGS += -mstack-protector-guard=sysreg            \
-> >                                -mstack-protector-guard-reg=sp_el0        \
-> >                                -mstack-protector-guard-offset=$(shell    \
-> >                        awk '{if ($$2 == "TSK_STACK_CANARY") print $$3;}' \
-> >                                        include/generated/asm-offsets.h))
-> > endif
-> >
-> > I prefer arm64, but x86 percpu_data design needs to be considered ?
->
-> I don't know riscv internals, so I leave that to y'all! :)
->
-> > After the discussion, let's continue the work for riscv gcc
-> > stack-protector.
->
-> I think you'll need some buy-in from GCC before this kernel patch can
-> land.
-exactly!
+On Mon, Jul 06, 2020 at 08:55:35AM +0800, Guo Ren wrote:
+> On Mon, Jul 6, 2020 at 4:31 AM Kees Cook <keescook@chromium.org> wrote:
+> > Sure -- I assume get_cycles64() is architecturally "simple"? (i.e. it
+> > doesn't require that the entire time-keeping subsystem has started?)
+> Yes, it's just a csr read. But it's necessary? get_random_bytes should enough.
 
->
-> > Here is arm64 gcc's work [1].
-> >
-> > [1] https://github.com/gcc-mirror/gcc/commit/cd0b2d361df82c848dc7e1c3078651bb0624c3c6
->
-> Can this kind of thing be made general-purposes, instead of having to
-> reimplement it each time there's a new arch wanting to do it?
-Great idea. Now only x86 arm64 support, It's the right time point.
-
->
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > ---
-> >  arch/riscv/Kconfig                      |  7 +++++++
-> >  arch/riscv/Makefile                     | 10 ++++++++++
-> >  arch/riscv/include/asm/stackprotector.h |  3 ++-
-> >  arch/riscv/kernel/asm-offsets.c         |  3 +++
-> >  arch/riscv/kernel/process.c             |  2 +-
-> >  5 files changed, 23 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 4b0e308..4b4e833 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -394,6 +394,13 @@ config CMDLINE_FORCE
-> >
-> >  endchoice
-> >
-> > +config CC_HAVE_STACKPROTECTOR_SYSREG
-Should change to CC_HAVE_STACKPROTECTOR_GPR
-
-> > +     def_bool $(cc-option,-mstack-protector-guard=gpr -mstack-protector-guard-reg=tp -mstack-protector-guard-offset=0)
->
-> And, as I'm sure you realize, it's not supported by the riscv backend
-> yet:
->
-> riscv64-unknown-linux-gnu-gcc: error: unrecognized command line option '-mstack-protector-guard=gpr'; did you mean '-fstack-protector-strong'?
-> riscv64-unknown-linux-gnu-gcc: error: unrecognized command line option '-mstack-protector-guard-reg=tp'; did you mean '-fstack-protector-strong'?
-> riscv64-unknown-linux-gnu-gcc: error: unrecognized command line option '-mstack-protector-guard-offset=0'; did you mean '-fstack-protector-strong'?
-
-Yeah! :) I just want to show you, how about the format: use tp in gpr
-to do that. The format is similar to arm64.
-
-tp is the task_struct point in riscv.
+Well, that depends on how early _all_ riscv platforms are able to
+initialize their random pool correctly. I'd include a csr mix.
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Kees Cook
