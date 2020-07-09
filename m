@@ -2,73 +2,81 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6938A219780
-	for <lists+linux-csky@lfdr.de>; Thu,  9 Jul 2020 06:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4632197EC
+	for <lists+linux-csky@lfdr.de>; Thu,  9 Jul 2020 07:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgGIEja (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 9 Jul 2020 00:39:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40266 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726064AbgGIEja (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 9 Jul 2020 00:39:30 -0400
-Received: from localhost.localdomain (unknown [42.120.72.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2196D20674;
-        Thu,  9 Jul 2020 04:39:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594269569;
-        bh=EzEck5pK05sjzHneaktRgOUwg6NdvPNK4uNthDpoQk0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=d8hxSgcPxbbd08TV7oJ+807uJ7gS/2ZfhyWs5TQWkLCFurJsAjhQnErf8p/c+BAB9
-         l7DJP93A6bvQWdYn9Z8p9ArLTP+BDu3z1K5ZQbRjcHB5Yb1z/aag2vWoxXOffgVblQ
-         rHRj6EoSocX1nEDAGlV7FSo9+1v2YBoxx6m8c38k=
-From:   guoren@kernel.org
-To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        me@packi.ch, bjorn.topel@gmail.com, atish.patra@wdc.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, guoren@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Greentime Hu <green.hu@gmail.com>
-Subject: [PATCH] riscv: Enable ELF-ASLR for riscv
-Date:   Thu,  9 Jul 2020 04:38:30 +0000
-Message-Id: <1594269511-13340-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1726509AbgGIFcP (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 9 Jul 2020 01:32:15 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:53513 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbgGIFcP (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 9 Jul 2020 01:32:15 -0400
+X-Originating-IP: 90.112.45.105
+Received: from [192.168.1.11] (lfbn-gre-1-325-105.w90-112.abo.wanadoo.fr [90.112.45.105])
+        (Authenticated sender: alex@ghiti.fr)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 6345740007;
+        Thu,  9 Jul 2020 05:32:06 +0000 (UTC)
+Subject: Re: [PATCH] riscv: Enable ELF-ASLR for riscv
+To:     guoren@kernel.org, palmerdabbelt@google.com,
+        paul.walmsley@sifive.com, anup@brainfault.org,
+        greentime.hu@sifive.com, zong.li@sifive.com, me@packi.ch,
+        bjorn.topel@gmail.com, atish.patra@wdc.com
+Cc:     Guo Ren <guoren@linux.alibaba.com>, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, Greentime Hu <green.hu@gmail.com>,
+        linux-riscv@lists.infradead.org
+References: <1594269511-13340-1-git-send-email-guoren@kernel.org>
+From:   Alex Ghiti <alex@ghiti.fr>
+Message-ID: <5c7e9eb0-d811-2e08-87c4-12de9b869b79@ghiti.fr>
+Date:   Thu, 9 Jul 2020 01:32:06 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <1594269511-13340-1-git-send-email-guoren@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi Guo,
 
-Let riscv enable randomizes the stack, heap and binary images of
-ELF binaries. Seems it's ok at all after qemu & chip test and
-there is no founded side effect.
+Le 7/9/20 à 12:38 AM, guoren@kernel.org a écrit :
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Let riscv enable randomizes the stack, heap and binary images of
+> ELF binaries. Seems it's ok at all after qemu & chip test and
+> there is no founded side effect.
+> 
+> So just simply select ARCH_HAS_ELF_RANDOMIZE :)
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Zong Li <zong.li@sifive.com>
+> Cc: Greentime Hu <green.hu@gmail.com>
+> ---
+>   arch/riscv/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 91bfc6c..eed6647 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -20,6 +20,7 @@ config RISCV
+>   	select ARCH_HAS_GIGANTIC_PAGE
+>   	select ARCH_HAS_MMIOWB
+>   	select ARCH_HAS_PTE_SPECIAL
+> +	select ARCH_HAS_ELF_RANDOMIZE
+>   	select ARCH_HAS_SET_DIRECT_MAP
+>   	select ARCH_HAS_SET_MEMORY
+>   	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
+> 
 
-So just simply select ARCH_HAS_ELF_RANDOMIZE :)
+Actually it is already the case: ARCH_HAS_ELF_RANDOMIZE is already 
+selected by ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Zong Li <zong.li@sifive.com>
-Cc: Greentime Hu <green.hu@gmail.com>
----
- arch/riscv/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Thanks,
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 91bfc6c..eed6647 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -20,6 +20,7 @@ config RISCV
- 	select ARCH_HAS_GIGANTIC_PAGE
- 	select ARCH_HAS_MMIOWB
- 	select ARCH_HAS_PTE_SPECIAL
-+	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_SET_DIRECT_MAP
- 	select ARCH_HAS_SET_MEMORY
- 	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
--- 
-2.7.4
-
+Alex
