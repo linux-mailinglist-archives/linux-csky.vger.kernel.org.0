@@ -2,104 +2,103 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A768219A51
-	for <lists+linux-csky@lfdr.de>; Thu,  9 Jul 2020 09:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412F321AA42
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Jul 2020 00:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726122AbgGIH7v (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 9 Jul 2020 03:59:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55424 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726118AbgGIH7u (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 9 Jul 2020 03:59:50 -0400
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE07C2073A;
-        Thu,  9 Jul 2020 07:59:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594281590;
-        bh=n8KuoxvesWiAIY+opfod/4XWjPg+flAzBwzo6WbZ1nU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZtCT+Ofj8X751NtW4t93j95+HisHO+Zg6Cayf2kjUr3HAhz7wQB5t2WMZkwMra5mX
-         hOgOPsCmW1ujWjt8/3MKy7jH/DdJ6ZraVCcoovUUOJKhzwSnCmyGXZxlItqdRbnrDw
-         +k+UuTbdwNDMJy+TQRgWE/r2k4cA5YSmy9Cfd3WQ=
-Received: by mail-lj1-f176.google.com with SMTP id e4so1339982ljn.4;
-        Thu, 09 Jul 2020 00:59:49 -0700 (PDT)
-X-Gm-Message-State: AOAM532yX1AP50yZLGWv0OeyQff+KQY4i0JgVN88GHwcVpMrI3b8rrtR
-        +x5oLrcAEhvt05zAUDcBcIHVwG0R/QqhRZqCJ28=
-X-Google-Smtp-Source: ABdhPJyYE8JVjLzbw3nJJvf2cbSZOzBgUbCeBR8sdnHEUjqpORlM6Sa6qf1SVXghITca69v+n3jBtWTcX/1A1ezqC1A=
-X-Received: by 2002:a2e:959a:: with SMTP id w26mr4755601ljh.79.1594281588092;
- Thu, 09 Jul 2020 00:59:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594269511-13340-1-git-send-email-guoren@kernel.org> <5c7e9eb0-d811-2e08-87c4-12de9b869b79@ghiti.fr>
-In-Reply-To: <5c7e9eb0-d811-2e08-87c4-12de9b869b79@ghiti.fr>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 9 Jul 2020 15:59:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQnE-J25Jr=qmTqoTopOY9+kHh5ULkUOWvN5SmkZPOOAg@mail.gmail.com>
-Message-ID: <CAJF2gTQnE-J25Jr=qmTqoTopOY9+kHh5ULkUOWvN5SmkZPOOAg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Enable ELF-ASLR for riscv
-To:     Alex Ghiti <alex@ghiti.fr>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Greentime Hu <green.hu@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726275AbgGIWGo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 9 Jul 2020 18:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbgGIWGo (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 9 Jul 2020 18:06:44 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9F1C08C5CE
+        for <linux-csky@vger.kernel.org>; Thu,  9 Jul 2020 15:06:44 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id t15so1695836pjq.5
+        for <linux-csky@vger.kernel.org>; Thu, 09 Jul 2020 15:06:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8CK0I8zJbGlH0rJDFXmQvv5rpjqRFDp888sWR1bVovw=;
+        b=s0JZ5pO/GZ7fXyqQDzDmx8kuDguwspLqorvrH+OdYjBFl/uCF0Be7BpE7WGfgBRcen
+         4Htj9cQoZMRn4Z3ToPS9QIEmkfghneRkevOktoFcG7CLk7KCwN8ZyJsceZArCZZB7TBu
+         IGhyyBu38L+7+mARgarW6v6rqsVnMQKlVY45ClkQpAPr/4D5jgxo9kTmKcVSn9RTkkYL
+         eMsOxA2kaMLQ5LTNrvMTzqstPrtXoLW2AAoozhtuV31v0esflicl6y61CUlNWmJc1oxj
+         Zt/saYZAe1nU4NqGrqLWw5l2dmiBQix+rIP2lxS/8JIODBlTgY7VEUtpa0VT92815QnE
+         1+jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=8CK0I8zJbGlH0rJDFXmQvv5rpjqRFDp888sWR1bVovw=;
+        b=Aw+C6o1FgzOymqKG3TRNt1X2Nte+O6663BAYi2jDRTWP7CmA17lgK/HH3jF3ge6f/I
+         WNbaJ8nqPEJYdc6e8S3Z1Wqq7N4b4dMG/MCLXwYOVejLVBbTRX8RbfJfoLO5Ejwa7N4h
+         6LdZVD6h/vBkyx8HVe6E7J/+j7tAQqFNWKXL+qfVSJcn+F8swOjWNpaymPTvpaOFM2Wg
+         AkUv//DoKKSAUBNsQErrpAXCXv0YBIbGGUstHLgH7QL22nkzEXuXF0owAdXQMgNHTWkd
+         mqvO2nhV0idYLQog4A7QJu1olXxKB35KZjzYhbuJ+K1B0+VcxkYKQn4zPeMiK7WDBAQO
+         iAdQ==
+X-Gm-Message-State: AOAM530E9xsWwPZAMmezjGnpdAPceGAHXVtX8I3dd7QwI+sITxqoLdoD
+        aHgkyMAUGT/zaO20QuAbD+pbSA==
+X-Google-Smtp-Source: ABdhPJyR7Siu7Y/A4iQg3bBo7ftXxCV5V8bWZODguKGhUXjoYZ4xnZ1Kn21deuob8QYmEuB9LYfIOw==
+X-Received: by 2002:a17:90a:2367:: with SMTP id f94mr2400859pje.20.1594332403444;
+        Thu, 09 Jul 2020 15:06:43 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id q20sm3875614pfn.111.2020.07.09.15.06.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2020 15:06:42 -0700 (PDT)
+Date:   Thu, 09 Jul 2020 15:06:42 -0700 (PDT)
+X-Google-Original-Date: Thu, 09 Jul 2020 14:48:00 PDT (-0700)
+Subject:     Re: [PATCH V2 0/3] riscv: Enable LOCKDEP
+In-Reply-To: <1593266228-61125-1-git-send-email-guoren@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
+        greentime.hu@sifive.com, zong.li@sifive.com, aou@eecs.berkeley.edu,
+        tglx@linutronix.de, tycho@tycho.ws, nickhu@andestech.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-af022fcc-7dce-4d1b-9204-d31241538412@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Jul 9, 2020 at 1:32 PM Alex Ghiti <alex@ghiti.fr> wrote:
+On Sat, 27 Jun 2020 06:57:05 PDT (-0700), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
-> Hi Guo,
+> Lockdep is needed by proving the spinlocks and rwlocks. To support it,
+> we need to add TRACE_IRQFLAGS codes in kernel/entry.S. These patches
+> follow Documentation/irqflags-tracing.txt.
 >
-> Le 7/9/20 =C3=A0 12:38 AM, guoren@kernel.org a =C3=A9crit :
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Let riscv enable randomizes the stack, heap and binary images of
-> > ELF binaries. Seems it's ok at all after qemu & chip test and
-> > there is no founded side effect.
-> >
-> > So just simply select ARCH_HAS_ELF_RANDOMIZE :)
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> > Cc: Zong Li <zong.li@sifive.com>
-> > Cc: Greentime Hu <green.hu@gmail.com>
-> > ---
-> >   arch/riscv/Kconfig | 1 +
-> >   1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 91bfc6c..eed6647 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -20,6 +20,7 @@ config RISCV
-> >       select ARCH_HAS_GIGANTIC_PAGE
-> >       select ARCH_HAS_MMIOWB
-> >       select ARCH_HAS_PTE_SPECIAL
-> > +     select ARCH_HAS_ELF_RANDOMIZE
-> >       select ARCH_HAS_SET_DIRECT_MAP
-> >       select ARCH_HAS_SET_MEMORY
-> >       select ARCH_HAS_STRICT_KERNEL_RWX if MMU
-> >
+> Fixup 2 bugs that block the lockdep implementation.
 >
-> Actually it is already the case: ARCH_HAS_ELF_RANDOMIZE is already
-> selected by ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT.
-Oops :P, Thx for correcting, abandon the patch.
+> ---
+> Changes in v2
+>  - Remove sX regs recovery codes which are unnecessary, because
+>    callee will handle them. Thx Greentime :)
+>
+>  - Move "restore a0 - a7" to handle_syscall, but if _TIF_SYSCALL_WORK
+>    is set, "restore a1 - a7" is still duplicated. I prefer a C wrapper
+>    for syscall.
+>
+> Guo Ren (2):
+>   riscv: Fixup static_obj() fail
+>   riscv: Enable LOCKDEP_SUPPORT & fixup TRACE_IRQFLAGS_SUPPORT
+>
+> Zong Li (1):
+>   riscv: Fixup lockdep_assert_held with wrong param cpu_running
+>
+>  arch/riscv/Kconfig              |  3 +++
+>  arch/riscv/kernel/entry.S       | 33 ++++++++++++++++++++++++++++++++-
+>  arch/riscv/kernel/smpboot.c     |  1 -
+>  arch/riscv/kernel/vmlinux.lds.S |  2 +-
+>  4 files changed, 36 insertions(+), 3 deletions(-)
 
---=20
-Best Regards
- Guo Ren
+These are on for-next.  As far as I can tell lockdep is working, but I'm just
+doing some simple boot tests.
 
-ML: https://lore.kernel.org/linux-csky/
+Thanks!
