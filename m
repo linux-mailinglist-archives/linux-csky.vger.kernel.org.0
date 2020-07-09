@@ -2,120 +2,199 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 642C2217B63
-	for <lists+linux-csky@lfdr.de>; Wed,  8 Jul 2020 00:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF1A219623
+	for <lists+linux-csky@lfdr.de>; Thu,  9 Jul 2020 04:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729868AbgGGWv6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 7 Jul 2020 18:51:58 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:47956 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728742AbgGGWui (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 7 Jul 2020 18:50:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594162236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jxvjf7Q+v/mOPCYZqZl27IogKSwgytmGoijHqe+1Kyo=;
-        b=P1GHIVX5tnRGecOQlWrsq9Q3ScUaoZXQIfYEkK/B9GeC04SIQNGi02tJwD6QJTLKywG9ge
-        8MkehkXJxlixptsJSWpDDQXApEtw4AJbgP5KLWsq7cgF1NyCxPwZc/2BdrJYfIShaNcV+G
-        EbmYHFWmNmpXFdV0wM9fmJvm6jkWt7U=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-96-U0zE8oDtNgaOo1gpjSFbrg-1; Tue, 07 Jul 2020 18:50:35 -0400
-X-MC-Unique: U0zE8oDtNgaOo1gpjSFbrg-1
-Received: by mail-qv1-f70.google.com with SMTP id g17so26320750qvw.0
-        for <linux-csky@vger.kernel.org>; Tue, 07 Jul 2020 15:50:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Jxvjf7Q+v/mOPCYZqZl27IogKSwgytmGoijHqe+1Kyo=;
-        b=ZhG0L8i2xbMi6JEjvL7ohPTiKLtz2TscSn7oZ2cGz9pGIDdsCxVedJqGUZcBuQhbNJ
-         2IXygoR6EQpL9hg1svGmNQJOFQh2eH5OORPoVvvy4MEuXE3Pf8W9/KM9zPQ39LFAyNbf
-         wTIkEzgtn37/VM/pzr4fQPaU4Hvym+pYeljKpeRBHxBvKPicHYaa+6CFFi3LKtxeHtHk
-         Uz4pDjdnZFqPBrq5Upp+xotakDBHU+BZfLUpDtBJeav/lH8lyFD9To71FvkxlbT/zP56
-         64eqf2KPdt2eaSBD1Hp7UTxVwBGLHKBvVlvEdMk16pTzoAgLdie4hrCrz9NJktXnop5M
-         Y1Iw==
-X-Gm-Message-State: AOAM533W9P2nkN/Q2+E756zDAWCAJdtcN3Vh3MM6G4uuz4+GExYnCWHf
-        /HbT5er1z7fspBaw6JEXuk+JxqlqIXcT1aOJRAUPuQyVXkQlSt0QqkQqHjM2Z/X6tA9r1aXvGMG
-        cyr1Nf7/FD6UQRIv4jqhHsg==
-X-Received: by 2002:ac8:16b2:: with SMTP id r47mr57607225qtj.273.1594162234497;
-        Tue, 07 Jul 2020 15:50:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzEUX4FOONaw2ZO8mmmd3zmBYLqC03cLLhe3ytu7deLkE6Bv0g/Xef2K2OGzTk+bX724w5ibw==
-X-Received: by 2002:ac8:16b2:: with SMTP id r47mr57607196qtj.273.1594162234214;
-        Tue, 07 Jul 2020 15:50:34 -0700 (PDT)
-Received: from xz-x1.redhat.com ([2607:9880:19c0:32::2])
-        by smtp.gmail.com with ESMTPSA id j16sm26267642qtp.92.2020.07.07.15.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 15:50:33 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        peterx@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH v5 06/25] mm/csky: Use general page fault accounting
-Date:   Tue,  7 Jul 2020 18:50:02 -0400
-Message-Id: <20200707225021.200906-7-peterx@redhat.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200707225021.200906-1-peterx@redhat.com>
-References: <20200707225021.200906-1-peterx@redhat.com>
+        id S1726140AbgGICUI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 8 Jul 2020 22:20:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726122AbgGICUI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 8 Jul 2020 22:20:08 -0400
+Received: from localhost.localdomain (unknown [42.120.72.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C4B2206F6;
+        Thu,  9 Jul 2020 02:20:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594261207;
+        bh=gnUddFvJBhvfM3ugnRh9YBTiMPmrcX+YnUy9VnaSapM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GgM/Oi8zj9KXIGP2V6HlPLxAwXAI8Pq98wtQDA7AK0PgqLPemEpteY5JyTHZnv/Or
+         meu5EhcLw4L4+WTJwdwrdRiGI9JBV/EUK/WKfICKH4FlOMpKhbU3Xs90oy7e8PWWtk
+         MAcXEw/ookSu6kmzoP3DAzOEIBugiEHifLLZuy+A=
+From:   guoren@kernel.org
+To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
+        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
+        me@packi.ch, bjorn.topel@gmail.com, atish.patra@wdc.com,
+        penberg@kernel.org, mhiramat@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH v2 0/6] riscv: Add k/uprobe supported
+Date:   Thu,  9 Jul 2020 02:19:08 +0000
+Message-Id: <1594261154-69745-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Use the general page fault accounting by passing regs into handle_mm_fault().
-It naturally solve the issue of multiple page fault accounting when page fault
-retry happened.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-CC: Guo Ren <guoren@kernel.org>
-CC: linux-csky@vger.kernel.org
-Acked-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/csky/mm/fault.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+The patchset includes kprobe/uprobe support and some related fixups.
+Patrick provides HAVE_REGS_AND_STACK_ACCESS_API support and some
+kprobe's code. The framework of k/uprobe is from csky but also refers
+to other arches'. kprobes on ftrace is also supported in the patchset.
 
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index 7137e2e8dc57..c3f580714ee4 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -151,7 +151,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- 	 * the fault.
- 	 */
- 	fault = handle_mm_fault(vma, address, write ? FAULT_FLAG_WRITE : 0,
--				NULL);
-+				regs);
- 	if (unlikely(fault & VM_FAULT_ERROR)) {
- 		if (fault & VM_FAULT_OOM)
- 			goto out_of_memory;
-@@ -161,16 +161,6 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- 			goto bad_area;
- 		BUG();
- 	}
--	if (fault & VM_FAULT_MAJOR) {
--		tsk->maj_flt++;
--		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1, regs,
--			      address);
--	} else {
--		tsk->min_flt++;
--		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1, regs,
--			      address);
--	}
--
- 	mmap_read_unlock(mm);
- 	return;
- 
+There is no single step exception in riscv ISA, only single-step
+facility for jtag. See riscv-Privileged spec:
+
+Interrupt Exception Code-Description
+1 0 Reserved
+1 1 Supervisor software interrupt
+1 2–4 Reserved
+1 5 Supervisor timer interrupt
+1 6–8 Reserved
+1 9 Supervisor external interrupt
+1 10–15 Reserved
+1 ≥16 Available for platform use
+0 0 Instruction address misaligned
+0 1 Instruction access fault
+0 2 Illegal instruction
+0 3 Breakpoint
+0 4 Load address misaligned
+0 5 Load access fault
+0 6 Store/AMO address misaligned
+0 7 Store/AMO access fault
+0 8 Environment call from U-mode
+0 9 Environment call from S-mode
+0 10–11 Reserved
+0 12 Instruction page fault
+0 13 Load page fault
+0 14 Reserved
+0 15 Store/AMO page fault
+0 16–23 Reserved
+0 24–31 Available for custom use
+0 32–47 Reserved
+0 48–63 Available for custom use
+0 ≥64 Reserved
+
+No single step!
+
+Other arches use hardware single-step exception for k/uprobe,  eg:
+ - powerpc: regs->msr |= MSR_SINGLESTEP
+ - arm/arm64: PSTATE.D for enabling software step exceptions
+ - s390: Set PER control regs, turns on single step for the given address
+ - x86: regs->flags |= X86_EFLAGS_TF
+ - csky: of course use hw single step :)
+
+All the above arches use a hardware single-step exception
+mechanism to execute the instruction that was replaced with a probe
+breakpoint. So utilize ebreak to simulate.
+
+Some pc related instructions couldn't be executed out of line and some
+system/fence instructions couldn't be a trace site at all. So we give
+out a reject list and simulate list in decode-insn.c.
+
+You could use uprobe to test simulate code like this:
+
+ echo 'p:enter_current_state_one /hello:0x6e4 a0=%a0 a1=%a1' >> /sys/kernel/debug/tracing/uprobe_events
+ echo 1 > /sys/kernel/debug/tracing/events/uprobes/enable
+ /hello
+ ^C
+ cat /sys/kernel/debug/tracing/trace
+ tracer: nop
+
+ entries-in-buffer/entries-written: 1/1   #P:1
+
+                              _-----=> irqs-off
+                             / _----=> need-resched
+                            | / _---=> hardirq/softirq
+                            || / _--=> preempt-depth
+                            ||| /     delay
+           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+              | |       |   ||||       |         |
+          hello-94    [000] d...    55.404242: enter_current_state_one: (0x106e4) a0=0x1 a1=0x3fffa8ada8
+
+Be care /hello:0x6e4 is the file offset in elf and it relate to 0x106e4
+in memory and hello is your target elf program.
+
+Try kprobe like this:
+
+ echo 'p:myprobe _do_fork dfd=%a0 filename=%a1 flags=%a2 mode=+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
+ echo 'r:myretprobe _do_fork $retval' >> /sys/kernel/debug/tracing/kprobe_event
+
+ echo 1 >/sys/kernel/debug/tracing/events/kprobes/enable
+ cat /sys/kernel/debug/tracing/trace
+ tracer: nop
+
+ entries-in-buffer/entries-written: 2/2   #P:1
+
+                              _-----=> irqs-off
+                             / _----=> need-resched
+                            | / _---=> hardirq/softirq
+                            || / _--=> preempt-depth
+                            ||| /     delay
+           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+              | |       |   ||||       |         |
+             sh-92    [000] .n..   131.804230: myprobe: (_do_fork+0x0/0x2e6) dfd=0xffffffe03929fdf8 filename=0x0 flags=0x101000 mode=0x1200000ffffffe0
+             sh-92    [000] d...   131.806607: myretprobe: (__do_sys_clone+0x70/0x82 <- _do_fork) arg1=0x5f
+ cat /sys/kernel/debug/tracing/trace
+
+Changes v2:
+ - Add Reviewed-by, Tested-by, Acked-by, thx for all of you
+ - Add kprobes on ftrace feature
+
+Guo Ren (5):
+  riscv: Fixup __vdso_gettimeofday broke dynamic ftrace
+  riscv: Fixup compile error BUILD_BUG_ON failed
+  riscv: Add kprobes supported
+  riscv: Add uprobes supported
+  riscv: Add KPROBES_ON_FTRACE supported
+
+Patrick Stählin (1):
+  RISC-V: Implement ptrace regs and stack API
+
+ arch/riscv/Kconfig                            |   7 +
+ arch/riscv/include/asm/kprobes.h              |  40 +++
+ arch/riscv/include/asm/probes.h               |  24 ++
+ arch/riscv/include/asm/processor.h            |   1 +
+ arch/riscv/include/asm/ptrace.h               |  29 ++
+ arch/riscv/include/asm/thread_info.h          |   4 +-
+ arch/riscv/include/asm/uprobes.h              |  40 +++
+ arch/riscv/kernel/Makefile                    |   1 +
+ arch/riscv/kernel/patch.c                     |   8 +-
+ arch/riscv/kernel/probes/Makefile             |   6 +
+ arch/riscv/kernel/probes/decode-insn.c        |  48 +++
+ arch/riscv/kernel/probes/decode-insn.h        |  18 +
+ arch/riscv/kernel/probes/ftrace.c             |  53 +++
+ arch/riscv/kernel/probes/kprobes.c            | 471 ++++++++++++++++++++++++++
+ arch/riscv/kernel/probes/kprobes_trampoline.S |  93 +++++
+ arch/riscv/kernel/probes/simulate-insn.c      |  85 +++++
+ arch/riscv/kernel/probes/simulate-insn.h      |  47 +++
+ arch/riscv/kernel/probes/uprobes.c            | 186 ++++++++++
+ arch/riscv/kernel/ptrace.c                    |  99 ++++++
+ arch/riscv/kernel/signal.c                    |   3 +
+ arch/riscv/kernel/traps.c                     |  19 ++
+ arch/riscv/kernel/vdso/Makefile               |   3 +
+ arch/riscv/mm/fault.c                         |  11 +
+ 23 files changed, 1293 insertions(+), 3 deletions(-)
+ create mode 100644 arch/riscv/include/asm/probes.h
+ create mode 100644 arch/riscv/include/asm/uprobes.h
+ create mode 100644 arch/riscv/kernel/probes/Makefile
+ create mode 100644 arch/riscv/kernel/probes/decode-insn.c
+ create mode 100644 arch/riscv/kernel/probes/decode-insn.h
+ create mode 100644 arch/riscv/kernel/probes/ftrace.c
+ create mode 100644 arch/riscv/kernel/probes/kprobes.c
+ create mode 100644 arch/riscv/kernel/probes/kprobes_trampoline.S
+ create mode 100644 arch/riscv/kernel/probes/simulate-insn.c
+ create mode 100644 arch/riscv/kernel/probes/simulate-insn.h
+ create mode 100644 arch/riscv/kernel/probes/uprobes.c
+
 -- 
-2.26.2
+2.7.4
 
