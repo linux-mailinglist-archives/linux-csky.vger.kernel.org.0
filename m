@@ -2,120 +2,150 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC86121B716
-	for <lists+linux-csky@lfdr.de>; Fri, 10 Jul 2020 15:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E5C21BAAC
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Jul 2020 18:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgGJNuX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 10 Jul 2020 09:50:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43714 "EHLO mail.kernel.org"
+        id S1727932AbgGJQU0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 10 Jul 2020 12:20:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44376 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726965AbgGJNuW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 10 Jul 2020 09:50:22 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726820AbgGJQU0 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 10 Jul 2020 12:20:26 -0400
+Received: from localhost.localdomain (unknown [89.208.247.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 075632064B;
-        Fri, 10 Jul 2020 13:50:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 320D420657;
+        Fri, 10 Jul 2020 16:20:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594389022;
-        bh=In0YOJkA3w7O35oZQkhR6Xs3Z6653LLM+6Ev004T7dg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pr0Ks08N4TqEHRkkVNv/YzDtzu1bHPCyMMe1BkNX3T+JxjVueFzwsIadyMRsA8U/d
-         sgDd2o4xNZqOv3gYmuYMo4SPJt82ZnVZJ6xXAb7qU0opCl6xhYh0FsRxwQ0hyAtW18
-         RljlWhtXhPIjUATorUHl1BRmj0VrBlnSUTJXJicI=
-Date:   Fri, 10 Jul 2020 22:50:17 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     guoren@kernel.org
-Cc:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
+        s=default; t=1594398025;
+        bh=ERGigc8QaW07BGajQpKa6kuFdOuBQHa4YxZRxHxyvG4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P4/zkk+OTc+xvnY6KxP1vHRODZoVLxJJn16uHU7qWli0vWQntfnTEIqIzqPCR2KIm
+         QYTPjJt0sRKFVlTA+hOrmHFUDBcjDujpl8rekHxeXG7nIkAsM4sTSMLqSTvjihJXrs
+         pvZu1XPk4TCvLB4LlpctImEuS5FEGfvJ9IH+aw4M=
+From:   guoren@kernel.org
+To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
         anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        me@packi.ch, bjorn.topel@gmail.com, atish.patra@wdc.com,
-        penberg@kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH v2 6/6] riscv: Add KPROBES_ON_FTRACE supported
-Message-Id: <20200710225017.5ce329485e911f99e17cd483@kernel.org>
-In-Reply-To: <1594261154-69745-7-git-send-email-guoren@kernel.org>
-References: <1594261154-69745-1-git-send-email-guoren@kernel.org>
-        <1594261154-69745-7-git-send-email-guoren@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        keescook@chromium.org, bjorn.topel@gmail.com, atish.patra@wdc.com,
+        cooper.qu@linux.alibaba.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Greentime Hu <green.hu@gmail.com>
+Subject: [PATCH v3 1/2] riscv: Add STACKPROTECTOR supported
+Date:   Fri, 10 Jul 2020 16:19:57 +0000
+Message-Id: <1594397998-10221-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Guo,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On Thu,  9 Jul 2020 02:19:14 +0000
-guoren@kernel.org wrote:
+The -fstack-protector & -fstack-protector-strong features are from
+gcc. The patch only add basic kernel support to stack-protector
+feature and some arch could have its own solution such as
+ARM64_PTR_AUTH.
 
-> +/* Ftrace callback handler for kprobes -- called under preepmt disabed */
-> +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> +			   struct ftrace_ops *ops, struct pt_regs *regs)
-> +{
-> +	struct kprobe *p;
-> +	struct kprobe_ctlblk *kcb;
-> +
-> +	p = get_kprobe((kprobe_opcode_t *)ip);
-> +	if (unlikely(!p) || kprobe_disabled(p))
-> +		return;
-> +
-> +	kcb = get_kprobe_ctlblk();
-> +	if (kprobe_running()) {
-> +		kprobes_inc_nmissed_count(p);
-> +	} else {
-> +		/*
-> +		 * The regs->epc hasn't been saved by SAVE_ALL in mcount-dyn.S
-> +		 * So no need to resume it, just for kprobe handler.
-> +		 */
-> +		instruction_pointer_set(regs, ip);
-> +		__this_cpu_write(current_kprobe, p);
-> +		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
-> +		if (!p->pre_handler || !p->pre_handler(p, regs)) {
-> +			/*
-> +			 * Emulate singlestep (and also recover regs->pc)
-> +			 * as if there is a nop
-> +			 */
-> +			instruction_pointer_set(regs,
-> +				(unsigned long)p->addr + MCOUNT_INSN_SIZE);
-> +			if (unlikely(p->post_handler)) {
-> +				kcb->kprobe_status = KPROBE_HIT_SSDONE;
-> +				p->post_handler(p, regs, 0);
-> +			}
+After enabling STACKPROTECTOR and STACKPROTECTOR_STRONG, the .text
+size is expanded from  0x7de066 to 0x81fb32 (only 5%) to add canary
+checking code.
 
-Hmm, don't you need restoring the previous instruction pointer here?
-If you don't support modifying the instruction pointer in the handler,
-it must not be compatible with kprobes.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Björn Töpel <bjorn.topel@gmail.com>
+Cc: Greentime Hu <green.hu@gmail.com>
+Cc: Atish Patra <atish.patra@wdc.com>
+---
+Change v2:
+ - Fixup rsicv32 compile warning
 
-Now BPF function override and function error injection depends on
-this behevior, so could you consider to support it in the "ftrace"
-implementation at first? (And if it is enabled, you can enable the
-livepatch on RISCV too)
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+---
+ arch/riscv/Kconfig                      |  1 +
+ arch/riscv/include/asm/stackprotector.h | 33 +++++++++++++++++++++++++++++++++
+ arch/riscv/kernel/process.c             |  6 ++++++
+ 3 files changed, 40 insertions(+)
+ create mode 100644 arch/riscv/include/asm/stackprotector.h
 
-Thank you,
-
-> +		}
-> +
-> +		/*
-> +		 * If pre_handler returns !0, it changes regs->pc. We have to
-> +		 * skip emulating post_handler.
-> +		 */
-> +		__this_cpu_write(current_kprobe, NULL);
-> +	}
-> +}
-> +NOKPROBE_SYMBOL(kprobe_ftrace_handler);
-> +
-> +int arch_prepare_kprobe_ftrace(struct kprobe *p)
-> +{
-> +	p->ainsn.api.insn = NULL;
-> +	return 0;
-> +}
-> -- 
-> 2.7.4
-> 
-
-
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index f927a91..4b0e308 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -63,6 +63,7 @@ config RISCV
+ 	select HAVE_PERF_EVENTS
+ 	select HAVE_PERF_REGS
+ 	select HAVE_PERF_USER_STACK_DUMP
++	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select IRQ_DOMAIN
+ 	select MODULES_USE_ELF_RELA if MODULES
+diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
+new file mode 100644
+index 00000000..d95f7b2
+--- /dev/null
++++ b/arch/riscv/include/asm/stackprotector.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _ASM_RISCV_STACKPROTECTOR_H
++#define _ASM_RISCV_STACKPROTECTOR_H
++
++#include <linux/random.h>
++#include <linux/version.h>
++#include <asm/timex.h>
++
++extern unsigned long __stack_chk_guard;
++
++/*
++ * Initialize the stackprotector canary value.
++ *
++ * NOTE: this must only be called from functions that never return,
++ * and it must always be inlined.
++ */
++static __always_inline void boot_init_stack_canary(void)
++{
++	unsigned long canary;
++	unsigned long tsc;
++
++	/* Try to get a semi random initial value. */
++	get_random_bytes(&canary, sizeof(canary));
++	tsc = get_cycles();
++	canary += tsc + (tsc << BITS_PER_LONG/2);
++	canary ^= LINUX_VERSION_CODE;
++	canary &= CANARY_MASK;
++
++	current->stack_canary = canary;
++	__stack_chk_guard = current->stack_canary;
++}
++#endif /* _ASM_RISCV_STACKPROTECTOR_H */
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 824d117..6548929 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -24,6 +24,12 @@
+ 
+ register unsigned long gp_in_global __asm__("gp");
+ 
++#ifdef CONFIG_STACKPROTECTOR
++#include <linux/stackprotector.h>
++unsigned long __stack_chk_guard __read_mostly;
++EXPORT_SYMBOL(__stack_chk_guard);
++#endif
++
+ extern asmlinkage void ret_from_fork(void);
+ extern asmlinkage void ret_from_kernel_thread(void);
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.7.4
+
