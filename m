@@ -2,104 +2,120 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1039321AB50
-	for <lists+linux-csky@lfdr.de>; Fri, 10 Jul 2020 01:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC86121B716
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Jul 2020 15:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgGIXPp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 9 Jul 2020 19:15:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42572 "EHLO mail.kernel.org"
+        id S1727003AbgGJNuX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 10 Jul 2020 09:50:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726311AbgGIXPp (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 9 Jul 2020 19:15:45 -0400
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726965AbgGJNuW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 10 Jul 2020 09:50:22 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9373420786;
-        Thu,  9 Jul 2020 23:15:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 075632064B;
+        Fri, 10 Jul 2020 13:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594336544;
-        bh=WKp2RVFe68SGsfy7Hqg46eACLbZJztj8u5UjJnydzJw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sTKNHyrGxjZHVmElPsUrMB0oPbGEmh5sIBbuCWoItrDYOtZOQtKBzRCD1UOwRW0ps
-         xYuzzensHJN29VXkbSU6m244+1lhHoeEjAUc8IQj6dY7k1sZULyLeqTvV0ZhOND5I2
-         qIvmbbAXmhQevnKbX//nYKBoVOqX97awD/JvDNdA=
-Received: by mail-lj1-f180.google.com with SMTP id h19so4255625ljg.13;
-        Thu, 09 Jul 2020 16:15:44 -0700 (PDT)
-X-Gm-Message-State: AOAM532uWMyOy5m3fbk7zDok68KOihMBZRyldLWzAHuloYpDFEvb4KkP
-        U8SjEndGk57z1Lt/5BO+kC3sQNO0yZBP2V3UvjM=
-X-Google-Smtp-Source: ABdhPJwP3mup+JqlbZ3i4TpJbfsI0x3PxwcNYP4Z+8OXIGKrTQvFVgXB2+LnS3GVk56FcdbCumxmhbXp3nvJtI9dPx4=
-X-Received: by 2002:a05:651c:111:: with SMTP id a17mr16456695ljb.265.1594336542920;
- Thu, 09 Jul 2020 16:15:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <1593266228-61125-1-git-send-email-guoren@kernel.org> <mhng-af022fcc-7dce-4d1b-9204-d31241538412@palmerdabbelt-glaptop1>
-In-Reply-To: <mhng-af022fcc-7dce-4d1b-9204-d31241538412@palmerdabbelt-glaptop1>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 10 Jul 2020 07:15:31 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRQkEM7zR06GYOGhT_Aerhc9vRNaxsDZ-jVCHyEodnXcg@mail.gmail.com>
-Message-ID: <CAJF2gTRQkEM7zR06GYOGhT_Aerhc9vRNaxsDZ-jVCHyEodnXcg@mail.gmail.com>
-Subject: Re: [PATCH V2 0/3] riscv: Enable LOCKDEP
-To:     Palmer Dabbelt <palmerdabbelt@google.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Nick Hu <nickhu@andestech.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        s=default; t=1594389022;
+        bh=In0YOJkA3w7O35oZQkhR6Xs3Z6653LLM+6Ev004T7dg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pr0Ks08N4TqEHRkkVNv/YzDtzu1bHPCyMMe1BkNX3T+JxjVueFzwsIadyMRsA8U/d
+         sgDd2o4xNZqOv3gYmuYMo4SPJt82ZnVZJ6xXAb7qU0opCl6xhYh0FsRxwQ0hyAtW18
+         RljlWhtXhPIjUATorUHl1BRmj0VrBlnSUTJXJicI=
+Date:   Fri, 10 Jul 2020 22:50:17 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     guoren@kernel.org
+Cc:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
+        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
+        me@packi.ch, bjorn.topel@gmail.com, atish.patra@wdc.com,
+        penberg@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH v2 6/6] riscv: Add KPROBES_ON_FTRACE supported
+Message-Id: <20200710225017.5ce329485e911f99e17cd483@kernel.org>
+In-Reply-To: <1594261154-69745-7-git-send-email-guoren@kernel.org>
+References: <1594261154-69745-1-git-send-email-guoren@kernel.org>
+        <1594261154-69745-7-git-send-email-guoren@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thank you, Palmer
+Hi Guo,
 
-On Fri, Jul 10, 2020 at 6:06 AM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
->
-> On Sat, 27 Jun 2020 06:57:05 PDT (-0700), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Lockdep is needed by proving the spinlocks and rwlocks. To support it,
-> > we need to add TRACE_IRQFLAGS codes in kernel/entry.S. These patches
-> > follow Documentation/irqflags-tracing.txt.
-> >
-> > Fixup 2 bugs that block the lockdep implementation.
-> >
-> > ---
-> > Changes in v2
-> >  - Remove sX regs recovery codes which are unnecessary, because
-> >    callee will handle them. Thx Greentime :)
-> >
-> >  - Move "restore a0 - a7" to handle_syscall, but if _TIF_SYSCALL_WORK
-> >    is set, "restore a1 - a7" is still duplicated. I prefer a C wrapper
-> >    for syscall.
-> >
-> > Guo Ren (2):
-> >   riscv: Fixup static_obj() fail
-> >   riscv: Enable LOCKDEP_SUPPORT & fixup TRACE_IRQFLAGS_SUPPORT
-> >
-> > Zong Li (1):
-> >   riscv: Fixup lockdep_assert_held with wrong param cpu_running
-> >
-> >  arch/riscv/Kconfig              |  3 +++
-> >  arch/riscv/kernel/entry.S       | 33 ++++++++++++++++++++++++++++++++-
-> >  arch/riscv/kernel/smpboot.c     |  1 -
-> >  arch/riscv/kernel/vmlinux.lds.S |  2 +-
-> >  4 files changed, 36 insertions(+), 3 deletions(-)
->
-> These are on for-next.  As far as I can tell lockdep is working, but I'm just
-> doing some simple boot tests.
->
-> Thanks!
+On Thu,  9 Jul 2020 02:19:14 +0000
+guoren@kernel.org wrote:
 
+> +/* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> +			   struct ftrace_ops *ops, struct pt_regs *regs)
+> +{
+> +	struct kprobe *p;
+> +	struct kprobe_ctlblk *kcb;
+> +
+> +	p = get_kprobe((kprobe_opcode_t *)ip);
+> +	if (unlikely(!p) || kprobe_disabled(p))
+> +		return;
+> +
+> +	kcb = get_kprobe_ctlblk();
+> +	if (kprobe_running()) {
+> +		kprobes_inc_nmissed_count(p);
+> +	} else {
+> +		/*
+> +		 * The regs->epc hasn't been saved by SAVE_ALL in mcount-dyn.S
+> +		 * So no need to resume it, just for kprobe handler.
+> +		 */
+> +		instruction_pointer_set(regs, ip);
+> +		__this_cpu_write(current_kprobe, p);
+> +		kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> +		if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> +			/*
+> +			 * Emulate singlestep (and also recover regs->pc)
+> +			 * as if there is a nop
+> +			 */
+> +			instruction_pointer_set(regs,
+> +				(unsigned long)p->addr + MCOUNT_INSN_SIZE);
+> +			if (unlikely(p->post_handler)) {
+> +				kcb->kprobe_status = KPROBE_HIT_SSDONE;
+> +				p->post_handler(p, regs, 0);
+> +			}
+
+Hmm, don't you need restoring the previous instruction pointer here?
+If you don't support modifying the instruction pointer in the handler,
+it must not be compatible with kprobes.
+
+Now BPF function override and function error injection depends on
+this behevior, so could you consider to support it in the "ftrace"
+implementation at first? (And if it is enabled, you can enable the
+livepatch on RISCV too)
+
+Thank you,
+
+> +		}
+> +
+> +		/*
+> +		 * If pre_handler returns !0, it changes regs->pc. We have to
+> +		 * skip emulating post_handler.
+> +		 */
+> +		__this_cpu_write(current_kprobe, NULL);
+> +	}
+> +}
+> +NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+> +
+> +int arch_prepare_kprobe_ftrace(struct kprobe *p)
+> +{
+> +	p->ainsn.api.insn = NULL;
+> +	return 0;
+> +}
+> -- 
+> 2.7.4
+> 
 
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Masami Hiramatsu <mhiramat@kernel.org>
