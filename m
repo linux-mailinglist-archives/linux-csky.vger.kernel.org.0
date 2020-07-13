@@ -2,214 +2,211 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D271A21CDF4
-	for <lists+linux-csky@lfdr.de>; Mon, 13 Jul 2020 06:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FF321E3A9
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 01:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725767AbgGMEFs (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 13 Jul 2020 00:05:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36634 "EHLO mail.kernel.org"
+        id S1726352AbgGMXjs (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 13 Jul 2020 19:39:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725554AbgGMEFr (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 13 Jul 2020 00:05:47 -0400
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726339AbgGMXjr (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 13 Jul 2020 19:39:47 -0400
+Received: from localhost.localdomain (unknown [89.208.247.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A95E92075D;
-        Mon, 13 Jul 2020 04:05:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E72FB2137B;
+        Mon, 13 Jul 2020 23:39:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594613147;
-        bh=3f7C3yEJ+nGltzg0bLlJ5HzcFjk3ROnLlMXm3IvIkrE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=So0bJiTtI3nZiPj9dXXi24DFNB1/4fsj+F+YnGiraBC1O3XKlE/M+IiW8uFwcef7U
-         uVXpnz+NZFYpTzFciRC8BVQU58oXFqP4IagJebc49qkFl9nX1JI7UCydd42lNM7uPX
-         wLGIafN8l7BpgPNYFbzUwmvO0REn61PZXRCjSRzc=
-Received: by mail-lj1-f182.google.com with SMTP id h22so14830094lji.9;
-        Sun, 12 Jul 2020 21:05:46 -0700 (PDT)
-X-Gm-Message-State: AOAM533NPnRfSYhagFOfrblYrTZkMy9vbz8yVUZDBb+RA7vK4nK0ZHKQ
-        FPZSIc6C8B9LmC2AVrE7vrmZK+HniUc0qo/Krxw=
-X-Google-Smtp-Source: ABdhPJwBTq4Yy1nBnQVW15Yc68mu5Rbru7z8rYZM7uGeo1nkRpH+GiFIwkktrb7/uxrO1jq3C3zt+RhLFJc0AnHJbRY=
-X-Received: by 2002:a2e:b0ed:: with SMTP id h13mr37189480ljl.250.1594613144896;
- Sun, 12 Jul 2020 21:05:44 -0700 (PDT)
+        s=default; t=1594683586;
+        bh=Vqf01DncIE5Y4/nHfHNC63MvPZBQw5slk8yytRbgiMg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mWYoD/XXgWMDTyzvDn96p9cITKPx24HfVkxPotigZKn34Y+GxsIJDKX6IiBt20eIB
+         ijFFvJOFm7/2lqiwbep/ec/HfblhE6BDKQSz+MdjnGHNEWSuLzKZjwhA7fN4/+MCfS
+         5MIPonfQg+XezFs89VEBwqygcjETQc7WNWgE9+XY=
+From:   guoren@kernel.org
+To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
+        mhiramat@kernel.org, oleg@redhat.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        anup@brainfault.org, linux-csky@vger.kernel.org,
+        greentime.hu@sifive.com, zong.li@sifive.com, guoren@kernel.org,
+        me@packi.ch, bjorn.topel@gmail.com,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH v3 0/7] riscv: Add k/uprobe supported
+Date:   Mon, 13 Jul 2020 23:39:15 +0000
+Message-Id: <1594683562-68149-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <1594397998-10221-1-git-send-email-guoren@kernel.org>
- <1594397998-10221-2-git-send-email-guoren@kernel.org> <202007121939.07FB14D@keescook>
-In-Reply-To: <202007121939.07FB14D@keescook>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 13 Jul 2020 12:05:33 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQQerCP0i1zsj28wP+r9mjsV1wU_ssWASbNWuhK9UgbtA@mail.gmail.com>
-Message-ID: <CAJF2gTQQerCP0i1zsj28wP+r9mjsV1wU_ssWASbNWuhK9UgbtA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] riscv: Enable per-task stack canaries
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Atish Patra <atish.patra@wdc.com>, cooper.qu@linux.alibaba.com,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Kees,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On Mon, Jul 13, 2020 at 10:40 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Jul 10, 2020 at 04:19:58PM +0000, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > This enables the use of per-task stack canary values if GCC has
-> > support for emitting the stack canary reference relative to the
-> > value of tp, which holds the task struct pointer in the riscv
-> > kernel.
-> >
-> > After compare arm64 and x86 implementations, seems arm64's is more
-> > flexible and readable. The key point is how gcc get the offset of
-> > stack_canary from gs/el0_sp.
-> >
-> > x86: Use a fix offset from gs, not flexible.
-> >
-> > struct fixed_percpu_data {
-> >       /*
-> >        * GCC hardcodes the stack canary as %gs:40.  Since the
-> >        * irq_stack is the object at %gs:0, we reserve the bottom
-> >        * 48 bytes of the irq stack for the canary.
-> >        */
-> >       char            gs_base[40]; // :(
-> >       unsigned long   stack_canary;
-> > };
-> >
-> > arm64: Use -mstack-protector-guard-offset & guard-reg
-> >       gcc options:
-> >       -mstack-protector-guard=sysreg
-> >       -mstack-protector-guard-reg=sp_el0
-> >       -mstack-protector-guard-offset=xxx
-> >
-> > riscv: Use -mstack-protector-guard-offset & guard-reg
-> >       gcc options:
-> >       -mstack-protector-guard=tls
-> >       -mstack-protector-guard-reg=tp
-> >       -mstack-protector-guard-offset=xxx
-> >
-> > Here is riscv gcc's work [1].
-> >
-> > [1] https://gcc.gnu.org/pipermail/gcc-patches/2020-July/549583.html
-> >
-> > In the end, these codes are inserted by gcc before return:
-> >
-> > *  0xffffffe00020b396 <+120>:   ld      a5,1008(tp) # 0x3f0
-> > *  0xffffffe00020b39a <+124>:   xor     a5,a5,a4
-> > *  0xffffffe00020b39c <+126>:   mv      a0,s5
-> > *  0xffffffe00020b39e <+128>:   bnez    a5,0xffffffe00020b61c <_do_fork+766>
-> >    0xffffffe00020b3a2 <+132>:   ld      ra,136(sp)
-> >    0xffffffe00020b3a4 <+134>:   ld      s0,128(sp)
-> >    0xffffffe00020b3a6 <+136>:   ld      s1,120(sp)
-> >    0xffffffe00020b3a8 <+138>:   ld      s2,112(sp)
-> >    0xffffffe00020b3aa <+140>:   ld      s3,104(sp)
-> >    0xffffffe00020b3ac <+142>:   ld      s4,96(sp)
-> >    0xffffffe00020b3ae <+144>:   ld      s5,88(sp)
-> >    0xffffffe00020b3b0 <+146>:   ld      s6,80(sp)
-> >    0xffffffe00020b3b2 <+148>:   ld      s7,72(sp)
-> >    0xffffffe00020b3b4 <+150>:   addi    sp,sp,144
-> >    0xffffffe00020b3b6 <+152>:   ret
-> >    ...
-> > *  0xffffffe00020b61c <+766>:   auipc   ra,0x7f8
-> > *  0xffffffe00020b620 <+770>:   jalr    -1764(ra) # 0xffffffe000a02f38 <__stack_chk_fail>
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: cooper <cooper.qu@linux.alibaba.com>
-> > Cc: cooper <cooper.qu@linux.alibaba.com>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > ---
-> > Change v2:
-> >  - Change to -mstack-protector-guard=tls for gcc final define
-> >  - Solve compile error by changing position of KBUILD_CFLAGS in
-> >    Makefile
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > ---
-> >  arch/riscv/Kconfig                      |  7 +++++++
-> >  arch/riscv/Makefile                     | 10 ++++++++++
-> >  arch/riscv/include/asm/stackprotector.h |  3 ++-
-> >  arch/riscv/kernel/asm-offsets.c         |  3 +++
-> >  arch/riscv/kernel/process.c             |  2 +-
-> >  5 files changed, 23 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 4b0e308..d98ce29 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -394,6 +394,13 @@ config CMDLINE_FORCE
-> >
-> >  endchoice
-> >
-> > +config CC_HAVE_STACKPROTECTOR_TLS
-> > +     def_bool $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=tp -mstack-protector-guard-offset=0)
-> > +
-> > +config STACKPROTECTOR_PER_TASK
-> > +     def_bool y
-> > +     depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_TLS
-> > +
-> >  endmenu
-> >
-> >  config BUILTIN_DTB
-> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > index fb6e37d..f5f8ee9 100644
-> > --- a/arch/riscv/Makefile
-> > +++ b/arch/riscv/Makefile
-> > @@ -68,6 +68,16 @@ KBUILD_CFLAGS_MODULE += $(call cc-option,-mno-relax)
-> >  # architectures.  It's faster to have GCC emit only aligned accesses.
-> >  KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
-> >
-> > +ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
-> > +prepare: stack_protector_prepare
-> > +stack_protector_prepare: prepare0
-> > +     $(eval KBUILD_CFLAGS += -mstack-protector-guard=tls               \
-> > +                             -mstack-protector-guard-reg=tp            \
-> > +                             -mstack-protector-guard-offset=$(shell    \
-> > +                     awk '{if ($$2 == "TSK_STACK_CANARY") print $$3;}' \
-> > +                                     include/generated/asm-offsets.h))
-> > +endif
-> > +
-> >  # arch specific predefines for sparse
-> >  CHECKFLAGS += -D__riscv -D__riscv_xlen=$(BITS)
-> >
-> > diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
-> > index d95f7b2..a895e07 100644
-> > --- a/arch/riscv/include/asm/stackprotector.h
-> > +++ b/arch/riscv/include/asm/stackprotector.h
-> > @@ -28,6 +28,7 @@ static __always_inline void boot_init_stack_canary(void)
-> >       canary &= CANARY_MASK;
-> >
-> >       current->stack_canary = canary;
-> > -     __stack_chk_guard = current->stack_canary;
-> > +     if (!IS_ENABLED(CONFIG_STACKPROTECTOR_PER_TASK))
-> > +             __stack_chk_guard = current->stack_canary;
-> >  }
-> >  #endif /* _ASM_RISCV_STACKPROTECTOR_H */
-> > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> > index 07cb9c1..999b465 100644
-> > --- a/arch/riscv/kernel/asm-offsets.c
-> > +++ b/arch/riscv/kernel/asm-offsets.c
-> > @@ -29,6 +29,9 @@ void asm_offsets(void)
-> >       OFFSET(TASK_THREAD_S11, task_struct, thread.s[11]);
-> >       OFFSET(TASK_THREAD_SP, task_struct, thread.sp);
-> >       OFFSET(TASK_STACK, task_struct, stack);
-> > +#ifdef CONFIG_STACKPROTECTOR
->
-> Should this be CONFIG_STACKPROTECTOR_PER_TASK ?
-Yes, it's more accurate, Thx. I also send a patch [1] to arm64, and
-let's see how they reply?
+The patchset includes kprobe/uprobe support and some related fixups.
+Patrick provides HAVE_REGS_AND_STACK_ACCESS_API support and some
+kprobe's code. The framework of k/uprobe is from csky but also refers
+to other arches'. kprobes on ftrace is also supported in the patchset.
 
-[1] https://lore.kernel.org/linux-csky/1594613013-13059-1-git-send-email-guoren@kernel.org/T/#u
+There is no single step exception in riscv ISA, only single-step
+facility for jtag. See riscv-Privileged spec:
+
+Interrupt Exception Code-Description
+1 0 Reserved
+1 1 Supervisor software interrupt
+1 2–4 Reserved
+1 5 Supervisor timer interrupt
+1 6–8 Reserved
+1 9 Supervisor external interrupt
+1 10–15 Reserved
+1 ≥16 Available for platform use
+0 0 Instruction address misaligned
+0 1 Instruction access fault
+0 2 Illegal instruction
+0 3 Breakpoint
+0 4 Load address misaligned
+0 5 Load access fault
+0 6 Store/AMO address misaligned
+0 7 Store/AMO access fault
+0 8 Environment call from U-mode
+0 9 Environment call from S-mode
+0 10–11 Reserved
+0 12 Instruction page fault
+0 13 Load page fault
+0 14 Reserved
+0 15 Store/AMO page fault
+0 16–23 Reserved
+0 24–31 Available for custom use
+0 32–47 Reserved
+0 48–63 Available for custom use
+0 ≥64 Reserved
+
+No single step!
+
+Other arches use hardware single-step exception for k/uprobe,  eg:
+ - powerpc: regs->msr |= MSR_SINGLESTEP
+ - arm/arm64: PSTATE.D for enabling software step exceptions
+ - s390: Set PER control regs, turns on single step for the given address
+ - x86: regs->flags |= X86_EFLAGS_TF
+ - csky: of course use hw single step :)
+
+All the above arches use a hardware single-step exception
+mechanism to execute the instruction that was replaced with a probe
+breakpoint. So utilize ebreak to simulate.
+
+Some pc related instructions couldn't be executed out of line and some
+system/fence instructions couldn't be a trace site at all. So we give
+out a reject list and simulate list in decode-insn.c.
+
+You could use uprobe to test simulate code like this:
+
+ echo 'p:enter_current_state_one /hello:0x6e4 a0=%a0 a1=%a1' >> /sys/kernel/debug/tracing/uprobe_events
+ echo 1 > /sys/kernel/debug/tracing/events/uprobes/enable
+ /hello
+ ^C
+ cat /sys/kernel/debug/tracing/trace
+ tracer: nop
+
+ entries-in-buffer/entries-written: 1/1   #P:1
+
+                              _-----=> irqs-off
+                             / _----=> need-resched
+                            | / _---=> hardirq/softirq
+                            || / _--=> preempt-depth
+                            ||| /     delay
+           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+              | |       |   ||||       |         |
+          hello-94    [000] d...    55.404242: enter_current_state_one: (0x106e4) a0=0x1 a1=0x3fffa8ada8
+
+Be care /hello:0x6e4 is the file offset in elf and it relate to 0x106e4
+in memory and hello is your target elf program.
+
+Try kprobe like this:
+
+ echo 'p:myprobe _do_fork dfd=%a0 filename=%a1 flags=%a2 mode=+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
+ echo 'r:myretprobe _do_fork $retval' >> /sys/kernel/debug/tracing/kprobe_event
+
+ echo 1 >/sys/kernel/debug/tracing/events/kprobes/enable
+ cat /sys/kernel/debug/tracing/trace
+ tracer: nop
+
+ entries-in-buffer/entries-written: 2/2   #P:1
+
+                              _-----=> irqs-off
+                             / _----=> need-resched
+                            | / _---=> hardirq/softirq
+                            || / _--=> preempt-depth
+                            ||| /     delay
+           TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+              | |       |   ||||       |         |
+             sh-92    [000] .n..   131.804230: myprobe: (_do_fork+0x0/0x2e6) dfd=0xffffffe03929fdf8 filename=0x0 flags=0x101000 mode=0x1200000ffffffe0
+             sh-92    [000] d...   131.806607: myretprobe: (__do_sys_clone+0x70/0x82 <- _do_fork) arg1=0x5f
+ cat /sys/kernel/debug/tracing/trace
+
+Changlog v3:
+ - Add upport for function error injection
+ - Fixup kprobes handler couldn't change pc
+
+Changlog v2:
+ - Add Reviewed-by, Tested-by, Acked-by, thx for all of you
+ - Add kprobes on ftrace feature
+ - Use __always_inline as same as fix_to_virt for fixup
+   BUILD_BUG_ON
+ - Use const "const unsigned int" for 2th param for fixup
+   BUILD_BUG_ON
+
+Guo Ren (6):
+  riscv: Fixup compile error BUILD_BUG_ON failed
+  riscv: Fixup kprobes handler couldn't change pc
+  riscv: Add kprobes supported
+  riscv: Add uprobes supported
+  riscv: Add KPROBES_ON_FTRACE supported
+  riscv: Add support for function error injection
+
+Patrick Stählin (1):
+  RISC-V: Implement ptrace regs and stack API
+
+ arch/riscv/Kconfig                            |   8 +
+ arch/riscv/include/asm/kprobes.h              |  40 +++
+ arch/riscv/include/asm/probes.h               |  24 ++
+ arch/riscv/include/asm/processor.h            |   1 +
+ arch/riscv/include/asm/ptrace.h               |  35 ++
+ arch/riscv/include/asm/thread_info.h          |   4 +-
+ arch/riscv/include/asm/uprobes.h              |  40 +++
+ arch/riscv/kernel/Makefile                    |   1 +
+ arch/riscv/kernel/mcount-dyn.S                |   3 +-
+ arch/riscv/kernel/patch.c                     |   8 +-
+ arch/riscv/kernel/probes/Makefile             |   6 +
+ arch/riscv/kernel/probes/decode-insn.c        |  48 +++
+ arch/riscv/kernel/probes/decode-insn.h        |  18 +
+ arch/riscv/kernel/probes/ftrace.c             |  52 +++
+ arch/riscv/kernel/probes/kprobes.c            | 471 ++++++++++++++++++++++++++
+ arch/riscv/kernel/probes/kprobes_trampoline.S |  93 +++++
+ arch/riscv/kernel/probes/simulate-insn.c      |  85 +++++
+ arch/riscv/kernel/probes/simulate-insn.h      |  47 +++
+ arch/riscv/kernel/probes/uprobes.c            | 186 ++++++++++
+ arch/riscv/kernel/ptrace.c                    |  99 ++++++
+ arch/riscv/kernel/signal.c                    |   3 +
+ arch/riscv/kernel/traps.c                     |  19 ++
+ arch/riscv/lib/Makefile                       |   2 +
+ arch/riscv/lib/error-inject.c                 |  10 +
+ arch/riscv/mm/fault.c                         |  11 +
+ 25 files changed, 1310 insertions(+), 4 deletions(-)
+ create mode 100644 arch/riscv/include/asm/probes.h
+ create mode 100644 arch/riscv/include/asm/uprobes.h
+ create mode 100644 arch/riscv/kernel/probes/Makefile
+ create mode 100644 arch/riscv/kernel/probes/decode-insn.c
+ create mode 100644 arch/riscv/kernel/probes/decode-insn.h
+ create mode 100644 arch/riscv/kernel/probes/ftrace.c
+ create mode 100644 arch/riscv/kernel/probes/kprobes.c
+ create mode 100644 arch/riscv/kernel/probes/kprobes_trampoline.S
+ create mode 100644 arch/riscv/kernel/probes/simulate-insn.c
+ create mode 100644 arch/riscv/kernel/probes/simulate-insn.h
+ create mode 100644 arch/riscv/kernel/probes/uprobes.c
+ create mode 100644 arch/riscv/lib/error-inject.c
 
 -- 
-Best Regards
- Guo Ren
+2.7.4
 
-ML: https://lore.kernel.org/linux-csky/
