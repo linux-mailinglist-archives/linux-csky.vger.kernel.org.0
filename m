@@ -2,235 +2,67 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A470621CD52
-	for <lists+linux-csky@lfdr.de>; Mon, 13 Jul 2020 04:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6301A21CDF1
+	for <lists+linux-csky@lfdr.de>; Mon, 13 Jul 2020 06:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgGMCkA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 12 Jul 2020 22:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbgGMCj7 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 12 Jul 2020 22:39:59 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90805C061794
-        for <linux-csky@vger.kernel.org>; Sun, 12 Jul 2020 19:39:59 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id g67so5389365pgc.8
-        for <linux-csky@vger.kernel.org>; Sun, 12 Jul 2020 19:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jsRkdhqxS3NZSgX5ATVfGNLOv6qqnTr/cmm8NfBgbBE=;
-        b=dzJcZTQoWMe2tmnqof+8OvU9bFh9EHwb5yqVnjcAUsuuC2oA3e/7ua+6nqKi2aZwk2
-         RPTdokLpU/bejdGXn3l2GZyCyq250gZ2iNQ2Tjuv03asTariQZ1rZMu+7fDvZKTcoLfc
-         KaJAQ2o0rHEAT06ffa3dzgaNPeIRCezF73HQg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jsRkdhqxS3NZSgX5ATVfGNLOv6qqnTr/cmm8NfBgbBE=;
-        b=RLMI3X6dzyqDAxynuo1JyCLhcWRCUahAkBAsYY1PDODTH4fA154uXJ2ezN/ER96JCV
-         4K4JBTVuq4vhrvX0TpnYeIkpS/LWhveVZPiBH3FXRWn4tlLMDC4F0nspoGpaBbsom0Ja
-         eKGzl5/X0M+vegefQYpZbkqZ5lZi3jE1DtHN80YhnRoJFQuufxiwhoMWbn7Pk6O/2qaF
-         iAJ7DfHfYBeFBZYbFN5+GI6eJRX6nZUtpSrHRBiA1VyszJlnj1gh6aYzd4cO66iYX09t
-         Nft+aHREGEErENGZlRqAXnt2tFqt2u0btBYRd3MVfVBoYZtl87G56yWi81iU0b35TF4q
-         DZEA==
-X-Gm-Message-State: AOAM531Zia4C+BE6aWE/IE8NxBCyhgmU1w8ItYQoDvipVhNdhemfGXIX
-        eXiZ5UpX9pgqGE1WGGisDZ7p3Q==
-X-Google-Smtp-Source: ABdhPJyX+8sNQyWljdeceleZgJhFuJjzYvo/VS87Sp7fA08kQ5NiWlAeKhuViXcWtWotTPnuvfu4fQ==
-X-Received: by 2002:aa7:8d02:: with SMTP id j2mr6926476pfe.90.1594607999067;
-        Sun, 12 Jul 2020 19:39:59 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y6sm13085278pfp.7.2020.07.12.19.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2020 19:39:58 -0700 (PDT)
-Date:   Sun, 12 Jul 2020 19:39:57 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     guoren@kernel.org
-Cc:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        bjorn.topel@gmail.com, atish.patra@wdc.com,
-        cooper.qu@linux.alibaba.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH v3 2/2] riscv: Enable per-task stack canaries
-Message-ID: <202007121939.07FB14D@keescook>
-References: <1594397998-10221-1-git-send-email-guoren@kernel.org>
- <1594397998-10221-2-git-send-email-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1594397998-10221-2-git-send-email-guoren@kernel.org>
+        id S1725859AbgGMEEd (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 13 Jul 2020 00:04:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35914 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725554AbgGMEEc (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 13 Jul 2020 00:04:32 -0400
+Received: from localhost.localdomain (unknown [42.120.72.68])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F36B72068F;
+        Mon, 13 Jul 2020 04:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594613072;
+        bh=O+jw074gG5NLA3KWbpk115l+I7y00D2c/QoGxkEJctc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZSOc14oG4hnaC9gnGlXBLjLgW1e7oh/AvMg/2wPkCUZzMJGGrShuTD6vsnG3CTxTN
+         UBXEh0zKh2Hqnjy+Wuc6vn/LXAc4YBYbAx6myCXZ4pBdOoIPKelbE8Qw0U6f5uPP3n
+         Y/ZoqpjsdMnEhdfqQ1Mn/MQN74AftungizjGvFi4=
+From:   guoren@kernel.org
+To:     catalin.marinas@arm.com, will@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] arm64: Make TSK_STACK_CANARY more accurate defined
+Date:   Mon, 13 Jul 2020 04:03:33 +0000
+Message-Id: <1594613013-13059-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 04:19:58PM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> This enables the use of per-task stack canary values if GCC has
-> support for emitting the stack canary reference relative to the
-> value of tp, which holds the task struct pointer in the riscv
-> kernel.
-> 
-> After compare arm64 and x86 implementations, seems arm64's is more
-> flexible and readable. The key point is how gcc get the offset of
-> stack_canary from gs/el0_sp.
-> 
-> x86: Use a fix offset from gs, not flexible.
-> 
-> struct fixed_percpu_data {
-> 	/*
-> 	 * GCC hardcodes the stack canary as %gs:40.  Since the
-> 	 * irq_stack is the object at %gs:0, we reserve the bottom
-> 	 * 48 bytes of the irq stack for the canary.
-> 	 */
-> 	char            gs_base[40]; // :(
-> 	unsigned long   stack_canary;
-> };
-> 
-> arm64: Use -mstack-protector-guard-offset & guard-reg
-> 	gcc options:
-> 	-mstack-protector-guard=sysreg
-> 	-mstack-protector-guard-reg=sp_el0
-> 	-mstack-protector-guard-offset=xxx
-> 
-> riscv: Use -mstack-protector-guard-offset & guard-reg
-> 	gcc options:
-> 	-mstack-protector-guard=tls
-> 	-mstack-protector-guard-reg=tp
-> 	-mstack-protector-guard-offset=xxx
-> 
-> Here is riscv gcc's work [1].
-> 
-> [1] https://gcc.gnu.org/pipermail/gcc-patches/2020-July/549583.html
-> 
-> In the end, these codes are inserted by gcc before return:
-> 
-> *  0xffffffe00020b396 <+120>:   ld      a5,1008(tp) # 0x3f0
-> *  0xffffffe00020b39a <+124>:   xor     a5,a5,a4
-> *  0xffffffe00020b39c <+126>:   mv      a0,s5
-> *  0xffffffe00020b39e <+128>:   bnez    a5,0xffffffe00020b61c <_do_fork+766>
->    0xffffffe00020b3a2 <+132>:   ld      ra,136(sp)
->    0xffffffe00020b3a4 <+134>:   ld      s0,128(sp)
->    0xffffffe00020b3a6 <+136>:   ld      s1,120(sp)
->    0xffffffe00020b3a8 <+138>:   ld      s2,112(sp)
->    0xffffffe00020b3aa <+140>:   ld      s3,104(sp)
->    0xffffffe00020b3ac <+142>:   ld      s4,96(sp)
->    0xffffffe00020b3ae <+144>:   ld      s5,88(sp)
->    0xffffffe00020b3b0 <+146>:   ld      s6,80(sp)
->    0xffffffe00020b3b2 <+148>:   ld      s7,72(sp)
->    0xffffffe00020b3b4 <+150>:   addi    sp,sp,144
->    0xffffffe00020b3b6 <+152>:   ret
->    ...
-> *  0xffffffe00020b61c <+766>:   auipc   ra,0x7f8
-> *  0xffffffe00020b620 <+770>:   jalr    -1764(ra) # 0xffffffe000a02f38 <__stack_chk_fail>
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: cooper <cooper.qu@linux.alibaba.com>
-> Cc: cooper <cooper.qu@linux.alibaba.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> ---
-> Change v2:
->  - Change to -mstack-protector-guard=tls for gcc final define
->  - Solve compile error by changing position of KBUILD_CFLAGS in
->    Makefile
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> ---
->  arch/riscv/Kconfig                      |  7 +++++++
->  arch/riscv/Makefile                     | 10 ++++++++++
->  arch/riscv/include/asm/stackprotector.h |  3 ++-
->  arch/riscv/kernel/asm-offsets.c         |  3 +++
->  arch/riscv/kernel/process.c             |  2 +-
->  5 files changed, 23 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 4b0e308..d98ce29 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -394,6 +394,13 @@ config CMDLINE_FORCE
->  
->  endchoice
->  
-> +config CC_HAVE_STACKPROTECTOR_TLS
-> +	def_bool $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=tp -mstack-protector-guard-offset=0)
-> +
-> +config STACKPROTECTOR_PER_TASK
-> +	def_bool y
-> +	depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_TLS
-> +
->  endmenu
->  
->  config BUILTIN_DTB
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index fb6e37d..f5f8ee9 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -68,6 +68,16 @@ KBUILD_CFLAGS_MODULE += $(call cc-option,-mno-relax)
->  # architectures.  It's faster to have GCC emit only aligned accesses.
->  KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
->  
-> +ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
-> +prepare: stack_protector_prepare
-> +stack_protector_prepare: prepare0
-> +	$(eval KBUILD_CFLAGS += -mstack-protector-guard=tls		  \
-> +				-mstack-protector-guard-reg=tp		  \
-> +				-mstack-protector-guard-offset=$(shell	  \
-> +			awk '{if ($$2 == "TSK_STACK_CANARY") print $$3;}' \
-> +					include/generated/asm-offsets.h))
-> +endif
-> +
->  # arch specific predefines for sparse
->  CHECKFLAGS += -D__riscv -D__riscv_xlen=$(BITS)
->  
-> diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
-> index d95f7b2..a895e07 100644
-> --- a/arch/riscv/include/asm/stackprotector.h
-> +++ b/arch/riscv/include/asm/stackprotector.h
-> @@ -28,6 +28,7 @@ static __always_inline void boot_init_stack_canary(void)
->  	canary &= CANARY_MASK;
->  
->  	current->stack_canary = canary;
-> -	__stack_chk_guard = current->stack_canary;
-> +	if (!IS_ENABLED(CONFIG_STACKPROTECTOR_PER_TASK))
-> +		__stack_chk_guard = current->stack_canary;
->  }
->  #endif /* _ASM_RISCV_STACKPROTECTOR_H */
-> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> index 07cb9c1..999b465 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -29,6 +29,9 @@ void asm_offsets(void)
->  	OFFSET(TASK_THREAD_S11, task_struct, thread.s[11]);
->  	OFFSET(TASK_THREAD_SP, task_struct, thread.sp);
->  	OFFSET(TASK_STACK, task_struct, stack);
-> +#ifdef CONFIG_STACKPROTECTOR
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Should this be CONFIG_STACKPROTECTOR_PER_TASK ?
+TSK_STACK_CANARY only used in arm64/Makefile with
+CONFIG_STACKPROTECTOR_PER_TASK wrap. So use the same policy in
+asm-offset.c.
 
-> +	OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
-> +#endif
->  	OFFSET(TASK_TI, task_struct, thread_info);
->  	OFFSET(TASK_TI_FLAGS, task_struct, thread_info.flags);
->  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
-> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> index 6548929..cb4ac65 100644
-> --- a/arch/riscv/kernel/process.c
-> +++ b/arch/riscv/kernel/process.c
-> @@ -24,7 +24,7 @@
->  
->  register unsigned long gp_in_global __asm__("gp");
->  
-> -#ifdef CONFIG_STACKPROTECTOR
-> +#if defined(CONFIG_STACKPROTECTOR) && !defined(CONFIG_STACKPROTECTOR_PER_TASK)
->  #include <linux/stackprotector.h>
->  unsigned long __stack_chk_guard __read_mostly;
->  EXPORT_SYMBOL(__stack_chk_guard);
-> -- 
-> 2.7.4
-> 
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Co-developed-by: Kees Cook <keescook@chromium.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+---
+ arch/arm64/kernel/asm-offsets.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
+index 0577e21..37d5d3d 100644
+--- a/arch/arm64/kernel/asm-offsets.c
++++ b/arch/arm64/kernel/asm-offsets.c
+@@ -39,7 +39,7 @@ int main(void)
+   DEFINE(TSK_TI_SCS_SP,		offsetof(struct task_struct, thread_info.scs_sp));
+ #endif
+   DEFINE(TSK_STACK,		offsetof(struct task_struct, stack));
+-#ifdef CONFIG_STACKPROTECTOR
++#ifdef CONFIG_STACKPROTECTOR_PER_TASK
+   DEFINE(TSK_STACK_CANARY,	offsetof(struct task_struct, stack_canary));
+ #endif
+   BLANK();
 -- 
-Kees Cook
+2.7.4
+
