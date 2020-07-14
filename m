@@ -2,64 +2,65 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4E021F9AE
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 20:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E7A220016
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 23:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729170AbgGNSnQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Jul 2020 14:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S1727052AbgGNVh0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Jul 2020 17:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729166AbgGNSnQ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Jul 2020 14:43:16 -0400
+        with ESMTP id S1726722AbgGNVh0 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Jul 2020 17:37:26 -0400
 Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35134C061794
-        for <linux-csky@vger.kernel.org>; Tue, 14 Jul 2020 11:43:16 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 1so7933883pfn.9
-        for <linux-csky@vger.kernel.org>; Tue, 14 Jul 2020 11:43:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3075DC061755
+        for <linux-csky@vger.kernel.org>; Tue, 14 Jul 2020 14:37:26 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id j20so8186135pfe.5
+        for <linux-csky@vger.kernel.org>; Tue, 14 Jul 2020 14:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=PSoCqSYVR+5FyIES+wNpKGXpQ6OMW93exMYtdsHXH4k=;
-        b=VqYEE3IP8swNW+rXe3FApsMadhgHxhZy8ibBebKms2S7nKFFyNPBLEd6Rrue/Wv99e
-         flXsbemj7CpKBYHX3MxvA67IKPUmppbSNT+gPgkFpNZ5qC3dQea/PXmw9FmNT3rqFJW6
-         XidYvF/4kac1AeKE3xioGoL/1BwhhlJ+LcO0mpipTiSF5mDHNeGJDQNzmXGtTHlycY5I
-         VbdMC9iNffDuRpABymuWbSjOGnv4B25/4AjOiBJ55fSam9EjCRStVnuI8UoJwY05u4UW
-         ga3dV4mwHIGEglqHHwHXw80x4tF1T7GujKOADhgbtQYQItc+O+jB67qY4X8KCAxNW+r+
-         8IiA==
+        bh=YJ0G1WscJm4FfZPiovvokq1HLkA2cFUNl9/Ll9hz56Y=;
+        b=bhlOrFqq49tLbK37KIEbbFF0YS7WVT1j4BIcVWCY1z+DhlHPzW6Ei7oUWauYcOaeL0
+         BUIyjZqvrIPiy2BmUEw3Usbqut8KFxSiSwaRmjXKgLGwoX2sR/TkIpKm8HjEmODSsGdr
+         dKJ7hgWmGou4ifi3YJatsQP2zJYh9YXVvo5LjO8hJb21TbFIBeNUltyMRp9UvdoMDu60
+         NkZX8ZospCIqOAqVNC3SA2RbnMTMIlKRjR1qLpRyf1d2d3sq6KeLA9LpOukqNgYuYLGo
+         HSJXAv2DUlDDaoNE/gh2ZZZplHHA9r2+NsIZk6169hV7ZdCbVU10dUBBT0MTwlEx9Mva
+         S3dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=PSoCqSYVR+5FyIES+wNpKGXpQ6OMW93exMYtdsHXH4k=;
-        b=U32S5Sqtj97zVKgaC5hLRJxNj6iBRSqh0QMKNVPAzNv8yliO1H0QVusLQj2We0Hyn3
-         Crj0Y4vKuvIdb/5cUlGlm299XhhcBX3rkp+lLNobyHxphdaKAiqsQlhr9xjabxWVAavX
-         zzaW+EBQLJ0Zg3vtGoqDGXOsK3VWCnOhJPLtm6JR90pRAyKqWe1+oTs+X/Hs1j+ffgH7
-         PwBfM/F23PyW+Z/PznOmY3MQgaWehz6pPCCfHsRTGs3R6u/z3lJD+o/MsK20VDLFfuID
-         a/8A1/tQW94UNlLGXjW8t3Uex/9dw3T03YNc+3jvRjqm79gWunFCXWhsZ7g88A7D8X+x
-         cUFw==
-X-Gm-Message-State: AOAM532H2ItNxmnataT2DnMWy2kImuxFtSL4GR1aFg7wXo8g9g5kH0Hx
-        6MLN0tZJMA2mb/fl9B5fQ0T0cw==
-X-Google-Smtp-Source: ABdhPJwxHr5He73PpmJ7dhNXk0QtMbRcg41+cb1Z/AGCqiehbQOnK2uT3gPUge2Z3NVy2oAzpA9FOw==
-X-Received: by 2002:a62:192:: with SMTP id 140mr5226967pfb.53.1594752195348;
-        Tue, 14 Jul 2020 11:43:15 -0700 (PDT)
+        bh=YJ0G1WscJm4FfZPiovvokq1HLkA2cFUNl9/Ll9hz56Y=;
+        b=DxWzQCYUy6Fs3x+MHkzSc9isgoxnBOwzQjzns7OBON9bT08ClFHfKdrw5w4mqabTa5
+         pSbjaqLYoHOoBKHQXgTBgn4rY4iICNoxQFH/6tQmbsAuJCljwnyB1euuSukErkkpZMG/
+         sS5/wbpzvG3blqzK+d9eiVQMvJX54OT4rzwPIM+8QntOOer1D4b+fgtm2dyz2sNujLRA
+         0lZS99eWM7KpfVMD9dl/DHxWCp2lj7be1LUxzp7lvNY91A209C84djvl+aos0c17wHW7
+         /QVC1yzU9VpC+JpD5PkqRtlUAvKD76PTB4T6Axh2w1iET1qpPGwcOOBGFRpPwmqiAbJz
+         N79A==
+X-Gm-Message-State: AOAM533fFmpqb7iDw+NHHeG0Rm1aEdVKVkiPRiKdhrQzP9b7pXdUoWgb
+        3YycGkbO8lLyaU1zZiB6N+3wGA==
+X-Google-Smtp-Source: ABdhPJx5GhHJyhVweUPdY3X0RJfcQ8peciN79Bv6P89HIfszH5h2UWvvhuZvNxkMJBuTpBesMjPIbA==
+X-Received: by 2002:a63:dc50:: with SMTP id f16mr4714443pgj.19.1594762645146;
+        Tue, 14 Jul 2020 14:37:25 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id d4sm17285706pgf.9.2020.07.14.11.43.14
+        by smtp.gmail.com with ESMTPSA id 191sm110567pfw.150.2020.07.14.14.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 11:43:14 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 11:43:14 -0700 (PDT)
-X-Google-Original-Date: Tue, 14 Jul 2020 11:43:12 PDT (-0700)
-Subject:     Re: [PATCH V1 0/5] riscv: Add k/uprobe supported
-In-Reply-To: <CAJF2gTSYyj5rTUJW-yDDrrV7T3hUssAhGc0gnCntcQpuixNJzw@mail.gmail.com>
-CC:     penberg@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        me@packi.ch, Bjorn Topel <bjorn.topel@gmail.com>,
-        Atish Patra <Atish.Patra@wdc.com>,
-        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org
+        Tue, 14 Jul 2020 14:37:24 -0700 (PDT)
+Date:   Tue, 14 Jul 2020 14:37:24 -0700 (PDT)
+X-Google-Original-Date: Tue, 14 Jul 2020 14:23:00 PDT (-0700)
+Subject:     Re: [PATCH v3 2/2] riscv: Enable per-task stack canaries
+In-Reply-To: <1594397998-10221-2-git-send-email-guoren@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
+        greentime.hu@sifive.com, zong.li@sifive.com, keescook@chromium.org,
+        Bjorn Topel <bjorn.topel@gmail.com>,
+        Atish Patra <Atish.Patra@wdc.com>, cooper.qu@linux.alibaba.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@kernel.org,
+        guoren@linux.alibaba.com
 From:   Palmer Dabbelt <palmerdabbelt@google.com>
 To:     guoren@kernel.org
-Message-ID: <mhng-3921ee3a-6033-4f1c-9c93-ecdb5751b3b1@palmerdabbelt-glaptop1>
+Message-ID: <mhng-1f027fd5-a558-4bf4-8168-59a75f36caac@palmerdabbelt-glaptop1>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -68,119 +69,172 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, 04 Jul 2020 07:55:28 PDT (-0700), guoren@kernel.org wrote:
-> Hi Pekka,
+On Fri, 10 Jul 2020 09:19:58 PDT (-0700), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
-> On Sat, Jul 4, 2020 at 2:40 PM Pekka Enberg <penberg@gmail.com> wrote:
->>
->> On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
->> > The patchset includes kprobe/uprobe support and some related fixups.
->>
->> Nice!
->>
->> On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
->> > There is no single step exception in riscv ISA, so utilize ebreak to
->> > simulate. Some pc related instructions couldn't be executed out of line
->> > and some system/fence instructions couldn't be a trace site at all.
->> > So we give out a reject list and simulate list in decode-insn.c.
->>
->> Can you elaborate on what you mean by this? Why would you need a
->> single-step facility for kprobes? Is it for executing the instruction
->> that was replaced with a probe breakpoint?
+> This enables the use of per-task stack canary values if GCC has
+> support for emitting the stack canary reference relative to the
+> value of tp, which holds the task struct pointer in the riscv
+> kernel.
 >
-> It's the single-step exception, not single-step facility!
+> After compare arm64 and x86 implementations, seems arm64's is more
+> flexible and readable. The key point is how gcc get the offset of
+> stack_canary from gs/el0_sp.
 >
-> Other arches use hardware single-step exception for k/uprobe,  eg:
->  - powerpc: regs->msr |= MSR_SINGLESTEP
->  - arm/arm64: PSTATE.D for enabling software step exceptions
->  - s390: Set PER control regs, turns on single step for the given address
->  - x86: regs->flags |= X86_EFLAGS_TF
->  - csky: of course use hw single step :)
+> x86: Use a fix offset from gs, not flexible.
 >
-> Yes, All the above arches use a hardware single-step exception
-> mechanism to execute the instruction that was replaced with a probe
-> breakpoint.
+> struct fixed_percpu_data {
+> 	/*
+> 	 * GCC hardcodes the stack canary as %gs:40.  Since the
+> 	 * irq_stack is the object at %gs:0, we reserve the bottom
+> 	 * 48 bytes of the irq stack for the canary.
+> 	 */
+> 	char            gs_base[40]; // :(
+> 	unsigned long   stack_canary;
+> };
+>
+> arm64: Use -mstack-protector-guard-offset & guard-reg
+> 	gcc options:
+> 	-mstack-protector-guard=sysreg
+> 	-mstack-protector-guard-reg=sp_el0
+> 	-mstack-protector-guard-offset=xxx
+>
+> riscv: Use -mstack-protector-guard-offset & guard-reg
+> 	gcc options:
+> 	-mstack-protector-guard=tls
+> 	-mstack-protector-guard-reg=tp
+> 	-mstack-protector-guard-offset=xxx
+>
+> Here is riscv gcc's work [1].
+>
+> [1] https://gcc.gnu.org/pipermail/gcc-patches/2020-July/549583.html
+>
+> In the end, these codes are inserted by gcc before return:
+>
+> *  0xffffffe00020b396 <+120>:   ld      a5,1008(tp) # 0x3f0
+> *  0xffffffe00020b39a <+124>:   xor     a5,a5,a4
+> *  0xffffffe00020b39c <+126>:   mv      a0,s5
+> *  0xffffffe00020b39e <+128>:   bnez    a5,0xffffffe00020b61c <_do_fork+766>
+>    0xffffffe00020b3a2 <+132>:   ld      ra,136(sp)
+>    0xffffffe00020b3a4 <+134>:   ld      s0,128(sp)
+>    0xffffffe00020b3a6 <+136>:   ld      s1,120(sp)
+>    0xffffffe00020b3a8 <+138>:   ld      s2,112(sp)
+>    0xffffffe00020b3aa <+140>:   ld      s3,104(sp)
+>    0xffffffe00020b3ac <+142>:   ld      s4,96(sp)
+>    0xffffffe00020b3ae <+144>:   ld      s5,88(sp)
+>    0xffffffe00020b3b0 <+146>:   ld      s6,80(sp)
+>    0xffffffe00020b3b2 <+148>:   ld      s7,72(sp)
+>    0xffffffe00020b3b4 <+150>:   addi    sp,sp,144
+>    0xffffffe00020b3b6 <+152>:   ret
+>    ...
+> *  0xffffffe00020b61c <+766>:   auipc   ra,0x7f8
+> *  0xffffffe00020b620 <+770>:   jalr    -1764(ra) # 0xffffffe000a02f38 <__stack_chk_fail>
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: cooper <cooper.qu@linux.alibaba.com>
 
-I guess we could handle fences by just IPIing over there and executing the
-fence?  Probably not worth the effort, though, as if you have an issue that's
-showing up close enough to a fence that you can't just probe somewhere nearby
-then you're probably going to disrupt things too much to learn anything.  I'd
-assume that AMOs are also too much of a headache to emulate, as moving them to
-a different hart would allow for different orderings that may break things.
+IIRC we're required to use full names here.  I'm assuming that's meant to be
+"Signed-off-by: Cooper Qu ...", and I know it's a bit procedural but I can't
+make that change.
 
-I suppose the tricker issue is that inserting a probe in the middle of a LR/SC
-sequence will result in a loss of forward progress (or maybe even incorrect
-behavior, if you mess up a pairing), as there are fairly heavyweight
-restrictions on what you're allowed to do inside there.  I don't see any
-mechanism for handling this, maybe we need to build up tables of restricted
-regions?  All the LR/SC sequences should be hidden behind macros already, so it
-shouldn't be that hard to figure it out.
+Otherwise these two look good, the first one is on for-next.  I can boot with a
+defconfig ammended with CONFIG_STACKPROTECTOR=y, 
 
-I only gave the code a quick look, but I don't see any references to LR/SC or
-AMO so if you are handling these I guess we at least need a comment :)
+Thanks!
 
+> Cc: cooper <cooper.qu@linux.alibaba.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+> Change v2:
+>  - Change to -mstack-protector-guard=tls for gcc final define
+>  - Solve compile error by changing position of KBUILD_CFLAGS in
+>    Makefile
 >
->>
->> Also, the "Debug Specification" [1] specifies a single-step facility
->> for RISC-V -- why is that not useful for implementing kprobes?
->>
->> 1. https://riscv.org/specifications/debug-specification/
-> We need single-step exception not single-step by jtag, so above spec
-> is not related to the patchset.
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> ---
+>  arch/riscv/Kconfig                      |  7 +++++++
+>  arch/riscv/Makefile                     | 10 ++++++++++
+>  arch/riscv/include/asm/stackprotector.h |  3 ++-
+>  arch/riscv/kernel/asm-offsets.c         |  3 +++
+>  arch/riscv/kernel/process.c             |  2 +-
+>  5 files changed, 23 insertions(+), 2 deletions(-)
 >
-> See riscv-Privileged spec:
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 4b0e308..d98ce29 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -394,6 +394,13 @@ config CMDLINE_FORCE
 >
-> Interrupt Exception Code-Description
-> 1 0 Reserved
-> 1 1 Supervisor software interrupt
-> 1 2–4 Reserved
-> 1 5 Supervisor timer interrupt
-> 1 6–8 Reserved
-> 1 9 Supervisor external interrupt
-> 1 10–15 Reserved
-> 1 ≥16 Available for platform use
-> 0 0 Instruction address misaligned
-> 0 1 Instruction access fault
-> 0 2 Illegal instruction
-> 0 3 Breakpoint
-> 0 4 Load address misaligned
-> 0 5 Load access fault
-> 0 6 Store/AMO address misaligned
-> 0 7 Store/AMO access fault
-> 0 8 Environment call from U-mode
-> 0 9 Environment call from S-mode
-> 0 10–11 Reserved
-> 0 12 Instruction page fault
-> 0 13 Load page fault
-> 0 14 Reserved
-> 0 15 Store/AMO page fault
-> 0 16–23 Reserved
-> 0 24–31 Available for custom use
-> 0 32–47 Reserved
-> 0 48–63 Available for custom use
-> 0 ≥64 Reserved
+>  endchoice
 >
-> No single step!
+> +config CC_HAVE_STACKPROTECTOR_TLS
+> +	def_bool $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=tp -mstack-protector-guard-offset=0)
+> +
+> +config STACKPROTECTOR_PER_TASK
+> +	def_bool y
+> +	depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_TLS
+> +
+>  endmenu
 >
-> So I insert a "ebreak" instruction behind the target single-step
-> instruction to simulate the same mechanism.
-
-Single step is part of the debug spec.  That mostly discusses JTAG debugging,
-but there's also some stuff in there related to in-band debugging (at least
-watch points and single step, though there may be more).  IIRC you get a
-breakpoint exception and then chase around some CSRs to differentiate between
-the various reasons, but it's been a while since I've looked at this stuff.
-
-It's all kind of irrelevant, though, as there's no way to get at all this stuff
-from supervisor mode.  I don't see any reason we couldn't put together an SBI
-extension to access this stuff, but I also don't know anyone who's looked into
-doing so.  There are some complexities involved because this state is all
-shared between machine mode and debug mode that we'd need to deal with, but I
-think we could put something together -- at least for single step those are
-fairly straight-forward issues to handle.
-
-> -- 
-> Best Regards
->  Guo Ren
+>  config BUILTIN_DTB
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index fb6e37d..f5f8ee9 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -68,6 +68,16 @@ KBUILD_CFLAGS_MODULE += $(call cc-option,-mno-relax)
+>  # architectures.  It's faster to have GCC emit only aligned accesses.
+>  KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
 >
-> ML: https://lore.kernel.org/linux-csky/
+> +ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
+> +prepare: stack_protector_prepare
+> +stack_protector_prepare: prepare0
+> +	$(eval KBUILD_CFLAGS += -mstack-protector-guard=tls		  \
+> +				-mstack-protector-guard-reg=tp		  \
+> +				-mstack-protector-guard-offset=$(shell	  \
+> +			awk '{if ($$2 == "TSK_STACK_CANARY") print $$3;}' \
+> +					include/generated/asm-offsets.h))
+> +endif
+> +
+>  # arch specific predefines for sparse
+>  CHECKFLAGS += -D__riscv -D__riscv_xlen=$(BITS)
+>
+> diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
+> index d95f7b2..a895e07 100644
+> --- a/arch/riscv/include/asm/stackprotector.h
+> +++ b/arch/riscv/include/asm/stackprotector.h
+> @@ -28,6 +28,7 @@ static __always_inline void boot_init_stack_canary(void)
+>  	canary &= CANARY_MASK;
+>
+>  	current->stack_canary = canary;
+> -	__stack_chk_guard = current->stack_canary;
+> +	if (!IS_ENABLED(CONFIG_STACKPROTECTOR_PER_TASK))
+> +		__stack_chk_guard = current->stack_canary;
+>  }
+>  #endif /* _ASM_RISCV_STACKPROTECTOR_H */
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index 07cb9c1..999b465 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -29,6 +29,9 @@ void asm_offsets(void)
+>  	OFFSET(TASK_THREAD_S11, task_struct, thread.s[11]);
+>  	OFFSET(TASK_THREAD_SP, task_struct, thread.sp);
+>  	OFFSET(TASK_STACK, task_struct, stack);
+> +#ifdef CONFIG_STACKPROTECTOR
+> +	OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
+> +#endif
+>  	OFFSET(TASK_TI, task_struct, thread_info);
+>  	OFFSET(TASK_TI_FLAGS, task_struct, thread_info.flags);
+>  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index 6548929..cb4ac65 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -24,7 +24,7 @@
+>
+>  register unsigned long gp_in_global __asm__("gp");
+>
+> -#ifdef CONFIG_STACKPROTECTOR
+> +#if defined(CONFIG_STACKPROTECTOR) && !defined(CONFIG_STACKPROTECTOR_PER_TASK)
+>  #include <linux/stackprotector.h>
+>  unsigned long __stack_chk_guard __read_mostly;
+>  EXPORT_SYMBOL(__stack_chk_guard);
