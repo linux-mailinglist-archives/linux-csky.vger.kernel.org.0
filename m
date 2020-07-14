@@ -2,165 +2,130 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD6F21EF99
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 13:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C074121F742
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 18:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728033AbgGNLnN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Jul 2020 07:43:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55078 "EHLO mail.kernel.org"
+        id S1726062AbgGNQZJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Jul 2020 12:25:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728018AbgGNLnL (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 14 Jul 2020 07:43:11 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725890AbgGNQZI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 14 Jul 2020 12:25:08 -0400
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9958D20BED;
-        Tue, 14 Jul 2020 11:43:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A60662255F;
+        Tue, 14 Jul 2020 16:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594726990;
-        bh=cVmijVoFVzbUvu8fDT/dJyJnUDFjkjRUgn8Ctil7QrQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tE0u9TlAoXY3svJF3yeRIYYYcEzsS2duKcVk5vMd62IsQrVixbg63cI1xTh0aCFYA
-         UtbBHxPX6ThWFG2vjLypD7C+yUbAG0G9qL4NbODpZdsdLrr575vmJILb7RwZGW0Eus
-         EeWMpfWFpBnKNVCZkWWALc57eUAzndusdm8nSojk=
-Date:   Tue, 14 Jul 2020 20:43:05 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     guoren@kernel.org
-Cc:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        oleg@redhat.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, anup@brainfault.org,
-        linux-csky@vger.kernel.org, greentime.hu@sifive.com,
-        zong.li@sifive.com, me@packi.ch, bjorn.topel@gmail.com,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH v3 7/7] riscv: Add support for function error injection
-Message-Id: <20200714204305.89ee1183f7c3fc4400e6d7c6@kernel.org>
-In-Reply-To: <1594683562-68149-8-git-send-email-guoren@kernel.org>
+        s=default; t=1594743908;
+        bh=k/Tsw6xLqgnJY1o7iH6r4M/K+u3aSSQdGkYMYdYd8I8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VTmpkPIzMgweGoJMVFQhHwPlTmsACcCZYKLnJf4uV5MJbosmzzKJ397vHUls2HOaz
+         eFZ69VNZv/h5RjAH/J8ksD9O2qsAxaIIp5R0iwg9VlZld06OGkc2JS41oAV6UtM2Za
+         h6VSMX+rCl64xxRhkdYo617vEockbRKEzQ3aA/hg=
+Received: by mail-lj1-f171.google.com with SMTP id d17so23599198ljl.3;
+        Tue, 14 Jul 2020 09:25:07 -0700 (PDT)
+X-Gm-Message-State: AOAM530zx9pSZGMmt+pXQJpdJUBK8GQyz5xzGkOp7MZq62TcyGqWho1E
+        B9u7XmA/PYsim9qu+R+jpLh0W7yFrwIv9gSaKYk=
+X-Google-Smtp-Source: ABdhPJw2LgpnAjeHGhekyjVCCVOxT1kK9hVgydd27e2JfjQorPcSs3QPMc/nVkb/g8IlxUzlBQI7f749Aj988uEH82o=
+X-Received: by 2002:a2e:864e:: with SMTP id i14mr2747628ljj.441.1594743905973;
+ Tue, 14 Jul 2020 09:25:05 -0700 (PDT)
+MIME-Version: 1.0
 References: <1594683562-68149-1-git-send-email-guoren@kernel.org>
-        <1594683562-68149-8-git-send-email-guoren@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+ <1594683562-68149-7-git-send-email-guoren@kernel.org> <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
+In-Reply-To: <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 15 Jul 2020 00:24:54 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
+Message-ID: <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] riscv: Add KPROBES_ON_FTRACE supported
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>, linux-csky@vger.kernel.org,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Pekka Enberg <penberg@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Guo,
+Thx Masami,
 
-On Mon, 13 Jul 2020 23:39:22 +0000
-guoren@kernel.org wrote:
+On Tue, Jul 14, 2020 at 7:38 PM Masami Hiramatsu <mhiramat@kernel.org> wrot=
+e:
+>
+> On Mon, 13 Jul 2020 23:39:21 +0000
+> guoren@kernel.org wrote:
+>
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > This patch adds support for kprobes on ftrace call sites to avoids
+> > much of the overhead with regular kprobes. Try it with simple
+> > steps:
+> >
+> > 1. Get _do_fork ftrace call site.
+> > Dump of assembler code for function _do_fork:
+> >    0xffffffe00020af64 <+0>:     addi    sp,sp,-128
+> >    0xffffffe00020af66 <+2>:     sd      s0,112(sp)
+> >    0xffffffe00020af68 <+4>:     sd      ra,120(sp)
+> >    0xffffffe00020af6a <+6>:     addi    s0,sp,128
+> >    0xffffffe00020af6c <+8>:     sd      s1,104(sp)
+> >    0xffffffe00020af6e <+10>:    sd      s2,96(sp)
+> >    0xffffffe00020af70 <+12>:    sd      s3,88(sp)
+> >    0xffffffe00020af72 <+14>:    sd      s4,80(sp)
+> >    0xffffffe00020af74 <+16>:    sd      s5,72(sp)
+> >    0xffffffe00020af76 <+18>:    sd      s6,64(sp)
+> >    0xffffffe00020af78 <+20>:    sd      s7,56(sp)
+> >    0xffffffe00020af7a <+22>:    mv      s4,a0
+> >    0xffffffe00020af7c <+24>:    mv      a0,ra
+> >    0xffffffe00020af7e <+26>:    nop   <<<<<<<< here!
+> >    0xffffffe00020af82 <+30>:    nop
+> >    0xffffffe00020af86 <+34>:    ld      s3,0(s4)
+> >
+> > 2. Set _do_fork+26 as the kprobe.
+> >   echo 'p:myprobe _do_fork+26 dfd=3D%a0 filename=3D%a1 flags=3D%a2 mode=
+=3D+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
+> >   echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
+> >   cat /sys/kernel/debug/tracing/trace
+> >   tracer: nop
+> >
+> >   entries-in-buffer/entries-written: 3/3   #P:1
+> >
+> >                                _-----=3D> irqs-off
+> >                               / _----=3D> need-resched
+> >                              | / _---=3D> hardirq/softirq
+> >                              || / _--=3D> preempt-depth
+> >                              ||| /     delay
+> >             TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+> >                | |       |   ||||       |         |
+> >               sh-87    [000] ....   551.557031: myprobe: (_do_fork+0x1a=
+/0x2e6) dfd=3D0xffffffe00020af7e filename=3D0xffffffe00020b34e flags=3D0xff=
+ffffe00101e7c0 mode=3D0x20af86ffffffe0
+> >
+> >   cat /sys/kernel/debug/kprobes/list
+> > ffffffe00020af7e  k  _do_fork+0x1a    [FTRACE]
+> >                                        ^^^^^^
+>
+> Hmm, this seems fentry is not supported on RISC-V yet. But anyway,
+> it will be useful for users (if they can find the offset).
 
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Inspired by the commit 42d038c4fb00 ("arm64: Add support for function
-> error injection"), this patch supports function error injection for
-> riscv.
-> 
-> This patch mainly support two functions: one is regs_set_return_value()
-> which is used to overwrite the return value; the another function is
-> override_function_with_return() which is to override the probed
-> function returning and jump to its caller.
-> 
-> Test log:
->  cd /sys/kernel/debug/fail_function
->  echo sys_clone > inject
->  echo 100 > probability
->  echo 1 > interval
->  ls /
-> [  313.176875] FAULT_INJECTION: forcing a failure.
-> [  313.176875] name fail_function, interval 1, probability 100, space 0, times 1
-> [  313.184357] CPU: 0 PID: 87 Comm: sh Not tainted 5.8.0-rc5-00007-g6a758cc #117
-> [  313.187616] Call Trace:
-> [  313.189100] [<ffffffe0002036b6>] walk_stackframe+0x0/0xc2
-> [  313.191626] [<ffffffe00020395c>] show_stack+0x40/0x4c
-> [  313.193927] [<ffffffe000556c60>] dump_stack+0x7c/0x96
-> [  313.194795] [<ffffffe0005522e8>] should_fail+0x140/0x142
-> [  313.195923] [<ffffffe000299ffc>] fei_kprobe_handler+0x2c/0x5a
-> [  313.197687] [<ffffffe0009e2ec4>] kprobe_breakpoint_handler+0xb4/0x18a
-> [  313.200054] [<ffffffe00020357e>] do_trap_break+0x36/0xca
-> [  313.202147] [<ffffffe000201bca>] ret_from_exception+0x0/0xc
-> [  313.204556] [<ffffffe000201bbc>] ret_from_syscall+0x0/0x2
-> -sh: can't fork: Invalid argument
+Seems only x86 & =E2=AC=86=EF=B8=8F90 use fentry=EF=BC=8Ccan you elaborate =
+more about fentry's
+benefit and how the user could set kprobe on ftrace call site without
+disassemble?
 
-OK, this looks good to me.
+--
+Best Regards
+ Guo Ren
 
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you,
-
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> ---
->  arch/riscv/Kconfig              |  1 +
->  arch/riscv/include/asm/ptrace.h |  6 ++++++
->  arch/riscv/lib/Makefile         |  2 ++
->  arch/riscv/lib/error-inject.c   | 10 ++++++++++
->  4 files changed, 19 insertions(+)
->  create mode 100644 arch/riscv/lib/error-inject.c
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 0e9f5eb..ad73174 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -58,6 +58,7 @@ config RISCV
->  	select HAVE_DMA_CONTIGUOUS if MMU
->  	select HAVE_EBPF_JIT if MMU
->  	select HAVE_FUTEX_CMPXCHG if FUTEX
-> +	select HAVE_FUNCTION_ERROR_INJECTION
->  	select HAVE_GENERIC_VDSO if MMU && 64BIT
->  	select HAVE_KPROBES
->  	select HAVE_KPROBES_ON_FTRACE
-> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
-> index 23372bb..cb4abb6 100644
-> --- a/arch/riscv/include/asm/ptrace.h
-> +++ b/arch/riscv/include/asm/ptrace.h
-> @@ -109,6 +109,12 @@ static inline unsigned long regs_return_value(struct pt_regs *regs)
->  	return regs->a0;
->  }
->  
-> +static inline void regs_set_return_value(struct pt_regs *regs,
-> +					 unsigned long val)
-> +{
-> +	regs->a0 = val;
-> +}
-> +
->  extern int regs_query_register_offset(const char *name);
->  extern unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
->  					       unsigned int n);
-> diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
-> index 0d0db80..04baa93 100644
-> --- a/arch/riscv/lib/Makefile
-> +++ b/arch/riscv/lib/Makefile
-> @@ -4,3 +4,5 @@ lib-y			+= memcpy.o
->  lib-y			+= memset.o
->  lib-y			+= uaccess.o
->  lib-$(CONFIG_64BIT)	+= tishift.o
-> +
-> +obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
-> diff --git a/arch/riscv/lib/error-inject.c b/arch/riscv/lib/error-inject.c
-> new file mode 100644
-> index 00000000..d667ade
-> --- /dev/null
-> +++ b/arch/riscv/lib/error-inject.c
-> @@ -0,0 +1,10 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/error-injection.h>
-> +#include <linux/kprobes.h>
-> +
-> +void override_function_with_return(struct pt_regs *regs)
-> +{
-> +	instruction_pointer_set(regs, regs->ra);
-> +}
-> +NOKPROBE_SYMBOL(override_function_with_return);
-> -- 
-> 2.7.4
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+ML: https://lore.kernel.org/linux-csky/
