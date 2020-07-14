@@ -2,130 +2,185 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C074121F742
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 18:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4E021F9AE
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 20:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbgGNQZJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Jul 2020 12:25:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51372 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725890AbgGNQZI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 14 Jul 2020 12:25:08 -0400
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A60662255F;
-        Tue, 14 Jul 2020 16:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594743908;
-        bh=k/Tsw6xLqgnJY1o7iH6r4M/K+u3aSSQdGkYMYdYd8I8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VTmpkPIzMgweGoJMVFQhHwPlTmsACcCZYKLnJf4uV5MJbosmzzKJ397vHUls2HOaz
-         eFZ69VNZv/h5RjAH/J8ksD9O2qsAxaIIp5R0iwg9VlZld06OGkc2JS41oAV6UtM2Za
-         h6VSMX+rCl64xxRhkdYo617vEockbRKEzQ3aA/hg=
-Received: by mail-lj1-f171.google.com with SMTP id d17so23599198ljl.3;
-        Tue, 14 Jul 2020 09:25:07 -0700 (PDT)
-X-Gm-Message-State: AOAM530zx9pSZGMmt+pXQJpdJUBK8GQyz5xzGkOp7MZq62TcyGqWho1E
-        B9u7XmA/PYsim9qu+R+jpLh0W7yFrwIv9gSaKYk=
-X-Google-Smtp-Source: ABdhPJw2LgpnAjeHGhekyjVCCVOxT1kK9hVgydd27e2JfjQorPcSs3QPMc/nVkb/g8IlxUzlBQI7f749Aj988uEH82o=
-X-Received: by 2002:a2e:864e:: with SMTP id i14mr2747628ljj.441.1594743905973;
- Tue, 14 Jul 2020 09:25:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594683562-68149-1-git-send-email-guoren@kernel.org>
- <1594683562-68149-7-git-send-email-guoren@kernel.org> <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
-In-Reply-To: <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 15 Jul 2020 00:24:54 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
-Message-ID: <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] riscv: Add KPROBES_ON_FTRACE supported
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>, linux-csky@vger.kernel.org,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Pekka Enberg <penberg@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1729170AbgGNSnQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Jul 2020 14:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729166AbgGNSnQ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Jul 2020 14:43:16 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35134C061794
+        for <linux-csky@vger.kernel.org>; Tue, 14 Jul 2020 11:43:16 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 1so7933883pfn.9
+        for <linux-csky@vger.kernel.org>; Tue, 14 Jul 2020 11:43:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PSoCqSYVR+5FyIES+wNpKGXpQ6OMW93exMYtdsHXH4k=;
+        b=VqYEE3IP8swNW+rXe3FApsMadhgHxhZy8ibBebKms2S7nKFFyNPBLEd6Rrue/Wv99e
+         flXsbemj7CpKBYHX3MxvA67IKPUmppbSNT+gPgkFpNZ5qC3dQea/PXmw9FmNT3rqFJW6
+         XidYvF/4kac1AeKE3xioGoL/1BwhhlJ+LcO0mpipTiSF5mDHNeGJDQNzmXGtTHlycY5I
+         VbdMC9iNffDuRpABymuWbSjOGnv4B25/4AjOiBJ55fSam9EjCRStVnuI8UoJwY05u4UW
+         ga3dV4mwHIGEglqHHwHXw80x4tF1T7GujKOADhgbtQYQItc+O+jB67qY4X8KCAxNW+r+
+         8IiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=PSoCqSYVR+5FyIES+wNpKGXpQ6OMW93exMYtdsHXH4k=;
+        b=U32S5Sqtj97zVKgaC5hLRJxNj6iBRSqh0QMKNVPAzNv8yliO1H0QVusLQj2We0Hyn3
+         Crj0Y4vKuvIdb/5cUlGlm299XhhcBX3rkp+lLNobyHxphdaKAiqsQlhr9xjabxWVAavX
+         zzaW+EBQLJ0Zg3vtGoqDGXOsK3VWCnOhJPLtm6JR90pRAyKqWe1+oTs+X/Hs1j+ffgH7
+         PwBfM/F23PyW+Z/PznOmY3MQgaWehz6pPCCfHsRTGs3R6u/z3lJD+o/MsK20VDLFfuID
+         a/8A1/tQW94UNlLGXjW8t3Uex/9dw3T03YNc+3jvRjqm79gWunFCXWhsZ7g88A7D8X+x
+         cUFw==
+X-Gm-Message-State: AOAM532H2ItNxmnataT2DnMWy2kImuxFtSL4GR1aFg7wXo8g9g5kH0Hx
+        6MLN0tZJMA2mb/fl9B5fQ0T0cw==
+X-Google-Smtp-Source: ABdhPJwxHr5He73PpmJ7dhNXk0QtMbRcg41+cb1Z/AGCqiehbQOnK2uT3gPUge2Z3NVy2oAzpA9FOw==
+X-Received: by 2002:a62:192:: with SMTP id 140mr5226967pfb.53.1594752195348;
+        Tue, 14 Jul 2020 11:43:15 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id d4sm17285706pgf.9.2020.07.14.11.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 11:43:14 -0700 (PDT)
+Date:   Tue, 14 Jul 2020 11:43:14 -0700 (PDT)
+X-Google-Original-Date: Tue, 14 Jul 2020 11:43:12 PDT (-0700)
+Subject:     Re: [PATCH V1 0/5] riscv: Add k/uprobe supported
+In-Reply-To: <CAJF2gTSYyj5rTUJW-yDDrrV7T3hUssAhGc0gnCntcQpuixNJzw@mail.gmail.com>
+CC:     penberg@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
+        me@packi.ch, Bjorn Topel <bjorn.topel@gmail.com>,
+        Atish Patra <Atish.Patra@wdc.com>,
+        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-3921ee3a-6033-4f1c-9c93-ecdb5751b3b1@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx Masami,
-
-On Tue, Jul 14, 2020 at 7:38 PM Masami Hiramatsu <mhiramat@kernel.org> wrot=
-e:
+On Sat, 04 Jul 2020 07:55:28 PDT (-0700), guoren@kernel.org wrote:
+> Hi Pekka,
 >
-> On Mon, 13 Jul 2020 23:39:21 +0000
-> guoren@kernel.org wrote:
+> On Sat, Jul 4, 2020 at 2:40 PM Pekka Enberg <penberg@gmail.com> wrote:
+>>
+>> On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
+>> > The patchset includes kprobe/uprobe support and some related fixups.
+>>
+>> Nice!
+>>
+>> On Sat, Jul 4, 2020 at 6:34 AM <guoren@kernel.org> wrote:
+>> > There is no single step exception in riscv ISA, so utilize ebreak to
+>> > simulate. Some pc related instructions couldn't be executed out of line
+>> > and some system/fence instructions couldn't be a trace site at all.
+>> > So we give out a reject list and simulate list in decode-insn.c.
+>>
+>> Can you elaborate on what you mean by this? Why would you need a
+>> single-step facility for kprobes? Is it for executing the instruction
+>> that was replaced with a probe breakpoint?
 >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > This patch adds support for kprobes on ftrace call sites to avoids
-> > much of the overhead with regular kprobes. Try it with simple
-> > steps:
-> >
-> > 1. Get _do_fork ftrace call site.
-> > Dump of assembler code for function _do_fork:
-> >    0xffffffe00020af64 <+0>:     addi    sp,sp,-128
-> >    0xffffffe00020af66 <+2>:     sd      s0,112(sp)
-> >    0xffffffe00020af68 <+4>:     sd      ra,120(sp)
-> >    0xffffffe00020af6a <+6>:     addi    s0,sp,128
-> >    0xffffffe00020af6c <+8>:     sd      s1,104(sp)
-> >    0xffffffe00020af6e <+10>:    sd      s2,96(sp)
-> >    0xffffffe00020af70 <+12>:    sd      s3,88(sp)
-> >    0xffffffe00020af72 <+14>:    sd      s4,80(sp)
-> >    0xffffffe00020af74 <+16>:    sd      s5,72(sp)
-> >    0xffffffe00020af76 <+18>:    sd      s6,64(sp)
-> >    0xffffffe00020af78 <+20>:    sd      s7,56(sp)
-> >    0xffffffe00020af7a <+22>:    mv      s4,a0
-> >    0xffffffe00020af7c <+24>:    mv      a0,ra
-> >    0xffffffe00020af7e <+26>:    nop   <<<<<<<< here!
-> >    0xffffffe00020af82 <+30>:    nop
-> >    0xffffffe00020af86 <+34>:    ld      s3,0(s4)
-> >
-> > 2. Set _do_fork+26 as the kprobe.
-> >   echo 'p:myprobe _do_fork+26 dfd=3D%a0 filename=3D%a1 flags=3D%a2 mode=
-=3D+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
-> >   echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
-> >   cat /sys/kernel/debug/tracing/trace
-> >   tracer: nop
-> >
-> >   entries-in-buffer/entries-written: 3/3   #P:1
-> >
-> >                                _-----=3D> irqs-off
-> >                               / _----=3D> need-resched
-> >                              | / _---=3D> hardirq/softirq
-> >                              || / _--=3D> preempt-depth
-> >                              ||| /     delay
-> >             TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
-> >                | |       |   ||||       |         |
-> >               sh-87    [000] ....   551.557031: myprobe: (_do_fork+0x1a=
-/0x2e6) dfd=3D0xffffffe00020af7e filename=3D0xffffffe00020b34e flags=3D0xff=
-ffffe00101e7c0 mode=3D0x20af86ffffffe0
-> >
-> >   cat /sys/kernel/debug/kprobes/list
-> > ffffffe00020af7e  k  _do_fork+0x1a    [FTRACE]
-> >                                        ^^^^^^
+> It's the single-step exception, not single-step facility!
 >
-> Hmm, this seems fentry is not supported on RISC-V yet. But anyway,
-> it will be useful for users (if they can find the offset).
+> Other arches use hardware single-step exception for k/uprobe,  eg:
+>  - powerpc: regs->msr |= MSR_SINGLESTEP
+>  - arm/arm64: PSTATE.D for enabling software step exceptions
+>  - s390: Set PER control regs, turns on single step for the given address
+>  - x86: regs->flags |= X86_EFLAGS_TF
+>  - csky: of course use hw single step :)
+>
+> Yes, All the above arches use a hardware single-step exception
+> mechanism to execute the instruction that was replaced with a probe
+> breakpoint.
 
-Seems only x86 & =E2=AC=86=EF=B8=8F90 use fentry=EF=BC=8Ccan you elaborate =
-more about fentry's
-benefit and how the user could set kprobe on ftrace call site without
-disassemble?
+I guess we could handle fences by just IPIing over there and executing the
+fence?  Probably not worth the effort, though, as if you have an issue that's
+showing up close enough to a fence that you can't just probe somewhere nearby
+then you're probably going to disrupt things too much to learn anything.  I'd
+assume that AMOs are also too much of a headache to emulate, as moving them to
+a different hart would allow for different orderings that may break things.
 
---
-Best Regards
- Guo Ren
+I suppose the tricker issue is that inserting a probe in the middle of a LR/SC
+sequence will result in a loss of forward progress (or maybe even incorrect
+behavior, if you mess up a pairing), as there are fairly heavyweight
+restrictions on what you're allowed to do inside there.  I don't see any
+mechanism for handling this, maybe we need to build up tables of restricted
+regions?  All the LR/SC sequences should be hidden behind macros already, so it
+shouldn't be that hard to figure it out.
 
-ML: https://lore.kernel.org/linux-csky/
+I only gave the code a quick look, but I don't see any references to LR/SC or
+AMO so if you are handling these I guess we at least need a comment :)
+
+>
+>>
+>> Also, the "Debug Specification" [1] specifies a single-step facility
+>> for RISC-V -- why is that not useful for implementing kprobes?
+>>
+>> 1. https://riscv.org/specifications/debug-specification/
+> We need single-step exception not single-step by jtag, so above spec
+> is not related to the patchset.
+>
+> See riscv-Privileged spec:
+>
+> Interrupt Exception Code-Description
+> 1 0 Reserved
+> 1 1 Supervisor software interrupt
+> 1 2–4 Reserved
+> 1 5 Supervisor timer interrupt
+> 1 6–8 Reserved
+> 1 9 Supervisor external interrupt
+> 1 10–15 Reserved
+> 1 ≥16 Available for platform use
+> 0 0 Instruction address misaligned
+> 0 1 Instruction access fault
+> 0 2 Illegal instruction
+> 0 3 Breakpoint
+> 0 4 Load address misaligned
+> 0 5 Load access fault
+> 0 6 Store/AMO address misaligned
+> 0 7 Store/AMO access fault
+> 0 8 Environment call from U-mode
+> 0 9 Environment call from S-mode
+> 0 10–11 Reserved
+> 0 12 Instruction page fault
+> 0 13 Load page fault
+> 0 14 Reserved
+> 0 15 Store/AMO page fault
+> 0 16–23 Reserved
+> 0 24–31 Available for custom use
+> 0 32–47 Reserved
+> 0 48–63 Available for custom use
+> 0 ≥64 Reserved
+>
+> No single step!
+>
+> So I insert a "ebreak" instruction behind the target single-step
+> instruction to simulate the same mechanism.
+
+Single step is part of the debug spec.  That mostly discusses JTAG debugging,
+but there's also some stuff in there related to in-band debugging (at least
+watch points and single step, though there may be more).  IIRC you get a
+breakpoint exception and then chase around some CSRs to differentiate between
+the various reasons, but it's been a while since I've looked at this stuff.
+
+It's all kind of irrelevant, though, as there's no way to get at all this stuff
+from supervisor mode.  I don't see any reason we couldn't put together an SBI
+extension to access this stuff, but I also don't know anyone who's looked into
+doing so.  There are some complexities involved because this state is all
+shared between machine mode and debug mode that we'd need to deal with, but I
+think we could put something together -- at least for single step those are
+fairly straight-forward issues to handle.
+
+> -- 
+> Best Regards
+>  Guo Ren
+>
+> ML: https://lore.kernel.org/linux-csky/
