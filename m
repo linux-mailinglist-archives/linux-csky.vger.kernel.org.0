@@ -2,262 +2,223 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A0B21EF36
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 13:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE5C21EF4F
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Jul 2020 13:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726332AbgGNLZZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Jul 2020 07:25:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42864 "EHLO mail.kernel.org"
+        id S1726352AbgGNLcQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Jul 2020 07:32:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726041AbgGNLZZ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 14 Jul 2020 07:25:25 -0400
+        id S1726332AbgGNLcQ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 14 Jul 2020 07:32:16 -0400
 Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 05CD42077D;
-        Tue, 14 Jul 2020 11:25:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED7E622203;
+        Tue, 14 Jul 2020 11:32:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594725924;
-        bh=6ZvUkrPctgXnpkfo0fUBL2cQ2/rmdUyIWl3ZJGuFlyA=;
+        s=default; t=1594726335;
+        bh=TtYXJCaAfVAvmXpndjUmq8mNbDnr+kPGfgYNHKOGZfw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UxDHbXM/O+tqeajBaeop7BCKzSDCGhqDsnoGlRWqvwC23DwE9KgJV+qGvOQ5Wu2U3
-         giI9y3wGhMPzyoVlXwy7TqF3DigNHZAUCgayGblna1BIn6vPH4hYgaegjvZ2Dzuqec
-         7pfYVtQ8QNQNz9YNAW4kTCRzf90somJh68PBNp6k=
-Date:   Tue, 14 Jul 2020 20:25:18 +0900
+        b=K9OxxVXF0L5Tjod5E1qIyBeJa5zwBm4VZFHIxJUcNK2+Gu0v0neorOgsLghlxU5XY
+         URaH5+u4Sz2oza/Acl3WTQ47DDv7ccQ1D6TA44pgArxCcjzH3E7g2hJIohyyOwRvhB
+         BWbYBouIxFi4uOYS+4p1f8P7YxXfwPMztvQAITgk=
+Date:   Tue, 14 Jul 2020 20:32:09 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     guoren@kernel.org
-Cc:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        oleg@redhat.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, anup@brainfault.org,
-        linux-csky@vger.kernel.org, greentime.hu@sifive.com,
-        zong.li@sifive.com, me@packi.ch, bjorn.topel@gmail.com,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH v3 1/7] RISC-V: Implement ptrace regs and stack API
-Message-Id: <20200714202518.2d052f8d046e00329b167f15@kernel.org>
-In-Reply-To: <1594683562-68149-2-git-send-email-guoren@kernel.org>
-References: <1594683562-68149-1-git-send-email-guoren@kernel.org>
-        <1594683562-68149-2-git-send-email-guoren@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        Patrick =?UTF-8?B?U3TDpGhsaW4=?= <me@packi.ch>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Atish Patra <atish.patra@wdc.com>, penberg@kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH v2 6/6] riscv: Add KPROBES_ON_FTRACE supported
+Message-Id: <20200714203209.29d3a3b967238f0cf04c4c6e@kernel.org>
+In-Reply-To: <CAJF2gTQcRYHPmyM_T9g2rYRDN2DPedO0+s5X-MOiEzaFX+xxmA@mail.gmail.com>
+References: <1594261154-69745-1-git-send-email-guoren@kernel.org>
+        <1594261154-69745-7-git-send-email-guoren@kernel.org>
+        <20200710225017.5ce329485e911f99e17cd483@kernel.org>
+        <CAJF2gTSfFY6qf7gZ9t80P-3cACWi3oEe4X8ek+_1nQZZT3Uk5w@mail.gmail.com>
+        <20200712223748.9cb00fdf7938fbf7353c11cc@kernel.org>
+        <CAJF2gTQcRYHPmyM_T9g2rYRDN2DPedO0+s5X-MOiEzaFX+xxmA@mail.gmail.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, 13 Jul 2020 23:39:16 +0000
-guoren@kernel.org wrote:
+Hi Guo,
 
-> From: Patrick Stählin <me@packi.ch>
-> 
-> Needed for kprobes support. Copied and adapted from arm64 code.
-> 
-> Guo Ren fixup pt_regs type for linux-5.8-rc1.
-> 
+On Tue, 14 Jul 2020 07:47:20 +0800
+Guo Ren <guoren@kernel.org> wrote:
 
-Looks good to me.
-
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you!
-
-> Signed-off-by: Patrick Stählin <me@packi.ch>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Reviewed-by: Pekka Enberg <penberg@kernel.org>
-> Reviewed-by: Zong Li <zong.li@sifive.com>
-> ---
->  arch/riscv/Kconfig              |  1 +
->  arch/riscv/include/asm/ptrace.h | 29 ++++++++++++
->  arch/riscv/kernel/ptrace.c      | 99 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 129 insertions(+)
+> Hi Masami,
 > 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 3230c1d..e70449a 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -78,6 +78,7 @@ config RISCV
->  	select SPARSE_IRQ
->  	select SYSCTL_EXCEPTION_TRACE
->  	select THREAD_INFO_IN_TASK
-> +	select HAVE_REGS_AND_STACK_ACCESS_API
->  
->  config ARCH_MMAP_RND_BITS_MIN
->  	default 18 if 64BIT
-> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
-> index ee49f80..23372bb 100644
-> --- a/arch/riscv/include/asm/ptrace.h
-> +++ b/arch/riscv/include/asm/ptrace.h
-> @@ -8,6 +8,7 @@
->  
->  #include <uapi/asm/ptrace.h>
->  #include <asm/csr.h>
-> +#include <linux/compiler.h>
->  
->  #ifndef __ASSEMBLY__
->  
-> @@ -60,6 +61,7 @@ struct pt_regs {
->  
->  #define user_mode(regs) (((regs)->status & SR_PP) == 0)
->  
-> +#define MAX_REG_OFFSET offsetof(struct pt_regs, orig_a0)
->  
->  /* Helpers for working with the instruction pointer */
->  static inline unsigned long instruction_pointer(struct pt_regs *regs)
-> @@ -85,6 +87,12 @@ static inline void user_stack_pointer_set(struct pt_regs *regs,
->  	regs->sp =  val;
->  }
->  
-> +/* Valid only for Kernel mode traps. */
-> +static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-> +{
-> +	return regs->sp;
-> +}
-> +
->  /* Helpers for working with the frame pointer */
->  static inline unsigned long frame_pointer(struct pt_regs *regs)
->  {
-> @@ -101,6 +109,27 @@ static inline unsigned long regs_return_value(struct pt_regs *regs)
->  	return regs->a0;
->  }
->  
-> +extern int regs_query_register_offset(const char *name);
-> +extern unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
-> +					       unsigned int n);
-> +
-> +/**
-> + * regs_get_register() - get register value from its offset
-> + * @regs:	pt_regs from which register value is gotten
-> + * @offset:	offset of the register.
-> + *
-> + * regs_get_register returns the value of a register whose offset from @regs.
-> + * The @offset is the offset of the register in struct pt_regs.
-> + * If @offset is bigger than MAX_REG_OFFSET, this returns 0.
-> + */
-> +static inline unsigned long regs_get_register(struct pt_regs *regs,
-> +					      unsigned int offset)
-> +{
-> +	if (unlikely(offset > MAX_REG_OFFSET))
-> +		return 0;
-> +
-> +	return *(unsigned long *)((unsigned long)regs + offset);
-> +}
->  #endif /* __ASSEMBLY__ */
->  
->  #endif /* _ASM_RISCV_PTRACE_H */
-> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-> index 444dc7b..a11c692 100644
-> --- a/arch/riscv/kernel/ptrace.c
-> +++ b/arch/riscv/kernel/ptrace.c
-> @@ -125,6 +125,105 @@ const struct user_regset_view *task_user_regset_view(struct task_struct *task)
->  	return &riscv_user_native_view;
->  }
->  
-> +struct pt_regs_offset {
-> +	const char *name;
-> +	int offset;
-> +};
-> +
-> +#define REG_OFFSET_NAME(r) {.name = #r, .offset = offsetof(struct pt_regs, r)}
-> +#define REG_OFFSET_END {.name = NULL, .offset = 0}
-> +
-> +static const struct pt_regs_offset regoffset_table[] = {
-> +	REG_OFFSET_NAME(epc),
-> +	REG_OFFSET_NAME(ra),
-> +	REG_OFFSET_NAME(sp),
-> +	REG_OFFSET_NAME(gp),
-> +	REG_OFFSET_NAME(tp),
-> +	REG_OFFSET_NAME(t0),
-> +	REG_OFFSET_NAME(t1),
-> +	REG_OFFSET_NAME(t2),
-> +	REG_OFFSET_NAME(s0),
-> +	REG_OFFSET_NAME(s1),
-> +	REG_OFFSET_NAME(a0),
-> +	REG_OFFSET_NAME(a1),
-> +	REG_OFFSET_NAME(a2),
-> +	REG_OFFSET_NAME(a3),
-> +	REG_OFFSET_NAME(a4),
-> +	REG_OFFSET_NAME(a5),
-> +	REG_OFFSET_NAME(a6),
-> +	REG_OFFSET_NAME(a7),
-> +	REG_OFFSET_NAME(s2),
-> +	REG_OFFSET_NAME(s3),
-> +	REG_OFFSET_NAME(s4),
-> +	REG_OFFSET_NAME(s5),
-> +	REG_OFFSET_NAME(s6),
-> +	REG_OFFSET_NAME(s7),
-> +	REG_OFFSET_NAME(s8),
-> +	REG_OFFSET_NAME(s9),
-> +	REG_OFFSET_NAME(s10),
-> +	REG_OFFSET_NAME(s11),
-> +	REG_OFFSET_NAME(t3),
-> +	REG_OFFSET_NAME(t4),
-> +	REG_OFFSET_NAME(t5),
-> +	REG_OFFSET_NAME(t6),
-> +	REG_OFFSET_NAME(status),
-> +	REG_OFFSET_NAME(badaddr),
-> +	REG_OFFSET_NAME(cause),
-> +	REG_OFFSET_NAME(orig_a0),
-> +	REG_OFFSET_END,
-> +};
-> +
-> +/**
-> + * regs_query_register_offset() - query register offset from its name
-> + * @name:	the name of a register
-> + *
-> + * regs_query_register_offset() returns the offset of a register in struct
-> + * pt_regs from its name. If the name is invalid, this returns -EINVAL;
-> + */
-> +int regs_query_register_offset(const char *name)
-> +{
-> +	const struct pt_regs_offset *roff;
-> +
-> +	for (roff = regoffset_table; roff->name != NULL; roff++)
-> +		if (!strcmp(roff->name, name))
-> +			return roff->offset;
-> +	return -EINVAL;
-> +}
-> +
-> +/**
-> + * regs_within_kernel_stack() - check the address in the stack
-> + * @regs:      pt_regs which contains kernel stack pointer.
-> + * @addr:      address which is checked.
-> + *
-> + * regs_within_kernel_stack() checks @addr is within the kernel stack page(s).
-> + * If @addr is within the kernel stack, it returns true. If not, returns false.
-> + */
-> +static bool regs_within_kernel_stack(struct pt_regs *regs, unsigned long addr)
-> +{
-> +	return (addr & ~(THREAD_SIZE - 1))  ==
-> +		(kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1));
-> +}
-> +
-> +/**
-> + * regs_get_kernel_stack_nth() - get Nth entry of the stack
-> + * @regs:	pt_regs which contains kernel stack pointer.
-> + * @n:		stack entry number.
-> + *
-> + * regs_get_kernel_stack_nth() returns @n th entry of the kernel stack which
-> + * is specified by @regs. If the @n th entry is NOT in the kernel stack,
-> + * this returns 0.
-> + */
-> +unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
-> +{
-> +	unsigned long *addr = (unsigned long *)kernel_stack_pointer(regs);
-> +
-> +	addr += n;
-> +	if (regs_within_kernel_stack(regs, (unsigned long)addr))
-> +		return *addr;
-> +	else
-> +		return 0;
-> +}
-> +
->  void ptrace_disable(struct task_struct *child)
->  {
->  	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
-> -- 
-> 2.7.4
+> On Sun, Jul 12, 2020 at 9:37 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Sat, 11 Jul 2020 09:32:01 +0800
+> > Guo Ren <guoren@kernel.org> wrote:
+> >
+> > > Thx Masami,
+> > >
+> > > On Fri, Jul 10, 2020 at 9:50 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > >
+> > > > Hi Guo,
+> > > >
+> > > > On Thu,  9 Jul 2020 02:19:14 +0000
+> > > > guoren@kernel.org wrote:
+> > > >
+> > > > > +/* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> > > > > +void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> > > > > +                        struct ftrace_ops *ops, struct pt_regs *regs)
+> > > > > +{
+> > > > > +     struct kprobe *p;
+> > > > > +     struct kprobe_ctlblk *kcb;
+> > > > > +
+> > > > > +     p = get_kprobe((kprobe_opcode_t *)ip);
+> > > > > +     if (unlikely(!p) || kprobe_disabled(p))
+> > > > > +             return;
+> > > > > +
+> > > > > +     kcb = get_kprobe_ctlblk();
+> > > > > +     if (kprobe_running()) {
+> > > > > +             kprobes_inc_nmissed_count(p);
+> > > > > +     } else {
+> > > > > +             /*
+> > > > > +              * The regs->epc hasn't been saved by SAVE_ALL in mcount-dyn.S
+> > > > > +              * So no need to resume it, just for kprobe handler.
+> > > > > +              */
+> > > > > +             instruction_pointer_set(regs, ip);
+> > > > > +             __this_cpu_write(current_kprobe, p);
+> > > > > +             kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> > > > > +             if (!p->pre_handler || !p->pre_handler(p, regs)) {
+> > > > > +                     /*
+> > > > > +                      * Emulate singlestep (and also recover regs->pc)
+> > > > > +                      * as if there is a nop
+> > > > > +                      */
+> > > > > +                     instruction_pointer_set(regs,
+> > > > > +                             (unsigned long)p->addr + MCOUNT_INSN_SIZE);
+> > > > > +                     if (unlikely(p->post_handler)) {
+> > > > > +                             kcb->kprobe_status = KPROBE_HIT_SSDONE;
+> > > > > +                             p->post_handler(p, regs, 0);
+> > > > > +                     }
+> > > >
+> > > > Hmm, don't you need restoring the previous instruction pointer here?
+> > > look at  riscv mcount-dyn.S SAVE_ALL function, sp frame lay out like this:
+> > > -----------------------
+> > > | return address |
+> > > -----------------------
+> > > | frame pointer   |
+> > > -----------------------
+> > > | pt_regs x1-x31|
+> > > -----------------------
+> > > It's not a complete pt_regs for the handler, so modifing regs->ip is no use.
+> >
+> > Yes, that is same on x86. But ftrace regs_caller on x86-64 modifies the
+> > return address on the stack by regs->ip.
+> >
+> > See arch/x86/kernel/ftrace_64.S:
+> >
+> > -----
+> > SYM_INNER_LABEL(ftrace_regs_call, SYM_L_GLOBAL)
+> >         call ftrace_stub
+> >
+> >         /* Copy flags back to SS, to restore them */
+> >         movq EFLAGS(%rsp), %rax
+> >         movq %rax, MCOUNT_REG_SIZE(%rsp)
+> >
+> >         /* Handlers can change the RIP */
+> >         movq RIP(%rsp), %rax
+> >         movq %rax, MCOUNT_REG_SIZE+8(%rsp)
+> > -----
+> Yes, and in save_mcount_regs, it prepare the origin pt_regs RIP.
 > 
+>          /* Move RIP to its proper location */
+>         movq MCOUNT_REG_SIZE+\added(%rsp), %rdi
+>         movq %rdi, RIP(%rsp)
+> 
+> I've fixed up riscv's: [1]
+> [1]: https://lore.kernel.org/linux-riscv/1594683562-68149-4-git-send-email-guoren@kernel.org/T/#u
+
+OK, looks good :)
+
+> >
+> > The last part update the return address on the stack.
+> >
+> > > > If you don't support modifying the instruction pointer in the handler,
+> > > We can modify ip like this if necessary:
+> > > *(unsigned long *)((unsigned long)regs + sizeof(struct pt_regs) + 8) = xxx;
+> > >
+> > > > it must not be compatible with kprobes.
+> > > Why, can you show related codes? thank you very much.
+> >
+> > The "Changing Execution Path" section in the Documentation/kprobes.txt said
+> >
+> > -----
+> > Since kprobes can probe into a running kernel code, it can change the
+> > register set, including instruction pointer.
+> > -----
+> Got it, thx for correct me.
+> 
+> >
+> > As you can see, this is the expected behavior on kprobes.
+> > Since user will not know the kprobes is working on a breakpoint or
+> > ftrace, we have to support this behavior transparently. So, could you
+> > enable this feature at first on ftrace@RISCV?
+> Ditto
+> 
+> >
+> > >
+> > > >
+> > > > Now BPF function override and function error injection depends on
+> > > > this behevior, so could you consider to support it in the "ftrace"
+> > > > implementation at first? (And if it is enabled, you can enable the
+> > > > livepatch on RISCV too)
+> > > Great message!
+> > >
+> > > But can you show me codes that bpf and err-jnject using the behavior? Thx
+> >
+> > In kernel/fail_function.c
+> Nice tip, thx. And I've tested err-jnject: [2]
+> [2]: https://lore.kernel.org/linux-riscv/1594683562-68149-4-git-send-email-guoren@kernel.org/T/#md66e4e58f3463c1369e11ab9e5d646343f7d250d
+
+Good! Thanks for porting it!
+
+
+> 
+> >
+> > -----
+> > static int fei_kprobe_handler(struct kprobe *kp, struct pt_regs *regs)
+> > {
+> >         struct fei_attr *attr = container_of(kp, struct fei_attr, kp);
+> >
+> >         if (should_fail(&fei_fault_attr, 1)) {
+> >                 regs_set_return_value(regs, attr->retval);
+> >                 override_function_with_return(regs);
+> >                 return 1;
+> >         }
+> >
+> >         return 0;
+> > }
+> > -----
+> >
+> > And follow the code related to CONFIG_BPF_KPROBE_OVERRIDE in
+> > kernel/trace/bpf_trace.c. (doing similar thing, but fail_function.c
+> > is simpler.)
+> Nice tip, thx
+> 
+> --
+> Best Regards
+>  Guo Ren
+> 
+> ML: https://lore.kernel.org/linux-csky/
 
 
 -- 
