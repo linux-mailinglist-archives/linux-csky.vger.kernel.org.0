@@ -2,106 +2,130 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 297852280D0
-	for <lists+linux-csky@lfdr.de>; Tue, 21 Jul 2020 15:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00CA2280DD
+	for <lists+linux-csky@lfdr.de>; Tue, 21 Jul 2020 15:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbgGUNV6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Jul 2020 09:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726715AbgGUNV6 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Jul 2020 09:21:58 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E2FC061794;
-        Tue, 21 Jul 2020 06:21:58 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id o1so10266969plk.1;
-        Tue, 21 Jul 2020 06:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=qvjV4zJ+ljsVrLYY5u3yPmLUInDJuCQrPmhPzG4KVUY=;
-        b=BES0uEM4PJ/rIG9EX4hZwteKAx1jygN3UQZXu+mgyPvmne9xny+k5O3BDJlgnUbw0/
-         V24eaycp4Rr7qztdthu/dtvL85ZhF3zSMjnWQiyIz/So7rllxGCV+OKgaulRQY0Mo9nx
-         eDiTOhJx6aDaYNrDh0jdqt8jQLe+uqyTS1ydmMNqdWS8zM+Fh40nHtN6dfbnvmmuo9nH
-         tGMIWFID1uQN0g/hUMa1ZES7vj3Obkky+87hRzY/ABponvu8Ch9aZc8PZ/1izFUtcL6P
-         CN5Hck8KUAQeWljihSI257+ber3n7SKOSPmz9P05ItNxz//WmFB7PZFUIHwFNjdjFNDg
-         Sy/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=qvjV4zJ+ljsVrLYY5u3yPmLUInDJuCQrPmhPzG4KVUY=;
-        b=mKY2FPTSg+uzknbt4HnJEmcB5pyIv47gqo2/cAW7hJrCAjbbfHK5VGUzPkOMFGvK9p
-         547f5r5CeWAtuuz3MLA/lpfgW5ZavkFk5/GK862pb6zHqELTLkjkj1KPpOr3VrtH7Cph
-         l3cHOvq4FxH2mrna4PMIYUYE/MZjIfaync6HM/JMBw/4I6YX1s1qEyp1xdU8mTxkEmLM
-         vFiKZtndhgIKEMPb+c62eSs2WzLT6e3LIVs4yVbNcO8J6rjmS27Y2IP7oTlu3GGj8/f6
-         hjvKvaO3as0AoI/CvvvrsryzGIrIYta1WENJaBz7drIIMLmGoUDGA4ZXcx8J6BH1HifR
-         Y72g==
-X-Gm-Message-State: AOAM53150dOAWqpV9803q5wvLzOWEcoug724uhnw0Bm+b4eH9cYVPCS2
-        Ry6a58A0HwAFV2fc8af+Vmc=
-X-Google-Smtp-Source: ABdhPJyTYWQ8cQ3pZgDqPfuKNrJEv4+INxomhkf1hfiXMKffG62IYyX7/QBvttxJakTyM9dEubRXXw==
-X-Received: by 2002:a17:90a:2e85:: with SMTP id r5mr4842326pjd.232.1595337717533;
-        Tue, 21 Jul 2020 06:21:57 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s89sm3419637pjj.28.2020.07.21.06.21.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 21 Jul 2020 06:21:57 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 06:21:55 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH] csky: Fix build with upstream gcc
-Message-ID: <20200721132155.GA27649@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1726312AbgGUN1I (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 21 Jul 2020 09:27:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726014AbgGUN1H (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 21 Jul 2020 09:27:07 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9DB0B206E9;
+        Tue, 21 Jul 2020 13:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595338026;
+        bh=VMw8YE5x3FLHqpQGkH/mADRhXIT9v2v+BirY/MVEvvA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BjmXkpeMj7JySjDEpkGsYN3u59UQW0/R5lAcuVxbLMI4lu8y3U3un1Zbis1T2oWpR
+         SDAVBuGUc9o5iTFEmzgnGXEtvuSA20k1ntorTYvIX7W9ctgzCgmlDQB2umeE1yFWS9
+         7dgDPUjCRPor0Brr/UVjFZG3Uvo6WPP2W2SEuaLY=
+Date:   Tue, 21 Jul 2020 22:27:01 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>, linux-csky@vger.kernel.org,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        Patrick =?UTF-8?B?U3TDpGhsaW4=?= <me@packi.ch>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Pekka Enberg <penberg@kernel.org>
+Subject: Re: [PATCH v3 6/7] riscv: Add KPROBES_ON_FTRACE supported
+Message-Id: <20200721222701.3074315f6a9f6c42c5963f40@kernel.org>
+In-Reply-To: <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
+References: <1594683562-68149-1-git-send-email-guoren@kernel.org>
+        <1594683562-68149-7-git-send-email-guoren@kernel.org>
+        <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
+        <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 01:23:14PM +0200, Joerg Roedel wrote:
-> From: Joerg Roedel <jroedel@suse.de>
-> 
-> Building a kernel for the CSKY architecture with CONFIG_FRAME_POINTER
-> set requires a gcc supporting the non-upstream '-mbacktrace' option.
-> Check for the '-mbacktrace' option before enabling CONFIG_FRAMEPOINTER
-> and fix building CSKY with an upstream gcc compiler.
-> 
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
+On Wed, 15 Jul 2020 00:24:54 +0800
+Guo Ren <guoren@kernel.org> wrote:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+> Thx Masami,
+> 
+> On Tue, Jul 14, 2020 at 7:38 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Mon, 13 Jul 2020 23:39:21 +0000
+> > guoren@kernel.org wrote:
+> >
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > This patch adds support for kprobes on ftrace call sites to avoids
+> > > much of the overhead with regular kprobes. Try it with simple
+> > > steps:
+> > >
+> > > 1. Get _do_fork ftrace call site.
+> > > Dump of assembler code for function _do_fork:
+> > >    0xffffffe00020af64 <+0>:     addi    sp,sp,-128
+> > >    0xffffffe00020af66 <+2>:     sd      s0,112(sp)
+> > >    0xffffffe00020af68 <+4>:     sd      ra,120(sp)
+> > >    0xffffffe00020af6a <+6>:     addi    s0,sp,128
+> > >    0xffffffe00020af6c <+8>:     sd      s1,104(sp)
+> > >    0xffffffe00020af6e <+10>:    sd      s2,96(sp)
+> > >    0xffffffe00020af70 <+12>:    sd      s3,88(sp)
+> > >    0xffffffe00020af72 <+14>:    sd      s4,80(sp)
+> > >    0xffffffe00020af74 <+16>:    sd      s5,72(sp)
+> > >    0xffffffe00020af76 <+18>:    sd      s6,64(sp)
+> > >    0xffffffe00020af78 <+20>:    sd      s7,56(sp)
+> > >    0xffffffe00020af7a <+22>:    mv      s4,a0
+> > >    0xffffffe00020af7c <+24>:    mv      a0,ra
+> > >    0xffffffe00020af7e <+26>:    nop   <<<<<<<< here!
+> > >    0xffffffe00020af82 <+30>:    nop
+> > >    0xffffffe00020af86 <+34>:    ld      s3,0(s4)
+> > >
+> > > 2. Set _do_fork+26 as the kprobe.
+> > >   echo 'p:myprobe _do_fork+26 dfd=%a0 filename=%a1 flags=%a2 mode=+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
+> > >   echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
+> > >   cat /sys/kernel/debug/tracing/trace
+> > >   tracer: nop
+> > >
+> > >   entries-in-buffer/entries-written: 3/3   #P:1
+> > >
+> > >                                _-----=> irqs-off
+> > >                               / _----=> need-resched
+> > >                              | / _---=> hardirq/softirq
+> > >                              || / _--=> preempt-depth
+> > >                              ||| /     delay
+> > >             TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
+> > >                | |       |   ||||       |         |
+> > >               sh-87    [000] ....   551.557031: myprobe: (_do_fork+0x1a/0x2e6) dfd=0xffffffe00020af7e filename=0xffffffe00020b34e flags=0xffffffe00101e7c0 mode=0x20af86ffffffe0
+> > >
+> > >   cat /sys/kernel/debug/kprobes/list
+> > > ffffffe00020af7e  k  _do_fork+0x1a    [FTRACE]
+> > >                                        ^^^^^^
+> >
+> > Hmm, this seems fentry is not supported on RISC-V yet. But anyway,
+> > it will be useful for users (if they can find the offset).
+> 
+> Seems only x86 & ⬆️90 use fentry，can you elaborate more about fentry's
+> benefit and how the user could set kprobe on ftrace call site without
+> disassemble?
 
-> ---
->  arch/csky/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index bd31ab12f77d..1622e1c56026 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -8,7 +8,7 @@ config CSKY
->  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->  	select ARCH_USE_BUILTIN_BSWAP
->  	select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
-> -	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610
-> +	select ARCH_WANT_FRAME_POINTERS if (!CPU_CK610 && STACKTRACE_SUPPORT)
->  	select COMMON_CLK
->  	select CLKSRC_MMIO
->  	select CSKY_MPINTC if CPU_CK860
-> @@ -125,7 +125,7 @@ config MMU
->  	def_bool y
->  
->  config STACKTRACE_SUPPORT
-> -	def_bool y
-> +	def_bool $(success,echo 'int foo(void) { return 0; }' | $(CC) -mbacktrace -x c - -c -o /dev/null)
->  
->  config TIME_LOW_RES
->  	def_bool y
-> -- 
-> 2.27.0
-> 
+On x86, the fentry replaces the mcount with just one call instruction, without
+saving any arguments. This means all probes which are puts on the address of
+target symbol, are automatically using ftrace. IOW, all probes on _do_fork+0
+will use ftrace. We don't need any disassembling.
+
+I think if RISC-V already support "-fpatchable-function-entry=2" option on
+GCC, you can easily enable it as same as arm64. See https://lkml.org/lkml/2019/6/18/648
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
