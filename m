@@ -2,43 +2,43 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 148602293C2
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Jul 2020 10:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA2622993D
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Jul 2020 15:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbgGVIkI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Jul 2020 04:40:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40854 "EHLO mail.kernel.org"
+        id S1726758AbgGVNbg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Jul 2020 09:31:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58504 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726930AbgGVIkI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 22 Jul 2020 04:40:08 -0400
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+        id S1726146AbgGVNbe (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 22 Jul 2020 09:31:34 -0400
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 31C932084D;
-        Wed, 22 Jul 2020 08:40:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CAB11207BB;
+        Wed, 22 Jul 2020 13:31:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595407207;
-        bh=VE9TEy4TaBrXAUOfVps22D3GyNc1Lgjd/KIVOsr7iRE=;
+        s=default; t=1595424694;
+        bh=G+K3d514kcxDDUU/TieFP3V0nSBRnKLAgwKlg3nKpOE=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XMHZYDe+HsqdgolM4FM11vgpgBo8oGNFi12pM1TVZ6sjBUvaLd9cUwKAOd7RYyuxP
-         MBUaWckX7gAQthcfoY7rZOdxuysoT0ZKMswKBL6X/iA+JS2AIm7g7d3FOVHpmAxFXO
-         MnPJx7OxZLdvV0r/ix+jzajqQAJpF+NAUyrRVZNQ=
-Received: by mail-lf1-f43.google.com with SMTP id u25so871745lfm.1;
-        Wed, 22 Jul 2020 01:40:07 -0700 (PDT)
-X-Gm-Message-State: AOAM530ALQBhhL6yH+zCbKaGHPJbSxIGVB5BC8WpnnrZ60ysQBIQbeov
-        B9F/d4P2YXsFlvbjU/2LMEEtXVY02w8sQO+8lKI=
-X-Google-Smtp-Source: ABdhPJxM9I8nLASjXFg39htK/rhr5fByxOJVsWiQcQfWB4zl8ffRhBZFGXHlg/WB63xIk+kZZJguVKSDf1KZ39lRh64=
-X-Received: by 2002:ac2:5935:: with SMTP id v21mr15443904lfi.135.1595407205384;
- Wed, 22 Jul 2020 01:40:05 -0700 (PDT)
+        b=qtqVsywTdyKY0aLtGD7JuZ+qcoKUwI4hl8trE9CPPMhV3qlgTpMTYLvs5Y0jeTGlC
+         k0g/7b8jeMzwqCY/GM+3WrGj7wo7qTagwHXLA/K2A/8jK92j0czE+TPYj2Q5QECoy6
+         NWp9gVuH6gKeb6Zr8H5ZHawpEr1CELbE85dKoCa0=
+Received: by mail-lj1-f171.google.com with SMTP id j11so2493100ljo.7;
+        Wed, 22 Jul 2020 06:31:33 -0700 (PDT)
+X-Gm-Message-State: AOAM5330qKK8C5u0YX2Vy55LFXtHLxB1M63VSE08R/c64OWnfIG14fzw
+        Wh2LHfI8cZr5Qu0OXm2Tgz4ADQKb976rF2TgHLs=
+X-Google-Smtp-Source: ABdhPJw7AlCg8zPFdGB7cfoEAZq9U0346rr0bSMhuJZm/pzQsspB7CrpgTev9f3U1nbJZCYRWvKZKCFQWwq0czTvfzQ=
+X-Received: by 2002:a2e:b0ed:: with SMTP id h13mr14060325ljl.250.1595424692019;
+ Wed, 22 Jul 2020 06:31:32 -0700 (PDT)
 MIME-Version: 1.0
 References: <1594683562-68149-1-git-send-email-guoren@kernel.org>
  <1594683562-68149-7-git-send-email-guoren@kernel.org> <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
  <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com> <20200721222701.3074315f6a9f6c42c5963f40@kernel.org>
 In-Reply-To: <20200721222701.3074315f6a9f6c42c5963f40@kernel.org>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Jul 2020 16:39:53 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTM6fsK5A9CKFkEhCC3hdsM8bCfBh613ohvM50fTLc5cw@mail.gmail.com>
-Message-ID: <CAJF2gTTM6fsK5A9CKFkEhCC3hdsM8bCfBh613ohvM50fTLc5cw@mail.gmail.com>
+Date:   Wed, 22 Jul 2020 21:31:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR4319vMy9hStLeR3+42WG4opnsZTaGdN__Bm23VCHjBg@mail.gmail.com>
+Message-ID: <CAJF2gTR4319vMy9hStLeR3+42WG4opnsZTaGdN__Bm23VCHjBg@mail.gmail.com>
 Subject: Re: [PATCH v3 6/7] riscv: Add KPROBES_ON_FTRACE supported
 To:     Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
@@ -61,6 +61,35 @@ List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 Hi Masami,
+
+Current riscv ftrace_caller utilize fp(s0) - 8 in stack to get ra of
+function, eg:
+foo:
+   2bb0:       7119                    addi    sp,sp,-128
+    2bb2:       f8a2                    sd      s0,112(sp)
+    2bb4:       fc86                    sd      ra,120(sp)
+...
+    2bc4:       0100                    addi    s0,sp,128
+...
+0000000000002bca <.LVL828>:
+    2bca:       00000097                auipc   ra,0x0
+    2bce:       000080e7                jalr    ra # 2bca <.LVL828> //_mcou=
+nt
+
+So just put two nops before prologue of function isn't enough, because
+riscv don't like arm64 which could use x9-x18 reserved regs to pass
+ra(x30).
+    | mov       x9, x30
+    | bl        <ftrace-entry>
+If the benefit is just making a kprobe on function symbol address to
+prevent disassembling, I'll delay this feature.
+
+
+I also have a look at HAVE_FENTRY & HAVE_NOP_MCOUNT. Seems it just
+avoid using scripts/recordmcount.pl script and directly generate nops
+for _mcount.
+It's different from -fpatchable-function-entry=3D2 which generating nops
+before function prologue in arm64, isn't it?
 
 On Tue, Jul 21, 2020 at 9:27 PM Masami Hiramatsu <mhiramat@kernel.org> wrot=
 e:
@@ -145,10 +174,13 @@ k+0
  on
 > GCC, you can easily enable it as same as arm64. See https://lkml.org/lkml=
 /2019/6/18/648
-the link is:
-[PATCH 0/7] powerpc/ftrace: Patch out -mprofile-kernel instructions
+>
+> Thank you,
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>
 
-Is that right?
+
 
 --=20
 Best Regards
