@@ -2,109 +2,127 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DE02284CA
-	for <lists+linux-csky@lfdr.de>; Tue, 21 Jul 2020 18:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DD6228DBA
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Jul 2020 03:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728496AbgGUQFz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Jul 2020 12:05:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728219AbgGUQFz (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 21 Jul 2020 12:05:55 -0400
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 349AD2077D;
-        Tue, 21 Jul 2020 16:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595347554;
-        bh=MVP3OpzScc9JjM+8+tSf1gE2+cNmrTX8DEqNNjz9VeY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XXLGUgyVuW69/ZzoZ6TWEjcHhoEQ4BmikarMVI4Dhz8eDjCovH2uVMUE3ZnocqhSH
-         5BSXQOkx0OpI+wsw8ixesFZwggbK2OgnrFDuViYcaa9tGcLmJMP5RXbNmk5hmogqOn
-         1lY69HAJMsGS6O0PvxhQuaC809BzpGMmYzH8cXsg=
-Received: by mail-lj1-f172.google.com with SMTP id e8so24700053ljb.0;
-        Tue, 21 Jul 2020 09:05:54 -0700 (PDT)
-X-Gm-Message-State: AOAM533U6Brvk89hzf3QPqTt5X6KyfqBE218z3heBL4cgQDT9G/PUisE
-        UF6rBlifKVfDllaehxfXBl5CwPuB4xQ0995m36s=
-X-Google-Smtp-Source: ABdhPJw0hco+aL68Av32bukogJjf6+WGT3mk7PwPG+qMfUeXDISwCl7Tlm4ssAdoDblIYlw7Sqih8P3eV+rx3LbhTTw=
-X-Received: by 2002:a2e:864e:: with SMTP id i14mr13406723ljj.441.1595347552511;
- Tue, 21 Jul 2020 09:05:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200721132155.GA27649@roeck-us.net>
-In-Reply-To: <20200721132155.GA27649@roeck-us.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Jul 2020 00:05:41 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR34maSk_Up2CUKyxaHJ=wKLUx+LfhKsv6=Ci25dWbqJg@mail.gmail.com>
-Message-ID: <CAJF2gTR34maSk_Up2CUKyxaHJ=wKLUx+LfhKsv6=Ci25dWbqJg@mail.gmail.com>
-Subject: Re: [PATCH] csky: Fix build with upstream gcc
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Joerg Roedel <joro@8bytes.org>, linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joerg Roedel <jroedel@suse.de>
-Content-Type: text/plain; charset="UTF-8"
+        id S1731594AbgGVBov (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 21 Jul 2020 21:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731589AbgGVBov (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Jul 2020 21:44:51 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2057BC0619DB
+        for <linux-csky@vger.kernel.org>; Tue, 21 Jul 2020 18:44:51 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id f16so342431pjt.0
+        for <linux-csky@vger.kernel.org>; Tue, 21 Jul 2020 18:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yRf1KkzEQtnGqiMsmmJMd1M1Ly6X4XyFRu3fx8vPXY0=;
+        b=XQHFTK8TLwZMhMuzQyIKFEykOxgVlgNBf9kaI3gUbbLyJWGbwT3FRt8tHlFdtILJ4c
+         162oajiVIQqH8z1mqFu5PRaz343GNQwde5dW8LT3G148vliNleRUs5HvY7OBsX/0nzdO
+         qbhS0vkY3rnvqHNeTlOB854yvG8n6FdfxEyDRdnQFrtELcOJgj8NCiPdmISu8WcAqbdO
+         AoShQJKs6FsZDnsSYHlYzxKbnJKmrMQBX9SwdOH5Ew0MP8n1r5T9Je3XFJt6wqvJUUmR
+         yvTngVKx+sAR2oB9r5jHVsZ4bpXAi6kMAHBA61m52VwIXLg+hopolQSiecm6SQUxU24l
+         L7yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=yRf1KkzEQtnGqiMsmmJMd1M1Ly6X4XyFRu3fx8vPXY0=;
+        b=ZIwwtHh+xaWSX3hgtzcHQC2UUF7cxW41ozOi2wIAPjyyyNYob9rBRzNeF53oBgMMLl
+         uvhsW0GZF72tX6ZCaE8M5w4Uy+L3XCgpgZmtKlHFlmu1wLCl1Zwo3+/Yf9Qjp/a46vyL
+         B43wkvAa82RRWKTpEkc0UOWVNMH4B5lS26qZ9d6sSvLdPNNoctzEIIDhgHKWwo5pLheS
+         SPolg+VbP5oGrQWl8OmEs+MXvPHYtFXhQMR5OqgJR3sYvUIjZTjV56tGtM6JcWeZ03DY
+         cxVSS8PSRadhzFnF40JBbTc66WzQyEmAaF0DW0WmEve96NBCsHSsyZvulaUYZ2VUWHpy
+         erdA==
+X-Gm-Message-State: AOAM532cGvmh+I7FeVQ1du0FsTbC8AdtYkkDFCoPOMT3HT9qB0NFYb3K
+        KkOGdHaTGGITAdPKK0TxpAOH3w==
+X-Google-Smtp-Source: ABdhPJwywb/lnJmZV4jLcblWIs0VYXUeViGyBDggD6qYivCicW5bfW11E23m5aEUiqrPdmqQ4G5gHA==
+X-Received: by 2002:a17:90a:4fa2:: with SMTP id q31mr8100898pjh.178.1595382290361;
+        Tue, 21 Jul 2020 18:44:50 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id 4sm18359304pgk.68.2020.07.21.18.44.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 18:44:49 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 18:44:49 -0700 (PDT)
+X-Google-Original-Date: Tue, 21 Jul 2020 18:44:46 PDT (-0700)
+Subject:     Re: [PATCH] riscv: Cleanup unnecessary define in asm-offset.c
+In-Reply-To: <1594561309-65026-1-git-send-email-guoren@kernel.org>
+CC:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@kernel.org,
+        guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-6e379a55-7e6a-46aa-8faa-011756333d92@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx Joerg & Guenter,
-
-Cool work!
-
-Acked-by: Guo Ren <guoren@kernel.org>
-
-Approve to next branch.
-
-On Tue, Jul 21, 2020 at 9:21 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Sun, 12 Jul 2020 06:41:49 PDT (-0700), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
-> On Tue, Jul 21, 2020 at 01:23:14PM +0200, Joerg Roedel wrote:
-> > From: Joerg Roedel <jroedel@suse.de>
-> >
-> > Building a kernel for the CSKY architecture with CONFIG_FRAME_POINTER
-> > set requires a gcc supporting the non-upstream '-mbacktrace' option.
-> > Check for the '-mbacktrace' option before enabling CONFIG_FRAMEPOINTER
-> > and fix building CSKY with an upstream gcc compiler.
-> >
-> > Signed-off-by: Joerg Roedel <jroedel@suse.de>
+>  - TASK_THREAD_SP is duplicated define
+>  - TASK_STACK is no use at all
+>  - Don't worry about thread_info's offset in task_struct, have
+>    a look on comment in include/linux/sched.h:
 >
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> struct task_struct {
+> 	/*
+> 	 * For reasons of header soup (see current_thread_info()), this
+> 	 * must be the first element of task_struct.
+> 	 */
+> 	struct thread_info		thread_info;
 >
-> > ---
-> >  arch/csky/Kconfig | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> > index bd31ab12f77d..1622e1c56026 100644
-> > --- a/arch/csky/Kconfig
-> > +++ b/arch/csky/Kconfig
-> > @@ -8,7 +8,7 @@ config CSKY
-> >       select ARCH_HAS_SYNC_DMA_FOR_DEVICE
-> >       select ARCH_USE_BUILTIN_BSWAP
-> >       select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
-> > -     select ARCH_WANT_FRAME_POINTERS if !CPU_CK610
-> > +     select ARCH_WANT_FRAME_POINTERS if (!CPU_CK610 && STACKTRACE_SUPPORT)
-> >       select COMMON_CLK
-> >       select CLKSRC_MMIO
-> >       select CSKY_MPINTC if CPU_CK860
-> > @@ -125,7 +125,7 @@ config MMU
-> >       def_bool y
-> >
-> >  config STACKTRACE_SUPPORT
-> > -     def_bool y
-> > +     def_bool $(success,echo 'int foo(void) { return 0; }' | $(CC) -mbacktrace -x c - -c -o /dev/null)
-> >
-> >  config TIME_LOW_RES
-> >       def_bool y
-> > --
-> > 2.27.0
-> >
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> ---
+>  arch/riscv/kernel/asm-offsets.c | 3 ---
+>  arch/riscv/kernel/entry.S       | 5 -----
+>  2 files changed, 8 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index 07cb9c1..db20344 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -27,9 +27,6 @@ void asm_offsets(void)
+>  	OFFSET(TASK_THREAD_S9, task_struct, thread.s[9]);
+>  	OFFSET(TASK_THREAD_S10, task_struct, thread.s[10]);
+>  	OFFSET(TASK_THREAD_S11, task_struct, thread.s[11]);
+> -	OFFSET(TASK_THREAD_SP, task_struct, thread.sp);
+> -	OFFSET(TASK_STACK, task_struct, stack);
+> -	OFFSET(TASK_TI, task_struct, thread_info);
+>  	OFFSET(TASK_TI_FLAGS, task_struct, thread_info.flags);
+>  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
+>  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index cae7e6d..3e8707e 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -389,12 +389,7 @@ ENTRY(__switch_to)
+>  	lw a4, TASK_TI_CPU(a1)
+>  	sw a3, TASK_TI_CPU(a1)
+>  	sw a4, TASK_TI_CPU(a0)
+> -#if TASK_TI != 0
+> -#error "TASK_TI != 0: tp will contain a 'struct thread_info', not a 'struct task_struct' so get_current() won't work."
+> -	addi tp, a1, TASK_TI
+> -#else
+>  	move tp, a1
+> -#endif
 
+Seems reasonable.  That was really there to save anyone who got bit by the
+conversion to to THREAD_INFO_IN_TASK.
 
+I've added a comment and put this on for-next.
 
--- 
-Best Regards
- Guo Ren
+Thanks!
 
-ML: https://lore.kernel.org/linux-csky/
+>  	ret
+>  ENDPROC(__switch_to)
+
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
