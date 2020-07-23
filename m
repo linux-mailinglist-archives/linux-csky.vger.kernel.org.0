@@ -2,28 +2,28 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A5D22B30A
-	for <lists+linux-csky@lfdr.de>; Thu, 23 Jul 2020 17:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BD522B336
+	for <lists+linux-csky@lfdr.de>; Thu, 23 Jul 2020 18:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgGWPzh (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 23 Jul 2020 11:55:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33864 "EHLO mail.kernel.org"
+        id S1726649AbgGWQLt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 23 Jul 2020 12:11:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726761AbgGWPzh (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 23 Jul 2020 11:55:37 -0400
+        id S1726621AbgGWQLt (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 23 Jul 2020 12:11:49 -0400
 Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD83120674;
-        Thu, 23 Jul 2020 15:55:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E0EC20714;
+        Thu, 23 Jul 2020 16:11:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595519736;
-        bh=794oAZiy8ioLny+/Vr1tNGrLTY249LqhcFj6aS5p5q0=;
+        s=default; t=1595520708;
+        bh=UwNbjNnkRhPtN3M1FcHhf18EPEdkbGS8hia36IkGCMU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=0+JgSJk1dXhhIMv0nAOS2nDA1d724WZmuJsOZuKsCI2bSawYdcMTMe1MLG+C72u8O
-         s2l0ecLkuJd3yFX8AteP06ydgbYdprPLGMKL/gCsuGvbMHaCukAgG5ek/uk4jRDcMF
-         kRmvO0NowMo++AH6lrhBzjfcuHUncWxykhGvW/gQ=
-Date:   Fri, 24 Jul 2020 00:55:31 +0900
+        b=KTAu2n/tep3Ope7nKjpIkD+hDh2cBrQhD+vCOEIs3a+CvHULRCInnNBPVRtiJjVFz
+         y2b0cdYj8JDxlEzZaYRf3gdCEFZ2VHlj9ynUF6u0mFAZJRGgFPQzDsuL1mPD6bhOB6
+         bQrPjm1rSyM1gVdo1QEcqD83BrODAPLuHymSTkTU=
+Date:   Fri, 24 Jul 2020 01:11:43 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
@@ -39,14 +39,14 @@ Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
         Guo Ren <guoren@linux.alibaba.com>,
         Pekka Enberg <penberg@kernel.org>
 Subject: Re: [PATCH v3 6/7] riscv: Add KPROBES_ON_FTRACE supported
-Message-Id: <20200724005531.e1fe3c7f024886a1a04e16eb@kernel.org>
-In-Reply-To: <CAJF2gTTM6fsK5A9CKFkEhCC3hdsM8bCfBh613ohvM50fTLc5cw@mail.gmail.com>
+Message-Id: <20200724011143.a2dd2e231411e46edde2e8c4@kernel.org>
+In-Reply-To: <CAJF2gTR4319vMy9hStLeR3+42WG4opnsZTaGdN__Bm23VCHjBg@mail.gmail.com>
 References: <1594683562-68149-1-git-send-email-guoren@kernel.org>
         <1594683562-68149-7-git-send-email-guoren@kernel.org>
         <20200714203757.512ce7fb5fa61a88b1dbb2f3@kernel.org>
         <CAJF2gTSMUnHfv3GLj_TGT2dJkKq2zbEsnbPKREiq5i6PPjyTBg@mail.gmail.com>
         <20200721222701.3074315f6a9f6c42c5963f40@kernel.org>
-        <CAJF2gTTM6fsK5A9CKFkEhCC3hdsM8bCfBh613ohvM50fTLc5cw@mail.gmail.com>
+        <CAJF2gTR4319vMy9hStLeR3+42WG4opnsZTaGdN__Bm23VCHjBg@mail.gmail.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,10 +56,51 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, 22 Jul 2020 16:39:53 +0800
+On Wed, 22 Jul 2020 21:31:20 +0800
 Guo Ren <guoren@kernel.org> wrote:
 
 > Hi Masami,
+> 
+> Current riscv ftrace_caller utilize fp(s0) - 8 in stack to get ra of
+> function, eg:
+> foo:
+>    2bb0:       7119                    addi    sp,sp,-128
+>     2bb2:       f8a2                    sd      s0,112(sp)
+>     2bb4:       fc86                    sd      ra,120(sp)
+> ...
+>     2bc4:       0100                    addi    s0,sp,128
+> ...
+> 0000000000002bca <.LVL828>:
+>     2bca:       00000097                auipc   ra,0x0
+>     2bce:       000080e7                jalr    ra # 2bca <.LVL828> //_mcount
+> 
+> So just put two nops before prologue of function isn't enough, because
+> riscv don't like arm64 which could use x9-x18 reserved regs to pass
+> ra(x30).
+>     | mov       x9, x30
+>     | bl        <ftrace-entry>
+> If the benefit is just making a kprobe on function symbol address to
+> prevent disassembling, I'll delay this feature.
+
+I recommend that. This feature has to involve ftrace and gcc, so
+it is better to split it from this series.
+
+> 
+> 
+> I also have a look at HAVE_FENTRY & HAVE_NOP_MCOUNT. Seems it just
+> avoid using scripts/recordmcount.pl script and directly generate nops
+> for _mcount.
+
+Right.
+
+> It's different from -fpatchable-function-entry=2 which generating nops
+> before function prologue in arm64, isn't it?
+
+Yes, fentry is for x86, but -fpatchable-function-entry=2 is making a
+placeholder with nop at the entry of the functions for direct patching.
+
+Thank you,
+
 > 
 > On Tue, Jul 21, 2020 at 9:27 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > >
@@ -133,14 +174,20 @@ Guo Ren <guoren@kernel.org> wrote:
 > >
 > > I think if RISC-V already support "-fpatchable-function-entry=2" option on
 > > GCC, you can easily enable it as same as arm64. See https://lkml.org/lkml/2019/6/18/648
-> the link is:
-> [PATCH 0/7] powerpc/ftrace: Patch out -mprofile-kernel instructions
+> >
+> > Thank you,
+> >
+> > --
+> > Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> 
+> 
+> -- 
+> Best Regards
+>  Guo Ren
+> 
+> ML: https://lore.kernel.org/linux-csky/
 
-Oops, sorry.
-
-https://lore.kernel.org/linux-arm-kernel/20191225172625.69811b3e@xhacker.debian/
-
-this should be the right one.
 
 -- 
 Masami Hiramatsu <mhiramat@kernel.org>
