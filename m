@@ -2,108 +2,104 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3022323D465
-	for <lists+linux-csky@lfdr.de>; Thu,  6 Aug 2020 02:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA9223DCA4
+	for <lists+linux-csky@lfdr.de>; Thu,  6 Aug 2020 18:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgHFAKQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 5 Aug 2020 20:10:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37042 "EHLO mail.kernel.org"
+        id S1729136AbgHFQyp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 6 Aug 2020 12:54:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56228 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725779AbgHFAKO (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 5 Aug 2020 20:10:14 -0400
-Received: from guoren-Inspiron-7460.lan (unknown [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1729560AbgHFQuc (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 6 Aug 2020 12:50:32 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A089B22CA1;
-        Thu,  6 Aug 2020 00:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596672613;
-        bh=iU0ZUkOjTpHNy95m8ekQCDxNWW2NYU6kn26pzXQoobQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Mmt0yIpqytj8FppbALT5zLqthA8Qey1R/hquzYIcyx20zy0N08Zf9vYvMegcOWV1H
-         7DDm6+Iocg7fXDNg7hr/C+Vc4XPGeWVi0WSCBfO7w4VXzRRcUrt15H3BNRL4EpW6RM
-         QmVKplVmse1UAQwRn6dNLWz14pnSSC0hE4oolqog=
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky updates for v5.9-rc1
-Date:   Thu,  6 Aug 2020 08:10:01 +0800
-Message-Id: <1596672601-8227-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        by mail.kernel.org (Postfix) with ESMTPSA id 251B923134;
+        Thu,  6 Aug 2020 15:48:52 +0000 (UTC)
+Date:   Thu, 6 Aug 2020 11:48:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     guoren@kernel.org
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] ftrace: Fixup lockdep assert held of text_mutex
+Message-ID: <20200806114850.051f84d0@oasis.local.home>
+In-Reply-To: <1596725454-16245-1-git-send-email-guoren@kernel.org>
+References: <1596725454-16245-1-git-send-email-guoren@kernel.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Linus,
+On Thu,  6 Aug 2020 14:50:54 +0000
+guoren@kernel.org wrote:
 
-Please pull csky updates for v5.9-rc1:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> The function ftrace_process_locs() will modify text code, so we
+> should give a text_mutex lock. Because some arch's patch code
+> will assert held of text_mutex even during start_kernel->
+> ftrace_init().
 
-The following changes since commit 92ed301919932f777713b9172e525674157e983d:
+NAK.
 
-  Linux 5.8-rc7 (2020-07-26 14:14:06 -0700)
+This looks like a bug in the lockdep_assert_held() in whatever arch
+(riscv) is running.
 
-are available in the git repository at:
+> 
+> backtrace log:
+>    assert by lockdep_assert_held(&text_mutex)
+> 0  patch_insn_write (addr=0xffffffe0000010fc <set_reset_devices+10>, insn=0xffffffe001203eb8, len=8) at arch/riscv/kernel/patch.c:63
+> 1  0xffffffe0002042ec in patch_text_nosync (addr=<optimized out>, insns=<optimized out>, len=<optimized out>) at arch/riscv/kernel/patch.c:93
+> 2  0xffffffe00020628e in __ftrace_modify_call (hook_pos=<optimized out>, target=<optimized out>, enable=<optimized out>) at arch/riscv/kernel/ftrace.c:68
+> 3  0xffffffe0002063c0 in ftrace_make_nop (mod=<optimized out>, rec=0xffffffe001221c70 <text_mutex+96>, addr=18446743936272720288) at arch/riscv/kernel/ftrace.c:97
+> 4  0xffffffe0002b13f0 in ftrace_init_nop (rec=<optimized out>, mod=<optimized out>) at ./include/linux/ftrace.h:647
+> 5  ftrace_nop_initialize (rec=<optimized out>, mod=<optimized out>) at kernel/trace/ftrace.c:2619
+> 6  ftrace_update_code (new_pgs=<optimized out>, mod=<optimized out>) at kernel/trace/ftrace.c:3063
+> 7  ftrace_process_locs (mod=<optimized out>, start=<optimized out>, end=<optimized out>) at kernel/trace/ftrace.c:6154
+> 8  0xffffffe00000b6e6 in ftrace_init () at kernel/trace/ftrace.c:6715
+> 9  0xffffffe000001b48 in start_kernel () at init/main.c:888
+> 10 0xffffffe0000010a8 in _start_kernel () at arch/riscv/kernel/head.S:247
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> ---
+>  kernel/trace/ftrace.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 1903b80..4b48b88 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/uaccess.h>
+>  #include <linux/bsearch.h>
+>  #include <linux/module.h>
+> +#include <linux/memory.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/sysctl.h>
+>  #include <linux/slab.h>
+> @@ -6712,9 +6713,11 @@ void __init ftrace_init(void)
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.9-rc1
+ftrace_init() is called before SMP is initialized. Nothing else should
+be running here. That means grabbing a mutex is useless.
 
-for you to fetch changes up to bdcd93ef9afb42a6051e472fa62c693b1f9edbd8:
+-- Steve
 
-  csky: Add context tracking support (2020-08-01 08:17:51 +0000)
 
-----------------------------------------------------------------
-arch/csky patches for 5.9-rc1
+>  
+>  	last_ftrace_enabled = ftrace_enabled = 1;
+>  
+> +	mutex_lock(&text_mutex);
+>  	ret = ftrace_process_locs(NULL,
+>  				  __start_mcount_loc,
+>  				  __stop_mcount_loc);
+> +	mutex_unlock(&text_mutex);
+>  
+>  	pr_info("ftrace: allocated %ld pages with %ld groups\n",
+>  		ftrace_number_of_pages, ftrace_number_of_groups);
 
-Features:
- - seccomp-filter
- - err-injection
- - top-down&random mmap-layout
- - irq_work
- - show_ipi
- - context-tracking)
-
-Fixup & Optimize:
- - kprobe_on_ftrace
- - optimize panic print
-
-----------------------------------------------------------------
-Guo Ren (12):
-      csky: Add SECCOMP_FILTER supported
-      csky: Add cpu feature register hint for smp
-      csky: Fixup duplicated restore sp in RESTORE_REGS_FTRACE
-      csky: Fixup kprobes handler couldn't change pc
-      csky: Add support for function error injection
-      csky: Optimize the trap processing flow
-      csky: Use top-down mmap layout
-      csky: Set CONFIG_NR_CPU 4 as default
-      csky: Fixup warning by EXPORT_SYMBOL(kmap)
-      csky: Add irq_work support
-      csky: Add arch_show_interrupts for IPI interrupts
-      csky: Add context tracking support
-
-Tobias Klauser (1):
-      csky: remove unusued thread_saved_pc and *_segments functions/macros
-
- arch/csky/Kconfig                             |  29 +++-
- arch/csky/abiv2/inc/abi/entry.h               |   3 -
- arch/csky/abiv2/mcount.S                      |   4 +-
- arch/csky/include/asm/Kbuild                  |   1 +
- arch/csky/include/asm/bug.h                   |   3 +-
- arch/csky/include/asm/irq_work.h              |  11 ++
- arch/csky/include/asm/processor.h             |   6 -
- arch/csky/include/asm/ptrace.h                |   7 +
- arch/csky/include/asm/thread_info.h           |   2 +-
- arch/csky/kernel/entry.S                      |  28 ++++
- arch/csky/kernel/process.c                    |  10 --
- arch/csky/kernel/ptrace.c                     |  37 +----
- arch/csky/kernel/smp.c                        |  62 ++++++-
- arch/csky/kernel/traps.c                      | 223 +++++++++++++++++---------
- arch/csky/lib/Makefile                        |   1 +
- arch/csky/lib/error-inject.c                  |  10 ++
- arch/csky/mm/fault.c                          |  10 +-
- arch/csky/mm/highmem.c                        |   2 -
- tools/testing/selftests/seccomp/seccomp_bpf.c |  13 +-
- 19 files changed, 319 insertions(+), 143 deletions(-)
- create mode 100644 arch/csky/include/asm/irq_work.h
- create mode 100644 arch/csky/lib/error-inject.c
