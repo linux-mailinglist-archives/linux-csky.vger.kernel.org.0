@@ -2,267 +2,180 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6988423E515
-	for <lists+linux-csky@lfdr.de>; Fri,  7 Aug 2020 02:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5799623E613
+	for <lists+linux-csky@lfdr.de>; Fri,  7 Aug 2020 04:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbgHGAYJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 6 Aug 2020 20:24:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58378 "EHLO mail.kernel.org"
+        id S1726058AbgHGC7b (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 6 Aug 2020 22:59:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43950 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725947AbgHGAYI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 6 Aug 2020 20:24:08 -0400
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+        id S1726038AbgHGC7a (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 6 Aug 2020 22:59:30 -0400
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 451A120855;
-        Fri,  7 Aug 2020 00:24:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D1D7122D01;
+        Fri,  7 Aug 2020 02:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596759847;
-        bh=WT5/ZbSgfaderB5Ge8RH11JapqNx2uuvd9h0qdPCn0Q=;
+        s=default; t=1596769170;
+        bh=rohTHTvBnOfXgLz546XmcHOe65GGSth3l9B42BKK52U=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pbyqJOherK/amtB8m6wkfGNCsPAGHSpqqsdWgPrK4rFkIwLPSGdiFRpHmh5hZQcDh
-         x6vrKU+OKddRmM38eMZDXtYrpNwQ9Wk4bvgSrCGRTVfWnxFhie3692hpD2L5qS6uBW
-         wIYQSgfe1VCvvMtcn7XPrbWvCYtl5O+mAK35TPao=
-Received: by mail-lj1-f180.google.com with SMTP id g6so280235ljn.11;
-        Thu, 06 Aug 2020 17:24:07 -0700 (PDT)
-X-Gm-Message-State: AOAM532Hdvjugct9HdIgWVWEwGO3FacVjnbeX/fm8Kv+2F1j+gXbp9A6
-        WKc/qaz3MRB4JIUiw+o5Nou1ewQNp5rUuzqrWYc=
-X-Google-Smtp-Source: ABdhPJzYkrXyPAnRh91DPhVQkBmh2Vbe1E41s/eKJXEW5cF0NiWNfulpn7WC1neJ1hRZV+dLboTfh5pUycZovzdhHwo=
-X-Received: by 2002:a2e:86d8:: with SMTP id n24mr4622806ljj.377.1596759845398;
- Thu, 06 Aug 2020 17:24:05 -0700 (PDT)
+        b=LGUOG4xAAqNl5JK0ekaICDXc6dnE2jHVF1DS1L3bqOvRtbENdMSjKbKoas2QLjvnq
+         0V4Qhpzk4T0E/en+jHOc/4WRkHTexxWdMm7lw1EqJWDQhheo7OG9eMd435oFzsXgqq
+         bCfbshAUDyck54ZmI6PyryxbkdaXV7S2JWyDuA1U=
+Received: by mail-lj1-f178.google.com with SMTP id z14so626443ljm.1;
+        Thu, 06 Aug 2020 19:59:29 -0700 (PDT)
+X-Gm-Message-State: AOAM531oCDGQ7gGH1IIpYoFfcPr0dXBa+jPy5G5AxIGrIGVo/A9FuZHD
+        Yt4vbUJC8zHVJNj+LOk3IE7WoyfKjRS810fAIHQ=
+X-Google-Smtp-Source: ABdhPJy3cyMLEpLQp+e9nmXl1yojXJ9/wlMyQ5xgEtncZI62/v4i1cFVkr3ygiVhv/Sk+csRIK1JhBPw/s7GD1hAbPs=
+X-Received: by 2002:a2e:2f02:: with SMTP id v2mr4659800ljv.79.1596769167982;
+ Thu, 06 Aug 2020 19:59:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200805104146.GP2674@hirez.programming.kicks-ass.net> <20200805104415.GA35926@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200805104415.GA35926@hirez.programming.kicks-ass.net>
+References: <1596725454-16245-1-git-send-email-guoren@kernel.org> <20200806114850.051f84d0@oasis.local.home>
+In-Reply-To: <20200806114850.051f84d0@oasis.local.home>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 7 Aug 2020 08:23:53 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSWCE-MCpwbiax79njqUUSQgLo_w=7SF7ejWavQQKCKZQ@mail.gmail.com>
-Message-ID: <CAJF2gTSWCE-MCpwbiax79njqUUSQgLo_w=7SF7ejWavQQKCKZQ@mail.gmail.com>
-Subject: Re: csky: smp_mb__after_spinlock
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ren Guo <ren_guo@c-sky.com>,
+Date:   Fri, 7 Aug 2020 10:59:16 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRufu561K_8p6KS0C=2xTq+YdOfGLbFqkuuiapSk3_cAQ@mail.gmail.com>
+Message-ID: <CAJF2gTRufu561K_8p6KS0C=2xTq+YdOfGLbFqkuuiapSk3_cAQ@mail.gmail.com>
+Subject: Re: [PATCH] ftrace: Fixup lockdep assert held of text_mutex
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        Will Deacon <will@kernel.org>
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
-
-On Thu, Aug 6, 2020 at 3:55 AM <peterz@infradead.org> wrote:
+On Thu, Aug 6, 2020 at 11:48 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> On Wed, Aug 05, 2020 at 12:41:46PM +0200, peterz@infradead.org wrote:
-> > Hi,
+> On Thu,  6 Aug 2020 14:50:54 +0000
+> guoren@kernel.org wrote:
+>
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > While doing an audit of smp_mb__after_spinlock, I found that csky
-> > defines it, why?
-> >
-> > CSKY only has smp_mb(), it doesn't override __atomic_acquire_fence or
-> > otherwise special cases it's atomic*_acquire() primitives. It has an
-> > explicit smp_mb() in its arch_spin_lock().
+> > The function ftrace_process_locs() will modify text code, so we
+> > should give a text_mutex lock. Because some arch's patch code
+> > will assert held of text_mutex even during start_kernel->
+> > ftrace_init().
 >
-> Also, why have two implementations of all the locking ?
+> NAK.
 >
-> ---
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index bd31ab12f77d..332738e93e57 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -7,7 +7,7 @@ config CSKY
->         select ARCH_HAS_SYNC_DMA_FOR_CPU
->         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->         select ARCH_USE_BUILTIN_BSWAP
-> -       select ARCH_USE_QUEUED_RWLOCKS if NR_CPUS>2
-> +       select ARCH_USE_QUEUED_RWLOCKS
->         select ARCH_WANT_FRAME_POINTERS if !CPU_CK610
->         select COMMON_CLK
->         select CLKSRC_MMIO
-> diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
-> index 7cf3f2b34cea..69f5aa249c5f 100644
-> --- a/arch/csky/include/asm/spinlock.h
-> +++ b/arch/csky/include/asm/spinlock.h
-> @@ -6,8 +6,6 @@
->  #include <linux/spinlock_types.h>
->  #include <asm/barrier.h>
->
-> -#ifdef CONFIG_QUEUED_RWLOCKS
-> -
->  /*
->   * Ticket-based spin-locking.
->   */
-> @@ -88,169 +86,4 @@ static inline int arch_spin_is_contended(arch_spinlock_t *lock)
->
->  #include <asm/qrwlock.h>
->
-> -/* See include/linux/spinlock.h */
-> -#define smp_mb__after_spinlock()       smp_mb()
-> -
-> -#else /* CONFIG_QUEUED_RWLOCKS */
-> -
-> -/*
-> - * Test-and-set spin-locking.
-> - */
-> -static inline void arch_spin_lock(arch_spinlock_t *lock)
-> -{
-> -       u32 *p = &lock->lock;
-> -       u32 tmp;
-> -
-> -       asm volatile (
-> -               "1:     ldex.w          %0, (%1) \n"
-> -               "       bnez            %0, 1b   \n"
-> -               "       movi            %0, 1    \n"
-> -               "       stex.w          %0, (%1) \n"
-> -               "       bez             %0, 1b   \n"
-> -               : "=&r" (tmp)
-> -               : "r"(p)
-> -               : "cc");
-> -       smp_mb();
-> -}
-> -
-> -static inline void arch_spin_unlock(arch_spinlock_t *lock)
-> -{
-> -       smp_mb();
-> -       WRITE_ONCE(lock->lock, 0);
-> -}
-> -
-> -static inline int arch_spin_trylock(arch_spinlock_t *lock)
-> -{
-> -       u32 *p = &lock->lock;
-> -       u32 tmp;
-> -
-> -       asm volatile (
-> -               "1:     ldex.w          %0, (%1) \n"
-> -               "       bnez            %0, 2f   \n"
-> -               "       movi            %0, 1    \n"
-> -               "       stex.w          %0, (%1) \n"
-> -               "       bez             %0, 1b   \n"
-> -               "       movi            %0, 0    \n"
-> -               "2:                              \n"
-> -               : "=&r" (tmp)
-> -               : "r"(p)
-> -               : "cc");
-> -
-> -       if (!tmp)
-> -               smp_mb();
-> -
-> -       return !tmp;
-> -}
-> -
-> -#define arch_spin_is_locked(x) (READ_ONCE((x)->lock) != 0)
-> -
-> -/*
-> - * read lock/unlock/trylock
-> - */
-> -static inline void arch_read_lock(arch_rwlock_t *lock)
-> -{
-> -       u32 *p = &lock->lock;
-> -       u32 tmp;
-> -
-> -       asm volatile (
-> -               "1:     ldex.w          %0, (%1) \n"
-> -               "       blz             %0, 1b   \n"
-> -               "       addi            %0, 1    \n"
-> -               "       stex.w          %0, (%1) \n"
-> -               "       bez             %0, 1b   \n"
-> -               : "=&r" (tmp)
-> -               : "r"(p)
-> -               : "cc");
-> -       smp_mb();
-> -}
-> -
-> -static inline void arch_read_unlock(arch_rwlock_t *lock)
-> -{
-> -       u32 *p = &lock->lock;
-> -       u32 tmp;
-> -
-> -       smp_mb();
-> -       asm volatile (
-> -               "1:     ldex.w          %0, (%1) \n"
-> -               "       subi            %0, 1    \n"
-> -               "       stex.w          %0, (%1) \n"
-> -               "       bez             %0, 1b   \n"
-> -               : "=&r" (tmp)
-> -               : "r"(p)
-> -               : "cc");
-> -}
-> -
-> -static inline int arch_read_trylock(arch_rwlock_t *lock)
-> -{
-> -       u32 *p = &lock->lock;
-> -       u32 tmp;
-> -
-> -       asm volatile (
-> -               "1:     ldex.w          %0, (%1) \n"
-> -               "       blz             %0, 2f   \n"
-> -               "       addi            %0, 1    \n"
-> -               "       stex.w          %0, (%1) \n"
-> -               "       bez             %0, 1b   \n"
-> -               "       movi            %0, 0    \n"
-> -               "2:                              \n"
-> -               : "=&r" (tmp)
-> -               : "r"(p)
-> -               : "cc");
-> -
-> -       if (!tmp)
-> -               smp_mb();
-> -
-> -       return !tmp;
-> -}
-> -
-> -/*
-> - * write lock/unlock/trylock
-> - */
-> -static inline void arch_write_lock(arch_rwlock_t *lock)
-> -{
-> -       u32 *p = &lock->lock;
-> -       u32 tmp;
-> -
-> -       asm volatile (
-> -               "1:     ldex.w          %0, (%1) \n"
-> -               "       bnez            %0, 1b   \n"
-> -               "       subi            %0, 1    \n"
-> -               "       stex.w          %0, (%1) \n"
-> -               "       bez             %0, 1b   \n"
-> -               : "=&r" (tmp)
-> -               : "r"(p)
-> -               : "cc");
-> -       smp_mb();
-> -}
-> -
-> -static inline void arch_write_unlock(arch_rwlock_t *lock)
-> -{
-> -       smp_mb();
-> -       WRITE_ONCE(lock->lock, 0);
-> -}
-> -
-> -static inline int arch_write_trylock(arch_rwlock_t *lock)
-> -{
-> -       u32 *p = &lock->lock;
-> -       u32 tmp;
-> -
-> -       asm volatile (
-> -               "1:     ldex.w          %0, (%1) \n"
-> -               "       bnez            %0, 2f   \n"
-> -               "       subi            %0, 1    \n"
-> -               "       stex.w          %0, (%1) \n"
-> -               "       bez             %0, 1b   \n"
-> -               "       movi            %0, 0    \n"
-> -               "2:                              \n"
-> -               : "=&r" (tmp)
-> -               : "r"(p)
-> -               : "cc");
-> -
-> -       if (!tmp)
-> -               smp_mb();
-> -
-> -       return !tmp;
-> -}
-> -
-> -#endif /* CONFIG_QUEUED_RWLOCKS */
->  #endif /* __ASM_CSKY_SPINLOCK_H */
+> This looks like a bug in the lockdep_assert_held() in whatever arch
+> (riscv) is running.
+Seems you think it's a bug of arch implementation with the wrong usage
+of text_mutex?
 
+Also @riscv maintainer,
+How about modifying it in riscv's code? we still need to solve it.
+
+----------------
+diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+index ace8a6e..fb266c3 100644
+--- a/arch/riscv/include/asm/ftrace.h
++++ b/arch/riscv/include/asm/ftrace.h
+@@ -23,6 +23,12 @@ static inline unsigned long
+ftrace_call_adjust(unsigned long addr)
+
+ struct dyn_arch_ftrace {
+ };
++
++#ifdef CONFIG_DYNAMIC_FTRACE
++struct dyn_ftrace;
++int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
++#define ftrace_init_nop ftrace_init_nop
++#endif
+ #endif
+
+ #ifdef CONFIG_DYNAMIC_FTRACE
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 2ff63d0..9e9f7c0 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -97,6 +97,17 @@ int ftrace_make_nop(struct module *mod, struct
+dyn_ftrace *rec,
+        return __ftrace_modify_call(rec->ip, addr, false);
+ }
+
++int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
++{
++       int ret;
++
++       mutex_lock(&text_mutex);
++       ret = ftrace_make_nop(mod, rec, MCOUNT_ADDR);
++       mutex_unlock(&text_mutex);
++
++       return ret;
++}
++
+ int ftrace_update_ftrace_func(ftrace_func_t func)
+ {
+        int ret = __ftrace_modify_call((unsigned long)&ftrace_call,
+-------------------
+
+>
+> >
+> > backtrace log:
+> >    assert by lockdep_assert_held(&text_mutex)
+> > 0  patch_insn_write (addr=0xffffffe0000010fc <set_reset_devices+10>, insn=0xffffffe001203eb8, len=8) at arch/riscv/kernel/patch.c:63
+> > 1  0xffffffe0002042ec in patch_text_nosync (addr=<optimized out>, insns=<optimized out>, len=<optimized out>) at arch/riscv/kernel/patch.c:93
+> > 2  0xffffffe00020628e in __ftrace_modify_call (hook_pos=<optimized out>, target=<optimized out>, enable=<optimized out>) at arch/riscv/kernel/ftrace.c:68
+> > 3  0xffffffe0002063c0 in ftrace_make_nop (mod=<optimized out>, rec=0xffffffe001221c70 <text_mutex+96>, addr=18446743936272720288) at arch/riscv/kernel/ftrace.c:97
+> > 4  0xffffffe0002b13f0 in ftrace_init_nop (rec=<optimized out>, mod=<optimized out>) at ./include/linux/ftrace.h:647
+> > 5  ftrace_nop_initialize (rec=<optimized out>, mod=<optimized out>) at kernel/trace/ftrace.c:2619
+> > 6  ftrace_update_code (new_pgs=<optimized out>, mod=<optimized out>) at kernel/trace/ftrace.c:3063
+> > 7  ftrace_process_locs (mod=<optimized out>, start=<optimized out>, end=<optimized out>) at kernel/trace/ftrace.c:6154
+> > 8  0xffffffe00000b6e6 in ftrace_init () at kernel/trace/ftrace.c:6715
+> > 9  0xffffffe000001b48 in start_kernel () at init/main.c:888
+> > 10 0xffffffe0000010a8 in _start_kernel () at arch/riscv/kernel/head.S:247
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > ---
+> >  kernel/trace/ftrace.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> > index 1903b80..4b48b88 100644
+> > --- a/kernel/trace/ftrace.c
+> > +++ b/kernel/trace/ftrace.c
+> > @@ -26,6 +26,7 @@
+> >  #include <linux/uaccess.h>
+> >  #include <linux/bsearch.h>
+> >  #include <linux/module.h>
+> > +#include <linux/memory.h>
+> >  #include <linux/ftrace.h>
+> >  #include <linux/sysctl.h>
+> >  #include <linux/slab.h>
+> > @@ -6712,9 +6713,11 @@ void __init ftrace_init(void)
+>
+> ftrace_init() is called before SMP is initialized. Nothing else should
+> be running here. That means grabbing a mutex is useless.
+I don't agree, ftrace_init are modifying kernel text, so we should
+give the lock of text_mutex to keep semantic consistency.
+
+
+>
+> -- Steve
+>
+>
+> >
+> >       last_ftrace_enabled = ftrace_enabled = 1;
+> >
+> > +     mutex_lock(&text_mutex);
+> >       ret = ftrace_process_locs(NULL,
+> >                                 __start_mcount_loc,
+> >                                 __stop_mcount_loc);
+> > +     mutex_unlock(&text_mutex);
+> >
+> >       pr_info("ftrace: allocated %ld pages with %ld groups\n",
+> >               ftrace_number_of_pages, ftrace_number_of_groups);
+>
 
 
 -- 
