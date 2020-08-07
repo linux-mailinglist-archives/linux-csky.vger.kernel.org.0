@@ -2,92 +2,87 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7164623DEDF
-	for <lists+linux-csky@lfdr.de>; Thu,  6 Aug 2020 19:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466EF23E513
+	for <lists+linux-csky@lfdr.de>; Fri,  7 Aug 2020 02:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729339AbgHFRdm (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 6 Aug 2020 13:33:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55390 "EHLO mail.kernel.org"
+        id S1726242AbgHGAWv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 6 Aug 2020 20:22:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58024 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729731AbgHFRcF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 6 Aug 2020 13:32:05 -0400
-Received: from localhost.localdomain (unknown [89.208.247.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S1726149AbgHGAWv (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 6 Aug 2020 20:22:51 -0400
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 09D5523123;
-        Thu,  6 Aug 2020 14:52:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DDC1122CA1;
+        Fri,  7 Aug 2020 00:22:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596725526;
-        bh=i5ANlpqR018YR0d6q0AnTMbQwaCSVTrwSPCu4a3h7lc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NWfRvtbaky3m3FtA0y3zzCKqvokh4wOi44r6qO8lyx6VnY3sSO1XUFafedRF6Eh8Y
-         up9hJkXBv3MqNDx1IBqInmV8ifJpbXr7ybPfA/nitNWGSwgx/f8Clc9hmt/420yBDE
-         Pyg1GFqDe84WMyVVFL2oHiVYusgeLw25WfXIHINE=
-From:   guoren@kernel.org
-To:     guoren@kernel.org, rostedt@goodmis.org, mingo@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] ftrace: Fixup lockdep assert held of text_mutex
-Date:   Thu,  6 Aug 2020 14:50:54 +0000
-Message-Id: <1596725454-16245-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        s=default; t=1596759770;
+        bh=pkcY1cimNMDbQ9RVzs4TpVS5NVc1IMyxBAvdaany3Ng=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CBY5GhyfGS56YW17PsneEppDyAsgHKiXTuc4R6MJRFpNeCl4vnKNXGZq4BDlX4UvG
+         vZ0FVCF8FV76orHhhKOfPpGRploLz4Hsn/gfykUNLZ5mZ/Fqq9eZEzB4LOUDrLPmpM
+         Nu/Ac/qbC1DEg+/xTIAUmqz1pGsnE6HyHvNDiXc4=
+Received: by mail-lf1-f51.google.com with SMTP id j22so104228lfm.2;
+        Thu, 06 Aug 2020 17:22:49 -0700 (PDT)
+X-Gm-Message-State: AOAM5321kAYb12fjSqpBSnXpoW7oBL1+8Z8KlSCuSEdnN+Tefb5eYdaK
+        bFcCS/TDYrCYT7MPY8VPRCUUjDTIRUC3yQqepUU=
+X-Google-Smtp-Source: ABdhPJyvyRLn9ReqXtclDsN0AdxBbUGkzogNbRrTyBVZBSevpv0l7yNHrrJvXec12YOi9ul/FEn/LKGODqJ0zC26mI4=
+X-Received: by 2002:ac2:44d4:: with SMTP id d20mr5041848lfm.137.1596759767874;
+ Thu, 06 Aug 2020 17:22:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200805104146.GP2674@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200805104146.GP2674@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 7 Aug 2020 08:22:36 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRqi-HuxJsMOjHTpaf33f1L9LypF-FkWo8OZm4SP12Hnw@mail.gmail.com>
+Message-ID: <CAJF2gTRqi-HuxJsMOjHTpaf33f1L9LypF-FkWo8OZm4SP12Hnw@mail.gmail.com>
+Subject: Re: csky: smp_mb__after_spinlock
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ren Guo <ren_guo@c-sky.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Hi Peter,
 
-The function ftrace_process_locs() will modify text code, so we
-should give a text_mutex lock. Because some arch's patch code
-will assert held of text_mutex even during start_kernel->
-ftrace_init().
+On Thu, Aug 6, 2020 at 3:53 AM <peterz@infradead.org> wrote:
+>
+> Hi,
+>
+> While doing an audit of smp_mb__after_spinlock, I found that csky
+> defines it, why?
+>
+> CSKY only has smp_mb(), it doesn't override __atomic_acquire_fence or
+> otherwise special cases it's atomic*_acquire() primitives. It has an
+> explicit smp_mb() in its arch_spin_lock().
 
-backtrace log:
-   assert by lockdep_assert_held(&text_mutex)
-0  patch_insn_write (addr=0xffffffe0000010fc <set_reset_devices+10>, insn=0xffffffe001203eb8, len=8) at arch/riscv/kernel/patch.c:63
-1  0xffffffe0002042ec in patch_text_nosync (addr=<optimized out>, insns=<optimized out>, len=<optimized out>) at arch/riscv/kernel/patch.c:93
-2  0xffffffe00020628e in __ftrace_modify_call (hook_pos=<optimized out>, target=<optimized out>, enable=<optimized out>) at arch/riscv/kernel/ftrace.c:68
-3  0xffffffe0002063c0 in ftrace_make_nop (mod=<optimized out>, rec=0xffffffe001221c70 <text_mutex+96>, addr=18446743936272720288) at arch/riscv/kernel/ftrace.c:97
-4  0xffffffe0002b13f0 in ftrace_init_nop (rec=<optimized out>, mod=<optimized out>) at ./include/linux/ftrace.h:647
-5  ftrace_nop_initialize (rec=<optimized out>, mod=<optimized out>) at kernel/trace/ftrace.c:2619
-6  ftrace_update_code (new_pgs=<optimized out>, mod=<optimized out>) at kernel/trace/ftrace.c:3063
-7  ftrace_process_locs (mod=<optimized out>, start=<optimized out>, end=<optimized out>) at kernel/trace/ftrace.c:6154
-8  0xffffffe00000b6e6 in ftrace_init () at kernel/trace/ftrace.c:6715
-9  0xffffffe000001b48 in start_kernel () at init/main.c:888
-10 0xffffffe0000010a8 in _start_kernel () at arch/riscv/kernel/head.S:247
+Yes, csky didn't implement ACQUIRE/RELEASE in spinlock.h. So it is a
+redundant and side-effect wrong macro, we should remove it to fixup.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
----
- kernel/trace/ftrace.c | 3 +++
- 1 file changed, 3 insertions(+)
+TODO:
+ - implement csky's ACQUIRE/RELEASE barrier
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 1903b80..4b48b88 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -26,6 +26,7 @@
- #include <linux/uaccess.h>
- #include <linux/bsearch.h>
- #include <linux/module.h>
-+#include <linux/memory.h>
- #include <linux/ftrace.h>
- #include <linux/sysctl.h>
- #include <linux/slab.h>
-@@ -6712,9 +6713,11 @@ void __init ftrace_init(void)
- 
- 	last_ftrace_enabled = ftrace_enabled = 1;
- 
-+	mutex_lock(&text_mutex);
- 	ret = ftrace_process_locs(NULL,
- 				  __start_mcount_loc,
- 				  __stop_mcount_loc);
-+	mutex_unlock(&text_mutex);
- 
- 	pr_info("ftrace: allocated %ld pages with %ld groups\n",
- 		ftrace_number_of_pages, ftrace_number_of_groups);
--- 
-2.7.4
+> Also, why have two implementations of all the locking?
 
+I just kept my baby's codes :P. Now, we could remove it and just keep
+the ticket's one.
+
+BTW, I want to change the spinlock to qspinlock, but csky only has
+32-bit atomic operation in hardware.
+
+Any plan to deal with this in spinlock?
+
+Maybe for the embedded scenario, qspinlock seems a bit heavy, are any
+tickets-like comm spinlock infrastructures in the plan?
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
