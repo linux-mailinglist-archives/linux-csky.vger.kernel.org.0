@@ -2,96 +2,161 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFE0245801
-	for <lists+linux-csky@lfdr.de>; Sun, 16 Aug 2020 16:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE182466A0
+	for <lists+linux-csky@lfdr.de>; Mon, 17 Aug 2020 14:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729585AbgHPObD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 16 Aug 2020 10:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729532AbgHPO3V (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 16 Aug 2020 10:29:21 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB16DC061365
-        for <linux-csky@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id k20so11864566wmi.5
-        for <linux-csky@vger.kernel.org>; Sun, 16 Aug 2020 07:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
-         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
-         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
-         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
-         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
-         yMKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=SAy9D5ri64uhnmUkYTxKQy1b0qkk1y7/MY/BKVxflFTmUsY/efA4wq+3JPyizRLRh2
-         A7C0yLm40chguJ5xtTQP3EDMGAtKlEnj5sTC60bLtJh8e6MdED8mzJICXPEyGoyKbuct
-         cFbsvKMcA+f9MoGo28B4Iafjs+kNrYRn/lcTU5O9yWykvDH6AiyLcDYZGqye8jjOzFBg
-         lOPOWgzDmZidGHkXI6IlCQaPZyj3yIjw6Z2A6ngi/6TeyMa4mh4yUzF4PfwBxcLXKC7p
-         M9QjNFQiglU1iDrgEwJFlHFJnBAYP8CagglDmr9KT+ubCcpsBZTfgoEsse1H4Nw1gAYu
-         kjtA==
-X-Gm-Message-State: AOAM532kCdAI0/eZAJ8gQ3kisZ+tVcUG2K6higW/ZU6UijUUiViJGfbR
-        EQgtJGqNHmqXo7XRF7IFSdTmnQNvPi/iOriS8bE=
-X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
-X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
- Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
+        id S1728284AbgHQMri (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 17 Aug 2020 08:47:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35594 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726265AbgHQMrh (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 17 Aug 2020 08:47:37 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 09A2A2078D;
+        Mon, 17 Aug 2020 12:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597668456;
+        bh=F6AeSzf4yODe5VfS/mOvvXXrmYEDiPf8ncHRYGsJH9o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WLGovId1pF0RtoS/pxVhAbmTDQxL+wlb/YPyjGm4gwU7EG0HpRde71z58372pAGUI
+         Mk7gmvMtdYHyCuhuPVYr4Pyx7oBmnbh5hBitrBnQEaY0aHR0Q7DRVQHu/ZXD3RYk4h
+         ZjAMCDf1SsweOIV20FDlQU218t5SISXQewIF1Xjo=
+Received: by mail-lj1-f179.google.com with SMTP id h19so17298517ljg.13;
+        Mon, 17 Aug 2020 05:47:35 -0700 (PDT)
+X-Gm-Message-State: AOAM532oqzzG5LP9YEUrK2IZP8tpsDMZcUPpohezb42zbSVCSt0TzE4J
+        Yr6UXzWlaMlVjN6FRh5PIq4hUnJAjDtwgDZCwss=
+X-Google-Smtp-Source: ABdhPJw1v8JVnt2oJ6bSCPU4EmN7bm2mGdNOp7Vx6uxxuEJFPNSCeEfTKhQjsXzu5H3BmOMqhHgKjHmNPG6tmd7ZCYE=
+X-Received: by 2002:a2e:9bc1:: with SMTP id w1mr6581503ljj.79.1597668454259;
+ Mon, 17 Aug 2020 05:47:34 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
- -0700 (PDT)
-Reply-To: sctnld11170@tlen.pl
-From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
-Date:   Sun, 16 Aug 2020 07:28:30 -0700
-Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
-Subject: Hello, Please
-To:     undisclosed-recipients:;
+References: <1594683562-68149-4-git-send-email-guoren@kernel.org> <mhng-296dd63e-71de-4d30-acfb-df374d12388d@palmerdabbelt-glaptop1>
+In-Reply-To: <mhng-296dd63e-71de-4d30-acfb-df374d12388d@palmerdabbelt-glaptop1>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 17 Aug 2020 20:47:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTz_EFpzMoT3yBgCNTNme9_QbQ9b2dGZB3S0F5+O6Fpyw@mail.gmail.com>
+Message-ID: <CAJF2gTTz_EFpzMoT3yBgCNTNme9_QbQ9b2dGZB3S0F5+O6Fpyw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/7] riscv: Fixup kprobes handler couldn't change pc
+To:     Palmer Dabbelt <palmerdabbelt@google.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>, linux-csky@vger.kernel.org,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
+        Bjorn Topel <bjorn.topel@gmail.com>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
---=20
-Dear Friend,
+On Sat, Aug 15, 2020 at 6:36 AM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
+>
+> On Mon, 13 Jul 2020 16:39:18 PDT (-0700), guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The "Changing Execution Path" section in the Documentation/kprobes.txt
+> > said:
+> >
+> > Since kprobes can probe into a running kernel code, it can change the
+> > register set, including instruction pointer.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> > Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> > ---
+> >  arch/riscv/kernel/mcount-dyn.S | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
+> > index 35a6ed7..4b58b54 100644
+> > --- a/arch/riscv/kernel/mcount-dyn.S
+> > +++ b/arch/riscv/kernel/mcount-dyn.S
+> > @@ -123,6 +123,7 @@ ENDPROC(ftrace_caller)
+> >       sd      ra, (PT_SIZE_ON_STACK+8)(sp)
+> >       addi    s0, sp, (PT_SIZE_ON_STACK+16)
+> >
+> > +     sd ra,  PT_EPC(sp)
+> >       sd x1,  PT_RA(sp)
+> >       sd x2,  PT_SP(sp)
+> >       sd x3,  PT_GP(sp)
+>
+> So that's definately not going to be EPC any more.  I'm not sure that field is
+> sanely named, though, as it's really just the PC when it comes to other ptrace
+> stuff.
+>
+> > @@ -157,6 +158,7 @@ ENDPROC(ftrace_caller)
+> >       .endm
+> >
+> >       .macro RESTORE_ALL
+> > +     ld ra,  PT_EPC(sp)
+> >       ld x1,  PT_RA(sp)
+>
+> x1 is ra, so loading it twice doesn't seem reasonable.
+>
+> >       ld x2,  PT_SP(sp)
+> >       ld x3,  PT_GP(sp)
+> > @@ -190,7 +192,6 @@ ENDPROC(ftrace_caller)
+> >       ld x31, PT_T6(sp)
+> >
+> >       ld      s0, (PT_SIZE_ON_STACK)(sp)
+> > -     ld      ra, (PT_SIZE_ON_STACK+8)(sp)
+> >       addi    sp, sp, (PT_SIZE_ON_STACK+16)
+> >       .endm
+>
+> If you're dropping the load you should drop the store above as well.  In
+> general this seems kind of mixed up, both before and after this patch.
 
-I'm Mr. Scott Donald a Successful businessMan dealing with
-Exportation, I got your mail contact through search to let you know my
-intension and my Ugly Situation Am a dying Man here in Los Angeles
-California Hospital Bed in (USA), I Lost my Wife and my only Daughter
-for Covid-19 and I also have a problem in my Health and I can die
-anytime I Know,
+This is a wrong patch, it should be:
 
-I have a project that I am about to hand over to you. and I already
-instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
-of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
-able you
-to give 50% of this fund to Charitable Home in your State and take 50%
-don't think otherwise and why would anybody send someone you barely
-know to help you deliver a message, help me do this for the happiness
-of my soul and for God to mercy me and my Family and give Us a good
-place.
+diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
+index 35a6ed7..d82b8f0 100644
+--- a/arch/riscv/kernel/mcount-dyn.S
++++ b/arch/riscv/kernel/mcount-dyn.S
+@@ -120,10 +120,10 @@ ENDPROC(ftrace_caller)
+        .macro SAVE_ALL
+        addi    sp, sp, -(PT_SIZE_ON_STACK+16)
+        sd      s0, (PT_SIZE_ON_STACK)(sp)
+-       sd      ra, (PT_SIZE_ON_STACK+8)(sp)
+        addi    s0, sp, (PT_SIZE_ON_STACK+16)
 
-please, do as I said there was someone from your State that I deeply
-love so very very much and I miss her so badly I have no means to
-reach any Charitable Home there. that is why I go for a personal
-search of the Country and State and I got your mail contact through
-search to let you know my Bitterness and please, help me is getting
-Dark I ask my Doctor to help me keep you notice failure for me to
-reach you in person Your urgent Response, here is my Doctor Whats-app
-Number for urgent notice +13019692737
+-       sd x1,  PT_RA(sp)
++       sd ra,  PT_EPC(sp)
++       sd ra,  PT_RA(sp)
+        sd x2,  PT_SP(sp)
+        sd x3,  PT_GP(sp)
+        sd x4,  PT_TP(sp)
+@@ -157,7 +157,7 @@ ENDPROC(ftrace_caller)
+        .endm
 
-Hope To Hear From You. I'm sending this email to you for the second
-time yet no response from you.
+        .macro RESTORE_ALL
+-       ld x1,  PT_RA(sp)
++       ld ra,  PT_EPC(sp)
+        ld x2,  PT_SP(sp)
+        ld x3,  PT_GP(sp)
+        ld x4,  PT_TP(sp)
+@@ -190,7 +190,6 @@ ENDPROC(ftrace_caller)
+        ld x31, PT_T6(sp)
 
-My Regards.
+        ld      s0, (PT_SIZE_ON_STACK)(sp)
+-       ld      ra, (PT_SIZE_ON_STACK+8)(sp)
+        addi    sp, sp, (PT_SIZE_ON_STACK+16)
+        .endm
 
-Mr. Scott Donald
-CEO
+Now, I'm developing livepatch and they are so mixed features (kprobe,
+livepatch, ftrace, optprobes, STACK_WALK, -fpatchable-function-entry
+'no -pg'). I'll test this patch in the next version of the patchset.
+
+Thx for the review.
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
