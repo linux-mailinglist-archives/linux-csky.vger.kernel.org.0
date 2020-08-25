@@ -2,94 +2,164 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FC124F8AA
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Aug 2020 11:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64226250D8E
+	for <lists+linux-csky@lfdr.de>; Tue, 25 Aug 2020 02:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgHXJgL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Aug 2020 05:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S1728204AbgHYAd0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 24 Aug 2020 20:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728209AbgHXJgA (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Aug 2020 05:36:00 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5ECC061574
-        for <linux-csky@vger.kernel.org>; Mon, 24 Aug 2020 02:35:59 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id g75so7494209wme.4
-        for <linux-csky@vger.kernel.org>; Mon, 24 Aug 2020 02:35:59 -0700 (PDT)
+        with ESMTP id S1728174AbgHYA3e (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Aug 2020 20:29:34 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6460EC061755
+        for <linux-csky@vger.kernel.org>; Mon, 24 Aug 2020 17:29:34 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id t9so1759220pfq.8
+        for <linux-csky@vger.kernel.org>; Mon, 24 Aug 2020 17:29:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a+qBqva1TzYQ5RnHnuZAT29wnXZU/+xs6tKfmNJfO0E=;
-        b=yIT/7UWxUOXMSG5UryvbaY1Ck/9X1LWrS3GIdFRp7f9jKp1MojafFO7SlcdTqycmN9
-         YOkAdQNb6x3hxaPpMyoC6HBnpKa+TPMoPrX4v5Bx8e/0rcQzz3rwDAwlVJ9ySDjdHa8P
-         gxl+Alxxd3oh++LTDkXFX07MCvPy9AOHsxRLS33TQLbbJK98OjqhxguOU8kmCKbfGl+i
-         SZFZAy1V1zlQbTGkiwk+ZVCmCR7cij4liuYQ5vCKnbkQeQdxp0gb3tZq9i0Cc0HS+JK3
-         MvIYTmlkUcRDJSLOk1loa7GDDg3VUqTL4VEyL5Wu1q2wZdV4rpTx19Z4K0IQWg7MxPGC
-         D+ZA==
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rK9hGhgXVC8NPfqVY3Kpb9dQwJZSivpy8q2Mup6dtSM=;
+        b=c4ZZgQ2YaOyAq7e5T+tyFU0xqMufACY+Y4SnbIlMwiY/5sKjRW9L+obI/uA+5stwVq
+         JHkc5gnYKmKcZpu+NiFL8tXyLRyHW51aSKG5zmYRQHrPXaVIuq5NgouoW4qDOmWehjqd
+         zj16E4/59kSSYwyPHHVeVxpg9v3KtL3+FOfjWUB1RdcCArxJqS3i1lVzSKgQ3yw2YL9M
+         Z6pcqkvhHkvgQgG7oLp3n1p0Syg9AhEy+QWNtmtUU3R1boenHXU67c55myRV+Wm8XHos
+         McZfUvW3KGoL+k2BVCKHx3Y3+49MLogFiC5xStqzaBZh/NGJ2gpPhZWsGXD2nq0l5LFg
+         wLxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a+qBqva1TzYQ5RnHnuZAT29wnXZU/+xs6tKfmNJfO0E=;
-        b=OSL6GuRPhs60UIuPI95Qu+f3x9aKLv6YxmKZOH7wmg6xrVAbohqRxsc72DEqbOtXYT
-         x4slJUGjzm04FTBv+0Neq3PIx48QSe9YzJT9MACcjNNJFecL9AJ48UE8Gp75MIPZWT6W
-         s7lgy/FLJTuyMyskMaGOGRj90QFkKTa/XbmqpBb08p43TPfdpwyeQ+KimNtT0vq2xyNM
-         g+hcUb8f0gP1Fstck5ZA7VN6QFIhFCJBvj9MgjPyLdZ65Aqe2bZCDkGeaDRkktX+/dpD
-         5ZLI21nB2H0pBoMmPXdO0PCsXygjhTAVGIZ/f7vpjXC0irFTPG4gxmTh6wEhi/QN6hGO
-         1o8w==
-X-Gm-Message-State: AOAM530PiYVOl1EmKpBJDkXDDZiXH+TItX1w1BIv70xDnx8bsyBtDAjz
-        F/oSTmdJi2M0HzuMw6HjwWk3HQ==
-X-Google-Smtp-Source: ABdhPJzIc6QSoUS9oxZsc9VLLMmsA6P6cy+Q5aHgP/cOCZLdV9bKWS8FvvqVA6WEuOaSKYKDEZPY4A==
-X-Received: by 2002:a1c:f017:: with SMTP id a23mr4668754wmb.164.1598261758453;
-        Mon, 24 Aug 2020 02:35:58 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0? ([2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0])
-        by smtp.googlemail.com with ESMTPSA id f6sm30504901wme.32.2020.08.24.02.35.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Aug 2020 02:35:58 -0700 (PDT)
-Subject: Re: [PATCH] clocksource/drivers/timer-gx6605s: Fixup counter reload
-To:     guoren@kernel.org
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <1597735877-71115-1-git-send-email-guoren@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <8fae0fad-4211-61fa-b687-0eca4bffbdaf@linaro.org>
-Date:   Mon, 24 Aug 2020 11:35:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <1597735877-71115-1-git-send-email-guoren@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=rK9hGhgXVC8NPfqVY3Kpb9dQwJZSivpy8q2Mup6dtSM=;
+        b=eonDq514rWGpyonpyOsfGZ83z8Gr0WS91lKQC63AKIveQfZ+iCRK+p2zzv03U2eFSJ
+         IkvqfK1AQzt4GksNImBGEvvII2Vdfm38ZnqMlg/VnibxU60zJ31mrezz5u2tV4e9TnND
+         pdeu84eT5zfLTtQXrgaC1AEphVgYvOkv4+5eK2SWAHOdGz/GVbpx601ljqueFhyhQdGR
+         1s6wOeeU33VC8sf1WTHWlWlLAAT49oRlyxwO1+nlRPdScHQvowl0bZNIt2zHJVrlBn+v
+         +53OqEh1inLnKhUy1bkZq4Ger6vRCsRUtKYs/3xXe8+riR9qkhZkOH9BgDkdV+Rrt3Yi
+         soig==
+X-Gm-Message-State: AOAM5315VcaHnS3OXD5RNIujrXJpEoGySwEh/p827OV8an2ixYl9jrIa
+        Ef0WvNcPpAOcEjiXJk+BAG/DbOEwNt5Efg==
+X-Google-Smtp-Source: ABdhPJw/jqpwfLOw3R6pkLUIZZ4Ecso+LA6G75jVVfmfWTR2dmWId+wwLT6HnFSbtT7bjTfvJeyROw==
+X-Received: by 2002:aa7:9aa2:: with SMTP id x2mr6097798pfi.318.1598315373559;
+        Mon, 24 Aug 2020 17:29:33 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id w130sm12707231pfd.104.2020.08.24.17.29.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 17:29:32 -0700 (PDT)
+Date:   Mon, 24 Aug 2020 17:29:32 -0700 (PDT)
+X-Google-Original-Date: Mon, 24 Aug 2020 17:29:28 PDT (-0700)
+Subject:     Re: [PATCH] ftrace: Fixup lockdep assert held of text_mutex
+In-Reply-To: <20200813113743.001b6c31@oasis.local.home>
+CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        mingo@redhat.com, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@linux.alibaba.com,
+        linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rostedt@goodmis.org
+Message-ID: <mhng-5de4c6ca-7e77-4b55-9097-59296872e6de@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 18/08/2020 09:31, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> When the timer counts to the upper limit, an overflow interrupt is
-> generated, and the count is reset with the value in the TIME_INI
-> register. But the software expects to start counting from 0 when
-> the count overflows, so it forces TIME_INI to 0 to solve the
-> potential interrupt storm problem.
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Tested-by: Xu Kai <xukai@nationalchip.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> ---
+On Thu, 13 Aug 2020 08:37:43 PDT (-0700), rostedt@goodmis.org wrote:
+> On Wed, 12 Aug 2020 22:13:19 -0700 (PDT)
+> Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+>> Sorry, I'm not really sure what's going on here.  I'm not really seeing code
+>> that matches this in our port right now, so maybe this is aginst some other
+>> tree?  If it's the RISC-V kprobes patch set then I was hoping to take a look at
+>> that tomorrow (or I guess a bit earlier this week, but I had some surprise work
+>> stuff to do).  IIRC there were a handful of races in the last patch set I saw,
+>> but it's been a while so I don't remember for sure.
+>>
+>> That said, I certainly wouldn't be surprised if there's a locking bug in our
+>> ftrace stuff.  It'd be way easier for me to figure out what's going on if you
+>> have a concrete suggestion as to how to fix the issues -- even if it's just a
+>> workaround.
+>
+> The issue is actually quite basic.
+>
+> ftrace_init_nop() is called quite early in boot up and never called
+> again. It's called before SMP is set up, so it's on a single CPU, and
+> no worries about synchronization with other CPUs is needed.
+>
+> On x86, it is called before text_poke() is initialized (which is used
+> to synchronize code updates across CPUs), and thus can't be called.
+> There's a "text_poke_early()" that is used instead, which is basically
+> just a memcpy().
+>
+> Now, if ftrace_init_nop() is not defined by the architecture, it is a
+> simple call to ftrace_make_nop(), which is also used to disable ftrace
+> callbacks.
+>
+> The issue is that we have the following path on riscv:
+>
+>  ftrace_init_nop()
+>    ftrace_make_nop()
+>      __ftrace_modify_call()
+>        patch_text_nosync()
+>          patch_insn_write()
+>            lockdep_assert_held(&text_mutex);
+>
+> Boom! text_mutex is not held, and lockdep complains.
+>
+>
+> The difference between ftrace_make_nop() being called by
+> ftrace_init_nop() and being called later to disable function tracing is
+> that the latter will have:
+>
+>
+> 	ftrace_arch_code_modify_prepare();
+> 	[..]
+> 	ftrace_make_nop();
+> 	[..]
+> 	ftrace_arch_code_modify_post_process();
+>
+> and the former will not have those called.
+>
+> On x86, we handle the two different cases with:
+>
+>
+> static int ftrace_poke_late = 0;
+>
+> int ftrace_arch_code_modify_prepare(void)
+> {
+> 	mutex_lock(&text_mutex);
+> 	ftrace_poke_late = 1;
+> 	return 0;
+> }
+>
+> int ftrace_arch_code_modify_post_process(void)
+> {
+> 	text_poke_finish();
+> 	ftrace_poke_late = 0;
+> 	mutex_unlock(&text_mutex);
+> }
+>
+> Although, the post_process() probably doesn't even need to set
+> ftrace_poke_late back to zero.
+>
+> Then in ftrace_make_nop(), we have:
+>
+>   ftrace_make_nop()
+>     ftrace_modify_code_direct()
+>       if (ftrace_poke_late)
+>         text_poke_queue(...); // this checks if text_mutex is held
+>       else
+>         text_poke_early(...); // is basically just memcpy, no test on text_mutex.
+>
+> The two solutions for riscv, is either to implement the same thing as
+> above, or you can create your own ftrace_init_nop() to take the
+> text_mutex before calling ftrace_make_nop(), and that should work too.
 
-Applied, thanks
+Ya, thanks, that's a pretty straight-forward issue.  I've To'd you on a patch,
+but it's essentially just exactly what you suggested so I doubt it's that
+interesting.
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I pointed out in the patch notes that it seems reasonable to have the generic
+code handle this case, would you be opposed to doing it that way?
