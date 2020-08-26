@@ -2,164 +2,100 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64226250D8E
-	for <lists+linux-csky@lfdr.de>; Tue, 25 Aug 2020 02:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E664253284
+	for <lists+linux-csky@lfdr.de>; Wed, 26 Aug 2020 16:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728204AbgHYAd0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Aug 2020 20:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S1728271AbgHZO46 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 26 Aug 2020 10:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728174AbgHYA3e (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Aug 2020 20:29:34 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6460EC061755
-        for <linux-csky@vger.kernel.org>; Mon, 24 Aug 2020 17:29:34 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id t9so1759220pfq.8
-        for <linux-csky@vger.kernel.org>; Mon, 24 Aug 2020 17:29:34 -0700 (PDT)
+        with ESMTP id S1728233AbgHZOxV (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 26 Aug 2020 10:53:21 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5392CC061574;
+        Wed, 26 Aug 2020 07:53:21 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id nv17so999671pjb.3;
+        Wed, 26 Aug 2020 07:53:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rK9hGhgXVC8NPfqVY3Kpb9dQwJZSivpy8q2Mup6dtSM=;
-        b=c4ZZgQ2YaOyAq7e5T+tyFU0xqMufACY+Y4SnbIlMwiY/5sKjRW9L+obI/uA+5stwVq
-         JHkc5gnYKmKcZpu+NiFL8tXyLRyHW51aSKG5zmYRQHrPXaVIuq5NgouoW4qDOmWehjqd
-         zj16E4/59kSSYwyPHHVeVxpg9v3KtL3+FOfjWUB1RdcCArxJqS3i1lVzSKgQ3yw2YL9M
-         Z6pcqkvhHkvgQgG7oLp3n1p0Syg9AhEy+QWNtmtUU3R1boenHXU67c55myRV+Wm8XHos
-         McZfUvW3KGoL+k2BVCKHx3Y3+49MLogFiC5xStqzaBZh/NGJ2gpPhZWsGXD2nq0l5LFg
-         wLxA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+cGML8t0IrnDZlw59Ro+Eu895qkrrnKIgTl4NIzGBZ4=;
+        b=BspJF27QzbuQjjnvh+8w6iecMZp5YbD25ThpZed/PjkuGD6GJvNJ4CklxEb1ZrezDD
+         yk7s2seci6BRkj6H0vXEDr6p6ouZWNefLvEUcER0Z4lbgqk4M/tISZl+Kg6lcDH1zm+J
+         dODpaFi3JOrWQzVtm3giyP3xjFO0Q9RPJw6tbXqRFwPu8Rha7iWP7EMpxCXvA9A2Pudh
+         LFalYZ8dqFGjPwLvve/KBiUZ279dPkB5bmL73P29fzrf4shaLvAf/hqdJdEXWajkCXAh
+         G9VNfPz9scpQmioUtHRYPoxw2WqTtHJsSoUKxg7E5fzt5qBmZ91++UgqsvHT0OXrZyzO
+         nCyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=rK9hGhgXVC8NPfqVY3Kpb9dQwJZSivpy8q2Mup6dtSM=;
-        b=eonDq514rWGpyonpyOsfGZ83z8Gr0WS91lKQC63AKIveQfZ+iCRK+p2zzv03U2eFSJ
-         IkvqfK1AQzt4GksNImBGEvvII2Vdfm38ZnqMlg/VnibxU60zJ31mrezz5u2tV4e9TnND
-         pdeu84eT5zfLTtQXrgaC1AEphVgYvOkv4+5eK2SWAHOdGz/GVbpx601ljqueFhyhQdGR
-         1s6wOeeU33VC8sf1WTHWlWlLAAT49oRlyxwO1+nlRPdScHQvowl0bZNIt2zHJVrlBn+v
-         +53OqEh1inLnKhUy1bkZq4Ger6vRCsRUtKYs/3xXe8+riR9qkhZkOH9BgDkdV+Rrt3Yi
-         soig==
-X-Gm-Message-State: AOAM5315VcaHnS3OXD5RNIujrXJpEoGySwEh/p827OV8an2ixYl9jrIa
-        Ef0WvNcPpAOcEjiXJk+BAG/DbOEwNt5Efg==
-X-Google-Smtp-Source: ABdhPJw/jqpwfLOw3R6pkLUIZZ4Ecso+LA6G75jVVfmfWTR2dmWId+wwLT6HnFSbtT7bjTfvJeyROw==
-X-Received: by 2002:aa7:9aa2:: with SMTP id x2mr6097798pfi.318.1598315373559;
-        Mon, 24 Aug 2020 17:29:33 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id w130sm12707231pfd.104.2020.08.24.17.29.32
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+cGML8t0IrnDZlw59Ro+Eu895qkrrnKIgTl4NIzGBZ4=;
+        b=nknA5B6MSKBavtZfxInU4K46I3xUY4uoQNtRHTS59tgKAtsRGWEeC8l0i6fZRJJIuH
+         mgub1S55sDUq26c2sh9UHlkDz95bSkqr7HUMgZF/Kd5V5+eH13DqM8BI/H8R5uvYosEv
+         v60YA+iCFRQW6HqJHRAQFi0wBnjgU2hxIZCQOh3VEp7CuNgCZg0u7JKE9d/EajrArqE3
+         fDDeyRdnVJl8wr1soeKMviSQhakS3WLgaSe9AwfbzYXIR6FuxeKTu6Nfy5mP63Xbi0LQ
+         L5N/J4gjjE6ZWvgAvMp5r4Da1BBGnwV8Tg2rZ4y0tPTArIFKT0F41M4NkytpfZ2EGCG9
+         fPkQ==
+X-Gm-Message-State: AOAM530ZKTof6WMNdXEkX8Lxh2b24bhinkISPP5f/ZUzxRqvLlroR8i4
+        zs3Y/cCmekDj811DwRm3Fno2SHFSyMw=
+X-Google-Smtp-Source: ABdhPJzsbZy6isz4fHT5ReTyRXlVh220hAC0FejIMuKzxdA9ukIYV2V/k8A2gJ++hFMUoDTndc1d1w==
+X-Received: by 2002:a17:90a:7b82:: with SMTP id z2mr6216692pjc.106.1598453600691;
+        Wed, 26 Aug 2020 07:53:20 -0700 (PDT)
+Received: from bobo.ozlabs.ibm.com (61-68-212-105.tpgi.com.au. [61.68.212.105])
+        by smtp.gmail.com with ESMTPSA id r7sm3327140pfl.186.2020.08.26.07.53.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 17:29:32 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 17:29:32 -0700 (PDT)
-X-Google-Original-Date: Mon, 24 Aug 2020 17:29:28 PDT (-0700)
-Subject:     Re: [PATCH] ftrace: Fixup lockdep assert held of text_mutex
-In-Reply-To: <20200813113743.001b6c31@oasis.local.home>
-CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        mingo@redhat.com, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, guoren@linux.alibaba.com,
-        linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     rostedt@goodmis.org
-Message-ID: <mhng-5de4c6ca-7e77-4b55-9097-59296872e6de@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Wed, 26 Aug 2020 07:53:20 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-arch@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@kernel.org>
+Subject: [PATCH v2 06/23] csky: use asm-generic/mmu_context.h for no-op implementations
+Date:   Thu, 27 Aug 2020 00:52:32 +1000
+Message-Id: <20200826145249.745432-7-npiggin@gmail.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200826145249.745432-1-npiggin@gmail.com>
+References: <20200826145249.745432-1-npiggin@gmail.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, 13 Aug 2020 08:37:43 PDT (-0700), rostedt@goodmis.org wrote:
-> On Wed, 12 Aug 2020 22:13:19 -0700 (PDT)
-> Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
->> Sorry, I'm not really sure what's going on here.  I'm not really seeing code
->> that matches this in our port right now, so maybe this is aginst some other
->> tree?  If it's the RISC-V kprobes patch set then I was hoping to take a look at
->> that tomorrow (or I guess a bit earlier this week, but I had some surprise work
->> stuff to do).  IIRC there were a handful of races in the last patch set I saw,
->> but it's been a while so I don't remember for sure.
->>
->> That said, I certainly wouldn't be surprised if there's a locking bug in our
->> ftrace stuff.  It'd be way easier for me to figure out what's going on if you
->> have a concrete suggestion as to how to fix the issues -- even if it's just a
->> workaround.
->
-> The issue is actually quite basic.
->
-> ftrace_init_nop() is called quite early in boot up and never called
-> again. It's called before SMP is set up, so it's on a single CPU, and
-> no worries about synchronization with other CPUs is needed.
->
-> On x86, it is called before text_poke() is initialized (which is used
-> to synchronize code updates across CPUs), and thus can't be called.
-> There's a "text_poke_early()" that is used instead, which is basically
-> just a memcpy().
->
-> Now, if ftrace_init_nop() is not defined by the architecture, it is a
-> simple call to ftrace_make_nop(), which is also used to disable ftrace
-> callbacks.
->
-> The issue is that we have the following path on riscv:
->
->  ftrace_init_nop()
->    ftrace_make_nop()
->      __ftrace_modify_call()
->        patch_text_nosync()
->          patch_insn_write()
->            lockdep_assert_held(&text_mutex);
->
-> Boom! text_mutex is not held, and lockdep complains.
->
->
-> The difference between ftrace_make_nop() being called by
-> ftrace_init_nop() and being called later to disable function tracing is
-> that the latter will have:
->
->
-> 	ftrace_arch_code_modify_prepare();
-> 	[..]
-> 	ftrace_make_nop();
-> 	[..]
-> 	ftrace_arch_code_modify_post_process();
->
-> and the former will not have those called.
->
-> On x86, we handle the two different cases with:
->
->
-> static int ftrace_poke_late = 0;
->
-> int ftrace_arch_code_modify_prepare(void)
-> {
-> 	mutex_lock(&text_mutex);
-> 	ftrace_poke_late = 1;
-> 	return 0;
-> }
->
-> int ftrace_arch_code_modify_post_process(void)
-> {
-> 	text_poke_finish();
-> 	ftrace_poke_late = 0;
-> 	mutex_unlock(&text_mutex);
-> }
->
-> Although, the post_process() probably doesn't even need to set
-> ftrace_poke_late back to zero.
->
-> Then in ftrace_make_nop(), we have:
->
->   ftrace_make_nop()
->     ftrace_modify_code_direct()
->       if (ftrace_poke_late)
->         text_poke_queue(...); // this checks if text_mutex is held
->       else
->         text_poke_early(...); // is basically just memcpy, no test on text_mutex.
->
-> The two solutions for riscv, is either to implement the same thing as
-> above, or you can create your own ftrace_init_nop() to take the
-> text_mutex before calling ftrace_make_nop(), and that should work too.
+Cc: linux-csky@vger.kernel.org
+Acked-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ arch/csky/include/asm/mmu_context.h | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Ya, thanks, that's a pretty straight-forward issue.  I've To'd you on a patch,
-but it's essentially just exactly what you suggested so I doubt it's that
-interesting.
+diff --git a/arch/csky/include/asm/mmu_context.h b/arch/csky/include/asm/mmu_context.h
+index abdf1f1cb6ec..b227d29393a8 100644
+--- a/arch/csky/include/asm/mmu_context.h
++++ b/arch/csky/include/asm/mmu_context.h
+@@ -24,11 +24,6 @@
+ #define cpu_asid(mm)		(atomic64_read(&mm->context.asid) & ASID_MASK)
+ 
+ #define init_new_context(tsk,mm)	({ atomic64_set(&(mm)->context.asid, 0); 0; })
+-#define activate_mm(prev,next)		switch_mm(prev, next, current)
+-
+-#define destroy_context(mm)		do {} while (0)
+-#define enter_lazy_tlb(mm, tsk)		do {} while (0)
+-#define deactivate_mm(tsk, mm)		do {} while (0)
+ 
+ void check_and_switch_context(struct mm_struct *mm, unsigned int cpu);
+ 
+@@ -46,4 +41,7 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 
+ 	flush_icache_deferred(next);
+ }
++
++#include <asm-generic/mmu_context.h>
++
+ #endif /* __ASM_CSKY_MMU_CONTEXT_H */
+-- 
+2.23.0
 
-I pointed out in the patch notes that it seems reasonable to have the generic
-code handle this case, would you be opposed to doing it that way?
