@@ -2,62 +2,48 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4456A259126
-	for <lists+linux-csky@lfdr.de>; Tue,  1 Sep 2020 16:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B3525E275
+	for <lists+linux-csky@lfdr.de>; Fri,  4 Sep 2020 22:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728661AbgIAOpC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 1 Sep 2020 10:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728027AbgIAOQN (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 1 Sep 2020 10:16:13 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8D2C06125E;
-        Tue,  1 Sep 2020 07:16:12 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id s10so148782plp.1;
-        Tue, 01 Sep 2020 07:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+cGML8t0IrnDZlw59Ro+Eu895qkrrnKIgTl4NIzGBZ4=;
-        b=q/L+aoGRQrWIn3GYU9nuKy9oC2d5bDbHhhRro1r90MDLWrwe1RmfZXOp6jivtRHnQt
-         Pms8OjK6Bmlq936jr8qBCqmyJqZgIXsMxB9QH0VtREPg1O3kn2ActM2ghM7PVDI9Keqh
-         2eyD0PfIPWXBmuEZ4YIF0wHZjh0znY4x9t6701ZagEU8SZNQSxKIwHogz2hwbcIS9lMm
-         Ifw2lpDuMXSebyFfdrFEpDJ5R854gI85YjQrxyI+gAzVGFlXHYpO3KEEblQUz+KvX/kZ
-         k9vEfLpBosQBSMti5oQIbOSsUuLEeeEvjKD08vTZAWCk/yEfqyfoiLt3a26sK2zzlXbd
-         iwpw==
+        id S1727051AbgIDUOI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 4 Sep 2020 16:14:08 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34806 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbgIDUOD (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 4 Sep 2020 16:14:03 -0400
+Received: by mail-lj1-f196.google.com with SMTP id v23so9451481ljd.1;
+        Fri, 04 Sep 2020 13:14:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+cGML8t0IrnDZlw59Ro+Eu895qkrrnKIgTl4NIzGBZ4=;
-        b=YTtQ8ma/vqEW3ICgPTIVWEemmjUQRS2CA0A8icIsvkkeysvHo3dV2vwUcjnZ3XT7Tg
-         odppSSOWWWq+Lu1LDFlTW7N+pbw6BvGTRqWmLjgfHQ21eY6E1IecpABdNQR+UhGz+Pj/
-         m0AKYuOMXLlVVuo9pIm/PD62Mq6HEQZE/y9pXujBCznES3VzffnwJ7+NnI/UfQyfKNIj
-         ZEdB8yP4hGdFMGGwbDHEtcfnW1NfyFcr47Y0zLsuQo9706Q8nPJ7jKm6gR2pD53MlmIm
-         dWyIuESBYlc3po7lHY9Qi7PEIGwJlKn7BcC+aV1bdOrGINdt4s+WNtoH4BA2hPdnpOkc
-         96PQ==
-X-Gm-Message-State: AOAM532BKnNq1xaQwF90kRJoedvLHwph/nDz1700moiotteVs/FEUa4v
-        05zQQBAxNNf9dvHLmXemEVv7JEsweC0=
-X-Google-Smtp-Source: ABdhPJylqMXQGKTlmnPfp26Mn7dao1YgWG7htPyEpONiO22Ggga6Tlf4bzQNnEnK7C93V4kGf7L02Q==
-X-Received: by 2002:a17:902:323:: with SMTP id 32mr1579212pld.59.1598969772004;
-        Tue, 01 Sep 2020 07:16:12 -0700 (PDT)
-Received: from bobo.ibm.com ([203.185.249.227])
-        by smtp.gmail.com with ESMTPSA id w9sm2212816pgg.76.2020.09.01.07.16.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=At+S5JZyc9Zm+52GjsVD6sS7Q92PnPRfNew2jlCBSY4=;
+        b=CYh51hfOSGSU1k025B/yyx52c1q1eDqhCjILVvznk8+axwX7sVyOQ1GADMKccuzylr
+         w8CNdNqzIm56sUrPy38XJxviuaWyZqLGNpng/v5cyStt28vEYI4EJoID2cYDEEl3eSQx
+         cUsxgxLpl/GyQbSulAVwJdT0oafSFZYvEiKAJGGtlgB/Wbshp7EdlvCgikzAJ5BdH1Yu
+         xR0VzctUqpd22pWq7T4BpIGE0lfldaVXz/IUX+g3S0crPnRdPLz/zHFCADxa7ePadBeT
+         HiZ2j4zKwyJ2Z176gpvJzWSNUIQPDgj8/LlzrhsQEdtb5rxZCSZKpVJtmXzl+Jgq1bQ+
+         ONRA==
+X-Gm-Message-State: AOAM531RZd0lLgdIqEBDqb3kSJgACK6HovFia8FfrGdTUeqOCJzn2Weg
+        2c8HiQWafjd87l4m+CtcmTA=
+X-Google-Smtp-Source: ABdhPJyOWTIqrtXqErOx88+91MdhEusWqnJHGxKq/QirYJUhbK/MdJOSOdDLCajmGAobK2J007RA8w==
+X-Received: by 2002:a2e:9047:: with SMTP id n7mr4954800ljg.125.1599250440040;
+        Fri, 04 Sep 2020 13:14:00 -0700 (PDT)
+Received: from localhost.localdomain (broadband-37-110-38-130.ip.moscow.rt.ru. [37.110.38.130])
+        by smtp.googlemail.com with ESMTPSA id a16sm1468533ljj.108.2020.09.04.13.13.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 07:16:11 -0700 (PDT)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-arch@vger.kernel.org
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@kernel.org>
-Subject: [PATCH v3 06/23] csky: use asm-generic/mmu_context.h for no-op implementations
-Date:   Wed,  2 Sep 2020 00:15:22 +1000
-Message-Id: <20200901141539.1757549-7-npiggin@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200901141539.1757549-1-npiggin@gmail.com>
-References: <20200901141539.1757549-1-npiggin@gmail.com>
+        Fri, 04 Sep 2020 13:13:59 -0700 (PDT)
+From:   Denis Efremov <efremov@linux.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Guo Ren <guoren@kernel.org>
+Cc:     Denis Efremov <efremov@linux.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: [PATCH 0/2] drop GZFLAGS definition
+Date:   Fri,  4 Sep 2020 23:12:56 +0300
+Message-Id: <20200904201258.795438-1-efremov@linux.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-csky-owner@vger.kernel.org
@@ -65,37 +51,17 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Cc: linux-csky@vger.kernel.org
-Acked-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- arch/csky/include/asm/mmu_context.h | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+GZFLAGS is not used. KGZIP env var can be used to pass
+additional flags to gzip instead.
 
-diff --git a/arch/csky/include/asm/mmu_context.h b/arch/csky/include/asm/mmu_context.h
-index abdf1f1cb6ec..b227d29393a8 100644
---- a/arch/csky/include/asm/mmu_context.h
-+++ b/arch/csky/include/asm/mmu_context.h
-@@ -24,11 +24,6 @@
- #define cpu_asid(mm)		(atomic64_read(&mm->context.asid) & ASID_MASK)
- 
- #define init_new_context(tsk,mm)	({ atomic64_set(&(mm)->context.asid, 0); 0; })
--#define activate_mm(prev,next)		switch_mm(prev, next, current)
--
--#define destroy_context(mm)		do {} while (0)
--#define enter_lazy_tlb(mm, tsk)		do {} while (0)
--#define deactivate_mm(tsk, mm)		do {} while (0)
- 
- void check_and_switch_context(struct mm_struct *mm, unsigned int cpu);
- 
-@@ -46,4 +41,7 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
- 
- 	flush_icache_deferred(next);
- }
-+
-+#include <asm-generic/mmu_context.h>
-+
- #endif /* __ASM_CSKY_MMU_CONTEXT_H */
+Denis Efremov (2):
+  ARM: makefile: Drop GZFLAGS definition and export
+  csky: Drop GZFLAGS definition
+
+ arch/arm/Makefile  | 3 +--
+ arch/csky/Makefile | 1 -
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
 -- 
-2.23.0
+2.26.2
 
