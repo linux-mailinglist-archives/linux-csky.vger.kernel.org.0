@@ -2,72 +2,106 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC9725E27C
-	for <lists+linux-csky@lfdr.de>; Fri,  4 Sep 2020 22:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB4C25E91B
+	for <lists+linux-csky@lfdr.de>; Sat,  5 Sep 2020 18:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726842AbgIDUOw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 4 Sep 2020 16:14:52 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37459 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726791AbgIDUOv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 4 Sep 2020 16:14:51 -0400
-Received: by mail-lj1-f193.google.com with SMTP id w14so9435116ljj.4;
-        Fri, 04 Sep 2020 13:14:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3XhSnjbH4LNvROC1KGa4RbBBuJXx+HscGx/nuzRhKi4=;
-        b=csZ9sQX4GAGvZlWqM5lO8SFjSpai02VKLj37OFXJHhmyYVCn19+zE4Uisx7tojS2i8
-         YbHo4WEwvJUPNHhf+idQyagjDWx7RETME7VsDtnk/D2TlieLK/hUTOLvN42cR5kJoF9d
-         bkMHTa8zYrKGMtcVQtLpkJNakcdbZA0SV7lYv2n2UsZ2gmgJWaQPRq4nzWoFTfoSfmoZ
-         Uuh6HGSvjnNNTe3tgR73Uvj2IY/i4S4pTr2gJmVyNvupug/RmccaBO1jFFMs5fC1fn6h
-         Q4WdP3lmw7VWixfD8rRstq2ccVQIFWEuTRXUCs2UgryjwnHg/7eh3CGyPdgfLCL3Okvs
-         9KIQ==
-X-Gm-Message-State: AOAM532P0BvjivCVBg1p/uUXnF66gWwgAFq66CwhCGX/umHornWmEowA
-        VZODoeIBSU84KfNnv3iHo1Q=
-X-Google-Smtp-Source: ABdhPJzXJOW130FzdJUGS6UuQt5VBqDxfzwsc9hptue+bOvUkgYU2sQ6YEi41Af7ZkI6ITGH3cgu4w==
-X-Received: by 2002:a05:651c:1253:: with SMTP id h19mr2118949ljh.55.1599250489648;
-        Fri, 04 Sep 2020 13:14:49 -0700 (PDT)
-Received: from localhost.localdomain (broadband-37-110-38-130.ip.moscow.rt.ru. [37.110.38.130])
-        by smtp.googlemail.com with ESMTPSA id a16sm1468533ljj.108.2020.09.04.13.14.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 13:14:49 -0700 (PDT)
-From:   Denis Efremov <efremov@linux.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>, Guo Ren <guoren@kernel.org>
-Cc:     Denis Efremov <efremov@linux.com>, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: [PATCH 2/2] csky: Drop GZFLAGS definition
-Date:   Fri,  4 Sep 2020 23:12:58 +0300
-Message-Id: <20200904201258.795438-3-efremov@linux.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200904201258.795438-1-efremov@linux.com>
-References: <20200904201258.795438-1-efremov@linux.com>
+        id S1726568AbgIEQr2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 5 Sep 2020 12:47:28 -0400
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:33579 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726590AbgIEQrO (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 5 Sep 2020 12:47:14 -0400
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 085Gkmtp032650;
+        Sun, 6 Sep 2020 01:46:48 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 085Gkmtp032650
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1599324408;
+        bh=nedGK7syy4xWYLAIUicSEvsL6HxwQNEQw4VtYu98CcU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DqO4WZdo+W8HL7J3xG3o4qy20EDTVq1ra2YMnh4LIV5nh4bCU0+XxQI1ttuX2rvWx
+         EMgqURbHJbVQLyE+1nw2iEWlOCw+Ym/sUHUzvCC2aZxC0Y9hx9jZe5TK7Yn2W+Vkv8
+         yilAY55PvNvo4IQHuBEjvda21VYUs4fYgB6DnTI0ArfrdPvwL7BddRPOov5u/p7rwS
+         yeXWazKP6xPu7giVx7q4Rp9eE6ItLw/c2JYplb3GHeCjojNVN60o3Q9eHGiNnJhgkb
+         axMQktLTwHoBqDHBJBLgwV3GCFQmtLa5CpK69lFTIJ07m9V16D+EsgwyaHREBOEtIp
+         jwslcj/kTzJgQ==
+X-Nifty-SrcIP: [209.85.215.175]
+Received: by mail-pg1-f175.google.com with SMTP id e33so5943170pgm.0;
+        Sat, 05 Sep 2020 09:46:48 -0700 (PDT)
+X-Gm-Message-State: AOAM5322lRmIcuvqDLBbYu2t4koe9E/uC3NFORCb+Kzz47Hd7UY9DVjf
+        jj1YXj0bRponCtXXR/q/C/7WvZEn9XoNYryab5g=
+X-Google-Smtp-Source: ABdhPJzq4mv2RYH3ieWtiZKLwb33YdlkrwtanvICQqRyixCHxXJa7r8P5GW5TmXj2/3lzrbXjSL934NZJt6OdBDnl4E=
+X-Received: by 2002:a05:6a00:7ca:: with SMTP id n10mr13524222pfu.129.1599324407714;
+ Sat, 05 Sep 2020 09:46:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200904201258.795438-1-efremov@linux.com> <20200904201258.795438-2-efremov@linux.com>
+In-Reply-To: <20200904201258.795438-2-efremov@linux.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 6 Sep 2020 01:46:10 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATyitupGkjvff+cmi7s6zxe6STLUQtYCtPwm025PeUB9A@mail.gmail.com>
+Message-ID: <CAK7LNATyitupGkjvff+cmi7s6zxe6STLUQtYCtPwm025PeUB9A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ARM: makefile: Drop GZFLAGS definition and export
+To:     Denis Efremov <efremov@linux.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Drop the definition of GZFLAGS because it's not used.
+On Sat, Sep 5, 2020 at 5:14 AM Denis Efremov <efremov@linux.com> wrote:
+>
+> Drop the definition and export of GZFLAGS, because it's
+> not used. GZFLAGS was dropped from arm64 in commit
+> 4cf234943dcf ("arm64: drop GZFLAGS definition and export").
+>
+> Signed-off-by: Denis Efremov <efremov@linux.com>
 
-Signed-off-by: Denis Efremov <efremov@linux.com>
----
- arch/csky/Makefile | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/arch/csky/Makefile b/arch/csky/Makefile
-index 37f593a4bf53..715b839bf998 100644
---- a/arch/csky/Makefile
-+++ b/arch/csky/Makefile
-@@ -1,6 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- OBJCOPYFLAGS		:=-O binary
--GZFLAGS			:=-9
- 
- ifdef CONFIG_CPU_HAS_FPU
- FPUEXT = f
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+
+
+BTW, if you want Russell to pick up this patch,
+you need to send it to:
+
+patches@arm.linux.org.uk
+
+
+
+> ---
+>  arch/arm/Makefile | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index 4e877354515f..3780063e0be0 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -20,7 +20,6 @@ ifeq ($(CONFIG_ARM_MODULE_PLTS),y)
+>  KBUILD_LDS_MODULE      += $(srctree)/arch/arm/kernel/module.lds
+>  endif
+>
+> -GZFLAGS                :=-9
+>  #KBUILD_CFLAGS +=-pipe
+>
+>  # Never generate .eh_frame
+> @@ -270,7 +269,7 @@ KBUILD_CPPFLAGS += $(patsubst %,-I$(srctree)/%include,$(machdirs) $(platdirs))
+>  endif
+>  endif
+>
+> -export TEXT_OFFSET GZFLAGS MMUEXT
+> +export TEXT_OFFSET MMUEXT
+>
+>  core-y                         += arch/arm/
+>  # If we have a machine-specific directory, then include it in the build.
+> --
+> 2.26.2
+>
+
+
 -- 
-2.26.2
-
+Best Regards
+Masahiro Yamada
