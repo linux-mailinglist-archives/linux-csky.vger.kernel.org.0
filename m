@@ -2,114 +2,98 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB263268AE5
-	for <lists+linux-csky@lfdr.de>; Mon, 14 Sep 2020 14:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B36626A124
+	for <lists+linux-csky@lfdr.de>; Tue, 15 Sep 2020 10:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbgINM2J (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 14 Sep 2020 08:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726368AbgINMZy (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Sep 2020 08:25:54 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED71C06121C
-        for <linux-csky@vger.kernel.org>; Mon, 14 Sep 2020 04:57:06 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id x2so16448843ilm.0
-        for <linux-csky@vger.kernel.org>; Mon, 14 Sep 2020 04:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
-        b=S3hnDzeyOV/KQ922busf1d/R/7LCDmIdhnW5hNyo73hvAgf/JZKPLpi3K2o9cXfhlm
-         wrrNFmWHxV3BMpExhEnJbwz8IK3yuy6KcbXiq56FAwsPKEjwxzeY/e/kmMFz3/Bul0q8
-         Hu/spnGUgjOUFcGazTBOeVKMM+XqmuSe8YWdt0lWWeGY70V2x0qOjX/2Q+nLKm/nhFgj
-         42RP1rJbhQ288LlcOh++oXUB6hnDQGIivKQ+GFVbkWDBckXVgfw3YBWFsBRvLrcbNg+s
-         XV1Bve1N8kdnsPj+C/qEZMAgxO7eHsmVX5U3ZoSsiTRbe4uO3+niWoSdiwTtF1dd2yc3
-         G0IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
-        b=EHlB+uRVbCV4KGTBXpo7Ukjl9H0oqPUT1pC1MSOwJehANFUm6hGg3jx5M5k6C9HnXJ
-         V9LHJaHtxd38SlDYX4cW/YvZeWEV8rPvj7jnxEtr+Bv4m5UMmIZav/W6ER6WpkWh9UH6
-         oY5MFSKm2tDbvobb1LyCoTTk7sbMJmYoYdt0zdtOHOJLyONKg1e+DyF+6BOMqmVGILYB
-         zMXHaGXy2YHpm6uHHaRDce/+d/eBRx6BZ0jsgMAsTP9hO/Qq7yj7lE410H8pMwkNh6im
-         H8kk6wzDk8ioJYa0gI/03bHYnjV9e4DWxl84+y9Tzd9sNky9gwKKyd1ETj6RL5aivnOw
-         r84w==
-X-Gm-Message-State: AOAM533r3K67AXogLjA+nCpcCVu0RjAV0xJes6LnBy9/CryElCTznHna
-        Hpat5JaeFu6ebW/tUZcGAKrgXR235MtximoBhU4=
-X-Google-Smtp-Source: ABdhPJw/ZjweXQYWQiERdOzppaWF+3PhmnixKj1GSwHMEag3lHQshH/J8Qps9v7BVGR2MRdNX0+PncXhyTywKjxfrNg=
-X-Received: by 2002:a92:8955:: with SMTP id n82mr3924152ild.25.1600084625389;
- Mon, 14 Sep 2020 04:57:05 -0700 (PDT)
+        id S1726185AbgIOIni (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 15 Sep 2020 04:43:38 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12263 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726087AbgIOInh (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 15 Sep 2020 04:43:37 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 45AAE387E0E933AA5B0E;
+        Tue, 15 Sep 2020 16:43:35 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.177.253) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 15 Sep 2020 16:43:30 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Haoyu Lv <lvhaoyu@huawei.com>, Libin <huawei.libin@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Jianguo Chen" <chenjianguo3@huawei.com>
+Subject: [PATCH v4 0/4] irqchip: dw-apb-ictl: support hierarchy irq domain
+Date:   Tue, 15 Sep 2020 16:43:01 +0800
+Message-ID: <20200915084305.3085-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Received: by 2002:ac0:a30a:0:0:0:0:0 with HTTP; Mon, 14 Sep 2020 04:57:05
- -0700 (PDT)
-Reply-To: mrsmegwilliam6@gmail.com
-From:   Ms Mary Mcniff <diplmatemarkwilliam@gmail.com>
-Date:   Mon, 14 Sep 2020 04:57:05 -0700
-Message-ID: <CAC-KMFva676naUe3=hxR0_=GeYuS_tMMXOERknqyPR3=GhO+sA@mail.gmail.com>
-Subject: Your Respond ASAP
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.177.253]
+X-CFilter-Loop: Reflected
 Sender: linux-csky-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+v3 --> v4:
+1. remove "gc->chip_types[0].chip.irq_eoi = irq_gc_noop;", the "chip.irq_eoi" hook
+   is not needed by handle_level_irq(). Thanks for Marc Zyngier's review.
+2. Add a new patch: define an empty function set_handle_irq() if !GENERIC_IRQ_MULTI_HANDLER
+   to avoid compilation error on arch/arc system.
+
+v2 --> v3:
+1. change (1 << hwirq) to BIT(hwirq).
+2. change __exception_irq_entry to __irq_entry, so we can "#include <linux/interrupt.h>"
+   instead of "#include <asm/exception.h>". Ohterwise, an compilation error will be
+   reported on arch/csky.
+   drivers/irqchip/irq-dw-apb-ictl.c:20:10: fatal error: asm/exception.h: No such file or directory
+3. use "if (!parent || (np == parent))" to determine whether it is primary interrupt controller.
+4. make the primary interrupt controller case also use function handle_level_irq(), I used 
+   handle_fasteoi_irq() as flow_handler before.
+5. Other minor changes are not detailed.
+
+v1 --> v2:
+According to Marc Zyngier's suggestion, discard adding an independent SD5203-VIC
+driver, but make the dw-apb-ictl irqchip driver to support hierarchy irq domain.
+It was originally available only for secondary interrupt controller, now it can
+also be used as primary interrupt controller. The related dt-bindings is updated
+appropriately.
+
+Add "Suggested-by: Marc Zyngier <maz@kernel.org>".
+Add "Tested-by: Haoyu Lv <lvhaoyu@huawei.com>".
+
+
+v1:
+The interrupt controller of SD5203 SoC is VIC(vector interrupt controller), it's
+based on Synopsys DesignWare APB interrupt controller (dw_apb_ictl) IP, but it
+can not directly use dw_apb_ictl driver. The main reason is that VIC is used as
+primary interrupt controller and dw_apb_ictl driver worked for secondary
+interrupt controller. So add a new driver: "hisilicon,sd5203-vic".
+
+
+Zhen Lei (4):
+  genirq: define an empty function set_handle_irq() if
+    !GENERIC_IRQ_MULTI_HANDLER
+  irqchip: dw-apb-ictl: prepare for support hierarchy irq domain
+  irqchip: dw-apb-ictl: support hierarchy irq domain
+  dt-bindings: dw-apb-ictl: support hierarchy irq domain
+
+ .../interrupt-controller/snps,dw-apb-ictl.txt      | 14 +++-
+ drivers/irqchip/Kconfig                            |  2 +-
+ drivers/irqchip/irq-dw-apb-ictl.c                  | 83 ++++++++++++++++++----
+ include/linux/irq.h                                |  2 +
+ 4 files changed, 87 insertions(+), 14 deletions(-)
+
 -- 
-From Chief Compliance Officer, Citigroup Inc CITIBANK
-388 Greenwich St, New York, 10013, United States United.
-PAYMENT CODE: FRB010
-Swift: PTBLBXXX
-==============================================
+1.8.3
 
-Attention: Beneficiary,
 
-We write to inform you that Series of meetings have been held over the
-past 2 weeks with the Secretary General of United Nations,U.S
-Department of State and Dubai Union Organization this ended last
-week.And parcel is under our custody right now, It will deliver to you
-within 24 hours once you clear the charges which will cost you
-according to the BANKERS COURIER SERVICES that wish to deliver your
-ATM CARD card to
-you immediately.
-
-However, it is the pleasure of this office to inform you that your ATM
-CARD number; is 29741733 and it has been approved and upgraded in your
-favor .you call me for the pin code numbers. The ATM CARD value is us
-$10.5 Million only.
-
-Kindly contact the paying bank for the claim of your ATM visa card
-payment fund $10,500,000.00 through the below contact information;
-
-Contact Person:Mr Williams S Young
-Director of Financial Controller
-Bank Name: CITIBANK
-Bank address; 388 Greenwich St,
-New York City,10013, United States
-Email:mrsmegwilliam6@gmail.com
-
-Reconfirm the following information?
-
-(1)Your Full Name=============
-(2)Mobile Phone Number======
-(3)Current Home Address==== ====
-(4)Fax Number================
-(5)Passport/Drivers license ======
-
-Endeavor to keep me posted once you contacted the officer in charge
-through the above mentioned information.
-
-Your timely response is highly appreciated.To this end, you are
-required to forward your payment information as follows to enable us
-load your fund into the card with your information and deliver it to
-your door step. as the BANKERS COURIER SERVICES are in charge of the
-delivery services to your destination.
-
-Yours truly;
-
-Ms Mary Mcniff.
-Chief Compliance Officer, Citigroup Inc
-FEDERAL RESERVE SYSTEM.
-Email: marymcniff7@gmail.com.
