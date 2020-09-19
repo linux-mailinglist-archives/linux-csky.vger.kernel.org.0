@@ -2,57 +2,67 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E07270D17
-	for <lists+linux-csky@lfdr.de>; Sat, 19 Sep 2020 12:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14772270FBD
+	for <lists+linux-csky@lfdr.de>; Sat, 19 Sep 2020 19:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726321AbgISKiG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 19 Sep 2020 06:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S1726528AbgISRYt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 19 Sep 2020 13:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726256AbgISKiF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 19 Sep 2020 06:38:05 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CFC0613D1
-        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 03:38:04 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id m13so3341844otl.9
-        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 03:38:04 -0700 (PDT)
+        with ESMTP id S1726493AbgISRYt (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 19 Sep 2020 13:24:49 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D89C0613CE
+        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 10:24:48 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id lo4so12221852ejb.8
+        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 10:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4qBMELpxnMWeh+ygY0m7dFfIjeObvSXUbCfgU+81OoU=;
-        b=MhdAd/ZHaFK/DWpIGeCJTSrL4TspZA8urGXmqj7eu+tNyozMPj8lsNoIYGKFEkHH3i
-         tz5kIr/iJffDO0Nt2pDPL1zyk3OacLo0mtMS/oIiThW5ZZklv3HS4ydmHDNHz/bb5JWz
-         njvA7YA9+16uPDZnqoPhv6tTBSjVAYTx0v+gc=
+        bh=waM6UyKAxKjxaPuk1aOj7tJ5Pe/ksOuiXEzSSo1PI/U=;
+        b=PDwKTi4lX9j7zg3G7WzPyBOHBiLdhmAgWRxWPWvYR/nEys9FVfUL6zNUVgG09pDixg
+         o+e2DCxbAvOZN3jBhyrOMZPfygh9RU8mogp2HXrCoLkUWHRL8e1VK4NRvgzXaMsluBfo
+         GR1BPuNqLZOfJqo2g/IqA9gl4eqzfpV+zOYak=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4qBMELpxnMWeh+ygY0m7dFfIjeObvSXUbCfgU+81OoU=;
-        b=d4tbEVHleQ+iWvx52CqQBVd4JDmfmZUK55zWgsxm3xZ8yVjh9wJKGR4++EPmqezhmB
-         WP+uRizN0NyXMq6dBgdBFieD6r5NDbygT351/JaGqRHR1bxv4mfm+jryfMBNDRs2JxVn
-         zRwYmvxy+B/yPWYAXmGE0SucxAy68BWMzBe+xrabFll7Bkur/FlCc7+FQy4E1RxiXQ0c
-         A5kygV/XAIQjKzboitEPP++8tVYN45a0wSuk0NyBc0X9Pb+v7yXOqJ3PHAGntibt7Wxr
-         0pE+u7GVhT8zoWsnJc4+oByPtrihbN3w5vckOqirZWfLAo7vuRbvvjgJmdb75AH52rvh
-         eeFA==
-X-Gm-Message-State: AOAM5303mH7vc1yQh117x1k/eNGTTUJHKQKtycMu9CccsJjeyS+I6R8Q
-        +S06PvNp5jc4eJT/jnNvi/0f4F4ea8TlqqVa8AIfZQ==
-X-Google-Smtp-Source: ABdhPJx5xVWJo6i2zNxAj54jCqUfintQtxPDT+BaBMGgav4MX+Ax0tqlV2axmkJLRRkUUHGKVrFmThuU1Fd1j9Iveeo=
-X-Received: by 2002:a05:6830:14d9:: with SMTP id t25mr27032226otq.188.1600511884193;
- Sat, 19 Sep 2020 03:38:04 -0700 (PDT)
+        bh=waM6UyKAxKjxaPuk1aOj7tJ5Pe/ksOuiXEzSSo1PI/U=;
+        b=A2q+Csx5W2NocT8hFrCMopgJfn6HKMYhoym/BYFhiHYV9z1U27Yn+YmmBYpCZdnNSp
+         eX9Iu7QrzuL3xKD8qFQD1agiBpJVvNb3Mp3VGF27LmfemdVas6KOJ9dzzDOsXSZgSNeX
+         T44FyZXDlIG+PTjk/oqBJR3ILz3xyhoSIbSZbYxQ9iKB33vhwN6nDOn7EGS2SSTW3drE
+         i9JTInptoKgvBClMGV+e8IsvzPL1RdLB51ocSpFCU0ukgxRoVvJwRcQ5oWZLxC855QwP
+         INdhPooeLYEFz20a9To3QwEo1dZjLRYpViS/eFdYATIVuQMIHozxG9gXDDl+53sKe7k9
+         +Zqw==
+X-Gm-Message-State: AOAM531FYWKiHtKW8PTdg3tkdnv01zJZ186ZsF1624lPmT2r1rbqhLA4
+        +hV2ylK2rHmRYQR3L9n5mZvgvZp87xMM4Q==
+X-Google-Smtp-Source: ABdhPJwGNP6qetFj22O3XC3bhZ2UsXDsOy/2T9TjbyKD2hFUANqQA/hD2zjhHjObQDIKAFrt9WCsjw==
+X-Received: by 2002:a17:906:1dd0:: with SMTP id v16mr41082565ejh.309.1600536286916;
+        Sat, 19 Sep 2020 10:24:46 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id h2sm4961626ejk.33.2020.09.19.10.24.46
+        for <linux-csky@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Sep 2020 10:24:46 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id g4so8655396wrs.5
+        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 10:24:46 -0700 (PDT)
+X-Received: by 2002:a19:521a:: with SMTP id m26mr14134256lfb.133.1600535951025;
+ Sat, 19 Sep 2020 10:19:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200919091751.011116649@linutronix.de> <CAKMK7uHTVJL2jGtCg61zG=myiF1BSk+yDdRYikcm-Mq_1TQWMQ@mail.gmail.com>
-In-Reply-To: <CAKMK7uHTVJL2jGtCg61zG=myiF1BSk+yDdRYikcm-Mq_1TQWMQ@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Sat, 19 Sep 2020 12:37:53 +0200
-Message-ID: <CAKMK7uENFDANQKebS_H0bhHeQRijrp1aVHQqyZPute3KBZ+fVQ@mail.gmail.com>
+References: <20200919091751.011116649@linutronix.de>
+In-Reply-To: <20200919091751.011116649@linutronix.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 19 Sep 2020 10:18:54 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+Message-ID: <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
 Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
  kmap_atomic & friends
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/A..." <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Paul McKenney <paulmck@kernel.org>, X86 ML <x86@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -73,12 +83,14 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         intel-gfx <intel-gfx@lists.freedesktop.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Vineet Gupta <vgupta@synopsys.com>,
-        arcml <linux-snps-arc@lists.infradead.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -89,137 +101,69 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 12:35 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+On Sat, Sep 19, 2020 at 2:50 AM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> On Sat, Sep 19, 2020 at 11:50 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > First of all, sorry for the horribly big Cc list!
-> >
-> > Following up to the discussion in:
-> >
-> >   https://lore.kernel.org/r/20200914204209.256266093@linutronix.de
-> >
-> > this provides a preemptible variant of kmap_atomic & related
-> > interfaces. This is achieved by:
-> >
-> >  - Consolidating all kmap atomic implementations in generic code
-> >
-> >  - Switching from per CPU storage of the kmap index to a per task storage
-> >
-> >  - Adding a pteval array to the per task storage which contains the ptevals
-> >    of the currently active temporary kmaps
-> >
-> >  - Adding context switch code which checks whether the outgoing or the
-> >    incoming task has active temporary kmaps. If so, the outgoing task's
-> >    kmaps are removed and the incoming task's kmaps are restored.
-> >
-> >  - Adding new interfaces k[un]map_temporary*() which are not disabling
-> >    preemption and can be called from any context (except NMI).
-> >
-> >    Contrary to kmap() which provides preemptible and "persistant" mappings,
-> >    these interfaces are meant to replace the temporary mappings provided by
-> >    kmap_atomic*() today.
-> >
-> > This allows to get rid of conditional mapping choices and allows to have
-> > preemptible short term mappings on 64bit which are today enforced to be
-> > non-preemptible due to the highmem constraints. It clearly puts overhead on
-> > the highmem users, but highmem is slow anyway.
-> >
-> > This is not a wholesale conversion which makes kmap_atomic magically
-> > preemptible because there might be usage sites which rely on the implicit
-> > preempt disable. So this needs to be done on a case by case basis and the
-> > call sites converted to kmap_temporary.
-> >
-> > Note, that this is only lightly tested on X86 and completely untested on
-> > all other architectures.
-> >
-> > The lot is also available from
-> >
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git highmem
->
-> I think it should be the case, but I want to double check: Will
-> copy_*_user be allowed within a kmap_temporary section? This would
-> allow us to ditch an absolute pile of slowpaths.
+> this provides a preemptible variant of kmap_atomic & related
+> interfaces. This is achieved by:
 
-(coffee just kicked in) copy_*_user is ofc allowed, but if you hit a
-page fault you get a short read/write. This looks like it would remove
-the need to handle these in a slowpath, since page faults can now be
-served in this new kmap_temporary sections. But this sounds too good
-to be true, so I'm wondering what I'm missing.
--Daniel
->
-> >
-> > Thanks,
-> >
-> >         tglx
-> > ---
-> >  a/arch/arm/mm/highmem.c               |  121 ---------------------
-> >  a/arch/microblaze/mm/highmem.c        |   78 -------------
-> >  a/arch/nds32/mm/highmem.c             |   48 --------
-> >  a/arch/powerpc/mm/highmem.c           |   67 -----------
-> >  a/arch/sparc/mm/highmem.c             |  115 --------------------
-> >  arch/arc/Kconfig                      |    1
-> >  arch/arc/include/asm/highmem.h        |    8 +
-> >  arch/arc/mm/highmem.c                 |   44 -------
-> >  arch/arm/Kconfig                      |    1
-> >  arch/arm/include/asm/highmem.h        |   30 +++--
-> >  arch/arm/mm/Makefile                  |    1
-> >  arch/csky/Kconfig                     |    1
-> >  arch/csky/include/asm/highmem.h       |    4
-> >  arch/csky/mm/highmem.c                |   75 -------------
-> >  arch/microblaze/Kconfig               |    1
-> >  arch/microblaze/include/asm/highmem.h |    6 -
-> >  arch/microblaze/mm/Makefile           |    1
-> >  arch/microblaze/mm/init.c             |    6 -
-> >  arch/mips/Kconfig                     |    1
-> >  arch/mips/include/asm/highmem.h       |    4
-> >  arch/mips/mm/highmem.c                |   77 -------------
-> >  arch/mips/mm/init.c                   |    3
-> >  arch/nds32/Kconfig.cpu                |    1
-> >  arch/nds32/include/asm/highmem.h      |   21 ++-
-> >  arch/nds32/mm/Makefile                |    1
-> >  arch/powerpc/Kconfig                  |    1
-> >  arch/powerpc/include/asm/highmem.h    |    6 -
-> >  arch/powerpc/mm/Makefile              |    1
-> >  arch/powerpc/mm/mem.c                 |    7 -
-> >  arch/sparc/Kconfig                    |    1
-> >  arch/sparc/include/asm/highmem.h      |    7 -
-> >  arch/sparc/mm/Makefile                |    3
-> >  arch/sparc/mm/srmmu.c                 |    2
-> >  arch/x86/include/asm/fixmap.h         |    1
-> >  arch/x86/include/asm/highmem.h        |   12 +-
-> >  arch/x86/include/asm/iomap.h          |   29 +++--
-> >  arch/x86/mm/highmem_32.c              |   59 ----------
-> >  arch/x86/mm/init_32.c                 |   15 --
-> >  arch/x86/mm/iomap_32.c                |   57 ----------
-> >  arch/xtensa/Kconfig                   |    1
-> >  arch/xtensa/include/asm/highmem.h     |    9 +
-> >  arch/xtensa/mm/highmem.c              |   44 -------
-> >  b/arch/x86/Kconfig                    |    3
-> >  include/linux/highmem.h               |  141 +++++++++++++++---------
-> >  include/linux/io-mapping.h            |    2
-> >  include/linux/sched.h                 |    9 +
-> >  kernel/sched/core.c                   |   10 +
-> >  mm/Kconfig                            |    3
-> >  mm/highmem.c                          |  192 ++++++++++++++++++++++++++++++++--
-> >  49 files changed, 422 insertions(+), 909 deletions(-)
->
->
->
-> --
-> Daniel Vetter
-> Software Engineer, Intel Corporation
-> http://blog.ffwll.ch
+Ack. This looks really nice, even apart from the new capability.
 
+The only thing I really reacted to is that the name doesn't make sense
+to me: "kmap_temporary()" seems a bit odd.
 
+Particularly for an interface that really is basically meant as a
+better replacement of "kmap_atomic()" (but is perhaps also a better
+replacement for "kmap()").
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+I think I understand how the name came about: I think the "temporary"
+is there as a distinction from the "longterm" regular kmap(). So I
+think it makes some sense from an internal implementation angle, but I
+don't think it makes a lot of sense from an interface name.
+
+I don't know what might be a better name, but if we want to emphasize
+that it's thread-private and a one-off, maybe "local" would be a
+better naming, and make it distinct from the "global" nature of the
+old kmap() interface?
+
+However, another solution might be to just use this new preemptible
+"local" kmap(), and remove the old global one entirely. Yes, the old
+global one caches the page table mapping and that sounds really
+efficient and nice. But it's actually horribly horribly bad, because
+it means that we need to use locking for them. Your new "temporary"
+implementation seems to be fundamentally better locking-wise, and only
+need preemption disabling as locking (and is equally fast for the
+non-highmem case).
+
+So I wonder if the single-page TLB flush isn't a better model, and
+whether it wouldn't be a lot simpler to just get rid of the old
+complex kmap() entirely, and replace it with this?
+
+I agree we can't replace the kmap_atomic() version, because maybe
+people depend on the preemption disabling it also implied. But what
+about replacing the non-atomic kmap()?
+
+Maybe I've missed something.  Is it because the new interface still
+does "pagefault_disable()" perhaps?
+
+But does it even need the pagefault_disable() at all? Yes, the
+*atomic* one obviously needed it. But why does this new one need to
+disable page faults?
+
+[ I'm just reading the patches, I didn't try to apply them and look at
+the end result, so I might have missed something ]
+
+The only other worry I would have is just test coverage of this
+change. I suspect very few developers use HIGHMEM. And I know the
+various test robots don't tend to test 32-bit either.
+
+But apart from that question about naming (and perhaps replacing
+kmap() entirely), I very much like it.
+
+                        Linus
