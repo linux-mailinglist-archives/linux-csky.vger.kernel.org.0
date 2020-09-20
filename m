@@ -2,69 +2,41 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A6FC27102B
-	for <lists+linux-csky@lfdr.de>; Sat, 19 Sep 2020 21:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39ED2712A9
+	for <lists+linux-csky@lfdr.de>; Sun, 20 Sep 2020 08:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbgISTU2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 19 Sep 2020 15:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbgISTU2 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 19 Sep 2020 15:20:28 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07009C0613CE
-        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 12:20:27 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id y11so9768970lfl.5
-        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 12:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=10sVGN8u2TwfCpnAq/jp4iLrESxL2PzGGvVZbBHI37U=;
-        b=SNvzyY/D28nrQ/9in1B6Dzi002SQEpeIWQ8e1hzmI9hVRDCDcHjzeJE8AlbYJKjj8B
-         G7NnpY7h0luEeygyoDxqLDk2AWGbQCdyloo3Y9XIxWLvxZdXjZ/NeK2kaD/mL0YWoior
-         T+0jhpZUK76WT2Sz7na41qAPiBNog2OUpnoIA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=10sVGN8u2TwfCpnAq/jp4iLrESxL2PzGGvVZbBHI37U=;
-        b=HJQtEIpalr+9aOw7wdW1INX04kd9M4HFibEabmwQoafxquyLV91KfPLlcP3prm4hGn
-         Vdgs0Phz8GpDvmDJiXMQKrjkU+TvXakp1oNBkt0WiiM6JfdKVWLPHVmqml1f6khOpxYd
-         tjhMCQTznYHrzlT4UYSjN55WrNPgTdPhebTZTKaV93aSEf7XNJioAx++pgqFnCyY0UJo
-         wdjfR5B3WFkSnHtHncSHy/Lfcd9XpwaG94UnfLc+9tM5VtXaPt/10PrGasA6gwYfU8+M
-         3/PlPEJX7AEZVD5B3eFr6dYOcH6fBhyFZ1lPynEPF59LT00hcix4ovpeScFDJtv8vSwI
-         KUOw==
-X-Gm-Message-State: AOAM532nEr2KzUwueGpFOc3YMel5Np1bJIloECqCXGzCJgxlNiXfBjBb
-        zJLZHdhuhOU/MgMT9GqM8TGzxRiFiBsEIg==
-X-Google-Smtp-Source: ABdhPJxp1+pyC/L1ACK9wntWHnejdVdiuefABt5xwfEytgfV4FDVLqg/gGRfBtp1zMikFtSjhxkI6A==
-X-Received: by 2002:a19:106:: with SMTP id 6mr14203298lfb.276.1600543226096;
-        Sat, 19 Sep 2020 12:20:26 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id c10sm1421354lfc.4.2020.09.19.12.20.25
-        for <linux-csky@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Sep 2020 12:20:25 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id x69so9763226lff.3
-        for <linux-csky@vger.kernel.org>; Sat, 19 Sep 2020 12:20:25 -0700 (PDT)
-X-Received: by 2002:a19:8907:: with SMTP id l7mr12464193lfd.105.1600542797553;
- Sat, 19 Sep 2020 12:13:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
- <20200919173906.GQ32101@casper.infradead.org>
-In-Reply-To: <20200919173906.GQ32101@casper.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 19 Sep 2020 12:13:01 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgyVxGaYkL71DhHgmyU=tE=4rEHgAkOYRq=1-9+q_adAw@mail.gmail.com>
-Message-ID: <CAHk-=wgyVxGaYkL71DhHgmyU=tE=4rEHgAkOYRq=1-9+q_adAw@mail.gmail.com>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        id S1726315AbgITGXb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 20 Sep 2020 02:23:31 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:44382 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726200AbgITGXb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 20 Sep 2020 02:23:31 -0400
+X-Greylist: delayed 74005 seconds by postgrey-1.27 at vger.kernel.org; Sun, 20 Sep 2020 02:23:29 EDT
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600583007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7fzEIVZ8tkjS2ndcSNVbu7zYvMlAYQ/NWyoKHxP3faw=;
+        b=ZdXKJXZGwHl2KR4hH2q5cUf4dfgyefKiq5FJK4CdaiUzjuDw/zsfzyDwUT0Vb3vxnFMmA2
+        GbGWdXGNam/BxDVayB/9W9lKW9cEGTy4k40j+g76SxOFKgyaP4kz+dJNXxDya0A6vacAHQ
+        etbQkUBwH/pk7aVUdpmHO5hYMDrDQDP5KgAuzWF1TeBFDWPD7hNOa95TYtIkpNlkk7xqPo
+        YZDmeBiMP6cP8bfVBIDyjT3CMK5xsUBeFdgoJYUZ63lHnZ5f4NanBw5QbC7HkoYRGwgBsy
+        Bsz/o+mfvaeq05vAqvejTR9EViDozt0cf4n5wRrzHjQfCFUXuG/KuqeDB61mqg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600583007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7fzEIVZ8tkjS2ndcSNVbu7zYvMlAYQ/NWyoKHxP3faw=;
+        b=yd7i2KhtoQQ4HuYBfV4K2iDNHIVcqLD+eOCjOAMiHylcYwCzvC7AWTYk8VGrY+iNFLAu2j
+        3+A+8QdYt6q7wFBw==
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "open list\:GENERIC INCLUDE\/A..." <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Paul McKenney <paulmck@kernel.org>, X86 ML <x86@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -85,14 +57,12 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
         intel-gfx <intel-gfx@lists.freedesktop.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
         Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -103,21 +73,40 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
+In-Reply-To: <CAKMK7uENFDANQKebS_H0bhHeQRijrp1aVHQqyZPute3KBZ+fVQ@mail.gmail.com>
+References: <20200919091751.011116649@linutronix.de> <CAKMK7uHTVJL2jGtCg61zG=myiF1BSk+yDdRYikcm-Mq_1TQWMQ@mail.gmail.com> <CAKMK7uENFDANQKebS_H0bhHeQRijrp1aVHQqyZPute3KBZ+fVQ@mail.gmail.com>
+Date:   Sun, 20 Sep 2020 08:23:26 +0200
+Message-ID: <87pn6hc6g1.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Sep 19, 2020 at 10:39 AM Matthew Wilcox <willy@infradead.org> wrote:
+On Sat, Sep 19 2020 at 12:37, Daniel Vetter wrote:
+> On Sat, Sep 19, 2020 at 12:35 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+>> I think it should be the case, but I want to double check: Will
+>> copy_*_user be allowed within a kmap_temporary section? This would
+>> allow us to ditch an absolute pile of slowpaths.
 >
-> My concern with that is people might use kmap() and then pass the address
-> to a different task.  So we need to audit the current users of kmap()
-> and convert any that do that into using vmap() instead.
+> (coffee just kicked in) copy_*_user is ofc allowed, but if you hit a
+> page fault you get a short read/write. This looks like it would remove
+> the need to handle these in a slowpath, since page faults can now be
+> served in this new kmap_temporary sections. But this sounds too good
+> to be true, so I'm wondering what I'm missing.
 
-Ahh. Yes, I guess they might do that. It sounds strange, but not
-entirely crazy - I could imagine some "PIO thread" that does IO to a
-page that has been set up by somebody else using kmap(). Or similar.
+In principle we could allow pagefaults, but not with the currently
+proposed interface which can be called from any context. Obviously if
+called from atomic context it can't handle user page faults.
 
-                Linus
+In theory we could make a variant which does not disable pagefaults, but
+that's what kmap() already provides.
+
+Thanks,
+
+        tglx
+
+
+
