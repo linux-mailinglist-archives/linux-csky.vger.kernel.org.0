@@ -2,62 +2,63 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B82027166D
-	for <lists+linux-csky@lfdr.de>; Sun, 20 Sep 2020 19:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9621227169C
+	for <lists+linux-csky@lfdr.de>; Sun, 20 Sep 2020 20:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbgITRse (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 20 Sep 2020 13:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
+        id S1726055AbgITSH2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 20 Sep 2020 14:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725858AbgITRsd (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 20 Sep 2020 13:48:33 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C86C061755
-        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 10:48:33 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id w1so10703063edr.3
-        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 10:48:33 -0700 (PDT)
+        with ESMTP id S1726043AbgITSH2 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 20 Sep 2020 14:07:28 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF44EC061755
+        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 11:07:27 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id g4so10762793edk.0
+        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 11:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ejz/GOVvBNgiciatH4EjBRwlfy2MnL1tDSObr2BrKeg=;
-        b=cBDZkiv4uiqeUChUbmqRPD8tkvllq4angLGjbI6fcWbyt0pYNQ1SGMQdEdmcewXaXT
-         IE5S9J/GFuNXr/rpY1dC/0Yf7uyzIPTs0u+8f3gLaQ3BI+ak5trluGhkQvuTa+ZLZ3HS
-         UcueGtftJ4Q3p1fqvR6MgwdAfAMUTTFhAr56U=
+        bh=10vFh59zX+qrXR+btNd9keaZllR85H50W0pZVqW9mvg=;
+        b=aTcZkpnkgiAVVoqRXBCAnYw8B8YS7QD0nmh7mtbe8Dtb85AdAYIiPcbXVjdrb/fbX9
+         3yTs920flMKnlnbAGz7q1CYoJs0994Dvfor1DakKOqSDUOemiqgeakXoqfK/+swxI5fB
+         0DUfGVYXrHTR7XO61iz2Eybc+W0Ekg5v+dkh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ejz/GOVvBNgiciatH4EjBRwlfy2MnL1tDSObr2BrKeg=;
-        b=IS0fr4+MzrYcdgh6FY0KfTnrfK7QStO7eMcYICnJIAnFHW+Dh/b9b4WyzFM2T+6NF4
-         Uv12rGKWrnsG8gtqI0uZxvwUuYKxtDjKaxfElOOU8aaYqG9dt3zLgvTBoHANhvk3Rgx6
-         MmnDPJ7olxlK2a5BCV7Kb04VbANohscSi8Stymc4LDAXq+9mfksUKT0bQGZlpOyGdze0
-         t2vE+H80Cca3S4nXx1Hbb8i+Ubb6+LLRZs/Qt/YU5XLw+Gdbk+uTfIk8hA/TFnVxHlmA
-         zUcJn8VYtFjtxzeGA3CQKxbO4duFf+1UMXrTtSYEO73xOxCUBFIBShuhJdkmTBBXunvn
-         zRaw==
-X-Gm-Message-State: AOAM530N35doG18HsZYZLyZ4nZRFh4VEsb1LJ2SHX/ojkbiuva4WfWzc
-        QQ/iPycB27rT6ahdDp1uCheaNa1mhCGzeQ==
-X-Google-Smtp-Source: ABdhPJyf8hMqCC548eLRa44ddsz1EzLj+Xf6ugLJvqOPG3a8J1Vbzul2wqV5jh4fzRQ+41P1L9OBzg==
-X-Received: by 2002:a05:6402:1558:: with SMTP id p24mr47506613edx.194.1600624111978;
-        Sun, 20 Sep 2020 10:48:31 -0700 (PDT)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id lo25sm7006362ejb.53.2020.09.20.10.48.31
+        bh=10vFh59zX+qrXR+btNd9keaZllR85H50W0pZVqW9mvg=;
+        b=bovDlvS/MHCd8LB0/7z0x/tW7z4wDUGrQntobPDwRYfkU2MDMNZJJJ5qgC63EnqqFR
+         pJYCsRep006OiAHDCNwsUdGCGDH6OBUTdeEeFqDrraja1QXyyoVDc7RGKgoIOSElKpyH
+         FLtwiAstm0zLWn3P0uRfkVDZm/UDbn+FcXBNP7dZCOmCFZxHRCmLWfew588qDsiQs+2V
+         sgElC5lqRzz2+miRz/L4tuNyI86Q37t3SZsrwinBCVx712QjAWkNn7ENo4Ox//xQAYj1
+         ZjlZuO59OoLI3hAKdhuwI5fhNdvIH0XAH9DGQKwRDoU8uspJVMdvqbT33Bow9HOiu/t/
+         HNmg==
+X-Gm-Message-State: AOAM532xtGpAdZZKTjtn/g3eXQiRFgVZfL/Cim0+28/tqPSwZ9oaT5+c
+        ONJn5BWWRLirBDQzE00yak7aqwS1M4TnBA==
+X-Google-Smtp-Source: ABdhPJyt3ask5hw2JecCbiZ1eOah+IWLXnYVl6aI1QSBEG1oxDui9oR8aT2NBPBw31vWJeweGtGufw==
+X-Received: by 2002:aa7:da09:: with SMTP id r9mr49536967eds.7.1600625246160;
+        Sun, 20 Sep 2020 11:07:26 -0700 (PDT)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id m2sm6972274ejo.4.2020.09.20.11.07.25
         for <linux-csky@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Sep 2020 10:48:31 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id o8so14620683ejb.10
-        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 10:48:31 -0700 (PDT)
-X-Received: by 2002:a2e:84d6:: with SMTP id q22mr13708479ljh.70.1600623791519;
- Sun, 20 Sep 2020 10:43:11 -0700 (PDT)
+        Sun, 20 Sep 2020 11:07:25 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id nw23so14657502ejb.4
+        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 11:07:25 -0700 (PDT)
+X-Received: by 2002:ac2:4ec7:: with SMTP id p7mr12591149lfr.352.1600624746105;
+ Sun, 20 Sep 2020 10:59:06 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
  <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de>
- <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de>
-In-Reply-To: <87eemwcpnq.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
+ <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 20 Sep 2020 10:42:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
-Message-ID: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+Date:   Sun, 20 Sep 2020 10:58:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh_iVgA3H7CVvAzDoYC1gC1AKbLmv_mCeUnVxg79_9y8A@mail.gmail.com>
+Message-ID: <CAHk-=wh_iVgA3H7CVvAzDoYC1gC1AKbLmv_mCeUnVxg79_9y8A@mail.gmail.com>
 Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
  kmap_atomic & friends
 To:     Thomas Gleixner <tglx@linutronix.de>
@@ -110,19 +111,20 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Sep 20, 2020 at 10:40 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Sun, Sep 20, 2020 at 10:42 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> I think the more obvious solution is to split the whole exercise:
->
->   schedule()
->      prepare_switch()
->         unmap()
->
->     switch_to()
->
->     finish_switch()
->         map()
+> Yeah, that looks much easier to explain. Ack.
 
-Yeah, that looks much easier to explain. Ack.
+Btw, one thing that might be a good idea at least initially is to add
+a check for p->kmap_ctrl.idx being zero at fork, exit and maybe
+syscall return time (but that last one may be too cumbersome to really
+worry about).
 
-               Linus
+The kmap_atomic() interface basically has a lot of coverage for leaked
+as part of all the "might_sleep()" checks sprinkled around,  The new
+kmap_temporary/local/whatever wouldn't have that kind of incidental
+debug checking, and any leaked kmap indexes would be rather hard to
+debug (much) later when they cause index overflows or whatever.
+
+                Linus
