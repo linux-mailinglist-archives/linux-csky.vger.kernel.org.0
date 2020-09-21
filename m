@@ -2,70 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9621227169C
-	for <lists+linux-csky@lfdr.de>; Sun, 20 Sep 2020 20:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E463B271AD7
+	for <lists+linux-csky@lfdr.de>; Mon, 21 Sep 2020 08:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbgITSH2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 20 Sep 2020 14:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
+        id S1726412AbgIUGXv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 21 Sep 2020 02:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgITSH2 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 20 Sep 2020 14:07:28 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF44EC061755
-        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 11:07:27 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id g4so10762793edk.0
-        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 11:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=10vFh59zX+qrXR+btNd9keaZllR85H50W0pZVqW9mvg=;
-        b=aTcZkpnkgiAVVoqRXBCAnYw8B8YS7QD0nmh7mtbe8Dtb85AdAYIiPcbXVjdrb/fbX9
-         3yTs920flMKnlnbAGz7q1CYoJs0994Dvfor1DakKOqSDUOemiqgeakXoqfK/+swxI5fB
-         0DUfGVYXrHTR7XO61iz2Eybc+W0Ekg5v+dkh0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=10vFh59zX+qrXR+btNd9keaZllR85H50W0pZVqW9mvg=;
-        b=bovDlvS/MHCd8LB0/7z0x/tW7z4wDUGrQntobPDwRYfkU2MDMNZJJJ5qgC63EnqqFR
-         pJYCsRep006OiAHDCNwsUdGCGDH6OBUTdeEeFqDrraja1QXyyoVDc7RGKgoIOSElKpyH
-         FLtwiAstm0zLWn3P0uRfkVDZm/UDbn+FcXBNP7dZCOmCFZxHRCmLWfew588qDsiQs+2V
-         sgElC5lqRzz2+miRz/L4tuNyI86Q37t3SZsrwinBCVx712QjAWkNn7ENo4Ox//xQAYj1
-         ZjlZuO59OoLI3hAKdhuwI5fhNdvIH0XAH9DGQKwRDoU8uspJVMdvqbT33Bow9HOiu/t/
-         HNmg==
-X-Gm-Message-State: AOAM532xtGpAdZZKTjtn/g3eXQiRFgVZfL/Cim0+28/tqPSwZ9oaT5+c
-        ONJn5BWWRLirBDQzE00yak7aqwS1M4TnBA==
-X-Google-Smtp-Source: ABdhPJyt3ask5hw2JecCbiZ1eOah+IWLXnYVl6aI1QSBEG1oxDui9oR8aT2NBPBw31vWJeweGtGufw==
-X-Received: by 2002:aa7:da09:: with SMTP id r9mr49536967eds.7.1600625246160;
-        Sun, 20 Sep 2020 11:07:26 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id m2sm6972274ejo.4.2020.09.20.11.07.25
-        for <linux-csky@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Sep 2020 11:07:25 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id nw23so14657502ejb.4
-        for <linux-csky@vger.kernel.org>; Sun, 20 Sep 2020 11:07:25 -0700 (PDT)
-X-Received: by 2002:ac2:4ec7:: with SMTP id p7mr12591149lfr.352.1600624746105;
- Sun, 20 Sep 2020 10:59:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
- <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de>
- <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
- <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 20 Sep 2020 10:58:50 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh_iVgA3H7CVvAzDoYC1gC1AKbLmv_mCeUnVxg79_9y8A@mail.gmail.com>
-Message-ID: <CAHk-=wh_iVgA3H7CVvAzDoYC1gC1AKbLmv_mCeUnVxg79_9y8A@mail.gmail.com>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
+        with ESMTP id S1726297AbgIUGXu (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 21 Sep 2020 02:23:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B75CC061755;
+        Sun, 20 Sep 2020 23:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xTLh23wHPG4TqC3FM8xjFZG4IFBTa9u/cbF3kBwK6Ds=; b=RTAohrKQEJ4d/+2FHmYCSfnjaU
+        3Y1oN0bX+qNiXFWWNQ5Bx+rNc3TH1ppQwCVDi8zlXDOxk4uSGN0o6OjNUqN5ZaH5p/UcdOos6uaKX
+        vllToVdZRo/76JFQ3wTCiQ471CZFaX1BccaWpPpcB/IeKOoZaf90ILoLhkgXiVEZjCJAlFIHYK7cC
+        2Idpp6EiVC1risOlIyV1ZZZgUcMQYapM6jn/nD1nDGMIF9n70bKhqPEdll9S2tBpls2hjZ8pj53jo
+        5fqdSa3anAUXYCJg0H/nKgdpbgaLvqoX/s5XchLK7sAQ11cFqoLoPDGi8F3iJ/WzUGnXg/GC/FoHK
+        JVE5YMag==;
+Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kKFEf-0000LF-P3; Mon, 21 Sep 2020 06:23:37 +0000
+Date:   Mon, 21 Sep 2020 07:23:37 +0100
+From:   Christoph Hellwig <hch@infradead.org>
 To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Paul McKenney <paulmck@kernel.org>, x86@kernel.org,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -92,10 +58,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        linux-snps-arc@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
@@ -103,28 +68,26 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
+Subject: Re: [patch RFC 01/15] mm/highmem: Un-EXPORT __kmap_atomic_idx()
+Message-ID: <20200921062337.GA32081@infradead.org>
+References: <20200919091751.011116649@linutronix.de>
+ <20200919092615.879315697@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200919092615.879315697@linutronix.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Sep 20, 2020 at 10:42 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Yeah, that looks much easier to explain. Ack.
+On Sat, Sep 19, 2020 at 11:17:52AM +0200, Thomas Gleixner wrote:
+> Nothing in modules can use that.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Btw, one thing that might be a good idea at least initially is to add
-a check for p->kmap_ctrl.idx being zero at fork, exit and maybe
-syscall return time (but that last one may be too cumbersome to really
-worry about).
+Looks good,
 
-The kmap_atomic() interface basically has a lot of coverage for leaked
-as part of all the "might_sleep()" checks sprinkled around,  The new
-kmap_temporary/local/whatever wouldn't have that kind of incidental
-debug checking, and any leaked kmap indexes would be rather hard to
-debug (much) later when they cause index overflows or whatever.
-
-                Linus
+Reviewed-by: Christoph Hellwig <hch@lst.de>
