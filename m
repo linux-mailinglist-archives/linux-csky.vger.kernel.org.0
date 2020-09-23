@@ -2,49 +2,33 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A92B0275A2B
-	for <lists+linux-csky@lfdr.de>; Wed, 23 Sep 2020 16:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE18275C6B
+	for <lists+linux-csky@lfdr.de>; Wed, 23 Sep 2020 17:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgIWOdV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 23 Sep 2020 10:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726587AbgIWOdV (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Sep 2020 10:33:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8F9C0613CE;
-        Wed, 23 Sep 2020 07:33:21 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1600871599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=htFCLJWsNhxoKbCNWhQS/6Kyz86LUNNWBiBq6qkBFyQ=;
-        b=pA5Hd7/wYPJW36CTtNNTbOYCzRvXBsTbhCHBjjmQZ01hpagIyv/VcnxLW17kJqMxHoJumz
-        z5+hv3BrOqb8U7x+bnWe3Vg7hjpdsIzhk0Jj3S1z+5+winumEs8KsUyf1K1TnGwBajSWcB
-        LPdDuPzlUY6BQkUL/KCzLAeEkhIHNDaswPGDWAOJny+dzcHlZahNl7c2FSd1xp6gP0rEgj
-        KzUlj0Dxhw0txRUSLaqWlErEiWSU9Sozf2/yRD5Qwp08ro8Q2KjAE/20gQBa42apztEBT8
-        SUzGb5WlY8s1AJc0khV/84NW02EhLXtT8nMIfQBdpZd1EmcFI7Hj8Ky6D6u98A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1600871599;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=htFCLJWsNhxoKbCNWhQS/6Kyz86LUNNWBiBq6qkBFyQ=;
-        b=qGRiwr69/8k8ntlbQpv0icecJVUI4PbZN1b5MTw/xOk+gHpAMJmHhEqUxn40L21XWDImxq
-        PUiJwewr0xn47MAg==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+        id S1726656AbgIWPxE (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 23 Sep 2020 11:53:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726130AbgIWPxD (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 23 Sep 2020 11:53:03 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 492262223E;
+        Wed, 23 Sep 2020 15:52:54 +0000 (UTC)
+Date:   Wed, 23 Sep 2020 11:52:51 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     peterz@infradead.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Paul McKenney <paulmck@kernel.org>,
         the arch/x86 maintainers <x86@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Will Deacon <will@kernel.org>,
@@ -79,44 +63,55 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
-In-Reply-To: <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com> <87a6xjd1dw.fsf@nanos.tec.linutronix.de> <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com> <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
-Date:   Wed, 23 Sep 2020 16:33:19 +0200
-Message-ID: <877dska7gw.fsf@nanos.tec.linutronix.de>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
+ kmap_atomic & friends
+Message-ID: <20200923115251.7cc63a7e@oasis.local.home>
+In-Reply-To: <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
+References: <20200919091751.011116649@linutronix.de>
+        <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
+        <87mu1lc5mp.fsf@nanos.tec.linutronix.de>
+        <87k0wode9a.fsf@nanos.tec.linutronix.de>
+        <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
+        <87eemwcpnq.fsf@nanos.tec.linutronix.de>
+        <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
+        <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
+        <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
+        <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
+        <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Sep 21 2020 at 21:27, Thomas Gleixner wrote:
-> On Mon, Sep 21 2020 at 09:24, Linus Torvalds wrote:
->> On Mon, Sep 21, 2020 at 12:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->> Maybe we really *could* call this new kmap functionality something
->> like "kmap_percpu()" (or maybe "local" is good enough), and make it
->> act like your RT code does for spinlocks - not disable preemption, but
->> only disabling CPU migration.
->
-> I"m all for it, but the scheduler people have opinions :)
+On Wed, 23 Sep 2020 10:40:32 +0200
+peterz@infradead.org wrote:
 
-I just took the latest version of migrate disable patches
+> However, with migrate_disable() we can have each task preempted in a
+> migrate_disable() region, worse we can stack them all on the _same_ CPU
+> (super ridiculous odds, sure). And then we end up only able to run one
+> task, with the rest of the CPUs picking their nose.
 
-  https://lore.kernel.org/r/20200921163557.234036895@infradead.org
+What if we just made migrate_disable() a local_lock() available for !RT?
 
-removed the RT dependency on top of them and adopted the kmap stuff
-(addressing the various comments while at it and unbreaking ARM).
+I mean make it a priority inheritance PER CPU lock.
 
-I'm not going to post that until there is consensus about the general
-availability of migrate disable, but for those who want to play with it
-I've pushed the resulting combo out to:
+That is, no two tasks could do a migrate_disable() on the same CPU? If
+one task does a migrate_disable() and then gets preempted and the
+preempting task does a migrate_disable() on the same CPU, it will block
+and wait for the first task to do a migrate_enable().
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git highmem 
+No two tasks on the same CPU could enter the migrate_disable() section
+simultaneously, just like no two tasks could enter a preempt_disable()
+section.
 
-For testing I've tweaked a few places to use the new _local() variants
-and it survived testing so far and I've verified that there is actual
-preemption which means zap/restore of the thread local kmaps.
+In essence, we just allow local_lock() to be used for both RT and !RT.
 
-Thanks,
+Perhaps make migrate_disable() an anonymous local_lock()?
 
-        tglx
+This should lower the SHC in theory, if you can't have stacked migrate
+disables on the same CPU.
+
+-- Steve
