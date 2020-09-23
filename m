@@ -2,39 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C28275375
-	for <lists+linux-csky@lfdr.de>; Wed, 23 Sep 2020 10:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AB2275578
+	for <lists+linux-csky@lfdr.de>; Wed, 23 Sep 2020 12:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgIWImX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 23 Sep 2020 04:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
+        id S1726497AbgIWKVO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 23 Sep 2020 06:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726424AbgIWImS (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Sep 2020 04:42:18 -0400
+        with ESMTP id S1726130AbgIWKVO (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Sep 2020 06:21:14 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB242C061755;
-        Wed, 23 Sep 2020 01:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06077C0613CE;
+        Wed, 23 Sep 2020 03:21:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XUajjvVX4H86jnKIk5XMmvtu2ykOTjeXul3/BJu/hwU=; b=vqx/B66IY6FJeZM3oZmg/+Un+I
-        juk4SYQ/onu0T+HuU6X7fOPUIa6l9h67CTBxy3SeH234BxCXwizgdRSm3ioDdv8gF+TwH9O22nczg
-        iqTkLZMjcnlPg/CQhzPF7llJEWqzYy/Dtj1pYfU2/xkQ01m00/IofSzmAb4/u67Eqx5ofz6yzA4Jr
-        k+ENSw1eHzIn/yXomefawgme8b2QPv9bNql8zuIi3CmNCPYqKCAg5yJhl56cZVRivF4fUyQXVfWDV
-        f/qwJzeMoNXuRo68QwZoXhQ3RDUab4cXjbENpYgZ4B+vroJlmNEOdrOdKJLG7gc49cxKVxNJisFa1
-        TLPApaFA==;
+        bh=O4A3QRP4HEH7pkY19EFh0K5o5RX6GGVTm9jhhlkiNIA=; b=pNi62cLpz5Zta9gkWwEt4lfxLS
+        MvhJOB6wShDmzS61MUaHO4PpqjGN9Sm/CRsoDDzFeOKdB1AsXqzPU0+ObaxataHs7GirJ6ZZrNA29
+        JPWLW2cWAsjQWQbdxWBW0dcBjYBOhFdcukcR730OctenEgtMdnxXFf2H16Xmyh8kGL1vudzudnTWS
+        vgNOihiXykvGZ4JuqnJtzxEEw21LcbXj/0WRtpi2vf37zyqZKGgA0xHxtS+lCluMZDHojS7jgks+j
+        aId3Dnzk0AyXRqRRmekuY3B5xhsSuZTtpZucjls9NPVPsQXWrpdBaC7TpOBBrZeOKsQtIyaebVCjb
+        X6rPNsiw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kL0KM-0004t5-Gu; Wed, 23 Sep 2020 08:40:38 +0000
+        id 1kL1sU-00033a-DF; Wed, 23 Sep 2020 10:19:58 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A998D300455;
-        Wed, 23 Sep 2020 10:40:32 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0EA94301124;
+        Wed, 23 Sep 2020 12:19:54 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6A1AD213DCC80; Wed, 23 Sep 2020 10:40:32 +0200 (CEST)
-Date:   Wed, 23 Sep 2020 10:40:32 +0200
+        id E35462B79EDA9; Wed, 23 Sep 2020 12:19:53 +0200 (CEST)
+Date:   Wed, 23 Sep 2020 12:19:53 +0200
 From:   peterz@infradead.org
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -83,7 +83,7 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-sparc <sparclinux@vger.kernel.org>
 Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
  kmap_atomic & friends
-Message-ID: <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
+Message-ID: <20200923101953.GT2674@hirez.programming.kicks-ass.net>
 References: <20200919091751.011116649@linutronix.de>
  <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com>
  <87mu1lc5mp.fsf@nanos.tec.linutronix.de>
@@ -103,56 +103,20 @@ List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 On Mon, Sep 21, 2020 at 09:27:57PM +0200, Thomas Gleixner wrote:
-> On Mon, Sep 21 2020 at 09:24, Linus Torvalds wrote:
-> > On Mon, Sep 21, 2020 at 12:39 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >>
-> >> If a task is migrated to a different CPU then the mapping address will
-> >> change which will explode in colourful ways.
-> >
-> > Right you are.
-> >
-> > Maybe we really *could* call this new kmap functionality something
-> > like "kmap_percpu()" (or maybe "local" is good enough), and make it
-> > act like your RT code does for spinlocks - not disable preemption, but
-> > only disabling CPU migration.
-> 
-> I"m all for it, but the scheduler people have opinions :)
+> Alternatively this could of course be solved with per CPU page tables
+> which will come around some day anyway I fear.
 
-Right, so I'm concerned. migrate_disable() wrecks pretty much all
-Real-Time scheduler theory we have, and PREEMPRT_RT bringing it in is
-somewhat ironic.
+Previously (with PTI) we looked at making the entire kernel map per-CPU,
+and that takes a 2K copy on switch_mm() (or more general, the user part
+of whatever the top level directory is for architectures that have a
+shared kernel/user page-table setup in the first place).
 
-Yes, it allows breaking up non-preemptible regions of non-deterministic
-duration, and thereby both reduce and bound the scheduling latency, the
-cost for doing that is that the theory on CPU utilization/bandwidth go
-out the window.
+The idea was having a fixed per-cpu kernel page-table, share a bunch of
+(kernel) page-tables between all CPUs and then copy in the user part on
+switch.
 
-To easily see this consider an SMP system with a number of tasks equal
-to the number of CPUs. On a regular (preempt_disable) kernel we can
-always run each task, by virtue of always having an idle CPU to take the
-task.
+I've forgotten what the plan was for ASID/PCID in that scheme.
 
-However, with migrate_disable() we can have each task preempted in a
-migrate_disable() region, worse we can stack them all on the _same_ CPU
-(super ridiculous odds, sure). And then we end up only able to run one
-task, with the rest of the CPUs picking their nose.
-
-The end result is that, like with unbounded latency, we will still miss
-our deadline, simply because we got starved for CPU.
-
-
-Now, while we could (with a _lot_ of work) rework the kernel to not rely
-on the implicit per-cpu ness of things like spinlock_t, the moment we
-bring in basic primitives that rely on migrate_disable() we're stuck
-with it.
-
-
-The problem is; afaict there's been no research into this problem. There
-might be scheduling (read: balancing) schemes that can mitigate/solve
-this problem, or it might prove to be a 'hard' problem, I just don't
-know. But once we start down this road, it's going to be hell to get rid
-of it.
-
-That's why I've been arguing (for many years) to strictly limit this to
-PREEMPT_RT and only as a gap-stop, not a fundamental primitive to build
-on.
+For x86_64 we've been fearing the performance of that 2k copy, but I
+don't think we've ever actually bit the bullet and implemented it to see
+how bad it really is.
