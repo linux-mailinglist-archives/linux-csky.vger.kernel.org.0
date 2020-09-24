@@ -2,140 +2,80 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D02042769D5
-	for <lists+linux-csky@lfdr.de>; Thu, 24 Sep 2020 08:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D3D276AE4
+	for <lists+linux-csky@lfdr.de>; Thu, 24 Sep 2020 09:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbgIXG5z (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 24 Sep 2020 02:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S1727120AbgIXHgf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 24 Sep 2020 03:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726902AbgIXG5y (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 24 Sep 2020 02:57:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E880C0613CE;
-        Wed, 23 Sep 2020 23:57:54 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1600930672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5rTYnFSI7MvYdctqS1tc/c91OuHk2uQv9NNDSCQ04XQ=;
-        b=ToSaPZLxQ2AH6wpji2/x8TcisM3A51I/7u6foK9kSTrf7OV6+B/sYvPqQhMtEJrg0N9zIx
-        Cxs2etUyPDaehZQCOzhxH7PpvSyJSfy+zT5nw6FTVB78t6JNp7mDPmryw8BrJtWSznRbjf
-        8WXrnLC1goQovtz1OVkxeDIie+039a2C5Ao2dLue3fpVFSN5R/cBi6m5tXzS9aMxE6UJwX
-        Uwp2HtahcdV3lHGQhtB2rKe1baF/Au/D2y5x0sKC4vrpIL/XuoPxLZOPdKWgIlvAl5aFPa
-        sm2IQ31/n393ddHyPDhkeJ4Ev5cXAXShQDmJK93cRSzGvYG6PFna1CfbOLLbSA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1600930672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5rTYnFSI7MvYdctqS1tc/c91OuHk2uQv9NNDSCQ04XQ=;
-        b=EvF/NhfcVha3UwOSEREyL46c1SondfygAd7QtbHcK6NXwedthX3cPGyjT7D4JChbCJd2jo
-        pNgVY6bwfByW4sDA==
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     peterz@infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list\:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
-In-Reply-To: <20200923171234.0001402d@oasis.local.home>
-References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com> <87a6xjd1dw.fsf@nanos.tec.linutronix.de> <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com> <87sgbbaq0y.fsf@nanos.tec.linutronix.de> <20200923084032.GU1362448@hirez.programming.kicks-ass.net> <20200923115251.7cc63a7e@oasis.local.home> <874kno9pr9.fsf@nanos.tec.linutronix.de> <20200923171234.0001402d@oasis.local.home>
-Date:   Thu, 24 Sep 2020 08:57:52 +0200
-Message-ID: <871riracgf.fsf@nanos.tec.linutronix.de>
+        with ESMTP id S1726655AbgIXHgc (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 24 Sep 2020 03:36:32 -0400
+Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FD6C0613CE
+        for <linux-csky@vger.kernel.org>; Thu, 24 Sep 2020 00:36:32 -0700 (PDT)
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4Bxn0p4dj1z1rtZW;
+        Thu, 24 Sep 2020 09:36:25 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4Bxn0n4X4Kz1qyXD;
+        Thu, 24 Sep 2020 09:36:25 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id j-KCvUrx7nDZ; Thu, 24 Sep 2020 09:36:24 +0200 (CEST)
+X-Auth-Info: 8ronH07tWdu1XzNhwoSiBMOdcXov5iGOJ61TwDCB0oH2QygpST0od5Si4bxqvrCq
+Received: from igel.home (ppp-46-244-184-54.dynamic.mnet-online.de [46.244.184.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Thu, 24 Sep 2020 09:36:24 +0200 (CEST)
+Received: by igel.home (Postfix, from userid 1000)
+        id EA4C42C278E; Thu, 24 Sep 2020 09:36:23 +0200 (CEST)
+From:   Andreas Schwab <schwab@linux-m68k.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Nick Hu <nickhu@andestech.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org
+Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
+References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
+        <1593266228-61125-2-git-send-email-guoren@kernel.org>
+        <20200911204512.GA2705@aurel32.net>
+        <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
+        <20200914103836.GB2705@aurel32.net>
+X-Yow:  ..  are the STEWED PRUNES still in the HAIR DRYER?
+Date:   Thu, 24 Sep 2020 09:36:23 +0200
+In-Reply-To: <20200914103836.GB2705@aurel32.net> (Aurelien Jarno's message of
+        "Mon, 14 Sep 2020 12:38:36 +0200")
+Message-ID: <87lfgzeidk.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Sep 23 2020 at 17:12, Steven Rostedt wrote:
-> On Wed, 23 Sep 2020 22:55:54 +0200
-> Then scratch the idea of having anonymous local_lock() and just bring
-> local_lock in directly? Then have a kmap local lock, which would only
-> block those that need to do a kmap.
+On Sep 14 2020, Aurelien Jarno wrote:
 
-That's still going to end up in lock ordering nightmares and you lose
-the ability to use kmap_local from arbitrary contexts which was again
-one of the goals of this exercise.
+> How should we proceed to get that fixed in time for 5.9? For the older
+> branches where it has been backported (so far 5.7 and 5.8), should we
+> just get that commit reverted instead?
 
-Aside of that you're imposing reentrancy protections on something which
-does not need it in the first place.
+Can this please be resolved ASAP?
 
-> Now as for migration disabled nesting, at least now we would have
-> groupings of this, and perhaps the theorists can handle that. I mean,
-> how is this much different that having a bunch of tasks blocked on a
-> mutex with the owner is pinned on a CPU?
->
-> migrate_disable() is a BKL of pinning affinity.
+Andreas.
 
-No. That's just wrong. preempt disable is a concurrency control,
-i.e. protecting against reentrancy on a given CPU. But it's a cpu global
-protection which means that it's not protecting a specific code path.
-
-Contrary to preempt disable, migrate disable is not protecting against
-reentrancy on a given CPU. It's a temporary restriction to the scheduler
-on placement.
-
-The fact that disabling preemption implicitely disables migration does
-not make them semantically equivalent.
-
-> If we only have local_lock() available (even on !RT), then it makes
-> the blocking in groups. At least this way you could grep for all the
-> different local_locks in the system and plug that into the algorithm
-> for WCS, just like one would with a bunch of mutexes.
-
-You cannot do that on RT at all where migrate disable is substituting
-preempt disable in spin and rw locks. The result would be the same as
-with a !RT kernel just with horribly bad performance.
-
-That means the stacking problem has to be solved anyway.
-
-So why on earth do you want to create yet another special duct tape case
-for kamp_local() which proliferates inconsistency instead of aiming for
-consistency accross all preemption models?
-
-Thanks,
-
-        tglx
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
