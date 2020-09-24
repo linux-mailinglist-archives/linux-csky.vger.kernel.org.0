@@ -2,124 +2,163 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA1327767D
-	for <lists+linux-csky@lfdr.de>; Thu, 24 Sep 2020 18:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB4227780F
+	for <lists+linux-csky@lfdr.de>; Thu, 24 Sep 2020 19:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgIXQTu (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 24 Sep 2020 12:19:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43646 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726458AbgIXQTu (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 24 Sep 2020 12:19:50 -0400
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 03DC52311B;
-        Thu, 24 Sep 2020 16:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600964389;
-        bh=r00IuGK5X4M7N6a9KOcuaC8vPlLWVqhKALShVxiGX1k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J8IIsKYi2Sg1I974iLW774RlXPH4NpiJIHTCb40J2Kg5XuyCH70i3/2ElWkQC4dLl
-         VIa/s7z3oKL0Y5ZO2WHgzdjvS81cW4H3GK23R4h3sBFEHcd939hMI6uFOA04s4haSp
-         xuoTdJh0UgzRKbYb/hnhHLcmAQRNY8PysRdFdkfI=
-Received: by mail-lf1-f41.google.com with SMTP id w11so4615496lfn.2;
-        Thu, 24 Sep 2020 09:19:48 -0700 (PDT)
-X-Gm-Message-State: AOAM531fY8mjW4vt2oAwjn/poTUstmpQCHyb/pmecbxYJTYLwKTZrLrT
-        tqa2A8KnxL2mDfylRnMofLPJk8ekAH6j+lYcIPA=
-X-Google-Smtp-Source: ABdhPJxK14YFyUBWy6SgCJIl22YZISDj8RkvTJ370I4zSII4adfInU3jERuIkf/bpKmN5pFlCasStitlaM5OzKK+AJg=
-X-Received: by 2002:ac2:5e99:: with SMTP id b25mr82111lfq.248.1600964387152;
- Thu, 24 Sep 2020 09:19:47 -0700 (PDT)
+        id S1727687AbgIXRzO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 24 Sep 2020 13:55:14 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:50314 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726915AbgIXRzO (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 24 Sep 2020 13:55:14 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1600970110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YRlGrH6qHmnud4V/lnVcV5vqfU+DBGnkWu7EgTdSlr8=;
+        b=R1sSPNYUxHYkL72kHsFR+TjF2/2XwUg3yHnnvqS04QAoOSx3FfOe7kjlz2P4SBE6pJNUIa
+        hdR8ztc2Y876w4EM4LOexnHM/7SZoZmxV1htzbXf7EKpktR4oJ6+4mHuXWjkPH1VY/l3WA
+        BDZuq2kCxBWA+lBGZas1gx2m7Dv1Mr9TuyMtHCzHwnqPd7pEkH0IPycsMRDeGzIT+LhH/P
+        fD5rejTsusYZl+6oPjNSvlWEGFuSs+dru2lqmqS0eQyEjsJRaoi/QioZZsY52Jx0mxP/yt
+        DHX2BsnUtXH095ARER7BX2h+L097buboL3NLI28knfxP0+LsVtWbo4iS7mzumg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1600970110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YRlGrH6qHmnud4V/lnVcV5vqfU+DBGnkWu7EgTdSlr8=;
+        b=80WsylEKjzTs3/b8Ys3ZZODQN3enPjmHtostMFWbuTS0dOkCPecrcEXoDR2lpjy5cNRqVe
+        3kVR1EQtT/FXXFAg==
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     peterz@infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "open list\:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-sparc <sparclinux@vger.kernel.org>
+Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of kmap_atomic & friends
+In-Reply-To: <20200924083241.314f2102@gandalf.local.home>
+References: <20200919091751.011116649@linutronix.de> <CAHk-=wiYGyrFRbA1cc71D2-nc5U9LM9jUJesXGqpPnB7E4X1YQ@mail.gmail.com> <87mu1lc5mp.fsf@nanos.tec.linutronix.de> <87k0wode9a.fsf@nanos.tec.linutronix.de> <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com> <87eemwcpnq.fsf@nanos.tec.linutronix.de> <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com> <87a6xjd1dw.fsf@nanos.tec.linutronix.de> <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com> <87sgbbaq0y.fsf@nanos.tec.linutronix.de> <20200923084032.GU1362448@hirez.programming.kicks-ass.net> <20200923115251.7cc63a7e@oasis.local.home> <874kno9pr9.fsf@nanos.tec.linutronix.de> <20200923171234.0001402d@oasis.local.home> <871riracgf.fsf@nanos.tec.linutronix.de> <20200924083241.314f2102@gandalf.local.home>
+Date:   Thu, 24 Sep 2020 19:55:10 +0200
+Message-ID: <875z8383gh.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
- <1593266228-61125-2-git-send-email-guoren@kernel.org> <20200911204512.GA2705@aurel32.net>
- <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
- <20200914103836.GB2705@aurel32.net> <87lfgzeidk.fsf@igel.home>
-In-Reply-To: <87lfgzeidk.fsf@igel.home>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 25 Sep 2020 00:19:35 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com>
-Message-ID: <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com>
-Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-To:     Andreas Schwab <schwab@linux-m68k.org>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>,
-        Nick Hu <nickhu@andestech.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-How about this, revert the commit and don't free INIT_DATA_SECTION. I
-think the solution is safe enough, but wast a little memory.
-
-diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-index f3586e3..34d00d9 100644
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -22,13 +22,11 @@ SECTIONS
-        /* Beginning of code and text segment */
-        . = LOAD_OFFSET;
-        _start = .;
--       _stext = .;
-        HEAD_TEXT_SECTION
-        . = ALIGN(PAGE_SIZE);
-
-        __init_begin = .;
-        INIT_TEXT_SECTION(PAGE_SIZE)
--       INIT_DATA_SECTION(16)
-        . = ALIGN(8);
-        __soc_early_init_table : {
-                __soc_early_init_table_start = .;
-@@ -55,6 +53,7 @@ SECTIONS
-        . = ALIGN(SECTION_ALIGN);
-        .text : {
-                _text = .;
-+               _stext = .;
-                TEXT_TEXT
-                SCHED_TEXT
-                CPUIDLE_TEXT
-@@ -67,6 +66,8 @@ SECTIONS
-                _etext = .;
-        }
-
-+       INIT_DATA_SECTION(16)
-+
-        /* Start of data section */
-        _sdata = .;
-        RO_DATA(SECTION_ALIGN)
-
-On Thu, Sep 24, 2020 at 3:36 PM Andreas Schwab <schwab@linux-m68k.org> wrote:
+On Thu, Sep 24 2020 at 08:32, Steven Rostedt wrote:
+> On Thu, 24 Sep 2020 08:57:52 +0200
+> Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> On Sep 14 2020, Aurelien Jarno wrote:
+>> > Now as for migration disabled nesting, at least now we would have
+>> > groupings of this, and perhaps the theorists can handle that. I mean,
+>> > how is this much different that having a bunch of tasks blocked on a
+>> > mutex with the owner is pinned on a CPU?
+>> >
+>> > migrate_disable() is a BKL of pinning affinity.  
+>> 
+>> No. That's just wrong. preempt disable is a concurrency control,
 >
-> > How should we proceed to get that fixed in time for 5.9? For the older
-> > branches where it has been backported (so far 5.7 and 5.8), should we
-> > just get that commit reverted instead?
+> I think you totally misunderstood what I was saying. The above wasn't about
+> comparing preempt_disable to migrate_disable. It was comparing
+> migrate_disable to a chain of tasks blocked on mutexes where the top owner
+> has preempt_disable set. You still have a bunch of tasks that can't move to
+> other CPUs.
+
+What? The top owner does not prevent any task from moving. The tasks
+cannot move because they are blocked on the mutex, which means they are
+not runnable and non runnable tasks are not migrated at all.
+
+I really don't understand what you are trying to say.
+
+>> > If we only have local_lock() available (even on !RT), then it makes
+>> > the blocking in groups. At least this way you could grep for all the
+>> > different local_locks in the system and plug that into the algorithm
+>> > for WCS, just like one would with a bunch of mutexes.  
+>> 
+>> You cannot do that on RT at all where migrate disable is substituting
+>> preempt disable in spin and rw locks. The result would be the same as
+>> with a !RT kernel just with horribly bad performance.
 >
-> Can this please be resolved ASAP?
+> Note, the spin and rwlocks already have a lock associated with them. Why
+> would it be any different on RT? I wasn't suggesting adding another lock
+> inside a spinlock. Why would I recommend THAT? I wasn't recommending
+> blindly replacing migrate_disable() with local_lock(). I just meant expose
+> local_lock() but not migrate_disable().
+
+We already exposed local_lock() to non RT and it's for places which do
+preempt_disable() or local_irq_disable() without having a lock
+associated. But both primitives are scope less and therefore behave like
+CPU local BKLs. What local_lock() provides in these cases is:
+
+  - Making the protection scope clear by associating a named local
+    lock which is coverred by lockdep.
+
+  - It still maps to preempt_disable() or local_irq_disable() in !RT
+    kernels
+
+  - The scope and the named lock allows RT kernels to substitute with
+    real (recursion aware) locking primitives which keep preemption and
+    interupts enabled, but provide the fine grained protection for the
+    scoped critical section.
+  
+So how would you substitute migrate_disable() with a local_lock()? You
+can't. Again migrate_disable() is NOT a concurrency control and
+therefore it cannot be substituted by any concurrency control primitive.
+
+>> That means the stacking problem has to be solved anyway.
+>> 
+>> So why on earth do you want to create yet another special duct tape case
+>> for kamp_local() which proliferates inconsistency instead of aiming for
+>> consistency accross all preemption models?
 >
-> Andreas.
->
-> --
-> Andreas Schwab, schwab@linux-m68k.org
-> GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-> "And now for something completely different."
+> The idea was to help with the scheduling issue.
 
+I don't see how mixing concepts and trying to duct tape a problem which
+is clearly in the realm of the scheduler, i.e. load balancing and
+placing algorithms, is helpful.
 
+Thanks,
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+        tglx
