@@ -2,142 +2,116 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740E0277973
-	for <lists+linux-csky@lfdr.de>; Thu, 24 Sep 2020 21:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B5B2780C3
+	for <lists+linux-csky@lfdr.de>; Fri, 25 Sep 2020 08:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728821AbgIXThA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 24 Sep 2020 15:37:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46900 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728781AbgIXThA (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 24 Sep 2020 15:37:00 -0400
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600976218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=twNrygaxLsVZPNKYCHY3ZfHX7UvhS+LdDIfmkCz5FTg=;
-        b=Kr4u0+wKDT4eE4Ovfk8dVq+zwEnG3+m9nBXV98aP7EduhHCHW16A+CAkoAsez2npbw8dyM
-        F42oliu8ePZ+iErn6O4Kku3QUN9ZIpqaI29BaqqCM/MwyQAJ1jE7qUu8VTcTnyor0Tjv1G
-        AGafI+2TkSoImau4U/fywK786XFkk6M=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-215-ScEXMgfTOjaTARK8VnAmnA-1; Thu, 24 Sep 2020 15:36:56 -0400
-X-MC-Unique: ScEXMgfTOjaTARK8VnAmnA-1
-Received: by mail-wm1-f72.google.com with SMTP id b14so126237wmj.3
-        for <linux-csky@vger.kernel.org>; Thu, 24 Sep 2020 12:36:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=twNrygaxLsVZPNKYCHY3ZfHX7UvhS+LdDIfmkCz5FTg=;
-        b=DSNuzNWgo1cg5w+mZ9PuaMNrlH+js8VVWMjMr7sFuJEKRA/q0vIoCJwLNqsUD3dpQf
-         MzM5tj75MMUydgFVbC0nqkONO0WaMP/I6lv7MLSdAjjvtgNfwesz2P2/IexN5EUSsV3L
-         oRHQHiTdJ+BLzEKkSngbw1ubeExl4pc1XldUL7uLuud6koNPLbvvCkLhxXnoRlC9SAIW
-         pA+ZcobEzMzelNb+7wuExcHSq6h6x9ZcqEje0FnT2DAyDTeuJu5I+64kjT2gdWLeybKp
-         oYZ5QmNbw0a47felithlk0rlQ8JAAyEF13F//BvAWs9FWYrxW5iYWJzGqc4jQHllJfxJ
-         5UBw==
-X-Gm-Message-State: AOAM532tIVZ2LlQY3F0FUc8tyCnhA5inGhM047PSovo5lWgpOKzL8rTX
-        0/64ndNXy5ueIUPrz/cDm52Bhc8zLcejww3zH9nxLtR3PM8pc+LnHyO+WKpYvod89UEEo3KK4w4
-        6xJwhqfY1aJNlEdEXrQpMcA==
-X-Received: by 2002:adf:f34a:: with SMTP id e10mr491626wrp.91.1600976215159;
-        Thu, 24 Sep 2020 12:36:55 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJynpHjsvPmbyspQelrDSoXiAKotSicrrWAZZ3D0g/KyVrY5rzQz/w0XAUEKgRr9DXJGglK1Gg==
-X-Received: by 2002:adf:f34a:: with SMTP id e10mr491615wrp.91.1600976214950;
-        Thu, 24 Sep 2020 12:36:54 -0700 (PDT)
-Received: from x1.bristot.me (host-87-17-196-109.retail.telecomitalia.it. [87.17.196.109])
-        by smtp.gmail.com with ESMTPSA id h204sm302746wmf.35.2020.09.24.12.36.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2020 12:36:54 -0700 (PDT)
-Subject: Re: [patch RFC 00/15] mm/highmem: Provide a preemptible variant of
- kmap_atomic & friends
-To:     peterz@infradead.org, Steven Rostedt <rostedt@goodmis.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-sparc <sparclinux@vger.kernel.org>
-References: <87mu1lc5mp.fsf@nanos.tec.linutronix.de>
- <87k0wode9a.fsf@nanos.tec.linutronix.de>
- <CAHk-=wgbmwsTOKs23Z=71EBTrULoeaH2U3TNqT2atHEWvkBKdw@mail.gmail.com>
- <87eemwcpnq.fsf@nanos.tec.linutronix.de>
- <CAHk-=wgF-upZVpqJWK=TK7MS9H-Rp1ZxGfOG+dDW=JThtxAzVQ@mail.gmail.com>
- <87a6xjd1dw.fsf@nanos.tec.linutronix.de>
- <CAHk-=wjhxzx3KHHOMvdDj3Aw-_Mk5eRiNTUBB=tFf=vTkw1FeA@mail.gmail.com>
- <87sgbbaq0y.fsf@nanos.tec.linutronix.de>
- <20200923084032.GU1362448@hirez.programming.kicks-ass.net>
- <20200923115251.7cc63a7e@oasis.local.home>
- <20200924082717.GA1362448@hirez.programming.kicks-ass.net>
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-Message-ID: <7541acd1-65a0-0d55-4028-71cab544e90d@redhat.com>
-Date:   Thu, 24 Sep 2020 21:36:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1727044AbgIYGeI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 25 Sep 2020 02:34:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59026 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726925AbgIYGeI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 25 Sep 2020 02:34:08 -0400
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DDE17235F8;
+        Fri, 25 Sep 2020 06:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601015647;
+        bh=amAPdhrqPuLJn+5i6b8ttL9Z/Dbp2FpG/s3Qbb//sCo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GCuLxUSZHg/qzQby6H0WlGzbrFIr/jkty0DUSk2SYaejqaGd4z46Sjro3dAb+x1YD
+         eiT4fZ7/j3xLqZZPyEqnxYiRvv/rpE5/vzPmJIPXk3fz2nCDijfUmDcVXa7EcKNn2n
+         ggEHpUQEM4/KlhbUA+f7WXkv/tQEvVJ6tOZpdYsA=
+Received: by mail-lf1-f49.google.com with SMTP id y17so1526735lfa.8;
+        Thu, 24 Sep 2020 23:34:06 -0700 (PDT)
+X-Gm-Message-State: AOAM530RZeEZtdvTrZABHpbfJU+PdIbKGnY5z47wpCeOkaWurx8dm3s2
+        34Ea5hF4diit5awRqDR7bhcL39jBYnbxm65H1pk=
+X-Google-Smtp-Source: ABdhPJyj7MW82Lm69rSYI94+WN3tjHrUZIx1nispUPoncSCx8ouWV0ji/iKhmBQw8Og6fksOFpaqVmZZ+U1CYG99UtA=
+X-Received: by 2002:a19:3c8:: with SMTP id 191mr754965lfd.549.1601015645132;
+ Thu, 24 Sep 2020 23:34:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200924082717.GA1362448@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200922091505.471-1-zhenzhong.duan@gmail.com>
+ <20200922162901.GA3421308@ZenIV.linux.org.uk> <CAJF2gTSMWc_=j1NKCTXqhLj7cmSB_A3dYB7nL4F7H3jqT+u38A@mail.gmail.com>
+ <20200923002315.GC3421308@ZenIV.linux.org.uk> <CAJF2gTSU4e4yU63z1q502SeuTf2m2BKaD0yZ0deFj0TkiVupFg@mail.gmail.com>
+ <20200923045231.GH3421308@ZenIV.linux.org.uk>
+In-Reply-To: <20200923045231.GH3421308@ZenIV.linux.org.uk>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 25 Sep 2020 14:33:53 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTb1QN=BmbtcqkNPpUzGa1fQsQtMM2pjrRtNOVxdkkWkQ@mail.gmail.com>
+Message-ID: <CAJF2gTTb1QN=BmbtcqkNPpUzGa1fQsQtMM2pjrRtNOVxdkkWkQ@mail.gmail.com>
+Subject: Re: [PATCH] csky: Fix a size determination in gpr_get()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Zhenzhong Duan <zhenzhong.duan@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 9/24/20 10:27 AM, peterz@infradead.org wrote:
-> So my current todo list is:
-> 
->  - Change RT PULL
->  - Change DL PULL
->  - Add migrate_disable() tracer; exactly like preempt/irqoff, except
->    measuring task-runtime instead of cpu-time.
->  - Add a mode that measures actual interference.
->  - Add a traceevent to detect preemption in migrate_disable().
-> 
-> 
-> And then I suppose I should twist Daniel's arm to update his model to
-> include these scenarios and numbers.
+On Wed, Sep 23, 2020 at 12:52 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Wed, Sep 23, 2020 at 10:37:31AM +0800, Guo Ren wrote:
+>
+> > > What's going on there?  The mapping is really weird - assuming
+> > > you had v0..v31 in the first 32 elements of regs->vr[], you
+> > > end up with
+> > >
+> > > v0 v1 v2 v3 v2 v3 v6 v7 v4 v5 v10 v11 v6 v7 v14 v15
+> > > v8 v9 v18 v19 v10 v11 v22 v23 v12 v13 v26 v27 v14 v15 v30 v31
+> > >
+> > > in the beginning of the output.  Assuming it is the intended
+> > > behaviour, it's probably worth some comments...
+> > FPU & VDSP use the same regs. 32 FPU regs' width is 64b and 16 VDSP
+> > regs' width is 128b.
+> >
+> > vr[0], vr[1] = fp[0] & vr[0] vr[1], vr[2], vr[3] = vdsp reg[0]
+> > ...
+> > vr[60], vr[61] = fp[15] & vr[60] vr[61], vr[62], vr[63] = vdsp reg[15]
+> > vr[64], vr[65] = fp[16]
+> > vr[66], vr[67] = fp[17]
+> > ...
+> > vr[94], vr[95] = fp[31]
+> >
+> > Yeah, this is confusing and I'll add a comment later.
+>
+> Umm...  It would help if you described these 3 layouts:
+>         1) kernel-side with VDSP
+With VDSP: we use vdsp ld/st instructions to access first 16
+128bit-regs and use fpu ld/st instructions to access last 16
+64bit-regs.
 
-Challenge accepted :-)
+>         2) userland (identical to (1)?)
+Identical to 1.
 
--- Daniel
+>         3) kernel-side without VDSP
+Without VDSP: we use fpu ld/st instructions to access last 32 64bit-regs.
 
+So, there are 96 32bit-vr[] for the struct. And with VDSP or not will
+got different storage format.
+With VDSP:
+vr128[16] // contain first fp64[16]
+fp64[16]; // second fp64[16]
+
+Without VDSP:
+fp64[32]
+no-use for the reset vr[]
+
+> Still confused...
+>
+> PS: my apologies re commit message - I left a note to myself when doing
+> that series and then forgot about it ;-/
+>
+> Anyway, which tree should it go through?  In any case, that fix is
+Thx for your job, and pushing to linus with Zhenzhong Duan's advice.
+
+> Acked-by: Al Viro <viro@zeniv.linux.org.uk>
+> and I can take it through vfs.git or you guys can pick in csky tree;
+> up to you.
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
