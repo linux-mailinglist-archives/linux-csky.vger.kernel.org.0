@@ -2,27 +2,27 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDA427B964
-	for <lists+linux-csky@lfdr.de>; Tue, 29 Sep 2020 03:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED35D27BA19
+	for <lists+linux-csky@lfdr.de>; Tue, 29 Sep 2020 03:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbgI2Ba3 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 28 Sep 2020 21:30:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39272 "EHLO mail.kernel.org"
+        id S1727727AbgI2Bft (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 28 Sep 2020 21:35:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40296 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726379AbgI2Ba3 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 28 Sep 2020 21:30:29 -0400
+        id S1727486AbgI2BbH (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 28 Sep 2020 21:31:07 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6280A2083B;
-        Tue, 29 Sep 2020 01:30:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3FCDC216C4;
+        Tue, 29 Sep 2020 01:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601343029;
+        s=default; t=1601343067;
         bh=lX9O4hxvxd90v1IeDiyJoQVpOMMiA7ft8aBH2MqUH60=;
         h=From:To:Cc:Subject:Date:From;
-        b=a7sj9sdi5WSXc7BXNnKs3zrdZZWUN7ZDB7O+wsrc6ij6zA7NbLruJ49HlyWGMTaV2
-         tIk/sNCid6tedj0tnl8CXlu0ouPBzEEBQjZmF/FxiMtqmnJuNLZtBJIFtlEj5rn5yI
-         dNMSgPz+Wa32hjzL7vGVh0ZUDidga5lJghHhhMFo=
+        b=XluAL55v+wvU58u+ARFlTqN50Bu8JWsz6/yWxd9udHSSrlzna25hzC0vyfsIriGmV
+         JLIsE+UNeNBgtmkxpKj9+eaHDnOMvRqtzDQRvGkeD6raoVbud/KFJIwXkQDlDyx/ql
+         vrxyPCmtkhxUL85GVD641RdQm2k30I2lQ2Zz84/4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Guo Ren <guoren@linux.alibaba.com>,
@@ -30,9 +30,9 @@ Cc:     Guo Ren <guoren@linux.alibaba.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 01/29] clocksource/drivers/timer-gx6605s: Fixup counter reload
-Date:   Mon, 28 Sep 2020 21:29:58 -0400
-Message-Id: <20200929013027.2406344-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 01/18] clocksource/drivers/timer-gx6605s: Fixup counter reload
+Date:   Mon, 28 Sep 2020 21:30:47 -0400
+Message-Id: <20200929013105.2406634-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-stable: review
