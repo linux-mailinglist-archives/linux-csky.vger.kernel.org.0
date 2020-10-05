@@ -2,119 +2,165 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F779283FD1
-	for <lists+linux-csky@lfdr.de>; Mon,  5 Oct 2020 21:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC482841F2
+	for <lists+linux-csky@lfdr.de>; Mon,  5 Oct 2020 23:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729302AbgJETpy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 5 Oct 2020 15:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S1729729AbgJEVM5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 5 Oct 2020 17:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727007AbgJETpx (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 5 Oct 2020 15:45:53 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93FDC0613CE
-        for <linux-csky@vger.kernel.org>; Mon,  5 Oct 2020 12:45:53 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id s19so38059plp.3
-        for <linux-csky@vger.kernel.org>; Mon, 05 Oct 2020 12:45:53 -0700 (PDT)
+        with ESMTP id S1729710AbgJEVM4 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 5 Oct 2020 17:12:56 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B90C0613A7
+        for <linux-csky@vger.kernel.org>; Mon,  5 Oct 2020 14:12:56 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id z5so9143363ilq.5
+        for <linux-csky@vger.kernel.org>; Mon, 05 Oct 2020 14:12:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kPwILm2H0sETNXBahvwPUIdNPmK2c87ErCJPYr1DBUI=;
-        b=m2E4KR0nmc7nJQL45uZ4PanuHrj5odtDbQBDOB9b+hB128UBGEFMMSZqSp5my3UeJA
-         GHsHd5UHZwWED6mgBNJugsvH1Ea/rHiPQy/xjEouuwrAlG+gT/7gy3JwBDmGFzLH93CV
-         Xm0PCwh54oNPtCkr0GLxjxGy2vLehqiElOI5qB1I7XaHI9tfTqMlZJ8nq4iU1rsCR/S7
-         Mmao5mBGDbnzbTciPvzbnke+Yx+gdW62tHmYdDZDh9jJAGh1dfLDEcU48WcIC42RMRfT
-         zXMNdOYHXkjTc9uXK0DMXgFv1Pv6FG1c84MxTpiQ1ruItd2tXUJpOif/HLfUaLrrkev6
-         X44g==
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hKXwSMve9PnldoH43kS3Xgw5qsEbRZ3Kf03jpGjBYtg=;
+        b=kdzNUrb1DhZ2jENYGiwAQKI6NwynyshSmiBq14W8rPg2MF0psG+TQ2FRmPIcYQW/bm
+         YdinuQL1h+9HkZZ+MIFLcgfrLEpZT4Se5cjqeZOREyJ9Yx4wGfhrrE0KK9jDsBVjSGbd
+         hlrOhl31YH5Otjhzo7Sg4w3G7dNl7mQUad1gE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=kPwILm2H0sETNXBahvwPUIdNPmK2c87ErCJPYr1DBUI=;
-        b=LX36TeZ2K9DNCTdGEdsDk8VCzkeXj7hjIuPpCBRtcS68sgeME+8U65ZdpP3cQs4up/
-         VQIDm5vFHQaAxsEdLHcQ3X6NtHvBycZx8+8dAqCHUzmxo40hOs6Q/O40YMeivm7+P5Ey
-         wuaubDSHOzrcufluJJl/KPZl/ZEFAsCffeWvZbEcjGVVHk2U+cJSmVBVfCLM+lXLow6l
-         9+ZcWYfj4acWUVCJ4JiQQRvOhi7IyXFClQJPLI3eyslUCq+3cgymqQxgSd/opsVzZQVe
-         h50XzTKLI5Hfte484CIJZl7WvpuzgLt7ALvydOZHTAcTbsdF6L/KiVdSa3xSYVSw6dZz
-         7Rag==
-X-Gm-Message-State: AOAM533HUDcZ6lUFykoRlsEzEE/hKhsJ8e8WgxM8IiN+g4F1t1cN7HAJ
-        469/1o/tdd+07LyKaf7KALXR4Q==
-X-Google-Smtp-Source: ABdhPJw3SWHhkUaAg1XjvyB5XCCd63EQ7AAIIkxuPFRbDh3KD8mHwG2uISU/uJBrT0shZwpkiz1nGw==
-X-Received: by 2002:a17:90a:be05:: with SMTP id a5mr1071892pjs.118.1601927153154;
-        Mon, 05 Oct 2020 12:45:53 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id 189sm470140pfw.123.2020.10.05.12.45.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 12:45:52 -0700 (PDT)
-Date:   Mon, 05 Oct 2020 12:45:52 -0700 (PDT)
-X-Google-Original-Date: Mon, 05 Oct 2020 12:45:44 PDT (-0700)
-Subject:     Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-In-Reply-To: <87362stt1l.fsf@igel.home>
-CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        aou@eecs.berkeley.edu, tglx@linutronix.de, tycho@tycho.ws,
-        nickhu@andestech.com, linux-riscv@lists.infradead.org,
-        guoren@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     schwab@linux-m68k.org
-Message-ID: <mhng-b2aa7eab-cb69-4113-8c32-b5fcbd7e9150@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hKXwSMve9PnldoH43kS3Xgw5qsEbRZ3Kf03jpGjBYtg=;
+        b=oLiBrJDfUEie8L2lxx/9UNLhvx7zSWT1vfZgXoY+EI1BpNEEkQRzThInJtH6zp0XFN
+         nKKeuQijHOmUHr3Y1Y6wkZX2KpbVyP4lZtL++kKiyvwDH0RKCZuTiGzmomV/UDh8yvYj
+         IPFwKvHvesNS0ZZSCalnsX3NYEJflN6fSHP/Mgn+b3pWIS2Lxyfmt06dis8rdKIT2kwl
+         5/Ag10tZtA4pGQxmqr0uZi/oVvWd1EfQgEgqNJUePXCB8cdVWTnHE5KhybZru5J4w5BW
+         1BrAh7hJviigz2n4oqZBbCEVGmItNI9CF0zMZkze4dcPXtmw3SAJVqmw+1fdLbOfgHcy
+         f72A==
+X-Gm-Message-State: AOAM532exoFb9grK0e1BKDUJlY5hqKUtKlwioqQhXdcv8mnodHzXo3r7
+        gPLBeYSM/sTyDw5kspys6LPYXwU1556Wmka6vJ6H
+X-Google-Smtp-Source: ABdhPJzIPIQeIy/04Z4P4HcGGP5E5bBjfX0fewLMGLvvvCgeX+bqmqNmYXQ/+bGXmMYqx2Lldqxmz4h9L1DJTUt3lrs=
+X-Received: by 2002:a05:6e02:54d:: with SMTP id i13mr991738ils.219.1601932375822;
+ Mon, 05 Oct 2020 14:12:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <87362stt1l.fsf@igel.home> <mhng-b2aa7eab-cb69-4113-8c32-b5fcbd7e9150@palmerdabbelt-glaptop1>
+In-Reply-To: <mhng-b2aa7eab-cb69-4113-8c32-b5fcbd7e9150@palmerdabbelt-glaptop1>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 5 Oct 2020 14:12:44 -0700
+Message-ID: <CAOnJCUKa82Faf0DLfhR10i3dSJrQ6JZWwmCiLWTaAQf173CYwQ@mail.gmail.com>
+Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
+To:     Palmer Dabbelt <palmerdabbelt@google.com>
+Cc:     Andreas Schwab <schwab@linux-m68k.org>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nick Hu <nickhu@andestech.com>,
+        Anup Patel <anup@brainfault.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>, Zong Li <zong.li@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, 05 Oct 2020 11:40:54 PDT (-0700), schwab@linux-m68k.org wrote:
-> On Okt 05 2020, Palmer Dabbelt wrote:
+On Mon, Oct 5, 2020 at 12:46 PM Palmer Dabbelt <palmerdabbelt@google.com> w=
+rote:
 >
->> On Mon, 05 Oct 2020 01:25:22 PDT (-0700), schwab@linux-m68k.org wrote:
->>> On Sep 14 2020, Aurelien Jarno wrote:
->>>
->>>> How should we proceed to get that fixed in time for 5.9? For the older
->>>> branches where it has been backported (so far 5.7 and 5.8), should we
->>>> just get that commit reverted instead?
->>>
->>> Why is this still broken?
->>
->> Sorry, I hadn't seen this.  I'm not seeing a boot failure on 5.9-rc8 with just
->> CONFIG_HARDENED_USERCPOY=y in addition to defconfig (on QEMU, though I doubt
->> that's relevant here).
+> On Mon, 05 Oct 2020 11:40:54 PDT (-0700), schwab@linux-m68k.org wrote:
+> > On Okt 05 2020, Palmer Dabbelt wrote:
+> >
+> >> On Mon, 05 Oct 2020 01:25:22 PDT (-0700), schwab@linux-m68k.org wrote:
+> >>> On Sep 14 2020, Aurelien Jarno wrote:
+> >>>
+> >>>> How should we proceed to get that fixed in time for 5.9? For the old=
+er
+> >>>> branches where it has been backported (so far 5.7 and 5.8), should w=
+e
+> >>>> just get that commit reverted instead?
+> >>>
+> >>> Why is this still broken?
+> >>
+> >> Sorry, I hadn't seen this.  I'm not seeing a boot failure on 5.9-rc8 w=
+ith just
+> >> CONFIG_HARDENED_USERCPOY=3Dy in addition to defconfig (on QEMU, though=
+ I doubt
+> >> that's relevant here).
+> >
+> > I don't see a boot failure either, but eventually you will get crashes
+> > like this, and resources are not properly released:
+> >
+> > [ 4560.936645] usercopy: Kernel memory overwrite attempt detected to ke=
+rnel text (offset 241626, size 16)!
+> > [ 4560.945324] ------------[ cut here ]------------
+> > [ 4560.949954] kernel BUG at mm/usercopy.c:99!
+> > [ 4560.954030] Kernel BUG [#1]
+> > [ 4560.956805] Modules linked in: nfsv3 nfs_acl rfkill mmc_block sf_pdm=
+a i2c_ocores virt_dma spi_sifive uio_pdrv_genirq uio loop drm drm_panel_ori=
+entation_quirks rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd gr=
+ace fscache af_packet mscc macsec macb ptp pps_core phylink of_mdio fixed_p=
+hy libphy pwm_sifive mmc_spi crc_itu_t crc7 of_mmc_spi mmc_core spi_bitbang=
+ sunrpc sg dm_multipath dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua
+> > [ 4560.995103] CPU: 2 PID: 23806 Comm: nis Not tainted 5.8.10-1-default=
+ #1 openSUSE Tumbleweed (unreleased)
+> > [ 4561.004563] epc: ffffffe00036140e ra : ffffffe00036140e sp : ffffffe=
+004bc7d60
+> > [ 4561.011679]  gp : ffffffe00127ee60 tp : ffffffe1b05d0000 t0 : ffffff=
+e001297ca0
+> > [ 4561.018886]  t1 : ffffffe001297c30 t2 : 0000000000000000 s0 : ffffff=
+e004bc7d80
+> > [ 4561.026093]  s1 : ffffffe00003afda a0 : 000000000000005b a1 : ffffff=
+e1f7d67588
+> > [ 4561.033298]  a2 : ffffffe1f7d6c108 a3 : 0000000000000000 a4 : ffffff=
+e000043e80
+> > [ 4561.040506]  a5 : ffffffe1f7d6be80 a6 : 0000000000000144 a7 : 000000=
+0000000000
+> > [ 4561.047712]  s2 : 0000000000000010 s3 : 0000000000000000 s4 : ffffff=
+e00003afea
+> > [ 4561.054918]  s5 : ffffffe1f7e00e80 s6 : 0000002af4a2c2e0 s7 : ffffff=
+fffffff000
+> > [ 4561.062124]  s8 : 0000003ffffff000 s9 : ffffffe19f985400 s10: 000000=
+0000000010
+> > [ 4561.069329]  s11: ffffffe1f7e00e80 t3 : 0000000000038fa8 t4 : 000000=
+0000038fa8
+> > [ 4561.076533]  t5 : 0000000000000001 t6 : ffffffe00128e062
+> > [ 4561.081832] status: 0000000200000120 badaddr: 0000000000000000 cause=
+: 0000000000000003
+> > [ 4561.089821] ---[ end trace a7c93e7595e9c2cc ]---
+> > [ 4561.095589] BUG: Bad rss-counter state mm:00000000c54f4c29 type:MM_A=
+NONPAGES val:1
 >
-> I don't see a boot failure either, but eventually you will get crashes
-> like this, and resources are not properly released:
+> Ah, I must have misunderstood.  I guess I just assumed "init crashes" mea=
+nt on
+> boot, not just at some time later.  I just sent out a patch reverting thi=
+s, LMK
+> if it fixes the issue.  I have some work stuff to do, but I'll try to fin=
+d some
+> time tonight to look into fixing both of the bugs -- otherwise I'll just =
+take
+> the revert (assuming it does actually fix the issue for you and passes th=
+e
+> tests).
 >
-> [ 4560.936645] usercopy: Kernel memory overwrite attempt detected to kernel text (offset 241626, size 16)!
-> [ 4560.945324] ------------[ cut here ]------------
-> [ 4560.949954] kernel BUG at mm/usercopy.c:99!
-> [ 4560.954030] Kernel BUG [#1]
-> [ 4560.956805] Modules linked in: nfsv3 nfs_acl rfkill mmc_block sf_pdma i2c_ocores virt_dma spi_sifive uio_pdrv_genirq uio loop drm drm_panel_orientation_quirks rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache af_packet mscc macsec macb ptp pps_core phylink of_mdio fixed_phy libphy pwm_sifive mmc_spi crc_itu_t crc7 of_mmc_spi mmc_core spi_bitbang sunrpc sg dm_multipath dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua
-> [ 4560.995103] CPU: 2 PID: 23806 Comm: nis Not tainted 5.8.10-1-default #1 openSUSE Tumbleweed (unreleased)
-> [ 4561.004563] epc: ffffffe00036140e ra : ffffffe00036140e sp : ffffffe004bc7d60
-> [ 4561.011679]  gp : ffffffe00127ee60 tp : ffffffe1b05d0000 t0 : ffffffe001297ca0
-> [ 4561.018886]  t1 : ffffffe001297c30 t2 : 0000000000000000 s0 : ffffffe004bc7d80
-> [ 4561.026093]  s1 : ffffffe00003afda a0 : 000000000000005b a1 : ffffffe1f7d67588
-> [ 4561.033298]  a2 : ffffffe1f7d6c108 a3 : 0000000000000000 a4 : ffffffe000043e80
-> [ 4561.040506]  a5 : ffffffe1f7d6be80 a6 : 0000000000000144 a7 : 0000000000000000
-> [ 4561.047712]  s2 : 0000000000000010 s3 : 0000000000000000 s4 : ffffffe00003afea
-> [ 4561.054918]  s5 : ffffffe1f7e00e80 s6 : 0000002af4a2c2e0 s7 : fffffffffffff000
-> [ 4561.062124]  s8 : 0000003ffffff000 s9 : ffffffe19f985400 s10: 0000000000000010
-> [ 4561.069329]  s11: ffffffe1f7e00e80 t3 : 0000000000038fa8 t4 : 0000000000038fa8
-> [ 4561.076533]  t5 : 0000000000000001 t6 : ffffffe00128e062
-> [ 4561.081832] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-> [ 4561.089821] ---[ end trace a7c93e7595e9c2cc ]---
-> [ 4561.095589] BUG: Bad rss-counter state mm:00000000c54f4c29 type:MM_ANONPAGES val:1
+> I saw Atish post after I started writing this: I agree we need to sort of=
+ the
+> kernel's memory map, I just think it's too late for 5.9.
+>
 
-Ah, I must have misunderstood.  I guess I just assumed "init crashes" meant on
-boot, not just at some time later.  I just sent out a patch reverting this, LMK
-if it fixes the issue.  I have some work stuff to do, but I'll try to find some
-time tonight to look into fixing both of the bugs -- otherwise I'll just take
-the revert (assuming it does actually fix the issue for you and passes the
-tests).
+Yes. It is definitely a for-next material. I will try to take a stab
+at this if nobody else has an objection.
 
-I saw Atish post after I started writing this: I agree we need to sort of the
-kernel's memory map, I just think it's too late for 5.9.
+> > Andreas.
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-> Andreas.
+
+
+--
+Regards,
+Atish
