@@ -2,97 +2,158 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3AA283EE7
-	for <lists+linux-csky@lfdr.de>; Mon,  5 Oct 2020 20:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0968D283F65
+	for <lists+linux-csky@lfdr.de>; Mon,  5 Oct 2020 21:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725994AbgJESlB (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 5 Oct 2020 14:41:01 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:48009 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbgJESlB (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 5 Oct 2020 14:41:01 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4C4qDT3bBpz1qt4L;
-        Mon,  5 Oct 2020 20:40:56 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4C4qDS5R48z1r0lS;
-        Mon,  5 Oct 2020 20:40:56 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id dhxAh5FxZBrC; Mon,  5 Oct 2020 20:40:55 +0200 (CEST)
-X-Auth-Info: wToZBNEoEF1rWN+IPsWKDZkac8E1RIC382M0Q6fDxQgtEkwRSbB5xQed0w7uOL0i
-Received: from igel.home (ppp-46-244-175-195.dynamic.mnet-online.de [46.244.175.195])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Mon,  5 Oct 2020 20:40:55 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id E303C2C2982; Mon,  5 Oct 2020 20:40:54 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Palmer Dabbelt <palmerdabbelt@google.com>
-Cc:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        aou@eecs.berkeley.edu, tglx@linutronix.de, tycho@tycho.ws,
-        nickhu@andestech.com, linux-riscv@lists.infradead.org,
-        guoren@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org
-Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-References: <mhng-847e71cf-64bc-464b-8d09-3bcec40aa491@palmerdabbelt-glaptop1>
-X-Yow:  HOW could a GLASS be YELLING??
-Date:   Mon, 05 Oct 2020 20:40:54 +0200
-In-Reply-To: <mhng-847e71cf-64bc-464b-8d09-3bcec40aa491@palmerdabbelt-glaptop1>
-        (Palmer Dabbelt's message of "Mon, 05 Oct 2020 09:39:51 -0700 (PDT)")
-Message-ID: <87362stt1l.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S1728113AbgJETOP (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 5 Oct 2020 15:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbgJETOP (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 5 Oct 2020 15:14:15 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B36BC0613CE
+        for <linux-csky@vger.kernel.org>; Mon,  5 Oct 2020 12:14:13 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id n6so3922545ioc.12
+        for <linux-csky@vger.kernel.org>; Mon, 05 Oct 2020 12:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xwAxPetPQqjNloRqroHgPvWNU+a4/LgMNfeziHOHJfY=;
+        b=F2TRLVcMaGt3VPEEmegwbHPJ4ou8ND6anmLed18QlQIrqj8v2nxubg6lM79u1s4oi9
+         pUIrVv2FRRGNSC8ASvas42okTQ3qCh7q3fWtd6bfHviFqAceEtSblKsomzFqK+lMqnir
+         MxxNaca8KW2t8a/hAAHLN2eXGppKSuGDWm1aA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xwAxPetPQqjNloRqroHgPvWNU+a4/LgMNfeziHOHJfY=;
+        b=Ayfor5Hlfe1CjuKyP4e1u0MR26TGmFd+QDeOXXqlUvS9ckHu+F/qos+/DohEfw1Ljf
+         ThUgEO49AGSz+kaM5q5ziRefi/pdk+tbbh5mhFV0Hks1zsRxFGIhstaYRf5me8pDBCwF
+         ZgzSKkpT1VMsJyEQSn5CRxW7M2IdzfsHULoDFEHYXG/aIAW5gsGmkLOaWj/ee6Q7Vgbl
+         Wa+x1wRi09tkweXBiHddN4pYxL6Z4KcqRC4z22lfEmYlK9YxXmRsGOa7yS8Sq58Hubki
+         WL1hxCiF+wRsdBDWl8+wn3DQuuiekz1NIYqYzEAxeenb48il2//Nn+xI25X1xvNo5jNF
+         btDw==
+X-Gm-Message-State: AOAM533NuWkqj3HyKVvFbcI4O7T7G2NsQvtkHsX5bkMiUFysJayv9oFh
+        wpw8YxHQLn3TsFzwu25kr8H0p9dz7sehWY8Q2Uq1
+X-Google-Smtp-Source: ABdhPJzZTWc5aDIps9qCUH4gIcx01yrGYSRg4jL6Z7cAHeANHCNGR8ghILZwdUivcGDVDXopZEUHL3dxxcJiPt4KNJA=
+X-Received: by 2002:a05:6638:dd3:: with SMTP id m19mr1345504jaj.115.1601925252825;
+ Mon, 05 Oct 2020 12:14:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
+ <1593266228-61125-2-git-send-email-guoren@kernel.org> <20200911204512.GA2705@aurel32.net>
+ <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
+ <20200914103836.GB2705@aurel32.net> <87lfgzeidk.fsf@igel.home> <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 5 Oct 2020 12:14:01 -0700
+Message-ID: <CAOnJCUJhb2K89pRETbfTJ=5jHQhWfyfrOUu8zOE77j+id6OpSA@mail.gmail.com>
+Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Andreas Schwab <schwab@linux-m68k.org>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nick Hu <nickhu@andestech.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Zong Li <zong.li@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Okt 05 2020, Palmer Dabbelt wrote:
-
-> On Mon, 05 Oct 2020 01:25:22 PDT (-0700), schwab@linux-m68k.org wrote:
->> On Sep 14 2020, Aurelien Jarno wrote:
->>
->>> How should we proceed to get that fixed in time for 5.9? For the older
->>> branches where it has been backported (so far 5.7 and 5.8), should we
->>> just get that commit reverted instead?
->>
->> Why is this still broken?
+On Thu, Sep 24, 2020 at 9:19 AM Guo Ren <guoren@kernel.org> wrote:
 >
-> Sorry, I hadn't seen this.  I'm not seeing a boot failure on 5.9-rc8 with just
-> CONFIG_HARDENED_USERCPOY=y in addition to defconfig (on QEMU, though I doubt
-> that's relevant here).
+> How about this, revert the commit and don't free INIT_DATA_SECTION. I
+> think the solution is safe enough, but wast a little memory.
+>
+> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
+> index f3586e3..34d00d9 100644
+> --- a/arch/riscv/kernel/vmlinux.lds.S
+> +++ b/arch/riscv/kernel/vmlinux.lds.S
+> @@ -22,13 +22,11 @@ SECTIONS
+>         /* Beginning of code and text segment */
+>         . = LOAD_OFFSET;
+>         _start = .;
+> -       _stext = .;
+>         HEAD_TEXT_SECTION
+>         . = ALIGN(PAGE_SIZE);
+>
+>         __init_begin = .;
+>         INIT_TEXT_SECTION(PAGE_SIZE)
+> -       INIT_DATA_SECTION(16)
+>         . = ALIGN(8);
+>         __soc_early_init_table : {
+>                 __soc_early_init_table_start = .;
+> @@ -55,6 +53,7 @@ SECTIONS
+>         . = ALIGN(SECTION_ALIGN);
+>         .text : {
+>                 _text = .;
+> +               _stext = .;
+>                 TEXT_TEXT
+>                 SCHED_TEXT
+>                 CPUIDLE_TEXT
+> @@ -67,6 +66,8 @@ SECTIONS
+>                 _etext = .;
+>         }
+>
+> +       INIT_DATA_SECTION(16)
+> +
 
-I don't see a boot failure either, but eventually you will get crashes
-like this, and resources are not properly released:
+I think you need to move EXIT_DATA as well. Currently, we have init
+data & text in one section.
+In general it is better idea to separate those similar to ARM64.
+Additionally, ARM64 applies different mapping for init data & text
+as the init data section is marked as non-executable[1]
 
-[ 4560.936645] usercopy: Kernel memory overwrite attempt detected to kernel text (offset 241626, size 16)!
-[ 4560.945324] ------------[ cut here ]------------
-[ 4560.949954] kernel BUG at mm/usercopy.c:99!
-[ 4560.954030] Kernel BUG [#1]
-[ 4560.956805] Modules linked in: nfsv3 nfs_acl rfkill mmc_block sf_pdma i2c_ocores virt_dma spi_sifive uio_pdrv_genirq uio loop drm drm_panel_orientation_quirks rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache af_packet mscc macsec macb ptp pps_core phylink of_mdio fixed_phy libphy pwm_sifive mmc_spi crc_itu_t crc7 of_mmc_spi mmc_core spi_bitbang sunrpc sg dm_multipath dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua
-[ 4560.995103] CPU: 2 PID: 23806 Comm: nis Not tainted 5.8.10-1-default #1 openSUSE Tumbleweed (unreleased)
-[ 4561.004563] epc: ffffffe00036140e ra : ffffffe00036140e sp : ffffffe004bc7d60
-[ 4561.011679]  gp : ffffffe00127ee60 tp : ffffffe1b05d0000 t0 : ffffffe001297ca0
-[ 4561.018886]  t1 : ffffffe001297c30 t2 : 0000000000000000 s0 : ffffffe004bc7d80
-[ 4561.026093]  s1 : ffffffe00003afda a0 : 000000000000005b a1 : ffffffe1f7d67588
-[ 4561.033298]  a2 : ffffffe1f7d6c108 a3 : 0000000000000000 a4 : ffffffe000043e80
-[ 4561.040506]  a5 : ffffffe1f7d6be80 a6 : 0000000000000144 a7 : 0000000000000000
-[ 4561.047712]  s2 : 0000000000000010 s3 : 0000000000000000 s4 : ffffffe00003afea
-[ 4561.054918]  s5 : ffffffe1f7e00e80 s6 : 0000002af4a2c2e0 s7 : fffffffffffff000
-[ 4561.062124]  s8 : 0000003ffffff000 s9 : ffffffe19f985400 s10: 0000000000000010
-[ 4561.069329]  s11: ffffffe1f7e00e80 t3 : 0000000000038fa8 t4 : 0000000000038fa8
-[ 4561.076533]  t5 : 0000000000000001 t6 : ffffffe00128e062
-[ 4561.081832] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-[ 4561.089821] ---[ end trace a7c93e7595e9c2cc ]---
-[ 4561.095589] BUG: Bad rss-counter state mm:00000000c54f4c29 type:MM_ANONPAGES val:1
+However, we don't modify any permission for any init sections. Should
+we do that as well ?
 
-Andreas.
+[1] https://patchwork.kernel.org/patch/9572869/
+
+>         /* Start of data section */
+>         _sdata = .;
+>         RO_DATA(SECTION_ALIGN)
+>
+> On Thu, Sep 24, 2020 at 3:36 PM Andreas Schwab <schwab@linux-m68k.org> wrote:
+> >
+> > On Sep 14 2020, Aurelien Jarno wrote:
+> >
+> > > How should we proceed to get that fixed in time for 5.9? For the older
+> > > branches where it has been backported (so far 5.7 and 5.8), should we
+> > > just get that commit reverted instead?
+> >
+> > Can this please be resolved ASAP?
+> >
+> > Andreas.
+> >
+> > --
+> > Andreas Schwab, schwab@linux-m68k.org
+> > GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+> > "And now for something completely different."
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+>
+> ML: https://lore.kernel.org/linux-csky/
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+
 
 -- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+Regards,
+Atish
