@@ -2,135 +2,192 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A73284206
-	for <lists+linux-csky@lfdr.de>; Mon,  5 Oct 2020 23:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4530C285022
+	for <lists+linux-csky@lfdr.de>; Tue,  6 Oct 2020 18:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726057AbgJEVRv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 5 Oct 2020 17:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725795AbgJEVRq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 5 Oct 2020 17:17:46 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F47C0613CE
-        for <linux-csky@vger.kernel.org>; Mon,  5 Oct 2020 14:17:44 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id n136so1803389pfd.11
-        for <linux-csky@vger.kernel.org>; Mon, 05 Oct 2020 14:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R3FoEKph5/Q3zh1qrp1x58plkH4C/W9lj4keUROU3cc=;
-        b=XzxTTE1wtNhw53A9/iFePIvAcbbSu+HVKVR5DHAVb9SRuPyIMeDNJJScDfbo3YBGzA
-         neGayHxBTB8hPKq4ntKqfnA5r0RiDBgbN/QJzQMXDX6w+Cf8fTxBScRHxmjqNRkQdIJk
-         BglxRAWtRA5v57pTecb/nTSengAobRq0GKBoFAHdWubYO9rel24WYpfOU+3Pmgy3Y59i
-         jTj4bp85fm6bTpzYRNr5MdT5TL3iBzZBgT3AF5NTgLihovbkYMXvoC7uAfMcZ34D3xwD
-         8pvELZ+XB+Li7mbQrkEPQkV9b/kDKBGR4YQ/LuyR2ocxCwkwEGfQjGDgmOz7wd6W3qBh
-         d8Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=R3FoEKph5/Q3zh1qrp1x58plkH4C/W9lj4keUROU3cc=;
-        b=DgSM4akUC7Sn9No3oACutEGIyUo41ImhXTKYFSepheQTW42TgUnzbz+Sfb4ToqVnED
-         ibhYPr1Kxub+oEnOoD5L0NJimE4GOLEXvl44raurhJQ9VQoI8cpLyFCrd4UqIX1IWf39
-         ZYP5pVAGjYzlIwQfTKunyr/R+X12ZOVZNUfyBcWgC5UnUT3hOwXrTuj+1eVYG23Qzi8n
-         uAWPYJOlVI4y9QYSsDtjCrQl7ebJFnSKPfFm7DygNuco4i1ffdbrW9JZH5P3aGChGDqZ
-         +JF+f6/O8ghRr4Ay8Zihmq9T7LrfCK2kVF68zcJe1dJxLr70LBVstSmk6CrJ4c3sKgOe
-         1L5w==
-X-Gm-Message-State: AOAM530y4pMl9Vho1MrxaJK/JK87DPgglfwGHd4+uKUZH1uJWzbhX/nM
-        ZijAchNKu5FgRaq4GlqIQXvMig==
-X-Google-Smtp-Source: ABdhPJzqPxSu7Lo6DsMZ31HZZm4hY6RkD+7hfHkT7Ug0G/Ht4dwCV2BFR+3u9B+7D24nzWgpj4MoNQ==
-X-Received: by 2002:a05:6a00:2d5:b029:13c:1611:653b with SMTP id b21-20020a056a0002d5b029013c1611653bmr1494841pft.13.1601932664202;
-        Mon, 05 Oct 2020 14:17:44 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id t9sm559534pgp.90.2020.10.05.14.17.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2020 14:17:43 -0700 (PDT)
-Date:   Mon, 05 Oct 2020 14:17:43 -0700 (PDT)
-X-Google-Original-Date: Mon, 05 Oct 2020 14:17:41 PDT (-0700)
-Subject:     Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-In-Reply-To: <CAOnJCUKa82Faf0DLfhR10i3dSJrQ6JZWwmCiLWTaAQf173CYwQ@mail.gmail.com>
-CC:     schwab@linux-m68k.org, tycho@tycho.ws, aou@eecs.berkeley.edu,
-        nickhu@andestech.com, anup@brainfault.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        guoren@linux.alibaba.com, guoren@kernel.org, zong.li@sifive.com,
+        id S1725970AbgJFQqz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 6 Oct 2020 12:46:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60226 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725769AbgJFQqz (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 6 Oct 2020 12:46:55 -0400
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 42E4E207EA;
+        Tue,  6 Oct 2020 16:46:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602002814;
+        bh=6N+wobMAF8IDk/3qDidkLTePM+37ZvHyxc4HmXmoJ1c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BF9Y+dblnnqOoSkiL8Cu4L+HICS17ElwDmAcgBEhWIW0dK9tYf7dz5YiIFggv2lR4
+         R4wad3CFaPcdR0am35OTcuG7bD1vJOrcwe6UAF3WYDnrwhsy9aiA1tpcbgfA+yaxIc
+         qEsTKDBh+N3Os2f049MjERzQ03NlRgf/RBsOK5nY=
+Received: by mail-lf1-f49.google.com with SMTP id y11so15803890lfl.5;
+        Tue, 06 Oct 2020 09:46:54 -0700 (PDT)
+X-Gm-Message-State: AOAM531MSPkdIT025t2CfGjU9lWE7Rj7MD5NanQgv9bfiFd7bzsSJHEB
+        z8nu4jBQmz2m/nw5QGtYjKXHVDYzA23TTYv3ono=
+X-Google-Smtp-Source: ABdhPJwtmt0yVvix028cPsVw2WUiutEQ6nut7CVVXsWMH1AsUC4wFfHGzamo+vtertKc8n/lduNuaP6Rc5riToZ+vuI=
+X-Received: by 2002:a19:7508:: with SMTP id y8mr771313lfe.540.1602002812413;
+ Tue, 06 Oct 2020 09:46:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
+ <1593266228-61125-2-git-send-email-guoren@kernel.org> <20200911204512.GA2705@aurel32.net>
+ <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
+ <20200914103836.GB2705@aurel32.net> <87lfgzeidk.fsf@igel.home>
+ <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com> <CAOnJCUJhb2K89pRETbfTJ=5jHQhWfyfrOUu8zOE77j+id6OpSA@mail.gmail.com>
+In-Reply-To: <CAOnJCUJhb2K89pRETbfTJ=5jHQhWfyfrOUu8zOE77j+id6OpSA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 7 Oct 2020 00:46:40 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRc-RUBiQ=ZE7BT8tABHu3=Bcmuc+ADyBLZ7r7fozwahg@mail.gmail.com>
+Message-ID: <CAJF2gTRc-RUBiQ=ZE7BT8tABHu3=Bcmuc+ADyBLZ7r7fozwahg@mail.gmail.com>
+Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Andreas Schwab <schwab@linux-m68k.org>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nick Hu <nickhu@andestech.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Zong Li <zong.li@sifive.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        greentime.hu@sifive.com, tglx@linutronix.de,
-        linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     atishp@atishpatra.org
-Message-ID: <mhng-e2ceb9e5-81ae-41b8-96c5-72112854f475@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Greentime Hu <greentime.hu@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, 05 Oct 2020 14:12:44 PDT (-0700), atishp@atishpatra.org wrote:
-> On Mon, Oct 5, 2020 at 12:46 PM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
->>
->> On Mon, 05 Oct 2020 11:40:54 PDT (-0700), schwab@linux-m68k.org wrote:
->> > On Okt 05 2020, Palmer Dabbelt wrote:
->> >
->> >> On Mon, 05 Oct 2020 01:25:22 PDT (-0700), schwab@linux-m68k.org wrote:
->> >>> On Sep 14 2020, Aurelien Jarno wrote:
->> >>>
->> >>>> How should we proceed to get that fixed in time for 5.9? For the older
->> >>>> branches where it has been backported (so far 5.7 and 5.8), should we
->> >>>> just get that commit reverted instead?
->> >>>
->> >>> Why is this still broken?
->> >>
->> >> Sorry, I hadn't seen this.  I'm not seeing a boot failure on 5.9-rc8 with just
->> >> CONFIG_HARDENED_USERCPOY=y in addition to defconfig (on QEMU, though I doubt
->> >> that's relevant here).
->> >
->> > I don't see a boot failure either, but eventually you will get crashes
->> > like this, and resources are not properly released:
->> >
->> > [ 4560.936645] usercopy: Kernel memory overwrite attempt detected to kernel text (offset 241626, size 16)!
->> > [ 4560.945324] ------------[ cut here ]------------
->> > [ 4560.949954] kernel BUG at mm/usercopy.c:99!
->> > [ 4560.954030] Kernel BUG [#1]
->> > [ 4560.956805] Modules linked in: nfsv3 nfs_acl rfkill mmc_block sf_pdma i2c_ocores virt_dma spi_sifive uio_pdrv_genirq uio loop drm drm_panel_orientation_quirks rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache af_packet mscc macsec macb ptp pps_core phylink of_mdio fixed_phy libphy pwm_sifive mmc_spi crc_itu_t crc7 of_mmc_spi mmc_core spi_bitbang sunrpc sg dm_multipath dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua
->> > [ 4560.995103] CPU: 2 PID: 23806 Comm: nis Not tainted 5.8.10-1-default #1 openSUSE Tumbleweed (unreleased)
->> > [ 4561.004563] epc: ffffffe00036140e ra : ffffffe00036140e sp : ffffffe004bc7d60
->> > [ 4561.011679]  gp : ffffffe00127ee60 tp : ffffffe1b05d0000 t0 : ffffffe001297ca0
->> > [ 4561.018886]  t1 : ffffffe001297c30 t2 : 0000000000000000 s0 : ffffffe004bc7d80
->> > [ 4561.026093]  s1 : ffffffe00003afda a0 : 000000000000005b a1 : ffffffe1f7d67588
->> > [ 4561.033298]  a2 : ffffffe1f7d6c108 a3 : 0000000000000000 a4 : ffffffe000043e80
->> > [ 4561.040506]  a5 : ffffffe1f7d6be80 a6 : 0000000000000144 a7 : 0000000000000000
->> > [ 4561.047712]  s2 : 0000000000000010 s3 : 0000000000000000 s4 : ffffffe00003afea
->> > [ 4561.054918]  s5 : ffffffe1f7e00e80 s6 : 0000002af4a2c2e0 s7 : fffffffffffff000
->> > [ 4561.062124]  s8 : 0000003ffffff000 s9 : ffffffe19f985400 s10: 0000000000000010
->> > [ 4561.069329]  s11: ffffffe1f7e00e80 t3 : 0000000000038fa8 t4 : 0000000000038fa8
->> > [ 4561.076533]  t5 : 0000000000000001 t6 : ffffffe00128e062
->> > [ 4561.081832] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
->> > [ 4561.089821] ---[ end trace a7c93e7595e9c2cc ]---
->> > [ 4561.095589] BUG: Bad rss-counter state mm:00000000c54f4c29 type:MM_ANONPAGES val:1
->>
->> Ah, I must have misunderstood.  I guess I just assumed "init crashes" meant on
->> boot, not just at some time later.  I just sent out a patch reverting this, LMK
->> if it fixes the issue.  I have some work stuff to do, but I'll try to find some
->> time tonight to look into fixing both of the bugs -- otherwise I'll just take
->> the revert (assuming it does actually fix the issue for you and passes the
->> tests).
->>
->> I saw Atish post after I started writing this: I agree we need to sort of the
->> kernel's memory map, I just think it's too late for 5.9.
->>
+On Tue, Oct 6, 2020 at 3:14 AM Atish Patra <atishp@atishpatra.org> wrote:
 >
-> Yes. It is definitely a for-next material. I will try to take a stab
-> at this if nobody else has an objection.
+> On Thu, Sep 24, 2020 at 9:19 AM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > How about this, revert the commit and don't free INIT_DATA_SECTION. I
+> > think the solution is safe enough, but wast a little memory.
+> >
+> > diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
+> > index f3586e3..34d00d9 100644
+> > --- a/arch/riscv/kernel/vmlinux.lds.S
+> > +++ b/arch/riscv/kernel/vmlinux.lds.S
+> > @@ -22,13 +22,11 @@ SECTIONS
+> >         /* Beginning of code and text segment */
+> >         . = LOAD_OFFSET;
+> >         _start = .;
+> > -       _stext = .;
+> >         HEAD_TEXT_SECTION
+> >         . = ALIGN(PAGE_SIZE);
+> >
+> >         __init_begin = .;
+> >         INIT_TEXT_SECTION(PAGE_SIZE)
+> > -       INIT_DATA_SECTION(16)
+> >         . = ALIGN(8);
+> >         __soc_early_init_table : {
+> >                 __soc_early_init_table_start = .;
+> > @@ -55,6 +53,7 @@ SECTIONS
+> >         . = ALIGN(SECTION_ALIGN);
+> >         .text : {
+> >                 _text = .;
+> > +               _stext = .;
+> >                 TEXT_TEXT
+> >                 SCHED_TEXT
+> >                 CPUIDLE_TEXT
+> > @@ -67,6 +66,8 @@ SECTIONS
+> >                 _etext = .;
+> >         }
+> >
+> > +       INIT_DATA_SECTION(16)
+> > +
+>
+> I think you need to move EXIT_DATA as well. Currently, we have init
+> data & text in one section.
+It's not related to this issue. There is two check code problem:
+ 1.     static int static_obj(const void *obj)
+    {
+            unsigned long start = (unsigned long) &_stext,
+                          end   = (unsigned long) &_end,
+                          addr  = (unsigned long) obj;
 
-WFM.  Thanks!
+            /*
+             * static variable?
+             */
+            if ((addr >= start) && (addr < end))
+                    return 1;
+
+ 2.     /* Is this address range in the kernel text area? */
+    static inline void check_kernel_text_object(const unsigned long ptr,
+                                                unsigned long n, bool to_user)
+    {
+            unsigned long textlow = (unsigned long)_stext;
+            unsigned long texthigh = (unsigned long)_etext;
+            unsigned long textlow_linear, texthigh_linear;
+
+            if (overlaps(ptr, n, textlow, texthigh))
+                    usercopy_abort("kernel text", NULL, to_user, ptr -
+textlow, n);
+
+The patch of commit: a0fa4027dc911 (riscv: Fixup static_obj() fail) broke 2th.
+
+> In general it is better idea to separate those similar to ARM64.
+> Additionally, ARM64 applies different mapping for init data & text
+> as the init data section is marked as non-executable[1]
+Yes, it's safer to protect init text & init data, but it's should be
+another patch.
 
 >
->> > Andreas.
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> However, we don't modify any permission for any init sections. Should
+> we do that as well ?
+Agree, we should do that.
+
+>
+> [1] https://patchwork.kernel.org/patch/9572869/
+>
+> >         /* Start of data section */
+> >         _sdata = .;
+> >         RO_DATA(SECTION_ALIGN)
+> >
+> > On Thu, Sep 24, 2020 at 3:36 PM Andreas Schwab <schwab@linux-m68k.org> wrote:
+> > >
+> > > On Sep 14 2020, Aurelien Jarno wrote:
+> > >
+> > > > How should we proceed to get that fixed in time for 5.9? For the older
+> > > > branches where it has been backported (so far 5.7 and 5.8), should we
+> > > > just get that commit reverted instead?
+> > >
+> > > Can this please be resolved ASAP?
+> > >
+> > > Andreas.
+> > >
+> > > --
+> > > Andreas Schwab, schwab@linux-m68k.org
+> > > GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+> > > "And now for something completely different."
+> >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+> >
+> > ML: https://lore.kernel.org/linux-csky/
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
+>
+>
+> --
+> Regards,
+> Atish
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
