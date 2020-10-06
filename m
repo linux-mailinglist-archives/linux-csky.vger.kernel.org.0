@@ -2,89 +2,287 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F161285035
-	for <lists+linux-csky@lfdr.de>; Tue,  6 Oct 2020 18:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E23028534A
+	for <lists+linux-csky@lfdr.de>; Tue,  6 Oct 2020 22:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbgJFQzZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 6 Oct 2020 12:55:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34274 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725769AbgJFQzZ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 6 Oct 2020 12:55:25 -0400
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF8B020796;
-        Tue,  6 Oct 2020 16:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602003325;
-        bh=pzBiZFeYHRuM1MF/EG+vEY3UU0+WKZ5gBUmlAf1fZk8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=p+wsizep1tpsNCv0UU0tD/SPcXCwTlcFK+FUqCnKk7fr+pu9UtVtfXz1IWM3qEzaa
-         y0Fk5u/7eFsRCZRnpExTDNzfNK8cM4b4eLkJppmqJLItT1eNgpHRq+gXi4S9CcR3by
-         LudgPKIwsY5MEcDwD+TKgpZhPREmC+Wp1lmlAk1o=
-Received: by mail-lj1-f181.google.com with SMTP id v23so11646196ljd.1;
-        Tue, 06 Oct 2020 09:55:24 -0700 (PDT)
-X-Gm-Message-State: AOAM530P9JfkstNyCOwslGM2FkYZdaI3zIEN6WClbPJ8Pom2vuhfKvFs
-        jfMBfY2za/h+Y6VFfCam1EHskMh4LFhbY1tmn5w=
-X-Google-Smtp-Source: ABdhPJwhosMAr3iuJ1VKbEhFgz81Oros95KFySfs0kYUf49Z0cZexyRx4rKaRWsJf3NtGFrsN2s70CEiJegChyU1d9U=
-X-Received: by 2002:a2e:86c2:: with SMTP id n2mr2048844ljj.346.1602003322919;
- Tue, 06 Oct 2020 09:55:22 -0700 (PDT)
+        id S1727338AbgJFUjE (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 6 Oct 2020 16:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727336AbgJFUjE (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 6 Oct 2020 16:39:04 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054C4C061755
+        for <linux-csky@vger.kernel.org>; Tue,  6 Oct 2020 13:39:04 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id k25so14523331ioh.7
+        for <linux-csky@vger.kernel.org>; Tue, 06 Oct 2020 13:39:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aP26k3iPNr1VpqvkggYcdxciq5A3h6k+A8ZkkiVk+vE=;
+        b=ZS2TGe3M6BM2pCGvzZsvuQhQScVUluOJsnRH1r5i7A7P6n2UP7siMbluTKbkh4+efU
+         UbqSZZ+fZQFwAS4BzVTQ+ar++o7dmdlQJ22yy7Dy/lTn9yWkfYz7e1qZyE9eKgBE3HSs
+         q2vSZxGTu1hN+p8wF+jDAJ+KtO9L8yLq2iLt8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aP26k3iPNr1VpqvkggYcdxciq5A3h6k+A8ZkkiVk+vE=;
+        b=aHhSPwngC3czO22hm5M+75im/JsRJ3tdn6hqJFxag59LnmWs/u6uzvez3qRXgw/w/G
+         CSdTxPyHHx6QAFtVl/mUHFg+ZpClEC1tugAW0tYDgvc1NVYR0slhBqwPFnc2HuDitqaH
+         MXBvif0Gtq5pMtVXOKI18VvdqKDb7UpgM6hju9xNqOKwxUuXtVkJhIDdpY746aiip/LZ
+         QOpzSusvpav2fcgmuTUexh9dWyTWR9Xob51CpDIv8CylvD0q1RYBMece3ls/XQFTxusv
+         bJ9BQckyAMcoSTW4WV9tk9m4/SruzGCu860R6tJ98B/7avkyzl+i7QYxZT02apk9rXqN
+         e5Tg==
+X-Gm-Message-State: AOAM531k79i/tVE7aHv4zOakgt9niBshKSKEdQlJ8F2XrIuV+4iKd114
+        EKR7wIi1jFJZJ1nAfGuHc2fLZ+zeX2HRzcOhMdq3
+X-Google-Smtp-Source: ABdhPJw+FN3XoT0rxMl6Ve49NN7RdklCAzgoNyZ08hcLaNGIRm+nAoOXgbR9257x0DX6r58+AhI1DeDfnRtTGG/ffQA=
+X-Received: by 2002:a5d:9842:: with SMTP id p2mr2700429ios.113.1602016743286;
+ Tue, 06 Oct 2020 13:39:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <87lfglt6z1.fsf@igel.home> <mhng-847e71cf-64bc-464b-8d09-3bcec40aa491@palmerdabbelt-glaptop1>
-In-Reply-To: <mhng-847e71cf-64bc-464b-8d09-3bcec40aa491@palmerdabbelt-glaptop1>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Oct 2020 00:55:11 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRuQpwHvyZVjab+RMgx9BMR8gjcnGSgeP3a7L=dCcNqAg@mail.gmail.com>
-Message-ID: <CAJF2gTRuQpwHvyZVjab+RMgx9BMR8gjcnGSgeP3a7L=dCcNqAg@mail.gmail.com>
+References: <1593266228-61125-1-git-send-email-guoren@kernel.org>
+ <1593266228-61125-2-git-send-email-guoren@kernel.org> <20200911204512.GA2705@aurel32.net>
+ <CAJF2gTQiLV8sDE5cnvP=aBog4zaiMvMeieg_JtXwRODky1u3Hg@mail.gmail.com>
+ <20200914103836.GB2705@aurel32.net> <87lfgzeidk.fsf@igel.home>
+ <CAJF2gTQ8ONde3GRhQgx2Nqvb5X20nTmW8jZEemZKhezRDzP3aQ@mail.gmail.com>
+ <CAOnJCUJhb2K89pRETbfTJ=5jHQhWfyfrOUu8zOE77j+id6OpSA@mail.gmail.com> <CAJF2gTRc-RUBiQ=ZE7BT8tABHu3=Bcmuc+ADyBLZ7r7fozwahg@mail.gmail.com>
+In-Reply-To: <CAJF2gTRc-RUBiQ=ZE7BT8tABHu3=Bcmuc+ADyBLZ7r7fozwahg@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 6 Oct 2020 13:38:52 -0700
+Message-ID: <CAOnJCUKi-bzEvYWw3BxBbGe6ODHEzdjTWsfrmS54qEk1i1Kr8Q@mail.gmail.com>
 Subject: Re: [PATCH V2 1/3] riscv: Fixup static_obj() fail
-To:     Palmer Dabbelt <palmerdabbelt@google.com>
+To:     Guo Ren <guoren@kernel.org>
 Cc:     Andreas Schwab <schwab@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
         Tycho Andersen <tycho@tycho.ws>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Nick Hu <nickhu@andestech.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Zong Li <zong.li@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 12:39 AM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
+On Tue, Oct 6, 2020 at 9:46 AM Guo Ren <guoren@kernel.org> wrote:
 >
-> On Mon, 05 Oct 2020 01:25:22 PDT (-0700), schwab@linux-m68k.org wrote:
-> > On Sep 14 2020, Aurelien Jarno wrote:
+> On Tue, Oct 6, 2020 at 3:14 AM Atish Patra <atishp@atishpatra.org> wrote:
 > >
-> >> How should we proceed to get that fixed in time for 5.9? For the older
-> >> branches where it has been backported (so far 5.7 and 5.8), should we
-> >> just get that commit reverted instead?
+> > On Thu, Sep 24, 2020 at 9:19 AM Guo Ren <guoren@kernel.org> wrote:
+> > >
+> > > How about this, revert the commit and don't free INIT_DATA_SECTION. I
+> > > think the solution is safe enough, but wast a little memory.
+> > >
+> > > diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
+> > > index f3586e3..34d00d9 100644
+> > > --- a/arch/riscv/kernel/vmlinux.lds.S
+> > > +++ b/arch/riscv/kernel/vmlinux.lds.S
+> > > @@ -22,13 +22,11 @@ SECTIONS
+> > >         /* Beginning of code and text segment */
+> > >         . = LOAD_OFFSET;
+> > >         _start = .;
+> > > -       _stext = .;
+> > >         HEAD_TEXT_SECTION
+> > >         . = ALIGN(PAGE_SIZE);
+> > >
+> > >         __init_begin = .;
+> > >         INIT_TEXT_SECTION(PAGE_SIZE)
+> > > -       INIT_DATA_SECTION(16)
+> > >         . = ALIGN(8);
+> > >         __soc_early_init_table : {
+> > >                 __soc_early_init_table_start = .;
+> > > @@ -55,6 +53,7 @@ SECTIONS
+> > >         . = ALIGN(SECTION_ALIGN);
+> > >         .text : {
+> > >                 _text = .;
+> > > +               _stext = .;
+> > >                 TEXT_TEXT
+> > >                 SCHED_TEXT
+> > >                 CPUIDLE_TEXT
+> > > @@ -67,6 +66,8 @@ SECTIONS
+> > >                 _etext = .;
+> > >         }
+> > >
+> > > +       INIT_DATA_SECTION(16)
+> > > +
 > >
-> > Why is this still broken?
->
-> Sorry, I hadn't seen this.  I'm not seeing a boot failure on 5.9-rc8 with just
-> CONFIG_HARDENED_USERCPOY=y in addition to defconfig (on QEMU, though I doubt
-> that's relevant here).  It looks like the fix is to essentially revert this,
-> which I'm fine with, but I'd prefer to have a failing test to make sure this
-> doesn't break again.
->
-> Guo: I don't see an actual patch (signed off and such) posted for this, do you
-> mind posting one?  Otherwise I'll take a crack at constructing the revert
-> myself.
+> > I think you need to move EXIT_DATA as well. Currently, we have init
+> > data & text in one section.
+> It's not related to this issue. There is two check code problem:
 
-Please have a look:
-https://lore.kernel.org/linux-riscv/1602002973-92934-1-git-send-email-guoren@kernel.org/T/#u
+Yes. But we shouldn't move only INIT_DATA_SECTION out of __init section
+while leaving percpu & exit data in the __init section. Here is what I
+have in mind.
 
-The only revert couldn't solve the static_obj problem.
+diff --git a/arch/riscv/kernel/vmlinux.lds.S
+b/arch/riscv/kernel/vmlinux.lds.S
+index 9795359cb9da..4432cef8184e 100644
+--- a/arch/riscv/kernel/vmlinux.lds.S
++++ b/arch/riscv/kernel/vmlinux.lds.S
+@@ -26,13 +26,11 @@ SECTIONS
+        /* Beginning of code and text segment */
+        . = LOAD_OFFSET;
+        _start = .;
+        _start = .;
+-       _stext = .;
+        HEAD_TEXT_SECTION
+        . = ALIGN(PAGE_SIZE);
+
+        __init_begin = .;
+        INIT_TEXT_SECTION(PAGE_SIZE)
+-       INIT_DATA_SECTION(16)
+        . = ALIGN(8);
+        __soc_early_init_table : {
+                __soc_early_init_table_start = .;
+@@ -49,16 +47,13 @@ SECTIONS
+        {
+                EXIT_TEXT
+        }
+-       .exit.data :
+-       {
+-               EXIT_DATA
+-       }
+-       PERCPU_SECTION(L1_CACHE_BYTES)
++
+        __init_end = .;
+
+        . = ALIGN(SECTION_ALIGN);
+        .text : {
+                _text = .;
++               _stext = .;
+                TEXT_TEXT
+                SCHED_TEXT
+                CPUIDLE_TEXT
+@@ -77,6 +72,17 @@ SECTIONS
+ #endif
+
+        /* Start of data section */
++       __init_data_begin = .;
++       INIT_DATA_SECTION(16)
++       .exit.data :
++       {
++               EXIT_DATA
++       }
++
++       PERCPU_SECTION(L1_CACHE_BYTES)
++
++       __init_data_end = .;
++
+
+As you correctly pointed out, this wastes around ~200K init memory
+that is wasted.
+That is not an ideal solution.
+
+The other alternative is to move __init_text section after _text as
+well similar to other architectures. But that won't work
+for RISC-V as we jump from _start to __start_kernel(in __init section)
+in head.S.  A JAL instruction can't be fit because
+__start_kernel is now too far. We can't replace JAL with a JALR
+because that would require an additional
+instruction and violates image header format.
+
+Any other ideas to solve this problem without wasting memory ?
+
+>  1.     static int static_obj(const void *obj)
+>     {
+>             unsigned long start = (unsigned long) &_stext,
+>                           end   = (unsigned long) &_end,
+>                           addr  = (unsigned long) obj;
+>
+>             /*
+>              * static variable?
+>              */
+>             if ((addr >= start) && (addr < end))
+>                     return 1;
+>
+>  2.     /* Is this address range in the kernel text area? */
+>     static inline void check_kernel_text_object(const unsigned long ptr,
+>                                                 unsigned long n, bool to_user)
+>     {
+>             unsigned long textlow = (unsigned long)_stext;
+>             unsigned long texthigh = (unsigned long)_etext;
+>             unsigned long textlow_linear, texthigh_linear;
+>
+>             if (overlaps(ptr, n, textlow, texthigh))
+>                     usercopy_abort("kernel text", NULL, to_user, ptr -
+> textlow, n);
+>
+> The patch of commit: a0fa4027dc911 (riscv: Fixup static_obj() fail) broke 2th.
+>
+> > In general it is better idea to separate those similar to ARM64.
+> > Additionally, ARM64 applies different mapping for init data & text
+> > as the init data section is marked as non-executable[1]
+> Yes, it's safer to protect init text & init data, but it's should be
+> another patch.
+>
+
+Yes. I will send the patch based on this fix.
+
+> >
+> > However, we don't modify any permission for any init sections. Should
+> > we do that as well ?
+> Agree, we should do that.
+>
+> >
+> > [1] https://patchwork.kernel.org/patch/9572869/
+> >
+> > >         /* Start of data section */
+> > >         _sdata = .;
+> > >         RO_DATA(SECTION_ALIGN)
+> > >
+> > > On Thu, Sep 24, 2020 at 3:36 PM Andreas Schwab <schwab@linux-m68k.org> wrote:
+> > > >
+> > > > On Sep 14 2020, Aurelien Jarno wrote:
+> > > >
+> > > > > How should we proceed to get that fixed in time for 5.9? For the older
+> > > > > branches where it has been backported (so far 5.7 and 5.8), should we
+> > > > > just get that commit reverted instead?
+> > > >
+> > > > Can this please be resolved ASAP?
+> > > >
+> > > > Andreas.
+> > > >
+> > > > --
+> > > > Andreas Schwab, schwab@linux-m68k.org
+> > > > GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+> > > > "And now for something completely different."
+> > >
+> > >
+> > >
+> > > --
+> > > Best Regards
+> > >  Guo Ren
+> > >
+> > > ML: https://lore.kernel.org/linux-csky/
+> > >
+> > > _______________________________________________
+> > > linux-riscv mailing list
+> > > linux-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> >
+> >
+> >
+> > --
+> > Regards,
+> > Atish
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+>
+> ML: https://lore.kernel.org/linux-csky/
+
+
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Regards,
+Atish
