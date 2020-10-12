@@ -2,103 +2,140 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B14287CCA
-	for <lists+linux-csky@lfdr.de>; Thu,  8 Oct 2020 22:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F6B28AC2B
+	for <lists+linux-csky@lfdr.de>; Mon, 12 Oct 2020 04:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729908AbgJHUEM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 8 Oct 2020 16:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729877AbgJHUEL (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 8 Oct 2020 16:04:11 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5454FC0613D2;
-        Thu,  8 Oct 2020 13:04:10 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id e23so655163wme.2;
-        Thu, 08 Oct 2020 13:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0cpv+tP36ues9zKZvc23gnyV9b7gmZPPP3bWOFay3Z8=;
-        b=soGxHYxnlKP7l3roOE54jwTEMNQqPWr0nj6Hc9h7KhV5a8ASVFMdI1r+dyLbrtgIlV
-         TIdIKxQRLCjI9QAsxQOxc9AHdwu5H5MieylLqbVx15tm0HWBhRKahOO9STQ4r/ARFp+h
-         ag8HAY9rWc6BN+2zEcR6FUdQGjvyCdNf+e4zF7CfRfjQgx/nKr9oj2Lybgq7pNxViRIi
-         URASZFHORPGZxpo8hBuB4alXjoaIhNJqxtu820Z8PwM9/JpM+Y4bxcXu/IKgbPSPefd4
-         G3oQaPWFeqzD9PjBz9F9pBE735mtlMp6IYhU/ubBRRI9qww7GMVCbY7y8MURqzuej0rc
-         GynA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=0cpv+tP36ues9zKZvc23gnyV9b7gmZPPP3bWOFay3Z8=;
-        b=SjQ6PFuUbI6yIRkzqHbXAVu60nGqvB15d3dcrUi6s0YLsSa5Lu440bRaVmp5Pub4D/
-         TY7UkNtXYFnfZz5po7TICv79Q363w0cWvewtb7av20OLYO46EbP+/6Rc6kFTAf4jpCsa
-         Y9sl9dLz/Yi0q/w6N1Mea2Tpgp4nkH74T0MMrBe8UdznM52jU1jjtUUA8mCgwftO2b42
-         LLGSpxJdnC9WvPRmol3FY4vfeFQ+X/6mua/QbuIyBH/rtoq1OzVomzcpAgRLPxJ/mTbR
-         kx+Fk58AFJ5sw/G2EKXIMNkYw4ARSEbkY93Z/tQlJxrUIBXc5qmVM7HnWsYAoGuBgYM7
-         XfSg==
-X-Gm-Message-State: AOAM532A0ZCOtrH9qA+avRifr4v9QP8s5QWyyq+I3U7hJqoh7R2ya7F8
-        qyMa+6opGCz9woATL+4mfmg=
-X-Google-Smtp-Source: ABdhPJzbefUFsnEexYnumCuenoA3EWX1ObnpD7vhR0ttyC6Vq9tiw4N7i5bJAYFbq933cEFleHu87Q==
-X-Received: by 2002:a1c:4904:: with SMTP id w4mr9841419wma.99.1602187449021;
-        Thu, 08 Oct 2020 13:04:09 -0700 (PDT)
-Received: from dell5510 ([62.201.25.198])
-        by smtp.gmail.com with ESMTPSA id v2sm9103715wme.19.2020.10.08.13.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2020 13:04:08 -0700 (PDT)
-Date:   Thu, 8 Oct 2020 22:04:06 +0200
-From:   Petr Vorel <petr.vorel@gmail.com>
-To:     Jan Stancek <jstancek@redhat.com>
-Cc:     ltp@lists.linux.it, Ofer Levi <oferle@nvidia.com>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, Guo Ren <guoren@kernel.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        "Maciej W . Rozycki" <macro@linux-mips.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Vincent Chen <deanbo422@gmail.com>
-Subject: Re: [LTP] [PATCH 1/1] cacheflush01: Rewrite into new API
-Message-ID: <20201008200406.GA18136@dell5510>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-References: <20201002202416.28972-1-petr.vorel@gmail.com>
- <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
+        id S1726104AbgJLCdM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 11 Oct 2020 22:33:12 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:51520 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725882AbgJLCdM (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 11 Oct 2020 22:33:12 -0400
+Received: from [10.130.0.80] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr97yv4NfkbEcAA--.4007S3;
+        Mon, 12 Oct 2020 10:31:16 +0800 (CST)
+Subject: Re: [PATCH v5 00/14] irqchip: Fix potential resource leaks
+To:     Marc Zyngier <maz@kernel.org>
+References: <1593998365-25910-1-git-send-email-yangtiezhu@loongson.cn>
+ <ab1cd9280c7892a0230945ef5ff0880c@kernel.org>
+ <02e077df-7c4e-24a7-1640-5f17894bd252@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        linux-kernel@vger.kernel.org, Alban Bedel <albeu@free.fr>,
+        Guo Ren <guoren@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        David Lechner <david@lechnology.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Jisheng Zhang <jszhang@marvell.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        u.kleine-koenig@pengutronix.de,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Tony Lindgren <tony@atomide.com>, Felipe Balbi <balbi@ti.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup.patel@wdc.com>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <rob.herring@calxeda.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>,
+        linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <4b18d030-76c7-1b83-3b0d-deb8ecd925dc@loongson.cn>
+Date:   Mon, 12 Oct 2020 10:31:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1478290725.17134142.1602069275205.JavaMail.zimbra@redhat.com>
+In-Reply-To: <02e077df-7c4e-24a7-1640-5f17894bd252@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxr97yv4NfkbEcAA--.4007S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrW5Xw43tFyrCr4Duw47XFb_yoW8XF4DpF
+        13t3WYkr4kX34qyFnFkw47Xa4Iy3yDK3yUWryYgrs3Aw1q9F1DWrWrtFyFkw4DWw1rGF42
+        kws5t3s7Aw1jyaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Eb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr
+        0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
+        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMx
+        C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
+        wI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+        AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8aYLPUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Jan,
+On 09/02/2020 11:59 AM, Tiezhu Yang wrote:
+> On 07/06/2020 03:30 PM, Marc Zyngier wrote:
+>> On 2020-07-06 02:19, Tiezhu Yang wrote:
+>>> When I test the irqchip code of Loongson, I read the related code of 
+>>> other
+>>> chips in drivers/irqchip and I find some potential resource leaks in 
+>>> the
+>>> error path, I think it is better to fix them.
+>>>
+>>> v2:
+>>>   - Split the first patch into a new patch series which
+>>>     includes small patches and add "Fixes" tag
+>>>   - Use "goto" label to handle error path in some patches
+>>>
+>>> v3:
+>>>   - Add missed variable "ret" in the patch #5 and #13
+>>>
+>>> v4:
+>>>   - Modify the commit message of each patch suggested by Markus Elfring
+>>>   - Make "irq_domain_remove(root_domain)" under CONFIG_SMP in patch #3
+>>>   - Add a return statement before goto label in patch #4
+>>>
+>>> v5:
+>>>   - Modify the commit messages and do some code cleanups
+>>
+>> Please stop replying to Markus Elfring, and give people who actually
+>> care a chance to review this code. Elfring will keep asking you to make
+>> absolutely pointless changes until you are blue in the face
+>
+> Hi Marc,
+>
+> Any comments?
+> Could you please apply this patch series?
 
-> ----- Original Message -----
-> > This syscall is currently (v5.9) supported on these architectures:
-> > arc, csky, mips, m68k, nds32, sh
+Hi all,
 
-> > constants are missing for m68k, not sure if the testcase is valid for it.
-> > Untested.
+Maybe I should cc the related persons through ./scripts/get_maintainer.pl
+to get Acked-by or Reviewed-by.
 
-> > Test for __LTP__NR_INVALID_SYSCALL saves adding autotools check for
-> > <asm/cachectl.h>.
+The cover letter link of this patch series is:
+[v5,00/14] irqchip: Fix potential resource leaks
+https://lore.kernel.org/patchwork/cover/1268043/
 
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > ---
-> > Hi,
+Any comments will be much appreciated.
 
-> > FYI: I was going to ask for removal of this test, but all these archs are
-> > still supported. This test compiles on all archs now, but I haven't run
-> > it (I don't have access to none of these archs, not sure if LTP is even
-> > tested on these archs).
+Thanks,
+Tiezhu
 
-> I haven't tested it too, but rewrite looks good.
+>
+> Thanks,
+> Tiezhu
+>
+>>
+>>
+>> Thanks,
+>>
+>>         M.
+>
 
-> Acked-by: Jan Stancek <jstancek@redhat.com>
-
-Thanks for your review, merged.
-
-Kind regards,
-Petr
