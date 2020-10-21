@@ -2,58 +2,46 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CC62948A1
-	for <lists+linux-csky@lfdr.de>; Wed, 21 Oct 2020 09:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B69294956
+	for <lists+linux-csky@lfdr.de>; Wed, 21 Oct 2020 10:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437102AbgJUHKy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 21 Oct 2020 03:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436982AbgJUHKx (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 21 Oct 2020 03:10:53 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5054C0613D4
-        for <linux-csky@vger.kernel.org>; Wed, 21 Oct 2020 00:10:51 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id w141so1113651oia.2
-        for <linux-csky@vger.kernel.org>; Wed, 21 Oct 2020 00:10:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t/G7MIqK+NBHfqzH6rZ1PdmS1knHg5JTFYQufZDq68M=;
-        b=LSs4yKI9wS65l8r8fpRxqXk5x07ZeLSm6fAhoYh0RxmCH+roM+bIJshNV/QY9/tD7L
-         ERh26aii8sdn80nguZIZuQICgo/J+KpYu3Ps/A1i3AzR+cl857JamiOfDaSD/hBp9gMn
-         7vddbVaRtybJ5oLylMFCBsf0lXbeHxNV2PRLKcE6V0Xq9sCNTpQtNjHrAWmTB394TGm6
-         qFnILdP/sfK51Mp87ZGveAkQN6wTob/ne2aCmKTbMxqtRSRvOWOAbzD2K6KJvwV13IbJ
-         NXnx6FA+Q0906q7UshpIfkIEzYiQrxtJ6YmPmExcJwE31U7Hpty9AdUTa8NycmvrXn/+
-         Q3Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t/G7MIqK+NBHfqzH6rZ1PdmS1knHg5JTFYQufZDq68M=;
-        b=MWN3vPvBKxQfpYiXpm/2bUNP1QmXcaQkVaGHHcGGjPeHqouCPZ8YyqFuGRKvsLTia7
-         XINhLHEcmhPgxTCOdDvEZPKL6Vg05YbTl4uL9SHjf2MfhSgTgtVJF7cGQbr9CsoBe1wa
-         ji7oenf5cUtbTCE0tCnyCIsaBV60GSI75TJmjAbrPqv64jKDpGOl8gJwyxKhcb4u31kP
-         5cqDeAGnZJCi1CClzzpan+Tq8dgeSdfcEABX18otGcfDXqfgE/BZKNZKrhx6Z+yLsMj5
-         UAfFdWJqs6Hwg067sD51ePrQqBOSQ/CNuixbn2+X6MxFKNqkbmWxyaAu2y4OoqxWB/Mo
-         eR7g==
-X-Gm-Message-State: AOAM530+VFfCaxUwTD7lQy8pLf3Y/yKKT7K0dVCN6E5hkArYTc8u5ey4
-        hAV4uBsnDjHvchmXd7GHj6gxpFGRYWB8JoCmR82aZA==
-X-Google-Smtp-Source: ABdhPJz+Y36Nw9siV5fFGt0r0s5z3699GS0nBv6WffR9icsOv4oaCCCbH/Hl5XfvqWi9X/hf4w8a6lsYKcKjEMQd3Vk=
-X-Received: by 2002:aca:54c3:: with SMTP id i186mr1216632oib.35.1603264251105;
- Wed, 21 Oct 2020 00:10:51 -0700 (PDT)
+        id S2394768AbgJUI1Q (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 21 Oct 2020 04:27:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40554 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394683AbgJUI1Q (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 21 Oct 2020 04:27:16 -0400
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 390A0222C8;
+        Wed, 21 Oct 2020 08:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603268835;
+        bh=nMmI8qRuAv1yyZjH2PDs0VpZ8HlNElzwHwOCPCUV/wM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vbVMF2Ffjd0/ArQ/MNVOMx4NHX8jFUMBuyywm7cYqrUxbH/kJA8pM+ielLTVu5zAh
+         5Bhtxb1OHGBZwGIrgZYJkVw8sLvV8qSBTC5ubJBa/AmC9Dpay0EZBMCNd5bGiPSvI0
+         5CA520/c2cUrg41SNdPYnbDJlWmBJ9CuIkoIwVI0=
+Received: by mail-lf1-f50.google.com with SMTP id r127so1945575lff.12;
+        Wed, 21 Oct 2020 01:27:15 -0700 (PDT)
+X-Gm-Message-State: AOAM533O0nE/ui9/hEBfPFJR0wXyQq6KxpLITTKaBbtozzOogw+Xn4lj
+        CWHy3y+4uJ75duWz6Q65x+u6FY9wQRz17FEYKiE=
+X-Google-Smtp-Source: ABdhPJyVwP5SKU7CNKU3RSFKHT0y1pGyDfX2/XwsNk97u9k6um7/ZanN9MPhONY1QqNPV9ltPXGduJx8MkjDIi5j6zQ=
+X-Received: by 2002:ac2:5a4e:: with SMTP id r14mr737881lfn.451.1603268833344;
+ Wed, 21 Oct 2020 01:27:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <1602918377-23573-1-git-send-email-guoren@kernel.org>
  <1602918377-23573-10-git-send-email-guoren@kernel.org> <CAOnJCU+oTRcJ2p8WQDX5P-EsOHmkn3kP9s54VQa+iw2wXDvzkg@mail.gmail.com>
  <CAJF2gTSU+M+b+bn5zH_EyE7Ksh=5+ZkO8LkAn=Tm-p45CgYW1w@mail.gmail.com> <20201020164121.32626e45@gandalf.local.home>
 In-Reply-To: <20201020164121.32626e45@gandalf.local.home>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Wed, 21 Oct 2020 15:10:39 +0800
-Message-ID: <CANXhq0pc5STcmZRP5HZXZ_SxqSRq=izStMV0VQyPNM1ayEzszg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 21 Oct 2020 16:27:02 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSpcNAzhic9KTSygtjSbyTerA3VLFb2ziFu6uSGxgAhfg@mail.gmail.com>
+Message-ID: <CAJF2gTSpcNAzhic9KTSygtjSbyTerA3VLFb2ziFu6uSGxgAhfg@mail.gmail.com>
 Subject: Re: [PATCH v4 9/9] riscv: Fixup lockdep_assert_held(&text_mutex) in patch_insn_write
 To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Guo Ren <guoren@kernel.org>, Atish Patra <atishp@atishpatra.org>,
+Cc:     Atish Patra <atishp@atishpatra.org>, Zong Li <zong.li@sifive.com>,
         Palmer Dabbelt <palmerdabbelt@google.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -68,6 +56,18 @@ Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
+
+Why?
+
+funca:
+nop                   addi  sp,sp, -8
+nop                   sd ra, 0(sp)
+nop, nop           auipc ra, 0x?
+nop, nop  ->      jalr -?(ra)
+nop                   ld ra,0(sp)
+nop                   addi sp,sp, 8
+
+When CPU0 has only changed half of them, CPU1 call funca then CPU1 broken.
 
 On Wed, Oct 21, 2020 at 4:41 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
@@ -87,27 +87,10 @@ On Wed, Oct 21, 2020 at 4:41 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
 > -- Steve
 
-Hi all,
 
-I'm going to send the patch to fix the problem. Ftrace was broken from
-v5.3 kernel version, and only happen on SMP. The problem is caused by
-the following two patches:
 
-Commit 4ecf0a43e729a7e641d800c294faabe87378fc05 ("processor: get rid
-of cpu_relax_yield")
-and
-Commit 366237e7b0833faa2d8da7a8d7d7da8c3ca802e5 ("stop_machine:
-Provide RCU quiescent state in multi_cpu_stop()")
+--
+Best Regards
+ Guo Ren
 
-We have to mark these two functions as notrace. The stopped CPUs
-cannot make function calls to traceable functions on RISC-V, the
-function call instruction pattern needs two instructions (auipc,
-jalr), so there is a change to execute the (auipc + nop) or (nop,
-jalr) when patching code.
-
-There is a similar fix as follow:
-Commit cb9d7fd51d9fbb329d182423bd7b92d0f8cb0e01 ("watchdog: Mark
-watchdog touch functions as notrace")
-
-I have verified my patches, and I'm going to send it to the mailing
-list these few days.
+ML: https://lore.kernel.org/linux-csky/
