@@ -2,156 +2,133 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A7D29ED16
-	for <lists+linux-csky@lfdr.de>; Thu, 29 Oct 2020 14:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A288429F0E1
+	for <lists+linux-csky@lfdr.de>; Thu, 29 Oct 2020 17:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbgJ2NkJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 29 Oct 2020 09:40:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56144 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725601AbgJ2NkI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 29 Oct 2020 09:40:08 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5577420796;
-        Thu, 29 Oct 2020 13:40:04 +0000 (UTC)
-Date:   Thu, 29 Oct 2020 09:40:01 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-csky@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 5/9] kprobes/ftrace: Add recursion protection to the
- ftrace callback
-Message-ID: <20201029094001.0cfab7aa@gandalf.local.home>
-In-Reply-To: <20201029165803.5f6b401e5bccca4e57c70181@kernel.org>
-References: <20201028115244.995788961@goodmis.org>
-        <20201028115613.140212174@goodmis.org>
-        <20201029165803.5f6b401e5bccca4e57c70181@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726172AbgJ2QNU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 29 Oct 2020 12:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725764AbgJ2QNS (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 29 Oct 2020 12:13:18 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5628BC0613CF
+        for <linux-csky@vger.kernel.org>; Thu, 29 Oct 2020 09:13:18 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id x7so3609345ili.5
+        for <linux-csky@vger.kernel.org>; Thu, 29 Oct 2020 09:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=CxZxnzINXZRT3YGogUWBhXNUk7pxaKbs9qaXsTqeRDs=;
+        b=nCgsOeGWTzSyElFPe6aS772O9zRic7wWosPv+P1ULYSRNF2LtxZOanOsZ+OewCYVrk
+         WQObkbAylUNmSlLbtVkaZ/3Iu2NZ8jmi3U60cpnM/dU/XiQ1v36T+OR9jj/tz4NNYOaf
+         l/6OnzDo8fWxAPo0SVSlTtMb2W8rFnxqnJwDYtfMUMOy3KgfWynd+2DAU7tyUG2/4SjP
+         Z+WonQAuwBxXcJDWK3YN07HKu1Z0Nw8L7mrVsN4auI/6AkQLelA3JZP5dliBbCNOjQhb
+         hE6HDmweGOu6y5gA3awnsxMjfH8hCrHYoi9oPQRXCYbrz7mtQ76lKHbESQqZa9Lhp7MR
+         JRyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=CxZxnzINXZRT3YGogUWBhXNUk7pxaKbs9qaXsTqeRDs=;
+        b=FTFIf/mu3vUMe3p+6AIik5fIZZCEaMItW4M0QDGKqLXB1o1Dr2Am0AjIJwK3muwTIv
+         eZRcOY98RCAahpt4QaEHJ/+oZMVhZzjw8m6gA3foIL8j4yiYMeli/CWGqUzbTefA0ROn
+         i4GoqIX5GBP2dAIu6Lk1lAa/iu0QxIMycwAUTeZnanIt7/NS2B7Ly1uBAZSfEBSWjBQ1
+         Q8x4NNwykvQOnGS++xAV/Hj16LwCunq8ev/K8jFH6HiPCGUwT72e6dxJuZsl0+J4/u0x
+         qkpGzmkYgmKK0OQ7eLy4IxO5wr3Kq7Gk5hKLQDPmK4kEZjbBUCsxU/7E5K9KeWD080NY
+         9QzA==
+X-Gm-Message-State: AOAM5325jtJ7wFFmaU3YnHBneCqUiOerHcpQ6zPIyRVgmoqpdKDQuXZT
+        pZw2T+1n3ruDmf6U0sxNPZtRu8yk/LsT0A==
+X-Google-Smtp-Source: ABdhPJxANGpxIEtRO1BXALnM7dUFvh8db5yGpEBLo76xjy7OcxuCw27eX11S2cwuGbZbqzjaaF7Enw==
+X-Received: by 2002:a92:5b42:: with SMTP id p63mr4036000ilb.139.1603987997319;
+        Thu, 29 Oct 2020 09:13:17 -0700 (PDT)
+Received: from [192.168.1.30] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id i201sm2716191ild.12.2020.10.29.09.13.16
+        for <linux-csky@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Oct 2020 09:13:16 -0700 (PDT)
+To:     linux-csky@vger.kernel.org
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] csky: add support for TIF_NOTIFY_SIGNAL
+Message-ID: <4f498dfd-00eb-3f15-4529-672264fdab0f@kernel.dk>
+Date:   Thu, 29 Oct 2020 10:13:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, 29 Oct 2020 16:58:03 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Wire up TIF_NOTIFY_SIGNAL handling for csky.
 
-> Hi Steve,
-> 
-> On Wed, 28 Oct 2020 07:52:49 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-> > 
-> > If a ftrace callback does not supply its own recursion protection and
-> > does not set the RECURSION_SAFE flag in its ftrace_ops, then ftrace will
-> > make a helper trampoline to do so before calling the callback instead of
-> > just calling the callback directly.  
-> 
-> So in that case the handlers will be called without preempt disabled?
-> 
-> 
-> > The default for ftrace_ops is going to assume recursion protection unless
-> > otherwise specified.  
-> 
-> This seems to skip entier handler if ftrace finds recursion.
-> I would like to increment the missed counter even in that case.
+Cc: linux-csky@vger.kernel.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
 
-Note, this code does not change the functionality at this point, because
-without having the FL_RECURSION flag set (which kprobes does not even in
-this patch), it always gets called from the helper function that does this:
+5.11 has support queued up for TIF_NOTIFY_SIGNAL, see this posting
+for details:
 
-	bit = trace_test_and_set_recursion(TRACE_LIST_START, TRACE_LIST_MAX);
-	if (bit < 0)
-		return;
+https://lore.kernel.org/io-uring/20201026203230.386348-1-axboe@kernel.dk/
 
-	preempt_disable_notrace();
+As part of that work, I'm adding TIF_NOTIFY_SIGNAL support to all archs,
+as that will enable a set of cleanups once all of them support it. I'm
+happy carrying this patch if need be, or it can be funelled through the
+arch tree. Let me know.
 
-	op->func(ip, parent_ip, op, regs);
+ arch/csky/include/asm/thread_info.h | 5 ++++-
+ arch/csky/kernel/signal.c           | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-	preempt_enable_notrace();
-	trace_clear_recursion(bit);
+diff --git a/arch/csky/include/asm/thread_info.h b/arch/csky/include/asm/thread_info.h
+index 68e7a1227170..21456a3737c2 100644
+--- a/arch/csky/include/asm/thread_info.h
++++ b/arch/csky/include/asm/thread_info.h
+@@ -64,6 +64,7 @@ static inline struct thread_info *current_thread_info(void)
+ #define TIF_SYSCALL_TRACE	4	/* syscall trace active */
+ #define TIF_SYSCALL_TRACEPOINT	5       /* syscall tracepoint instrumentation */
+ #define TIF_SYSCALL_AUDIT	6	/* syscall auditing */
++#define TIF_NOTIFY_SIGNAL	7	/* signal notifications exist */
+ #define TIF_POLLING_NRFLAG	16	/* poll_idle() is TIF_NEED_RESCHED */
+ #define TIF_MEMDIE		18      /* is terminating due to OOM killer */
+ #define TIF_RESTORE_SIGMASK	20	/* restore signal mask in do_signal() */
+@@ -75,6 +76,7 @@ static inline struct thread_info *current_thread_info(void)
+ #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+ #define _TIF_SYSCALL_TRACEPOINT	(1 << TIF_SYSCALL_TRACEPOINT)
+ #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
++#define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
+ #define _TIF_UPROBE		(1 << TIF_UPROBE)
+ #define _TIF_POLLING_NRFLAG	(1 << TIF_POLLING_NRFLAG)
+ #define _TIF_MEMDIE		(1 << TIF_MEMDIE)
+@@ -82,7 +84,8 @@ static inline struct thread_info *current_thread_info(void)
+ #define _TIF_SECCOMP		(1 << TIF_SECCOMP)
+ 
+ #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+-				 _TIF_NOTIFY_RESUME | _TIF_UPROBE)
++				 _TIF_NOTIFY_RESUME | _TIF_UPROBE | \
++				 _TIF_NOTIFY_SIGNAL)
+ 
+ #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+ 				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP)
+diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
+index 8b068cf37447..37ea64ed3c12 100644
+--- a/arch/csky/kernel/signal.c
++++ b/arch/csky/kernel/signal.c
+@@ -257,7 +257,7 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+ 		uprobe_notify_resume(regs);
+ 
+ 	/* Handle pending signal delivery */
+-	if (thread_info_flags & _TIF_SIGPENDING)
++	if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+ 		do_signal(regs);
+ 
+ 	if (thread_info_flags & _TIF_NOTIFY_RESUME) {
+-- 
+2.29.0
 
-Where this function gets called by op->func().
+-- 
+Jens Axboe
 
-In other words, you don't get that count anyway, and I don't think you want
-it. Because it means you traced something that your callback calls.
-
-That bit check is basically a nop, because the last patch in this series
-will make the default that everything has recursion protection, but at this
-patch the test does this:
-
-	/* A previous recursion check was made */
-	if ((val & TRACE_CONTEXT_MASK) > max)
-		return 0;
-
-Which would always return true, because this function is called via the
-helper that already did the trace_test_and_set_recursion() which, if it
-made it this far, the val would always be greater than max.
-
-> 
-> [...]
-> e.g.
-> 
-> > diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
-> > index 5264763d05be..5eb2604fdf71 100644
-> > --- a/arch/csky/kernel/probes/ftrace.c
-> > +++ b/arch/csky/kernel/probes/ftrace.c
-> > @@ -13,16 +13,21 @@ int arch_check_ftrace_location(struct kprobe *p)
-> >  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> >  			   struct ftrace_ops *ops, struct pt_regs *regs)
-> >  {
-> > +	int bit;
-> >  	bool lr_saver = false;
-> >  	struct kprobe *p;
-> >  	struct kprobe_ctlblk *kcb;
-> >  
-> > -	/* Preempt is disabled by ftrace */
-> > +	bit = ftrace_test_recursion_trylock();  
-> 
-> > +
-> > +	preempt_disable_notrace();
-> >  	p = get_kprobe((kprobe_opcode_t *)ip);
-> >  	if (!p) {
-> >  		p = get_kprobe((kprobe_opcode_t *)(ip - MCOUNT_INSN_SIZE));
-> >  		if (unlikely(!p) || kprobe_disabled(p))
-> > -			return;
-> > +			goto out;
-> >  		lr_saver = true;
-> >  	}  
-> 
-> 	if (bit < 0) {
-> 		kprobes_inc_nmissed_count(p);
-> 		goto out;
-> 	}
-
-If anything called in get_kprobe() or kprobes_inc_nmissed_count() gets
-traced here, you have zero recursion protection, and this will crash the
-machine with a likely reboot (triple fault).
-
-Note, the recursion handles interrupts and wont stop them. bit < 0 only
-happens if you recurse because this function called something that ends up
-calling itself. Really, why would you care about missing a kprobe on the
-same kprobe?
-
--- Steve
