@@ -2,32 +2,24 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F09829E58E
-	for <lists+linux-csky@lfdr.de>; Thu, 29 Oct 2020 08:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A7D29ED16
+	for <lists+linux-csky@lfdr.de>; Thu, 29 Oct 2020 14:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732815AbgJ2H6M (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 29 Oct 2020 03:58:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58754 "EHLO mail.kernel.org"
+        id S1726354AbgJ2NkJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 29 Oct 2020 09:40:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56144 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726987AbgJ2H6K (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 29 Oct 2020 03:58:10 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        id S1725601AbgJ2NkI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 29 Oct 2020 09:40:08 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48A4220724;
-        Thu, 29 Oct 2020 07:58:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603958289;
-        bh=ZcYvWQr2VWQJtO2BXb6i/VkN/X0mqZM5yiREyaXyl50=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=duIABjJkNNi8c+SdlJLhGYLKvsMmP3ziC5m5+qOVz+2xsjzrBsyeeD6fnYweqCjzK
-         vinRLQ6rgBdJamFfYVDOweLdMWIvCQGWGFPexG/BBW42C3b5wWUxTF2et8MNALOdrG
-         1fKICN4OGuubvxElYZ3VOGjVNLPF7NiEGA1RCMUU=
-Date:   Thu, 29 Oct 2020 16:58:03 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 5577420796;
+        Thu, 29 Oct 2020 13:40:04 +0000 (UTC)
+Date:   Thu, 29 Oct 2020 09:40:01 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Guo Ren <guoren@kernel.org>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -48,255 +40,118 @@ Cc:     linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
 Subject: Re: [PATCH 5/9] kprobes/ftrace: Add recursion protection to the
  ftrace callback
-Message-Id: <20201029165803.5f6b401e5bccca4e57c70181@kernel.org>
-In-Reply-To: <20201028115613.140212174@goodmis.org>
+Message-ID: <20201029094001.0cfab7aa@gandalf.local.home>
+In-Reply-To: <20201029165803.5f6b401e5bccca4e57c70181@kernel.org>
 References: <20201028115244.995788961@goodmis.org>
         <20201028115613.140212174@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        <20201029165803.5f6b401e5bccca4e57c70181@kernel.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Steve,
+On Thu, 29 Oct 2020 16:58:03 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-On Wed, 28 Oct 2020 07:52:49 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> Hi Steve,
 > 
-> If a ftrace callback does not supply its own recursion protection and
-> does not set the RECURSION_SAFE flag in its ftrace_ops, then ftrace will
-> make a helper trampoline to do so before calling the callback instead of
-> just calling the callback directly.
+> On Wed, 28 Oct 2020 07:52:49 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> > 
+> > If a ftrace callback does not supply its own recursion protection and
+> > does not set the RECURSION_SAFE flag in its ftrace_ops, then ftrace will
+> > make a helper trampoline to do so before calling the callback instead of
+> > just calling the callback directly.  
+> 
+> So in that case the handlers will be called without preempt disabled?
+> 
+> 
+> > The default for ftrace_ops is going to assume recursion protection unless
+> > otherwise specified.  
+> 
+> This seems to skip entier handler if ftrace finds recursion.
+> I would like to increment the missed counter even in that case.
 
-So in that case the handlers will be called without preempt disabled?
+Note, this code does not change the functionality at this point, because
+without having the FL_RECURSION flag set (which kprobes does not even in
+this patch), it always gets called from the helper function that does this:
 
-
-> The default for ftrace_ops is going to assume recursion protection unless
-> otherwise specified.
-
-This seems to skip entier handler if ftrace finds recursion.
-I would like to increment the missed counter even in that case.
-
-[...]
-e.g.
-
-> diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
-> index 5264763d05be..5eb2604fdf71 100644
-> --- a/arch/csky/kernel/probes/ftrace.c
-> +++ b/arch/csky/kernel/probes/ftrace.c
-> @@ -13,16 +13,21 @@ int arch_check_ftrace_location(struct kprobe *p)
->  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  			   struct ftrace_ops *ops, struct pt_regs *regs)
->  {
-> +	int bit;
->  	bool lr_saver = false;
->  	struct kprobe *p;
->  	struct kprobe_ctlblk *kcb;
->  
-> -	/* Preempt is disabled by ftrace */
-> +	bit = ftrace_test_recursion_trylock();
-
-> +
-> +	preempt_disable_notrace();
->  	p = get_kprobe((kprobe_opcode_t *)ip);
->  	if (!p) {
->  		p = get_kprobe((kprobe_opcode_t *)(ip - MCOUNT_INSN_SIZE));
->  		if (unlikely(!p) || kprobe_disabled(p))
-> -			return;
-> +			goto out;
->  		lr_saver = true;
->  	}
-
-	if (bit < 0) {
-		kprobes_inc_nmissed_count(p);
-		goto out;
-	}
-
->  
-> @@ -56,6 +61,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  		 */
->  		__this_cpu_write(current_kprobe, NULL);
->  	}
-> +out:
-> +	preempt_enable_notrace();
-
-	if (bit >= 0)
-		ftrace_test_recursion_unlock(bit);
-
->  }
->  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
->  
-
-Or, we can also introduce a support function,
-
-static inline void kprobes_inc_nmissed_ip(unsigned long ip)
-{
-	struct kprobe *p;
+	bit = trace_test_and_set_recursion(TRACE_LIST_START, TRACE_LIST_MAX);
+	if (bit < 0)
+		return;
 
 	preempt_disable_notrace();
-	p = get_kprobe((kprobe_opcode_t *)ip);
-	if (p)
-		kprobes_inc_nmissed_count(p);
+
+	op->func(ip, parent_ip, op, regs);
+
 	preempt_enable_notrace();
-}
+	trace_clear_recursion(bit);
 
-> diff --git a/arch/parisc/kernel/ftrace.c b/arch/parisc/kernel/ftrace.c
-> index 4bab21c71055..5f7742b225a5 100644
-> --- a/arch/parisc/kernel/ftrace.c
-> +++ b/arch/parisc/kernel/ftrace.c
-> @@ -208,13 +208,19 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  {
->  	struct kprobe_ctlblk *kcb;
->  	struct kprobe *p = get_kprobe((kprobe_opcode_t *)ip);
+Where this function gets called by op->func().
 
-(BTW, here is a bug... get_kprobe() must be called with preempt disabled.)
+In other words, you don't get that count anyway, and I don't think you want
+it. Because it means you traced something that your callback calls.
 
-> +	int bit;
->  
-> -	if (unlikely(!p) || kprobe_disabled(p))
-> +	bit = ftrace_test_recursion_trylock();
+That bit check is basically a nop, because the last patch in this series
+will make the default that everything has recursion protection, but at this
+patch the test does this:
 
-	if (bit < 0) {
-		kprobes_inc_nmissed_ip(ip);
->  		return;
-	}
+	/* A previous recursion check was made */
+	if ((val & TRACE_CONTEXT_MASK) > max)
+		return 0;
 
-This may easier for you ?
+Which would always return true, because this function is called via the
+helper that already did the trace_test_and_set_recursion() which, if it
+made it this far, the val would always be greater than max.
 
-Thank you,
-
->  
-> +	preempt_disable_notrace();
-> +	if (unlikely(!p) || kprobe_disabled(p))
-> +		goto out;
-> +
->  	if (kprobe_running()) {
->  		kprobes_inc_nmissed_count(p);
-> -		return;
-> +		goto out;
->  	}
->  
->  	__this_cpu_write(current_kprobe, p);
-> @@ -235,6 +241,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  		}
->  	}
->  	__this_cpu_write(current_kprobe, NULL);
-> +out:
-> +	preempt_enable_notrace();
-> +	ftrace_test_recursion_unlock(bit);
->  }
->  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
->  
-> diff --git a/arch/powerpc/kernel/kprobes-ftrace.c b/arch/powerpc/kernel/kprobes-ftrace.c
-> index 972cb28174b2..5df8d50c65ae 100644
-> --- a/arch/powerpc/kernel/kprobes-ftrace.c
-> +++ b/arch/powerpc/kernel/kprobes-ftrace.c
-> @@ -18,10 +18,16 @@ void kprobe_ftrace_handler(unsigned long nip, unsigned long parent_nip,
->  {
->  	struct kprobe *p;
->  	struct kprobe_ctlblk *kcb;
-> +	int bit;
->  
-> +	bit = ftrace_test_recursion_trylock();
-> +	if (bit < 0)
-> +		return;
-> +
-> +	preempt_disable_notrace();
->  	p = get_kprobe((kprobe_opcode_t *)nip);
->  	if (unlikely(!p) || kprobe_disabled(p))
-> -		return;
-> +		goto out;
->  
->  	kcb = get_kprobe_ctlblk();
->  	if (kprobe_running()) {
-> @@ -52,6 +58,9 @@ void kprobe_ftrace_handler(unsigned long nip, unsigned long parent_nip,
->  		 */
->  		__this_cpu_write(current_kprobe, NULL);
->  	}
-> +out:
-> +	preempt_enable_notrace();
-> +	ftrace_test_recursion_unlock(bit);
->  }
->  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
->  
-> diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
-> index b388e87a08bf..88466d7fb6b2 100644
-> --- a/arch/s390/kernel/ftrace.c
-> +++ b/arch/s390/kernel/ftrace.c
-> @@ -202,13 +202,19 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  {
->  	struct kprobe_ctlblk *kcb;
->  	struct kprobe *p = get_kprobe((kprobe_opcode_t *)ip);
-> +	int bit;
->  
-> -	if (unlikely(!p) || kprobe_disabled(p))
-> +	bit = ftrace_test_recursion_trylock();
-> +	if (bit < 0)
->  		return;
->  
-> +	preempt_disable_notrace();
-> +	if (unlikely(!p) || kprobe_disabled(p))
-> +		goto out;
-> +
->  	if (kprobe_running()) {
->  		kprobes_inc_nmissed_count(p);
-> -		return;
-> +		goto out;
->  	}
->  
->  	__this_cpu_write(current_kprobe, p);
-> @@ -228,6 +234,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  		}
->  	}
->  	__this_cpu_write(current_kprobe, NULL);
-> +out:
-> +	preempt_enable_notrace();
-> +	ftrace_test_recursion_unlock(bit);
->  }
->  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
->  
-> diff --git a/arch/x86/kernel/kprobes/ftrace.c b/arch/x86/kernel/kprobes/ftrace.c
-> index 681a4b36e9bb..a40a6cdfcca3 100644
-> --- a/arch/x86/kernel/kprobes/ftrace.c
-> +++ b/arch/x86/kernel/kprobes/ftrace.c
-> @@ -18,11 +18,16 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  {
->  	struct kprobe *p;
->  	struct kprobe_ctlblk *kcb;
-> +	int bit;
->  
-> -	/* Preempt is disabled by ftrace */
-> +	bit = ftrace_test_recursion_trylock();
-> +	if (bit < 0)
-> +		return;
-> +
-> +	preempt_disable_notrace();
->  	p = get_kprobe((kprobe_opcode_t *)ip);
->  	if (unlikely(!p) || kprobe_disabled(p))
-> -		return;
-> +		goto out;
->  
->  	kcb = get_kprobe_ctlblk();
->  	if (kprobe_running()) {
-> @@ -52,6 +57,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
->  		 */
->  		__this_cpu_write(current_kprobe, NULL);
->  	}
-> +out:
-> +	preempt_enable_notrace();
-> +	ftrace_test_recursion_unlock(bit);
->  }
->  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
->  
-> -- 
-> 2.28.0
 > 
+> [...]
+> e.g.
 > 
+> > diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
+> > index 5264763d05be..5eb2604fdf71 100644
+> > --- a/arch/csky/kernel/probes/ftrace.c
+> > +++ b/arch/csky/kernel/probes/ftrace.c
+> > @@ -13,16 +13,21 @@ int arch_check_ftrace_location(struct kprobe *p)
+> >  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+> >  			   struct ftrace_ops *ops, struct pt_regs *regs)
+> >  {
+> > +	int bit;
+> >  	bool lr_saver = false;
+> >  	struct kprobe *p;
+> >  	struct kprobe_ctlblk *kcb;
+> >  
+> > -	/* Preempt is disabled by ftrace */
+> > +	bit = ftrace_test_recursion_trylock();  
+> 
+> > +
+> > +	preempt_disable_notrace();
+> >  	p = get_kprobe((kprobe_opcode_t *)ip);
+> >  	if (!p) {
+> >  		p = get_kprobe((kprobe_opcode_t *)(ip - MCOUNT_INSN_SIZE));
+> >  		if (unlikely(!p) || kprobe_disabled(p))
+> > -			return;
+> > +			goto out;
+> >  		lr_saver = true;
+> >  	}  
+> 
+> 	if (bit < 0) {
+> 		kprobes_inc_nmissed_count(p);
+> 		goto out;
+> 	}
 
+If anything called in get_kprobe() or kprobes_inc_nmissed_count() gets
+traced here, you have zero recursion protection, and this will crash the
+machine with a likely reboot (triple fault).
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Note, the recursion handles interrupts and wont stop them. bit < 0 only
+happens if you recurse because this function called something that ends up
+calling itself. Really, why would you care about missing a kprobe on the
+same kprobe?
+
+-- Steve
