@@ -2,39 +2,33 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E14A2A019F
-	for <lists+linux-csky@lfdr.de>; Fri, 30 Oct 2020 10:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188242A062D
+	for <lists+linux-csky@lfdr.de>; Fri, 30 Oct 2020 14:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbgJ3Jjv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 30 Oct 2020 05:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        id S1726178AbgJ3NHB (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 30 Oct 2020 09:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgJ3Jjv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 30 Oct 2020 05:39:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C05C0613CF;
-        Fri, 30 Oct 2020 02:39:51 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1604050789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SAnK7jywPa1GOe2OuqwDJLyZGDzUuixXtlwihZHVsUc=;
-        b=DJVMSRd0qSrh4qYCn9wA493aNBmMgpWEcC+DvdpwzaRDvlM9GLKnEgKej1q9Pjzm9R+Wbs
-        SDi3g+IJ46Uix1vGIe/ZYW4m61MI+Iaw5AZAFaLpBqWgGMlssdhbZlo/f7rBhKNBzNp0ql
-        AfNrswKRF+YJTa9uIYVgSjvVSA2hm+3Uo8FE2CUbADDpAaUi5+pLITUyecfHGq85dCGrM6
-        ye41RcUorO4bMmTTQADOv++RFFw5xbZssFQqXyqHenRIXBZCR3WWb7IZDjqY6k6VEbvE3u
-        Tfhh5ZTwPL+4DOCzh5iRmbXJG66Efnr9i/wjo97sHGpkIG/AcCkDrLPDQ7sJmw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1604050789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SAnK7jywPa1GOe2OuqwDJLyZGDzUuixXtlwihZHVsUc=;
-        b=xjkTScsjovLjMF5jCfSAo4zF71pVuZpjsm7SHzu9Cw8PlE4P8sLRwcUur1ZnT3ITuwSffU
-        9R+g3a6sInOEqeDg==
-To:     Christoph Hellwig <hch@lst.de>
+        with ESMTP id S1725975AbgJ3NHB (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 30 Oct 2020 09:07:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227DAC0613CF;
+        Fri, 30 Oct 2020 06:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rfcpHo3sYbHG9663+/oEKU5+yDacWVNSfCtmxqY30IA=; b=JKDGOHNWU/V8Y+2rs/k7xDcd+D
+        ywFaOKdh66CG7CRxohaMqHaFLXYS9D8UEmY4cTPadxISCv3CHKX+79wCldI0LV8nLjJimNpRjUFot
+        BbcFgkfMoOoVVqbSn6at/tUwkE3W4TeiBSkn85uGjZxEhlxcEUEn86bKSTG6W3x+/e6w76iTiIDMo
+        +S7YG45wv9UKO0gFrKbYfO0n5SfTbF1pG2kSlc2FKZXNaKU1XoICbQHjohPVjgTGHFNPIe1Xmtc6u
+        jm1U+Hxe5+XhivRe6Qrj/AgJuMiGDjrS/uMW8LgIirsxF3LkwsBxbZgQIkCutkdRTk0XP+Op+X95w
+        kA9B9H+g==;
+Received: from willy by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kYU6t-0002Yw-HM; Fri, 30 Oct 2020 13:06:27 +0000
+Date:   Fri, 30 Oct 2020 13:06:27 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -71,27 +65,45 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, linux-arch@vger.kernel.org,
         sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org
-Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
-In-Reply-To: <20201030072508.GA18471@lst.de>
-References: <20201029221806.189523375@linutronix.de> <20201030072508.GA18471@lst.de>
-Date:   Fri, 30 Oct 2020 10:39:49 +0100
-Message-ID: <87a6w4njbu.fsf@nanos.tec.linutronix.de>
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic
+ & friends
+Message-ID: <20201030130627.GI27442@casper.infradead.org>
+References: <20201029221806.189523375@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201029221806.189523375@linutronix.de>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Oct 30 2020 at 08:25, Christoph Hellwig wrote:
-> On Thu, Oct 29, 2020 at 11:18:06PM +0100, Thomas Gleixner wrote:
->>  - Consolidating all kmap atomic implementations in generic code
->
-> I think the consolidation is a winner no matter where we go next.  Maybe
-> split it out in a prep series so we can get it in ASAP?
+On Thu, Oct 29, 2020 at 11:18:06PM +0100, Thomas Gleixner wrote:
+> This series provides kmap_local.* iomap_local variants which only disable
+> migration to keep the virtual mapping address stable accross preemption,
+> but do neither disable pagefaults nor preemption. The new functions can be
+> used in any context, but if used in atomic context the caller has to take
+> care of eventually disabling pagefaults.
 
-Yes, patch 2-15 can just go without any dependency. The only thing which
-needs a bit of thought is naming. See the other reply to Linus.
+Could I ask for a CONFIG_KMAP_DEBUG which aliases all the kmap variants
+to vmap()?  I think we currently have a problem in iov_iter on HIGHMEM
+configs:
 
-Thanks,
+copy_page_to_iter() calls page_copy_sane() which checks:
 
-        tglx
+        head = compound_head(page);
+        if (likely(n <= v && v <= page_size(head)))
+                return true;
+
+but then:
+
+                void *kaddr = kmap_atomic(page);
+                size_t wanted = copy_to_iter(kaddr + offset, bytes, i);
+                kunmap_atomic(kaddr);
+
+so if offset to offset+bytes is larger than PAGE_SIZE, this is going to
+work for lowmem pages and fail miserably for highmem pages.  I suggest
+vmap() because vmap has a PAGE_SIZE gap between each allocation.
+
+Alternatively if we could have a kmap_atomic_compound(), that would
+be awesome, but probably not realistic to implement.  I've more
+or less resigned myself to having to map things one page at a time.
