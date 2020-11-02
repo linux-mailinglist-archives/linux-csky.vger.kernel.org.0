@@ -2,126 +2,114 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E08012A1AC2
-	for <lists+linux-csky@lfdr.de>; Sat, 31 Oct 2020 22:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E832A22AE
+	for <lists+linux-csky@lfdr.de>; Mon,  2 Nov 2020 02:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726022AbgJaVdw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 31 Oct 2020 17:33:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57510 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725937AbgJaVdw (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 31 Oct 2020 17:33:52 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DC6B720853;
-        Sat, 31 Oct 2020 21:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604180031;
-        bh=a949fi3JWCiOsIfB/oXLlGSJaTnnNYCIyox+iEaG/3k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FmxLv/JX6BAYBbl58Wkol2prTj8sKl9cvxus7OmDo+6URnNTLmGqZ06GE9zo4BHaB
-         iXhqDXTppGvvGbmmfODkn8e10A9CmYm2o8DPHq6nDPdkB1ghH/QP2hswGJSP45Izjn
-         hBxXJsrdmGoAujywpsoLUpU9+3792RN4eIWY5h0o=
-Received: by mail-qt1-f173.google.com with SMTP id p45so6745899qtb.5;
-        Sat, 31 Oct 2020 14:33:50 -0700 (PDT)
-X-Gm-Message-State: AOAM530phMDMs7NbEYVeHpjHR6yY98D7PX3+9oSP8hR7TfnJ5xD76Ar9
-        SbKny+x4Qac9cu0BnDzo+1WVOf3QO+ljyuylyeA=
-X-Google-Smtp-Source: ABdhPJyD/4AcE03j7HIaN207+kO4IYyQ0WkWkrWDUSbNUToIdPZlRv7YWwHuIabdMaXmtCngmEmV1ORQEwrjBUGk+Sk=
-X-Received: by 2002:ac8:4808:: with SMTP id g8mr8036830qtq.18.1604180029997;
- Sat, 31 Oct 2020 14:33:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201029221806.189523375@linutronix.de> <CAHk-=wiFxxGapdOyZHE-7LbFPk+jdfoqdeeJg0zWNQ86WvJGXg@mail.gmail.com>
- <87pn50ob0s.fsf@nanos.tec.linutronix.de> <87blgknjcw.fsf@nanos.tec.linutronix.de>
- <CAHk-=whsJv0bwWRVZHsLoSe48ykAea6T7Oi=G+r8ckLrZ0YUpg@mail.gmail.com>
- <87sg9vl59i.fsf@nanos.tec.linutronix.de> <CAHk-=wjjO9BtTUAsLraqZqdzaPGJ-qvubZfwUsmRUX896eHcGw@mail.gmail.com>
- <CAK8P3a3FyKTHDSAPCyP8e7UA0LN3OvAatNK_vQ3tnBsdbou4sA@mail.gmail.com> <20201031160539.Horde.n5yNbG9LoUSWqtuPQW_h3w1@messagerie.c-s.fr>
-In-Reply-To: <20201031160539.Horde.n5yNbG9LoUSWqtuPQW_h3w1@messagerie.c-s.fr>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 31 Oct 2020 22:33:33 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3uY0ASRGcPi-OZdRyL_xLY81nJfu+O6z-Ovxu9YCR4dQ@mail.gmail.com>
-Message-ID: <CAK8P3a3uY0ASRGcPi-OZdRyL_xLY81nJfu+O6z-Ovxu9YCR4dQ@mail.gmail.com>
-Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michal Simek <monstr@monstr.eu>,
-        Chris Zankel <chris@zankel.net>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, Mel Gorman <mgorman@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Christoph Hellwig <hch@lst.de>, linux-csky@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Chen <deanbo422@gmail.com>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Guo Ren <guoren@kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        Ben Segall <bsegall@google.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        id S1727591AbgKBBI0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 1 Nov 2020 20:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727335AbgKBBIZ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 1 Nov 2020 20:08:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A48CC0617A6;
+        Sun,  1 Nov 2020 17:08:25 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1604279303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4uGtzWR3XDWVzxJPeTJwUrr+92QjqUI1P4Rl6d07MCc=;
+        b=XrgDk26VSw3lMWxT80X6p2BiIELFfSd45uXmpqg40hcbZPvcaSEbWpk3R+GxKbboSmpFo7
+        63BVEl/BSGohNcNmokSUofaOuAyVB8TF4zkcITLfRQimdDp0/NzDabt6xoWCRv1KCKeW7F
+        JBfHL2Zd4jfQiOa73d8ngQE8XEVUJ3AcbNTfvECT7y8NW8OaNw3Ie/CbXJDQBPmopC0hi6
+        3UpqoW4N6M5pY4xkTcBxiJGRWb665zE7gX5m+PKTKEvvjyV6Hoqyt5gxZLMHwAEcjlgo+r
+        WdCkNHrQQLMZuU+RDrUNzqVy0E0MpRf3weVrn07sYqVIDzra4XxQNgHUkZAAnw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1604279303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4uGtzWR3XDWVzxJPeTJwUrr+92QjqUI1P4Rl6d07MCc=;
+        b=w804GlJ3cTjryaWI6xXsdwM5po9NFzF1/LMSPDCaZtr/gWtzM/1QwrA9gqRhs9hURGxtuJ
+        nFG9PzKRhgh+hKBA==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-xtensa@linux-xtensa.org, Juri Lelli <juri.lelli@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Paul McKenney <paulmck@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Matthew Wilcox <willy@infradead.org>
+Subject: Re: [patch V2 00/18] mm/highmem: Preemptible variant of kmap_atomic & friends
+In-Reply-To: <20201029221806.189523375@linutronix.de>
+References: <20201029221806.189523375@linutronix.de>
+Date:   Mon, 02 Nov 2020 02:08:23 +0100
+Message-ID: <87k0v48t14.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Oct 31, 2020 at 4:04 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> > There are also some users on 10+ year old 32-bit netbooks or
-> > business laptops, both x86 and Apple G4.
-> > The longest-lived 32-bit embedded systems with large memory
-> > (other than Arm) are probably NXP QorIQ P20xx/P40xx used in
-> > military VME bus systems, and low-end embedded systems based
-> > on Vortex86.
-> > I'm less worried about all of these because upstream kernel
-> > support for ppc32 and x86-32 is already bitrotting and they will
-> > likely get stuck on the last working kernel before the
-> > TI/Renesas/NXP Arm systems do.
-> >
+On Thu, Oct 29 2020 at 23:18, Thomas Gleixner wrote:
 >
-> Upstream kernel support for ppc32 is bitrotting, seriously ? What do
-> you mean exactly ?
+> There is also a still to be investigated question from Linus on the initial
+> posting versus the per cpu / per task mapping stack depth which might need
+> to be made larger due to the ability to take page faults within a mapping
+> region.
 
-I was thinking more of the platform support: out of the twelve
-32-bit platforms in arch/powerpc/platforms/, your 8xx is the only
-one listed as 'maintained' or 'supported' in the maintainers list,
-and that seems to accurately describe the current state.
+I looked deeper into that and we have a stack depth of 20. That's plenty
+and I couldn't find a way to get above 10 nested ones including faults,
+interrupts, softirqs. With some stress testing I was not able to get over
+a maximum of 6 according to the traceprintk I added.
 
-Freescale seems to have practically stopped contributing to any of
-their 32-bit platforms in 2016 after the NXP acquisition and no longer
-employing either of the maintainers. Similarly, Ben seems to have
-stopped working on powermac in 2016, which was ten years after
-the last 32-bit hardware shipped for that platform.
+For some obscure reason when CONFIG_DEBUG_HIGHMEM is enabled the stack
+depth is increased from 20 to 41. But the only thing DEBUG_HIGHMEM does
+is to enable a few BUG_ON()'s in the mapping code.
 
-> ppc32 is actively supported, with recent addition of support of
-> hugepages, kasan, uaccess protection, VMAP stack, etc ...
+That's a leftover from the historical mapping code which had fixed
+entries for various purposes. DEBUG_HIGHMEM inserted guard mappings
+between the map types. But that got all ditched when kmap_atomic()
+switched to a stack based map management. Though the WITH_KM_FENCE magic
+survived without being functional. All the thing does today is to
+increase the stack depth.
 
-That is good to hear, I didn't know about these additions.
-What platforms are people using to develop these? Is this
-mainly your 8xx work, or is there ongoing development for
-platforms that need highmem?
+I just made that functional again by keeping the stack depth increase
+and utilizing every second slot. That should catch Willy's mapping
+problem nicely if he bothers to test on 32bit :)
 
-         Arnd
+Thanks,
+
+        tglx
+
