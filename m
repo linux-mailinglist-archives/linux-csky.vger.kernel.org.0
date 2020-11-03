@@ -2,156 +2,160 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C158D2A434C
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 11:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2792A43CC
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 12:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgKCKkx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 3 Nov 2020 05:40:53 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50220 "EHLO mx2.suse.de"
+        id S1727869AbgKCLNt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 3 Nov 2020 06:13:49 -0500
+Received: from mx2.suse.de ([195.135.220.15]:52838 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726388AbgKCKkx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 3 Nov 2020 05:40:53 -0500
+        id S1725988AbgKCLNt (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 3 Nov 2020 06:13:49 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1604400051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OpLXhG7xm+V2xdBg1+KjOIVd448NLhIB6otcbwQQTDI=;
-        b=XSdNy7mxSwPPbuLKLXZRfCFfjOJHautUQu++n50tMCvpfkaBXlr+bOunNRM8+xoxvQYvi5
-        mY40GKHAydPd5jnotGgN8FQylfnmTxCAY7Xg9pOTx1xVd1OxQtnbCqyriarK0Ndrtzt94h
-        IzlzFUKI+hnTAEK+ASYY8dP7/EOox/U=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CFA08ACD8;
-        Tue,  3 Nov 2020 10:40:50 +0000 (UTC)
-Date:   Tue, 3 Nov 2020 11:40:49 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        by mx2.suse.de (Postfix) with ESMTP id D6E17ACC6;
+        Tue,  3 Nov 2020 11:13:46 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id D95E0DA7D2; Tue,  3 Nov 2020 12:12:08 +0100 (CET)
+Date:   Tue, 3 Nov 2020 12:12:08 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>, Guo Ren <guoren@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
+        Paul McKenney <paulmck@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        VMware Graphics <linux-graphics-maintainer@vmware.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        intel-gfx@lists.freedesktop.org
+Subject: Re: [patch V3 03/37] fs: Remove asm/kmap_types.h includes
+Message-ID: <20201103111208.GL6756@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paul McKenney <paulmck@kernel.org>, Christoph Hellwig <hch@lst.de>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-doc@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH 11/11 v2] ftrace: Add recording of functions that caused
- recursion
-Message-ID: <20201103104049.GN20201@alley>
-References: <20201030213142.096102821@goodmis.org>
- <20201030214014.801706340@goodmis.org>
- <20201102164147.GJ20201@alley>
- <20201102120907.457ad2f7@gandalf.local.home>
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>, linux-fsdevel@vger.kernel.org,
+        linux-aio@kvack.org, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+        linux-btrfs@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org,
+        Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        VMware Graphics <linux-graphics-maintainer@vmware.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Dave Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        intel-gfx@lists.freedesktop.org
+References: <20201103092712.714480842@linutronix.de>
+ <20201103095856.870272797@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201102120907.457ad2f7@gandalf.local.home>
+In-Reply-To: <20201103095856.870272797@linutronix.de>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon 2020-11-02 12:09:07, Steven Rostedt wrote:
-> On Mon, 2 Nov 2020 17:41:47 +0100
-> Petr Mladek <pmladek@suse.com> wrote:
+On Tue, Nov 03, 2020 at 10:27:15AM +0100, Thomas Gleixner wrote:
+> Historical leftovers from the time where kmap() had fixed slots.
 > 
-> > On Fri 2020-10-30 17:31:53, Steven Rostedt wrote:
-> > > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-> > > 
-> > > This adds CONFIG_FTRACE_RECORD_RECURSION that will record to a file
-> > > "recursed_functions" all the functions that caused recursion while a
-> > > callback to the function tracer was running.
-> > >   
-> > 
-> > > --- /dev/null
-> > > +++ b/kernel/trace/trace_recursion_record.c
-> > > +	if (index >= CONFIG_FTRACE_RECORD_RECURSION_SIZE)
-> > > +		return;
-> > > +
-> > > +	for (i = index - 1; i >= 0; i--) {
-> > > +		if (recursed_functions[i].ip == ip) {
-> > > +			cached_function = ip;
-> > > +			return;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	cached_function = ip;
-> > > +
-> > > +	/*
-> > > +	 * We only want to add a function if it hasn't been added before.
-> > > +	 * Add to the current location before incrementing the count.
-> > > +	 * If it fails to add, then increment the index (save in i)
-> > > +	 * and try again.
-> > > +	 */
-> > > +	old = cmpxchg(&recursed_functions[index].ip, 0, ip);
-> > > +	if (old != 0) {
-> > > +		/* Did something else already added this for us? */
-> > > +		if (old == ip)
-> > > +			return;
-> > > +		/* Try the next location (use i for the next index) */
-> > > +		i = index + 1;  
-> > 
-> > What about
-> > 
-> > 		index++;
-> > 
-> > We basically want to run the code again with index + 1 limit.
-> 
-> But something else could update nr_records, and we want to use that if
-> nr_records is greater than i.
-> 
-> Now, we could swap the use case, and have
-> 
-> 	int index = 0;
-> 
-> 	[..]
-> 	i = atomic_read(&nr_records);
-> 	if (i > index)
-> 		index = i;
-> 
-> 	[..]
-> 
-> 		index++;
-> 		goto again;
-> 
-> 
-> > 
-> > Maybe, it even does not make sense to check the array again
-> > and we should just try to store the value into the next slot.
-> 
-> We do this dance to prevent duplicates.
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Benjamin LaHaise <bcrl@kvack.org>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: linux-aio@kvack.org
+> Cc: Chris Mason <clm@fb.com>
+> Cc: Josef Bacik <josef@toxicpanda.com>
+> Cc: David Sterba <dsterba@suse.com>
 
-I see.
+Acked-by: David Sterba <dsterba@suse.com>
 
-My code was wrong. It reserved slot for the new "ip" by cmpxchg
-on nr_records. The "ip" was stored later so that any parallel
-call need not see that it is a dumplicate.
+For the btrfs bits
 
-Your code reserves the slot by cmpxchg of "ip".
-Any parallel call would fail to take the slot and see
-the "ip" in the next iteration.
+>  fs/btrfs/ctree.h |    1 -
 
-Best Regards,
-Petr
+> --- a/fs/btrfs/ctree.h
+> +++ b/fs/btrfs/ctree.h
+> @@ -17,7 +17,6 @@
+>  #include <linux/wait.h>
+>  #include <linux/slab.h>
+>  #include <trace/events/btrfs.h>
+> -#include <asm/kmap_types.h>
+>  #include <asm/unaligned.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/btrfs.h>
