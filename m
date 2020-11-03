@@ -2,51 +2,51 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABFB2A46C6
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 14:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6942A46CB
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 14:48:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728180AbgKCNpH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 3 Nov 2020 08:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S1729311AbgKCNqv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 3 Nov 2020 08:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726312AbgKCNpH (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Nov 2020 08:45:07 -0500
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B316C0613D1;
-        Tue,  3 Nov 2020 05:45:07 -0800 (PST)
-Received: by mail-qt1-x844.google.com with SMTP id m65so11532057qte.11;
-        Tue, 03 Nov 2020 05:45:07 -0800 (PST)
+        with ESMTP id S1729242AbgKCNpT (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Nov 2020 08:45:19 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3422C0613D1;
+        Tue,  3 Nov 2020 05:45:19 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id x20so14628239qkn.1;
+        Tue, 03 Nov 2020 05:45:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2af8lawmvvDlOCNsCA7JIsdmqsCdB2rsVoy0htQN5ns=;
-        b=tG8I/1z0TzI4q4NRqPO0rLNCTHRPlcbPUisuwZGCHkTaA7gq31V+sIhXGjEgV0/vO6
-         pbNTw7LwqJ2BSRB+laFJtJlByIXmlZuy/6GU5jgLNMQiuBE8U4Tu//pUvxee4YY0nQ0c
-         k1RsAaL8qgvf6GpS53ldLQwM5sFzu943PYddpW6yoLTBmPW5+fsmDiA58lO3h3YiZxKA
-         1F8hhtjSQPz++5Bt4+shgsuVJGR+g/Uz2hsQEDd+OY//+xUtxXjKKJMY+Svoexxw1xC1
-         y9Pb+KBXnUylNFffJknKNkJidEoXJl2Lsu31GCkZxAv5KRlR4wsY/4vmMfzf53jrb4Lg
-         KfQA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KyUFBIsp7WG/ZlJY7JJxE8NR9eUIpLAxO9Zr6R0PBAI=;
+        b=b4PJS/xarNSgluAWCDQQJdu5ZZO0VU1I/CVu92i5vqJojdmesNzdpHU7yArgmVQ/E0
+         ssbV0IRGKePz0hLGbtulnwYnTx5COwyQyc9m5w6wHYmkYcfAi0KMHRRx7s4bial5QlHm
+         FvgIq+A4dw+gBa8aET875i6MrhNYYoEziVxW0mYaQlwHJjIC17MKQQffriRcRcrqbvIZ
+         E0DUUKInWpAcW0rkp9bF5XrHmo61/Wt1H/vsEPSTiCc6yDtBv1y+2E2shnOXWuZJykAv
+         qixeNSrBN1O663ndDaowUg7ftIsFgDEFacIeZyHTHWsjCEpnDR4tkoP+lBgPM5gFOtbX
+         RUdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2af8lawmvvDlOCNsCA7JIsdmqsCdB2rsVoy0htQN5ns=;
-        b=Ebn1TweGkhKdcKJvsjTzcQmb4byAALvkGDQBFe4/Dj8CpV/vfnbrBMjp/YwfDCkHsw
-         xJ0hTuQZVNR6rzxJooewiOPiBcJADZIEqeO9mSY1oo2vLZPbqVhqMdGVBnxRhWpox0jr
-         rxjwIRjLMh85xByXr3QdUXb+8kYeuj5VyD/cgO56tNYE81332B8qpnp2F4oWnA9H17Aa
-         vGo0FBaIZzKa4cJy2hG1tfFQ+dEohnryQxqRTuaOFsV3eIgSwOOnZklB+/CRL+FJsp8u
-         cvQwZ/QsPHw3BIXMT+y/qcmfBnwrmbmf0bHVJm+qcFcJHRsmh/j+pFVDq/EHryxIXYpP
-         ZWuA==
-X-Gm-Message-State: AOAM530/tqtZXJuxU9a8In1OjGA0l/tCBldZd+qGBFhq4y1+4GFioLft
-        VzilhujLb2oOfe/VAc2i+Bs=
-X-Google-Smtp-Source: ABdhPJyVcGsn9BfmX6lMFbKU1u49HpMjynWi/XDV0GRg9SB/A1h+SY8oRaMOm+QQs2KcIwEHTdVD7w==
-X-Received: by 2002:ac8:5a01:: with SMTP id n1mr19342230qta.52.1604411106177;
-        Tue, 03 Nov 2020 05:45:06 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KyUFBIsp7WG/ZlJY7JJxE8NR9eUIpLAxO9Zr6R0PBAI=;
+        b=KYzWSDYo5+d4+t2Ti1LTXBmCC8pJohP47Izm1wxrpb1nge9/+xt8vNhwNqw3deeCrG
+         GhoMThMmiyzKg14mqgc9Z2/yst54Gm83xdWX4x4D7BRMEIl7JiRoi/QacFS5eHTbA9M1
+         ANWOhSXx484Y8HPHsANZics2wNQVdcKg8m6d4ylaxx4RNGflkr0aezSoULlFTdSdvI+z
+         zIMoYERP3kzWHjYybwtvFfD0LcxSIawWYUSUWD+8ECYWbljofgVwstelJIVVUbe32pkw
+         B/o9zA4DxGEUENFCH4EpouVZHqkYLZNUZdC/bKS9mMkC+Tp3OhQcBFPTNGI/jxIrA48A
+         Zxmg==
+X-Gm-Message-State: AOAM531Ymm2npH7/k1RYsZfJ1kkeT/tqYuMsHo78b6lQ2SDoXSC0dF2B
+        SZ/WoeW248P7F/Uq942dRA8=
+X-Google-Smtp-Source: ABdhPJxjlZ3tKnk2e7vxZIf8aOb5eHzCPcpqw48aBWIjBaLIjY56iC7mD5NkhJDWu4rwTzCntUVI8A==
+X-Received: by 2002:a05:620a:62b:: with SMTP id 11mr20584746qkv.229.1604411118944;
+        Tue, 03 Nov 2020 05:45:18 -0800 (PST)
 Received: from zhuyifei1999-ThinkPad-T480.gw.illinois.edu ([2620:0:e00:400f::31])
-        by smtp.gmail.com with ESMTPSA id a206sm7356568qkb.64.2020.11.03.05.45.03
+        by smtp.gmail.com with ESMTPSA id a206sm7356568qkb.64.2020.11.03.05.45.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 05:45:05 -0800 (PST)
+        Tue, 03 Nov 2020 05:45:18 -0800 (PST)
 From:   YiFei Zhu <zhuyifei1999@gmail.com>
 To:     containers@lists.linux-foundation.org
 Cc:     YiFei Zhu <yifeifz2@illinois.edu>, linux-csky@vger.kernel.org,
@@ -69,10 +69,12 @@ Cc:     YiFei Zhu <yifeifz2@illinois.edu>, linux-csky@vger.kernel.org,
         Tycho Andersen <tycho@tycho.pizza>,
         Valentin Rothberg <vrothber@redhat.com>,
         Will Drewry <wad@chromium.org>
-Subject: [PATCH seccomp 0/8] seccomp: add bitmap cache support on remaining arches and report cache in procfs
-Date:   Tue,  3 Nov 2020 07:42:56 -0600
-Message-Id: <cover.1604410035.git.yifeifz2@illinois.edu>
+Subject: [PATCH seccomp 7/8] xtensa: Enable seccomp architecture tracking
+Date:   Tue,  3 Nov 2020 07:43:03 -0600
+Message-Id: <eab25a03fbf296e65e5292c7a25d15285e93e6de.1604410035.git.yifeifz2@illinois.edu>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <cover.1604410035.git.yifeifz2@illinois.edu>
+References: <cover.1604410035.git.yifeifz2@illinois.edu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -81,50 +83,44 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: YiFei Zhu <yifeifz2@illinois.edu>
 
-This patch series enables bitmap cache for the remaining arches with
-SECCOMP_FILTER, other than MIPS.
+To enable seccomp constant action bitmaps, we need to have a static
+mapping to the audit architecture and system call table size. Add these
+for xtensa.
 
-I was unable to find any of the arches having subarch-specific NR_syscalls
-macros, so generic NR_syscalls is used. SH's syscall_get_arch seems to
-only have the 32-bit subarch implementation. I'm not sure if this is
-expected.
-
-This series has not been tested; I have not built all the cross compilers
-necessary to build test, let alone run the kernel or benchmark the
-performance, so help on making sure the bitmap cache works as expected
-would be appreciated. The series applies on top of Kees's for-next/seccomp
-branch.
-
-YiFei Zhu (8):
-  csky: Enable seccomp architecture tracking
-  parisc: Enable seccomp architecture tracking
-  powerpc: Enable seccomp architecture tracking
-  riscv: Enable seccomp architecture tracking
-  s390: Enable seccomp architecture tracking
-  sh: Enable seccomp architecture tracking
-  xtensa: Enable seccomp architecture tracking
-  seccomp/cache: Report cache data through /proc/pid/seccomp_cache
-
- arch/Kconfig                       | 15 ++++++++
- arch/csky/include/asm/Kbuild       |  1 -
- arch/csky/include/asm/seccomp.h    | 11 ++++++
- arch/parisc/include/asm/Kbuild     |  1 -
- arch/parisc/include/asm/seccomp.h  | 22 +++++++++++
- arch/powerpc/include/asm/seccomp.h | 21 +++++++++++
- arch/riscv/include/asm/seccomp.h   | 10 +++++
- arch/s390/include/asm/seccomp.h    |  9 +++++
- arch/sh/include/asm/seccomp.h      | 10 +++++
- arch/xtensa/include/asm/Kbuild     |  1 -
- arch/xtensa/include/asm/seccomp.h  | 11 ++++++
- fs/proc/base.c                     |  6 +++
- include/linux/seccomp.h            |  7 ++++
- kernel/seccomp.c                   | 59 ++++++++++++++++++++++++++++++
- 14 files changed, 181 insertions(+), 3 deletions(-)
- create mode 100644 arch/csky/include/asm/seccomp.h
- create mode 100644 arch/parisc/include/asm/seccomp.h
+Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
+---
+ arch/xtensa/include/asm/Kbuild    |  1 -
+ arch/xtensa/include/asm/seccomp.h | 11 +++++++++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
  create mode 100644 arch/xtensa/include/asm/seccomp.h
 
-
-base-commit: 38c37e8fd3d2590c4234d8cfbc22158362f0eb04
---
+diff --git a/arch/xtensa/include/asm/Kbuild b/arch/xtensa/include/asm/Kbuild
+index c59c42a1221a..9718e9593564 100644
+--- a/arch/xtensa/include/asm/Kbuild
++++ b/arch/xtensa/include/asm/Kbuild
+@@ -7,5 +7,4 @@ generic-y += mcs_spinlock.h
+ generic-y += param.h
+ generic-y += qrwlock.h
+ generic-y += qspinlock.h
+-generic-y += seccomp.h
+ generic-y += user.h
+diff --git a/arch/xtensa/include/asm/seccomp.h b/arch/xtensa/include/asm/seccomp.h
+new file mode 100644
+index 000000000000..f1cb6b0a9e1f
+--- /dev/null
++++ b/arch/xtensa/include/asm/seccomp.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef _ASM_SECCOMP_H
++#define _ASM_SECCOMP_H
++
++#include <asm-generic/seccomp.h>
++
++#define SECCOMP_ARCH_NATIVE		AUDIT_ARCH_XTENSA
++#define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
++#define SECCOMP_ARCH_NATIVE_NAME	"xtensa"
++
++#endif /* _ASM_SECCOMP_H */
+-- 
 2.29.2
+
