@@ -2,131 +2,129 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0178A2A4502
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 13:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABFB2A46C6
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 14:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728214AbgKCMZr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 3 Nov 2020 07:25:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40634 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728168AbgKCMZq (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 3 Nov 2020 07:25:46 -0500
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0EAE822403;
-        Tue,  3 Nov 2020 12:25:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604406345;
-        bh=JnG9AEM3urtQJZbyh27ncRK5xtNjXhkMpT9pLY6ruAw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=S3ilUxfLmh/0Pv4skyGqFEAG0vwDSS5i5psimoXmAELMEWHSH2fW4IuM4Z+qMebRf
-         WAXWrrJnkn0me0BHoC6LmAQbdfefgrg1IUndUDBw+RKZdCT9Ym0K7hlLMGCU1lFFO3
-         Zsx6vPAhW90E/61D8322HI52wvm4X0FuC5QxUJR0=
-Received: by mail-wr1-f50.google.com with SMTP id k10so17011011wrw.13;
-        Tue, 03 Nov 2020 04:25:44 -0800 (PST)
-X-Gm-Message-State: AOAM531fAqcyHHSv2U9CZ9dP3oPogr0zh4cTugMzh94Ysy/X6sIGtfQM
-        XykDjgWFCFOGJqS5maLpA0+4zpavr1VWgO7H7Fg=
-X-Google-Smtp-Source: ABdhPJzaMTU0V4sDEP7WFi1D19pueRl5ySNY/GA/QmiGvW8mi19ZpCI6gDmcGIwe2rHXpOPoRB6cN5TL6gD3Vvt/QEU=
-X-Received: by 2002:adf:eb4f:: with SMTP id u15mr19654094wrn.165.1604406343518;
- Tue, 03 Nov 2020 04:25:43 -0800 (PST)
+        id S1728180AbgKCNpH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 3 Nov 2020 08:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726312AbgKCNpH (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Nov 2020 08:45:07 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B316C0613D1;
+        Tue,  3 Nov 2020 05:45:07 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id m65so11532057qte.11;
+        Tue, 03 Nov 2020 05:45:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2af8lawmvvDlOCNsCA7JIsdmqsCdB2rsVoy0htQN5ns=;
+        b=tG8I/1z0TzI4q4NRqPO0rLNCTHRPlcbPUisuwZGCHkTaA7gq31V+sIhXGjEgV0/vO6
+         pbNTw7LwqJ2BSRB+laFJtJlByIXmlZuy/6GU5jgLNMQiuBE8U4Tu//pUvxee4YY0nQ0c
+         k1RsAaL8qgvf6GpS53ldLQwM5sFzu943PYddpW6yoLTBmPW5+fsmDiA58lO3h3YiZxKA
+         1F8hhtjSQPz++5Bt4+shgsuVJGR+g/Uz2hsQEDd+OY//+xUtxXjKKJMY+Svoexxw1xC1
+         y9Pb+KBXnUylNFffJknKNkJidEoXJl2Lsu31GCkZxAv5KRlR4wsY/4vmMfzf53jrb4Lg
+         KfQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2af8lawmvvDlOCNsCA7JIsdmqsCdB2rsVoy0htQN5ns=;
+        b=Ebn1TweGkhKdcKJvsjTzcQmb4byAALvkGDQBFe4/Dj8CpV/vfnbrBMjp/YwfDCkHsw
+         xJ0hTuQZVNR6rzxJooewiOPiBcJADZIEqeO9mSY1oo2vLZPbqVhqMdGVBnxRhWpox0jr
+         rxjwIRjLMh85xByXr3QdUXb+8kYeuj5VyD/cgO56tNYE81332B8qpnp2F4oWnA9H17Aa
+         vGo0FBaIZzKa4cJy2hG1tfFQ+dEohnryQxqRTuaOFsV3eIgSwOOnZklB+/CRL+FJsp8u
+         cvQwZ/QsPHw3BIXMT+y/qcmfBnwrmbmf0bHVJm+qcFcJHRsmh/j+pFVDq/EHryxIXYpP
+         ZWuA==
+X-Gm-Message-State: AOAM530/tqtZXJuxU9a8In1OjGA0l/tCBldZd+qGBFhq4y1+4GFioLft
+        VzilhujLb2oOfe/VAc2i+Bs=
+X-Google-Smtp-Source: ABdhPJyVcGsn9BfmX6lMFbKU1u49HpMjynWi/XDV0GRg9SB/A1h+SY8oRaMOm+QQs2KcIwEHTdVD7w==
+X-Received: by 2002:ac8:5a01:: with SMTP id n1mr19342230qta.52.1604411106177;
+        Tue, 03 Nov 2020 05:45:06 -0800 (PST)
+Received: from zhuyifei1999-ThinkPad-T480.gw.illinois.edu ([2620:0:e00:400f::31])
+        by smtp.gmail.com with ESMTPSA id a206sm7356568qkb.64.2020.11.03.05.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2020 05:45:05 -0800 (PST)
+From:   YiFei Zhu <zhuyifei1999@gmail.com>
+To:     containers@lists.linux-foundation.org
+Cc:     YiFei Zhu <yifeifz2@illinois.edu>, linux-csky@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        David Laight <David.Laight@aculab.com>,
+        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Hubertus Franke <frankeh@us.ibm.com>,
+        Jack Chen <jianyan2@illinois.edu>,
+        Jann Horn <jannh@google.com>,
+        Josep Torrellas <torrella@illinois.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Tianyin Xu <tyxu@illinois.edu>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Valentin Rothberg <vrothber@redhat.com>,
+        Will Drewry <wad@chromium.org>
+Subject: [PATCH seccomp 0/8] seccomp: add bitmap cache support on remaining arches and report cache in procfs
+Date:   Tue,  3 Nov 2020 07:42:56 -0600
+Message-Id: <cover.1604410035.git.yifeifz2@illinois.edu>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20201103092712.714480842@linutronix.de> <20201103095857.078043987@linutronix.de>
-In-Reply-To: <20201103095857.078043987@linutronix.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 3 Nov 2020 13:25:27 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3q1O=vTLHpjkufNhspj+OJFn0BkMD6XaPZvN_0D+=FFQ@mail.gmail.com>
-Message-ID: <CAK8P3a3q1O=vTLHpjkufNhspj+OJFn0BkMD6XaPZvN_0D+=FFQ@mail.gmail.com>
-Subject: Re: [patch V3 05/37] asm-generic: Provide kmap_size.h
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-aio <linux-aio@kvack.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Nov 3, 2020 at 10:27 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> kmap_types.h is a misnomer because the old atomic MAP based array does not
-> exist anymore and the whole indirection of architectures including
-> kmap_types.h is inconinstent and does not allow to provide guard page
-> debugging for this misfeature.
->
-> Add a common header file which defines the mapping stack size for all
-> architectures. Will be used when converting architectures over to a
-> generic kmap_local/atomic implementation.
->
-> The array size is chosen with the following constraints in mind:
->
->     - The deepest nest level in one context is 3 according to code
->       inspection.
->
->     - The worst case nesting for the upcoming reemptible version would be:
->
->       2 maps in task context and a fault inside
->       2 maps in the fault handler
->       3 maps in softirq
->       2 maps in interrupt
->
-> So a total of 16 is sufficient and probably overestimated.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+From: YiFei Zhu <yifeifz2@illinois.edu>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+This patch series enables bitmap cache for the remaining arches with
+SECCOMP_FILTER, other than MIPS.
+
+I was unable to find any of the arches having subarch-specific NR_syscalls
+macros, so generic NR_syscalls is used. SH's syscall_get_arch seems to
+only have the 32-bit subarch implementation. I'm not sure if this is
+expected.
+
+This series has not been tested; I have not built all the cross compilers
+necessary to build test, let alone run the kernel or benchmark the
+performance, so help on making sure the bitmap cache works as expected
+would be appreciated. The series applies on top of Kees's for-next/seccomp
+branch.
+
+YiFei Zhu (8):
+  csky: Enable seccomp architecture tracking
+  parisc: Enable seccomp architecture tracking
+  powerpc: Enable seccomp architecture tracking
+  riscv: Enable seccomp architecture tracking
+  s390: Enable seccomp architecture tracking
+  sh: Enable seccomp architecture tracking
+  xtensa: Enable seccomp architecture tracking
+  seccomp/cache: Report cache data through /proc/pid/seccomp_cache
+
+ arch/Kconfig                       | 15 ++++++++
+ arch/csky/include/asm/Kbuild       |  1 -
+ arch/csky/include/asm/seccomp.h    | 11 ++++++
+ arch/parisc/include/asm/Kbuild     |  1 -
+ arch/parisc/include/asm/seccomp.h  | 22 +++++++++++
+ arch/powerpc/include/asm/seccomp.h | 21 +++++++++++
+ arch/riscv/include/asm/seccomp.h   | 10 +++++
+ arch/s390/include/asm/seccomp.h    |  9 +++++
+ arch/sh/include/asm/seccomp.h      | 10 +++++
+ arch/xtensa/include/asm/Kbuild     |  1 -
+ arch/xtensa/include/asm/seccomp.h  | 11 ++++++
+ fs/proc/base.c                     |  6 +++
+ include/linux/seccomp.h            |  7 ++++
+ kernel/seccomp.c                   | 59 ++++++++++++++++++++++++++++++
+ 14 files changed, 181 insertions(+), 3 deletions(-)
+ create mode 100644 arch/csky/include/asm/seccomp.h
+ create mode 100644 arch/parisc/include/asm/seccomp.h
+ create mode 100644 arch/xtensa/include/asm/seccomp.h
+
+
+base-commit: 38c37e8fd3d2590c4234d8cfbc22158362f0eb04
+--
+2.29.2
