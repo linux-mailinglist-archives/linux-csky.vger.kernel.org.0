@@ -2,160 +2,310 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2792A43CC
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 12:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F122A441C
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Nov 2020 12:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727869AbgKCLNt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 3 Nov 2020 06:13:49 -0500
-Received: from mx2.suse.de ([195.135.220.15]:52838 "EHLO mx2.suse.de"
+        id S1728407AbgKCLXG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 3 Nov 2020 06:23:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45382 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725988AbgKCLNt (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 3 Nov 2020 06:13:49 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id D6E17ACC6;
-        Tue,  3 Nov 2020 11:13:46 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id D95E0DA7D2; Tue,  3 Nov 2020 12:12:08 +0100 (CET)
-Date:   Tue, 3 Nov 2020 12:12:08 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
+        id S1728092AbgKCLXF (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 3 Nov 2020 06:23:05 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9561D20731;
+        Tue,  3 Nov 2020 11:22:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604402584;
+        bh=miw1KmiC65f8YnprkC3dEffuvVzO9uPuxKpkGSzVRd4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RbJ7yISctA2KuiVcvuzg/xkeLNmB1YRY1HOsjzx9flqELBpJT1V9eFqxkOc8y30nl
+         f9AVijA5fewrw/jyjA/6vkbIYD43mSjj+o9xEcbJcu99j9cYQ7JyXEnkfrbMcLtlkq
+         iB4AtvCZiedYkRfwXzZKpJ9seDNbEaP4BeKC2E9w=
+Date:   Tue, 3 Nov 2020 20:22:57 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Paul McKenney <paulmck@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, Guo Ren <guoren@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        intel-gfx@lists.freedesktop.org
-Subject: Re: [patch V3 03/37] fs: Remove asm/kmap_types.h includes
-Message-ID: <20201103111208.GL6756@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul McKenney <paulmck@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>, linux-fsdevel@vger.kernel.org,
-        linux-aio@kvack.org, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-        linux-btrfs@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        x86@kernel.org, Vineet Gupta <vgupta@synopsys.com>,
-        linux-snps-arc@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org,
-        Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        VMware Graphics <linux-graphics-maintainer@vmware.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Dave Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, Ben Skeggs <bskeggs@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        intel-gfx@lists.freedesktop.org
-References: <20201103092712.714480842@linutronix.de>
- <20201103095856.870272797@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201103095856.870272797@linutronix.de>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+        linux-csky@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 05/11 v2] kprobes/ftrace: Add recursion protection to
+ the ftrace callback
+Message-Id: <20201103202257.029364fd78492fd8efc360dc@kernel.org>
+In-Reply-To: <20201030214013.824581418@goodmis.org>
+References: <20201030213142.096102821@goodmis.org>
+        <20201030214013.824581418@goodmis.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 10:27:15AM +0100, Thomas Gleixner wrote:
-> Historical leftovers from the time where kmap() had fixed slots.
+On Fri, 30 Oct 2020 17:31:47 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Benjamin LaHaise <bcrl@kvack.org>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: linux-aio@kvack.org
-> Cc: Chris Mason <clm@fb.com>
-> Cc: Josef Bacik <josef@toxicpanda.com>
-> Cc: David Sterba <dsterba@suse.com>
+> If a ftrace callback does not supply its own recursion protection and
+> does not set the RECURSION_SAFE flag in its ftrace_ops, then ftrace will
+> make a helper trampoline to do so before calling the callback instead of
+> just calling the callback directly.
+> 
+> The default for ftrace_ops is going to change. It will expect that handlers
+> provide their own recursion protection, unless its ftrace_ops states
+> otherwise.
+> 
+> Link: https://lkml.kernel.org/r/20201028115613.140212174@goodmis.org
+> 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+> Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-csky@vger.kernel.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> ---
+>  arch/csky/kernel/probes/ftrace.c     | 12 ++++++++++--
+>  arch/parisc/kernel/ftrace.c          | 13 +++++++++++--
+>  arch/powerpc/kernel/kprobes-ftrace.c | 11 ++++++++++-
+>  arch/s390/kernel/ftrace.c            | 13 +++++++++++--
+>  arch/x86/kernel/kprobes/ftrace.c     | 12 ++++++++++--
+>  5 files changed, 52 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
+> index 5264763d05be..5eb2604fdf71 100644
+> --- a/arch/csky/kernel/probes/ftrace.c
+> +++ b/arch/csky/kernel/probes/ftrace.c
+> @@ -13,16 +13,21 @@ int arch_check_ftrace_location(struct kprobe *p)
+>  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  			   struct ftrace_ops *ops, struct pt_regs *regs)
+>  {
+> +	int bit;
+>  	bool lr_saver = false;
+>  	struct kprobe *p;
+>  	struct kprobe_ctlblk *kcb;
+>  
+> -	/* Preempt is disabled by ftrace */
+> +	bit = ftrace_test_recursion_trylock();
+> +	if (bit < 0)
+> +		return;
+> +
+> +	preempt_disable_notrace();
+>  	p = get_kprobe((kprobe_opcode_t *)ip);
+>  	if (!p) {
+>  		p = get_kprobe((kprobe_opcode_t *)(ip - MCOUNT_INSN_SIZE));
+>  		if (unlikely(!p) || kprobe_disabled(p))
+> -			return;
+> +			goto out;
+>  		lr_saver = true;
+>  	}
+>  
+> @@ -56,6 +61,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  		 */
+>  		__this_cpu_write(current_kprobe, NULL);
+>  	}
+> +out:
+> +	preempt_enable_notrace();
+> +	ftrace_test_recursion_unlock(bit);
+>  }
+>  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+>  
+> diff --git a/arch/parisc/kernel/ftrace.c b/arch/parisc/kernel/ftrace.c
+> index 63e3ecb9da81..4b1fdf15662c 100644
+> --- a/arch/parisc/kernel/ftrace.c
+> +++ b/arch/parisc/kernel/ftrace.c
+> @@ -208,13 +208,19 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  {
+>  	struct kprobe_ctlblk *kcb;
+>  	struct kprobe *p = get_kprobe((kprobe_opcode_t *)ip);
+> +	int bit;
+>  
+> -	if (unlikely(!p) || kprobe_disabled(p))
+> +	bit = ftrace_test_recursion_trylock();
+> +	if (bit < 0)
+>  		return;
+>  
+> +	preempt_disable_notrace();
 
-Acked-by: David Sterba <dsterba@suse.com>
+If we disable preempt here, we also move the get_kprobe() here as below.
+(get_kprobe() accesses percpu variable)
 
-For the btrfs bits
+	p = get_kprobe((kprobe_opcode_t *)ip);
 
->  fs/btrfs/ctree.h |    1 -
 
-> --- a/fs/btrfs/ctree.h
-> +++ b/fs/btrfs/ctree.h
-> @@ -17,7 +17,6 @@
->  #include <linux/wait.h>
->  #include <linux/slab.h>
->  #include <trace/events/btrfs.h>
-> -#include <asm/kmap_types.h>
->  #include <asm/unaligned.h>
->  #include <linux/pagemap.h>
->  #include <linux/btrfs.h>
+> +	if (unlikely(!p) || kprobe_disabled(p))
+> +		goto out;
+> +
+>  	if (kprobe_running()) {
+>  		kprobes_inc_nmissed_count(p);
+> -		return;
+> +		goto out;
+>  	}
+>  
+>  	__this_cpu_write(current_kprobe, p);
+> @@ -235,6 +241,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  		}
+>  	}
+>  	__this_cpu_write(current_kprobe, NULL);
+> +out:
+> +	preempt_enable_notrace();
+> +	ftrace_test_recursion_unlock(bit);
+>  }
+>  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+>  
+> diff --git a/arch/powerpc/kernel/kprobes-ftrace.c b/arch/powerpc/kernel/kprobes-ftrace.c
+> index 972cb28174b2..5df8d50c65ae 100644
+> --- a/arch/powerpc/kernel/kprobes-ftrace.c
+> +++ b/arch/powerpc/kernel/kprobes-ftrace.c
+> @@ -18,10 +18,16 @@ void kprobe_ftrace_handler(unsigned long nip, unsigned long parent_nip,
+>  {
+>  	struct kprobe *p;
+>  	struct kprobe_ctlblk *kcb;
+> +	int bit;
+>  
+> +	bit = ftrace_test_recursion_trylock();
+> +	if (bit < 0)
+> +		return;
+> +
+> +	preempt_disable_notrace();
+>  	p = get_kprobe((kprobe_opcode_t *)nip);
+>  	if (unlikely(!p) || kprobe_disabled(p))
+> -		return;
+> +		goto out;
+>  
+>  	kcb = get_kprobe_ctlblk();
+>  	if (kprobe_running()) {
+> @@ -52,6 +58,9 @@ void kprobe_ftrace_handler(unsigned long nip, unsigned long parent_nip,
+>  		 */
+>  		__this_cpu_write(current_kprobe, NULL);
+>  	}
+> +out:
+> +	preempt_enable_notrace();
+> +	ftrace_test_recursion_unlock(bit);
+>  }
+>  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+>  
+> diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
+> index b388e87a08bf..88466d7fb6b2 100644
+> --- a/arch/s390/kernel/ftrace.c
+> +++ b/arch/s390/kernel/ftrace.c
+> @@ -202,13 +202,19 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  {
+>  	struct kprobe_ctlblk *kcb;
+>  	struct kprobe *p = get_kprobe((kprobe_opcode_t *)ip);
+> +	int bit;
+>  
+> -	if (unlikely(!p) || kprobe_disabled(p))
+> +	bit = ftrace_test_recursion_trylock();
+> +	if (bit < 0)
+>  		return;
+>  
+> +	preempt_disable_notrace();
+
+Ditto.
+
+Others look good to me.
+
+Thank you,
+
+> +	if (unlikely(!p) || kprobe_disabled(p))
+> +		goto out;
+> +
+>  	if (kprobe_running()) {
+>  		kprobes_inc_nmissed_count(p);
+> -		return;
+> +		goto out;
+>  	}
+>  
+>  	__this_cpu_write(current_kprobe, p);
+> @@ -228,6 +234,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  		}
+>  	}
+>  	__this_cpu_write(current_kprobe, NULL);
+> +out:
+> +	preempt_enable_notrace();
+> +	ftrace_test_recursion_unlock(bit);
+>  }
+>  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+>  
+> diff --git a/arch/x86/kernel/kprobes/ftrace.c b/arch/x86/kernel/kprobes/ftrace.c
+> index 681a4b36e9bb..a40a6cdfcca3 100644
+> --- a/arch/x86/kernel/kprobes/ftrace.c
+> +++ b/arch/x86/kernel/kprobes/ftrace.c
+> @@ -18,11 +18,16 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  {
+>  	struct kprobe *p;
+>  	struct kprobe_ctlblk *kcb;
+> +	int bit;
+>  
+> -	/* Preempt is disabled by ftrace */
+> +	bit = ftrace_test_recursion_trylock();
+> +	if (bit < 0)
+> +		return;
+> +
+> +	preempt_disable_notrace();
+>  	p = get_kprobe((kprobe_opcode_t *)ip);
+>  	if (unlikely(!p) || kprobe_disabled(p))
+> -		return;
+> +		goto out;
+>  
+>  	kcb = get_kprobe_ctlblk();
+>  	if (kprobe_running()) {
+> @@ -52,6 +57,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  		 */
+>  		__this_cpu_write(current_kprobe, NULL);
+>  	}
+> +out:
+> +	preempt_enable_notrace();
+> +	ftrace_test_recursion_unlock(bit);
+>  }
+>  NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+>  
+> -- 
+> 2.28.0
+> 
+> 
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
