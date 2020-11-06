@@ -2,133 +2,292 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391FE2A8C4C
-	for <lists+linux-csky@lfdr.de>; Fri,  6 Nov 2020 02:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14052A8CF9
+	for <lists+linux-csky@lfdr.de>; Fri,  6 Nov 2020 03:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730414AbgKFBug (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 5 Nov 2020 20:50:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33494 "EHLO mail.kernel.org"
+        id S1725941AbgKFCfv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 5 Nov 2020 21:35:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40840 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732772AbgKFBug (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 5 Nov 2020 20:50:36 -0500
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725849AbgKFCfu (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 5 Nov 2020 21:35:50 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CBCE1206DC
-        for <linux-csky@vger.kernel.org>; Fri,  6 Nov 2020 01:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604627435;
-        bh=helXX3bor4utgRiggbzalAYGqagKwX2OyHQxG7F0D74=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pyhnLhiXghkUeShLMnHXj9MhLqbtTjVOJT5Mqu4e7J+4p4O6xn/d/Jc67EcrU8Q7F
-         UIqmhLWhkyxLcqmD3DxwkA7n3TBmOTv9QQRzPc4yvducORcbQVnrxE24o9S2beSl9I
-         bTfhkZOt7dy+tastteS93yKYLrJ1eF6/h+HuqT/8=
-Received: by mail-lj1-f178.google.com with SMTP id y16so3670043ljk.1
-        for <linux-csky@vger.kernel.org>; Thu, 05 Nov 2020 17:50:34 -0800 (PST)
-X-Gm-Message-State: AOAM531gnwFeaV01LeW9sFHIY5mmcXLnH5pSmdKDDaxQOgagMygWUg/Y
-        4W5GGbVZucdESBwgOYuvSbDV9ugFMT0RBIjD3PY=
-X-Google-Smtp-Source: ABdhPJyMzPcY3OBSGrJo9P1nTaJ16HOt5KfbI6gIRAnS133o54GjGiIjPpY2P20UcYgg/YO0IzVfyokaoORKG+1BXwY=
-X-Received: by 2002:a2e:921a:: with SMTP id k26mr1732307ljg.79.1604627433022;
- Thu, 05 Nov 2020 17:50:33 -0800 (PST)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7BDCC22227;
+        Fri,  6 Nov 2020 02:35:48 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.94)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1karbP-007WLH-2p; Thu, 05 Nov 2020 21:35:47 -0500
+Message-ID: <20201106023546.944907560@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Thu, 05 Nov 2020 21:32:40 -0500
+From:   Steven Rostedt (VMware) <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, Guo Ren <guoren@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-csky@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org
+Subject: [PATCH 05/11 v3] kprobes/ftrace: Add recursion protection to the ftrace callback
+References: <20201106023235.367190737@goodmis.org>
 MIME-Version: 1.0
-References: <4f498dfd-00eb-3f15-4529-672264fdab0f@kernel.dk> <19e5bad9-2421-0f40-446f-23479b365477@kernel.dk>
-In-Reply-To: <19e5bad9-2421-0f40-446f-23479b365477@kernel.dk>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 6 Nov 2020 09:50:21 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT=xm7vrEdw_je8vfHgkHk5t07htNJX+59tGKbb-co2vg@mail.gmail.com>
-Message-ID: <CAJF2gTT=xm7vrEdw_je8vfHgkHk5t07htNJX+59tGKbb-co2vg@mail.gmail.com>
-Subject: Re: [PATCH] csky: add support for TIF_NOTIFY_SIGNAL
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-I haven't tested the whole patchset of notify_signal, but the wire-up
-code is ok for me.
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-Acked-by: Guo Ren <guoren@kernel.org>
+If a ftrace callback does not supply its own recursion protection and
+does not set the RECURSION_SAFE flag in its ftrace_ops, then ftrace will
+make a helper trampoline to do so before calling the callback instead of
+just calling the callback directly.
 
+The default for ftrace_ops is going to change. It will expect that handlers
+provide their own recursion protection, unless its ftrace_ops states
+otherwise.
 
-On Fri, Nov 6, 2020 at 12:19 AM Jens Axboe <axboe@kernel.dk> wrote:
->
-> Gentle nudge on this one.
->
-> On 10/29/20 10:13 AM, Jens Axboe wrote:
-> > Wire up TIF_NOTIFY_SIGNAL handling for csky.
-> >
-> > Cc: linux-csky@vger.kernel.org
-> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> > ---
-> >
-> > 5.11 has support queued up for TIF_NOTIFY_SIGNAL, see this posting
-> > for details:
-> >
-> > https://lore.kernel.org/io-uring/20201026203230.386348-1-axboe@kernel.dk/
-> >
-> > As part of that work, I'm adding TIF_NOTIFY_SIGNAL support to all archs,
-> > as that will enable a set of cleanups once all of them support it. I'm
-> > happy carrying this patch if need be, or it can be funelled through the
-> > arch tree. Let me know.
-> >
-> >  arch/csky/include/asm/thread_info.h | 5 ++++-
-> >  arch/csky/kernel/signal.c           | 2 +-
-> >  2 files changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/csky/include/asm/thread_info.h b/arch/csky/include/asm/thread_info.h
-> > index 68e7a1227170..21456a3737c2 100644
-> > --- a/arch/csky/include/asm/thread_info.h
-> > +++ b/arch/csky/include/asm/thread_info.h
-> > @@ -64,6 +64,7 @@ static inline struct thread_info *current_thread_info(void)
-> >  #define TIF_SYSCALL_TRACE    4       /* syscall trace active */
-> >  #define TIF_SYSCALL_TRACEPOINT       5       /* syscall tracepoint instrumentation */
-> >  #define TIF_SYSCALL_AUDIT    6       /* syscall auditing */
-> > +#define TIF_NOTIFY_SIGNAL    7       /* signal notifications exist */
-> >  #define TIF_POLLING_NRFLAG   16      /* poll_idle() is TIF_NEED_RESCHED */
-> >  #define TIF_MEMDIE           18      /* is terminating due to OOM killer */
-> >  #define TIF_RESTORE_SIGMASK  20      /* restore signal mask in do_signal() */
-> > @@ -75,6 +76,7 @@ static inline struct thread_info *current_thread_info(void)
-> >  #define _TIF_SYSCALL_TRACE   (1 << TIF_SYSCALL_TRACE)
-> >  #define _TIF_SYSCALL_TRACEPOINT      (1 << TIF_SYSCALL_TRACEPOINT)
-> >  #define _TIF_SYSCALL_AUDIT   (1 << TIF_SYSCALL_AUDIT)
-> > +#define _TIF_NOTIFY_SIGNAL   (1 << TIF_NOTIFY_SIGNAL)
-> >  #define _TIF_UPROBE          (1 << TIF_UPROBE)
-> >  #define _TIF_POLLING_NRFLAG  (1 << TIF_POLLING_NRFLAG)
-> >  #define _TIF_MEMDIE          (1 << TIF_MEMDIE)
-> > @@ -82,7 +84,8 @@ static inline struct thread_info *current_thread_info(void)
-> >  #define _TIF_SECCOMP         (1 << TIF_SECCOMP)
-> >
-> >  #define _TIF_WORK_MASK               (_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
-> > -                              _TIF_NOTIFY_RESUME | _TIF_UPROBE)
-> > +                              _TIF_NOTIFY_RESUME | _TIF_UPROBE | \
-> > +                              _TIF_NOTIFY_SIGNAL)
-> >
-> >  #define _TIF_SYSCALL_WORK    (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
-> >                                _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP)
-> > diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
-> > index 8b068cf37447..37ea64ed3c12 100644
-> > --- a/arch/csky/kernel/signal.c
-> > +++ b/arch/csky/kernel/signal.c
-> > @@ -257,7 +257,7 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
-> >               uprobe_notify_resume(regs);
-> >
-> >       /* Handle pending signal delivery */
-> > -     if (thread_info_flags & _TIF_SIGPENDING)
-> > +     if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
-> >               do_signal(regs);
-> >
-> >       if (thread_info_flags & _TIF_NOTIFY_RESUME) {
-> >
->
->
-> --
-> Jens Axboe
->
+Link: https://lkml.kernel.org/r/20201028115613.140212174@goodmis.org
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: linux-csky@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+
+Changes since v2:
+
+ - Move get_kprobe() into preempt disabled sections for various archs
 
 
---
-Best Regards
- Guo Ren
+ arch/csky/kernel/probes/ftrace.c     | 12 ++++++++++--
+ arch/parisc/kernel/ftrace.c          | 16 +++++++++++++---
+ arch/powerpc/kernel/kprobes-ftrace.c | 11 ++++++++++-
+ arch/s390/kernel/ftrace.c            | 16 +++++++++++++---
+ arch/x86/kernel/kprobes/ftrace.c     | 12 ++++++++++--
+ 5 files changed, 56 insertions(+), 11 deletions(-)
 
-ML: https://lore.kernel.org/linux-csky/
+diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
+index 5264763d05be..5eb2604fdf71 100644
+--- a/arch/csky/kernel/probes/ftrace.c
++++ b/arch/csky/kernel/probes/ftrace.c
+@@ -13,16 +13,21 @@ int arch_check_ftrace_location(struct kprobe *p)
+ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 			   struct ftrace_ops *ops, struct pt_regs *regs)
+ {
++	int bit;
+ 	bool lr_saver = false;
+ 	struct kprobe *p;
+ 	struct kprobe_ctlblk *kcb;
+ 
+-	/* Preempt is disabled by ftrace */
++	bit = ftrace_test_recursion_trylock();
++	if (bit < 0)
++		return;
++
++	preempt_disable_notrace();
+ 	p = get_kprobe((kprobe_opcode_t *)ip);
+ 	if (!p) {
+ 		p = get_kprobe((kprobe_opcode_t *)(ip - MCOUNT_INSN_SIZE));
+ 		if (unlikely(!p) || kprobe_disabled(p))
+-			return;
++			goto out;
+ 		lr_saver = true;
+ 	}
+ 
+@@ -56,6 +61,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 		 */
+ 		__this_cpu_write(current_kprobe, NULL);
+ 	}
++out:
++	preempt_enable_notrace();
++	ftrace_test_recursion_unlock(bit);
+ }
+ NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+ 
+diff --git a/arch/parisc/kernel/ftrace.c b/arch/parisc/kernel/ftrace.c
+index 63e3ecb9da81..13d85042810a 100644
+--- a/arch/parisc/kernel/ftrace.c
++++ b/arch/parisc/kernel/ftrace.c
+@@ -207,14 +207,21 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 			   struct ftrace_ops *ops, struct pt_regs *regs)
+ {
+ 	struct kprobe_ctlblk *kcb;
+-	struct kprobe *p = get_kprobe((kprobe_opcode_t *)ip);
++	struct kprobe *p;
++	int bit;
+ 
+-	if (unlikely(!p) || kprobe_disabled(p))
++	bit = ftrace_test_recursion_trylock();
++	if (bit < 0)
+ 		return;
+ 
++	preempt_disable_notrace();
++	p = get_kprobe((kprobe_opcode_t *)ip);
++	if (unlikely(!p) || kprobe_disabled(p))
++		goto out;
++
+ 	if (kprobe_running()) {
+ 		kprobes_inc_nmissed_count(p);
+-		return;
++		goto out;
+ 	}
+ 
+ 	__this_cpu_write(current_kprobe, p);
+@@ -235,6 +242,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 		}
+ 	}
+ 	__this_cpu_write(current_kprobe, NULL);
++out:
++	preempt_enable_notrace();
++	ftrace_test_recursion_unlock(bit);
+ }
+ NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+ 
+diff --git a/arch/powerpc/kernel/kprobes-ftrace.c b/arch/powerpc/kernel/kprobes-ftrace.c
+index 972cb28174b2..5df8d50c65ae 100644
+--- a/arch/powerpc/kernel/kprobes-ftrace.c
++++ b/arch/powerpc/kernel/kprobes-ftrace.c
+@@ -18,10 +18,16 @@ void kprobe_ftrace_handler(unsigned long nip, unsigned long parent_nip,
+ {
+ 	struct kprobe *p;
+ 	struct kprobe_ctlblk *kcb;
++	int bit;
+ 
++	bit = ftrace_test_recursion_trylock();
++	if (bit < 0)
++		return;
++
++	preempt_disable_notrace();
+ 	p = get_kprobe((kprobe_opcode_t *)nip);
+ 	if (unlikely(!p) || kprobe_disabled(p))
+-		return;
++		goto out;
+ 
+ 	kcb = get_kprobe_ctlblk();
+ 	if (kprobe_running()) {
+@@ -52,6 +58,9 @@ void kprobe_ftrace_handler(unsigned long nip, unsigned long parent_nip,
+ 		 */
+ 		__this_cpu_write(current_kprobe, NULL);
+ 	}
++out:
++	preempt_enable_notrace();
++	ftrace_test_recursion_unlock(bit);
+ }
+ NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+ 
+diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
+index b388e87a08bf..8f31c726537a 100644
+--- a/arch/s390/kernel/ftrace.c
++++ b/arch/s390/kernel/ftrace.c
+@@ -201,14 +201,21 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 		struct ftrace_ops *ops, struct pt_regs *regs)
+ {
+ 	struct kprobe_ctlblk *kcb;
+-	struct kprobe *p = get_kprobe((kprobe_opcode_t *)ip);
++	struct kprobe *p;
++	int bit;
+ 
+-	if (unlikely(!p) || kprobe_disabled(p))
++	bit = ftrace_test_recursion_trylock();
++	if (bit < 0)
+ 		return;
+ 
++	preempt_disable_notrace();
++	p = get_kprobe((kprobe_opcode_t *)ip);
++	if (unlikely(!p) || kprobe_disabled(p))
++		goto out;
++
+ 	if (kprobe_running()) {
+ 		kprobes_inc_nmissed_count(p);
+-		return;
++		goto out;
+ 	}
+ 
+ 	__this_cpu_write(current_kprobe, p);
+@@ -228,6 +235,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 		}
+ 	}
+ 	__this_cpu_write(current_kprobe, NULL);
++out:
++	preempt_enable_notrace();
++	ftrace_test_recursion_unlock(bit);
+ }
+ NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+ 
+diff --git a/arch/x86/kernel/kprobes/ftrace.c b/arch/x86/kernel/kprobes/ftrace.c
+index 681a4b36e9bb..a40a6cdfcca3 100644
+--- a/arch/x86/kernel/kprobes/ftrace.c
++++ b/arch/x86/kernel/kprobes/ftrace.c
+@@ -18,11 +18,16 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ {
+ 	struct kprobe *p;
+ 	struct kprobe_ctlblk *kcb;
++	int bit;
+ 
+-	/* Preempt is disabled by ftrace */
++	bit = ftrace_test_recursion_trylock();
++	if (bit < 0)
++		return;
++
++	preempt_disable_notrace();
+ 	p = get_kprobe((kprobe_opcode_t *)ip);
+ 	if (unlikely(!p) || kprobe_disabled(p))
+-		return;
++		goto out;
+ 
+ 	kcb = get_kprobe_ctlblk();
+ 	if (kprobe_running()) {
+@@ -52,6 +57,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 		 */
+ 		__this_cpu_write(current_kprobe, NULL);
+ 	}
++out:
++	preempt_enable_notrace();
++	ftrace_test_recursion_unlock(bit);
+ }
+ NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+ 
+-- 
+2.28.0
+
+
