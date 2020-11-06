@@ -2,273 +2,133 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 312372A8BC3
-	for <lists+linux-csky@lfdr.de>; Fri,  6 Nov 2020 02:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 391FE2A8C4C
+	for <lists+linux-csky@lfdr.de>; Fri,  6 Nov 2020 02:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732396AbgKFBDr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 5 Nov 2020 20:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730895AbgKFBDq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 5 Nov 2020 20:03:46 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9923C0613D2
-        for <linux-csky@vger.kernel.org>; Thu,  5 Nov 2020 17:03:46 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id 13so2779128pfy.4
-        for <linux-csky@vger.kernel.org>; Thu, 05 Nov 2020 17:03:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h1qhqRSMRUXyrUbUEOvVj1Xayt+tRFfnnKrhvY579fA=;
-        b=Ye4CbyDkxD8CzEKWZyGLbqZxCo0wBnxB29MlGN/C/uWJtMnQPvPxxeNMU2Js3bAcYZ
-         wrV5R5Re+PojfvDG7jTmIc3fv/+Oqh/kBQ/tU/cfYqt8X6ZkMvJ1mygETTmq5FIQgLCL
-         YRXa7P4ZT+MgPEzsU2qU0I/RW21R5zbYyopVX8oa8OUW2bcM/IyqumlnyVdjCiujSmit
-         wvIUf/EgAYtOzXcU78Xpsd0oPRhm8XTeMull7sikNu7528pnJtW6ydBP95nW6IARFgcQ
-         QGvs8AAMYs8+Jwq6VYxq1gVoPQhovH3FxYRFM2wKXDSluczz+6NT57d4YgYzdp/DS4UX
-         d9nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=h1qhqRSMRUXyrUbUEOvVj1Xayt+tRFfnnKrhvY579fA=;
-        b=NgYLoaFuoSE7JmXXJvrfqUJzel9OSK2h2Nygy0DaYEsLgCi6XQkYO3nIeogYD1Ztal
-         uhDqRmAZqDQLTUReIyRno/qgbZTj9NO0jXoRnTu6i65IyMq0FBQ37OKK4mehwW4OF8/R
-         GumZEAVeqT6YVx39loBOgLkVQJMHhYu3BsAGCPSNTYQdB6+Y5jQif07Q6vznZ5DnpXqp
-         meDslahimIvi8YUdNPPS6uFN1EmTE2dxX5FOJmY1DounSK1nWhyUJPlBPAwd6tPIhtnD
-         n8XrPsXP0aRNow0OXAPlglZB8LEPNqVJzbYOymSZy1xFwxbTtwr59Q/L+LZii4V8GG62
-         XIdQ==
-X-Gm-Message-State: AOAM5331p8R/IbPoKHIQfzanBSjM/qnHJFEVPe15jATZpc3l+rBgBLVE
-        nYh+LzDJWfonbpsrpy/tIojxAg==
-X-Google-Smtp-Source: ABdhPJxuk/9LN+HRinOOazfvVLm0ahfLbbwa3GQ3/PlZrz4ilMrIrzMVzDvSxLJYgNiAbSSHS0aPVg==
-X-Received: by 2002:a62:5542:0:b029:156:222c:a630 with SMTP id j63-20020a6255420000b0290156222ca630mr4896256pfb.50.1604624626215;
-        Thu, 05 Nov 2020 17:03:46 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id b16sm3765879pfp.195.2020.11.05.17.03.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Nov 2020 17:03:45 -0800 (PST)
-Date:   Thu, 05 Nov 2020 17:03:45 -0800 (PST)
-X-Google-Original-Date: Thu, 05 Nov 2020 17:03:43 PST (-0800)
-Subject:     Re: [PATCH v4 1/9] RISC-V: Implement ptrace regs and stack API
-In-Reply-To: <1602918377-23573-2-git-send-email-guoren@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, mhiramat@kernel.org,
-        alankao@andestech.com, rostedt@goodmis.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        anup@brainfault.org, linux-csky@vger.kernel.org,
-        greentime.hu@sifive.com, zong.li@sifive.com, guoren@kernel.org,
-        me@packi.ch, guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     guoren@kernel.org
-Message-ID: <mhng-c3f5e2b4-0467-42f6-9f5b-e66ade70eef2@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1730414AbgKFBug (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 5 Nov 2020 20:50:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33494 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732772AbgKFBug (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 5 Nov 2020 20:50:36 -0500
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CBCE1206DC
+        for <linux-csky@vger.kernel.org>; Fri,  6 Nov 2020 01:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604627435;
+        bh=helXX3bor4utgRiggbzalAYGqagKwX2OyHQxG7F0D74=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pyhnLhiXghkUeShLMnHXj9MhLqbtTjVOJT5Mqu4e7J+4p4O6xn/d/Jc67EcrU8Q7F
+         UIqmhLWhkyxLcqmD3DxwkA7n3TBmOTv9QQRzPc4yvducORcbQVnrxE24o9S2beSl9I
+         bTfhkZOt7dy+tastteS93yKYLrJ1eF6/h+HuqT/8=
+Received: by mail-lj1-f178.google.com with SMTP id y16so3670043ljk.1
+        for <linux-csky@vger.kernel.org>; Thu, 05 Nov 2020 17:50:34 -0800 (PST)
+X-Gm-Message-State: AOAM531gnwFeaV01LeW9sFHIY5mmcXLnH5pSmdKDDaxQOgagMygWUg/Y
+        4W5GGbVZucdESBwgOYuvSbDV9ugFMT0RBIjD3PY=
+X-Google-Smtp-Source: ABdhPJyMzPcY3OBSGrJo9P1nTaJ16HOt5KfbI6gIRAnS133o54GjGiIjPpY2P20UcYgg/YO0IzVfyokaoORKG+1BXwY=
+X-Received: by 2002:a2e:921a:: with SMTP id k26mr1732307ljg.79.1604627433022;
+ Thu, 05 Nov 2020 17:50:33 -0800 (PST)
+MIME-Version: 1.0
+References: <4f498dfd-00eb-3f15-4529-672264fdab0f@kernel.dk> <19e5bad9-2421-0f40-446f-23479b365477@kernel.dk>
+In-Reply-To: <19e5bad9-2421-0f40-446f-23479b365477@kernel.dk>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 6 Nov 2020 09:50:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT=xm7vrEdw_je8vfHgkHk5t07htNJX+59tGKbb-co2vg@mail.gmail.com>
+Message-ID: <CAJF2gTT=xm7vrEdw_je8vfHgkHk5t07htNJX+59tGKbb-co2vg@mail.gmail.com>
+Subject: Re: [PATCH] csky: add support for TIF_NOTIFY_SIGNAL
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-csky@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, 17 Oct 2020 00:06:09 PDT (-0700), guoren@kernel.org wrote:
-> From: Patrick Stählin <me@packi.ch>
->
-> Needed for kprobes support. Copied and adapted from arm64 code.
->
-> Guo Ren fixup pt_regs type for linux-5.8-rc1.
->
-> Signed-off-by: Patrick Stählin <me@packi.ch>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Reviewed-by: Pekka Enberg <penberg@kernel.org>
-> Reviewed-by: Zong Li <zong.li@sifive.com>
-> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  arch/riscv/Kconfig              |  1 +
->  arch/riscv/include/asm/ptrace.h | 29 ++++++++++++
->  arch/riscv/kernel/ptrace.c      | 99 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 129 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index b7821ac..e6424d8b 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -87,6 +87,7 @@ config RISCV
->  	select SPARSE_IRQ
->  	select SYSCTL_EXCEPTION_TRACE
->  	select THREAD_INFO_IN_TASK
-> +	select HAVE_REGS_AND_STACK_ACCESS_API
+I haven't tested the whole patchset of notify_signal, but the wire-up
+code is ok for me.
 
-We alphabetize these now -- I'd usually just fix it, but there's a
-Signed-off-by issue later in the patch set.
+Acked-by: Guo Ren <guoren@kernel.org>
 
+
+On Fri, Nov 6, 2020 at 12:19 AM Jens Axboe <axboe@kernel.dk> wrote:
 >
->  config ARCH_MMAP_RND_BITS_MIN
->  	default 18 if 64BIT
-> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
-> index ee49f80..23372bb 100644
-> --- a/arch/riscv/include/asm/ptrace.h
-> +++ b/arch/riscv/include/asm/ptrace.h
-> @@ -8,6 +8,7 @@
+> Gentle nudge on this one.
 >
->  #include <uapi/asm/ptrace.h>
->  #include <asm/csr.h>
-> +#include <linux/compiler.h>
+> On 10/29/20 10:13 AM, Jens Axboe wrote:
+> > Wire up TIF_NOTIFY_SIGNAL handling for csky.
+> >
+> > Cc: linux-csky@vger.kernel.org
+> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> > ---
+> >
+> > 5.11 has support queued up for TIF_NOTIFY_SIGNAL, see this posting
+> > for details:
+> >
+> > https://lore.kernel.org/io-uring/20201026203230.386348-1-axboe@kernel.dk/
+> >
+> > As part of that work, I'm adding TIF_NOTIFY_SIGNAL support to all archs,
+> > as that will enable a set of cleanups once all of them support it. I'm
+> > happy carrying this patch if need be, or it can be funelled through the
+> > arch tree. Let me know.
+> >
+> >  arch/csky/include/asm/thread_info.h | 5 ++++-
+> >  arch/csky/kernel/signal.c           | 2 +-
+> >  2 files changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/csky/include/asm/thread_info.h b/arch/csky/include/asm/thread_info.h
+> > index 68e7a1227170..21456a3737c2 100644
+> > --- a/arch/csky/include/asm/thread_info.h
+> > +++ b/arch/csky/include/asm/thread_info.h
+> > @@ -64,6 +64,7 @@ static inline struct thread_info *current_thread_info(void)
+> >  #define TIF_SYSCALL_TRACE    4       /* syscall trace active */
+> >  #define TIF_SYSCALL_TRACEPOINT       5       /* syscall tracepoint instrumentation */
+> >  #define TIF_SYSCALL_AUDIT    6       /* syscall auditing */
+> > +#define TIF_NOTIFY_SIGNAL    7       /* signal notifications exist */
+> >  #define TIF_POLLING_NRFLAG   16      /* poll_idle() is TIF_NEED_RESCHED */
+> >  #define TIF_MEMDIE           18      /* is terminating due to OOM killer */
+> >  #define TIF_RESTORE_SIGMASK  20      /* restore signal mask in do_signal() */
+> > @@ -75,6 +76,7 @@ static inline struct thread_info *current_thread_info(void)
+> >  #define _TIF_SYSCALL_TRACE   (1 << TIF_SYSCALL_TRACE)
+> >  #define _TIF_SYSCALL_TRACEPOINT      (1 << TIF_SYSCALL_TRACEPOINT)
+> >  #define _TIF_SYSCALL_AUDIT   (1 << TIF_SYSCALL_AUDIT)
+> > +#define _TIF_NOTIFY_SIGNAL   (1 << TIF_NOTIFY_SIGNAL)
+> >  #define _TIF_UPROBE          (1 << TIF_UPROBE)
+> >  #define _TIF_POLLING_NRFLAG  (1 << TIF_POLLING_NRFLAG)
+> >  #define _TIF_MEMDIE          (1 << TIF_MEMDIE)
+> > @@ -82,7 +84,8 @@ static inline struct thread_info *current_thread_info(void)
+> >  #define _TIF_SECCOMP         (1 << TIF_SECCOMP)
+> >
+> >  #define _TIF_WORK_MASK               (_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
+> > -                              _TIF_NOTIFY_RESUME | _TIF_UPROBE)
+> > +                              _TIF_NOTIFY_RESUME | _TIF_UPROBE | \
+> > +                              _TIF_NOTIFY_SIGNAL)
+> >
+> >  #define _TIF_SYSCALL_WORK    (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+> >                                _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP)
+> > diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
+> > index 8b068cf37447..37ea64ed3c12 100644
+> > --- a/arch/csky/kernel/signal.c
+> > +++ b/arch/csky/kernel/signal.c
+> > @@ -257,7 +257,7 @@ asmlinkage void do_notify_resume(struct pt_regs *regs,
+> >               uprobe_notify_resume(regs);
+> >
+> >       /* Handle pending signal delivery */
+> > -     if (thread_info_flags & _TIF_SIGPENDING)
+> > +     if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+> >               do_signal(regs);
+> >
+> >       if (thread_info_flags & _TIF_NOTIFY_RESUME) {
+> >
 >
->  #ifndef __ASSEMBLY__
 >
-> @@ -60,6 +61,7 @@ struct pt_regs {
+> --
+> Jens Axboe
 >
->  #define user_mode(regs) (((regs)->status & SR_PP) == 0)
->
-> +#define MAX_REG_OFFSET offsetof(struct pt_regs, orig_a0)
->
->  /* Helpers for working with the instruction pointer */
->  static inline unsigned long instruction_pointer(struct pt_regs *regs)
-> @@ -85,6 +87,12 @@ static inline void user_stack_pointer_set(struct pt_regs *regs,
->  	regs->sp =  val;
->  }
->
-> +/* Valid only for Kernel mode traps. */
-> +static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-> +{
-> +	return regs->sp;
-> +}
-> +
->  /* Helpers for working with the frame pointer */
->  static inline unsigned long frame_pointer(struct pt_regs *regs)
->  {
-> @@ -101,6 +109,27 @@ static inline unsigned long regs_return_value(struct pt_regs *regs)
->  	return regs->a0;
->  }
->
-> +extern int regs_query_register_offset(const char *name);
-> +extern unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
-> +					       unsigned int n);
-> +
-> +/**
-> + * regs_get_register() - get register value from its offset
-> + * @regs:	pt_regs from which register value is gotten
-> + * @offset:	offset of the register.
-> + *
-> + * regs_get_register returns the value of a register whose offset from @regs.
-> + * The @offset is the offset of the register in struct pt_regs.
-> + * If @offset is bigger than MAX_REG_OFFSET, this returns 0.
-> + */
-> +static inline unsigned long regs_get_register(struct pt_regs *regs,
-> +					      unsigned int offset)
-> +{
-> +	if (unlikely(offset > MAX_REG_OFFSET))
-> +		return 0;
-> +
-> +	return *(unsigned long *)((unsigned long)regs + offset);
-> +}
->  #endif /* __ASSEMBLY__ */
->
->  #endif /* _ASM_RISCV_PTRACE_H */
-> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-> index 2d6395f..1a85305 100644
-> --- a/arch/riscv/kernel/ptrace.c
-> +++ b/arch/riscv/kernel/ptrace.c
-> @@ -114,6 +114,105 @@ const struct user_regset_view *task_user_regset_view(struct task_struct *task)
->  	return &riscv_user_native_view;
->  }
->
-> +struct pt_regs_offset {
-> +	const char *name;
-> +	int offset;
-> +};
-> +
-> +#define REG_OFFSET_NAME(r) {.name = #r, .offset = offsetof(struct pt_regs, r)}
-> +#define REG_OFFSET_END {.name = NULL, .offset = 0}
-> +
-> +static const struct pt_regs_offset regoffset_table[] = {
-> +	REG_OFFSET_NAME(epc),
-> +	REG_OFFSET_NAME(ra),
-> +	REG_OFFSET_NAME(sp),
-> +	REG_OFFSET_NAME(gp),
-> +	REG_OFFSET_NAME(tp),
-> +	REG_OFFSET_NAME(t0),
-> +	REG_OFFSET_NAME(t1),
-> +	REG_OFFSET_NAME(t2),
-> +	REG_OFFSET_NAME(s0),
-> +	REG_OFFSET_NAME(s1),
-> +	REG_OFFSET_NAME(a0),
-> +	REG_OFFSET_NAME(a1),
-> +	REG_OFFSET_NAME(a2),
-> +	REG_OFFSET_NAME(a3),
-> +	REG_OFFSET_NAME(a4),
-> +	REG_OFFSET_NAME(a5),
-> +	REG_OFFSET_NAME(a6),
-> +	REG_OFFSET_NAME(a7),
-> +	REG_OFFSET_NAME(s2),
-> +	REG_OFFSET_NAME(s3),
-> +	REG_OFFSET_NAME(s4),
-> +	REG_OFFSET_NAME(s5),
-> +	REG_OFFSET_NAME(s6),
-> +	REG_OFFSET_NAME(s7),
-> +	REG_OFFSET_NAME(s8),
-> +	REG_OFFSET_NAME(s9),
-> +	REG_OFFSET_NAME(s10),
-> +	REG_OFFSET_NAME(s11),
-> +	REG_OFFSET_NAME(t3),
-> +	REG_OFFSET_NAME(t4),
-> +	REG_OFFSET_NAME(t5),
-> +	REG_OFFSET_NAME(t6),
-> +	REG_OFFSET_NAME(status),
-> +	REG_OFFSET_NAME(badaddr),
-> +	REG_OFFSET_NAME(cause),
-> +	REG_OFFSET_NAME(orig_a0),
-> +	REG_OFFSET_END,
-> +};
-> +
-> +/**
-> + * regs_query_register_offset() - query register offset from its name
-> + * @name:	the name of a register
-> + *
-> + * regs_query_register_offset() returns the offset of a register in struct
-> + * pt_regs from its name. If the name is invalid, this returns -EINVAL;
-> + */
-> +int regs_query_register_offset(const char *name)
-> +{
-> +	const struct pt_regs_offset *roff;
-> +
-> +	for (roff = regoffset_table; roff->name != NULL; roff++)
-> +		if (!strcmp(roff->name, name))
-> +			return roff->offset;
-> +	return -EINVAL;
-> +}
-> +
-> +/**
-> + * regs_within_kernel_stack() - check the address in the stack
-> + * @regs:      pt_regs which contains kernel stack pointer.
-> + * @addr:      address which is checked.
-> + *
-> + * regs_within_kernel_stack() checks @addr is within the kernel stack page(s).
-> + * If @addr is within the kernel stack, it returns true. If not, returns false.
-> + */
-> +static bool regs_within_kernel_stack(struct pt_regs *regs, unsigned long addr)
-> +{
-> +	return (addr & ~(THREAD_SIZE - 1))  ==
-> +		(kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1));
-> +}
-> +
-> +/**
-> + * regs_get_kernel_stack_nth() - get Nth entry of the stack
-> + * @regs:	pt_regs which contains kernel stack pointer.
-> + * @n:		stack entry number.
-> + *
-> + * regs_get_kernel_stack_nth() returns @n th entry of the kernel stack which
-> + * is specified by @regs. If the @n th entry is NOT in the kernel stack,
-> + * this returns 0.
-> + */
-> +unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
-> +{
-> +	unsigned long *addr = (unsigned long *)kernel_stack_pointer(regs);
-> +
-> +	addr += n;
-> +	if (regs_within_kernel_stack(regs, (unsigned long)addr))
-> +		return *addr;
-> +	else
-> +		return 0;
-> +}
-> +
->  void ptrace_disable(struct task_struct *child)
->  {
->  	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
+
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
