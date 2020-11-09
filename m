@@ -2,107 +2,129 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF1E2A9794
-	for <lists+linux-csky@lfdr.de>; Fri,  6 Nov 2020 15:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9C32ABF7A
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Nov 2020 16:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbgKFO1n (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 6 Nov 2020 09:27:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46544 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726010AbgKFO1m (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 6 Nov 2020 09:27:42 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1604672860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fneYivF7KPk5Vezwqp16bHvlG7pQia60PP+ozhIKNOI=;
-        b=hOSy8tf6Xv9bxsLj3BRpsgcu/m8tXPh77G9b08Scucev/08pfZ/oZN7WOboqt1Phltz0oY
-        EY+Z7IhgTgZK8/cheL0CPQ+pGMcTvUW7Ysp6ShK8LBZpwqpEn7fzXD6giDnRBpzEP5qAeT
-        BwsA/u4RxQJT0sh1JOGSdIWHppyWK2U=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CBFB7ABCC;
-        Fri,  6 Nov 2020 14:27:39 +0000 (UTC)
-Date:   Fri, 6 Nov 2020 15:27:38 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>, Guo Ren <guoren@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-doc@vger.kernel.org, linux-csky@vger.kernel.org,
+        id S1731569AbgKIPEQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 9 Nov 2020 10:04:16 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41044 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731507AbgKIPEQ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 9 Nov 2020 10:04:16 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A9EXJ3S007393;
+        Mon, 9 Nov 2020 10:03:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=z5oC/8a+GTxhWeb+ZbLr8Xr4K+9R59YBdDdSSh5RKRM=;
+ b=XBIiWh0WE20556srxE4tLXEI6LHTLU0XOZ47YJ+y5FuzrW6vuf5w3TIr9w02PGtl0Vm2
+ DuyXTJVwYsCISKNILJK+M1iFuUbShIE99Jq3DvQ0X1oX8LTGL34og77coACb+wK/HnCR
+ AVRIlisnmRGpjCYnFi2E9U+kSrjh53XqIuAVfOxVS9IbINjiz9ouXPIQfH7yUyevg9fc
+ 0cuNK+RY6Rh+1w1zFDzDYDLhR8XfzoI7LW78lTBKqQts2p3iPmUCCyCpGOO1FeUilMD3
+ 8ctNR0S83H168re3lA8+p6vac/432WdtO2v2czqxzZ5czK9JDYTlY7G1LjWXEnXT8HFU zQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 34q5urdbxp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Nov 2020 10:03:25 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0A9EXd3B009077;
+        Mon, 9 Nov 2020 10:03:23 -0500
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 34q5urdbtv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Nov 2020 10:03:23 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0A9F1mKL012969;
+        Mon, 9 Nov 2020 15:03:19 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 34p26phjpu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 09 Nov 2020 15:03:18 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0A9F3Gqd55771522
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 9 Nov 2020 15:03:16 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8080BAE055;
+        Mon,  9 Nov 2020 15:03:16 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9050FAE051;
+        Mon,  9 Nov 2020 15:03:15 +0000 (GMT)
+Received: from osiris (unknown [9.171.58.192])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon,  9 Nov 2020 15:03:15 +0000 (GMT)
+Date:   Mon, 9 Nov 2020 16:03:14 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     YiFei Zhu <zhuyifei1999@gmail.com>
+Cc:     containers@lists.linux-foundation.org,
+        YiFei Zhu <yifeifz2@illinois.edu>, linux-csky@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH 11/11 v3] ftrace: Add recording of functions that caused
- recursion
-Message-ID: <20201106142738.GX20201@alley>
-References: <20201106023235.367190737@goodmis.org>
- <20201106023548.102375687@goodmis.org>
- <20201106131317.GW20201@alley>
- <20201106084131.7dfc3a30@gandalf.local.home>
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        David Laight <David.Laight@aculab.com>,
+        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Hubertus Franke <frankeh@us.ibm.com>,
+        Jack Chen <jianyan2@illinois.edu>,
+        Jann Horn <jannh@google.com>,
+        Josep Torrellas <torrella@illinois.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Tianyin Xu <tyxu@illinois.edu>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Valentin Rothberg <vrothber@redhat.com>,
+        Will Drewry <wad@chromium.org>
+Subject: Re: [PATCH seccomp 5/8] s390: Enable seccomp architecture tracking
+Message-ID: <20201109150314.GA16690@osiris>
+References: <cover.1604410035.git.yifeifz2@illinois.edu>
+ <0fbe0c14d598e18effad3b648ab4808f9cd95eba.1604410035.git.yifeifz2@illinois.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201106084131.7dfc3a30@gandalf.local.home>
+In-Reply-To: <0fbe0c14d598e18effad3b648ab4808f9cd95eba.1604410035.git.yifeifz2@illinois.edu>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-09_02:2020-11-05,2020-11-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=859
+ bulkscore=0 malwarescore=0 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=1 adultscore=0 mlxscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011090098
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri 2020-11-06 08:41:31, Steven Rostedt wrote:
-> On Fri, 6 Nov 2020 14:13:17 +0100
-> Petr Mladek <pmladek@suse.com> wrote:
+On Tue, Nov 03, 2020 at 07:43:01AM -0600, YiFei Zhu wrote:
+> From: YiFei Zhu <yifeifz2@illinois.edu>
 > 
-> > JFYI, the code reading and writing the cache looks good to me.
-> > 
-> > It is still possible that some entries might stay unused (filled
-> > with zeroes) but it should be hard to hit in practice. It
-> > is good enough from my POV.
+> To enable seccomp constant action bitmaps, we need to have a static
+> mapping to the audit architecture and system call table size. Add these
+> for s390.
 > 
-> You mean the part that was commented?
+> Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
+> ---
+>  arch/s390/include/asm/seccomp.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/s390/include/asm/seccomp.h b/arch/s390/include/asm/seccomp.h
+> index 795bbe0d7ca6..71d46f0ba97b 100644
+> --- a/arch/s390/include/asm/seccomp.h
+> +++ b/arch/s390/include/asm/seccomp.h
+> @@ -16,4 +16,13 @@
+>  
+>  #include <asm-generic/seccomp.h>
+>  
+> +#define SECCOMP_ARCH_NATIVE		AUDIT_ARCH_S390X
+> +#define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
+> +#define SECCOMP_ARCH_NATIVE_NAME	"s390x"
+> +#ifdef CONFIG_COMPAT
+> +# define SECCOMP_ARCH_COMPAT		AUDIT_ARCH_S390
+> +# define SECCOMP_ARCH_COMPAT_NR		NR_syscalls
+> +# define SECCOMP_ARCH_COMPAT_NAME	"s390"
+> +#endif
+> +
 
-Yeah, it is the comment problem when nr_records is pushed forward.
-
-> > 
-> > I do not give Reviewed-by tag just because I somehow do not have power
-> > to review the entire patch carefully enough at the moment.
-> 
-> No problem. Thanks for looking at it.
-> 
-> I'm adding a link to this thread, so if someone wants proof you helped out
-> on this code, you can have them follow the links ;-)
-> 
-> Anyway, even if I push this to linux-next where I stop rebasing code
-> (because of test coverage), I do rebase for adding tags. So if you ever get
-> around at looking at this code, I can add that tag later (before the next
-> merge window), or if you find something, I could fix it with a new patch and
-> give you a Reported-by.
-
-Good to know.
-
-Best Regards,
-Petr
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
