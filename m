@@ -2,51 +2,51 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B22A2AF2D5
-	for <lists+linux-csky@lfdr.de>; Wed, 11 Nov 2020 15:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AF82AF2DF
+	for <lists+linux-csky@lfdr.de>; Wed, 11 Nov 2020 15:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbgKKNfN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        id S1726570AbgKKNfN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
         Wed, 11 Nov 2020 08:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726274AbgKKNee (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 11 Nov 2020 08:34:34 -0500
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49693C0613D1;
-        Wed, 11 Nov 2020 05:34:34 -0800 (PST)
-Received: by mail-qt1-x844.google.com with SMTP id i12so1261149qtj.0;
-        Wed, 11 Nov 2020 05:34:34 -0800 (PST)
+        with ESMTP id S1726460AbgKKNeh (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 11 Nov 2020 08:34:37 -0500
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C368C0613D1;
+        Wed, 11 Nov 2020 05:34:37 -0800 (PST)
+Received: by mail-qt1-x842.google.com with SMTP id g17so1244604qts.5;
+        Wed, 11 Nov 2020 05:34:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/wWgXpwOKfWu89zfH4z55YdVS4FoKgsyU3KjhUPw2Xk=;
-        b=dNmx8letqvw7/kng3JJM9MT8cp864llEi2W+fdgHjl0ywQOexzPsPUHJHFNPynp1Fu
-         KyowDk74TZHDe12eygZFrmJx/0ykft94sWcknmiP/gb2ci8KYGrnhUPNAVoX1CQ7micC
-         W9dxg0yPt32jkNPh+v2S6Ec8TERKRUxhAcuQXa3NFkbWo80pdfJ6Bl7pZT/OVLOTmPOj
-         ZqSlW3XjT5hv6sk/2vSinzAG6ZS7KozmDUro8la2o7lq04jT1uzUKYXTrmPAjUt7smwf
-         isz4yxPSfYvHYghHVVTVYFLVyuwWgAnYoJ33J4COWXdBK+Sc1/TKSOTKCGWEZcvZVt2n
-         sfsQ==
+        bh=p4ug0/ujexdr5eX2KHZwXV+5OEEE0LQ6CHuZfwOYci4=;
+        b=vNGoRE4T2vueWtMyfIqsMJnHQf5sexlSfNm5+JYWvZrbhr28FRAtAv3lFmTY0+4W0Y
+         WcYZoYHknNJQqlmA5lKA2IjQ5N2wYEjtpuzYl7OO06EsiIGv6XJZ3Kb9UjRl3/b7/1X8
+         XfCjrkryG0QaqerFaC1fcQ9Tr2HyAB4KKtxuVtQp0xutUOI57AMaDr4CA2MgmoE4mjCv
+         KB12O8KYoI95e70wD3aaXcRNbfK6zccMr68ebqQN7E8uk7S2TR1coNLaubqwUvBts/Lv
+         zorqhisqngJ2ZuCEG1/njxhxTc7yrzx1m99VyQR+bb/RgHndyJV5i+iGi1vdeZUV7FdW
+         piDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/wWgXpwOKfWu89zfH4z55YdVS4FoKgsyU3KjhUPw2Xk=;
-        b=h78nz0hI6MZDa1YGKfIIaf5Ib28oKQqZEGfI4dsANSmULyZGuoSM7BLNepzkV3J49a
-         Yl5pv6BCSh4JtQkTimxA6tomgFRf+Qns3v3hyyR8bgU6uS5sYnKf5Uu67+c5X8we90wZ
-         mPgCymCs53jdzB57iFN8HLtQ+gbQyivTXttn0CPSSSNOdaDh+KrPdKKc2IqT2eCXfMxI
-         HQc/efBO2E7N9UNDGcWsqq1JnGXpYWID5D7k4uZd0MelU1kbbwwXEIMFrQIvNnmRWbzi
-         BV6AO3dZqztbtL6Esjmw6KMQ8zbFnBxJiwOcB0iXvIWy35I35hCkjBdds+Eo6PoI3u2J
-         XBEQ==
-X-Gm-Message-State: AOAM532z5g+8z+5Bdi4dkyTNvE4z8CKZB0pVf1DP9k6QazPwfEdwpHz0
-        zPxw6HkFTKZQEr82eH5l+Tc=
-X-Google-Smtp-Source: ABdhPJyXr79D39F72KQTAuWFk25+3xGmXqPHFQ+ygjm2TFYHLHgr595PCW4dLHay6xJ4RhIuu7lNGA==
-X-Received: by 2002:ac8:5901:: with SMTP id 1mr17048871qty.350.1605101673552;
-        Wed, 11 Nov 2020 05:34:33 -0800 (PST)
+        bh=p4ug0/ujexdr5eX2KHZwXV+5OEEE0LQ6CHuZfwOYci4=;
+        b=kNHrKJpjnwUFpUjIkHZJfnFlPO31514sfssyvHBhgGUZ2GFgGVDI1Y3Qr64Av5HUOn
+         Tn/NMjELOprB9mmQnKqmqngVsqR3dPT6nlCQ+GRO/M4z73dizL5IG6SvNbizrPJJrKvm
+         4tkjjJzeenGF9vDIog7vRgrYB64MDkSaM8cOgrbnLGKphK/Pbke779pbyW1mo9uyLdEu
+         +ogmWSPlI6G0I3WYvx3XqU+U6rTM1r1Pya5Eaninr1Nmz37Kzy72BTy47Gm7CcGCKiSC
+         1mD5ILZyaB2LGP8d4YhRhBpeGpHF6Git1vkuDU6MjybkRqdcdGejnol+O+NkVSPX30Hd
+         hAEQ==
+X-Gm-Message-State: AOAM530ai8B4VyLDnvpuO3AIvmoya+avyKog0Anm38dqZjyS5BlBTrMd
+        fOdqcurAk5pxOIfQV3t2fyg=
+X-Google-Smtp-Source: ABdhPJyVXjxkJWplKVPB4NFyM0YLYj5IP428vFSUkWNwwyzA8cf7e/mXCgVyvFukKTHkEaORyR7aHQ==
+X-Received: by 2002:aed:39c2:: with SMTP id m60mr12461442qte.206.1605101676823;
+        Wed, 11 Nov 2020 05:34:36 -0800 (PST)
 Received: from localhost.localdomain (host-173-230-99-154.tnkngak.clients.pavlovmedia.com. [173.230.99.154])
-        by smtp.gmail.com with ESMTPSA id r190sm1997814qkf.101.2020.11.11.05.34.32
+        by smtp.gmail.com with ESMTPSA id r190sm1997814qkf.101.2020.11.11.05.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Nov 2020 05:34:33 -0800 (PST)
+        Wed, 11 Nov 2020 05:34:36 -0800 (PST)
 From:   YiFei Zhu <zhuyifei1999@gmail.com>
 To:     containers@lists.linux-foundation.org
 Cc:     YiFei Zhu <yifeifz2@illinois.edu>, linux-csky@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc:     YiFei Zhu <yifeifz2@illinois.edu>, linux-csky@vger.kernel.org,
         Tycho Andersen <tycho@tycho.pizza>,
         Valentin Rothberg <vrothber@redhat.com>,
         Will Drewry <wad@chromium.org>
-Subject: [PATCH seccomp v2 1/8] csky: Enable seccomp architecture tracking
-Date:   Wed, 11 Nov 2020 07:33:47 -0600
-Message-Id: <f9219026d4803b22f3e57e3768b4e42e004ef236.1605101222.git.yifeifz2@illinois.edu>
+Subject: [PATCH seccomp v2 3/8] powerpc: Enable seccomp architecture tracking
+Date:   Wed, 11 Nov 2020 07:33:49 -0600
+Message-Id: <0b64925362671cdaa26d01bfe50b3ba5e164adfd.1605101222.git.yifeifz2@illinois.edu>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <cover.1605101222.git.yifeifz2@illinois.edu>
 References: <cover.1605101222.git.yifeifz2@illinois.edu>
@@ -85,43 +85,48 @@ From: YiFei Zhu <yifeifz2@illinois.edu>
 
 To enable seccomp constant action bitmaps, we need to have a static
 mapping to the audit architecture and system call table size. Add these
-for csky.
+for powerpc.
+
+__LITTLE_ENDIAN__ is used here instead of CONFIG_CPU_LITTLE_ENDIAN
+to keep it consistent with asm/syscall.h.
 
 Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
 ---
- arch/csky/include/asm/Kbuild    |  1 -
- arch/csky/include/asm/seccomp.h | 11 +++++++++++
- 2 files changed, 11 insertions(+), 1 deletion(-)
- create mode 100644 arch/csky/include/asm/seccomp.h
+ arch/powerpc/include/asm/seccomp.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
-index 64876e59e2ef..93372255984d 100644
---- a/arch/csky/include/asm/Kbuild
-+++ b/arch/csky/include/asm/Kbuild
-@@ -4,6 +4,5 @@ generic-y += gpio.h
- generic-y += kvm_para.h
- generic-y += local64.h
- generic-y += qrwlock.h
--generic-y += seccomp.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/csky/include/asm/seccomp.h b/arch/csky/include/asm/seccomp.h
-new file mode 100644
-index 000000000000..d33e758126fb
---- /dev/null
-+++ b/arch/csky/include/asm/seccomp.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _ASM_SECCOMP_H
-+#define _ASM_SECCOMP_H
+diff --git a/arch/powerpc/include/asm/seccomp.h b/arch/powerpc/include/asm/seccomp.h
+index 51209f6071c5..ac2033f134f0 100644
+--- a/arch/powerpc/include/asm/seccomp.h
++++ b/arch/powerpc/include/asm/seccomp.h
+@@ -8,4 +8,27 @@
+ 
+ #include <asm-generic/seccomp.h>
+ 
++#ifdef __LITTLE_ENDIAN__
++#define __SECCOMP_ARCH_LE		__AUDIT_ARCH_LE
++#define __SECCOMP_ARCH_LE_NAME		"le"
++#else
++#define __SECCOMP_ARCH_LE		0
++#define __SECCOMP_ARCH_LE_NAME
++#endif
 +
-+#include <asm-generic/seccomp.h>
++#ifdef CONFIG_PPC64
++# define SECCOMP_ARCH_NATIVE		(AUDIT_ARCH_PPC64 | __SECCOMP_ARCH_LE)
++# define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
++# define SECCOMP_ARCH_NATIVE_NAME	"ppc64" __SECCOMP_ARCH_LE_NAME
++# ifdef CONFIG_COMPAT
++#  define SECCOMP_ARCH_COMPAT		(AUDIT_ARCH_PPC | __SECCOMP_ARCH_LE)
++#  define SECCOMP_ARCH_COMPAT_NR	NR_syscalls
++#  define SECCOMP_ARCH_COMPAT_NAME	"ppc" __SECCOMP_ARCH_LE_NAME
++# endif
++#else /* !CONFIG_PPC64 */
++# define SECCOMP_ARCH_NATIVE		(AUDIT_ARCH_PPC | __SECCOMP_ARCH_LE)
++# define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
++# define SECCOMP_ARCH_NATIVE_NAME	"ppc" __SECCOMP_ARCH_LE_NAME
++#endif
 +
-+#define SECCOMP_ARCH_NATIVE		AUDIT_ARCH_CSKY
-+#define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
-+#define SECCOMP_ARCH_NATIVE_NAME	"csky"
-+
-+#endif /* _ASM_SECCOMP_H */
+ #endif	/* _ASM_POWERPC_SECCOMP_H */
 -- 
 2.29.2
 
