@@ -2,687 +2,196 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0DB2AFCCB
-	for <lists+linux-csky@lfdr.de>; Thu, 12 Nov 2020 02:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E127A2B00DF
+	for <lists+linux-csky@lfdr.de>; Thu, 12 Nov 2020 09:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728683AbgKLBeB (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 11 Nov 2020 20:34:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38978 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728091AbgKLAfj (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 11 Nov 2020 19:35:39 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F04A52222C;
-        Thu, 12 Nov 2020 00:33:35 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.94)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1kd0YQ-0002Bm-Rq; Wed, 11 Nov 2020 19:33:34 -0500
-Message-ID: <20201112003334.744819436@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 11 Nov 2020 19:32:55 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>, Guo Ren <guoren@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        id S1726140AbgKLIK4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 12 Nov 2020 03:10:56 -0500
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:47194 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbgKLIKz (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 12 Nov 2020 03:10:55 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20201112081042euoutp01ee2b09c53d6708d5028b94218aec3a07~GtGA8LMfA1889818898euoutp01_;
+        Thu, 12 Nov 2020 08:10:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20201112081042euoutp01ee2b09c53d6708d5028b94218aec3a07~GtGA8LMfA1889818898euoutp01_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1605168642;
+        bh=5QhIz+Gn5Nu1t1BJ55g8tgSxAnN2Qhv3UsWQAPjr2XE=;
+        h=From:Subject:To:Cc:Date:In-Reply-To:References:From;
+        b=b64XoHNHyRH94WtnWrIiT5KU/cDx5fnxzItI77Kk7w6SZX7tsbA7Ai3ryZMzN5Lct
+         /YSCwayQ3wP9rhBfKUQ6YvKDKVpMpPXrLRlytAyQgSyHTrglDtwehR53iPmlFxJL/4
+         fmxfGzt1a6FiPCOc3jgRik1oRrUBO3w1EsNW9HmI=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20201112081037eucas1p10001fdda6dddb9d057a3eb3cec683c9b~GtF75tkcF3069230692eucas1p1I;
+        Thu, 12 Nov 2020 08:10:37 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id F7.8C.27958.CFDECAF5; Thu, 12
+        Nov 2020 08:10:37 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20201112081036eucas1p14e135a370d3bccab311727fd2e89f4df~GtF7QhSjo3069230692eucas1p1H;
+        Thu, 12 Nov 2020 08:10:36 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201112081036eusmtrp1008f17458f30bdd010557b6fe39947dc~GtF7Pb3DY0531605316eusmtrp1k;
+        Thu, 12 Nov 2020 08:10:36 +0000 (GMT)
+X-AuditID: cbfec7f2-f15ff70000006d36-d1-5facedfc7293
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 08.81.21957.CFDECAF5; Thu, 12
+        Nov 2020 08:10:36 +0000 (GMT)
+Received: from [106.210.88.143] (unknown [106.210.88.143]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201112081034eusmtip10485455f165c607ea5327c010a6dcda1~GtF5oIs1T2201322013eusmtip1k;
+        Thu, 12 Nov 2020 08:10:34 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [patch V3 10/37] ARM: highmem: Switch to generic kmap atomic
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     linux-aio@kvack.org, Peter Zijlstra <peterz@infradead.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-doc@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, live-patching@vger.kernel.org
-Subject: [for-next][PATCH 11/17] ftrace: Add recording of functions that caused recursion
-References: <20201112003244.764326960@goodmis.org>
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        Huang Rui <ray.huang@amd.com>, sparclinux@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Paul McKenney <paulmck@kernel.org>, x86@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Mel Gorman <mgorman@suse.de>, nouveau@lists.freedesktop.org,
+        Dave Airlie <airlied@redhat.com>,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        spice-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-btrfs@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Message-ID: <c07bae0c-68dd-2693-948f-00e8a50f3053@samsung.com>
+Date:   Thu, 12 Nov 2020 09:10:34 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
+        Gecko/20100101 Thunderbird/78.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20201103095857.582196476@linutronix.de>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTZxzdd58tWnIBJx9gtliUBLehbNN9ic5oYuI1MxuLWbKYkFrmDbjx
+        SitOINlAkPESTUFWSnlNCC3lMS/PyLsOKiBlUGQIDGxgSHjoVodMsGXQqxv/nXN+53y/8/vj
+        E+HuVspbdCHyIqeIlIdLKReiofuF+T37UqXsQKMWQw/GijGkramkkF3VTaPb6hoS5Q6qcLQ0
+        1Uwi7UAygYaXn1JIb+jCUE7uFYD46RESDU3raNRQloyhltYeAlnuaCmUxtcDNFm5TqKrE1UY
+        0vdX0ch4sxWgtRUHibKfzAJkcPQCtJKVRSJb6XMCma51YOjaTBaG2lIfYSihR0eiGr4IR7X8
+        TRwV9FXTaMBuIlF5fyGF/vl5mjzmy14dslOsZWQQZ9dWVYCt0z/E2OS2MZqt1e1j+Yo0iuVt
+        Kpp9YjbT7D31GsHOdTbibHtBJc1OZZgwtrb0ezZ7tBywA+oSELTzrMuR81z4hUucYv/Rcy5h
+        jhuZIDrH4/LgeBpIAH1MOhCLIPMhNHUX0OnAReTO6ADUFufgAvkbwHq1FhPIMwAXMyz460hz
+        k40SBuUAlk40EQJ5CuCj0lZi00UxgTB9KZ3axB7MKdjaoXOmdzCfwdmk604PzuSJYaI+bBNL
+        mKOwOWfK6SGYvfDecLrT8yYTAhPvJlGCxw325M04dTFzED7svI4L77wNk+rzX2FPODZT5KwN
+        mUUXOD7fAoTaJ2DeZDsmYA84b6qjBbwL9mVnEkIgCUCruYoWSCaAlivqV+nDcMK8ulFDtLHC
+        H9bc2S/Ix6G1dIXelCHjCkeX3IQSrlDV8CMuyBKYmuIuuP2gxlT939rOX4fwG0Cq2XKaZss5
+        mi3naP7fWwyICuDJxSgjQjllYCT3bYBSHqGMiQwN+Coqggcbv6DPYbI1gYL5vwKMABMBI4Ai
+        XLpD4nusUuYuOS+PjeMUUTJFTDinNAIfESH1lFTkb4yYUPlF7huOi+YUr6eYSOydgBFiSXWE
+        ZUFr7c01LGfaqjte7M2zei88eEcReGLOcms51Td1eXWm4KdeXv9+fnFJ3Nc/xPt4eUZZtt/O
+        g2PQQJ3zm9jlH/eukjB+nPjW8cbx+3zLqceT/JpH4Sd/ZvMmfeKlaNlJx4GEzp0hwXYvn/WZ
+        IynbAv13373stmALXv6oqyWxnOwYbow8+UtbEG3cI3sZpxPXH/J7o7mwoSuBBOTzWxHbu0YM
+        rf3r24oaix4f/K7sjzM5u0Oe+YSc/aDf4LY+yzSk/H7YrS5Dbe38NF4ZoCH4Cl2wbS7V0O5Z
+        plb9Js13zSrpD1r83Msedyj6y8XQtVEuNvYLzWr8y/unZQ6zlFCGyQP34Qql/F8F4KeXdAQA
+        AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0ybVRiAPd+tBa1+lCInzIWlExc3KRQoHnCSJVvc54VsmphsbrMr7AsQ
+        abu1ZRleQp2MjDouK9d1FKgOKaPAaMdEEBjoBgiMFLBKQdG1Elwsm5CxKVCEggn/nrzned7k
+        JC8X58+TIdw0hYZVKWTpQsqfGPD2/hK+5LFII7sHIfrRWY2hiiYLhZb1tzmoubyJRKV2PY48
+        U+0kqhjOJtDYw/sUqqu/haHi0rMAWV0OEo24zBx0oyYbQ9929BNotK2CQrnWFoB+tayQ6Nxk
+        A4bqhho4qKekA6DFR14SFc1OA1Tv/QGgR/n5JJq7skCg3rybGMpz52Oo8/xvGNL2m0nUZK3C
+        kc1agiPjQCMHDS/3kqh2qJJCj6+5yD3bmXMjyxQz6rDjzOK/esBcrxvHmOxOJ4exmXcy1qu5
+        FGOd03OY2Tt3OExf+SLBzHR/jTNdRguHmfq8F2NsV7KYop9rATNcbgIHn31PtFulzNCw21KV
+        as2rwiNiFCUSxyFRVEycSBz98rH4KIkwImH3CTY97TSrikg4Lkr1Fl4AJ4sDz9gncoEWDNA6
+        4MeFdAxsb52jdMCfy6drACydXKLWH56D/aVacp0D4ZJDtyF5ADQ1TfskihZDnUfn40D6ddhx
+        04yvsYBOhGfzqsm1AKeNfvCLFYNP4tNS6Bh2+Lby6ATYXjzlCwg6DPaN6Yg1DqKTYI5lGaw7
+        AbD/kts396MlcLy7wOfjdCystP2+waHws5bLGxwMne4qrBDwDZtyw6bEsCkxbEqqAXEVCNgM
+        tTxFrhaL1DK5OkORIkpWyq1g9fpu3P7H1goq7/0t6gEYF/QAyMWFAt72PRYpn3dClvkhq1JK
+        VRnprLoHSFb/cxEPCUpWrp6vQiMVx0ZKxDGxcZGSuNhoYTCvxbga0SkyDfsBy55kVf93GNcv
+        RItpjr4W0TacaT/Q3FWUOX/YspWfc/FLavR+kHdv6wVQa7v2Vu3MwnjYZMHK+DttS5YtGkIf
+        n1fxoD24zHk3ybHwdmNEuPn9xleGFKfcl0MdYccEgp+sn9w6c3Bqx4s18tBw7LH+3Y8O8Mfc
+        dODpsInjLYnoiGluiytAsEPVV7Y3R2udHey0J34TX+KvMGif2L+U53ljkDhEsQV9L5z/o+HB
+        p8Fbgx+mPO1Qf9/8UuclZdpk0UhWzq7rTxZPH733XepTHUmHF6pMmpkxRBcPvem4uwj/zLJ1
+        saZdftHJDc/8FTDP+9g7Mfp8ZWHoNlPbvn1FESX+s4dcxvavpirE9WWnJCrWKSTUqTLxTlyl
+        lv0HmCntXQYEAAA=
+X-CMS-MailID: 20201112081036eucas1p14e135a370d3bccab311727fd2e89f4df
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20201112081036eucas1p14e135a370d3bccab311727fd2e89f4df
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20201112081036eucas1p14e135a370d3bccab311727fd2e89f4df
+References: <20201103092712.714480842@linutronix.de>
+        <20201103095857.582196476@linutronix.de>
+        <CGME20201112081036eucas1p14e135a370d3bccab311727fd2e89f4df@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Hi Thomas,
 
-This adds CONFIG_FTRACE_RECORD_RECURSION that will record to a file
-"recursed_functions" all the functions that caused recursion while a
-callback to the function tracer was running.
+On 03.11.2020 10:27, Thomas Gleixner wrote:
+> No reason having the same code in every architecture.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-arm-kernel@lists.infradead.org
 
-Link: https://lkml.kernel.org/r/20201106023548.102375687@goodmis.org
+This patch landed in linux-next 20201109 as commit 2a15ba82fa6c ("ARM: 
+highmem: Switch to generic kmap atomic"). However it causes a following 
+warning on my test boards (Samsung Exynos SoC based):
 
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Anton Vorontsov <anton@enomsg.org>
-Cc: Colin Cross <ccross@android.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Miroslav Benes <mbenes@suse.cz>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-csky@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-s390@vger.kernel.org
-Cc: live-patching@vger.kernel.org
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
- Documentation/trace/ftrace-uses.rst   |   6 +-
- arch/csky/kernel/probes/ftrace.c      |   2 +-
- arch/parisc/kernel/ftrace.c           |   2 +-
- arch/powerpc/kernel/kprobes-ftrace.c  |   2 +-
- arch/s390/kernel/ftrace.c             |   2 +-
- arch/x86/kernel/kprobes/ftrace.c      |   2 +-
- fs/pstore/ftrace.c                    |   2 +-
- include/linux/trace_recursion.h       |  29 +++-
- kernel/livepatch/patch.c              |   2 +-
- kernel/trace/Kconfig                  |  25 +++
- kernel/trace/Makefile                 |   1 +
- kernel/trace/ftrace.c                 |   4 +-
- kernel/trace/trace_event_perf.c       |   2 +-
- kernel/trace/trace_functions.c        |   2 +-
- kernel/trace/trace_output.c           |   6 +-
- kernel/trace/trace_output.h           |   1 +
- kernel/trace/trace_recursion_record.c | 236 ++++++++++++++++++++++++++
- 17 files changed, 306 insertions(+), 20 deletions(-)
- create mode 100644 kernel/trace/trace_recursion_record.c
+Run /sbin/init as init process
+INIT: version 2.88 booting
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 120 at mm/highmem.c:502 
+kunmap_local_indexed+0x194/0x1d0
+Modules linked in:
+CPU: 3 PID: 120 Comm: init Not tainted 5.10.0-rc2-00010-g2a15ba82fa6c #1924
+Hardware name: Samsung Exynos (Flattened Device Tree)
+[<c0111514>] (unwind_backtrace) from [<c010ceb8>] (show_stack+0x10/0x14)
+[<c010ceb8>] (show_stack) from [<c0b1b408>] (dump_stack+0xb4/0xd4)
+[<c0b1b408>] (dump_stack) from [<c0126988>] (__warn+0x98/0x104)
+[<c0126988>] (__warn) from [<c0126aa4>] (warn_slowpath_fmt+0xb0/0xb8)
+[<c0126aa4>] (warn_slowpath_fmt) from [<c028e22c>] 
+(kunmap_local_indexed+0x194/0x1d0)
+[<c028e22c>] (kunmap_local_indexed) from [<c02d37f4>] 
+(remove_arg_zero+0xa0/0x158)
+[<c02d37f4>] (remove_arg_zero) from [<c034cfc8>] (load_script+0x250/0x318)
+[<c034cfc8>] (load_script) from [<c02d2f7c>] (bprm_execve+0x3d0/0x930)
+[<c02d2f7c>] (bprm_execve) from [<c02d3dc8>] 
+(do_execveat_common+0x174/0x184)
+[<c02d3dc8>] (do_execveat_common) from [<c02d4cec>] (sys_execve+0x30/0x38)
+[<c02d4cec>] (sys_execve) from [<c0100060>] (ret_fast_syscall+0x0/0x28)
+Exception stack(0xc4561fa8 to 0xc4561ff0)
+1fa0:                   b6f2bab8 bef7dac4 bef7dac4 bef7d8fc 004b9b58 
+bef7dac8
+1fc0: b6f2bab8 bef7dac4 bef7d8fc 0000000b 004b8000 004bac44 bef7da3c 
+bef7d8dc
+1fe0: 0000002f bef7d89c b6d6dc74 b6d6d65c
+irq event stamp: 1283
+hardirqs last  enabled at (1293): [<c019f564>] console_unlock+0x430/0x6b0
+hardirqs last disabled at (1302): [<c019f55c>] console_unlock+0x428/0x6b0
+softirqs last  enabled at (1282): [<c0101768>] __do_softirq+0x528/0x674
+softirqs last disabled at (1269): [<c012fed4>] irq_exit+0x1dc/0x1e8
+---[ end trace 6f32a2fb4294655f ]---
 
-diff --git a/Documentation/trace/ftrace-uses.rst b/Documentation/trace/ftrace-uses.rst
-index 86cd14b8e126..5981d5691745 100644
---- a/Documentation/trace/ftrace-uses.rst
-+++ b/Documentation/trace/ftrace-uses.rst
-@@ -118,7 +118,7 @@ can help in this regard. If you start your code with:
- 
- 	int bit;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-@@ -130,7 +130,9 @@ The code in between will be safe to use, even if it ends up calling a
- function that the callback is tracing. Note, on success,
- ftrace_test_recursion_trylock() will disable preemption, and the
- ftrace_test_recursion_unlock() will enable it again (if it was previously
--enabled).
-+enabled). The instruction pointer (ip) and its parent (parent_ip) is passed to
-+ftrace_test_recursion_trylock() to record where the recursion happened
-+(if CONFIG_FTRACE_RECORD_RECURSION is set).
- 
- Alternatively, if the FTRACE_OPS_FL_RECURSION flag is set on the ftrace_ops
- (as explained below), then a helper trampoline will be used to test
-diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
-index 5eb2604fdf71..f30b179924ef 100644
---- a/arch/csky/kernel/probes/ftrace.c
-+++ b/arch/csky/kernel/probes/ftrace.c
-@@ -18,7 +18,7 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 	struct kprobe *p;
- 	struct kprobe_ctlblk *kcb;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/arch/parisc/kernel/ftrace.c b/arch/parisc/kernel/ftrace.c
-index 13d85042810a..1c5d3732bda2 100644
---- a/arch/parisc/kernel/ftrace.c
-+++ b/arch/parisc/kernel/ftrace.c
-@@ -210,7 +210,7 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 	struct kprobe *p;
- 	int bit;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/arch/powerpc/kernel/kprobes-ftrace.c b/arch/powerpc/kernel/kprobes-ftrace.c
-index 5df8d50c65ae..fdfee39938ea 100644
---- a/arch/powerpc/kernel/kprobes-ftrace.c
-+++ b/arch/powerpc/kernel/kprobes-ftrace.c
-@@ -20,7 +20,7 @@ void kprobe_ftrace_handler(unsigned long nip, unsigned long parent_nip,
- 	struct kprobe_ctlblk *kcb;
- 	int bit;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(nip, parent_nip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
-index 8f31c726537a..657c1ab45408 100644
---- a/arch/s390/kernel/ftrace.c
-+++ b/arch/s390/kernel/ftrace.c
-@@ -204,7 +204,7 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 	struct kprobe *p;
- 	int bit;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/arch/x86/kernel/kprobes/ftrace.c b/arch/x86/kernel/kprobes/ftrace.c
-index a40a6cdfcca3..954d930a7127 100644
---- a/arch/x86/kernel/kprobes/ftrace.c
-+++ b/arch/x86/kernel/kprobes/ftrace.c
-@@ -20,7 +20,7 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 	struct kprobe_ctlblk *kcb;
- 	int bit;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/fs/pstore/ftrace.c b/fs/pstore/ftrace.c
-index 816210fc5d3a..adb0935eb062 100644
---- a/fs/pstore/ftrace.c
-+++ b/fs/pstore/ftrace.c
-@@ -41,7 +41,7 @@ static void notrace pstore_ftrace_call(unsigned long ip,
- 	if (unlikely(oops_in_progress))
- 		return;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
-index ac3d73484cb2..228cc56ed66e 100644
---- a/include/linux/trace_recursion.h
-+++ b/include/linux/trace_recursion.h
-@@ -91,6 +91,9 @@ enum {
- 	 * not be correct. Allow for a single recursion to cover this case.
- 	 */
- 	TRACE_TRANSITION_BIT,
-+
-+	/* Used to prevent recursion recording from recursing. */
-+	TRACE_RECORD_RECURSION_BIT,
- };
- 
- #define trace_recursion_set(bit)	do { (current)->trace_recursion |= (1<<(bit)); } while (0)
-@@ -142,7 +145,22 @@ static __always_inline int trace_get_context_bit(void)
- 			pc & HARDIRQ_MASK ? TRACE_CTX_IRQ : TRACE_CTX_SOFTIRQ;
- }
- 
--static __always_inline int trace_test_and_set_recursion(int start, int max)
-+#ifdef CONFIG_FTRACE_RECORD_RECURSION
-+extern void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip);
-+# define do_ftrace_record_recursion(ip, pip)				\
-+	do {								\
-+		if (!trace_recursion_test(TRACE_RECORD_RECURSION_BIT)) { \
-+			trace_recursion_set(TRACE_RECORD_RECURSION_BIT); \
-+			ftrace_record_recursion(ip, pip);		\
-+			trace_recursion_clear(TRACE_RECORD_RECURSION_BIT); \
-+		}							\
-+	} while (0)
-+#else
-+# define do_ftrace_record_recursion(ip, pip)	do { } while (0)
-+#endif
-+
-+static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsigned long pip,
-+							int start, int max)
- {
- 	unsigned int val = current->trace_recursion;
- 	int bit;
-@@ -158,8 +176,10 @@ static __always_inline int trace_test_and_set_recursion(int start, int max)
- 		 * a switch between contexts. Allow for a single recursion.
- 		 */
- 		bit = TRACE_TRANSITION_BIT;
--		if (trace_recursion_test(bit))
-+		if (trace_recursion_test(bit)) {
-+			do_ftrace_record_recursion(ip, pip);
- 			return -1;
-+		}
- 		trace_recursion_set(bit);
- 		barrier();
- 		return bit + 1;
-@@ -199,9 +219,10 @@ static __always_inline void trace_clear_recursion(int bit)
-  * Returns: -1 if a recursion happened.
-  *           >= 0 if no recursion
-  */
--static __always_inline int ftrace_test_recursion_trylock(void)
-+static __always_inline int ftrace_test_recursion_trylock(unsigned long ip,
-+							 unsigned long parent_ip)
- {
--	return trace_test_and_set_recursion(TRACE_FTRACE_START, TRACE_FTRACE_MAX);
-+	return trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START, TRACE_FTRACE_MAX);
- }
- 
- /**
-diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
-index 15480bf3ce88..875c5dbbdd33 100644
---- a/kernel/livepatch/patch.c
-+++ b/kernel/livepatch/patch.c
-@@ -49,7 +49,7 @@ static void notrace klp_ftrace_handler(unsigned long ip,
- 
- 	ops = container_of(fops, struct klp_ops, fops);
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (WARN_ON_ONCE(bit < 0))
- 		return;
- 	/*
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index a4020c0b4508..9b11c096d139 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -727,6 +727,31 @@ config TRACE_EVAL_MAP_FILE
- 
- 	If unsure, say N.
- 
-+config FTRACE_RECORD_RECURSION
-+	bool "Record functions that recurse in function tracing"
-+	depends on FUNCTION_TRACER
-+	help
-+	  All callbacks that attach to the function tracing have some sort
-+	  of protection against recursion. Even though the protection exists,
-+	  it adds overhead. This option will create a file in the tracefs
-+	  file system called "recursed_functions" that will list the functions
-+	  that triggered a recursion.
-+
-+	  This will add more overhead to cases that have recursion.
-+
-+	  If unsure, say N
-+
-+config FTRACE_RECORD_RECURSION_SIZE
-+	int "Max number of recursed functions to record"
-+	default	128
-+	depends on FTRACE_RECORD_RECURSION
-+	help
-+	  This defines the limit of number of functions that can be
-+	  listed in the "recursed_functions" file, that lists all
-+	  the functions that caused a recursion to happen.
-+	  This file can be reset, but the limit can not change in
-+	  size at runtime.
-+
- config GCOV_PROFILE_FTRACE
- 	bool "Enable GCOV profiling on ftrace subsystem"
- 	depends on GCOV_KERNEL
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index e153be351548..7e44cea89fdc 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -92,6 +92,7 @@ obj-$(CONFIG_DYNAMIC_EVENTS) += trace_dynevent.o
- obj-$(CONFIG_PROBE_EVENTS) += trace_probe.o
- obj-$(CONFIG_UPROBE_EVENTS) += trace_uprobe.o
- obj-$(CONFIG_BOOTTIME_TRACING) += trace_boot.o
-+obj-$(CONFIG_FTRACE_RECORD_RECURSION) += trace_recursion_record.o
- 
- obj-$(CONFIG_TRACEPOINT_BENCHMARK) += trace_benchmark.o
- 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 39f2bba89b76..03aad2b5cd5e 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6918,7 +6918,7 @@ __ftrace_ops_list_func(unsigned long ip, unsigned long parent_ip,
- 	struct ftrace_ops *op;
- 	int bit;
- 
--	bit = trace_test_and_set_recursion(TRACE_LIST_START, TRACE_LIST_MAX);
-+	bit = trace_test_and_set_recursion(ip, parent_ip, TRACE_LIST_START, TRACE_LIST_MAX);
- 	if (bit < 0)
- 		return;
- 
-@@ -6993,7 +6993,7 @@ static void ftrace_ops_assist_func(unsigned long ip, unsigned long parent_ip,
- {
- 	int bit;
- 
--	bit = trace_test_and_set_recursion(TRACE_LIST_START, TRACE_LIST_MAX);
-+	bit = trace_test_and_set_recursion(ip, parent_ip, TRACE_LIST_START, TRACE_LIST_MAX);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
-index a2b9fddb8148..1b202e28dfaa 100644
---- a/kernel/trace/trace_event_perf.c
-+++ b/kernel/trace/trace_event_perf.c
-@@ -447,7 +447,7 @@ perf_ftrace_function_call(unsigned long ip, unsigned long parent_ip,
- 	if ((unsigned long)ops->private != smp_processor_id())
- 		return;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/kernel/trace/trace_functions.c b/kernel/trace/trace_functions.c
-index 89c414ce1388..646eda6c44a5 100644
---- a/kernel/trace/trace_functions.c
-+++ b/kernel/trace/trace_functions.c
-@@ -141,7 +141,7 @@ function_trace_call(unsigned long ip, unsigned long parent_ip,
- 	if (unlikely(!tr->function_enabled))
- 		return;
- 
--	bit = ftrace_test_recursion_trylock();
-+	bit = ftrace_test_recursion_trylock(ip, parent_ip);
- 	if (bit < 0)
- 		return;
- 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 000e9dc224c6..92b1575ae0ca 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -353,8 +353,8 @@ static inline const char *kretprobed(const char *name)
- }
- #endif /* CONFIG_KRETPROBES */
- 
--static void
--seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
-+void
-+trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
- {
- #ifdef CONFIG_KALLSYMS
- 	char str[KSYM_SYMBOL_LEN];
-@@ -420,7 +420,7 @@ seq_print_ip_sym(struct trace_seq *s, unsigned long ip, unsigned long sym_flags)
- 		goto out;
- 	}
- 
--	seq_print_sym(s, ip, sym_flags & TRACE_ITER_SYM_OFFSET);
-+	trace_seq_print_sym(s, ip, sym_flags & TRACE_ITER_SYM_OFFSET);
- 
- 	if (sym_flags & TRACE_ITER_SYM_ADDR)
- 		trace_seq_printf(s, " <" IP_FMT ">", ip);
-diff --git a/kernel/trace/trace_output.h b/kernel/trace/trace_output.h
-index 2f742b74e7e6..4c954636caf0 100644
---- a/kernel/trace/trace_output.h
-+++ b/kernel/trace/trace_output.h
-@@ -16,6 +16,7 @@ extern int
- seq_print_ip_sym(struct trace_seq *s, unsigned long ip,
- 		unsigned long sym_flags);
- 
-+extern void trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset);
- extern int trace_print_context(struct trace_iterator *iter);
- extern int trace_print_lat_context(struct trace_iterator *iter);
- 
-diff --git a/kernel/trace/trace_recursion_record.c b/kernel/trace/trace_recursion_record.c
-new file mode 100644
-index 000000000000..b2edac1fe156
---- /dev/null
-+++ b/kernel/trace/trace_recursion_record.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/seq_file.h>
-+#include <linux/kallsyms.h>
-+#include <linux/module.h>
-+#include <linux/ftrace.h>
-+#include <linux/fs.h>
-+
-+#include "trace_output.h"
-+
-+struct recursed_functions {
-+	unsigned long		ip;
-+	unsigned long		parent_ip;
-+};
-+
-+static struct recursed_functions recursed_functions[CONFIG_FTRACE_RECORD_RECURSION_SIZE];
-+static atomic_t nr_records;
-+
-+/*
-+ * Cache the last found function. Yes, updates to this is racey, but
-+ * so is memory cache ;-)
-+ */
-+static unsigned long cached_function;
-+
-+void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip)
-+{
-+	int index = 0;
-+	int i;
-+	unsigned long old;
-+
-+ again:
-+	/* First check the last one recorded */
-+	if (ip == cached_function)
-+		return;
-+
-+	i = atomic_read(&nr_records);
-+	/* nr_records is -1 when clearing records */
-+	smp_mb__after_atomic();
-+	if (i < 0)
-+		return;
-+
-+	/*
-+	 * If there's two writers and this writer comes in second,
-+	 * the cmpxchg() below to update the ip will fail. Then this
-+	 * writer will try again. It is possible that index will now
-+	 * be greater than nr_records. This is because the writer
-+	 * that succeeded has not updated the nr_records yet.
-+	 * This writer could keep trying again until the other writer
-+	 * updates nr_records. But if the other writer takes an
-+	 * interrupt, and that interrupt locks up that CPU, we do
-+	 * not want this CPU to lock up due to the recursion protection,
-+	 * and have a bug report showing this CPU as the cause of
-+	 * locking up the computer. To not lose this record, this
-+	 * writer will simply use the next position to update the
-+	 * recursed_functions, and it will update the nr_records
-+	 * accordingly.
-+	 */
-+	if (index < i)
-+		index = i;
-+	if (index >= CONFIG_FTRACE_RECORD_RECURSION_SIZE)
-+		return;
-+
-+	for (i = index - 1; i >= 0; i--) {
-+		if (recursed_functions[i].ip == ip) {
-+			cached_function = ip;
-+			return;
-+		}
-+	}
-+
-+	cached_function = ip;
-+
-+	/*
-+	 * We only want to add a function if it hasn't been added before.
-+	 * Add to the current location before incrementing the count.
-+	 * If it fails to add, then increment the index (save in i)
-+	 * and try again.
-+	 */
-+	old = cmpxchg(&recursed_functions[index].ip, 0, ip);
-+	if (old != 0) {
-+		/* Did something else already added this for us? */
-+		if (old == ip)
-+			return;
-+		/* Try the next location (use i for the next index) */
-+		index++;
-+		goto again;
-+	}
-+
-+	recursed_functions[index].parent_ip = parent_ip;
-+
-+	/*
-+	 * It's still possible that we could race with the clearing
-+	 *    CPU0                                    CPU1
-+	 *    ----                                    ----
-+	 *                                       ip = func
-+	 *  nr_records = -1;
-+	 *  recursed_functions[0] = 0;
-+	 *                                       i = -1
-+	 *                                       if (i < 0)
-+	 *  nr_records = 0;
-+	 *  (new recursion detected)
-+	 *      recursed_functions[0] = func
-+	 *                                            cmpxchg(recursed_functions[0],
-+	 *                                                    func, 0)
-+	 *
-+	 * But the worse that could happen is that we get a zero in
-+	 * the recursed_functions array, and it's likely that "func" will
-+	 * be recorded again.
-+	 */
-+	i = atomic_read(&nr_records);
-+	smp_mb__after_atomic();
-+	if (i < 0)
-+		cmpxchg(&recursed_functions[index].ip, ip, 0);
-+	else if (i <= index)
-+		atomic_cmpxchg(&nr_records, i, index + 1);
-+}
-+EXPORT_SYMBOL_GPL(ftrace_record_recursion);
-+
-+static DEFINE_MUTEX(recursed_function_lock);
-+static struct trace_seq *tseq;
-+
-+static void *recursed_function_seq_start(struct seq_file *m, loff_t *pos)
-+{
-+	void *ret = NULL;
-+	int index;
-+
-+	mutex_lock(&recursed_function_lock);
-+	index = atomic_read(&nr_records);
-+	if (*pos < index) {
-+		ret = &recursed_functions[*pos];
-+	}
-+
-+	tseq = kzalloc(sizeof(*tseq), GFP_KERNEL);
-+	if (!tseq)
-+		return ERR_PTR(-ENOMEM);
-+
-+	trace_seq_init(tseq);
-+
-+	return ret;
-+}
-+
-+static void *recursed_function_seq_next(struct seq_file *m, void *v, loff_t *pos)
-+{
-+	int index;
-+	int p;
-+
-+	index = atomic_read(&nr_records);
-+	p = ++(*pos);
-+
-+	return p < index ? &recursed_functions[p] : NULL;
-+}
-+
-+static void recursed_function_seq_stop(struct seq_file *m, void *v)
-+{
-+	kfree(tseq);
-+	mutex_unlock(&recursed_function_lock);
-+}
-+
-+static int recursed_function_seq_show(struct seq_file *m, void *v)
-+{
-+	struct recursed_functions *record = v;
-+	int ret = 0;
-+
-+	if (record) {
-+		trace_seq_print_sym(tseq, record->parent_ip, true);
-+		trace_seq_puts(tseq, ":\t");
-+		trace_seq_print_sym(tseq, record->ip, true);
-+		trace_seq_putc(tseq, '\n');
-+		ret = trace_print_seq(m, tseq);
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct seq_operations recursed_function_seq_ops = {
-+	.start  = recursed_function_seq_start,
-+	.next   = recursed_function_seq_next,
-+	.stop   = recursed_function_seq_stop,
-+	.show   = recursed_function_seq_show
-+};
-+
-+static int recursed_function_open(struct inode *inode, struct file *file)
-+{
-+	int ret = 0;
-+
-+	mutex_lock(&recursed_function_lock);
-+	/* If this file was opened for write, then erase contents */
-+	if ((file->f_mode & FMODE_WRITE) && (file->f_flags & O_TRUNC)) {
-+		/* disable updating records */
-+		atomic_set(&nr_records, -1);
-+		smp_mb__after_atomic();
-+		memset(recursed_functions, 0, sizeof(recursed_functions));
-+		smp_wmb();
-+		/* enable them again */
-+		atomic_set(&nr_records, 0);
-+	}
-+	if (file->f_mode & FMODE_READ)
-+		ret = seq_open(file, &recursed_function_seq_ops);
-+	mutex_unlock(&recursed_function_lock);
-+
-+	return ret;
-+}
-+
-+static ssize_t recursed_function_write(struct file *file,
-+				       const char __user *buffer,
-+				       size_t count, loff_t *ppos)
-+{
-+	return count;
-+}
-+
-+static int recursed_function_release(struct inode *inode, struct file *file)
-+{
-+	if (file->f_mode & FMODE_READ)
-+		seq_release(inode, file);
-+	return 0;
-+}
-+
-+static const struct file_operations recursed_functions_fops = {
-+	.open           = recursed_function_open,
-+	.write		= recursed_function_write,
-+	.read           = seq_read,
-+	.llseek         = seq_lseek,
-+	.release        = recursed_function_release,
-+};
-+
-+__init static int create_recursed_functions(void)
-+{
-+	struct dentry *dentry;
-+
-+	dentry = trace_create_file("recursed_functions", 0644, NULL, NULL,
-+				   &recursed_functions_fops);
-+	if (!dentry)
-+		pr_warn("WARNING: Failed to create recursed_functions\n");
-+	return 0;
-+}
-+
-+fs_initcall(create_recursed_functions);
+I can do more tests to help fixing this issue. Just let me know what to do.
+
+...
+
+Best regards
+
 -- 
-2.28.0
-
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
