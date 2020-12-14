@@ -2,86 +2,118 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E283F2D8DD9
-	for <lists+linux-csky@lfdr.de>; Sun, 13 Dec 2020 15:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2902D979C
+	for <lists+linux-csky@lfdr.de>; Mon, 14 Dec 2020 12:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395383AbgLMOLq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 13 Dec 2020 09:11:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395199AbgLMOLL (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 13 Dec 2020 09:11:11 -0500
-Date:   Sun, 13 Dec 2020 09:10:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607868630;
-        bh=S0NZCKTHXO1/XgTBibTeHKY2NyaV+jWp9oZjgvuSOZg=;
-        h=From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nFttyLKxDFdTzDqG+uV+ZMYwIDraCwmT1csa8RGjNQtB2KNQuC3CWvsr8XvQHFTkX
-         bOVfEZ3hZGq/q87besC+Bjzp/UHT9BZ6/avesb9g234GUTyQ6mz9ZdKVWLvvWayKcR
-         5IsZC3of1cWOok1XpWOR2jKmC5sWYP7UWQbjwfCJNcyT1mEousS3/8Iz7qmQngrF+E
-         UBfwNFX/Xim1w8qNAQxV89tayOf16Xozhta7DOpqMYNyp+n+eIU7Y985xkZoMGJ7UI
-         W/Q6SnFz+H4jXIWSjxGFg8FVH/fANHjQkaleEJRhOabM6QD83DoUX7CgAE554wRsQU
-         Zom91bCLKheaA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 5.9 27/39] sched/idle: Fix arch_cpu_idle() vs
- tracing
-Message-ID: <20201213141029.GQ643756@sasha-vm>
-References: <20201203132834.930999-1-sashal@kernel.org>
- <20201203132834.930999-27-sashal@kernel.org>
- <20201203145442.GC9994@osiris>
- <20201203171015.GN2414@hirez.programming.kicks-ass.net>
+        id S2438461AbgLNLoo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 14 Dec 2020 06:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438197AbgLNLoi (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Dec 2020 06:44:38 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18194C0613CF;
+        Mon, 14 Dec 2020 03:43:58 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id m5so16136074wrx.9;
+        Mon, 14 Dec 2020 03:43:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Duu0tFo0BYN5uj6dURuetdL16PH4j+9j2ppt0P47uAQ=;
+        b=pB9wTxjZ7/mVFcG7DEye1eerxxcC4ixF6IXGpSf6sVJ0MNqfl5c03LarhNR+9Rb2wn
+         3pUbhdPn6nInHo0E+Pf0mVki3C3Zr8fzOwKjpmZ2FX+BoX5rSfJQc9pDUK21jbtX5km8
+         9hRb5LbE1+MlqnR9s/G3R2MfzK7J+xYgG1eIiWgMh82BZtIgop2XPtldp0Th0azQFyRY
+         KDdJSgiOHjte4z7WP35RrewVVvovSMtgDYj0loZslXUF9lmzklXkN7xOHqLOQd3sA/J0
+         Zj2Diw5iZ7iWLGyaA+9LP0oyg8BDFKWESTaXBUyl0ml60gLMafwZ0samI25t67EX/iUA
+         HCgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Duu0tFo0BYN5uj6dURuetdL16PH4j+9j2ppt0P47uAQ=;
+        b=H08r69D69ETndCmUXJ44qfuN45tv8uNNuqms7y0Q8VHfEpQI1+qp7N5ggE0ge9bJDO
+         wiNxYh5FGhV5+F8QbT98OySRguSoS9zTwrA/RrfBuomeYRRbgebNyE6Nxt5IiNvtzp0y
+         ixLs8q2owVeT2ZVNMkXRnbzLKAXEFiq+oxDV0XngnrZ1ryAZyF0y8nP0ah0Hia/U8pIf
+         BGHQEXUNeOm8QIryq12ZfenQ8dCJbdweDBy4upHBGClXLyx7Kl7UhAJdSCxYgf2EeDSA
+         QSKJZhYtuLZdHw9Sl4fkeBTkVhOm+uTReWn9fNif1kPBoZ+cEGuN9kbJHieoyfmUBgZ0
+         Xmjg==
+X-Gm-Message-State: AOAM530CeTEeO/AcL6iHbPM3PS5P81LcXyTwX7Z1xqzuViXC+3WrGXQx
+        EkP8KdYP2joZKgfuAUbE7II=
+X-Google-Smtp-Source: ABdhPJxsLEA1x2BvX2Vfv0PWw5ZALM5wpjW+lZrR3OZvh23vfIoL8ABymDaKKnKOm5kmY/zsMlVxdQ==
+X-Received: by 2002:a5d:4d02:: with SMTP id z2mr29370287wrt.109.1607946236907;
+        Mon, 14 Dec 2020 03:43:56 -0800 (PST)
+Received: from debian.vlc ([170.253.51.130])
+        by smtp.gmail.com with ESMTPSA id w18sm11738403wrn.2.2020.12.14.03.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 03:43:56 -0800 (PST)
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+To:     Michael Kerrisk <mtk.manpages@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        linux-man@vger.kernel.org
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>, gcc-patches@gcc.gnu.org,
+        cfe-users@lists.llvm.org, cfe-dev@lists.llvm.org
+Subject: [PATCH v5] cacheflush.2: Document __builtin___clear_cache() as a more portable alternative
+Date:   Mon, 14 Dec 2020 12:43:07 +0100
+Message-Id: <20201214114306.10784-1-alx.manpages@gmail.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <e2424619-2a5a-a44a-2dc0-a16310725250@gmail.com>
+References: <e2424619-2a5a-a44a-2dc0-a16310725250@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20201203171015.GN2414@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 06:10:15PM +0100, Peter Zijlstra wrote:
->On Thu, Dec 03, 2020 at 03:54:42PM +0100, Heiko Carstens wrote:
->> On Thu, Dec 03, 2020 at 08:28:21AM -0500, Sasha Levin wrote:
->> > From: Peter Zijlstra <peterz@infradead.org>
->> >
->> > [ Upstream commit 58c644ba512cfbc2e39b758dd979edd1d6d00e27 ]
->> >
->> > We call arch_cpu_idle() with RCU disabled, but then use
->> > local_irq_{en,dis}able(), which invokes tracing, which relies on RCU.
->> >
->> > Switch all arch_cpu_idle() implementations to use
->> > raw_local_irq_{en,dis}able() and carefully manage the
->> > lockdep,rcu,tracing state like we do in entry.
->> >
->> > (XXX: we really should change arch_cpu_idle() to not return with
->> > interrupts enabled)
->> >
->> > Reported-by: Sven Schnelle <svens@linux.ibm.com>
->> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
->> > Tested-by: Mark Rutland <mark.rutland@arm.com>
->> > Link: https://lkml.kernel.org/r/20201120114925.594122626@infradead.org
->> > Signed-off-by: Sasha Levin <sashal@kernel.org>
->>
->> This patch broke s390 irq state tracing. A patch to fix this is
->> scheduled to be merged upstream today (hopefully).
->> Therefore I think this patch should not yet go into 5.9 stable.
->
->Agreed.
+Reported-by: Heinrich Schuchardt <xypron.glpk@gmx.de>
+Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
+---
+ man2/cacheflush.2 | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-I'll also grab b1cae1f84a0f ("s390: fix irq state tracing"). Thanks!
-
+diff --git a/man2/cacheflush.2 b/man2/cacheflush.2
+index aba625721..7a2eed506 100644
+--- a/man2/cacheflush.2
++++ b/man2/cacheflush.2
+@@ -86,6 +86,30 @@ On Linux, this call first appeared on the MIPS architecture,
+ but nowadays, Linux provides a
+ .BR cacheflush ()
+ system call on some other architectures, but with different arguments.
++.SH NOTES
++Unless you need the finer grained control that this system call provides,
++you probably want to use the GCC built-in function
++.BR __builtin___clear_cache (),
++which provides a portable interface
++across platforms supported by GCC and compatible compilers:
++.PP
++.in +4n
++.EX
++.BI "void __builtin___clear_cache(void *" begin ", void *" end );
++.EE
++.in
++.PP
++On platforms that don't require instruction cache flushes,
++.BR __builtin___clear_cache ()
++has no effect.
++.PP
++.IR Note :
++Until GCC 9.1.0,
++the prototype for this built-in function used
++.I char *
++instead of
++.I void *
++for the parameters.
+ .SH BUGS
+ Linux kernels older than version 2.6.11 ignore the
+ .I addr
 -- 
-Thanks,
-Sasha
+2.29.2
+
