@@ -2,186 +2,179 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20842DD541
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Dec 2020 17:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3450E2DD567
+	for <lists+linux-csky@lfdr.de>; Thu, 17 Dec 2020 17:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728127AbgLQQay (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 17 Dec 2020 11:30:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37482 "EHLO mail.kernel.org"
+        id S1728534AbgLQQoD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 17 Dec 2020 11:44:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728081AbgLQQay (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 17 Dec 2020 11:30:54 -0500
-From:   guoren@kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     palmerdabbelt@google.com, paul.walmsley@sifive.com,
-        anup@brainfault.org, greentime.hu@sifive.com, zong.li@sifive.com,
-        keescook@chromium.org, bjorn.topel@gmail.com, atish.patra@wdc.com,
-        cooper.qu@linux.alibaba.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, guoren@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH RESEND v4] riscv: Enable per-task stack canaries
-Date:   Thu, 17 Dec 2020 16:29:18 +0000
-Message-Id: <1608222558-6677-1-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1728080AbgLQQoD (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 17 Dec 2020 11:44:03 -0500
+X-Gm-Message-State: AOAM531I1eXRKJabg7VBy6nTgXkqBqxHOHWuV7SewlXFlKXONhaQx/rt
+        eqV4Jwlj1sH5ktKCulsC2TnCNrMT0ZSjdFGQe0M=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608223401;
+        bh=kCWRRVo07JtdEHtDVZdN4eB4jSvgcAmx1DbfVKxjmtY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vOOznWVo4LKiq8/+xyyVATt85LMupKJ6P1usYSzYh8TdYg/USoAeB4n3ovf/+DW9z
+         jPdMqVxz8tk2H7xOjSaKDKaFI4dSkFq0kjaPuD/lTuNSUr0p0p0ZBF+XFZ8/GBQC2c
+         I8NwzM/cieUajmUjrX4RbaFmhnPiIeScfqrW8vRlVJUKTG2LO4rcukpwY2LUEh07TC
+         m0o7qI92LRohhPheddbDcrYaQcwn6VTPN2h13MobnHQDJsM3KTU9PcchJBEljuRtvz
+         Yv0sWWgjdDZUSk0T7kIjthIMTlW2S03ZZKgVtqv6NSwZ10eLkP2AJ3KM9gE5NZjTyD
+         dYWzibnSSvWAw==
+X-Google-Smtp-Source: ABdhPJxyLeVaNSYGi++9Tbarz+w8Ml+kt3g+rnpUcU9Wdhl6QHM8qbv54hL/hlbFyMVToNhf6bj94ajO+sWiX0xyi2M=
+X-Received: by 2002:a05:6830:1e14:: with SMTP id s20mr1870086otr.210.1608223401054;
+ Thu, 17 Dec 2020 08:43:21 -0800 (PST)
+MIME-Version: 1.0
+References: <20190307091514.2489338-1-arnd@arndb.de> <X9S28TcEXd2zghzp@elver.google.com>
+ <87czzeg5ep.fsf@nanos.tec.linutronix.de> <CAK8P3a0LWjNgwm605TM4dKCsn078X7NC3sEfdBSgcMNEocQ5iA@mail.gmail.com>
+ <CAJF2gTRLEbBfZJ7Y6UNOMq-cwG5OYRW=+8Pfauz6v6R8ntBjYA@mail.gmail.com>
+ <CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com>
+ <20201215193800.GA1098247@ravnborg.org> <CAK8P3a24eAYjPTw_GvEC5H9nGODjeKCVLSmfpoNSvrzew5BX4Q@mail.gmail.com>
+ <6a2c250a-2c7e-81c5-705a-5904c0fc91b8@gaisler.com>
+In-Reply-To: <6a2c250a-2c7e-81c5-705a-5904c0fc91b8@gaisler.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 17 Dec 2020 17:43:04 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a31LRref0UfsQ3AbyohZcTN6F=6qYA-dspMaadSkP8Vrw@mail.gmail.com>
+Message-ID: <CAK8P3a31LRref0UfsQ3AbyohZcTN6F=6qYA-dspMaadSkP8Vrw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] futex: mark futex_detect_cmpxchg() as 'noinline'
+To:     Andreas Larsson <andreas@gaisler.com>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, software@gaisler.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, Dec 17, 2020 at 4:32 PM Andreas Larsson <andreas@gaisler.com> wrote:
+> On 2020-12-16 00:24, Arnd Bergmann wrote:
+> > On Tue, Dec 15, 2020 at 8:38 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+> >> On Tue, Dec 15, 2020 at 12:26:10PM +0100, Arnd Bergmann wrote:
+> >>>
+> >>> - Disable SMP support for sun4m/sun4d. From the historic git
+> >>>    tree, it's unclear how well this ever worked, and very few machines
+> >>>    of this class ever existed
+> >> Yeah, I have collection of sparc32 machines that I played around with
+> >> once. Including one sun4d that I brought from a friendly Linux fellow in
+> >> the UK. But somehow I lost interest as this is all very nice machines
+> >> but not useful for anything real work.
+> >>
+> >> I think we would be better served dropping support for sun4m and sun4d
+> >> from the kernel.
+> >
+> > This seems appropriate as well to me.
+> >
+> >> Last I suggested deleting sun4m/sun4d the argument to keep sun4m was that
+> >> QEMU supports sun4m - which is a good argument for sun4m. I dunno what
+> >> would be needed to migrate QEMU to LEON, see below.
+> >
+> > "qemu-system-sparc -M help" shows a "leon3_generic" platform, apparently
+> > added in 2013. Do you think that would be sufficient?
+>
+> We have only use QEMU for LEON3 on limited and simpler system
+> setups. For example the Zephyr SPARC arch + LEON3 BSP port we recently
+> submitted to the Linux Foundation Zephyr project run their test-suite
+> successfully on QEMU+LEON3. We will have to look into the QEMU for LEON
+> and Linux situation.
+>
+> We mainly use TSIM that is our own high fidelity simulator.
 
-This enables the use of per-task stack canary values if GCC has
-support for emitting the stack canary reference relative to the
-value of tp, which holds the task struct pointer in the riscv
-kernel.
+I don't think there is a need to have many features supported in qemu,
+as long as you have enough RAM, block and network devices (which
+are trivial if you have PCI or USB).
 
-After compare arm64 and x86 implementations, seems arm64's is more
-flexible and readable. The key point is how gcc get the offset of
-stack_canary from gs/el0_sp.
+> >>> - Mark SMP for LEON as temporarily broken. As I see in the LEON
+> >>>    patch set, they have changes to enable compare-and-swap-atomic
+> >>>    instructions unconditionally, as all SMP Leons have those and
+> >>>    seem to require this support already for other things.
+>
+> Regarding unconditional compare-and-swap-atomic instructions (CASA) for
+> LEON. I tried to get those into mainline under the LEON configuration
+> option but did not get OK for that at that time, with the feedback to do
+> it dynamically instead. I haven't come around to try to get an updated
+> patch doing probing instead into mainline yet. If the thought now is to
+> drop support for SMP for sparc32, maybe we can have the CASA
+> unconditionally on SMP configured kernels instead. Still we'd like to
+> have CASA usage even for non-SMP kernels for LEON systems that
+> supports it.
 
-x86: Use a fix offset from gs, not flexible.
+It does make sense to require that a single kernel can work on all
+possible hardware. So if we remove sun4m/sun4d support, all that
+is left is LEON, and you likely wouldn't need to worry about other
+CPUs any more.
 
-struct fixed_percpu_data {
-	/*
-	 * GCC hardcodes the stack canary as %gs:40.  Since the
-	 * irq_stack is the object at %gs:0, we reserve the bottom
-	 * 48 bytes of the irq stack for the canary.
-	 */
-	char            gs_base[40]; // :(
-	unsigned long   stack_canary;
-};
+However, there is still the question whether a single kernel needs
+to work on LEON both with and without CASA. Do you still care
+about Linux users on LEON cores that do not support CASA, or is
+widespread enough that you just make it unconditional for both
+SMP and non-SMP?
 
-arm64: Use -mstack-protector-guard-offset & guard-reg
-	gcc options:
-	-mstack-protector-guard=sysreg
-	-mstack-protector-guard-reg=sp_el0
-	-mstack-protector-guard-offset=xxx
+> >> LEON on the other hand could have some nice future. They are right now
+> >> stuck on an older kernel and someone that was motivated should be able
+> >> to get LEON4 running on latest upstream.
+> >> We had it working in the past - but is was around the time I lost my
+> >> sparc interest and no-one jumped in to move it much more forward.
+>
+> I would not say that we are stuck on an old kernel. It is rather that
+> for our official releases we stay on long term support kernels. We still
+> aim for kernels based on master to work on LEON. Right now we do have a
+> bit of backlog of things to get into upstream.
 
-riscv: Use -mstack-protector-guard-offset & guard-reg
-	gcc options:
-	-mstack-protector-guard=tls
-	-mstack-protector-guard-reg=tp
-	-mstack-protector-guard-offset=xxx
+Ok, good to hear. There were a couple of old bugs that got found
+on mainline that made me wonder whether mainline sparc32 was
+used on any hardware at all these days.
 
- GCC's implementation has been merged:
- commit c931e8d5a96463427040b0d11f9c4352ac22b2b0
- Author: Cooper Qu <cooper.qu@linux.alibaba.com>
- Date:   Mon Jul 13 16:15:08 2020 +0800
+I looked at your v4.9 patches and didn't see anything too scary
+there, in particular once sparc32 becomes leon-only, you no longer
+have to worry about making it work across different CPUs.
 
-     RISC-V: Add support for TLS stack protector canary access
+> > My best guess from the public information I could find on LEON is that
+> > it keeps shifting away from Linux on LEON to other OSs, and to
+> > and to Linux on NOEL-V.
+>
+> On the contrary. Our LEON users shows an increased interest in running
+> Linux, now that LEON-based systems gains in number of processors,
+> processor performance and memory. We are adding NOEL as a new processor
+> line. With NOEL we have a 64-bit architecture. We are not shifting from
+> LEON to NOEL. LEON is not going away.
 
-In the end, these codes are inserted by gcc before return:
+Ok.
 
-*  0xffffffe00020b396 <+120>:   ld      a5,1008(tp) # 0x3f0
-*  0xffffffe00020b39a <+124>:   xor     a5,a5,a4
-*  0xffffffe00020b39c <+126>:   mv      a0,s5
-*  0xffffffe00020b39e <+128>:   bnez    a5,0xffffffe00020b61c <_do_fork+766>
-   0xffffffe00020b3a2 <+132>:   ld      ra,136(sp)
-   0xffffffe00020b3a4 <+134>:   ld      s0,128(sp)
-   0xffffffe00020b3a6 <+136>:   ld      s1,120(sp)
-   0xffffffe00020b3a8 <+138>:   ld      s2,112(sp)
-   0xffffffe00020b3aa <+140>:   ld      s3,104(sp)
-   0xffffffe00020b3ac <+142>:   ld      s4,96(sp)
-   0xffffffe00020b3ae <+144>:   ld      s5,88(sp)
-   0xffffffe00020b3b0 <+146>:   ld      s6,80(sp)
-   0xffffffe00020b3b2 <+148>:   ld      s7,72(sp)
-   0xffffffe00020b3b4 <+150>:   addi    sp,sp,144
-   0xffffffe00020b3b6 <+152>:   ret
-   ...
-*  0xffffffe00020b61c <+766>:   auipc   ra,0x7f8
-*  0xffffffe00020b620 <+770>:   jalr    -1764(ra) # 0xffffffe000a02f38 <__stack_chk_fail>
+> > So even though the CPU itself will likely have a long life ahead of it
+> > with LEON5 only a year old, it's unclear how many more updates
+> > we'll see to the kernel from the current 4.9 based release.
+>
+> Our latest release was indeed based on 4.9, but we have no plans to stay
+> there forever. We just tend to select long term support kernels for our
+> official releases. The next step will be to go to 5.4 if not 5.10.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Cooper Qu <cooper.qu@linux.alibaba.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
----
- arch/riscv/Kconfig                      |  7 +++++++
- arch/riscv/Makefile                     | 10 ++++++++++
- arch/riscv/include/asm/stackprotector.h |  3 ++-
- arch/riscv/kernel/asm-offsets.c         |  3 +++
- arch/riscv/kernel/process.c             |  2 +-
- 5 files changed, 23 insertions(+), 2 deletions(-)
+I hope that you can make it to 5.10 then, as this contains the work
+I did for 64-bit time_t, which is required if you have users that want to
+run systems after 2038.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index a627ae2..3d9daee 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -420,6 +420,13 @@ config EFI
- 	  allow the kernel to be booted as an EFI application. This
- 	  is only useful on systems that have UEFI firmware.
- 
-+config CC_HAVE_STACKPROTECTOR_TLS
-+	def_bool $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=tp -mstack-protector-guard-offset=0)
-+
-+config STACKPROTECTOR_PER_TASK
-+	def_bool y
-+	depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_TLS
-+
- endmenu
- 
- config BUILTIN_DTB
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index b6eb946..508de08 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -67,6 +67,16 @@ KBUILD_CFLAGS_MODULE += $(call cc-option,-mno-relax)
- # architectures.  It's faster to have GCC emit only aligned accesses.
- KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
- 
-+ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
-+prepare: stack_protector_prepare
-+stack_protector_prepare: prepare0
-+	$(eval KBUILD_CFLAGS += -mstack-protector-guard=tls		  \
-+				-mstack-protector-guard-reg=tp		  \
-+				-mstack-protector-guard-offset=$(shell	  \
-+			awk '{if ($$2 == "TSK_STACK_CANARY") print $$3;}' \
-+					include/generated/asm-offsets.h))
-+endif
-+
- # arch specific predefines for sparse
- CHECKFLAGS += -D__riscv -D__riscv_xlen=$(BITS)
- 
-diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
-index 5962f88..09093af 100644
---- a/arch/riscv/include/asm/stackprotector.h
-+++ b/arch/riscv/include/asm/stackprotector.h
-@@ -24,6 +24,7 @@ static __always_inline void boot_init_stack_canary(void)
- 	canary &= CANARY_MASK;
- 
- 	current->stack_canary = canary;
--	__stack_chk_guard = current->stack_canary;
-+	if (!IS_ENABLED(CONFIG_STACKPROTECTOR_PER_TASK))
-+		__stack_chk_guard = current->stack_canary;
- }
- #endif /* _ASM_RISCV_STACKPROTECTOR_H */
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index db20344..877ff65 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -66,6 +66,9 @@ void asm_offsets(void)
- 	OFFSET(TASK_THREAD_F30, task_struct, thread.fstate.f[30]);
- 	OFFSET(TASK_THREAD_F31, task_struct, thread.fstate.f[31]);
- 	OFFSET(TASK_THREAD_FCSR, task_struct, thread.fstate.fcsr);
-+#ifdef CONFIG_STACKPROTECTOR
-+	OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
-+#endif
- 
- 	DEFINE(PT_SIZE, sizeof(struct pt_regs));
- 	OFFSET(PT_EPC, pt_regs, epc);
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index dd5f985..f786b5f 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -24,7 +24,7 @@
- 
- register unsigned long gp_in_global __asm__("gp");
- 
--#ifdef CONFIG_STACKPROTECTOR
-+#if defined(CONFIG_STACKPROTECTOR) && !defined(CONFIG_STACKPROTECTOR_PER_TASK)
- #include <linux/stackprotector.h>
- unsigned long __stack_chk_guard __read_mostly;
- EXPORT_SYMBOL(__stack_chk_guard);
--- 
-2.7.4
+> We recently released a new Linux 4.9 toolchain where we stepped up to
+> GLIBC 2.31 and GCC 10.2. So we do not consider us stuck at old versions
+> of any of the involved software.
+>
+> In addition, non-LTS users are running other mainline kernel versions
+> as well.
 
+FWIW, glibc-2.31 does not have support for 64-bit time_t yet, but I
+know there was interest in adding sparc support to the musl libc, which
+does support 64-bit time_t.
+
+        Arnd
