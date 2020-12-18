@@ -2,24 +2,26 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C632DD99B
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Dec 2020 21:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702672DE1C6
+	for <lists+linux-csky@lfdr.de>; Fri, 18 Dec 2020 12:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgLQUD6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 17 Dec 2020 15:03:58 -0500
-Received: from asavdk3.altibox.net ([109.247.116.14]:60498 "EHLO
-        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbgLQUD6 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 17 Dec 2020 15:03:58 -0500
-Received: from ravnborg.org (unknown [188.228.123.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk3.altibox.net (Postfix) with ESMTPS id 986F620026;
-        Thu, 17 Dec 2020 21:03:03 +0100 (CET)
-Date:   Thu, 17 Dec 2020 21:03:02 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
+        id S1733224AbgLRLJV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 18 Dec 2020 06:09:21 -0500
+Received: from bin-mail-out-05.binero.net ([195.74.38.228]:42526 "EHLO
+        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1733132AbgLRLJV (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 18 Dec 2020 06:09:21 -0500
+X-Halon-ID: 581e0ce0-4121-11eb-a542-005056917a89
+Authorized-sender: andreas@gaisler.com
+Received: from andreas.got.gaisler.com (h-98-128-223-123.na.cust.bahnhof.se [98.128.223.123])
+        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
+        id 581e0ce0-4121-11eb-a542-005056917a89;
+        Fri, 18 Dec 2020 12:08:32 +0100 (CET)
+Subject: Re: [PATCH 1/2] futex: mark futex_detect_cmpxchg() as 'noinline'
 To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Guo Ren <guoren@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+Cc:     Sam Ravnborg <sam@ravnborg.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
         Russell King <linux@armlinux.org.uk>,
         Ingo Molnar <mingo@redhat.com>,
@@ -32,49 +34,58 @@ Cc:     Guo Ren <guoren@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org,
         sparclinux <sparclinux@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 1/2] futex: mark futex_detect_cmpxchg() as 'noinline'
-Message-ID: <20201217200302.GB1523049@ravnborg.org>
+        "David S. Miller" <davem@davemloft.net>, software@gaisler.com
 References: <20190307091514.2489338-1-arnd@arndb.de>
- <X9S28TcEXd2zghzp@elver.google.com>
- <87czzeg5ep.fsf@nanos.tec.linutronix.de>
+ <X9S28TcEXd2zghzp@elver.google.com> <87czzeg5ep.fsf@nanos.tec.linutronix.de>
  <CAK8P3a0LWjNgwm605TM4dKCsn078X7NC3sEfdBSgcMNEocQ5iA@mail.gmail.com>
  <CAJF2gTRLEbBfZJ7Y6UNOMq-cwG5OYRW=+8Pfauz6v6R8ntBjYA@mail.gmail.com>
  <CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com>
  <20201215193800.GA1098247@ravnborg.org>
  <CAK8P3a24eAYjPTw_GvEC5H9nGODjeKCVLSmfpoNSvrzew5BX4Q@mail.gmail.com>
+ <6a2c250a-2c7e-81c5-705a-5904c0fc91b8@gaisler.com>
+ <CAK8P3a31LRref0UfsQ3AbyohZcTN6F=6qYA-dspMaadSkP8Vrw@mail.gmail.com>
+From:   Andreas Larsson <andreas@gaisler.com>
+Message-ID: <e9be6bfd-38da-cbfa-9b54-fc4d3dd94d14@gaisler.com>
+Date:   Fri, 18 Dec 2020 12:08:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a24eAYjPTw_GvEC5H9nGODjeKCVLSmfpoNSvrzew5BX4Q@mail.gmail.com>
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=Ibmpp1ia c=1 sm=1 tr=0
-        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
-        a=kj9zAlcOel0A:10 a=sAUyEq6cmD5XSRaL4sYA:9 a=CjuIK1q_8ugA:10
-        a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
+In-Reply-To: <CAK8P3a31LRref0UfsQ3AbyohZcTN6F=6qYA-dspMaadSkP8Vrw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Arnd,
-
-> > I think we would be better served dropping support for sun4m and sun4d
-> > from the kernel.
+On 2020-12-17 17:43, Arnd Bergmann wrote:
+> It does make sense to require that a single kernel can work on all
+> possible hardware. So if we remove sun4m/sun4d support, all that
+> is left is LEON, and you likely wouldn't need to worry about other
+> CPUs any more.
 > 
-> This seems appropriate as well to me.
+> However, there is still the question whether a single kernel needs
+> to work on LEON both with and without CASA. Do you still care
+> about Linux users on LEON cores that do not support CASA, or is
+> widespread enough that you just make it unconditional for both
+> SMP and non-SMP?
 
-I did a quick hack:
-20 files changed, 40 insertions(+), 3051 deletions(-)
+We are fine with unconditional CASA for both SMP and non-SMP for LEON.
 
-All the leon stuff is kept and there is room for more cleaning up.
-The kernel can build a sparc32_defconfig with the Gaisler toochain.
-This was a one hour quick hack that I cannot commit - it needs to be
-split up to allow some resemble of review.
 
-And it touched only arch/sparc/ - no sparc32 specific drivers were
-dropped.
+> I hope that you can make it to 5.10 then, as this contains the work
+> I did for 64-bit time_t, which is required if you have users that want to
+> run systems after 2038.
 
-If we decide to chase this and we can drop sun4m/sun4d then maintaining
-leon will be simpler as a nice side effect.
+That is a good point! Thank you!
 
-	Sam
+
+> FWIW, glibc-2.31 does not have support for 64-bit time_t yet, but I
+> know there was interest in adding sparc support to the musl libc, which
+> does support 64-bit time_t.
+
+Yes, we will have to follow the developments regarding 64-bit time_t
+in GLIBC as well.
+
+-- 
+Andreas
