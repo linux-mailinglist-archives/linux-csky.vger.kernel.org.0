@@ -2,90 +2,263 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 702672DE1C6
-	for <lists+linux-csky@lfdr.de>; Fri, 18 Dec 2020 12:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3622DF5CD
+	for <lists+linux-csky@lfdr.de>; Sun, 20 Dec 2020 16:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733224AbgLRLJV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 18 Dec 2020 06:09:21 -0500
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:42526 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733132AbgLRLJV (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 18 Dec 2020 06:09:21 -0500
-X-Halon-ID: 581e0ce0-4121-11eb-a542-005056917a89
-Authorized-sender: andreas@gaisler.com
-Received: from andreas.got.gaisler.com (h-98-128-223-123.na.cust.bahnhof.se [98.128.223.123])
-        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id 581e0ce0-4121-11eb-a542-005056917a89;
-        Fri, 18 Dec 2020 12:08:32 +0100 (CET)
-Subject: Re: [PATCH 1/2] futex: mark futex_detect_cmpxchg() as 'noinline'
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sam Ravnborg <sam@ravnborg.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
+        id S1727671AbgLTPNS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 20 Dec 2020 10:13:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39318 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727590AbgLTPNS (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 20 Dec 2020 10:13:18 -0500
+From:   guoren@kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, software@gaisler.com
-References: <20190307091514.2489338-1-arnd@arndb.de>
- <X9S28TcEXd2zghzp@elver.google.com> <87czzeg5ep.fsf@nanos.tec.linutronix.de>
- <CAK8P3a0LWjNgwm605TM4dKCsn078X7NC3sEfdBSgcMNEocQ5iA@mail.gmail.com>
- <CAJF2gTRLEbBfZJ7Y6UNOMq-cwG5OYRW=+8Pfauz6v6R8ntBjYA@mail.gmail.com>
- <CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com>
- <20201215193800.GA1098247@ravnborg.org>
- <CAK8P3a24eAYjPTw_GvEC5H9nGODjeKCVLSmfpoNSvrzew5BX4Q@mail.gmail.com>
- <6a2c250a-2c7e-81c5-705a-5904c0fc91b8@gaisler.com>
- <CAK8P3a31LRref0UfsQ3AbyohZcTN6F=6qYA-dspMaadSkP8Vrw@mail.gmail.com>
-From:   Andreas Larsson <andreas@gaisler.com>
-Message-ID: <e9be6bfd-38da-cbfa-9b54-fc4d3dd94d14@gaisler.com>
-Date:   Fri, 18 Dec 2020 12:08:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAK8P3a31LRref0UfsQ3AbyohZcTN6F=6qYA-dspMaadSkP8Vrw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Arnd Bergmann <arnd@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH v2 1/5] csky: Remove custom asm/atomic.h implementation
+Date:   Sun, 20 Dec 2020 15:12:22 +0000
+Message-Id: <1608477146-60070-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 2020-12-17 17:43, Arnd Bergmann wrote:
-> It does make sense to require that a single kernel can work on all
-> possible hardware. So if we remove sun4m/sun4d support, all that
-> is left is LEON, and you likely wouldn't need to worry about other
-> CPUs any more.
-> 
-> However, there is still the question whether a single kernel needs
-> to work on LEON both with and without CASA. Do you still care
-> about Linux users on LEON cores that do not support CASA, or is
-> widespread enough that you just make it unconditional for both
-> SMP and non-SMP?
+From: Guo Ren <guoren@linux.alibaba.com>
 
-We are fine with unconditional CASA for both SMP and non-SMP for LEON.
+Use generic atomic implementation based on cmpxchg. So remove csky
+asm/atomic.h.
 
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@kernel.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+---
+ arch/csky/include/asm/atomic.h | 212 -----------------------------------------
+ 1 file changed, 212 deletions(-)
+ delete mode 100644 arch/csky/include/asm/atomic.h
 
-> I hope that you can make it to 5.10 then, as this contains the work
-> I did for 64-bit time_t, which is required if you have users that want to
-> run systems after 2038.
-
-That is a good point! Thank you!
-
-
-> FWIW, glibc-2.31 does not have support for 64-bit time_t yet, but I
-> know there was interest in adding sparc support to the musl libc, which
-> does support 64-bit time_t.
-
-Yes, we will have to follow the developments regarding 64-bit time_t
-in GLIBC as well.
-
+diff --git a/arch/csky/include/asm/atomic.h b/arch/csky/include/asm/atomic.h
+deleted file mode 100644
+index e369d73..00000000
+--- a/arch/csky/include/asm/atomic.h
++++ /dev/null
+@@ -1,212 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifndef __ASM_CSKY_ATOMIC_H
+-#define __ASM_CSKY_ATOMIC_H
+-
+-#include <linux/version.h>
+-#include <asm/cmpxchg.h>
+-#include <asm/barrier.h>
+-
+-#ifdef CONFIG_CPU_HAS_LDSTEX
+-
+-#define __atomic_add_unless __atomic_add_unless
+-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
+-{
+-	unsigned long tmp, ret;
+-
+-	smp_mb();
+-
+-	asm volatile (
+-	"1:	ldex.w		%0, (%3) \n"
+-	"	mov		%1, %0   \n"
+-	"	cmpne		%0, %4   \n"
+-	"	bf		2f	 \n"
+-	"	add		%0, %2   \n"
+-	"	stex.w		%0, (%3) \n"
+-	"	bez		%0, 1b   \n"
+-	"2:				 \n"
+-		: "=&r" (tmp), "=&r" (ret)
+-		: "r" (a), "r"(&v->counter), "r"(u)
+-		: "memory");
+-
+-	if (ret != u)
+-		smp_mb();
+-
+-	return ret;
+-}
+-
+-#define ATOMIC_OP(op, c_op)						\
+-static inline void atomic_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp;						\
+-									\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%2) \n"				\
+-	"	" #op "		%0, %1   \n"				\
+-	"	stex.w		%0, (%2) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp)						\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-}
+-
+-#define ATOMIC_OP_RETURN(op, c_op)					\
+-static inline int atomic_##op##_return(int i, atomic_t *v)		\
+-{									\
+-	unsigned long tmp, ret;						\
+-									\
+-	smp_mb();							\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%3) \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	stex.w		%0, (%3) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-	smp_mb();							\
+-									\
+-	return ret;							\
+-}
+-
+-#define ATOMIC_FETCH_OP(op, c_op)					\
+-static inline int atomic_fetch_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, ret;						\
+-									\
+-	smp_mb();							\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stex.w		%0, (%3) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-	smp_mb();							\
+-									\
+-	return ret;							\
+-}
+-
+-#else /* CONFIG_CPU_HAS_LDSTEX */
+-
+-#include <linux/irqflags.h>
+-
+-#define __atomic_add_unless __atomic_add_unless
+-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
+-{
+-	unsigned long tmp, ret, flags;
+-
+-	raw_local_irq_save(flags);
+-
+-	asm volatile (
+-	"	ldw		%0, (%3) \n"
+-	"	mov		%1, %0   \n"
+-	"	cmpne		%0, %4   \n"
+-	"	bf		2f	 \n"
+-	"	add		%0, %2   \n"
+-	"	stw		%0, (%3) \n"
+-	"2:				 \n"
+-		: "=&r" (tmp), "=&r" (ret)
+-		: "r" (a), "r"(&v->counter), "r"(u)
+-		: "memory");
+-
+-	raw_local_irq_restore(flags);
+-
+-	return ret;
+-}
+-
+-#define ATOMIC_OP(op, c_op)						\
+-static inline void atomic_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%2) \n"				\
+-	"	" #op "		%0, %1   \n"				\
+-	"	stw		%0, (%2) \n"				\
+-		: "=&r" (tmp)						\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-}
+-
+-#define ATOMIC_OP_RETURN(op, c_op)					\
+-static inline int atomic_##op##_return(int i, atomic_t *v)		\
+-{									\
+-	unsigned long tmp, ret, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%3) \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stw		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-									\
+-	return ret;							\
+-}
+-
+-#define ATOMIC_FETCH_OP(op, c_op)					\
+-static inline int atomic_fetch_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, ret, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stw		%0, (%3) \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-									\
+-	return ret;							\
+-}
+-
+-#endif /* CONFIG_CPU_HAS_LDSTEX */
+-
+-#define atomic_add_return atomic_add_return
+-ATOMIC_OP_RETURN(add, +)
+-#define atomic_sub_return atomic_sub_return
+-ATOMIC_OP_RETURN(sub, -)
+-
+-#define atomic_fetch_add atomic_fetch_add
+-ATOMIC_FETCH_OP(add, +)
+-#define atomic_fetch_sub atomic_fetch_sub
+-ATOMIC_FETCH_OP(sub, -)
+-#define atomic_fetch_and atomic_fetch_and
+-ATOMIC_FETCH_OP(and, &)
+-#define atomic_fetch_or atomic_fetch_or
+-ATOMIC_FETCH_OP(or, |)
+-#define atomic_fetch_xor atomic_fetch_xor
+-ATOMIC_FETCH_OP(xor, ^)
+-
+-#define atomic_and atomic_and
+-ATOMIC_OP(and, &)
+-#define atomic_or atomic_or
+-ATOMIC_OP(or, |)
+-#define atomic_xor atomic_xor
+-ATOMIC_OP(xor, ^)
+-
+-#undef ATOMIC_FETCH_OP
+-#undef ATOMIC_OP_RETURN
+-#undef ATOMIC_OP
+-
+-#include <asm-generic/atomic.h>
+-
+-#endif /* __ASM_CSKY_ATOMIC_H */
 -- 
-Andreas
+2.7.4
+
