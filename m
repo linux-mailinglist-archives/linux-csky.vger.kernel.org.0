@@ -2,41 +2,42 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAC02DF5FB
-	for <lists+linux-csky@lfdr.de>; Sun, 20 Dec 2020 16:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482612DF650
+	for <lists+linux-csky@lfdr.de>; Sun, 20 Dec 2020 18:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727661AbgLTPo4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 20 Dec 2020 10:44:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46442 "EHLO mail.kernel.org"
+        id S1727713AbgLTRuM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 20 Dec 2020 12:50:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57954 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727474AbgLTPoz (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 20 Dec 2020 10:44:55 -0500
-X-Gm-Message-State: AOAM5316y/v0huV8jj8bupFRZQae5HinXdlOa+mAC202THLZZlxo1LV5
-        FR2SYA5+EBIqIJ9Trk/kAEfYra1P95Spq+gbzTY=
+        id S1727621AbgLTRuM (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 20 Dec 2020 12:50:12 -0500
+X-Gm-Message-State: AOAM532fX3ZEitY8vX8TpMD3BLnOWMAiOzWkl2RzSJNxv3rD742gpRe6
+        zH6iPYiGMVb5+ufiBXeoIgaIPBi0mZ4CItfXtj8=
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608479055;
-        bh=HkKiub65ipire3e2ahkx2AsS2X8l0pXLoLsYAl6pgds=;
+        s=k20201202; t=1608486570;
+        bh=iqp7gUniW01cFIdAe/0kjZ8VQGLxFBk/ZcEA3tr8OgA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pYv6WnlLGyVBrw6omIVgT5oi5MEsywjaO0uyPOuEN1ETkIQRyeHnkYpfpyzs2rjAp
-         gCi/VNEWzmBeK/L0z9V9Sqk96BgvN1YdEzRL6lxkKzK8JLoAZDFABfmJQdfqxWH2Og
-         oFVrT+b2H5CYvaw0tFfFx5sS5OM/qYYtFBk4zUoRp7mzuvuVjCrqGy0IQPrbUTfIlA
-         /L3uHzS5xQTwQpKhx2Ss43pOHlgz6vUqQKV7eznJvzTXVUZwry9MxFm8fxkHY+WDy0
-         LJG5zYAEkU7+YaNRMShS0p9p4rkmoa3XF5AxaJjn+1SvxAfyLcG1TPFZjelQ9PNjIX
-         7/ls3BzTTzMgg==
-X-Google-Smtp-Source: ABdhPJwN37zyTdHVtAaxBp4/w7PGJLCIyce4rq1B2FeLm9BHILKVERvfHjjLnZgA9qmknN/yINNixhCWoEaQ8OrCons=
-X-Received: by 2002:ac2:4987:: with SMTP id f7mr4736496lfl.41.1608479053208;
- Sun, 20 Dec 2020 07:44:13 -0800 (PST)
+        b=lVA5iy3RnN5NMkXR+rvQPyPQwEdd4+pkEzV+s4yFYx8aAtP3YkpuyL7oIKpgSoKz+
+         pp3s2l0TVs58AFJelPCM12d0A56Dt9wyBrIwKMA2KHDAm7/A+epMpADhJ7MTx4HVm7
+         wn7UPYoxsz1Jgfxwg0tEMh23M6xVmwOgmlmHNK+uQU0fl9/fwDJqRJX9fXnFmHeiOI
+         /3Tihq/quPiz5XGePD/Ge5DW8h9Rm1Swg0pLynu3T/IFgdoLwslx4HYuK+fW+T+3tH
+         v3TpjbI9eWnLp0HlfM5g5Z06OogGtq+4unPLYY7eUog0irLl2AmrDIKFfSlg/ZxG8P
+         bBMSh4W9VgeEw==
+X-Google-Smtp-Source: ABdhPJykjGV9LSsGbTTTe2PJBFyDya6l+Fbx0dVC2hpEZ9YGnkZZDZFhzdBB5yyQhBuNS5/ttLQ7QB665uMCRI5xNNY=
+X-Received: by 2002:a9d:7a4b:: with SMTP id z11mr9589019otm.305.1608486570097;
+ Sun, 20 Dec 2020 09:49:30 -0800 (PST)
 MIME-Version: 1.0
 References: <20190307091514.2489338-1-arnd@arndb.de> <X9S28TcEXd2zghzp@elver.google.com>
  <87czzeg5ep.fsf@nanos.tec.linutronix.de> <CAK8P3a0LWjNgwm605TM4dKCsn078X7NC3sEfdBSgcMNEocQ5iA@mail.gmail.com>
- <CAJF2gTRLEbBfZJ7Y6UNOMq-cwG5OYRW=+8Pfauz6v6R8ntBjYA@mail.gmail.com> <CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 20 Dec 2020 23:44:01 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQUPXzRL4P2ghoSt6t+pyAJ7A9dqdD6VWYNdOmJjd2HQg@mail.gmail.com>
-Message-ID: <CAJF2gTQUPXzRL4P2ghoSt6t+pyAJ7A9dqdD6VWYNdOmJjd2HQg@mail.gmail.com>
+ <CAJF2gTRLEbBfZJ7Y6UNOMq-cwG5OYRW=+8Pfauz6v6R8ntBjYA@mail.gmail.com>
+ <CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com> <CAJF2gTQUPXzRL4P2ghoSt6t+pyAJ7A9dqdD6VWYNdOmJjd2HQg@mail.gmail.com>
+In-Reply-To: <CAJF2gTQUPXzRL4P2ghoSt6t+pyAJ7A9dqdD6VWYNdOmJjd2HQg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sun, 20 Dec 2020 18:49:13 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3mrD7U__T-X2jr1Mw9Xk=dBE=Fuid_BHNE85GcX0g-rg@mail.gmail.com>
+Message-ID: <CAK8P3a3mrD7U__T-X2jr1Mw9Xk=dBE=Fuid_BHNE85GcX0g-rg@mail.gmail.com>
 Subject: Re: [PATCH 1/2] futex: mark futex_detect_cmpxchg() as 'noinline'
-To:     Arnd Bergmann <arnd@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Marco Elver <elver@google.com>, Arnd Bergmann <arnd@arndb.de>,
         Russell King <linux@armlinux.org.uk>,
@@ -56,34 +57,37 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Arnd,
-
-On Tue, Dec 15, 2020 at 7:26 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Tue, Dec 15, 2020 at 7:09 AM Guo Ren <guoren@kernel.org> wrote:
-> > On Mon, Dec 14, 2020 at 9:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> > > I had a look at what other architectures always implement
-> > > futex_atomic_cmpxchg_inatomic() or can use the asm-generic non-SMP version,
-> > > and I found that it's pretty much all of them, the odd ones being just sparc32
-> > > and csky, which use asm-generic/futex.h but do have an SMP option,
-> > > as well as xtensa
+On Sun, Dec 20, 2020 at 4:46 PM Guo Ren <guoren@kernel.org> wrote:
+> On Tue, Dec 15, 2020 at 7:26 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > On Tue, Dec 15, 2020 at 7:09 AM Guo Ren <guoren@kernel.org> wrote:
+> > > On Mon, Dec 14, 2020 at 9:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > > I had a look at what other architectures always implement
+> > > > futex_atomic_cmpxchg_inatomic() or can use the asm-generic non-SMP version,
+> > > > and I found that it's pretty much all of them, the odd ones being just sparc32
+> > > > and csky, which use asm-generic/futex.h but do have an SMP option,
+> > > > as well as xtensa
+> > > >
+> > > > I would guess that for csky, this is a mistake, as the architecture is fairly
+> > > > new and should be able to implement it. Not sure about sparc32.
 > > >
-> > > I would guess that for csky, this is a mistake, as the architecture is fairly
-> > > new and should be able to implement it. Not sure about sparc32.
+> > > The c610, c807, c810 don't support SMP, so futex_cmpxchg_enabled = 1
+> > > with asm-generic's implementation.
+> > > For c860, there is no HAVE_FUTEX_CMPXCHG and cmpxchg_inatomic/inuser
+> > > implementation, so futex_cmpxchg_enabled = 0.
+> > >
+> > > Thx for point it out, we'll implement cmpxchg_inatomic/inuser for C860
+> > > and still use asm-generic for non-smp CPUs.
 > >
-> > The c610, c807, c810 don't support SMP, so futex_cmpxchg_enabled = 1
-> > with asm-generic's implementation.
-> > For c860, there is no HAVE_FUTEX_CMPXCHG and cmpxchg_inatomic/inuser
-> > implementation, so futex_cmpxchg_enabled = 0.
-> >
-> > Thx for point it out, we'll implement cmpxchg_inatomic/inuser for C860
-> > and still use asm-generic for non-smp CPUs.
->
-> Sounds good to me.
-Done: https://lore.kernel.org/linux-csky/1608478763-60148-3-git-send-email-guoren@kernel.org/T/#u
+> > Sounds good to me.
+> Done: https://lore.kernel.org/linux-csky/1608478763-60148-3-git-send-email-guoren@kernel.org/T/#u
 
--- 
-Best Regards
- Guo Ren
+Thanks!
 
-ML: https://lore.kernel.org/linux-csky/
+Can you clarify if there are any dependencies on the other patches in
+that series?
+
+I'd like to take the futex patch through the asm-generic tree along with the
+patches for the other architectures.
+
+       Arnd
