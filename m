@@ -2,92 +2,111 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D61A42E0FE8
-	for <lists+linux-csky@lfdr.de>; Tue, 22 Dec 2020 22:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EEB2E139F
+	for <lists+linux-csky@lfdr.de>; Wed, 23 Dec 2020 03:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728011AbgLVVoI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 22 Dec 2020 16:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
+        id S1729642AbgLWCc2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 22 Dec 2020 21:32:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727965AbgLVVoI (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Dec 2020 16:44:08 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4081C0613D6
-        for <linux-csky@vger.kernel.org>; Tue, 22 Dec 2020 13:43:27 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id x12so8076993plr.10
-        for <linux-csky@vger.kernel.org>; Tue, 22 Dec 2020 13:43:27 -0800 (PST)
+        with ESMTP id S1729582AbgLWCc1 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Dec 2020 21:32:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93364C0613D3;
+        Tue, 22 Dec 2020 18:31:46 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qw4so20834386ejb.12;
+        Tue, 22 Dec 2020 18:31:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V18RJFVoSD2HfPTrMybJhWRx+16Y//JP10XUyAiF9C0=;
-        b=MoFoz97ipfgL0tskYxv3eUZrXs1Gtf4S6AIT48y4RoUx4gTy/pyHeDU0ASRe4+CTGV
-         6EQPpsfEG8ojet/F+BqJP7osfq2axER1b9OdQ5I7dbdF8eIZ5zNdTK9moJab2eBpN90w
-         Vqz2Kherc3CmoKwR9ICk4/+1KBetvtuXSFh+kNpzebgvZW1e10DodKAND41hjcHoL7O1
-         aPBdL2Cp6KXghjcUF5GrxhFp4g+00u7vCveST0JC+7XDzWJjhpp47uHFhFbzr8/ZqfKw
-         O4BIlbC80rAzXV+Cw98wRd4KHOlJJ73+yFwfcfXmpcLWmwDJ8GtjtZWcE5k59g3GypE5
-         qpPg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hJYV9T0G3B5sqaHuZ67qRHqaOvktDx25o29o6SPVfkM=;
+        b=IYyycRcoGYOP/KTETWj/vmhg9C2RGMb/P3JuA4pRuUW+wTLsd4j+sbJVNZaoq/HFsW
+         y903BXueXgsFDIJawkPdEAj6Zi8tRpLp17vvYB1L5zx0NitBG17XFdyRhl4qMz1Wms84
+         kczQbYle8rJRw9jLY7MpqGjC61nPY4vNhno+U6jbqhaiqaf7Yfif+2S/QRLVV7Nk2hcM
+         fz1OUEHC/vKjdJ0o5oNmLGZ0iwMjGalO60W1QDSPp5JnvEaTf4d6efMk/YzbY4t5z+MA
+         KotriduRqDYzYBozzgMRonapm8XqO6IfVYMlEqpVvhbPgwRJ8LBWG8ViphBp5ULQAYWs
+         Nnyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V18RJFVoSD2HfPTrMybJhWRx+16Y//JP10XUyAiF9C0=;
-        b=k4DhoN3xqGd8kWtQ5osvMgXZZXTjIzwdIpZcVaYtki+EifgXH5rRtMSW9kvHRY9O4q
-         nR1q3pha23uVyEpggbq1f1EFYI04qfL7gDOhIeZOxl0pIR9K7UXHxNQ4vG1pyiu66xnS
-         ApU66Py1j6xjw2wS8Q/T7OTkZCcCeHa/UZ/zsx616bNrjRJkfifcKHlk9Nk6o6CXGU3O
-         T3ykIGbckeJwiDwRmd4sBehBlk3IaDGc7HbVkTMIOuKsNPhIoX92GAEKteYCsvJg5CCU
-         SuyeDQc7CTWEcZd2FdbkWomqUfElBF1gD5XZmqu1d2E85COi8Lu852uLhj+OlHo4a79n
-         Qoxg==
-X-Gm-Message-State: AOAM530YfZNFbonYd9azLMX46sj88TlOueFYOnhuovHD0+V9pfA0rLOC
-        ebsvUIMV3kF60Xb+cESFY9Mm6PI4rb0yfg==
-X-Google-Smtp-Source: ABdhPJynPZBPU88MgcEl5WcwU0cdYjZC20/3FRJRStClymFa4iKtg9+XkPvnpAcMdwtKD+bNajR6Jw==
-X-Received: by 2002:a17:90a:fc83:: with SMTP id ci3mr24052182pjb.145.1608673407151;
-        Tue, 22 Dec 2020 13:43:27 -0800 (PST)
-Received: from google.com ([2620:15c:2ce:0:a6ae:11ff:fe11:4abb])
-        by smtp.gmail.com with ESMTPSA id s29sm22665086pgn.65.2020.12.22.13.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Dec 2020 13:43:26 -0800 (PST)
-Date:   Tue, 22 Dec 2020 13:43:23 -0800
-From:   Fangrui Song <maskray@google.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: building csky with CC=clang
-Message-ID: <20201222214323.655tjdqdvxhw3722@google.com>
-References: <CAKwvOdmnhsPU0UA9uEd1HTQ_yoBO8h741+sKrtebcPsXpXn8_g@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hJYV9T0G3B5sqaHuZ67qRHqaOvktDx25o29o6SPVfkM=;
+        b=gNVyRWQoxAQHVFoJ9jxkVqVaREc8eT4vMer3T66vVmHlGYlGDoQ8fMlEV/fHBPilyV
+         89fzDsCD200X7+qzdKZP9zel3J91pUecN03jVMC+UC4Wx6Ope9v/eDfKBTLC1ZQB3PL7
+         dxj4L3TulU9tPT9DHhGIXqX2Qob7R/4GlI0F+4Y3f/3fBiw8VdRjYTDcb3Um+DHVa+xx
+         poYNnPV+T1Df4lWtpF5Uea5E0qETgj9nV1Ub38AVzUe6189onYuM3FBnC1u0SASTVBUW
+         8TNw2FqgNTh5q3Yrk3aiZUb1a+DfnYFtJkg4qwg1PdQALqpxfRAwpl7K+gEa2KErJm7M
+         oDaQ==
+X-Gm-Message-State: AOAM532PTKQk2wEeh2sWUQ3YzdgzxJoLnUOljR0J10mARbaciNPmVMuD
+        OftXdMazQAry9Ge3pGdUzsTgp4W98/n7T9+vQIs=
+X-Google-Smtp-Source: ABdhPJz1B0KpAS61G37ZhvZ08Ft6rExhgmEqLff3Wbv30JgnF2UmY5AaWsrOOU4FM1RUZAcu5wJxN79JH90GdCJzjrA=
+X-Received: by 2002:a17:906:2681:: with SMTP id t1mr22464503ejc.29.1608690705392;
+ Tue, 22 Dec 2020 18:31:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmnhsPU0UA9uEd1HTQ_yoBO8h741+sKrtebcPsXpXn8_g@mail.gmail.com>
+References: <20200922091505.471-1-zhenzhong.duan@gmail.com>
+ <20200922162901.GA3421308@ZenIV.linux.org.uk> <CAJF2gTSMWc_=j1NKCTXqhLj7cmSB_A3dYB7nL4F7H3jqT+u38A@mail.gmail.com>
+ <20200923002315.GC3421308@ZenIV.linux.org.uk> <CAJF2gTSU4e4yU63z1q502SeuTf2m2BKaD0yZ0deFj0TkiVupFg@mail.gmail.com>
+ <20200923045231.GH3421308@ZenIV.linux.org.uk>
+In-Reply-To: <20200923045231.GH3421308@ZenIV.linux.org.uk>
+From:   Zhenzhong Duan <zhenzhong.duan@gmail.com>
+Date:   Wed, 23 Dec 2020 10:31:34 +0800
+Message-ID: <CAFH1YnNwqrK+kHbLKH684AwPWM0TfOxKC37TfJe5FYZ4_AXRvA@mail.gmail.com>
+Subject: Re: [PATCH] csky: Fix a size determination in gpr_get()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Guo Ren <guoren@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 2020-12-22, 'Nick Desaulniers' via Clang Built Linux wrote:
->Hello!
->I was playing with some of LLVM's experimental backends (m68k) and saw
->there was a CSKY backend. I rebuilt LLVM to support CSKY, but I ran
->into trouble building the kernel before even getting to the compiler
->invocation:
+On Wed, Sep 23, 2020 at 12:52 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 >
->$ ARCH=csky CROSS_COMPILE=csky-linux-gnu- make CC=clang -j71 defconfig
->...
->scripts/Kconfig.include:40: linker 'csky-linux-gnu-ld' not found
+> On Wed, Sep 23, 2020 at 10:37:31AM +0800, Guo Ren wrote:
 >
->My distro doesn't package binutils-csky-linux-gnu, is there
->documentation on how to build the kernel targeting CSKY, starting with
->building GNU binutils configured with CSKY emulation?
+> > > What's going on there?  The mapping is really weird - assuming
+> > > you had v0..v31 in the first 32 elements of regs->vr[], you
+> > > end up with
+> > >
+> > > v0 v1 v2 v3 v2 v3 v6 v7 v4 v5 v10 v11 v6 v7 v14 v15
+> > > v8 v9 v18 v19 v10 v11 v22 v23 v12 v13 v26 v27 v14 v15 v30 v31
+> > >
+> > > in the beginning of the output.  Assuming it is the intended
+> > > behaviour, it's probably worth some comments...
+> > FPU & VDSP use the same regs. 32 FPU regs' width is 64b and 16 VDSP
+> > regs' width is 128b.
+> >
+> > vr[0], vr[1] =3D fp[0] & vr[0] vr[1], vr[2], vr[3] =3D vdsp reg[0]
+> > ...
+> > vr[60], vr[61] =3D fp[15] & vr[60] vr[61], vr[62], vr[63] =3D vdsp reg[=
+15]
+> > vr[64], vr[65] =3D fp[16]
+> > vr[66], vr[67] =3D fp[17]
+> > ...
+> > vr[94], vr[95] =3D fp[31]
+> >
+> > Yeah, this is confusing and I'll add a comment later.
+>
+> Umm...  It would help if you described these 3 layouts:
+>         1) kernel-side with VDSP
+>         2) userland (identical to (1)?)
+>         3) kernel-side without VDSP
+> Still confused...
+>
+> PS: my apologies re commit message - I left a note to myself when doing
+> that series and then forgot about it ;-/
+>
+> Anyway, which tree should it go through?  In any case, that fix is
+> Acked-by: Al Viro <viro@zeniv.linux.org.uk>
+> and I can take it through vfs.git or you guys can pick in csky tree;
+> up to you.
 
-Note also that the llvm/lib/Target/CSKY has not been fully upstreamed
-yet. It is a WIP https://lists.llvm.org/pipermail/llvm-dev/2020-August/144481.html
-I will not expect clang csky to work currently.
-(The latest committed LLVM patch is https://reviews.llvm.org/D93372
-Normally committing an important piece of a large patch series like this should take
-a bit longer time longer after someone in the community accepted it
-https://llvm.org/docs/CodeReview.html#can-code-be-reviewed-after-it-is-committed )
+Hi Al, Guo
 
-I do want to raise the recent LLVM M68k target. Its patches ([M67k] (Patch */8))
-are very organized and the main proposer shares updates to llvm-dev regularly.
-There is a lot from the process where the C-SKY target can learn from.
+Seems this patch is still pending=EF=BC=8C could you help check it=EF=BC=9F=
+Thanks
+
+Zhenzhong
