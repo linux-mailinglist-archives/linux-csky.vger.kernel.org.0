@@ -2,111 +2,143 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EEB2E139F
-	for <lists+linux-csky@lfdr.de>; Wed, 23 Dec 2020 03:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0292E1B0C
+	for <lists+linux-csky@lfdr.de>; Wed, 23 Dec 2020 11:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729642AbgLWCc2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 22 Dec 2020 21:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729582AbgLWCc1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Dec 2020 21:32:27 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93364C0613D3;
-        Tue, 22 Dec 2020 18:31:46 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id qw4so20834386ejb.12;
-        Tue, 22 Dec 2020 18:31:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hJYV9T0G3B5sqaHuZ67qRHqaOvktDx25o29o6SPVfkM=;
-        b=IYyycRcoGYOP/KTETWj/vmhg9C2RGMb/P3JuA4pRuUW+wTLsd4j+sbJVNZaoq/HFsW
-         y903BXueXgsFDIJawkPdEAj6Zi8tRpLp17vvYB1L5zx0NitBG17XFdyRhl4qMz1Wms84
-         kczQbYle8rJRw9jLY7MpqGjC61nPY4vNhno+U6jbqhaiqaf7Yfif+2S/QRLVV7Nk2hcM
-         fz1OUEHC/vKjdJ0o5oNmLGZ0iwMjGalO60W1QDSPp5JnvEaTf4d6efMk/YzbY4t5z+MA
-         KotriduRqDYzYBozzgMRonapm8XqO6IfVYMlEqpVvhbPgwRJ8LBWG8ViphBp5ULQAYWs
-         Nnyg==
+        id S1728386AbgLWKiu (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 23 Dec 2020 05:38:50 -0500
+Received: from mail-oo1-f48.google.com ([209.85.161.48]:43468 "EHLO
+        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728301AbgLWKit (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Dec 2020 05:38:49 -0500
+Received: by mail-oo1-f48.google.com with SMTP id y14so3596101oom.10;
+        Wed, 23 Dec 2020 02:38:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hJYV9T0G3B5sqaHuZ67qRHqaOvktDx25o29o6SPVfkM=;
-        b=gNVyRWQoxAQHVFoJ9jxkVqVaREc8eT4vMer3T66vVmHlGYlGDoQ8fMlEV/fHBPilyV
-         89fzDsCD200X7+qzdKZP9zel3J91pUecN03jVMC+UC4Wx6Ope9v/eDfKBTLC1ZQB3PL7
-         dxj4L3TulU9tPT9DHhGIXqX2Qob7R/4GlI0F+4Y3f/3fBiw8VdRjYTDcb3Um+DHVa+xx
-         poYNnPV+T1Df4lWtpF5Uea5E0qETgj9nV1Ub38AVzUe6189onYuM3FBnC1u0SASTVBUW
-         8TNw2FqgNTh5q3Yrk3aiZUb1a+DfnYFtJkg4qwg1PdQALqpxfRAwpl7K+gEa2KErJm7M
-         oDaQ==
-X-Gm-Message-State: AOAM532PTKQk2wEeh2sWUQ3YzdgzxJoLnUOljR0J10mARbaciNPmVMuD
-        OftXdMazQAry9Ge3pGdUzsTgp4W98/n7T9+vQIs=
-X-Google-Smtp-Source: ABdhPJz1B0KpAS61G37ZhvZ08Ft6rExhgmEqLff3Wbv30JgnF2UmY5AaWsrOOU4FM1RUZAcu5wJxN79JH90GdCJzjrA=
-X-Received: by 2002:a17:906:2681:: with SMTP id t1mr22464503ejc.29.1608690705392;
- Tue, 22 Dec 2020 18:31:45 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=KihTF5JbxFD42cY1wA7aOsNP35ZO1n0Na3DWL4feoYk=;
+        b=YtfyJEtQ4Rx4GvXp2eCDN4oh3m7hdqGWJADE3nw4LO1Ll7HDCWRZUH9D6OTb0bvpOH
+         5YmSxqr4Ha9PCyYA5k772eYiOI2XkIZPURNfBieet9dpOU0vky3rzioiMoaxri/NpzBi
+         1Dub65HZkJ0GSLrIF0VIZU0gGZ2HNhD71pQuoAPxwT0CkdTSZrduwwA3lHXK/+ypLQom
+         TK97J9BwtFx8xSfswkSSE/y3eGFdBz/V1Vw19meTB2freUlcWrN/X0o2B4TBIR82lYBV
+         t64AvVZGsj64LzytClXqQLCJZ4jUj21jb0UtEM6gh3xLjyd6bYPp1kHo7bgQBrNMJaWx
+         m/ig==
+X-Gm-Message-State: AOAM531wM6DnKV6u3yODJnxzHR2nAmxnnTxrmc2HfQgTCgiBUjSjgDxe
+        BqilVeehe93fg1HlFcb6neaJDSuO+izDToDHEwDBh5K2
+X-Google-Smtp-Source: ABdhPJy9U98CPLOM9qWfCFZui6dO/PQYCRjI00tgXXUEHSfVAWiteZLCs+U7EpAO2soA/tWzSTNFmBBqnM2RmfJo+z4=
+X-Received: by 2002:a4a:c191:: with SMTP id w17mr18070553oop.1.1608719888011;
+ Wed, 23 Dec 2020 02:38:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20200922091505.471-1-zhenzhong.duan@gmail.com>
- <20200922162901.GA3421308@ZenIV.linux.org.uk> <CAJF2gTSMWc_=j1NKCTXqhLj7cmSB_A3dYB7nL4F7H3jqT+u38A@mail.gmail.com>
- <20200923002315.GC3421308@ZenIV.linux.org.uk> <CAJF2gTSU4e4yU63z1q502SeuTf2m2BKaD0yZ0deFj0TkiVupFg@mail.gmail.com>
- <20200923045231.GH3421308@ZenIV.linux.org.uk>
-In-Reply-To: <20200923045231.GH3421308@ZenIV.linux.org.uk>
-From:   Zhenzhong Duan <zhenzhong.duan@gmail.com>
-Date:   Wed, 23 Dec 2020 10:31:34 +0800
-Message-ID: <CAFH1YnNwqrK+kHbLKH684AwPWM0TfOxKC37TfJe5FYZ4_AXRvA@mail.gmail.com>
-Subject: Re: [PATCH] csky: Fix a size determination in gpr_get()
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Guo Ren <guoren@kernel.org>,
+References: <20201222184510.19415-1-info@metux.net> <CAMuHMdVze3oaWmzvzn8ROjpP6h6Tsv2SFLiV7T1Cnej36X445g@mail.gmail.com>
+ <2f1d53e9-0dbb-78ef-22d5-ab230438ddf0@metux.net>
+In-Reply-To: <2f1d53e9-0dbb-78ef-22d5-ab230438ddf0@metux.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Dec 2020 11:37:56 +0100
+Message-ID: <CAMuHMdXoHVPwqC_v6DL2MTi2j_tgnCqy9eiuLHvmZ9cB5scbQA@mail.gmail.com>
+Subject: Re: [PATCH] arch: consolidate pm_power_off callback
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Cc:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Salter <msalter@redhat.com>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        alpha <linux-alpha@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        linux-c6x-dev@linux-c6x.org, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 12:52 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Wed, Sep 23, 2020 at 10:37:31AM +0800, Guo Ren wrote:
->
-> > > What's going on there?  The mapping is really weird - assuming
-> > > you had v0..v31 in the first 32 elements of regs->vr[], you
-> > > end up with
-> > >
-> > > v0 v1 v2 v3 v2 v3 v6 v7 v4 v5 v10 v11 v6 v7 v14 v15
-> > > v8 v9 v18 v19 v10 v11 v22 v23 v12 v13 v26 v27 v14 v15 v30 v31
-> > >
-> > > in the beginning of the output.  Assuming it is the intended
-> > > behaviour, it's probably worth some comments...
-> > FPU & VDSP use the same regs. 32 FPU regs' width is 64b and 16 VDSP
-> > regs' width is 128b.
+Hi Enrico,
+
+On Tue, Dec 22, 2020 at 9:15 PM Enrico Weigelt, metux IT consult
+<lkml@metux.net> wrote:
+> On 22.12.20 19:54, Geert Uytterhoeven wrote:
+> > On Tue, Dec 22, 2020 at 7:46 PM Enrico Weigelt, metux IT consult
+> > <info@metux.net> wrote:
+> >> Move the pm_power_off callback into one global place and also add an
+> >> function for conditionally calling it (when not NULL), in order to remove
+> >> code duplication in all individual archs.
+> >>
+> >> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 > >
-> > vr[0], vr[1] =3D fp[0] & vr[0] vr[1], vr[2], vr[3] =3D vdsp reg[0]
-> > ...
-> > vr[60], vr[61] =3D fp[15] & vr[60] vr[61], vr[62], vr[63] =3D vdsp reg[=
-15]
-> > vr[64], vr[65] =3D fp[16]
-> > vr[66], vr[67] =3D fp[17]
-> > ...
-> > vr[94], vr[95] =3D fp[31]
+> > Thanks for your patch!
 > >
-> > Yeah, this is confusing and I'll add a comment later.
+> >> --- a/arch/alpha/kernel/process.c
+> >> +++ b/arch/alpha/kernel/process.c
+> >> @@ -43,12 +43,6 @@
+> >>  #include "proto.h"
+> >>  #include "pci_impl.h"
+> >>
+> >> -/*
+> >> - * Power off function, if any
+> >> - */
+> >> -void (*pm_power_off)(void) = machine_power_off;
+> >
+> > Assignments like these are lost in the conversion.
 >
-> Umm...  It would help if you described these 3 layouts:
->         1) kernel-side with VDSP
->         2) userland (identical to (1)?)
->         3) kernel-side without VDSP
-> Still confused...
+> Yes, but this doesn't seem to be ever called anyways. (in arch/alpha)
+> And, BTW, letting it point to machine_power_off() doesn't make much
+> sense, since it's the arch's machine_power_off() function, who're
+> calling pm_power_off().
 >
-> PS: my apologies re commit message - I left a note to myself when doing
-> that series and then forgot about it ;-/
+> Actually, we could remove pm_power_off completely from here, assuming
+> nobody would *build* any drivers that register themselves into
+> pm_power_off.
 >
-> Anyway, which tree should it go through?  In any case, that fix is
-> Acked-by: Al Viro <viro@zeniv.linux.org.uk>
-> and I can take it through vfs.git or you guys can pick in csky tree;
-> up to you.
+> If you feel better with it, I could post a patch that just removes
+> pm_power_off from arch/alpha.
 
-Hi Al, Guo
+This is not limited to alpha, there are similar initializations on
+m68k, openrisc,
+and s390.
+If none of these are called, they can be removed, but you should mention
+that in the patch description.
 
-Seems this patch is still pending=EF=BC=8C could you help check it=EF=BC=9F=
-Thanks
+Thanks!
 
-Zhenzhong
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
