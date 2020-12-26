@@ -2,73 +2,81 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 115222E23A1
-	for <lists+linux-csky@lfdr.de>; Thu, 24 Dec 2020 03:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A5F2E2D20
+	for <lists+linux-csky@lfdr.de>; Sat, 26 Dec 2020 06:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728849AbgLXCWr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 23 Dec 2020 21:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728524AbgLXCWq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Dec 2020 21:22:46 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874F2C061794;
-        Wed, 23 Dec 2020 18:22:06 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id ce23so1633981ejb.8;
-        Wed, 23 Dec 2020 18:22:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YiPNSwxAjPo4uUXcm83X8w/z0y2D2T2Z9dm6l7uYvao=;
-        b=DLBLiViEgeQx6WaK8axjfeKuOHTdltdswEpEWaZTLKbgaE8nA8iAlDwJqla75RnF5/
-         9vsiiySsNawQ8DoxRdfXn0/e0wTZyj9macFF4PUJ6PauHrmm53rVqE8u20BpjpzFxxX/
-         QHMvy8JhWEwrwIYtsh7/98jYy2OrUUmkK1MRvhsx0ba0/fWEA0tEaQT4RoCTJzPRRwUj
-         Na8YrF3yRqhTAokSWrt6PgkKLiK+WQfPGwGUfe+ELs1qS/uQyrXxOZvgFl0+zP2rKW4P
-         FJ2caBkhZD2JPnBcOajNAiGgE/yy7Rht3jA5pUAvrGfYkGfpZlx91JbIiDwHX+GtZlPm
-         7srw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YiPNSwxAjPo4uUXcm83X8w/z0y2D2T2Z9dm6l7uYvao=;
-        b=HSPGbSeGgBgmZvFdOon3tcYZ14CHfxVdfD7fKdGx2ElLSgl3LrTalXxJDFCnP/WahZ
-         XmdXQbapVj+/FKJIcENnJwABWh7HDefXhNRdtPcbmWZdFD9lyYwM/onjoOPAP7pqa8Mh
-         fFksI0jxJgCM/VOMj9z/C6DjjWznF7wEyy90dmFGm2XYjOIONSsUAqyx8KozLY//dKw8
-         1WN6re7TxUtLu6Yyr6Jl+DkzUy524/1z0vxJhmbstqxlgsdxM+58k+2Ulwv97CrDYxad
-         EQ4u8TPwMe7GbOJEKSpgYzPo93A4+pSe3M5rEoihRlacA1YtsB7CpSQsF0dUf/nrcutg
-         R2VA==
-X-Gm-Message-State: AOAM532EHe9TWTli+WRU9EtzxfmtuhLBFg6JiXOfhTXeasf0uUYhbmN7
-        HdE6uaAa1NCgFB9/BWj1gLW/B1CU9p63RItYHQs=
-X-Google-Smtp-Source: ABdhPJwLwjzHJ9C9lV1ZFjokYjldXjo0uBAvL6v4MJ3Kvy5Z0L+8fkp1ZGrRNrw9V0BBhIAd2E1Hdb5EIyxBpLCRvFI=
-X-Received: by 2002:a17:906:7804:: with SMTP id u4mr13377125ejm.97.1608776525300;
- Wed, 23 Dec 2020 18:22:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20200922091505.471-1-zhenzhong.duan@gmail.com>
- <20200922162901.GA3421308@ZenIV.linux.org.uk> <CAJF2gTSMWc_=j1NKCTXqhLj7cmSB_A3dYB7nL4F7H3jqT+u38A@mail.gmail.com>
- <20200923002315.GC3421308@ZenIV.linux.org.uk> <CAJF2gTSU4e4yU63z1q502SeuTf2m2BKaD0yZ0deFj0TkiVupFg@mail.gmail.com>
- <20200923045231.GH3421308@ZenIV.linux.org.uk> <CAFH1YnNwqrK+kHbLKH684AwPWM0TfOxKC37TfJe5FYZ4_AXRvA@mail.gmail.com>
- <CAJF2gTTeqm7=NaUzSQ8NfJwvo8hNrHtkLx7rwyZE5FdmLL7+tw@mail.gmail.com>
-In-Reply-To: <CAJF2gTTeqm7=NaUzSQ8NfJwvo8hNrHtkLx7rwyZE5FdmLL7+tw@mail.gmail.com>
-From:   Zhenzhong Duan <zhenzhong.duan@gmail.com>
-Date:   Thu, 24 Dec 2020 10:21:54 +0800
-Message-ID: <CAFH1YnPNXcwr+wekLaXjt3AzyOvywb6+fa7--=zQFxaVCzw1uw@mail.gmail.com>
-Subject: Re: [PATCH] csky: Fix a size determination in gpr_get()
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1725809AbgLZFF0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 26 Dec 2020 00:05:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40414 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725801AbgLZFF0 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 26 Dec 2020 00:05:26 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C1740221E9;
+        Sat, 26 Dec 2020 05:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608959085;
+        bh=GsnbYZxhqNnL9QP+G18FcYVYZO9/NbMeejiMTrvM+lQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mI4BQhPzCuiHIbi5nIZQfp99za/cXiUPo8svVVIXwX0DYz6z+yB99vqZjAFs7onXz
+         rrTXM7OVci9VH/BUQNaUHwEk0sFwTIG+BaVtCYVmqS94+uzcFl8q7uuP/PiQfLVBq7
+         PCDkO3aW9zxj514pL9YjaoDb9T1vM3xnIxWEwY0TrPvaAZMawFh95+2oheBF2dWa6j
+         m6FZdf68s6A0lbfCEZ6aCCJsMY4vcBnm7zb17rJcuvOnI8mOXg+eMZN2U8UsVv10om
+         lxXhOQegCJ6la5+s/+/GMuPGSwQFuNzslBIBUh5RTnbbCPIJ4WPvvIrkkcfl/SgsDZ
+         hNjTpmby3lvVw==
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Steven Price <steven.price@arm.com>
+Subject: [PATCH] mm: page-flags.h: Typo fix (It -> If)
+Date:   Sat, 26 Dec 2020 05:03:56 +0000
+Message-Id: <1608959036-91409-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 23, 2020 at 10:57 PM Guo Ren <guoren@kernel.org> wrote:
->
-> Hi Zhengzhong,
->
-> I'll take it, thx.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Thanks Guo.
+The "If" was wrongly spelled as "It".
 
-Zhenzhong
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Alexander Duyck <alexander.h.duyck@linux.intel.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Steven Price <steven.price@arm.com>
+
+---
+ include/linux/page-flags.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index 4f6ba93..e7b4242 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -824,7 +824,7 @@ static inline void ClearPageSlabPfmemalloc(struct page *page)
+ 
+ /*
+  * Flags checked when a page is freed.  Pages being freed should not have
+- * these flags set.  It they are, there is a problem.
++ * these flags set.  If they are, there is a problem.
+  */
+ #define PAGE_FLAGS_CHECK_AT_FREE				\
+ 	(1UL << PG_lru		| 1UL << PG_locked	|	\
+@@ -835,7 +835,7 @@ static inline void ClearPageSlabPfmemalloc(struct page *page)
+ 
+ /*
+  * Flags checked when a page is prepped for return by the page allocator.
+- * Pages being prepped should not have these flags set.  It they are set,
++ * Pages being prepped should not have these flags set.  If they are set,
+  * there has been a kernel bug or struct page corruption.
+  *
+  * __PG_HWPOISON is exceptional because it needs to be kept beyond page's
+-- 
+2.7.4
+
