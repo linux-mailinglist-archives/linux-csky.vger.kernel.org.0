@@ -2,87 +2,85 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B232EAE31
-	for <lists+linux-csky@lfdr.de>; Tue,  5 Jan 2021 16:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0432EB4E6
+	for <lists+linux-csky@lfdr.de>; Tue,  5 Jan 2021 22:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbhAEPZh (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 5 Jan 2021 10:25:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:33274 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726246AbhAEPZg (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 5 Jan 2021 10:25:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1609860250;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MI8fegNbRAndf7BvHodZgFSvrYR87JXw3Wc2/p2jog8=;
-        b=G3LYZXfHiHD1muINPKTN3l3ZTuQLkXXe5Q3xRIQpKGz9UJY01/XelufYLcBHjSt9/jIdoI
-        i4rlatMj+FlzJ+PhepMpg8Fmq5Jz/MNPrtev23Vr07+22YAluAVbssoKOMYTmoLAbKYyi8
-        QZORC0HQMu5TBWqOUz+II9RdbC92dhs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-216-Oe3VHKXVNJSvws48sKhIgQ-1; Tue, 05 Jan 2021 10:24:08 -0500
-X-MC-Unique: Oe3VHKXVNJSvws48sKhIgQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB514801817;
-        Tue,  5 Jan 2021 15:24:07 +0000 (UTC)
-Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 572F519713;
-        Tue,  5 Jan 2021 15:24:07 +0000 (UTC)
-From:   Prarit Bhargava <prarit@redhat.com>
-To:     linux-csky@vger.kernel.org
-Cc:     Prarit Bhargava <prarit@redhat.com>, Guo Ren <guoren@kernel.org>
-Subject: [PATCH] csky: Send stop IPI to send to online CPUs
-Date:   Tue,  5 Jan 2021 10:24:04 -0500
-Message-Id: <20210105152404.579730-1-prarit@redhat.com>
+        id S1725879AbhAEVeM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 5 Jan 2021 16:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbhAEVeM (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 5 Jan 2021 16:34:12 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1655BC061574;
+        Tue,  5 Jan 2021 13:33:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=nYVjMqbRLfBVIUStOapE6efMR2BK+1HUPqAiQNNoYmg=; b=pPkvq68X9pysO9znCOq+4c8zfb
+        jUx0+IENwAsq8jGo3QxZY/Kx4UEJPYdkHSLzlJm6eLsz5eG9Qzqr92YSXj0E3kyZzdXwWXiLWoyQd
+        nxvYue8Jhq9Dz9xLurOwMhl4G9gHIQJZZ5PLdtJl6y4NY/C7EcvJyqIXjZBqYQhcmeE7iW5Tgvyr3
+        PABBWC61P45MPDYVDPgyaJcJlHHK8pPh2Y/S3+woztuJbzGs1BOU1A5IjMYpKV6Nh3Car+t3V62ab
+        VJdAlP8GVFZioSxJoHprpSwsGnnqOfRj3ZwkyESGA6JkLAZVdQexL+qn7Irbj+FUFNTC2e9Welk24
+        eHCzFwGw==;
+Received: from [2601:1c0:6280:3f0::64ea]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kwtxJ-0002vc-HA; Tue, 05 Jan 2021 21:33:29 +0000
+Subject: Re: [PATCH] csky: Fix a typo in Kconfig
+To:     Masanari Iida <standby24x7@gmail.com>, guoren@kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210105134107.217920-1-standby24x7@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <ae3672c0-84d1-7ee5-1858-33d119544906@infradead.org>
+Date:   Tue, 5 Jan 2021 13:33:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <20210105134107.217920-1-standby24x7@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Unfortunately I do not have any HW to test this patch.  Hopefully someone on
-the cc list can help me out?
+Hi,
+There's a lot more to do here.  Please see below.
 
-P.
+On 1/5/21 5:41 AM, Masanari Iida wrote:
+> This patch fixes a spelling typo in Kconfig.
+> 
+> Signed-off-by: Masanari Iida <standby24x7@gmail.com>
+> ---
+>  arch/csky/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 7f1721101ea0..ce680f6e3b4b 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -243,7 +243,7 @@ menuconfig HAVE_TCM
+>  	bool "Tightly-Coupled/Sram Memory"
+>  	select GENERIC_ALLOCATOR
+>  	help
+> -	  The implementation are not only used by TCM (Tightly-Coupled Meory)
+> +	  The implementation are not only used by TCM (Tightly-Coupled Memory)
 
----8<---
+	                     is not
 
-This issue was noticed while debugging a shutdown issue where some
-secondary CPUs are not being shutdown correctly.  A fix for that [1] requires
-that secondary cpus be offlined using the cpu_online_mask so that the
-stop operation is a no-op if CPU HOTPLUG is disabled.  I, like the author in
-[1] looked at the architectures and found that csky is one of two
-architectures that executes smp_send_stop() on all possible CPUs.
+>  	  but also used by sram on SOC bus. It follow existed linux tcm
 
-On csky, smp_send_stop() sends an IPI to all possible CPUs but only needs
-to send them to online CPUs.
+	                   SRAM                follows the existing Linux TCM
 
-Send the stop IPI to only the online CPUs.
+>  	  software interface, so that old tcm application codes could be
 
-Signed-off-by: Prarit Bhargava <prarit@redhat.com>
-Cc: Guo Ren <guoren@kernel.org>
----
- arch/csky/kernel/smp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+	                                  TCM
 
-diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
-index 041d0de6a1b6..ee37586ba919 100644
---- a/arch/csky/kernel/smp.c
-+++ b/arch/csky/kernel/smp.c
-@@ -137,7 +137,7 @@ static void ipi_stop(void *unused)
- 
- void smp_send_stop(void)
- {
--	on_each_cpu(ipi_stop, NULL, 1);
-+	on_each_cpu_mask(cpu_online_mask, ipi_stop, NULL, 1);
- }
- 
- void smp_send_reschedule(int cpu)
+>  	  re-used directly.
+> 
+
+
 -- 
-2.29.2
+~Randy
 
