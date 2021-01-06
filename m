@@ -2,93 +2,79 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 078742EBC15
-	for <lists+linux-csky@lfdr.de>; Wed,  6 Jan 2021 11:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667CE2EC123
+	for <lists+linux-csky@lfdr.de>; Wed,  6 Jan 2021 17:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbhAFKFg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 6 Jan 2021 05:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S1727682AbhAFQX5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 6 Jan 2021 11:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbhAFKFf (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Jan 2021 05:05:35 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66752C06134C;
-        Wed,  6 Jan 2021 02:04:55 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id y8so1303595plp.8;
-        Wed, 06 Jan 2021 02:04:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8Pej9jARriZ60BGVv7VhJZA4YZIIR87ryzdHLJ898Gs=;
-        b=qihXTtjayFq9zn0t44O/83bH0WSoSXTM59I/yKjBanvKKOYP0dJ64oAip+k62qUN+f
-         1yqmVSb1y3iXx+h3RmKkuFPXVZE7zKCnqs7N2wBmGuUq3j+7ezohDYsgtDDUnruXt5Hu
-         BeawabdFkJgCZ+sZVkTUqBtpWCnzrdVBirsiGMd5XB5m4yoJEnoKl0zBWo6VowpSa3a9
-         XbP2uoIxdmXD+IBb32ZZyACAAI45wxouyQG0Wko3u3p+zCd9LxzFe8JoK0mNGrQzZ9SC
-         uab5KHT0xXOzlqfUifDFP/K2OqSDdPH71aOiaX5Lw43POnwL7mnL6V8TzhXvD1WTucj8
-         j0BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8Pej9jARriZ60BGVv7VhJZA4YZIIR87ryzdHLJ898Gs=;
-        b=lJwQu3CTwF+kEcMF8NYSXclZY4Nc6RCv5MY2fP7xPeiY24IzZhEZy0JYOjpCnzJs1d
-         Z40eicJBvEgi4JPfeJHuPqlrcEtw64OR3dkBKUC3LedTr6LELxDPb2QFssv9QDCpsAxo
-         cfdlSmyoYRgZa4nvTG7R1s/IexekXSPz7EC3jK8l0xA4Pq1espXAzyK7tkx5cW27h5i8
-         Oo53OJwblRwTJkEJVL7SL+YIcPvmM448WYAWY8Y8jw8gh88g61FGe/UVkmAmHTCS6K7O
-         +xhecg6cx6swBumSK8+ZJDwEfepbPmAI/ukCClqU/CdOFhCyUZqJ5LMv3IJd46jFCYkG
-         +VWg==
-X-Gm-Message-State: AOAM530j6vc0ZnfW6guE8lrvnYnxwHnP8dnyn4IYqleQ/dD0GI1O5iBv
-        +6pvFDNeRPq5VQAQYA2mDBEMSkpfZswbGg==
-X-Google-Smtp-Source: ABdhPJyC/clUeUiRBbXb8C8snoHqdCBLaw4ar7BFHJNnUaJyNqzVWgrLurrwEuvFtXebc9nIqF1D6w==
-X-Received: by 2002:a17:902:aa84:b029:da:f114:6022 with SMTP id d4-20020a170902aa84b02900daf1146022mr3449170plr.46.1609927494999;
-        Wed, 06 Jan 2021 02:04:54 -0800 (PST)
-Received: from masabert (oki-109-236-4-100.jptransit.net. [109.236.4.100])
-        by smtp.gmail.com with ESMTPSA id i10sm2197261pgt.85.2021.01.06.02.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jan 2021 02:04:53 -0800 (PST)
-Received: by masabert (Postfix, from userid 1000)
-        id B4C52236036D; Wed,  6 Jan 2021 19:04:51 +0900 (JST)
-From:   Masanari Iida <standby24x7@gmail.com>
-To:     guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rdunlap@infradead.org
-Cc:     Masanari Iida <standby24x7@gmail.com>
-Subject: [PATCH/v2] csky: Fix typos in Kconfig
-Date:   Wed,  6 Jan 2021 19:04:49 +0900
-Message-Id: <20210106100449.237875-1-standby24x7@gmail.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <ae3672c0-84d1-7ee5-1858-33d119544906@infradead.org>
+        with ESMTP id S1727482AbhAFQX5 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Jan 2021 11:23:57 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12127C06134C;
+        Wed,  6 Jan 2021 08:23:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=ANcFAU6fLTSbBpdHj/SLP8iiYS/tB5MLYP8orjFxP3w=; b=Mp2Ns2yCaTgK8O/OM/DclVcPC1
+        W67Z88Ot3yofV3FA+t25M3XNusyp9IHvkC3kRPyAx06tUZyAUA/K7Yng/X0GaPY7KZsk4Y8UY1y3D
+        L6xpKll2+KTVo3JhdT6TR2Jva+CKku6CGJawYRITxbtCTZsvpGvhQJnb7dB4scktS39HysfYNNio6
+        rsumOk9+N0xwZYAu1cLSEBRzdEi6bXflNniJWoGqs7N4xdp24+5l4NS0dbSpsoaLJ/kX6YEd1e9nF
+        ZbrWS/lFb7Ue6IgnaiTxe0tajBQON5p+GxJ2SO3UyiIKw71gUef6YHGASiIlhZwuNUMZskj6Rb1nV
+        k3WMJX6g==;
+Received: from [2601:1c0:6280:3f0::79df]
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1kxBZP-002V8T-VA; Wed, 06 Jan 2021 16:22:41 +0000
+Subject: Re: [PATCH/v2] csky: Fix typos in Kconfig
+To:     Masanari Iida <standby24x7@gmail.com>, guoren@kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <ae3672c0-84d1-7ee5-1858-33d119544906@infradead.org>
+ <20210106100449.237875-1-standby24x7@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <9de77ea7-c7cd-6235-30f3-50e12fa2d8fe@infradead.org>
+Date:   Wed, 6 Jan 2021 08:21:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210106100449.237875-1-standby24x7@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This patch fixes some spelling typos in Kconfig.
+On 1/6/21 2:04 AM, Masanari Iida wrote:
+> This patch fixes some spelling typos in Kconfig.
+> 
+> Signed-off-by: Masanari Iida <standby24x7@gmail.com>
+> ---
+>  arch/csky/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 7f1721101ea0..e6ddca10e3ee 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -243,9 +243,9 @@ menuconfig HAVE_TCM
+>  	bool "Tightly-Coupled/Sram Memory"
+>  	select GENERIC_ALLOCATOR
+>  	help
+> -	  The implementation are not only used by TCM (Tightly-Coupled Meory)
+> -	  but also used by sram on SOC bus. It follow existed linux tcm
+> -	  software interface, so that old tcm application codes could be
+> +	  The implementation is not only used by TCM (Tightly-Coupled Memory)
+> +	  but also used by SRAM on SOC bus. It follows the existing Linux TCM
+> +	  software interface, so that old TCM application codes could be
+>  	  re-used directly.
+>  
+>  if HAVE_TCM
+> 
 
-Signed-off-by: Masanari Iida <standby24x7@gmail.com>
----
- arch/csky/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+LGTM. Thanks.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 7f1721101ea0..e6ddca10e3ee 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -243,9 +243,9 @@ menuconfig HAVE_TCM
- 	bool "Tightly-Coupled/Sram Memory"
- 	select GENERIC_ALLOCATOR
- 	help
--	  The implementation are not only used by TCM (Tightly-Coupled Meory)
--	  but also used by sram on SOC bus. It follow existed linux tcm
--	  software interface, so that old tcm application codes could be
-+	  The implementation is not only used by TCM (Tightly-Coupled Memory)
-+	  but also used by SRAM on SOC bus. It follows the existing Linux TCM
-+	  software interface, so that old TCM application codes could be
- 	  re-used directly.
- 
- if HAVE_TCM
 -- 
-2.25.0
-
+~Randy
