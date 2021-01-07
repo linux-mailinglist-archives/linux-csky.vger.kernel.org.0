@@ -2,67 +2,93 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AED962ED031
-	for <lists+linux-csky@lfdr.de>; Thu,  7 Jan 2021 13:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2342ED43A
+	for <lists+linux-csky@lfdr.de>; Thu,  7 Jan 2021 17:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728287AbhAGMqZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 7 Jan 2021 07:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728053AbhAGMqZ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 7 Jan 2021 07:46:25 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75397C0612F5;
-        Thu,  7 Jan 2021 04:45:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DWW1LEFK63XItEvu4mOGMM8qQzgwQTYERoYCjLDAlxY=; b=yxYgd/Tn0UHwRDRnySbE9flYKt
-        36kvb4PZDVuB3+CsavRLHYj8xh35vd/98qYzRSLRSV6ztJLveY/3rfJjQwucAqdINQ3YgePrs6WaJ
-        AwphbYKnu+wx2M2jvVbsNmaUetj/xk+18BLRGcIsX4CQwi51VI7qMKkFKbYi8eHZSCfy0NvQjBICf
-        /zVTAA8tSKgK4areraHdcDZ4+pnjYaIV5LRzkA1ZNu9mJUWzW3TI2Rd+uLTHY/NhYhFxkl4apc+Dw
-        IMQc7GBwPfoEjsIcjMM7hoBqgVoEO6+wRwNP0iTEMlsHav9AFOPWNbklYjA/Y1C49LibUGxVQCOci
-        5wKjQO3w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kxUfW-0001Kw-8C; Thu, 07 Jan 2021 12:45:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 982413003E1;
-        Thu,  7 Jan 2021 13:45:32 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7D9BE20164735; Thu,  7 Jan 2021 13:45:32 +0100 (CET)
-Date:   Thu, 7 Jan 2021 13:45:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2 5/5] csky: Cleanup asm/spinlock.h
-Message-ID: <X/cCbByLzLI12xYZ@hirez.programming.kicks-ass.net>
-References: <1608478763-60148-1-git-send-email-guoren@kernel.org>
- <1608478763-60148-5-git-send-email-guoren@kernel.org>
+        id S1726436AbhAGQZa (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 7 Jan 2021 11:25:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43588 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726326AbhAGQZa (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 7 Jan 2021 11:25:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 35A13224D3;
+        Thu,  7 Jan 2021 16:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610036689;
+        bh=LXyHjXJQXFpphlsfzHKNJClU7qoI2uIq8c0hjWF5md0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AKdQQVU3ncSGA8q6ZqQZO9CxYZ8rxjM9R5Sj4IcOfIiEbSFEO9auLoadcbmlLh+mA
+         cY68ovTGqfd1Iw68yYSs6Yj3gq5rlSUjIUtIy5QB2K7FJcCEtybvtZxv/fHS1KEOLg
+         jYSoNSz6WRqk1/lf1TaW3y7zL2NvR9MPuq0MfuaShHt8lUVKLlh5ozPP5dEoNyRkxV
+         bllf6wn29n9YpAuIhJYCBjVxuUS3lEY6otk2vaJd5u1hTBe5U44tXyxRFAHh976KFe
+         6WjH1twatE3RmQgl17oDD9r0ZiHmDPLI9wfR1Z9SSbe/+n+JyoOQi6mxp665YNeVba
+         IThNL8i96WedQ==
+Received: by mail-lf1-f46.google.com with SMTP id o19so15968478lfo.1;
+        Thu, 07 Jan 2021 08:24:49 -0800 (PST)
+X-Gm-Message-State: AOAM5312zCuOe64ocZZKbWmtuqSqlT0TOSJTI8tpmPMUTZsGuz9y4Lpc
+        gZuGdchd6Fsvw5TYCrG07hSct1jTcnLuQ8GFz0w=
+X-Google-Smtp-Source: ABdhPJwBSy8wbYbmWqtAQq2EbbZ/Rlr/HwjJEF3jtIc7VmU55T++xsgfMq1glkhbMSK4HbObvoEBTMmbyVSixqmj4yA=
+X-Received: by 2002:a2e:8118:: with SMTP id d24mr4169763ljg.105.1610036687551;
+ Thu, 07 Jan 2021 08:24:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1608478763-60148-5-git-send-email-guoren@kernel.org>
+References: <ae3672c0-84d1-7ee5-1858-33d119544906@infradead.org>
+ <20210106100449.237875-1-standby24x7@gmail.com> <9de77ea7-c7cd-6235-30f3-50e12fa2d8fe@infradead.org>
+In-Reply-To: <9de77ea7-c7cd-6235-30f3-50e12fa2d8fe@infradead.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 8 Jan 2021 00:24:36 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQp6EuodAfFjtZZCdBT-nq87RJtuVjco9PkvF1PyimWGQ@mail.gmail.com>
+Message-ID: <CAJF2gTQp6EuodAfFjtZZCdBT-nq87RJtuVjco9PkvF1PyimWGQ@mail.gmail.com>
+Subject: Re: [PATCH/v2] csky: Fix typos in Kconfig
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Masanari Iida <standby24x7@gmail.com>, linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Dec 20, 2020 at 03:39:23PM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> There are two implementation of spinlock in arch/csky:
->  - simple one (NR_CPU = 1,2)
->  - tick's one (NR_CPU = 3,4)
-> Remove the simple one.
-> 
-> There is already smp_mb in spinlock, so remove the definition of
-> smp_mb__after_spinlock.
+Thx, looks good to me.
 
-Where ? Note that with qspinlock the fast path is
-atomic_try_cmpxchg_acquire(), which does not imply anything of the sort.
+
+On Thu, Jan 7, 2021 at 12:23 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> On 1/6/21 2:04 AM, Masanari Iida wrote:
+> > This patch fixes some spelling typos in Kconfig.
+> >
+> > Signed-off-by: Masanari Iida <standby24x7@gmail.com>
+> > ---
+> >  arch/csky/Kconfig | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> > index 7f1721101ea0..e6ddca10e3ee 100644
+> > --- a/arch/csky/Kconfig
+> > +++ b/arch/csky/Kconfig
+> > @@ -243,9 +243,9 @@ menuconfig HAVE_TCM
+> >       bool "Tightly-Coupled/Sram Memory"
+> >       select GENERIC_ALLOCATOR
+> >       help
+> > -       The implementation are not only used by TCM (Tightly-Coupled Meory)
+> > -       but also used by sram on SOC bus. It follow existed linux tcm
+> > -       software interface, so that old tcm application codes could be
+> > +       The implementation is not only used by TCM (Tightly-Coupled Memory)
+> > +       but also used by SRAM on SOC bus. It follows the existing Linux TCM
+> > +       software interface, so that old TCM application codes could be
+> >         re-used directly.
+> >
+> >  if HAVE_TCM
+> >
+>
+> LGTM. Thanks.
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+>
+> --
+> ~Randy
+
+
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
