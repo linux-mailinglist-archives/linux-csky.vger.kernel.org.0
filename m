@@ -2,123 +2,91 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A2A2F0EE9
-	for <lists+linux-csky@lfdr.de>; Mon, 11 Jan 2021 10:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5D92F183C
+	for <lists+linux-csky@lfdr.de>; Mon, 11 Jan 2021 15:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728302AbhAKJRc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 11 Jan 2021 04:17:32 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:37248 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727957AbhAKJRc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jan 2021 04:17:32 -0500
-Date:   Mon, 11 Jan 2021 10:16:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1610356608;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LEXe/B0Q3kSQ+pyi11QVzunFEXSDJfyzRctZD/mSGwY=;
-        b=uCnnwbctZA1rQ3V0p2kZu+d3zaZFHTKUJPOo76b5D7cuxWEOXVJdpIqiLFP5aTXpvIjv9s
-        qwAvW5WhwffRTnvcztEi2+1v/oENxwE79UOubMC7jJKeubOBD6zsvQUL74GztGQIAKB8HO
-        BT4sxjhTakFs4dVqAQh6GY6Sn14JBtplCvPA2cmstH/p72FEB2TnSYVyeSL8sjTNI80v3T
-        oCsDUl6wYJXQ9QueQxoB6wuP+fNUTobWuAtyizRQCOtZthAqYs4ojlXRNfsr2J83hANEKU
-        KrLFmoV7Ai9vVG4RtXD3Lh/qUjXo6jULZnNtu/UYw3EhRXUZtNRGRg4NMuxugQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1610356608;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LEXe/B0Q3kSQ+pyi11QVzunFEXSDJfyzRctZD/mSGwY=;
-        b=aQ0P+BB77W0OA8uLsIQDcnYrwKkOka8jvG0VLRGl2/Wpm04Edp57/CM7syBgLiKrsJkDcC
-        9SLKzMSTP9RzBiAw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Cercueil <paul@crapouillou.net>, tglx@linutronix.de,
-        airlied@linux.ie, airlied@redhat.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bcrl@kvack.org, bristot@redhat.com,
-        bsegall@google.com, bskeggs@redhat.com, chris@zankel.net,
-        christian.koenig@amd.com, clm@fb.com, davem@davemloft.net,
-        deanbo422@gmail.com, dietmar.eggemann@arm.com,
-        dri-devel@lists.freedesktop.org, dsterba@suse.com,
-        green.hu@gmail.com, hch@lst.de, intel-gfx@lists.freedesktop.org,
-        jcmvbkbc@gmail.com, josef@toxicpanda.com, juri.lelli@redhat.com,
-        kraxel@redhat.com, linux-aio@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-btrfs@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-graphics-maintainer@vmware.com, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux@armlinux.org.uk, linuxppc-dev@lists.ozlabs.org,
-        mgorman@suse.de, mingo@kernel.org, monstr@monstr.eu,
-        mpe@ellerman.id.au, nickhu@andestech.com,
-        nouveau@lists.freedesktop.org, paulmck@kernel.org,
-        paulus@samba.org, peterz@infradead.org, ray.huang@amd.com,
-        rodrigo.vivi@intel.com, rostedt@goodmis.org,
-        sparclinux@vger.kernel.org, spice-devel@lists.freedesktop.org,
-        sroland@vmware.com, torvalds@linuxfoundation.org,
-        vgupta@synopsys.com, vincent.guittot@linaro.org,
-        viro@zeniv.linux.org.uk, virtualization@lists.linux-foundation.org,
-        x86@kernel.org
-Subject: Re: [patch V3 13/37] mips/mm/highmem: Switch to generic kmap atomic
-Message-ID: <20210111091646.hkugbtlcced3vmno@linutronix.de>
-References: <JUTMMQ.NNFWKIUV7UUJ1@crapouillou.net>
- <20210108235805.GA17543@alpha.franken.de>
- <20210109003352.GA18102@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210109003352.GA18102@alpha.franken.de>
+        id S1729445AbhAKO0H (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 11 Jan 2021 09:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728348AbhAKO0H (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jan 2021 09:26:07 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F035C061794;
+        Mon, 11 Jan 2021 06:25:27 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id t6so9613250plq.1;
+        Mon, 11 Jan 2021 06:25:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=kjus1H8C0QBAlALuC5Cx0BMQHU+YX+HglMSKKZRyJ+M=;
+        b=ZjH9KXHTjPckjBfk6z2A+NQL3LfnBeZc1UzLr9XLv3Uf5AKeNth48r1nE1uKR2cjuA
+         0HF7bp7YMH0khXjA4iNCPlA4hYY2J1ZJ6TZHN7oXI4DKrULNEEd12HU7d6rTwyy7WROz
+         cvCkpd4wsPBNDGrFYKrWda1epW4AsrUQyQptkHMFMdTKbZtwZSlt7YGXnu0UVr+GW/Ui
+         LR5qieqUr5XPzxLDCacA3kO4lw1xy4ajjIRby4inglRY5flR7xAmDm0psN7NkuccHhc5
+         KQTb5cMeFlmynhrwcjHZJhLngkTwtgAU4CDOjJXm2QLYjQtRAWu296FQZHw9h6wxGzTw
+         SsZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kjus1H8C0QBAlALuC5Cx0BMQHU+YX+HglMSKKZRyJ+M=;
+        b=TojvySmsMEtA51rBlz9ySxuaK3Lm3GMcWwv/oksAWGyEAiGu82CBQARWUR9T/F2bgk
+         L35tlY9hI5XvwyIt2NArwhoBEfNgJDnidpMuP9MbH/hcjko/UQ9CugSmjaRDzt0HjM5y
+         vpLU6rOONZpfBbFVYMNpyUb8pVnSlqrY7j+HYKbQxmabgUhTG3t5dvezCwB7lpTaNkYN
+         Of+uocO0buxUGoCzLfZM4SYQXFsTP+prQSq27q/DGbl4+VkVhHN4TEDwj/AOkbZyEswk
+         3Cp74KkhePcYkFnjw5kWPOyf4rQIXUvH0erWwMRrqo0dn/AzF21emJzMi6mSiyZiUpwD
+         F7Qg==
+X-Gm-Message-State: AOAM5336HDufquJdneu2EW4Qo6RH5cTf1wDKpdRtgJ3lLaDBpSGzWw4g
+        CENfcvvDc6wWJFsW+WBAdmAwoQnFY8c=
+X-Google-Smtp-Source: ABdhPJz5brRCSrb7yoX5wtnr8u6RGNZ2oK7yZ1dQjKGnluwqdlsF1I3YLgY/ov3vs9iWLXEzMIcMpA==
+X-Received: by 2002:a17:902:6f01:b029:dc:3182:ce69 with SMTP id w1-20020a1709026f01b02900dc3182ce69mr16369769plk.10.1610375126720;
+        Mon, 11 Jan 2021 06:25:26 -0800 (PST)
+Received: from localhost.localdomain ([178.236.46.205])
+        by smtp.gmail.com with ESMTPSA id q12sm19498300pgj.24.2021.01.11.06.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 06:25:25 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: dong.menglong@zte.com.cn
+To:     guoren@kernel.org
+Cc:     dong.menglong@zte.com.cn, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] csky: kprobe: fix unreachable code in simulate_blz32
+Date:   Mon, 11 Jan 2021 06:25:17 -0800
+Message-Id: <20210111142517.4959-1-dong.menglong@zte.com.cn>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 2021-01-09 01:33:52 [+0100], Thomas Bogendoerfer wrote:
-> On Sat, Jan 09, 2021 at 12:58:05AM +0100, Thomas Bogendoerfer wrote:
-> > On Fri, Jan 08, 2021 at 08:20:43PM +0000, Paul Cercueil wrote:
-> > > Hi Thomas,
-> > > 
-> > > 5.11 does not boot anymore on Ingenic SoCs, I bisected it to this commit.
-> > > 
-> > > Any idea what could be happening?
-> > 
-> > not yet, kernel crash log of a Malta QEMU is below.
-> 
-> update:
-> 
-> This dirty hack lets the Malta QEMU boot again:
-> 
-> diff --git a/mm/highmem.c b/mm/highmem.c
-> index c3a9ea7875ef..190cdda1149d 100644
-> --- a/mm/highmem.c
-> +++ b/mm/highmem.c
-> @@ -515,7 +515,7 @@ void *__kmap_local_pfn_prot(unsigned long pfn, pgprot_t prot)
->  	vaddr = __fix_to_virt(FIX_KMAP_BEGIN + idx);
->  	BUG_ON(!pte_none(*(kmap_pte - idx)));
->  	pteval = pfn_pte(pfn, prot);
-> -	set_pte_at(&init_mm, vaddr, kmap_pte - idx, pteval);
-> +	set_pte(kmap_pte - idx, pteval);
->  	arch_kmap_local_post_map(vaddr, pteval);
->  	current->kmap_ctrl.pteval[kmap_local_idx()] = pteval;
->  	preempt_enable();
-> 
-> set_pte_at() tries to update cache and could do an kmap_atomic() there.
-So the old implementation used set_pte() while the new one uses
-set_pte_at().
+From: Menglong Dong <dong.menglong@zte.com.cn>
 
-> Not sure, if this is allowed at this point.
-The problem is the recursion
-  kmap_atomic() -> __update_cache() -> kmap_atomic()
+The type of 'val' is 'unsigned long' in simulate_blz32, so 'val < 0'
+can't be true.
 
-and kmap_local_idx_push() runs out if index space before stack space.
+When 'csky_insn_reg_get_val' fails, 'false' will be returned. We
+can directly use its return value here.
 
-I'm not sure if the __update_cache() worked for highmem. It has been
-added for that in commit
-   f4281bba81810 ("MIPS: Handle highmem pages in __update_cache")
+Fixes: 33e53ae1ce41 ("csky: Add kprobes supported")
+Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
+---
+ arch/csky/kernel/probes/simulate-insn.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-but it assumes that the address returned by kmap_atomic() is the same or
-related enough for flush_data_cache_page() to work.
+diff --git a/arch/csky/kernel/probes/simulate-insn.c b/arch/csky/kernel/probes/simulate-insn.c
+index 4e464fed52ec..b09ddcbcfa18 100644
+--- a/arch/csky/kernel/probes/simulate-insn.c
++++ b/arch/csky/kernel/probes/simulate-insn.c
+@@ -346,9 +346,7 @@ simulate_blz32(u32 opcode, long addr, struct pt_regs *regs)
+ 	unsigned long tmp = opcode & 0x1f;
+ 	unsigned long val;
+ 
+-	csky_insn_reg_get_val(regs, tmp, &val);
+-
+-	if (val < 0) {
++	if (!csky_insn_reg_get_val(regs, tmp, &val)) {
+ 		instruction_pointer_set(regs,
+ 			addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
+ 	} else
+-- 
+2.17.1
 
-> Thomas.
-> 
-
-Sebastian
