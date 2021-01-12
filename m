@@ -2,92 +2,90 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A312F2692
-	for <lists+linux-csky@lfdr.de>; Tue, 12 Jan 2021 04:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FF42F329B
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Jan 2021 15:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbhALDLZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 11 Jan 2021 22:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725919AbhALDLZ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jan 2021 22:11:25 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051B6C061575;
-        Mon, 11 Jan 2021 19:10:39 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id d2so529686pfq.5;
-        Mon, 11 Jan 2021 19:10:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=19kmUE1BPrGpUGDBCk/ABxpLH6xa1Vvslov055dejaA=;
-        b=ej7g91rlEQ+qxzJ0QvQoBRi3TpCToZa5lqGi/eCpRKLUuYm1ZyLSu3S/JWn9L13DBF
-         1QxnyK4j4d8d9YxnrPjaQUZei7bCElR1AULeK/ju6mSWppJ02WlCZxGIYJiTFMn+5oKL
-         vyjR2MiSS8yqdKxy48olMytl25ETBYlrqHndidtwGuKkVOQJ6m/4bp4qvrfgLeE905Wa
-         VZGHYJbDyytrAHF6erACmPOFXB5MJFEJJKW+3X7svkwxD8wUgI+KwPY6xoFkWBAOAFLI
-         UCvv6UudfTNN70K08N3yDsuG4wyVTnVNUeQ2nKgcwyasDXZQ0zze8/bU9CFYLYnw4G56
-         rDww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=19kmUE1BPrGpUGDBCk/ABxpLH6xa1Vvslov055dejaA=;
-        b=BBM9TwZqyud1eF4nR0SB/rMD0ziNTf91KeUzJOPKgcbhjGqhVmW9iw19gh3yeIVzXm
-         ESwuEptZEuCZVhhrSE4eIAC++pkA7usJyi/H/NF3/4WZbyGdSsYGzRDw+6qIDGMt6cVt
-         vrzV0smuKG5+Oz8QcSo318GJkio0+0sk4UxNxpt0qyo+Ta+HaDAq4nws7aD8YWCKDrd5
-         9XX2E2uVA1hbCsBmfuom17eHu6AUgsDZ4k1kDxYLtk6dA+JMTIUN6E2oLYs/HAHiSsn7
-         PrDO+e+B4F7xtcPo0b3qNfWTD/+9jopk6iYmnyCGh6XRzBqDQb6WdgMY+I9qNo/2WJK+
-         fCfw==
-X-Gm-Message-State: AOAM530nbOP9D2PiJM4Pm3wENhY11odLyLllzEzLshXFILRfzOr+Tkxl
-        kn8rZoE9IkQqOw+NTtl8I8w=
-X-Google-Smtp-Source: ABdhPJx+R5Gqmiy6NPeymhNp4TS4og79l55Efs5bBh9sHD5tlNh0p0Xd2sC6/01exCTWyASDq1BIuQ==
-X-Received: by 2002:a62:7711:0:b029:1aa:3203:73c9 with SMTP id s17-20020a6277110000b02901aa320373c9mr2473160pfc.65.1610421038532;
-        Mon, 11 Jan 2021 19:10:38 -0800 (PST)
-Received: from localhost.localdomain ([178.236.46.205])
-        by smtp.gmail.com with ESMTPSA id w9sm1039825pfj.128.2021.01.11.19.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 19:10:37 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: dong.menglong@zte.com.cn
-To:     guoren@kernel.org
-Cc:     dong.menglong@zte.com.cn, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] csky: kprobe: fix unreachable code in simulate_blz32
-Date:   Mon, 11 Jan 2021 19:10:25 -0800
-Message-Id: <20210112031025.5970-1-dong.menglong@zte.com.cn>
-X-Mailer: git-send-email 2.17.1
+        id S2387695AbhALOFw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 12 Jan 2021 09:05:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730158AbhALOFv (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 12 Jan 2021 09:05:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A42AE22CE3;
+        Tue, 12 Jan 2021 14:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610460310;
+        bh=YIZSFd4ngdBu3d+V+tCrhUDlUF7epBaWbFsCZCkzGJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S+ljzYYL3QMPhhApX5VwhFNyceVrA27EHM0FStNvwzUR1cQ7GFOIPOcEYTO0fdDaA
+         Kj7O7lmy0yWuWK+AZisJL2LrmlkoM/j63MxdM7S787vyvaT4LD71jTgKDStmGrzxuQ
+         L0/NqqEzqp6wU8ndgl0gsmTuxMJL2Vz98cUyPebone1iHGoyH3HLXEv/yY8kVzE9/C
+         3JxXpkug6tFhHh2/KJ9Ii5coAgelm+gr542ObqppAE3GEOphOgXDNiAJFxaofg4s3u
+         N68pjfATVrUXDVMPlwIcydiug5iK5JLd2AIK2alwIqlmLf7Si7Qy4TLd2kqk9nbCgG
+         c2IYKYoLXP3bw==
+Date:   Tue, 12 Jan 2021 14:05:00 +0000
+From:   Will Deacon <will@kernel.org>
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        msalter@redhat.com, jacquiot.aurelien@gmail.com,
+        ysato@users.sourceforge.jp, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, ley.foon.tan@intel.com,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
+        dalias@libc.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        sstabellini@kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
+        christian@brauner.io, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] arch: consolidate pm_power_off callback
+Message-ID: <20210112140459.GC9277@willie-the-truck>
+References: <20201227140129.19932-1-info@metux.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201227140129.19932-1-info@metux.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Menglong Dong <dong.menglong@zte.com.cn>
+On Sun, Dec 27, 2020 at 03:01:28PM +0100, Enrico Weigelt, metux IT consult wrote:
+> Move the pm_power_off callback into one global place and also add an
+> function for conditionally calling it (when not NULL), in order to remove
+> code duplication in all individual archs.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
 
-The type of 'val' is 'unsigned long' in simulate_blz32, so 'val < 0'
-can't be true.
+[...]
 
-Cast 'val' to 'long' here to determine branch token or not,
-as Guo Ren suggested.
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index eb1b15850761..ec4cd66dd1ae 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -53,6 +53,16 @@ int reboot_force;
+>  void (*pm_power_off_prepare)(void);
+>  EXPORT_SYMBOL_GPL(pm_power_off_prepare);
+>  
+> +void (*pm_power_off)(void);
+> +EXPORT_SYMBOL_GPL(pm_power_off);
+> +
+> +void do_power_off(void)
+> +{
+> +	if (pm_power_off)
+> +		pm_power_off();
+> +}
+> +EXPORT_SYMBOL_GPL(do_power_off);
 
-Fixes: 33e53ae1ce41 ("csky: Add kprobes supported")
-Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
----
-v2:
-- Cast 'val' to 'long'.
----
- arch/csky/kernel/probes/simulate-insn.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Could this just live as a static inline in pm.h to avoid having to export
+the extra symbol?
 
-diff --git a/arch/csky/kernel/probes/simulate-insn.c b/arch/csky/kernel/probes/simulate-insn.c
-index 4e464fed52ec..9ad771c47670 100644
---- a/arch/csky/kernel/probes/simulate-insn.c
-+++ b/arch/csky/kernel/probes/simulate-insn.c
-@@ -348,7 +348,7 @@ simulate_blz32(u32 opcode, long addr, struct pt_regs *regs)
- 
- 	csky_insn_reg_get_val(regs, tmp, &val);
- 
--	if (val < 0) {
-+	if ((long)val < 0) {
- 		instruction_pointer_set(regs,
- 			addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
- 	} else
--- 
-2.17.1
-
+Will
