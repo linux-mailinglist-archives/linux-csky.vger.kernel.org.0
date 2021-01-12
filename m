@@ -2,65 +2,65 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9BB2F39E2
-	for <lists+linux-csky@lfdr.de>; Tue, 12 Jan 2021 20:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A036D2F403F
+	for <lists+linux-csky@lfdr.de>; Wed, 13 Jan 2021 01:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436484AbhALTSq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 12 Jan 2021 14:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
+        id S2387860AbhALXXd (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 12 Jan 2021 18:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436479AbhALTSq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 12 Jan 2021 14:18:46 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE888C061794
-        for <linux-csky@vger.kernel.org>; Tue, 12 Jan 2021 11:18:05 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id n25so2090229pgb.0
-        for <linux-csky@vger.kernel.org>; Tue, 12 Jan 2021 11:18:05 -0800 (PST)
+        with ESMTP id S2387835AbhALXXc (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 12 Jan 2021 18:23:32 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831E0C061786
+        for <linux-csky@vger.kernel.org>; Tue, 12 Jan 2021 15:22:52 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 11so49344pfu.4
+        for <linux-csky@vger.kernel.org>; Tue, 12 Jan 2021 15:22:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=tRocDBL479oJ1SnnG9CByWUGNSwm/pLAX9mBthCnHbI=;
-        b=fE9M0/8RdbrERI9Tyx1kCXzw7GD2RsD6vzkGLiDSF8TjDtURHAB0Z8Ad9F4EHxgkZx
-         47FwaFDvb4b8u3or9x6FDrvjhsWWXsR9kvvLsw6uunP3W9clKa+UJsCJd+IkfpE9CUZS
-         OLcKjwIUpJhJR3ZuR72DP1KX4OdgVQwCJqnRxsxhYTgCJ42qOtnygXUrgzoDuJsXnJhl
-         wIea+xi/EgxQ8bIcJiv1go0GpmU58xM53tqAqRASM1EzsgJrhkdTVV6v6JfLdP7AG/js
-         7T/wdJ5KORX+Aj0EHe39Qd+4sUMBrJwgeY9WPjoIap9o0xWSXdcOJb/atE6JdtfbFnCE
-         mqEQ==
+        bh=auxzT8WGE14tQXppI+shw5Rz30NghYVmvwU0Vp5iL5k=;
+        b=VyfqD7Hmw6QHBNOGpfz7VAedmZJbr38CvUUjNYsf339XkhPbpiP1pAyR1SfboNtHXY
+         Jal/49YETAgcA31pn7zRGcgrY9h2PKK+UNzssj1Y1riAMrk/hpQW1BAkF8tCWtyvYHal
+         rrW13Yswc47+740p+USRxQmcG8X2EmTobHol6tmkWMRsKs/eIFccHvA3dphT1JjS8oEj
+         KNevcfnLooBv6H7M5f4ZwEhajmLjAo5zZvVaDT8GIy/BzBkIbtdnOYa0456kWZhnpyAW
+         z+0m2vhw1+bLZfvZbgCHnldoKS4lra3tTscnUQnaHqYLqqlQGyBMYhl4XNuRqbuATIje
+         C4HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=tRocDBL479oJ1SnnG9CByWUGNSwm/pLAX9mBthCnHbI=;
-        b=Rzr6Kve0QSiKaBOgKMGKtRuZNpy93g6zermfZ0Ea8ewvpuNYFGJzlUevZmrOui7SvY
-         aHcXrtino0aHeuQCOq4oAfQYguOClzMV4hyYl6l+dT0jw15TfAM6NPUmLwV6kmPyPsRx
-         gUy9jwlIQdsDb9ZfqJA/NqUKUMWy4XEIc9jOrxpgZoy8kmjiDPbaeeroGDdKxEICRsBV
-         3unHPqwWRnT+6ROdK86w6jApqGx0ysZC8DlYVTJbjc4ENn8SbBvUA8o5vzCkgheICOfD
-         b4qkVVC/JzRyDJF03UGqK8um5sEpkgvg1qjEMzw/GPWr97OZTZ/B5dXBHocZTktsQqAZ
-         SCxA==
-X-Gm-Message-State: AOAM532RYvZxuewpNXvumkil5tfeAUKi1LslxbKZOE+8Gey0CnNbv+pa
-        r9dWwZ7BZ+z5GNfbfIqSQQk9MhlYxHyQ8nI5
-X-Google-Smtp-Source: ABdhPJxS1euzXl+eV5Ano8ylVae3RrZE87WJAhTmunwTBG2zDilovLe9H80oYB0km8Dk7Yoke0PSaQ==
-X-Received: by 2002:a63:1f21:: with SMTP id f33mr532046pgf.31.1610479085005;
-        Tue, 12 Jan 2021 11:18:05 -0800 (PST)
+        bh=auxzT8WGE14tQXppI+shw5Rz30NghYVmvwU0Vp5iL5k=;
+        b=EhsEugrFZJd8T1+G5DKXxXJ5ayVjMccuB8cbsGFWTJj0ECsauqNBe7TKnjv9zg+dlE
+         QsP2F4ReF3FAnVtmbiGFY9TZ74VQ+P9B+Brol32splcwqltctoGDlNdSUVjR9ea4GwAm
+         2WMqErCuE+FdgzAk2UyXYYx/wfyg/9xzekQ/UugOxDYRTAVE6g2pK/wJGOVt+dvIRM9E
+         2HmlFSXzOGu/xj4vMM/3IA0OgBmrFsmSJq4IFz+T2/55dxMftaw5oRJfPGChrGZv9XIO
+         hgMTxsUtwDne3I9sBXJQsnYZZDAnk082DZ7Ms/y0rVcZqKqSacVyXm+8tiqwIOs/RrFK
+         kXGw==
+X-Gm-Message-State: AOAM531fLd1lmIqg8wCvjz0jRG8uHXc8HqKyH8RtYrywUrWEcLoVfazu
+        MgaN7H1Qj0o2F8IP4XabOYxt4w==
+X-Google-Smtp-Source: ABdhPJzFsGLD7kbS0RgvUR/OZyK9T2638CjYYZ8WQkg+IBAQpIy2f6o7FuoAxQiJst7JYje/ZHTjtw==
+X-Received: by 2002:aa7:9f0f:0:b029:19b:c68f:61cd with SMTP id g15-20020aa79f0f0000b029019bc68f61cdmr1538881pfr.45.1610493771433;
+        Tue, 12 Jan 2021 15:22:51 -0800 (PST)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id m26sm3920831pfo.123.2021.01.12.11.18.04
+        by smtp.gmail.com with ESMTPSA id h5sm17749pgl.86.2021.01.12.15.22.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 11:18:04 -0800 (PST)
-Date:   Tue, 12 Jan 2021 11:18:04 -0800 (PST)
-X-Google-Original-Date: Tue, 12 Jan 2021 11:18:02 PST (-0800)
-Subject:     Re: [PATCH v5 0/9] Add k/uprobe & fentry & error_injection supported
-In-Reply-To: <1608220905-1962-1-git-send-email-guoren@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, mhiramat@kernel.org,
-        alankao@andestech.com, rostedt@goodmis.org, bjorn.topel@intel.com,
-        pdp7pdp7@gmail.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, anup@brainfault.org,
-        linux-csky@vger.kernel.org, greentime.hu@sifive.com,
-        zong.li@sifive.com, guoren@kernel.org, me@packi.ch,
+        Tue, 12 Jan 2021 15:22:50 -0800 (PST)
+Date:   Tue, 12 Jan 2021 15:22:50 -0800 (PST)
+X-Google-Original-Date: Tue, 12 Jan 2021 15:22:48 PST (-0800)
+Subject:     Re: [PATCH RESEND v4] riscv: Enable per-task stack canaries
+In-Reply-To: <1608222558-6677-1-git-send-email-guoren@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
+        greentime.hu@sifive.com, zong.li@sifive.com, keescook@chromium.org,
+        Bjorn Topel <bjorn.topel@gmail.com>,
+        Atish Patra <Atish.Patra@wdc.com>, cooper.qu@linux.alibaba.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@kernel.org,
         guoren@linux.alibaba.com
 From:   Palmer Dabbelt <palmerdabbelt@google.com>
 To:     guoren@kernel.org
-Message-ID: <mhng-e2d0b1bb-151d-437f-8952-8d73fb231bd0@palmerdabbelt-glaptop>
+Message-ID: <mhng-a07967fd-5808-4550-a909-954f1a25b53b@palmerdabbelt-glaptop>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -68,221 +68,160 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, 17 Dec 2020 08:01:36 PST (-0800), guoren@kernel.org wrote:
+On Thu, 17 Dec 2020 08:29:18 PST (-0800), guoren@kernel.org wrote:
 > From: Guo Ren <guoren@linux.alibaba.com>
 >
-> This the 5th round of riscv k/uprobe support patchset, it's based on
-> linux-5.10 and you can test it with the repo:
+> This enables the use of per-task stack canary values if GCC has
+> support for emitting the stack canary reference relative to the
+> value of tp, which holds the task struct pointer in the riscv
+> kernel.
 >
->  https://github.com/c-sky/csky-linux/tree/linux-5.10-probe-dev
+> After compare arm64 and x86 implementations, seems arm64's is more
+> flexible and readable. The key point is how gcc get the offset of
+> stack_canary from gs/el0_sp.
 >
-> The important fixup is about the trampoline call site, we change the
-> prologue of the function call site from:
+> x86: Use a fix offset from gs, not flexible.
 >
->     <funca>:
->         nop -> addi sp, sp, -SZREG
->         nop -> REG_S ra, (sp)
->         nop -> auipc ra, 0x?
->         nop -> jalr ?(ra)
->         nop -> REG_L ra, (sp)
->         nop -> addi sp, sp, -SZREG
->         ...
+> struct fixed_percpu_data {
+> 	/*
+> 	 * GCC hardcodes the stack canary as %gs:40.  Since the
+> 	 * irq_stack is the object at %gs:0, we reserve the bottom
+> 	 * 48 bytes of the irq stack for the canary.
+> 	 */
+> 	char            gs_base[40]; // :(
+> 	unsigned long   stack_canary;
+> };
 >
-> to:
+> arm64: Use -mstack-protector-guard-offset & guard-reg
+> 	gcc options:
+> 	-mstack-protector-guard=sysreg
+> 	-mstack-protector-guard-reg=sp_el0
+> 	-mstack-protector-guard-offset=xxx
 >
->     <funca>:
->         nop -> REG_S ra, -SZREG(sp)
->         nop -> auipc ra, 0x?
->         nop -> jalr ?(ra)
->         nop -> REG_L ra, -SZREG(sp)
->         ...
+> riscv: Use -mstack-protector-guard-offset & guard-reg
+> 	gcc options:
+> 	-mstack-protector-guard=tls
+> 	-mstack-protector-guard-reg=tp
+> 	-mstack-protector-guard-offset=xxx
 >
-> It's wrong to change the sp in callsite, because when you change the value of
-> ra then the sp is broken and the same with HAVE_OPTPROBES.
+>  GCC's implementation has been merged:
+>  commit c931e8d5a96463427040b0d11f9c4352ac22b2b0
+>  Author: Cooper Qu <cooper.qu@linux.alibaba.com>
+>  Date:   Mon Jul 13 16:15:08 2020 +0800
 >
-> The patchset includes kprobe/uprobe support and some related fixups.
-> Patrick provides HAVE_REGS_AND_STACK_ACCESS_API support and some
-> kprobe's code. The framework of k/uprobe is from csky but also refers
-> to other arches'. kprobes on ftrace is also supported in the patchset.
-> Modify dynamic ftrace mechanism from mcount to fentry.
+>      RISC-V: Add support for TLS stack protector canary access
 >
-> There is no single step exception in riscv ISA, only single-step
-> facility for jtag. See riscv-Privileged spec:
+> In the end, these codes are inserted by gcc before return:
 >
-> Interrupt Exception Code-Description
-> 1 0 Reserved
-> 1 1 Supervisor software interrupt
-> 1 2–4 Reserved
-> 1 5 Supervisor timer interrupt
-> 1 6–8 Reserved
-> 1 9 Supervisor external interrupt
-> 1 10–15 Reserved
-> 1 ≥16 Available for platform use
-> 0 0 Instruction address misaligned
-> 0 1 Instruction access fault
-> 0 2 Illegal instruction
-> 0 3 Breakpoint
-> 0 4 Load address misaligned
-> 0 5 Load access fault
-> 0 6 Store/AMO address misaligned
-> 0 7 Store/AMO access fault
-> 0 8 Environment call from U-mode
-> 0 9 Environment call from S-mode
-> 0 10–11 Reserved
-> 0 12 Instruction page fault
-> 0 13 Load page fault
-> 0 14 Reserved
-> 0 15 Store/AMO page fault
-> 0 16–23 Reserved
-> 0 24–31 Available for custom use
-> 0 32–47 Reserved
-> 0 48–63 Available for custom use
-> 0 ≥64 Reserved
+> *  0xffffffe00020b396 <+120>:   ld      a5,1008(tp) # 0x3f0
+> *  0xffffffe00020b39a <+124>:   xor     a5,a5,a4
+> *  0xffffffe00020b39c <+126>:   mv      a0,s5
+> *  0xffffffe00020b39e <+128>:   bnez    a5,0xffffffe00020b61c <_do_fork+766>
+>    0xffffffe00020b3a2 <+132>:   ld      ra,136(sp)
+>    0xffffffe00020b3a4 <+134>:   ld      s0,128(sp)
+>    0xffffffe00020b3a6 <+136>:   ld      s1,120(sp)
+>    0xffffffe00020b3a8 <+138>:   ld      s2,112(sp)
+>    0xffffffe00020b3aa <+140>:   ld      s3,104(sp)
+>    0xffffffe00020b3ac <+142>:   ld      s4,96(sp)
+>    0xffffffe00020b3ae <+144>:   ld      s5,88(sp)
+>    0xffffffe00020b3b0 <+146>:   ld      s6,80(sp)
+>    0xffffffe00020b3b2 <+148>:   ld      s7,72(sp)
+>    0xffffffe00020b3b4 <+150>:   addi    sp,sp,144
+>    0xffffffe00020b3b6 <+152>:   ret
+>    ...
+> *  0xffffffe00020b61c <+766>:   auipc   ra,0x7f8
+> *  0xffffffe00020b620 <+770>:   jalr    -1764(ra) # 0xffffffe000a02f38 <__stack_chk_fail>
 >
-> No single step!
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Cooper Qu <cooper.qu@linux.alibaba.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+> ---
+>  arch/riscv/Kconfig                      |  7 +++++++
+>  arch/riscv/Makefile                     | 10 ++++++++++
+>  arch/riscv/include/asm/stackprotector.h |  3 ++-
+>  arch/riscv/kernel/asm-offsets.c         |  3 +++
+>  arch/riscv/kernel/process.c             |  2 +-
+>  5 files changed, 23 insertions(+), 2 deletions(-)
 >
-> Other arches use hardware single-step exception for k/uprobe,  eg:
->  - powerpc: regs->msr |= MSR_SINGLESTEP
->  - arm/arm64: PSTATE.D for enabling software step exceptions
->  - s390: Set PER control regs, turns on single step for the given address
->  - x86: regs->flags |= X86_EFLAGS_TF
->  - csky: of course use hw single step :)
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index a627ae2..3d9daee 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -420,6 +420,13 @@ config EFI
+>  	  allow the kernel to be booted as an EFI application. This
+>  	  is only useful on systems that have UEFI firmware.
 >
-> All the above arches use a hardware single-step exception
-> mechanism to execute the instruction that was replaced with a probe
-> breakpoint. So utilize ebreak to simulate.
+> +config CC_HAVE_STACKPROTECTOR_TLS
+> +	def_bool $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=tp -mstack-protector-guard-offset=0)
+> +
+> +config STACKPROTECTOR_PER_TASK
+> +	def_bool y
+> +	depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_TLS
+> +
+>  endmenu
 >
-> Some pc related instructions couldn't be executed out of line and some
-> system/fence instructions couldn't be a trace site at all. So we give
-> out a reject list and simulate list in decode-insn.c.
+>  config BUILTIN_DTB
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index b6eb946..508de08 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -67,6 +67,16 @@ KBUILD_CFLAGS_MODULE += $(call cc-option,-mno-relax)
+>  # architectures.  It's faster to have GCC emit only aligned accesses.
+>  KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
 >
-> You could use uprobe to test simulate code like this:
+> +ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
+> +prepare: stack_protector_prepare
+> +stack_protector_prepare: prepare0
+> +	$(eval KBUILD_CFLAGS += -mstack-protector-guard=tls		  \
+> +				-mstack-protector-guard-reg=tp		  \
+> +				-mstack-protector-guard-offset=$(shell	  \
+> +			awk '{if ($$2 == "TSK_STACK_CANARY") print $$3;}' \
+> +					include/generated/asm-offsets.h))
+> +endif
+> +
+>  # arch specific predefines for sparse
+>  CHECKFLAGS += -D__riscv -D__riscv_xlen=$(BITS)
 >
->  echo 'p:enter_current_state_one /hello:0x6e4 a0=%a0 a1=%a1' >> /sys/kernel/debug/tracing/uprobe_events
->  echo 1 > /sys/kernel/debug/tracing/events/uprobes/enable
->  /hello
->  ^C
->  cat /sys/kernel/debug/tracing/trace
->  tracer: nop
+> diff --git a/arch/riscv/include/asm/stackprotector.h b/arch/riscv/include/asm/stackprotector.h
+> index 5962f88..09093af 100644
+> --- a/arch/riscv/include/asm/stackprotector.h
+> +++ b/arch/riscv/include/asm/stackprotector.h
+> @@ -24,6 +24,7 @@ static __always_inline void boot_init_stack_canary(void)
+>  	canary &= CANARY_MASK;
 >
->  entries-in-buffer/entries-written: 1/1   #P:1
+>  	current->stack_canary = canary;
+> -	__stack_chk_guard = current->stack_canary;
+> +	if (!IS_ENABLED(CONFIG_STACKPROTECTOR_PER_TASK))
+> +		__stack_chk_guard = current->stack_canary;
+>  }
+>  #endif /* _ASM_RISCV_STACKPROTECTOR_H */
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index db20344..877ff65 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -66,6 +66,9 @@ void asm_offsets(void)
+>  	OFFSET(TASK_THREAD_F30, task_struct, thread.fstate.f[30]);
+>  	OFFSET(TASK_THREAD_F31, task_struct, thread.fstate.f[31]);
+>  	OFFSET(TASK_THREAD_FCSR, task_struct, thread.fstate.fcsr);
+> +#ifdef CONFIG_STACKPROTECTOR
+> +	OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
+> +#endif
 >
->                               _-----=> irqs-off
->                              / _----=> need-resched
->                             | / _---=> hardirq/softirq
->                             || / _--=> preempt-depth
->                             ||| /     delay
->            TASK-PID   CPU#  ||||    TIMESTAMP  FUNCTION
->               | |       |   ||||       |         |
->           hello-94    [000] d...    55.404242: enter_current_state_one: (0x106e4) a0=0x1 a1=0x3fffa8ada8
+>  	DEFINE(PT_SIZE, sizeof(struct pt_regs));
+>  	OFFSET(PT_EPC, pt_regs, epc);
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index dd5f985..f786b5f 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -24,7 +24,7 @@
 >
-> Be care /hello:0x6e4 is the file offset in elf and it relate to 0x106e4
-> in memory and hello is your target elf program.
+>  register unsigned long gp_in_global __asm__("gp");
 >
-> Try kprobe like this:
->
->  echo 'p:myprobe sys_clone a0=%a0 a1=%a1 a2=%a2 a3=%a3 stach_val=+4($stack)' > /sys/kernel/debug/tracing/kprobe_events
->  echo 'r:myretprobe sys_clone $retval' >> /sys/kernel/debug/tracing/kprobe_events
->  echo 1 > /sys/kernel/debug/tracing/events/kprobes/enable
->  cat /sys/kernel/debug/tracing/trace
->  tracer: nop
->
->  entries-in-buffer/entries-written: 2/2   #P:1
->
->                                 _-----=> irqs-off
->                                / _----=> need-resched
->                               | / _---=> hardirq/softirq
->                               || / _--=> preempt-depth
->                               ||| /     delay
->            TASK-PID     CPU#  ||||   TIMESTAMP  FUNCTION
->               | |         |   ||||      |         |
->               sh-92      [000] .n..  8506.435857: myprobe: (sys_clone+0x0/0x28) a0=0x1200011 a1=0x0 a2=0x0 a3=0x0 stach_val=0x2044ecffffffe0
->               sh-92      [000] d...  8506.445620: myretprobe: (ret_from_syscall+0x0/0x2 <- sys_clone) arg1=0x64
->
-> Changlog v5:
->  - Fixup fentry modified sp cause fail_inject error
->  - Fixup function_graph broken
->  - Update to linux-5.10
->  - Fixup checkpatch.pl issues
->
-> Changlog v4:
->  - Revert fixup kprobes handler couldn't change pc
->  - Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT
->  - rebase on linux-tree:
-> commit 071a0578b0ce0b0e543d1e38ee6926b9cc21c198
-> Merge: fad7011 be4df0c
-> Author: Linus Torvalds <torvalds@linux-foundation.org>
-> Date:   Fri Oct 16 15:29:46 2020 -0700
->
->     Merge tag 'ovl-update-5.10' of git://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/vfs
->
-> Changlog v3:
->  - Add upport for function error injection
->  - Fixup kprobes handler couldn't change pc
->
-> Changlog v2:
->  - Add Reviewed-by, Tested-by, Acked-by, thx for all of you
->  - Add kprobes on ftrace feature
->  - Use __always_inline as same as fix_to_virt for fixup
->    BUILD_BUG_ON
->  - Use const "const unsigned int" for 2th param for fixup
->    BUILD_BUG_ON
->
->
-> Guo Ren (8):
->   riscv: Fixup compile error BUILD_BUG_ON failed
->   riscv: Fixup wrong ftrace remove cflag
->   riscv: Fixup patch_text panic in ftrace
->   riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT
->   riscv: Add kprobes supported
->   riscv: Add KPROBES_ON_FTRACE supported
->   riscv: Add uprobes supported
->   riscv: Add support for function error injection
->
-> Patrick Stählin (1):
->   RISC-V: Implement ptrace regs and stack API
->
->  arch/riscv/Kconfig                            |   8 +
->  arch/riscv/Makefile                           |   2 +
->  arch/riscv/include/asm/kprobes.h              |  40 +++
->  arch/riscv/include/asm/probes.h               |  24 ++
->  arch/riscv/include/asm/processor.h            |   1 +
->  arch/riscv/include/asm/ptrace.h               |  35 +++
->  arch/riscv/include/asm/thread_info.h          |   4 +-
->  arch/riscv/include/asm/uprobes.h              |  40 +++
->  arch/riscv/kernel/Makefile                    |   6 +-
->  arch/riscv/kernel/ftrace.c                    |  95 +++---
->  arch/riscv/kernel/mcount-dyn.S                | 342 ++++++++++------------
->  arch/riscv/kernel/patch.c                     |   8 +-
->  arch/riscv/kernel/probes/Makefile             |   6 +
->  arch/riscv/kernel/probes/decode-insn.c        |  48 ++++
->  arch/riscv/kernel/probes/decode-insn.h        |  18 ++
->  arch/riscv/kernel/probes/ftrace.c             |  53 ++++
->  arch/riscv/kernel/probes/kprobes.c            | 398 ++++++++++++++++++++++++++
->  arch/riscv/kernel/probes/kprobes_trampoline.S |  93 ++++++
->  arch/riscv/kernel/probes/simulate-insn.c      |  85 ++++++
->  arch/riscv/kernel/probes/simulate-insn.h      |  47 +++
->  arch/riscv/kernel/probes/uprobes.c            | 186 ++++++++++++
->  arch/riscv/kernel/ptrace.c                    |  99 +++++++
->  arch/riscv/kernel/signal.c                    |   3 +
->  arch/riscv/kernel/traps.c                     |  19 ++
->  arch/riscv/lib/Makefile                       |   2 +
->  arch/riscv/lib/error-inject.c                 |  10 +
->  arch/riscv/mm/Makefile                        |   3 +-
->  arch/riscv/mm/fault.c                         |  10 +
->  28 files changed, 1444 insertions(+), 241 deletions(-)
->  create mode 100644 arch/riscv/include/asm/probes.h
->  create mode 100644 arch/riscv/include/asm/uprobes.h
->  create mode 100644 arch/riscv/kernel/probes/Makefile
->  create mode 100644 arch/riscv/kernel/probes/decode-insn.c
->  create mode 100644 arch/riscv/kernel/probes/decode-insn.h
->  create mode 100644 arch/riscv/kernel/probes/ftrace.c
->  create mode 100644 arch/riscv/kernel/probes/kprobes.c
->  create mode 100644 arch/riscv/kernel/probes/kprobes_trampoline.S
->  create mode 100644 arch/riscv/kernel/probes/simulate-insn.c
->  create mode 100644 arch/riscv/kernel/probes/simulate-insn.h
->  create mode 100644 arch/riscv/kernel/probes/uprobes.c
->  create mode 100644 arch/riscv/lib/error-inject.c
+> -#ifdef CONFIG_STACKPROTECTOR
+> +#if defined(CONFIG_STACKPROTECTOR) && !defined(CONFIG_STACKPROTECTOR_PER_TASK)
+>  #include <linux/stackprotector.h>
+>  unsigned long __stack_chk_guard __read_mostly;
+>  EXPORT_SYMBOL(__stack_chk_guard);
 
-Thanks, these are on for-next.  I've fixed up a few things, LMK if there were
-any issues.
+Thanks, this is on for-next.
