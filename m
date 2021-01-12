@@ -2,91 +2,95 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5D92F183C
-	for <lists+linux-csky@lfdr.de>; Mon, 11 Jan 2021 15:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B97D2F264A
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Jan 2021 03:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729445AbhAKO0H (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 11 Jan 2021 09:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728348AbhAKO0H (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jan 2021 09:26:07 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F035C061794;
-        Mon, 11 Jan 2021 06:25:27 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id t6so9613250plq.1;
-        Mon, 11 Jan 2021 06:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=kjus1H8C0QBAlALuC5Cx0BMQHU+YX+HglMSKKZRyJ+M=;
-        b=ZjH9KXHTjPckjBfk6z2A+NQL3LfnBeZc1UzLr9XLv3Uf5AKeNth48r1nE1uKR2cjuA
-         0HF7bp7YMH0khXjA4iNCPlA4hYY2J1ZJ6TZHN7oXI4DKrULNEEd12HU7d6rTwyy7WROz
-         cvCkpd4wsPBNDGrFYKrWda1epW4AsrUQyQptkHMFMdTKbZtwZSlt7YGXnu0UVr+GW/Ui
-         LR5qieqUr5XPzxLDCacA3kO4lw1xy4ajjIRby4inglRY5flR7xAmDm0psN7NkuccHhc5
-         KQTb5cMeFlmynhrwcjHZJhLngkTwtgAU4CDOjJXm2QLYjQtRAWu296FQZHw9h6wxGzTw
-         SsZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kjus1H8C0QBAlALuC5Cx0BMQHU+YX+HglMSKKZRyJ+M=;
-        b=TojvySmsMEtA51rBlz9ySxuaK3Lm3GMcWwv/oksAWGyEAiGu82CBQARWUR9T/F2bgk
-         L35tlY9hI5XvwyIt2NArwhoBEfNgJDnidpMuP9MbH/hcjko/UQ9CugSmjaRDzt0HjM5y
-         vpLU6rOONZpfBbFVYMNpyUb8pVnSlqrY7j+HYKbQxmabgUhTG3t5dvezCwB7lpTaNkYN
-         Of+uocO0buxUGoCzLfZM4SYQXFsTP+prQSq27q/DGbl4+VkVhHN4TEDwj/AOkbZyEswk
-         3Cp74KkhePcYkFnjw5kWPOyf4rQIXUvH0erWwMRrqo0dn/AzF21emJzMi6mSiyZiUpwD
-         F7Qg==
-X-Gm-Message-State: AOAM5336HDufquJdneu2EW4Qo6RH5cTf1wDKpdRtgJ3lLaDBpSGzWw4g
-        CENfcvvDc6wWJFsW+WBAdmAwoQnFY8c=
-X-Google-Smtp-Source: ABdhPJz5brRCSrb7yoX5wtnr8u6RGNZ2oK7yZ1dQjKGnluwqdlsF1I3YLgY/ov3vs9iWLXEzMIcMpA==
-X-Received: by 2002:a17:902:6f01:b029:dc:3182:ce69 with SMTP id w1-20020a1709026f01b02900dc3182ce69mr16369769plk.10.1610375126720;
-        Mon, 11 Jan 2021 06:25:26 -0800 (PST)
-Received: from localhost.localdomain ([178.236.46.205])
-        by smtp.gmail.com with ESMTPSA id q12sm19498300pgj.24.2021.01.11.06.25.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 06:25:25 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: dong.menglong@zte.com.cn
-To:     guoren@kernel.org
+        id S1729263AbhALCca (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 11 Jan 2021 21:32:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37080 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726645AbhALCca (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 11 Jan 2021 21:32:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4921C22CA2;
+        Tue, 12 Jan 2021 02:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610418709;
+        bh=4VFefuHt3FLjxAlUJPyc/xO8ouPzYSZlv+YmZIxUmF4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Z1GWOzE1O2g3fUPDWsh7AXLzfzy1SSfCF6Xuo0qfeO3NeoGzlHUc2tJFL2kRHxsnI
+         vXqrsyAYQwL83JhqFVnoY+SjysOwH17n4bsFwkNZZ6ZNwKTTKRNO/GORJffz+6xLxY
+         z/VemQQ4d9oSQX5rMNzoe5Q1mH/R/fgdC0iB1I5WZE3mvoLsgw05gtvcBixSUCXs5N
+         fItbeR6KIAMDoTdDIROCJljnlBngSDHsEF6zpeEToqT3WrsObsgZYdq+hUKaDkKJxy
+         WmIkoNvbsPqI1uEhAdKqpvlgs4jHJObI2FQpcXHwKXQDWDwDrTnoe+556oET2ZTDgY
+         lfPAGVPqokYbQ==
+Received: by mail-lf1-f50.google.com with SMTP id 23so1008786lfg.10;
+        Mon, 11 Jan 2021 18:31:49 -0800 (PST)
+X-Gm-Message-State: AOAM5307A4ZZpHKYrPHyFBQHu1H2eccBY4iU2lNqLvufODN0sPgSfZtj
+        OO3rI3TWsVCnHT9Ui7TJgURkxqxFcp4oqftTQsA=
+X-Google-Smtp-Source: ABdhPJwM93BqOuL2la8yQbEPwB2EQR8HRO6JS0dIBwyAnDuAnsShgxySJeaYWJEr7/c2v4cuCA0pbhTqfp0gD8+kGPs=
+X-Received: by 2002:a19:40d6:: with SMTP id n205mr1060500lfa.24.1610418707559;
+ Mon, 11 Jan 2021 18:31:47 -0800 (PST)
+MIME-Version: 1.0
+References: <20210111142517.4959-1-dong.menglong@zte.com.cn>
+In-Reply-To: <20210111142517.4959-1-dong.menglong@zte.com.cn>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 12 Jan 2021 10:31:36 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQjKXR9gpo06WAWG1aquiT87mATiMGorXs6ChxOxoe90Q@mail.gmail.com>
+Message-ID: <CAJF2gTQjKXR9gpo06WAWG1aquiT87mATiMGorXs6ChxOxoe90Q@mail.gmail.com>
+Subject: Re: [PATCH] csky: kprobe: fix unreachable code in simulate_blz32
+To:     menglong8.dong@gmail.com
 Cc:     dong.menglong@zte.com.cn, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] csky: kprobe: fix unreachable code in simulate_blz32
-Date:   Mon, 11 Jan 2021 06:25:17 -0800
-Message-Id: <20210111142517.4959-1-dong.menglong@zte.com.cn>
-X-Mailer: git-send-email 2.17.1
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Menglong Dong <dong.menglong@zte.com.cn>
+Hi menglong,
 
-The type of 'val' is 'unsigned long' in simulate_blz32, so 'val < 0'
-can't be true.
+On Mon, Jan 11, 2021 at 10:25 PM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <dong.menglong@zte.com.cn>
+>
+> The type of 'val' is 'unsigned long' in simulate_blz32, so 'val < 0'
+> can't be true.
+>
+> When 'csky_insn_reg_get_val' fails, 'false' will be returned. We
+> can directly use its return value here.
+>
+> Fixes: 33e53ae1ce41 ("csky: Add kprobes supported")
+> Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
+> ---
+>  arch/csky/kernel/probes/simulate-insn.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/arch/csky/kernel/probes/simulate-insn.c b/arch/csky/kernel/probes/simulate-insn.c
+> index 4e464fed52ec..b09ddcbcfa18 100644
+> --- a/arch/csky/kernel/probes/simulate-insn.c
+> +++ b/arch/csky/kernel/probes/simulate-insn.c
+> @@ -346,9 +346,7 @@ simulate_blz32(u32 opcode, long addr, struct pt_regs *regs)
+>         unsigned long tmp = opcode & 0x1f;
+>         unsigned long val;
+>
+> -       csky_insn_reg_get_val(regs, tmp, &val);
+> -
+> -       if (val < 0) {
+if ((long) val < 0) {
+?
 
-When 'csky_insn_reg_get_val' fails, 'false' will be returned. We
-can directly use its return value here.
+We need val to determine branch taken or not.
 
-Fixes: 33e53ae1ce41 ("csky: Add kprobes supported")
-Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
----
- arch/csky/kernel/probes/simulate-insn.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+> +       if (!csky_insn_reg_get_val(regs, tmp, &val)) {
+>                 instruction_pointer_set(regs,
+>                         addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
+>         } else
+> --
+> 2.17.1
+>
 
-diff --git a/arch/csky/kernel/probes/simulate-insn.c b/arch/csky/kernel/probes/simulate-insn.c
-index 4e464fed52ec..b09ddcbcfa18 100644
---- a/arch/csky/kernel/probes/simulate-insn.c
-+++ b/arch/csky/kernel/probes/simulate-insn.c
-@@ -346,9 +346,7 @@ simulate_blz32(u32 opcode, long addr, struct pt_regs *regs)
- 	unsigned long tmp = opcode & 0x1f;
- 	unsigned long val;
- 
--	csky_insn_reg_get_val(regs, tmp, &val);
--
--	if (val < 0) {
-+	if (!csky_insn_reg_get_val(regs, tmp, &val)) {
- 		instruction_pointer_set(regs,
- 			addr + sign_extend32((opcode & 0xffff0000) >> 15, 15));
- 	} else
+
 -- 
-2.17.1
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
