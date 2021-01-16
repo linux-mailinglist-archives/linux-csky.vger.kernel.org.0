@@ -2,86 +2,114 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C94E2F4341
-	for <lists+linux-csky@lfdr.de>; Wed, 13 Jan 2021 05:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CED2F8DE0
+	for <lists+linux-csky@lfdr.de>; Sat, 16 Jan 2021 18:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbhAMEhN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 12 Jan 2021 23:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S1728582AbhAPRLI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 16 Jan 2021 12:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725910AbhAMEhM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 12 Jan 2021 23:37:12 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7898CC061795
-        for <linux-csky@vger.kernel.org>; Tue, 12 Jan 2021 20:36:32 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 15so693112pgx.7
-        for <linux-csky@vger.kernel.org>; Tue, 12 Jan 2021 20:36:32 -0800 (PST)
+        with ESMTP id S1728569AbhAPRLF (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 16 Jan 2021 12:11:05 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6392C061382;
+        Sat, 16 Jan 2021 06:57:22 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id e15so3682622wme.0;
+        Sat, 16 Jan 2021 06:57:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ogtrVGZ6pAo0ADV9qwAesULOZDDOSRXRQwB1gmpCX8s=;
-        b=JNhHVXk/UfFxEOuGHLDZxxdRz1GzMEbSz/1g2abyF+tnPs89EwF+oUHBl/iUnN2nB7
-         ZBFIe+8+vaOSORcohr2CIiZgPS0JcspM7MA2KNFtlDMc7fROec2PxygF7aMY/4w4eDDD
-         nCZV4Owfn2uRfJAPdDDUHOLJzbcVWmOUaN8S5OuwzYeYjvAIwMPuVXYfc9bapC35N54I
-         EAhu8TUwqdg3MKG3P7ka9e69K9oxhoExLRsraaeuIWagPnh4UKhR1oBlq8Yr6hgXAiGs
-         bvOsXbIMH8ob1IA1dzYdQNBSYnzfM6hD0GampWUI8HEHlIcETCUyVdf/JVbOazJq7n5R
-         OpAg==
+        bh=GBNeTSu04ixKYSzbYAV+880sIV5+lGfcrwYBDcoDztA=;
+        b=Tf7ga7AWLWf2ItsBKMJgzstjS0iQOHyu2Bo5P9Zu7PeqJcTXV5R0QRtWy+fAX6ZziU
+         VTNdIKv1L+KoiYBkGsnBL+BhiCiRriQOW5i2KikBXwHQIALRDeXy+VTiYVnz73jP7DAl
+         27BkEd63K5Hg779deY110KMYRPgeCQDyER+D7mwy7XNpWem3zdNkAXMiD48+24RuYJIU
+         z0RotZ+DEDYaLV7VuLX0fzRCfjekiPoN3LBRk3jP37V7k+/qqLb5EksB0+JOLQGJvkDg
+         zapzPI3f8tN+CN+LVAlIUlwTk5krGCiBKPyZl2T/h3eXWZNQpH9kbeXmx3g503dfLN6x
+         DJ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=ogtrVGZ6pAo0ADV9qwAesULOZDDOSRXRQwB1gmpCX8s=;
-        b=Me8KEkRYy7bDoxLx674pGe6PLt/qXFAPEawfFL3I8xe8BL2bw+rzhgW2eQlejIKQ7D
-         O4wq+m2qheCQUWRxx0jfveH3UUSqTJtWpl5MAw+nscYlSq2Pk3PrAw3MgxNp1Xyxuaa6
-         9AVeXyaUJxdEDizgXIjOs6LyqDS2VzBNMyBsfoFlLu34FadGvtnRXN5SbXZa99bnvQV0
-         qYxW2D1Azq6EzPd3mPCzV7vnOWpFDuKd4T66vxsjkHu4PxxvXobsk2KULmXDA8Xp9z+u
-         jplJZcgpZide+OLNj/J7k7sxI7mSe3TSqqhigo1PBJSdj4ORLXrHQhxd2tE97fEQQVo/
-         DXZw==
-X-Gm-Message-State: AOAM530kRSTNlWU7D/O8AbDiZUrGzIWgz44NR7PGp3nxfsrmN4vjqyLU
-        aJPaGOGfKM4csMa/L+k4lmcinw==
-X-Google-Smtp-Source: ABdhPJyZQ4/PvLkpMLQMJw9Yk9cgwnCJD0Cvh1T6jj83SqfE84Pw82Sr82NFhWGF8VJvPwBXBeP7cA==
-X-Received: by 2002:aa7:8209:0:b029:19f:3002:513 with SMTP id k9-20020aa782090000b029019f30020513mr257917pfi.49.1610512591844;
-        Tue, 12 Jan 2021 20:36:31 -0800 (PST)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id a22sm747129pfa.215.2021.01.12.20.36.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GBNeTSu04ixKYSzbYAV+880sIV5+lGfcrwYBDcoDztA=;
+        b=aXAh9xVeFKsTte+Sjp5QQumAvwGc40uGJ7MdwJ+V1cVlQ8LnMseKsp+mwaeZD+1Z8F
+         Ag5c09hM+bMnlz1Fn8bOY7v8LiNfrPmtyqrlFGhv5yWBLO2kjoTXLkLUAuHmvG1yq0Vq
+         rOsOVFh+oAAXBUjaclJtjCEWpcpB+rVfMRGeXGiMb2WIvUdMlAOZVPOBWS5KDh9MGEYt
+         fLeF1H3kVLwm6FxiNPwkODGnrlXGlZirMdbQUNnh4Da7wxYfnPyNxUc4i1jRaKPEg9Az
+         6UQs1XmXQsQKBIhkx5ilQPWs95EVKGEaFgbWFN+CSOrEJZJJF7/SGrb8dozcnNe2yASe
+         ChhQ==
+X-Gm-Message-State: AOAM532usOjPa61kge6iUHluZsCywhqoErea8d5H+tk/I6CvVVY7SL6G
+        O+ees49kwhcWDPcKXwIV4rE=
+X-Google-Smtp-Source: ABdhPJwm71FymYwD2RCaAQe0ruh5XNahsyLNfkIwL+NUnHq8L9JrVeaj5YOOjlfFOQEHLVAB1cN/oQ==
+X-Received: by 2002:a1c:e0d4:: with SMTP id x203mr13318861wmg.160.1610809041319;
+        Sat, 16 Jan 2021 06:57:21 -0800 (PST)
+Received: from debian.vlc ([170.253.51.130])
+        by smtp.gmail.com with ESMTPSA id h83sm17285824wmf.9.2021.01.16.06.57.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 20:36:31 -0800 (PST)
-Date:   Tue, 12 Jan 2021 20:36:31 -0800 (PST)
-X-Google-Original-Date: Tue, 12 Jan 2021 20:36:21 PST (-0800)
-Subject:     Re: [PATCH] riscv: Fixup CONFIG_GENERIC_TIME_VSYSCALL
-In-Reply-To: <CAOJsxLGwdrw6t665+Q8k5o_2P8y7fxNV3s_SpQLD_toPg8Db_w@mail.gmail.com>
-CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        anup@brainfault.org, Atish Patra <Atish.Patra@wdc.com>,
-        guoren@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, vincent.chen@sifive.com,
-        linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     penberg@gmail.com
-Message-ID: <mhng-2092c5f2-ec27-4a8e-bb91-4c4ccdc1c5e1@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sat, 16 Jan 2021 06:57:20 -0800 (PST)
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+To:     mtk.manpages@gmail.com
+Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
+        linux-man@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        Heinrich Schuchardt <xypron.glpk@gmx.de>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>, libc-alpha@sourceware.org,
+        Dave Martin <Dave.Martin@arm.com>,
+        Martin Sebor <msebor@redhat.com>
+Subject: [PATCH] cacheflush.2: Update SYNOPSIS for glibc wrapper
+Date:   Sat, 16 Jan 2021 15:56:33 +0100
+Message-Id: <20210116145632.7636-1-alx.manpages@gmail.com>
+X-Mailer: git-send-email 2.30.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, 03 Jan 2021 02:11:35 PST (-0800), penberg@gmail.com wrote:
-> On Sat, Jan 2, 2021 at 3:26 PM <guoren@kernel.org> wrote:
->>
->> From: Guo Ren <guoren@linux.alibaba.com>
->>
->> The patch fix commit: ad5d112 ("riscv: use vDSO common flow to
->> reduce the latency of the time-related functions").
->>
->> The GENERIC_TIME_VSYSCALL should be CONFIG_GENERIC_TIME_VSYSCALL
->> or vgettimeofday won't work.
->>
->> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
->> Cc: Atish Patra <atish.patra@wdc.com>
->> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
->> Cc: Vincent Chen <vincent.chen@sifive.com>
->
-> Reviewed-by: Pekka Enberg <penberg@kernel.org>
+Glibc uses 'void *' instead of 'char *'.
+And the prototype is declared in <sys/cacheflush.h>.
 
-Thanks, this is on fixes.
+......
+
+$ syscall='cacheflush';
+$ ret='int';
+$ find glibc/ -type f -name '*.h' \
+  |xargs pcregrep -Mn "(?s)^[\w\s]*${ret}\s*${syscall}\s*\(.*?;";
+glibc/sysdeps/unix/sysv/linux/nios2/sys/cachectl.h:27:
+extern int cacheflush (void *__addr, const int __nbytes, const int __op) __THROW;
+glibc/sysdeps/unix/sysv/linux/mips/sys/cachectl.h:35:
+extern int cacheflush (void *__addr, const int __nbytes, const int __op) __THROW;
+glibc/sysdeps/unix/sysv/linux/arc/sys/cachectl.h:30:
+extern int cacheflush (void *__addr, int __nbytes, int __op) __THROW;
+glibc/sysdeps/unix/sysv/linux/csky/sys/cachectl.h:30:
+extern int cacheflush (void *__addr, const int __nbytes,
+		       const int __op) __THROW;
+
+Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
+---
+ man2/cacheflush.2 | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/man2/cacheflush.2 b/man2/cacheflush.2
+index 2cf624f3a..0496879ca 100644
+--- a/man2/cacheflush.2
++++ b/man2/cacheflush.2
+@@ -27,9 +27,9 @@
+ cacheflush \- flush contents of instruction and/or data cache
+ .SH SYNOPSIS
+ .nf
+-.B #include <asm/cachectl.h>
++.B #inlcude <sys/cacheflush.h>
+ .PP
+-.BI "int cacheflush(char *" addr ", int "nbytes ", int "cache );
++.BI "int cacheflush(void *" addr ", int "nbytes ", int "cache );
+ .fi
+ .PP
+ .IR Note :
+-- 
+2.30.0
+
