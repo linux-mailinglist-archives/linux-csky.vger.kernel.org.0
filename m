@@ -2,66 +2,78 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A18FB2FE457
-	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 08:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BE82FE91C
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 12:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727834AbhAUHtA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 21 Jan 2021 02:49:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36844 "EHLO mail.kernel.org"
+        id S1726603AbhAULnq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 Jan 2021 06:43:46 -0500
+Received: from foss.arm.com ([217.140.110.172]:33120 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726652AbhAUG6O (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:58:14 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CE73E2396D;
-        Thu, 21 Jan 2021 06:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212228;
-        bh=YHbzxdhpG02t8cJd6mky5l0pwml7Rhb1efMcLMa9ZyA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GgM20hSFY4iNBf7iiMo9nGiigCLZU8NdvnPkgsmx8lKTcI0mwVIQ5dCXTBFwlqxoI
-         xNN8lYs04nmIiUwYfUVUttpTFgjdvJXHw9anygN3tzo/dstrZrPFNYdR6FivE3FdcM
-         N+ofd3H7sdEgPlF8+8JhjOAMkhcXyKUewoEXNUFkzYfMQcxWnbpTDgh2hDHkWzC0Oz
-         Jan1/Kgtk3snmNK+ff0mvwquCTe64YA412yweaIWLX2waok/DpRmxbHkz0S8OT3BEl
-         ZZ32mFEHK9XnYe+1mYcEjoNwbUj3hUn3ULTHBdAeEc9MH2HTx0M95d8Oop8FmRGYtN
-         aZWz3oxyzq4jg==
-From:   guoren@kernel.org
+        id S1730606AbhAULnX (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 06:43:23 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CBBD11B3;
+        Thu, 21 Jan 2021 03:42:36 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.35.62])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 889553F719;
+        Thu, 21 Jan 2021 03:42:35 -0800 (PST)
+Date:   Thu, 21 Jan 2021 11:42:33 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 15/29] csky: Fixup update_mmu_cache called with user io mapping
-Date:   Thu, 21 Jan 2021 14:53:35 +0800
-Message-Id: <20210121065349.3188251-15-guoren@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
+Subject: Re: [PATCH 19/29] csky: mm: abort uaccess retries upon fatal signal
+Message-ID: <20210121114233.GC48431@C02TD0UTHF1T.local>
 References: <20210121065349.3188251-1-guoren@kernel.org>
+ <20210121065349.3188251-19-guoren@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121065349.3188251-19-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, Jan 21, 2021 at 02:53:39PM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Pick up the patch from the 'Link' made by Mark Rutland. Keep the
+> same with x86, arm, arm64, arc, sh, power.
+> 
+> Link: https://lore.kernel.org/linux-arm-kernel/1499782763-31418-1-git-send-email-mark.rutland@arm.com/
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> ---
+>  arch/csky/mm/fault.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+> index c7b67976bac4..1482de56f4f7 100644
+> --- a/arch/csky/mm/fault.c
+> +++ b/arch/csky/mm/fault.c
+> @@ -279,8 +279,11 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
+>  	 * signal first. We do not need to release the mmap_lock because it
+>  	 * would already be released in __lock_page_or_retry in mm/filemap.c.
+>  	 */
+> -	if (fault_signal_pending(fault, regs))
+> +	if (fault_signal_pending(fault, regs)) {
+> +		if (!user_mode(regs))
+> +			no_context(regs, addr);
+>  		return;
+> +	}
 
-The function update_mmu_cache could be called by user-io mapping.
-There is no space of struct page in mem_map for the pte. Just
-ignore the user-io mmaping in update_mmu_cache.
+FWIW, this looks right to me -- I assumed you've tested with the
+test-case in the linked email?
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/csky/abiv2/cacheflush.c | 3 +++
- 1 file changed, 3 insertions(+)
+It looks like a number of other architectures are still broken here. :/
 
-diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
-index 790f1ebfba44..39c51399dd81 100644
---- a/arch/csky/abiv2/cacheflush.c
-+++ b/arch/csky/abiv2/cacheflush.c
-@@ -12,6 +12,9 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
- 	unsigned long addr;
- 	struct page *page;
- 
-+	if (!pfn_valid(pte_pfn(*pte)))
-+		return;
-+
- 	page = pfn_to_page(pte_pfn(*pte));
- 	if (page == ZERO_PAGE(0))
- 		return;
--- 
-2.17.1
+I'll go and poke them...
 
+Thanks,
+Mark.
+  
+>  	if (unlikely((fault & VM_FAULT_RETRY) && (flags & FAULT_FLAG_ALLOW_RETRY))) {
+>  		flags |= FAULT_FLAG_TRIED;
+> -- 
+> 2.17.1
+> 
