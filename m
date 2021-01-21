@@ -2,78 +2,142 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BE82FE91C
-	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 12:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FA12FF613
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 21:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbhAULnq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 21 Jan 2021 06:43:46 -0500
-Received: from foss.arm.com ([217.140.110.172]:33120 "EHLO foss.arm.com"
+        id S1726600AbhAUHsg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 Jan 2021 02:48:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36774 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730606AbhAULnX (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 06:43:23 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7CBBD11B3;
-        Thu, 21 Jan 2021 03:42:36 -0800 (PST)
-Received: from C02TD0UTHF1T.local (unknown [10.57.35.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 889553F719;
-        Thu, 21 Jan 2021 03:42:35 -0800 (PST)
-Date:   Thu, 21 Jan 2021 11:42:33 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
+        id S1726564AbhAUG6H (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 01:58:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F0D612399C;
+        Thu, 21 Jan 2021 06:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611212209;
+        bh=W4ypOiLl33dIJpn7kvCRTFEgKfvNavmgd789Wd6eLNI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fc1bdyG82WZZNsR4TEhObb1rY5C/F+d19D/AOwQF/2vWusyernnydNkInQn316zGc
+         ycKRb8xzrh1OKsyLlsEadBOlA4YyMV5WAVbenixyGPZ5W28EzL1xBAkfll5NZmzdBE
+         OhSGt6rvVXJjvO3KI9F+WadP4GyUTZdaZR8iG67jOhPKDDrit1VaPUnvwdBNk0vyPU
+         ge+81Wd2qF/Q/kmq5FvQmfGP8dFhHI2CMacs8HouNbRDkukctjQ27/KkYrU8aS52pF
+         bs6L8F9GpvXyhrHq7POFzk9w4uPz9qF8Bs1dRe4SOCqYnD61wQVNwz8NrjFaE6/SJr
+         zvvuNbXulu+Qg==
+From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH 19/29] csky: mm: abort uaccess retries upon fatal signal
-Message-ID: <20210121114233.GC48431@C02TD0UTHF1T.local>
+        Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH 07/29] csky: Fixup asm/cmpxchg.h with correct ordering barrier
+Date:   Thu, 21 Jan 2021 14:53:27 +0800
+Message-Id: <20210121065349.3188251-7-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
- <20210121065349.3188251-19-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210121065349.3188251-19-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Jan 21, 2021 at 02:53:39PM +0800, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Pick up the patch from the 'Link' made by Mark Rutland. Keep the
-> same with x86, arm, arm64, arc, sh, power.
-> 
-> Link: https://lore.kernel.org/linux-arm-kernel/1499782763-31418-1-git-send-email-mark.rutland@arm.com/
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> ---
->  arch/csky/mm/fault.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-> index c7b67976bac4..1482de56f4f7 100644
-> --- a/arch/csky/mm/fault.c
-> +++ b/arch/csky/mm/fault.c
-> @@ -279,8 +279,11 @@ asmlinkage void do_page_fault(struct pt_regs *regs)
->  	 * signal first. We do not need to release the mmap_lock because it
->  	 * would already be released in __lock_page_or_retry in mm/filemap.c.
->  	 */
-> -	if (fault_signal_pending(fault, regs))
-> +	if (fault_signal_pending(fault, regs)) {
-> +		if (!user_mode(regs))
-> +			no_context(regs, addr);
->  		return;
-> +	}
+From: Guo Ren <guoren@linux.alibaba.com>
 
-FWIW, this looks right to me -- I assumed you've tested with the
-test-case in the linked email?
+Optimize the performance of cmpxchg by using more fine-grained
+acquire/release barriers.
 
-It looks like a number of other architectures are still broken here. :/
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+---
+ arch/csky/include/asm/cmpxchg.h | 27 +++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
 
-I'll go and poke them...
+diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
+index 89224530a0ee..dabc8e46ce7b 100644
+--- a/arch/csky/include/asm/cmpxchg.h
++++ b/arch/csky/include/asm/cmpxchg.h
+@@ -3,12 +3,12 @@
+ #ifndef __ASM_CSKY_CMPXCHG_H
+ #define __ASM_CSKY_CMPXCHG_H
+ 
+-#ifdef CONFIG_CPU_HAS_LDSTEX
++#ifdef CONFIG_SMP
+ #include <asm/barrier.h>
+ 
+ extern void __bad_xchg(void);
+ 
+-#define __xchg(new, ptr, size)					\
++#define __xchg_relaxed(new, ptr, size)				\
+ ({								\
+ 	__typeof__(ptr) __ptr = (ptr);				\
+ 	__typeof__(new) __new = (new);				\
+@@ -16,7 +16,6 @@ extern void __bad_xchg(void);
+ 	unsigned long tmp;					\
+ 	switch (size) {						\
+ 	case 4:							\
+-		smp_mb();					\
+ 		asm volatile (					\
+ 		"1:	ldex.w		%0, (%3) \n"		\
+ 		"	mov		%1, %2   \n"		\
+@@ -25,7 +24,6 @@ extern void __bad_xchg(void);
+ 			: "=&r" (__ret), "=&r" (tmp)		\
+ 			: "r" (__new), "r"(__ptr)		\
+ 			:);					\
+-		smp_mb();					\
+ 		break;						\
+ 	default:						\
+ 		__bad_xchg();					\
+@@ -33,9 +31,10 @@ extern void __bad_xchg(void);
+ 	__ret;							\
+ })
+ 
+-#define xchg(ptr, x)	(__xchg((x), (ptr), sizeof(*(ptr))))
++#define xchg_relaxed(ptr, x) \
++		(__xchg_relaxed((x), (ptr), sizeof(*(ptr))))
+ 
+-#define __cmpxchg(ptr, old, new, size)				\
++#define __cmpxchg_relaxed(ptr, old, new, size)			\
+ ({								\
+ 	__typeof__(ptr) __ptr = (ptr);				\
+ 	__typeof__(new) __new = (new);				\
+@@ -44,7 +43,6 @@ extern void __bad_xchg(void);
+ 	__typeof__(*(ptr)) __ret;				\
+ 	switch (size) {						\
+ 	case 4:							\
+-		smp_mb();					\
+ 		asm volatile (					\
+ 		"1:	ldex.w		%0, (%3) \n"		\
+ 		"	cmpne		%0, %4   \n"		\
+@@ -56,7 +54,6 @@ extern void __bad_xchg(void);
+ 			: "=&r" (__ret), "=&r" (__tmp)		\
+ 			: "r" (__new), "r"(__ptr), "r"(__old)	\
+ 			:);					\
+-		smp_mb();					\
+ 		break;						\
+ 	default:						\
+ 		__bad_xchg();					\
+@@ -64,8 +61,18 @@ extern void __bad_xchg(void);
+ 	__ret;							\
+ })
+ 
+-#define cmpxchg(ptr, o, n) \
+-	(__cmpxchg((ptr), (o), (n), sizeof(*(ptr))))
++#define cmpxchg_relaxed(ptr, o, n) \
++	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
++
++#define cmpxchg(ptr, o, n) 					\
++({								\
++	__typeof__(*(ptr)) __ret;				\
++	__smp_release_fence();					\
++	__ret = cmpxchg_relaxed(ptr, o, n);			\
++	__smp_acquire_fence();					\
++	__ret;							\
++})
++
+ #else
+ #include <asm-generic/cmpxchg.h>
+ #endif
+-- 
+2.17.1
 
-Thanks,
-Mark.
-  
->  	if (unlikely((fault & VM_FAULT_RETRY) && (flags & FAULT_FLAG_ALLOW_RETRY))) {
->  		flags |= FAULT_FLAG_TRIED;
-> -- 
-> 2.17.1
-> 
