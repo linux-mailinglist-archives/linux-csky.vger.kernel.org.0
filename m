@@ -2,37 +2,34 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D1E2FE344
+	by mail.lfdr.de (Postfix) with ESMTP id C54B22FE345
 	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 07:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726724AbhAUG6W (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 21 Jan 2021 01:58:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36486 "EHLO mail.kernel.org"
+        id S1726760AbhAUG60 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 Jan 2021 01:58:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726431AbhAUG5X (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        id S1726445AbhAUG5X (ORCPT <rfc822;linux-csky@vger.kernel.org>);
         Thu, 21 Jan 2021 01:57:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 74AB323976;
-        Thu, 21 Jan 2021 06:56:36 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0027423788;
+        Thu, 21 Jan 2021 06:56:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212199;
-        bh=9crLphldI+pxbID6OLrwUOxXKprJ2xTa4r9Ylj/4pto=;
+        s=k20201202; t=1611212201;
+        bh=BDKID0D/DjLf0/giy43ab3WNpzv+B/Dv/2ljTkyqQm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u+qbVqX+KKYPjevMwToIsLBnYVWttDKtaMLnA7NQCLfrw2ydSPnUXU+I4dZP6hXfg
-         vWm1vNwk+9XYGC0ZcBYivPDUUd7l7swN4X+Vwc6dJr0ppN3QzGMdH9/s1uw4ezSqfd
-         zIgWdwN43CnlDkCq4TiVy7n0qVni/f7itK497asRmdIbtyz9ACM69kxADGkVOHMAju
-         NOnikyFnWdIeyjPvgseFlED1EczQiMedklhzQ+hvjr6xbyYvl7PWodizro9inJ0fSe
-         c9w3etE4/u/gwvciAsH/lM54ocV42e8utvTJQLRYlu3nuygkuVAYCIMXechJgHMiXS
-         tI0mOJynrCESg==
+        b=IjuEqZKpP7TNniwWXxfJkftqyW3qH0ErAKyt4LAHLMRrJldC0k5vRPtOIhoNvWQ/n
+         /QeSM5v+XadjoxnRo0P+OO/e0xS8xwqOFBueGZ/+o8EUpEPnNtqNoCk1foqc+sSh8y
+         KttUxgxz+GZu+EAaqUT+jAUGdwQ/r0ZxPvDXDwBvrwlbw2oR2ndspa8cumGRGF52zz
+         ndjJSBnI9vJL45xAYpm1lMSFJTjhZ4tTQztSnuvwd5SSwoF/2jJF6ufJOikDrotBVa
+         YCXxWhueshFPn5Pf7TxHHte0b5icYCE9rGlJGimARVW9wAbqiba7FSCI/nugTHK4Rj
+         zqQKECqSQmT5A==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH 04/29] csky: Remove custom asm/atomic.h implementation
-Date:   Thu, 21 Jan 2021 14:53:24 +0800
-Message-Id: <20210121065349.3188251-4-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 05/29] csky: Fixup barrier design
+Date:   Thu, 21 Jan 2021 14:53:25 +0800
+Message-Id: <20210121065349.3188251-5-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
@@ -42,236 +39,119 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Use generic atomic implementation based on cmpxchg. So remove csky
-asm/atomic.h.
+Remove shareable bit for ordering barrier, just keep ordering
+in current hart is enough for SMP. Using three continuous
+sync.is as PTW barrier to prevent speculative PTW in 860
+microarchitecture.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Paul E. McKenney <paulmck@kernel.org>
 ---
- arch/csky/include/asm/atomic.h | 212 ---------------------------------
- 1 file changed, 212 deletions(-)
- delete mode 100644 arch/csky/include/asm/atomic.h
+ arch/csky/include/asm/barrier.h | 82 ++++++++++++++++++++++++---------
+ 1 file changed, 60 insertions(+), 22 deletions(-)
 
-diff --git a/arch/csky/include/asm/atomic.h b/arch/csky/include/asm/atomic.h
-deleted file mode 100644
-index e369d73b13e3..000000000000
---- a/arch/csky/include/asm/atomic.h
-+++ /dev/null
-@@ -1,212 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
+diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
+index a430e7fddf35..117e6224defa 100644
+--- a/arch/csky/include/asm/barrier.h
++++ b/arch/csky/include/asm/barrier.h
+@@ -8,6 +8,61 @@
+ 
+ #define nop()	asm volatile ("nop\n":::"memory")
+ 
++#ifdef CONFIG_SMP
++
++/*
++ * bar.brwarws: ordering barrier for all load/store instructions
++ *              before/after
++ *
++ * |31|30 26|25 21|20 16|15  10|9   5|4           0|
++ *  1  10000 00000 00000 100001	00001 0 bw br aw ar
++ *
++ * b: before
++ * a: after
++ * r: read
++ * w: write
++ *
++ * Here are all combinations:
++ *
++ * bar.brw
++ * bar.br
++ * bar.bw
++ * bar.arw
++ * bar.ar
++ * bar.aw
++ * bar.brwarw
++ * bar.brarw
++ * bar.bwarw
++ * bar.brwar
++ * bar.brwaw
++ * bar.brar
++ * bar.bwaw
++ */
++#define __bar_brw()	asm volatile (".long 0x842cc000\n":::"memory")
++#define __bar_br()	asm volatile (".long 0x8424c000\n":::"memory")
++#define __bar_bw()	asm volatile (".long 0x8428c000\n":::"memory")
++#define __bar_arw()	asm volatile (".long 0x8423c000\n":::"memory")
++#define __bar_ar()	asm volatile (".long 0x8421c000\n":::"memory")
++#define __bar_aw()	asm volatile (".long 0x8422c000\n":::"memory")
++#define __bar_brwarw()	asm volatile (".long 0x842fc000\n":::"memory")
++#define __bar_brarw()	asm volatile (".long 0x8427c000\n":::"memory")
++#define __bar_bwarw()	asm volatile (".long 0x842bc000\n":::"memory")
++#define __bar_brwar()	asm volatile (".long 0x842dc000\n":::"memory")
++#define __bar_brwaw()	asm volatile (".long 0x842ec000\n":::"memory")
++#define __bar_brar()	asm volatile (".long 0x8425c000\n":::"memory")
++#define __bar_brar()	asm volatile (".long 0x8425c000\n":::"memory")
++#define __bar_bwaw()	asm volatile (".long 0x842ac000\n":::"memory")
++
++#define __smp_mb()	__bar_brwarw()
++#define __smp_rmb()	__bar_brar()
++#define __smp_wmb()	__bar_bwaw()
++
++#define ACQUIRE_FENCE		".long 0x8427c000\n"
++#define __smp_acquire_fence()	__bar_brarw()
++#define __smp_release_fence()	__bar_brwaw()
++
++#endif /* CONFIG_SMP */
++
+ /*
+  * sync:        completion barrier, all sync.xx instructions
+  *              guarantee the last response recieved by bus transaction
+@@ -15,31 +70,14 @@
+  * sync.s:      inherit from sync, but also shareable to other cores
+  * sync.i:      inherit from sync, but also flush cpu pipeline
+  * sync.is:     the same with sync.i + sync.s
+- *
+- * bar.brwarw:  ordering barrier for all load/store instructions before it
+- * bar.brwarws: ordering barrier for all load/store instructions before it
+- *						and shareable to other cores
+- * bar.brar:    ordering barrier for all load       instructions before it
+- * bar.brars:   ordering barrier for all load       instructions before it
+- *						and shareable to other cores
+- * bar.bwaw:    ordering barrier for all store      instructions before it
+- * bar.bwaws:   ordering barrier for all store      instructions before it
+- *						and shareable to other cores
+  */
++#define mb()		asm volatile ("sync\n":::"memory")
+ 
+ #ifdef CONFIG_CPU_HAS_CACHEV2
+-#define mb()		asm volatile ("sync.s\n":::"memory")
 -
--#ifndef __ASM_CSKY_ATOMIC_H
--#define __ASM_CSKY_ATOMIC_H
+-#ifdef CONFIG_SMP
+-#define __smp_mb()	asm volatile ("bar.brwarws\n":::"memory")
+-#define __smp_rmb()	asm volatile ("bar.brars\n":::"memory")
+-#define __smp_wmb()	asm volatile ("bar.bwaws\n":::"memory")
+-#endif /* CONFIG_SMP */
 -
--#include <linux/version.h>
--#include <asm/cmpxchg.h>
--#include <asm/barrier.h>
+-#define sync_is()	asm volatile ("sync.is\n":::"memory")
 -
--#ifdef CONFIG_CPU_HAS_LDSTEX
--
--#define __atomic_add_unless __atomic_add_unless
--static inline int __atomic_add_unless(atomic_t *v, int a, int u)
--{
--	unsigned long tmp, ret;
--
--	smp_mb();
--
--	asm volatile (
--	"1:	ldex.w		%0, (%3) \n"
--	"	mov		%1, %0   \n"
--	"	cmpne		%0, %4   \n"
--	"	bf		2f	 \n"
--	"	add		%0, %2   \n"
--	"	stex.w		%0, (%3) \n"
--	"	bez		%0, 1b   \n"
--	"2:				 \n"
--		: "=&r" (tmp), "=&r" (ret)
--		: "r" (a), "r"(&v->counter), "r"(u)
--		: "memory");
--
--	if (ret != u)
--		smp_mb();
--
--	return ret;
--}
--
--#define ATOMIC_OP(op, c_op)						\
--static inline void atomic_##op(int i, atomic_t *v)			\
--{									\
--	unsigned long tmp;						\
--									\
--	asm volatile (							\
--	"1:	ldex.w		%0, (%2) \n"				\
--	"	" #op "		%0, %1   \n"				\
--	"	stex.w		%0, (%2) \n"				\
--	"	bez		%0, 1b   \n"				\
--		: "=&r" (tmp)						\
--		: "r" (i), "r"(&v->counter)				\
--		: "memory");						\
--}
--
--#define ATOMIC_OP_RETURN(op, c_op)					\
--static inline int atomic_##op##_return(int i, atomic_t *v)		\
--{									\
--	unsigned long tmp, ret;						\
--									\
--	smp_mb();							\
--	asm volatile (							\
--	"1:	ldex.w		%0, (%3) \n"				\
--	"	" #op "		%0, %2   \n"				\
--	"	mov		%1, %0   \n"				\
--	"	stex.w		%0, (%3) \n"				\
--	"	bez		%0, 1b   \n"				\
--		: "=&r" (tmp), "=&r" (ret)				\
--		: "r" (i), "r"(&v->counter)				\
--		: "memory");						\
--	smp_mb();							\
--									\
--	return ret;							\
--}
--
--#define ATOMIC_FETCH_OP(op, c_op)					\
--static inline int atomic_fetch_##op(int i, atomic_t *v)			\
--{									\
--	unsigned long tmp, ret;						\
--									\
--	smp_mb();							\
--	asm volatile (							\
--	"1:	ldex.w		%0, (%3) \n"				\
--	"	mov		%1, %0   \n"				\
--	"	" #op "		%0, %2   \n"				\
--	"	stex.w		%0, (%3) \n"				\
--	"	bez		%0, 1b   \n"				\
--		: "=&r" (tmp), "=&r" (ret)				\
--		: "r" (i), "r"(&v->counter)				\
--		: "memory");						\
--	smp_mb();							\
--									\
--	return ret;							\
--}
--
--#else /* CONFIG_CPU_HAS_LDSTEX */
--
--#include <linux/irqflags.h>
--
--#define __atomic_add_unless __atomic_add_unless
--static inline int __atomic_add_unless(atomic_t *v, int a, int u)
--{
--	unsigned long tmp, ret, flags;
--
--	raw_local_irq_save(flags);
--
--	asm volatile (
--	"	ldw		%0, (%3) \n"
--	"	mov		%1, %0   \n"
--	"	cmpne		%0, %4   \n"
--	"	bf		2f	 \n"
--	"	add		%0, %2   \n"
--	"	stw		%0, (%3) \n"
--	"2:				 \n"
--		: "=&r" (tmp), "=&r" (ret)
--		: "r" (a), "r"(&v->counter), "r"(u)
--		: "memory");
--
--	raw_local_irq_restore(flags);
--
--	return ret;
--}
--
--#define ATOMIC_OP(op, c_op)						\
--static inline void atomic_##op(int i, atomic_t *v)			\
--{									\
--	unsigned long tmp, flags;					\
--									\
--	raw_local_irq_save(flags);					\
--									\
--	asm volatile (							\
--	"	ldw		%0, (%2) \n"				\
--	"	" #op "		%0, %1   \n"				\
--	"	stw		%0, (%2) \n"				\
--		: "=&r" (tmp)						\
--		: "r" (i), "r"(&v->counter)				\
--		: "memory");						\
--									\
--	raw_local_irq_restore(flags);					\
--}
--
--#define ATOMIC_OP_RETURN(op, c_op)					\
--static inline int atomic_##op##_return(int i, atomic_t *v)		\
--{									\
--	unsigned long tmp, ret, flags;					\
--									\
--	raw_local_irq_save(flags);					\
--									\
--	asm volatile (							\
--	"	ldw		%0, (%3) \n"				\
--	"	" #op "		%0, %2   \n"				\
--	"	stw		%0, (%3) \n"				\
--	"	mov		%1, %0   \n"				\
--		: "=&r" (tmp), "=&r" (ret)				\
--		: "r" (i), "r"(&v->counter)				\
--		: "memory");						\
--									\
--	raw_local_irq_restore(flags);					\
--									\
--	return ret;							\
--}
--
--#define ATOMIC_FETCH_OP(op, c_op)					\
--static inline int atomic_fetch_##op(int i, atomic_t *v)			\
--{									\
--	unsigned long tmp, ret, flags;					\
--									\
--	raw_local_irq_save(flags);					\
--									\
--	asm volatile (							\
--	"	ldw		%0, (%3) \n"				\
--	"	mov		%1, %0   \n"				\
--	"	" #op "		%0, %2   \n"				\
--	"	stw		%0, (%3) \n"				\
--		: "=&r" (tmp), "=&r" (ret)				\
--		: "r" (i), "r"(&v->counter)				\
--		: "memory");						\
--									\
--	raw_local_irq_restore(flags);					\
--									\
--	return ret;							\
--}
--
--#endif /* CONFIG_CPU_HAS_LDSTEX */
--
--#define atomic_add_return atomic_add_return
--ATOMIC_OP_RETURN(add, +)
--#define atomic_sub_return atomic_sub_return
--ATOMIC_OP_RETURN(sub, -)
--
--#define atomic_fetch_add atomic_fetch_add
--ATOMIC_FETCH_OP(add, +)
--#define atomic_fetch_sub atomic_fetch_sub
--ATOMIC_FETCH_OP(sub, -)
--#define atomic_fetch_and atomic_fetch_and
--ATOMIC_FETCH_OP(and, &)
--#define atomic_fetch_or atomic_fetch_or
--ATOMIC_FETCH_OP(or, |)
--#define atomic_fetch_xor atomic_fetch_xor
--ATOMIC_FETCH_OP(xor, ^)
--
--#define atomic_and atomic_and
--ATOMIC_OP(and, &)
--#define atomic_or atomic_or
--ATOMIC_OP(or, |)
--#define atomic_xor atomic_xor
--ATOMIC_OP(xor, ^)
--
--#undef ATOMIC_FETCH_OP
--#undef ATOMIC_OP_RETURN
--#undef ATOMIC_OP
--
--#include <asm-generic/atomic.h>
--
--#endif /* __ASM_CSKY_ATOMIC_H */
+-#else /* !CONFIG_CPU_HAS_CACHEV2 */
+-#define mb()		asm volatile ("sync\n":::"memory")
++/*
++ * Using three sync.is to prevent speculative PTW
++ */
++#define sync_is()	asm volatile ("sync.is\nsync.is\nsync.is\n":::"memory")
+ #endif
+ 
+ #include <asm-generic/barrier.h>
 -- 
 2.17.1
 
