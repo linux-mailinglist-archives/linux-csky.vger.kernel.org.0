@@ -2,34 +2,37 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CF42FE343
-	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 07:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D1E2FE344
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 07:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726324AbhAUG6T (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 21 Jan 2021 01:58:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36452 "EHLO mail.kernel.org"
+        id S1726724AbhAUG6W (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 Jan 2021 01:58:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36486 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726427AbhAUG5W (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:57:22 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C5AC23977;
-        Thu, 21 Jan 2021 06:56:34 +0000 (UTC)
+        id S1726431AbhAUG5X (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 01:57:23 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 74AB323976;
+        Thu, 21 Jan 2021 06:56:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212195;
-        bh=+lVc5kXTHoD8tXEyQxzixx97JVig0Qgc5LRMhACBKUo=;
+        s=k20201202; t=1611212199;
+        bh=9crLphldI+pxbID6OLrwUOxXKprJ2xTa4r9Ylj/4pto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OPeyHBUYxylR9oygPRH5nLMX+1cmIMb3Vm/pp29MJz+f4jzezAqXcQzj8GK0+KxBC
-         6yKjOtMKPX/yEGL9VTvGU7KoRTL9uVZYS48L4FEHznRkurjWrvhBRcpvecgWAhK+PQ
-         USXskH86IBxhr6D09Es1U33PyPleY1JsGtM2xhZAS5Abj5oQGcFUYvcsYC1ZnwRci3
-         T1COYRMtYgMgaJZ7SunCY4QpFrXhAPKtV7REQLayw2yBGe1tJivSeyeVgsmPFHfBP1
-         5K2as6FOe2b884yiKwB2XLE0WwNCH1mQycMqnXIhhh5LI+Fjkze8OEnnW06ZVd+1Yx
-         78A1dlOky3iiw==
+        b=u+qbVqX+KKYPjevMwToIsLBnYVWttDKtaMLnA7NQCLfrw2ydSPnUXU+I4dZP6hXfg
+         vWm1vNwk+9XYGC0ZcBYivPDUUd7l7swN4X+Vwc6dJr0ppN3QzGMdH9/s1uw4ezSqfd
+         zIgWdwN43CnlDkCq4TiVy7n0qVni/f7itK497asRmdIbtyz9ACM69kxADGkVOHMAju
+         NOnikyFnWdIeyjPvgseFlED1EczQiMedklhzQ+hvjr6xbyYvl7PWodizro9inJ0fSe
+         c9w3etE4/u/gwvciAsH/lM54ocV42e8utvTJQLRYlu3nuygkuVAYCIMXechJgHMiXS
+         tI0mOJynrCESg==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 03/29] csky: Fixup show_regs doesn't contain regs->usp
-Date:   Thu, 21 Jan 2021 14:53:23 +0800
-Message-Id: <20210121065349.3188251-3-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH 04/29] csky: Remove custom asm/atomic.h implementation
+Date:   Thu, 21 Jan 2021 14:53:24 +0800
+Message-Id: <20210121065349.3188251-4-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
@@ -39,31 +42,236 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Current show_regs didn't display regs->usp and it confused debug.
-So fixup wrong SP display and add PT_REGS.
+Use generic atomic implementation based on cmpxchg. So remove csky
+asm/atomic.h.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@kernel.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
 ---
- arch/csky/kernel/ptrace.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/csky/include/asm/atomic.h | 212 ---------------------------------
+ 1 file changed, 212 deletions(-)
+ delete mode 100644 arch/csky/include/asm/atomic.h
 
-diff --git a/arch/csky/kernel/ptrace.c b/arch/csky/kernel/ptrace.c
-index d822144906ac..e5bd4e01b861 100644
---- a/arch/csky/kernel/ptrace.c
-+++ b/arch/csky/kernel/ptrace.c
-@@ -363,9 +363,10 @@ void show_regs(struct pt_regs *fp)
- 
- 	pr_info("PC: 0x%08lx (%pS)\n", (long)fp->pc, (void *)fp->pc);
- 	pr_info("LR: 0x%08lx (%pS)\n", (long)fp->lr, (void *)fp->lr);
--	pr_info("SP: 0x%08lx\n", (long)fp);
--	pr_info("orig_a0: 0x%08lx\n", fp->orig_a0);
-+	pr_info("SP: 0x%08lx\n", (long)fp->usp);
- 	pr_info("PSR: 0x%08lx\n", (long)fp->sr);
-+	pr_info("orig_a0: 0x%08lx\n", fp->orig_a0);
-+	pr_info("PT_REGS: 0x%08lx\n", (long)fp);
- 
- 	pr_info(" a0: 0x%08lx   a1: 0x%08lx   a2: 0x%08lx   a3: 0x%08lx\n",
- 		fp->a0, fp->a1, fp->a2, fp->a3);
+diff --git a/arch/csky/include/asm/atomic.h b/arch/csky/include/asm/atomic.h
+deleted file mode 100644
+index e369d73b13e3..000000000000
+--- a/arch/csky/include/asm/atomic.h
++++ /dev/null
+@@ -1,212 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-
+-#ifndef __ASM_CSKY_ATOMIC_H
+-#define __ASM_CSKY_ATOMIC_H
+-
+-#include <linux/version.h>
+-#include <asm/cmpxchg.h>
+-#include <asm/barrier.h>
+-
+-#ifdef CONFIG_CPU_HAS_LDSTEX
+-
+-#define __atomic_add_unless __atomic_add_unless
+-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
+-{
+-	unsigned long tmp, ret;
+-
+-	smp_mb();
+-
+-	asm volatile (
+-	"1:	ldex.w		%0, (%3) \n"
+-	"	mov		%1, %0   \n"
+-	"	cmpne		%0, %4   \n"
+-	"	bf		2f	 \n"
+-	"	add		%0, %2   \n"
+-	"	stex.w		%0, (%3) \n"
+-	"	bez		%0, 1b   \n"
+-	"2:				 \n"
+-		: "=&r" (tmp), "=&r" (ret)
+-		: "r" (a), "r"(&v->counter), "r"(u)
+-		: "memory");
+-
+-	if (ret != u)
+-		smp_mb();
+-
+-	return ret;
+-}
+-
+-#define ATOMIC_OP(op, c_op)						\
+-static inline void atomic_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp;						\
+-									\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%2) \n"				\
+-	"	" #op "		%0, %1   \n"				\
+-	"	stex.w		%0, (%2) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp)						\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-}
+-
+-#define ATOMIC_OP_RETURN(op, c_op)					\
+-static inline int atomic_##op##_return(int i, atomic_t *v)		\
+-{									\
+-	unsigned long tmp, ret;						\
+-									\
+-	smp_mb();							\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%3) \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	stex.w		%0, (%3) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-	smp_mb();							\
+-									\
+-	return ret;							\
+-}
+-
+-#define ATOMIC_FETCH_OP(op, c_op)					\
+-static inline int atomic_fetch_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, ret;						\
+-									\
+-	smp_mb();							\
+-	asm volatile (							\
+-	"1:	ldex.w		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stex.w		%0, (%3) \n"				\
+-	"	bez		%0, 1b   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-	smp_mb();							\
+-									\
+-	return ret;							\
+-}
+-
+-#else /* CONFIG_CPU_HAS_LDSTEX */
+-
+-#include <linux/irqflags.h>
+-
+-#define __atomic_add_unless __atomic_add_unless
+-static inline int __atomic_add_unless(atomic_t *v, int a, int u)
+-{
+-	unsigned long tmp, ret, flags;
+-
+-	raw_local_irq_save(flags);
+-
+-	asm volatile (
+-	"	ldw		%0, (%3) \n"
+-	"	mov		%1, %0   \n"
+-	"	cmpne		%0, %4   \n"
+-	"	bf		2f	 \n"
+-	"	add		%0, %2   \n"
+-	"	stw		%0, (%3) \n"
+-	"2:				 \n"
+-		: "=&r" (tmp), "=&r" (ret)
+-		: "r" (a), "r"(&v->counter), "r"(u)
+-		: "memory");
+-
+-	raw_local_irq_restore(flags);
+-
+-	return ret;
+-}
+-
+-#define ATOMIC_OP(op, c_op)						\
+-static inline void atomic_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%2) \n"				\
+-	"	" #op "		%0, %1   \n"				\
+-	"	stw		%0, (%2) \n"				\
+-		: "=&r" (tmp)						\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-}
+-
+-#define ATOMIC_OP_RETURN(op, c_op)					\
+-static inline int atomic_##op##_return(int i, atomic_t *v)		\
+-{									\
+-	unsigned long tmp, ret, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%3) \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stw		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-									\
+-	return ret;							\
+-}
+-
+-#define ATOMIC_FETCH_OP(op, c_op)					\
+-static inline int atomic_fetch_##op(int i, atomic_t *v)			\
+-{									\
+-	unsigned long tmp, ret, flags;					\
+-									\
+-	raw_local_irq_save(flags);					\
+-									\
+-	asm volatile (							\
+-	"	ldw		%0, (%3) \n"				\
+-	"	mov		%1, %0   \n"				\
+-	"	" #op "		%0, %2   \n"				\
+-	"	stw		%0, (%3) \n"				\
+-		: "=&r" (tmp), "=&r" (ret)				\
+-		: "r" (i), "r"(&v->counter)				\
+-		: "memory");						\
+-									\
+-	raw_local_irq_restore(flags);					\
+-									\
+-	return ret;							\
+-}
+-
+-#endif /* CONFIG_CPU_HAS_LDSTEX */
+-
+-#define atomic_add_return atomic_add_return
+-ATOMIC_OP_RETURN(add, +)
+-#define atomic_sub_return atomic_sub_return
+-ATOMIC_OP_RETURN(sub, -)
+-
+-#define atomic_fetch_add atomic_fetch_add
+-ATOMIC_FETCH_OP(add, +)
+-#define atomic_fetch_sub atomic_fetch_sub
+-ATOMIC_FETCH_OP(sub, -)
+-#define atomic_fetch_and atomic_fetch_and
+-ATOMIC_FETCH_OP(and, &)
+-#define atomic_fetch_or atomic_fetch_or
+-ATOMIC_FETCH_OP(or, |)
+-#define atomic_fetch_xor atomic_fetch_xor
+-ATOMIC_FETCH_OP(xor, ^)
+-
+-#define atomic_and atomic_and
+-ATOMIC_OP(and, &)
+-#define atomic_or atomic_or
+-ATOMIC_OP(or, |)
+-#define atomic_xor atomic_xor
+-ATOMIC_OP(xor, ^)
+-
+-#undef ATOMIC_FETCH_OP
+-#undef ATOMIC_OP_RETURN
+-#undef ATOMIC_OP
+-
+-#include <asm-generic/atomic.h>
+-
+-#endif /* __ASM_CSKY_ATOMIC_H */
 -- 
 2.17.1
 
