@@ -2,37 +2,34 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D2A2FE45E
-	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 08:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A95A2FE458
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 08:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbhAUHuL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 21 Jan 2021 02:50:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36772 "EHLO mail.kernel.org"
+        id S1727841AbhAUHtC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 Jan 2021 02:49:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36838 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726570AbhAUG6H (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 01:58:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B27C8235F9;
-        Thu, 21 Jan 2021 06:56:42 +0000 (UTC)
+        id S1726623AbhAUG6P (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 01:58:15 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 13FA8239A4;
+        Thu, 21 Jan 2021 06:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611212206;
-        bh=1U7yvjmMuzK51PmNewaagHReE48I6+8IeKcDglA4DxI=;
+        s=k20201202; t=1611212221;
+        bh=HNNMT9CIDk/vbSkKJSvWDbbApzJApXDkSAirk+ezFUk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HN3qfzI2jmDVAzsVy4ucLz7lsp/KEtdOX3ZMJ4sk88qU+eEE4Vw42P1aTfV9iWaVK
-         CW97GgYZKu/cxL0ZwBU5+Zudc4qLcWJT2gXgbGn6QtxaxvCO0L8LJ5YEgKh0rSP5VT
-         8Id7I/wMCN/G/rsynRYns8R7YdcFxdrIWLkffoKh0bcsnYGNP0/+4Ip7449yT9eqSY
-         s8dimmwfShIKiv7KeP+DgBWx6E9wEfC71nTPfJEzQenthpjrqk24/Miu3S5He2YD+w
-         J83CUhkevvx12dzyFdc8zWed99LlPj4YsHEAV24yC6AdLOgbfxfYxa35oZ0NTALJ0u
-         PR7CcE374mU2Q==
+        b=qHyyzDt4vqi8FLhn4fxS+4mbeEtQC9QH8lXXD37XOIkZZVizpanfNRYBCfGpuTKia
+         P+CoWatYd5d3gCGDlkFL8ggOR6rZNpBF9oDLdzAJM3NhN2YGdgFRRwK6dhxKIvGpK0
+         WgFu3OAStPo/uVjOE80858DEryC8yLraV+IcfoBlwaZUxOHEKYbHO45Fwk39fvpe25
+         Zmb2MCWUWxJWr1BlaOsd62PJs6d584mi0y7i/Jg7CIQ3veB79btULETPWqdJ38YDRa
+         PqdK8KQBdi+/t9ec7PtyYrWbV5nw/rx0VREs8r2837U25WiKbklOYPZyDl3nQjKhLU
+         eBN2Nl/2IISOw==
 From:   guoren@kernel.org
 To:     guoren@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH 06/29] csky: Fixup futex SMP implementation
-Date:   Thu, 21 Jan 2021 14:53:26 +0800
-Message-Id: <20210121065349.3188251-6-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 12/29] csky: Fix TLB maintenance synchronization problem
+Date:   Thu, 21 Jan 2021 14:53:32 +0800
+Message-Id: <20210121065349.3188251-12-guoren@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
 References: <20210121065349.3188251-1-guoren@kernel.org>
@@ -42,178 +39,223 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Arnd said:
-I would guess that for csky, this is a mistake, as the architecture
-is fairly new and should be able to implement it.
+TLB invalidate didn't contain a barrier operation in csky cpu and
+we need to prevent previous PTW response after TLB invalidation
+instruction. Of cause, the ASID changing also needs to take care
+of the issue.
 
-Guo reply:
-The c610, c807, c810 don't support SMP, so futex_cmpxchg_enabled = 1
-with asm-generic's implementation.
-For c860, there is no HAVE_FUTEX_CMPXCHG and cmpxchg_inatomic/inuser
-implementation, so futex_cmpxchg_enabled = 0.
-
-Thx for point it out, we'll implement cmpxchg_inatomic/inuser for
-C860 and still use asm-generic for non-smp CPUs.
-
-LTP test:
-futex_wait01    1  TPASS  :  futex_wait(): errno=ETIMEDOUT(110): Connection timed out
-futex_wait01    2  TPASS  :  futex_wait(): errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
-futex_wait01    3  TPASS  :  futex_wait(): errno=ETIMEDOUT(110): Connection timed out
-futex_wait01    4  TPASS  :  futex_wait(): errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
-futex_wait02    1  TPASS  :  futex_wait() woken up
-futex_wait03    1  TPASS  :  futex_wait() woken up
-futex_wait04    1  TPASS  :  futex_wait() returned -1: errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
+CPU0                    CPU1
+===============         ===============
+set_pte
+sync_is()        ->     See the previous set_pte for all harts
+tlbi.vas         ->     Invalidate all harts TLB entry & flush pipeline
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Arnd Bergmann <arnd@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Link: https://lore.kernel.org/lkml/CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com/
 ---
- arch/csky/Kconfig             |   1 +
- arch/csky/include/asm/futex.h | 121 ++++++++++++++++++++++++++++++++++
- 2 files changed, 122 insertions(+)
- create mode 100644 arch/csky/include/asm/futex.h
+ arch/csky/abiv1/inc/abi/ckmmu.h     |  3 ++-
+ arch/csky/abiv2/inc/abi/ckmmu.h     | 35 ++++++++++++++++++++----
+ arch/csky/include/asm/mmu_context.h |  3 +--
+ arch/csky/mm/init.c                 |  2 +-
+ arch/csky/mm/tlb.c                  | 42 ++++++++++++++++++++++++-----
+ 5 files changed, 69 insertions(+), 16 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 21b2ab099c8b..c74a8e2e8549 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -48,6 +48,7 @@ config CSKY
- 	select HAVE_FUNCTION_TRACER
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_ERROR_INJECTION
-+	select HAVE_FUTEX_CMPXCHG if FUTEX && SMP
- 	select HAVE_FTRACE_MCOUNT_RECORD
- 	select HAVE_KERNEL_GZIP
- 	select HAVE_KERNEL_LZO
-diff --git a/arch/csky/include/asm/futex.h b/arch/csky/include/asm/futex.h
-new file mode 100644
-index 000000000000..6cfd312723fa
---- /dev/null
-+++ b/arch/csky/include/asm/futex.h
-@@ -0,0 +1,121 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+diff --git a/arch/csky/abiv1/inc/abi/ckmmu.h b/arch/csky/abiv1/inc/abi/ckmmu.h
+index cceb3afb4c91..b4650de43078 100644
+--- a/arch/csky/abiv1/inc/abi/ckmmu.h
++++ b/arch/csky/abiv1/inc/abi/ckmmu.h
+@@ -89,9 +89,10 @@ static inline void tlb_invalid_indexed(void)
+ 	cpwcr("cpcr8", 0x02000000);
+ }
+ 
+-static inline void setup_pgd(pgd_t *pgd)
++static inline void setup_pgd(pgd_t *pgd, int asid)
+ {
+ 	cpwcr("cpcr29", __pa(pgd) | BIT(0));
++	write_mmu_entryhi(asid);
+ }
+ 
+ static inline pgd_t *get_pgd(void)
+diff --git a/arch/csky/abiv2/inc/abi/ckmmu.h b/arch/csky/abiv2/inc/abi/ckmmu.h
+index c39b13810550..530d2c7edc85 100644
+--- a/arch/csky/abiv2/inc/abi/ckmmu.h
++++ b/arch/csky/abiv2/inc/abi/ckmmu.h
+@@ -78,8 +78,13 @@ static inline void tlb_read(void)
+ static inline void tlb_invalid_all(void)
+ {
+ #ifdef CONFIG_CPU_HAS_TLBI
+-	asm volatile("tlbi.alls\n":::"memory");
+ 	sync_is();
++	asm volatile(
++		"tlbi.alls	\n"
++		"sync.i		\n"
++		:
++		:
++		: "memory");
+ #else
+ 	mtcr("cr<8, 15>", 0x04000000);
+ #endif
+@@ -88,8 +93,13 @@ static inline void tlb_invalid_all(void)
+ static inline void local_tlb_invalid_all(void)
+ {
+ #ifdef CONFIG_CPU_HAS_TLBI
+-	asm volatile("tlbi.all\n":::"memory");
+ 	sync_is();
++	asm volatile(
++		"tlbi.all	\n"
++		"sync.i		\n"
++		:
++		:
++		: "memory");
+ #else
+ 	tlb_invalid_all();
+ #endif
+@@ -100,12 +110,27 @@ static inline void tlb_invalid_indexed(void)
+ 	mtcr("cr<8, 15>", 0x02000000);
+ }
+ 
+-static inline void setup_pgd(pgd_t *pgd)
++#define NOP32 ".long 0x4820c400\n"
 +
-+#ifndef __ASM_CSKY_FUTEX_H
-+#define __ASM_CSKY_FUTEX_H
-+
-+#ifndef CONFIG_SMP
-+#include <asm-generic/futex.h>
++static inline void setup_pgd(pgd_t *pgd, int asid)
+ {
+ #ifdef CONFIG_CPU_HAS_TLBI
+-	mtcr("cr<28, 15>", __pa(pgd) | BIT(0));
++	sync_is();
 +#else
-+#include <linux/atomic.h>
-+#include <linux/futex.h>
-+#include <linux/uaccess.h>
-+#include <linux/errno.h>
++	mb();
++#endif
++	asm volatile(
++#ifdef CONFIG_CPU_HAS_TLBI
++		"mtcr %1, cr<28, 15>	\n"
+ #endif
+-	mtcr("cr<29, 15>", __pa(pgd) | BIT(0));
++		"mtcr %1, cr<29, 15>	\n"
++		"mtcr %0, cr< 4, 15>	\n"
++		".rept 64		\n"
++		NOP32
++		".endr			\n"
++		:
++		:"r"(asid), "r"(__pa(pgd) | BIT(0))
++		:"memory");
+ }
+ 
+ static inline pgd_t *get_pgd(void)
+diff --git a/arch/csky/include/asm/mmu_context.h b/arch/csky/include/asm/mmu_context.h
+index 3767dbffd02f..594167bbdc63 100644
+--- a/arch/csky/include/asm/mmu_context.h
++++ b/arch/csky/include/asm/mmu_context.h
+@@ -30,8 +30,7 @@ switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	if (prev != next)
+ 		check_and_switch_context(next, cpu);
+ 
+-	setup_pgd(next->pgd);
+-	write_mmu_entryhi(next->context.asid.counter);
++	setup_pgd(next->pgd, next->context.asid.counter);
+ 
+ 	flush_icache_deferred(next);
+ }
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index 8170d7ce116b..bc05a3be9d57 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -164,7 +164,7 @@ void __init mmu_init(unsigned long min_pfn, unsigned long max_pfn)
+ 	/* Setup page mask to 4k */
+ 	write_mmu_pagemask(0);
+ 
+-	setup_pgd(swapper_pg_dir);
++	setup_pgd(swapper_pg_dir, 0);
+ }
+ 
+ void __init fixrange_init(unsigned long start, unsigned long end,
+diff --git a/arch/csky/mm/tlb.c b/arch/csky/mm/tlb.c
+index ed1512381112..9234c5e5ceaf 100644
+--- a/arch/csky/mm/tlb.c
++++ b/arch/csky/mm/tlb.c
+@@ -24,7 +24,13 @@ void flush_tlb_all(void)
+ void flush_tlb_mm(struct mm_struct *mm)
+ {
+ #ifdef CONFIG_CPU_HAS_TLBI
+-	asm volatile("tlbi.asids %0"::"r"(cpu_asid(mm)));
++	sync_is();
++	asm volatile(
++		"tlbi.asids %0	\n"
++		"sync.i		\n"
++		:
++		: "r" (cpu_asid(mm))
++		: "memory");
+ #else
+ 	tlb_invalid_all();
+ #endif
+@@ -53,11 +59,17 @@ void flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+ 	end   &= TLB_ENTRY_SIZE_MASK;
+ 
+ #ifdef CONFIG_CPU_HAS_TLBI
++	sync_is();
+ 	while (start < end) {
+-		asm volatile("tlbi.vas %0"::"r"(start | newpid));
++		asm volatile(
++			"tlbi.vas %0	\n"
++			:
++			: "r" (start | newpid)
++			: "memory");
 +
-+#define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
-+{									\
-+	u32 tmp;							\
-+									\
-+	__atomic_pre_full_fence();					\
-+									\
-+	__asm__ __volatile__ (						\
-+	"1:	ldex.w	%[ov], %[u]			\n"		\
-+	"	"insn"					\n"		\
-+	"2:	stex.w	%[t], %[u]			\n"		\
-+	"	bez	%[t], 1b			\n"		\
-+	"	br	4f				\n"		\
-+	"3:	mov	%[r], %[e]			\n"		\
-+	"4:						\n"		\
-+	"	.section __ex_table,\"a\"		\n"		\
-+	"	.balign 4				\n"		\
-+	"	.long	1b, 3b				\n"		\
-+	"	.long	2b, 3b				\n"		\
-+	"	.previous				\n"		\
-+	: [r] "+r" (ret), [ov] "=&r" (oldval),				\
-+	  [u] "+m" (*uaddr), [t] "=&r" (tmp)				\
-+	: [op] "Jr" (oparg), [e] "jr" (-EFAULT)				\
-+	: "memory");							\
-+									\
-+	__atomic_post_full_fence();					\
-+}
+ 		start += 2*PAGE_SIZE;
+ 	}
+-	sync_is();
++	asm volatile("sync.i\n");
+ #else
+ 	{
+ 	unsigned long flags, oldpid;
+@@ -87,11 +99,17 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+ 	end   &= TLB_ENTRY_SIZE_MASK;
+ 
+ #ifdef CONFIG_CPU_HAS_TLBI
++	sync_is();
+ 	while (start < end) {
+-		asm volatile("tlbi.vaas %0"::"r"(start));
++		asm volatile(
++			"tlbi.vaas %0	\n"
++			:
++			: "r" (start)
++			: "memory");
 +
-+static inline int
-+arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
-+{
-+	int oldval = 0, ret = 0;
-+
-+	if (!access_ok(uaddr, sizeof(u32)))
-+		return -EFAULT;
-+
-+	switch (op) {
-+	case FUTEX_OP_SET:
-+		__futex_atomic_op("mov %[t], %[ov]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_ADD:
-+		__futex_atomic_op("add %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_OR:
-+		__futex_atomic_op("or %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_ANDN:
-+		__futex_atomic_op("and %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, ~oparg);
-+		break;
-+	case FUTEX_OP_XOR:
-+		__futex_atomic_op("xor %[t], %[ov], %[op]",
-+				  ret, oldval, uaddr, oparg);
-+		break;
-+	default:
-+		ret = -ENOSYS;
-+	}
-+
-+	if (!ret)
-+		*oval = oldval;
-+
-+	return ret;
-+}
-+
-+
-+
-+static inline int
-+futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
-+			      u32 oldval, u32 newval)
-+{
-+	int ret = 0;
-+	u32 val, tmp;
-+
-+	if (!access_ok(uaddr, sizeof(u32)))
-+		return -EFAULT;
-+
-+	__atomic_pre_full_fence();
-+
-+	__asm__ __volatile__ (
-+	"1:	ldex.w	%[v], %[u]			\n"
-+	"	cmpne	%[v], %[ov]			\n"
-+	"	bt	4f				\n"
-+	"	mov	%[t], %[nv]			\n"
-+	"2:	stex.w	%[t], %[u]			\n"
-+	"	bez	%[t], 1b			\n"
-+	"	br	4f				\n"
-+	"3:	mov	%[r], %[e]			\n"
-+	"4:						\n"
-+	"	.section __ex_table,\"a\"		\n"
-+	"	.balign 4				\n"
-+	"	.long	1b, 3b				\n"
-+	"	.long	2b, 3b				\n"
-+	"	.previous				\n"
-+	: [r] "+r" (ret), [v] "=&r" (val), [u] "+m" (*uaddr),
-+	  [t] "=&r" (tmp)
-+	: [ov] "Jr" (oldval), [nv] "Jr" (newval), [e] "Jr" (-EFAULT)
-+	: "memory");
-+
-+	__atomic_post_full_fence();
-+
-+	*uval = val;
-+	return ret;
-+}
-+
-+#endif /* CONFIG_SMP */
-+#endif /* __ASM_CSKY_FUTEX_H */
+ 		start += 2*PAGE_SIZE;
+ 	}
+-	sync_is();
++	asm volatile("sync.i\n");
+ #else
+ 	{
+ 	unsigned long flags, oldpid;
+@@ -121,8 +139,13 @@ void flush_tlb_page(struct vm_area_struct *vma, unsigned long addr)
+ 	addr &= TLB_ENTRY_SIZE_MASK;
+ 
+ #ifdef CONFIG_CPU_HAS_TLBI
+-	asm volatile("tlbi.vas %0"::"r"(addr | newpid));
+ 	sync_is();
++	asm volatile(
++		"tlbi.vas %0	\n"
++		"sync.i		\n"
++		:
++		: "r" (addr | newpid)
++		: "memory");
+ #else
+ 	{
+ 	int oldpid, idx;
+@@ -147,8 +170,13 @@ void flush_tlb_one(unsigned long addr)
+ 	addr &= TLB_ENTRY_SIZE_MASK;
+ 
+ #ifdef CONFIG_CPU_HAS_TLBI
+-	asm volatile("tlbi.vaas %0"::"r"(addr));
+ 	sync_is();
++	asm volatile(
++		"tlbi.vaas %0	\n"
++		"sync.i		\n"
++		:
++		: "r" (addr)
++		: "memory");
+ #else
+ 	{
+ 	int oldpid, idx;
 -- 
 2.17.1
 
