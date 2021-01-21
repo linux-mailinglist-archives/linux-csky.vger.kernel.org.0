@@ -2,73 +2,218 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B0B2FE38D
-	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 08:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D2A2FE45E
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Jan 2021 08:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbhAUHMF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 21 Jan 2021 02:12:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38604 "EHLO mail.kernel.org"
+        id S1727431AbhAUHuL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 Jan 2021 02:50:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727245AbhAUHLn (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 21 Jan 2021 02:11:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A602C23877;
-        Thu, 21 Jan 2021 07:11:01 +0000 (UTC)
+        id S1726570AbhAUG6H (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 21 Jan 2021 01:58:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B27C8235F9;
+        Thu, 21 Jan 2021 06:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611213062;
-        bh=X8yOPN+hKmInC/DRSvodSFKBWlat9kFmX3xsgoJYdZM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZqcEJytwGxeNaHcnvuLUiVfmLw7fhsyYn0CZzeYSEo72ucAxqD3uCMlcLjF/eruTZ
-         X+KA2Q2gvs1JukSAUPxZ6musFFJ0U+JMOewc2vX0JboxpJ5LDVeUxx6vYkbBniOxJ7
-         3p2vTQSU6uBtX7O8IrLyoC8xBbcBFityIyZ7oQBG4Qrc9p3zNL7DIoPfwWTQv5Ou5o
-         Nan+Hb1k261xsaANI8jq22CN6R6SiPVfh50x1DobHHJXCcnFoHFRzy3iZ93QoVjbhM
-         1Ugf+0pIl8lKm8A0zI2Djb1Y9HOmKy64oLz+mb46cO03JZiO8CZqOESiCtt0X038A/
-         SADfJTHxrVlnQ==
-Received: by mail-lf1-f45.google.com with SMTP id q8so1080723lfm.10;
-        Wed, 20 Jan 2021 23:11:01 -0800 (PST)
-X-Gm-Message-State: AOAM531HpiAUzSKyL41H2UL6X73uMb6sLwarylDvAB6z6T26KsJuqKru
-        b/RG9CP4Q6Ono7u94a5HZkY1mxLJ4KPT6wM7nic=
-X-Google-Smtp-Source: ABdhPJzrttCf3+Cf6MMkmGYKoV85CCdb2RCt8TvCgNmGnsV7Nlh6bzvtcwOMXaI/OwHAiLYaSy2Mj1Q8injhDzcn47c=
-X-Received: by 2002:ac2:4ade:: with SMTP id m30mr2534205lfp.231.1611213059919;
- Wed, 20 Jan 2021 23:10:59 -0800 (PST)
-MIME-Version: 1.0
-References: <1608478763-60148-1-git-send-email-guoren@kernel.org> <X/buKPr5OCH3C32J@hirez.programming.kicks-ass.net>
-In-Reply-To: <X/buKPr5OCH3C32J@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 21 Jan 2021 15:10:48 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSLLC8yLzLNkuRwLXBihs3uy9TXVVKRpEF9mM4nN4FopQ@mail.gmail.com>
-Message-ID: <CAJF2gTSLLC8yLzLNkuRwLXBihs3uy9TXVVKRpEF9mM4nN4FopQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] csky: Remove custom asm/atomic.h implementation
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
+        s=k20201202; t=1611212206;
+        bh=1U7yvjmMuzK51PmNewaagHReE48I6+8IeKcDglA4DxI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HN3qfzI2jmDVAzsVy4ucLz7lsp/KEtdOX3ZMJ4sk88qU+eEE4Vw42P1aTfV9iWaVK
+         CW97GgYZKu/cxL0ZwBU5+Zudc4qLcWJT2gXgbGn6QtxaxvCO0L8LJ5YEgKh0rSP5VT
+         8Id7I/wMCN/G/rsynRYns8R7YdcFxdrIWLkffoKh0bcsnYGNP0/+4Ip7449yT9eqSY
+         s8dimmwfShIKiv7KeP+DgBWx6E9wEfC71nTPfJEzQenthpjrqk24/Miu3S5He2YD+w
+         J83CUhkevvx12dzyFdc8zWed99LlPj4YsHEAV24yC6AdLOgbfxfYxa35oZ0NTALJ0u
+         PR7CcE374mU2Q==
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         Guo Ren <guoren@linux.alibaba.com>,
         Arnd Bergmann <arnd@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH 06/29] csky: Fixup futex SMP implementation
+Date:   Thu, 21 Jan 2021 14:53:26 +0800
+Message-Id: <20210121065349.3188251-6-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210121065349.3188251-1-guoren@kernel.org>
+References: <20210121065349.3188251-1-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Peter,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On Thu, Jan 7, 2021 at 7:19 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Sun, Dec 20, 2020 at 03:39:19PM +0000, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Use generic atomic implementation based on cmpxchg. So remove csky
-> > asm/atomic.h.
->
-> Clarification would be good. Typically cmpxchg() loops perform
-> sub-optimal on LL/SC architectures, due to the double loop construction.
+Arnd said:
+I would guess that for csky, this is a mistake, as the architecture
+is fairly new and should be able to implement it.
 
-Yes, you are right. But I still want to use comm cmpxchg instead of my
-implementation. Maybe in the future, we'll optimize it back.
+Guo reply:
+The c610, c807, c810 don't support SMP, so futex_cmpxchg_enabled = 1
+with asm-generic's implementation.
+For c860, there is no HAVE_FUTEX_CMPXCHG and cmpxchg_inatomic/inuser
+implementation, so futex_cmpxchg_enabled = 0.
 
+Thx for point it out, we'll implement cmpxchg_inatomic/inuser for
+C860 and still use asm-generic for non-smp CPUs.
+
+LTP test:
+futex_wait01    1  TPASS  :  futex_wait(): errno=ETIMEDOUT(110): Connection timed out
+futex_wait01    2  TPASS  :  futex_wait(): errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
+futex_wait01    3  TPASS  :  futex_wait(): errno=ETIMEDOUT(110): Connection timed out
+futex_wait01    4  TPASS  :  futex_wait(): errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
+futex_wait02    1  TPASS  :  futex_wait() woken up
+futex_wait03    1  TPASS  :  futex_wait() woken up
+futex_wait04    1  TPASS  :  futex_wait() returned -1: errno=EAGAIN/EWOULDBLOCK(11): Resource temporarily unavailable
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Arnd Bergmann <arnd@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Link: https://lore.kernel.org/lkml/CAK8P3a3+WaQNyJ6Za2qfu6=0mBgU1hApnRXrdp1b1=P7wwyRUg@mail.gmail.com/
+---
+ arch/csky/Kconfig             |   1 +
+ arch/csky/include/asm/futex.h | 121 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 122 insertions(+)
+ create mode 100644 arch/csky/include/asm/futex.h
+
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 21b2ab099c8b..c74a8e2e8549 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -48,6 +48,7 @@ config CSKY
+ 	select HAVE_FUNCTION_TRACER
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_ERROR_INJECTION
++	select HAVE_FUTEX_CMPXCHG if FUTEX && SMP
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+ 	select HAVE_KERNEL_GZIP
+ 	select HAVE_KERNEL_LZO
+diff --git a/arch/csky/include/asm/futex.h b/arch/csky/include/asm/futex.h
+new file mode 100644
+index 000000000000..6cfd312723fa
+--- /dev/null
++++ b/arch/csky/include/asm/futex.h
+@@ -0,0 +1,121 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __ASM_CSKY_FUTEX_H
++#define __ASM_CSKY_FUTEX_H
++
++#ifndef CONFIG_SMP
++#include <asm-generic/futex.h>
++#else
++#include <linux/atomic.h>
++#include <linux/futex.h>
++#include <linux/uaccess.h>
++#include <linux/errno.h>
++
++#define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
++{									\
++	u32 tmp;							\
++									\
++	__atomic_pre_full_fence();					\
++									\
++	__asm__ __volatile__ (						\
++	"1:	ldex.w	%[ov], %[u]			\n"		\
++	"	"insn"					\n"		\
++	"2:	stex.w	%[t], %[u]			\n"		\
++	"	bez	%[t], 1b			\n"		\
++	"	br	4f				\n"		\
++	"3:	mov	%[r], %[e]			\n"		\
++	"4:						\n"		\
++	"	.section __ex_table,\"a\"		\n"		\
++	"	.balign 4				\n"		\
++	"	.long	1b, 3b				\n"		\
++	"	.long	2b, 3b				\n"		\
++	"	.previous				\n"		\
++	: [r] "+r" (ret), [ov] "=&r" (oldval),				\
++	  [u] "+m" (*uaddr), [t] "=&r" (tmp)				\
++	: [op] "Jr" (oparg), [e] "jr" (-EFAULT)				\
++	: "memory");							\
++									\
++	__atomic_post_full_fence();					\
++}
++
++static inline int
++arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
++{
++	int oldval = 0, ret = 0;
++
++	if (!access_ok(uaddr, sizeof(u32)))
++		return -EFAULT;
++
++	switch (op) {
++	case FUTEX_OP_SET:
++		__futex_atomic_op("mov %[t], %[ov]",
++				  ret, oldval, uaddr, oparg);
++		break;
++	case FUTEX_OP_ADD:
++		__futex_atomic_op("add %[t], %[ov], %[op]",
++				  ret, oldval, uaddr, oparg);
++		break;
++	case FUTEX_OP_OR:
++		__futex_atomic_op("or %[t], %[ov], %[op]",
++				  ret, oldval, uaddr, oparg);
++		break;
++	case FUTEX_OP_ANDN:
++		__futex_atomic_op("and %[t], %[ov], %[op]",
++				  ret, oldval, uaddr, ~oparg);
++		break;
++	case FUTEX_OP_XOR:
++		__futex_atomic_op("xor %[t], %[ov], %[op]",
++				  ret, oldval, uaddr, oparg);
++		break;
++	default:
++		ret = -ENOSYS;
++	}
++
++	if (!ret)
++		*oval = oldval;
++
++	return ret;
++}
++
++
++
++static inline int
++futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
++			      u32 oldval, u32 newval)
++{
++	int ret = 0;
++	u32 val, tmp;
++
++	if (!access_ok(uaddr, sizeof(u32)))
++		return -EFAULT;
++
++	__atomic_pre_full_fence();
++
++	__asm__ __volatile__ (
++	"1:	ldex.w	%[v], %[u]			\n"
++	"	cmpne	%[v], %[ov]			\n"
++	"	bt	4f				\n"
++	"	mov	%[t], %[nv]			\n"
++	"2:	stex.w	%[t], %[u]			\n"
++	"	bez	%[t], 1b			\n"
++	"	br	4f				\n"
++	"3:	mov	%[r], %[e]			\n"
++	"4:						\n"
++	"	.section __ex_table,\"a\"		\n"
++	"	.balign 4				\n"
++	"	.long	1b, 3b				\n"
++	"	.long	2b, 3b				\n"
++	"	.previous				\n"
++	: [r] "+r" (ret), [v] "=&r" (val), [u] "+m" (*uaddr),
++	  [t] "=&r" (tmp)
++	: [ov] "Jr" (oldval), [nv] "Jr" (newval), [e] "Jr" (-EFAULT)
++	: "memory");
++
++	__atomic_post_full_fence();
++
++	*uval = val;
++	return ret;
++}
++
++#endif /* CONFIG_SMP */
++#endif /* __ASM_CSKY_FUTEX_H */
 -- 
-Best Regards
- Guo Ren
+2.17.1
 
-ML: https://lore.kernel.org/linux-csky/
