@@ -2,70 +2,135 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F14003051AC
-	for <lists+linux-csky@lfdr.de>; Wed, 27 Jan 2021 06:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8F930553D
+	for <lists+linux-csky@lfdr.de>; Wed, 27 Jan 2021 09:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbhA0FFK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 27 Jan 2021 00:05:10 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:43968 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232788AbhA0DFU (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 26 Jan 2021 22:05:20 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=guoren@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UN09ODa_1611716255;
-Received: from IT-C02Z45M7LVCF.local(mailfrom:guoren@linux.alibaba.com fp:SMTPD_---0UN09ODa_1611716255)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 27 Jan 2021 10:57:36 +0800
-Subject: Re: csky + clangbuiltlinux
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        zixuan.wu@linux.alibaba.com, ren_guo@c-sky.com,
-        linux-csky@vger.kernel.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-References: <CAKwvOdnQjm2yMfKLcT-9=iQg68=EskMh3Evrx=3rTAJo3UAnZw@mail.gmail.com>
-From:   Guo Ren <guoren@linux.alibaba.com>
-Message-ID: <d8f70be3-178f-7485-4a28-05108e21ef20@linux.alibaba.com>
-Date:   Wed, 27 Jan 2021 10:57:35 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
- Gecko/20100101 Thunderbird/78.6.0
+        id S234563AbhA0IFq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 27 Jan 2021 03:05:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54158 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231911AbhA0IDn (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 27 Jan 2021 03:03:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ED20920756;
+        Wed, 27 Jan 2021 07:52:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611733959;
+        bh=Tv+8y3pzWOHQkpR7Hs5hm5r5DosoTs5SyOgTkiddGHs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZLPBWbOUAdOHMPEoSwF7KtfjQYE2wJtn/7k3Bxd26KW9RHbAyfv1qUwzd5vT6n12W
+         w1wGGebrYPmJhNBi/NOhv9uquUI8zULSDvRfVSi7PRk9NZ646lVmde6SdIB/SwAl8p
+         70RtrTXtspXp6RIHreqDfCkMW2UPOey7BEehAYpnQiYCjsCCNwIMNPYcerKnv3ki4l
+         tS3XseuWB8NOkzkfPk+hGQDh3NYdjRaRwcMSVcfEolbClP+W2dkn6tTE4L7g2y8VAZ
+         AkaYkg3gS8mcZBHJT49dRFGEgsN8l9JtKuv4SYs7ruHpQw4HYACPb5p5hW6qMIj/f1
+         UD5yoLiN9UX8w==
+Received: by mail-lf1-f52.google.com with SMTP id p21so1325621lfu.11;
+        Tue, 26 Jan 2021 23:52:38 -0800 (PST)
+X-Gm-Message-State: AOAM532Jm1jZMe56OqU5rHQSI/fHaJGBpkXaz3SYlkvT13Y3NwECJX42
+        JmBRWciBth0f9srESlX446A7z6it/EmUcvne0W0=
+X-Google-Smtp-Source: ABdhPJy0vzzTa8tPz7BihHnETMHW4VOoner3DlexSXYzwwBiLgRdzOTa7biZMZ4cBO/OO2xwH6haTVe7HcWoFCBJlQY=
+X-Received: by 2002:ac2:4436:: with SMTP id w22mr4276748lfl.41.1611733957044;
+ Tue, 26 Jan 2021 23:52:37 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdnQjm2yMfKLcT-9=iQg68=EskMh3Evrx=3rTAJo3UAnZw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20210126181420.19223-1-david@redhat.com> <20210126182648.GR6332@kernel.org>
+In-Reply-To: <20210126182648.GR6332@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 27 Jan 2021 15:52:25 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRsqZ4DTvZm2V9VRKP_f6u-p5aupCjrvuGy_7m8tiQQVQ@mail.gmail.com>
+Message-ID: <CAJF2gTRsqZ4DTvZm2V9VRKP_f6u-p5aupCjrvuGy_7m8tiQQVQ@mail.gmail.com>
+Subject: Re: [PATCH v1] csky: use free_initmem_default() in free_initmem()
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-csky@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        Michal Hocko <mhocko@kernel.org>,
+        Wei Yang <richard.weiyang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Nick,
+Thx Mike,
 
-On 2021/1/27 上午5:51, Nick Desaulniers wrote:
+It's under test:
+https://gitlab.com/c-sky/buildroot/-/pipelines/247353584
 
-> Hello,
-> I was wondering if there's any interest in getting LLVM's csky backend
-> to compile the Linux kernel?  We maintain LLVM support in the kernel,
-> and CI in various places.  It would be neat to see these working well
-> together and actively supported.
+kernel:
+https://github.com/c-sky/csky-linux/commit/9d986b01feb991ded3fb8c1f8153a0c80ea84b9c
 
-I'll try to compile kernel with llvm after upstreamed.
+On Wed, Jan 27, 2021 at 2:26 AM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> On Tue, Jan 26, 2021 at 07:14:20PM +0100, David Hildenbrand wrote:
+> > The existing code is essentially
+> > free_initmem_default()->free_reserved_area() without poisoning.
+> >
+> > Note that existing code missed to update the managed page count of the
+> > zone.
+> >
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: Guo Ren <guoren@kernel.org>
+> > Cc: Mike Rapoport <rppt@kernel.org>
+> > Cc: Oscar Salvador <osalvador@suse.de>
+> > Cc: Michal Hocko <mhocko@kernel.org>
+> > Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
+> > Signed-off-by: David Hildenbrand <david@redhat.com>
+> > ---
+> >
+> > Not compile tested as documentation on how to get
+> >       https://gitlab.com/c-sky/buildroot
+> > running, especially with a custom kernel, is a bit sparse.
+>
+> You can pick a cross-compiler from here:
+>
+> https://mirrors.edge.kernel.org/pub/tools/crosstool/
+>
+> > ---
+> >  arch/csky/mm/init.c | 17 +----------------
+> >  1 file changed, 1 insertion(+), 16 deletions(-)
+> >
+> > diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+> > index 81e4e5e78f38..894050a8ce09 100644
+> > --- a/arch/csky/mm/init.c
+> > +++ b/arch/csky/mm/init.c
+> > @@ -110,24 +110,9 @@ void __init mem_init(void)
+> >       mem_init_print_info(NULL);
+> >  }
+> >
+> > -extern char __init_begin[], __init_end[];
+> > -
+> >  void free_initmem(void)
+> >  {
+> > -     unsigned long addr;
+> > -
+> > -     addr = (unsigned long) &__init_begin;
+> > -
+> > -     while (addr < (unsigned long) &__init_end) {
+> > -             ClearPageReserved(virt_to_page(addr));
+> > -             init_page_count(virt_to_page(addr));
+> > -             free_page(addr);
+> > -             totalram_pages_inc();
+> > -             addr += PAGE_SIZE;
+> > -     }
+> > -
+> > -     pr_info("Freeing unused kernel memory: %dk freed\n",
+> > -     ((unsigned int)&__init_end - (unsigned int)&__init_begin) >> 10);
+> > +     free_initmem_default(-1);
+> >  }
+> >
+> >  void pgd_init(unsigned long *p)
+> > --
+> > 2.29.2
+> >
+>
+> --
+> Sincerely yours,
+> Mike.
 
-https://reviews.llvm.org/D86505 
-<https://reviews.llvm.org/D86505?spm=a2o8d.corp_prod_task_list.0.0.63a76b88jKU2Wg> 
-[finished] https://reviews.llvm.org/D86610 
-<https://reviews.llvm.org/D86610> [finished]
 
-https://reviews.llvm.org/D89180 <https://reviews.llvm.org/D89180> 
-[finished]
 
-https://reviews.llvm.org/D93372 <https://reviews.llvm.org/D93372> 
-[finished]
+-- 
+Best Regards
+ Guo Ren
 
-https://reviews.llvm.org/D88466 <https://reviews.llvm.org/D88466> [finished]
-
-https://reviews.llvm.org/D94007 <https://reviews.llvm.org/D94007> 
-[reviewing] https://reviews.llvm.org/D93798 
-<https://reviews.llvm.org/D93798> [reviewing] 
-https://reviews.llvm.org/D95029 <https://reviews.llvm.org/D95029> 
-[reviewing] https://reviews.llvm.org/D95030 
-<https://reviews.llvm.org/D95030> [reviewing] Best Regards
-
-Guo Ren
-
+ML: https://lore.kernel.org/linux-csky/
