@@ -2,63 +2,70 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6781D304D43
-	for <lists+linux-csky@lfdr.de>; Wed, 27 Jan 2021 00:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14003051AC
+	for <lists+linux-csky@lfdr.de>; Wed, 27 Jan 2021 06:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732029AbhAZXHR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 26 Jan 2021 18:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726953AbhAZVwh (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 26 Jan 2021 16:52:37 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F19C061573
-        for <linux-csky@vger.kernel.org>; Tue, 26 Jan 2021 13:51:57 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id jx18so22871pjb.5
-        for <linux-csky@vger.kernel.org>; Tue, 26 Jan 2021 13:51:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=9AGUrnYhoWJA1kfWhc7TVECC62YzbW1KPUtWDLu+fzU=;
-        b=CoF8scV8GMS1FDnoMkt+B8uRJbbDV4uSOzXLMznAWJx7gspLHHagDXhqjTzxLiUI2h
-         FCey2UeS/rklKLrJGibOF62TW0gS8ZneJUW2t9JWVwBpZhrCTYFgIOLw821P892kvcEb
-         Dl2RMt1HCmoE90fCzuXCrXN/uN+DA6QKa35DP9Njotfi9z7Ouv/UU92I8Egs5vmftAjQ
-         NO8SKbNY3b6EWu7zbFPJxsgPFEjyTLN8N7pTSIF1DhpzsXmQu8u57oY6PacxBgkd/GVf
-         bIdYFn1a0wpRLpEqmoKVDFQwXiPAaLOYY7Ay7lDRJBK40XEvWLLDcsgGfvLza7jaRZgd
-         suQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=9AGUrnYhoWJA1kfWhc7TVECC62YzbW1KPUtWDLu+fzU=;
-        b=Lp9lNwemLRk3ruvAo1I2sUJzhdu0up4FGzrxv+tIEIAFq0K+JZrwI7CNfZI6p0sSxt
-         9srB6fNgCIVDzybRfWdKfMXCRji3Vbf1hoNbtMDRQn6TAE2gJverHp3S+6ghz/WgK6SG
-         6mKQA0CXhosVFz8TGRzFaYWIYoN0SdrHPzOPvq2/eyBttaQ6kdhWY08qJpnyy+2Rnyw7
-         o5kW9j4E421sxFGpK+MigqfoqaHeP0pW1jyv6q0SvANCxW6eVJL4I6uSV9lNC6GjzgbB
-         U+P/K9ky/x8SyZxde+Wisd8UppfCDsX7Ss4vm8LxSdFK63bx9AIr6rbZIZ5FZBA1qNAq
-         PADw==
-X-Gm-Message-State: AOAM5339oOlp2SsTOG/eyY1zmVW0VVaJ7KLrNugcxnWfMJuBDAXlXgjs
-        m8OJcuCBeOvalpgEkFezLRTzo4GOKOjV32SxtSQg3jgANGA=
-X-Google-Smtp-Source: ABdhPJxBIjAqb8gfSDmU64X+/zprHEQtEGNiETCtWpzd47rF+frXRR87DvkSZdnjsTD4JLIRssZhQrbC6RAiBrVCKIw=
-X-Received: by 2002:a17:90a:2e0d:: with SMTP id q13mr1881367pjd.101.1611697916681;
- Tue, 26 Jan 2021 13:51:56 -0800 (PST)
-MIME-Version: 1.0
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 26 Jan 2021 13:51:46 -0800
-Message-ID: <CAKwvOdnQjm2yMfKLcT-9=iQg68=EskMh3Evrx=3rTAJo3UAnZw@mail.gmail.com>
-Subject: csky + clangbuiltlinux
-To:     zixuan.wu@linux.alibaba.com, guoren@linux.alibaba.com,
-        ren_guo@c-sky.com, linux-csky@vger.kernel.org,
+        id S231160AbhA0FFK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 27 Jan 2021 00:05:10 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:43968 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232788AbhA0DFU (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 26 Jan 2021 22:05:20 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=guoren@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0UN09ODa_1611716255;
+Received: from IT-C02Z45M7LVCF.local(mailfrom:guoren@linux.alibaba.com fp:SMTPD_---0UN09ODa_1611716255)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 27 Jan 2021 10:57:36 +0800
+Subject: Re: csky + clangbuiltlinux
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        zixuan.wu@linux.alibaba.com, ren_guo@c-sky.com,
+        linux-csky@vger.kernel.org,
         clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <CAKwvOdnQjm2yMfKLcT-9=iQg68=EskMh3Evrx=3rTAJo3UAnZw@mail.gmail.com>
+From:   Guo Ren <guoren@linux.alibaba.com>
+Message-ID: <d8f70be3-178f-7485-4a28-05108e21ef20@linux.alibaba.com>
+Date:   Wed, 27 Jan 2021 10:57:35 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAKwvOdnQjm2yMfKLcT-9=iQg68=EskMh3Evrx=3rTAJo3UAnZw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello,
-I was wondering if there's any interest in getting LLVM's csky backend
-to compile the Linux kernel?  We maintain LLVM support in the kernel,
-and CI in various places.  It would be neat to see these working well
-together and actively supported.
--- 
-Thanks,
-~Nick Desaulniers
+Hi Nick,
+
+On 2021/1/27 上午5:51, Nick Desaulniers wrote:
+
+> Hello,
+> I was wondering if there's any interest in getting LLVM's csky backend
+> to compile the Linux kernel?  We maintain LLVM support in the kernel,
+> and CI in various places.  It would be neat to see these working well
+> together and actively supported.
+
+I'll try to compile kernel with llvm after upstreamed.
+
+https://reviews.llvm.org/D86505 
+<https://reviews.llvm.org/D86505?spm=a2o8d.corp_prod_task_list.0.0.63a76b88jKU2Wg> 
+[finished] https://reviews.llvm.org/D86610 
+<https://reviews.llvm.org/D86610> [finished]
+
+https://reviews.llvm.org/D89180 <https://reviews.llvm.org/D89180> 
+[finished]
+
+https://reviews.llvm.org/D93372 <https://reviews.llvm.org/D93372> 
+[finished]
+
+https://reviews.llvm.org/D88466 <https://reviews.llvm.org/D88466> [finished]
+
+https://reviews.llvm.org/D94007 <https://reviews.llvm.org/D94007> 
+[reviewing] https://reviews.llvm.org/D93798 
+<https://reviews.llvm.org/D93798> [reviewing] 
+https://reviews.llvm.org/D95029 <https://reviews.llvm.org/D95029> 
+[reviewing] https://reviews.llvm.org/D95030 
+<https://reviews.llvm.org/D95030> [reviewing] Best Regards
+
+Guo Ren
+
