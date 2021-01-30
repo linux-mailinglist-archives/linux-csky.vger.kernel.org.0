@@ -2,79 +2,94 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E04305689
-	for <lists+linux-csky@lfdr.de>; Wed, 27 Jan 2021 10:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C163098F6
+	for <lists+linux-csky@lfdr.de>; Sun, 31 Jan 2021 00:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235103AbhA0JJ1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-csky@lfdr.de>); Wed, 27 Jan 2021 04:09:27 -0500
-Received: from smtp2200-217.mail.aliyun.com ([121.197.200.217]:48506 "EHLO
-        smtp2200-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234958AbhA0JG7 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 27 Jan 2021 04:06:59 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07828137|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00286547-0.0055064-0.991628;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=ren_guo@c-sky.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.JR1zvmq_1611738375;
-Received: from 30.225.212.56(mailfrom:ren_guo@c-sky.com fp:SMTPD_---.JR1zvmq_1611738375)
-          by smtp.aliyun-inc.com(10.147.43.230);
-          Wed, 27 Jan 2021 17:06:15 +0800
-Content-Type: text/plain;
-        charset=gb2312
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH v1] csky: use free_initmem_default() in free_initmem()
-From:   Guo Ren <ren_guo@c-sky.com>
-In-Reply-To: <fb51bf47-a6ab-1a5a-60cf-0ec375a9511a@redhat.com>
-Date:   Wed, 27 Jan 2021 17:06:15 +0800
-Cc:     Guo Ren <guoren@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-csky@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oscar Salvador <osalvador@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        Wei Yang <richard.weiyang@linux.alibaba.com>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <9EBAE2A9-F06F-4198-BEF2-30A1A24F3796@c-sky.com>
-References: <20210126181420.19223-1-david@redhat.com>
- <20210126182648.GR6332@kernel.org>
- <CAJF2gTRsqZ4DTvZm2V9VRKP_f6u-p5aupCjrvuGy_7m8tiQQVQ@mail.gmail.com>
- <fb51bf47-a6ab-1a5a-60cf-0ec375a9511a@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-X-Mailer: Apple Mail (2.3445.104.11)
+        id S232645AbhA3Xvg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 30 Jan 2021 18:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232580AbhA3Xup (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 30 Jan 2021 18:50:45 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711B2C06174A;
+        Sat, 30 Jan 2021 15:50:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=U5UQwbMv+3uVjns01SLw/Dx/LPEia7UMhIebOpf7RQc=; b=QrtH0n+yPLbnjiOE//mqTzj+Be
+        IG1AMuHV84knwev+UQe60851Cpl+FPPJxJ8YET2Ah+Izq78JpVBh8Imv8WV/C2Ytz25FulF3/sFzK
+        sA2ZM5mYIpDAx4NbkRLA2/TJoKiBvMFgTp2KfMakSesf4xNXA+uyZpNSH9eCk/WsgX0rUxsszowrd
+        riqjp6IQdrhWsB0svOpi5deDvy9ujUWHzw7HKjg3XTGWDNH6stIlrP1EJ6AJbK0O0N/CL5dqInFd9
+        Em60zIlVc3d2jNRrYhvoYyftbnMWyZ0YlnY5PxL+G1zG6FlftAZ19aSH+dd6mgzUX49YWnidUARyT
+        TQTzJsBA==;
+Received: from [2601:1c0:6280:3f0:d7c4:8ab4:31d7:f0ba] (helo=merlin.infradead.org)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l6004-0007jA-So; Sat, 30 Jan 2021 23:49:57 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Subject: [PATCH] csky: change a Kconfig symbol name to fix e1000 build error
+Date:   Sat, 30 Jan 2021 15:49:49 -0800
+Message-Id: <20210130234949.21090-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi David,
+e1000's #define of CONFIG_RAM_BASE conflicts with a Kconfig symbol in
+arch/csky/Kconfig.
+The symbol in e1000 has been around longer, so change arch/csky/
+to use DRAM_BASE instead of RAM_BASE to remove the conflict.
+(although e1000 is also a 2-line change)
 
+Not tested: I don't have a build toolchain for CSKY.
 
-> 在 2021年1月27日，下午4:49，David Hildenbrand <david@redhat.com> 写道：
-> 
-> On 27.01.21 08:52, Guo Ren wrote:
->> Thx Mike,
-> 
-> Thanks for triggering a build/test! I'd be curious if there is an easy way to trigger this myself (I assume, fork csky buildroot on gitlab, reroute CSKY kernel repo, adjust CSKY_LINUX_NEXT_VERSION); if so, it would be worth documenting - thanks!
-> 
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: intel-wired-lan@lists.osuosl.org
+Cc: Guo Ren <guoren@linux.alibaba.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+---
+IMO "CONFIG_" namespace should belong to Kconfig files, not
+individual drivers, but e1000 isn't the only driver that uses
+CONFIG_ symbols.
 
-1. You can just simple fork our project, and enable your gitlab share-runner.
-2. Modify https://gitlab.com/c-sky/buildroot/-/blob/master/package/csky-arch/csky-arch.mk
-Line 28: CSKY_ARCH_SITE = $(call github,c-sky,csky-linux,$(CSKY_ARCH_VERSION)) to your own forked our kernel repo
-Line 49: CSKY_LINUX_NEXT_VERSION	= f0bbf052ae463b3802f1c7ba36b36da2f54945f2 change the version as you want
+ arch/csky/Kconfig            |    2 +-
+ arch/csky/include/asm/page.h |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-You also need to remove some unused entries in .gitlab.yml.
-
-
-> Thanks Mike for the valuable links :) For now I was only relying on cross-compilers as shipped by Fedora, now I can upgrade my cross-build environment :)
-> 
->> It's under test:
->> https://gitlab.com/c-sky/buildroot/-/pipelines/247353584
->> kernel:
->> https://github.com/c-sky/csky-linux/commit/9d986b01feb991ded3fb8c1f8153a0c80ea84b9c
-> 
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-
-
-
-Best Regards
-  Guo Ren
+--- linux-next-20210129.orig/arch/csky/include/asm/page.h
++++ linux-next-20210129/arch/csky/include/asm/page.h
+@@ -28,7 +28,7 @@
+ #define SSEG_SIZE	0x20000000
+ #define LOWMEM_LIMIT	(SSEG_SIZE * 2)
+ 
+-#define PHYS_OFFSET_OFFSET (CONFIG_RAM_BASE & (SSEG_SIZE - 1))
++#define PHYS_OFFSET_OFFSET (CONFIG_DRAM_BASE & (SSEG_SIZE - 1))
+ 
+ #ifndef __ASSEMBLY__
+ 
+--- linux-next-20210129.orig/arch/csky/Kconfig
++++ linux-next-20210129/arch/csky/Kconfig
+@@ -314,7 +314,7 @@ config FORCE_MAX_ZONEORDER
+ 	int "Maximum zone order"
+ 	default "11"
+ 
+-config RAM_BASE
++config DRAM_BASE
+ 	hex "DRAM start addr (the same with memory-section in dts)"
+ 	default 0x0
+ 
