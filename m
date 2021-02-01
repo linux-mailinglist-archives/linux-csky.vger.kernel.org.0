@@ -2,111 +2,85 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B6330A749
-	for <lists+linux-csky@lfdr.de>; Mon,  1 Feb 2021 13:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A79F30A7E9
+	for <lists+linux-csky@lfdr.de>; Mon,  1 Feb 2021 13:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbhBAMKp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 1 Feb 2021 07:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S231145AbhBAMpu (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 1 Feb 2021 07:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbhBAMKo (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 1 Feb 2021 07:10:44 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D46C061573;
-        Mon,  1 Feb 2021 04:10:03 -0800 (PST)
+        with ESMTP id S229707AbhBAMps (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 1 Feb 2021 07:45:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617DCC061573;
+        Mon,  1 Feb 2021 04:45:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SiaLfQzlU2jX5BxH4Z//DJZYI1eBlVSulAEY9UDx0pA=; b=GtLZOyQeBhsuT6FFJVSy2v+2/Z
-        xTAjqheyRljSkGm6MOLQ/XFlBt32MvLm5Oj+VpOuBidvgZZPsE6afaRelKYBXw0o8a22K5nNtdDDa
-        vVJ30anrh4leKFwbHLLyZSlV0wFdPcmO3PlGEXZOULCCjZPjnJ81ko+P5VcGbvKXst03rNdPj3HOX
-        3QB1zut7ZICr0P9VqNFHgpTVIHHZ49MKpTzAg51X+STHwPx7zzkTuH6FNXFISnH3DMn0LUGxVzg+o
-        4vgV24jt+j0kP/vJ+vWCcNIrimaKTTKX+NGQxnY0cahn/jFaudeICLOtnn65GwuWEDvw5FPB5mnQD
-        /v/Vxdmw==;
+        bh=iS8iy+q7Izh8AM4pbDoHtBgYLQUACj4slse1odTb8Xw=; b=m7ji0VO1MSn1lX6BI0jJ/Yb9pR
+        9LbSnyqEyG+WShVFDi6LLpOxh725y4TN5ZOzvkdZzaqe2VLLrMyA0w5DmjmAmnD9zsr9kHInq0sjB
+        ii38K9XKQhFn7sOI40UlVOovRxxAgm9h9jejp9eCBLKegUodvH0TprmeRQ27HIdL/dZ9Y9TeAXH+T
+        AH4kD9PgJxscyRe30c+nsFbhAUZbIF86CVRIvrNnDHqiAHo82ZC5vwPaZdUNJSPPkp0ldDsBPBc8P
+        BJXcBzycInlMsr0+a7N0JA8WObI/EMjH6YDE79gmnKGPIcRn4F4Lq0ejsbhou5qIjm5vd3EqnQ2UW
+        /oN5DJpg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l6Y1Y-0000Iz-RY; Mon, 01 Feb 2021 12:09:45 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1l6YZH-00Dm54-Iu; Mon, 01 Feb 2021 12:44:36 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B0C83011E6;
-        Mon,  1 Feb 2021 13:09:43 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7D8C9303A02;
+        Mon,  1 Feb 2021 13:44:34 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5349921A2F1E3; Mon,  1 Feb 2021 13:09:43 +0100 (CET)
-Date:   Mon, 1 Feb 2021 13:09:43 +0100
+        id 65B2620C8E303; Mon,  1 Feb 2021 13:44:34 +0100 (CET)
+Date:   Mon, 1 Feb 2021 13:44:34 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Nadav Amit <namit@vmware.com>,
+To:     Nadav Amit <namit@vmware.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Nick Piggin <npiggin@gmail.com>, linux-csky@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC 11/20] mm/tlb: remove arch-specific tlb_start/end_vma()
-Message-ID: <YBfvh1Imz6RRTUDV@hirez.programming.kicks-ass.net>
+        Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [RFC 00/20] TLB batching consolidation and enhancements
+Message-ID: <YBf3sl3M+j3hJRoM@hirez.programming.kicks-ass.net>
 References: <20210131001132.3368247-1-namit@vmware.com>
- <20210131001132.3368247-12-namit@vmware.com>
+ <1612063149.2awdsvvmhj.astroid@bobo.none>
+ <A1589669-34AE-4E15-8358-79BAD7C72520@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210131001132.3368247-12-namit@vmware.com>
+In-Reply-To: <A1589669-34AE-4E15-8358-79BAD7C72520@vmware.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Jan 30, 2021 at 04:11:23PM -0800, Nadav Amit wrote:
+On Sun, Jan 31, 2021 at 07:57:01AM +0000, Nadav Amit wrote:
+> > On Jan 30, 2021, at 7:30 PM, Nicholas Piggin <npiggin@gmail.com> wrote:
 
-> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-> index 427bfcc6cdec..b97136b7010b 100644
-> --- a/include/asm-generic/tlb.h
-> +++ b/include/asm-generic/tlb.h
-> @@ -334,8 +334,8 @@ static inline void __tlb_reset_range(struct mmu_gather *tlb)
->  
->  #ifdef CONFIG_MMU_GATHER_NO_RANGE
->  
-> -#if defined(tlb_flush) || defined(tlb_start_vma) || defined(tlb_end_vma)
-> -#error MMU_GATHER_NO_RANGE relies on default tlb_flush(), tlb_start_vma() and tlb_end_vma()
-> +#if defined(tlb_flush)
-> +#error MMU_GATHER_NO_RANGE relies on default tlb_flush()
->  #endif
->  
->  /*
-> @@ -362,10 +362,6 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
->  
->  #ifndef tlb_flush
->  
-> -#if defined(tlb_start_vma) || defined(tlb_end_vma)
-> -#error Default tlb_flush() relies on default tlb_start_vma() and tlb_end_vma()
-> -#endif
+> > I'll go through the patches a bit more closely when they all come 
+> > through. Sparc and powerpc of course need the arch lazy mode to get 
+> > per-page/pte information for operations that are not freeing pages, 
+> > which is what mmu gather is designed for.
+> 
+> IIUC you mean any PTE change requires a TLB flush. Even setting up a new PTE
+> where no previous PTE was set, right?
 
-#ifdef CONFIG_ARCH_WANT_AGGRESSIVE_TLB_FLUSH_BATCHING
-#error ....
-#endif
+These are the HASH architectures. Their hardware doesn't walk the
+page-tables, but it consults a hash-table to resolve page translations.
 
-goes here...
+They _MUST_ flush the entries under the PTL to avoid ever seeing
+conflicting information, which will make them really unhappy. They can
+do this because they have TLBI broadcast.
 
-
->  static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
->  {
->  	if (tlb->fullmm)
->  		return;
->  
-> +	if (IS_ENABLED(CONFIG_ARCH_WANT_AGGRESSIVE_TLB_FLUSH_BATCHING))
-> +		return;
-
-Also, can you please stick to the CONFIG_MMU_GATHER_* namespace?
-
-I also don't think AGRESSIVE_FLUSH_BATCHING quite captures what it does.
-How about:
-
-	CONFIG_MMU_GATHER_NO_PER_VMA_FLUSH
-
-?
-
-
+There's a few more details I'm sure, but those seem to have slipped from
+my mind.
