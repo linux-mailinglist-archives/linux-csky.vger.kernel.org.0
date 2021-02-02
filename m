@@ -2,85 +2,137 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A79F30A7E9
-	for <lists+linux-csky@lfdr.de>; Mon,  1 Feb 2021 13:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA2030B7F1
+	for <lists+linux-csky@lfdr.de>; Tue,  2 Feb 2021 07:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbhBAMpu (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 1 Feb 2021 07:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S232011AbhBBGmM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 2 Feb 2021 01:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbhBAMps (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 1 Feb 2021 07:45:48 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617DCC061573;
-        Mon,  1 Feb 2021 04:45:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iS8iy+q7Izh8AM4pbDoHtBgYLQUACj4slse1odTb8Xw=; b=m7ji0VO1MSn1lX6BI0jJ/Yb9pR
-        9LbSnyqEyG+WShVFDi6LLpOxh725y4TN5ZOzvkdZzaqe2VLLrMyA0w5DmjmAmnD9zsr9kHInq0sjB
-        ii38K9XKQhFn7sOI40UlVOovRxxAgm9h9jejp9eCBLKegUodvH0TprmeRQ27HIdL/dZ9Y9TeAXH+T
-        AH4kD9PgJxscyRe30c+nsFbhAUZbIF86CVRIvrNnDHqiAHo82ZC5vwPaZdUNJSPPkp0ldDsBPBc8P
-        BJXcBzycInlMsr0+a7N0JA8WObI/EMjH6YDE79gmnKGPIcRn4F4Lq0ejsbhou5qIjm5vd3EqnQ2UW
-        /oN5DJpg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l6YZH-00Dm54-Iu; Mon, 01 Feb 2021 12:44:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7D8C9303A02;
-        Mon,  1 Feb 2021 13:44:34 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 65B2620C8E303; Mon,  1 Feb 2021 13:44:34 +0100 (CET)
-Date:   Mon, 1 Feb 2021 13:44:34 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
+        with ESMTP id S232027AbhBBGmJ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 2 Feb 2021 01:42:09 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06FBC061573;
+        Mon,  1 Feb 2021 22:41:28 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id b145so6885881pfb.4;
+        Mon, 01 Feb 2021 22:41:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=rC09dL3t0JmuXKRGS11QfpT22mY/bCGC3yvB+dUe0fk=;
+        b=PWite5q3ilvWPrNzABf1n2ObHEBeUkcRaH7O0mz9AUYo+3gOXj1emeuovYEtUxa40D
+         Pprs3M/4nSbG5F422bG4VwKat8Yp6XPMULl2rGLdYqtHigSUo61/0wIy78mG+4EzglQp
+         lVpv80EHwoEh1xUNYr4+xQm4xm1O4J5JMT974md8qoEZNixRctDEXLd3PlFg4Lo4Wm5U
+         9GDmEgEdFw09Kn10gxC6lSyxDMixod5KD0FStaEkanlSCWPLmLZNDxsNG6BkKW+2qSG5
+         ITkh8hkgQvpJ541DDIyNaR1Gmci80t/qg+3wM0UTKUpsB32nnu9zSJJOIw5EswRPmx1+
+         o8VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=rC09dL3t0JmuXKRGS11QfpT22mY/bCGC3yvB+dUe0fk=;
+        b=JvePkou+chIngZKpNXDwvN/gRdBQ7Xgtft43N/IQzE3Z6bAasBSF/UrtLtkTZjUjuF
+         8KuM09k0vnAObkpDP65BV3UAQewgFRfVx4kRnUvwLxyCG8cM3fNQpJ3NVjJuZPlrsM2x
+         MoTErD7f4fjamobteMwL24wZCuBqQA06e8C3emI4o3CupOxYB7SKY+zkgAOxFSj2EFjT
+         zyAcBCrKapULB/OO2pQa5E4F60lBgIJTUyJDBf0hfvLOYET94v6ZWBvlaU0NvOqhGE5P
+         vXTTKRIlZY7diqt+njpW1PaGz0G4VIIWqo19y+jZMtV0bDTHnt6N1n4+tVG5wDaTfYg2
+         yLnQ==
+X-Gm-Message-State: AOAM533/az3aYpvWjggA0yYz9ovQecMU9H6Ezxyf9l9AEkWHNeFGY65c
+        hYzRG4u/d5B4UWwlOFv05YQ=
+X-Google-Smtp-Source: ABdhPJyaqrVbEaywPer83Q1yamTBUdgzhSLBAu5yKXicZ9+owt7LJ3m0errPFW51m0M7fMC12YcztQ==
+X-Received: by 2002:a62:7694:0:b029:1b9:8d43:95af with SMTP id r142-20020a6276940000b02901b98d4395afmr20512354pfc.2.1612248088518;
+        Mon, 01 Feb 2021 22:41:28 -0800 (PST)
+Received: from localhost (192.156.221.203.dial.dynamic.acc50-nort-cbr.comindico.com.au. [203.221.156.192])
+        by smtp.gmail.com with ESMTPSA id k10sm20969227pfk.0.2021.02.01.22.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Feb 2021 22:41:27 -0800 (PST)
+Date:   Tue, 02 Feb 2021 16:41:22 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [RFC 11/20] mm/tlb: remove arch-specific tlb_start/end_vma()
+To:     Nadav Amit <nadav.amit@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, Andy Lutomirski <luto@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, X86 ML <x86@kernel.org>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
         Yu Zhao <yuzhao@google.com>
-Subject: Re: [RFC 00/20] TLB batching consolidation and enhancements
-Message-ID: <YBf3sl3M+j3hJRoM@hirez.programming.kicks-ass.net>
 References: <20210131001132.3368247-1-namit@vmware.com>
- <1612063149.2awdsvvmhj.astroid@bobo.none>
- <A1589669-34AE-4E15-8358-79BAD7C72520@vmware.com>
+        <20210131001132.3368247-12-namit@vmware.com>
+        <YBfvh1Imz6RRTUDV@hirez.programming.kicks-ass.net>
+In-Reply-To: <YBfvh1Imz6RRTUDV@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <A1589669-34AE-4E15-8358-79BAD7C72520@vmware.com>
+Message-Id: <1612247956.0a1r1yjmm3.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Jan 31, 2021 at 07:57:01AM +0000, Nadav Amit wrote:
-> > On Jan 30, 2021, at 7:30 PM, Nicholas Piggin <npiggin@gmail.com> wrote:
+Excerpts from Peter Zijlstra's message of February 1, 2021 10:09 pm:
+> On Sat, Jan 30, 2021 at 04:11:23PM -0800, Nadav Amit wrote:
+>=20
+>> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+>> index 427bfcc6cdec..b97136b7010b 100644
+>> --- a/include/asm-generic/tlb.h
+>> +++ b/include/asm-generic/tlb.h
+>> @@ -334,8 +334,8 @@ static inline void __tlb_reset_range(struct mmu_gath=
+er *tlb)
+>> =20
+>>  #ifdef CONFIG_MMU_GATHER_NO_RANGE
+>> =20
+>> -#if defined(tlb_flush) || defined(tlb_start_vma) || defined(tlb_end_vma=
+)
+>> -#error MMU_GATHER_NO_RANGE relies on default tlb_flush(), tlb_start_vma=
+() and tlb_end_vma()
+>> +#if defined(tlb_flush)
+>> +#error MMU_GATHER_NO_RANGE relies on default tlb_flush()
+>>  #endif
+>> =20
+>>  /*
+>> @@ -362,10 +362,6 @@ static inline void tlb_end_vma(struct mmu_gather *t=
+lb, struct vm_area_struct *vm
+>> =20
+>>  #ifndef tlb_flush
+>> =20
+>> -#if defined(tlb_start_vma) || defined(tlb_end_vma)
+>> -#error Default tlb_flush() relies on default tlb_start_vma() and tlb_en=
+d_vma()
+>> -#endif
+>=20
+> #ifdef CONFIG_ARCH_WANT_AGGRESSIVE_TLB_FLUSH_BATCHING
+> #error ....
+> #endif
+>=20
+> goes here...
+>=20
+>=20
+>>  static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_s=
+truct *vma)
+>>  {
+>>  	if (tlb->fullmm)
+>>  		return;
+>> =20
+>> +	if (IS_ENABLED(CONFIG_ARCH_WANT_AGGRESSIVE_TLB_FLUSH_BATCHING))
+>> +		return;
+>=20
+> Also, can you please stick to the CONFIG_MMU_GATHER_* namespace?
+>=20
+> I also don't think AGRESSIVE_FLUSH_BATCHING quite captures what it does.
+> How about:
+>=20
+> 	CONFIG_MMU_GATHER_NO_PER_VMA_FLUSH
 
-> > I'll go through the patches a bit more closely when they all come 
-> > through. Sparc and powerpc of course need the arch lazy mode to get 
-> > per-page/pte information for operations that are not freeing pages, 
-> > which is what mmu gather is designed for.
-> 
-> IIUC you mean any PTE change requires a TLB flush. Even setting up a new PTE
-> where no previous PTE was set, right?
+Yes please, have to have descriptive names.
 
-These are the HASH architectures. Their hardware doesn't walk the
-page-tables, but it consults a hash-table to resolve page translations.
+I didn't quite see why this was much of an improvement though. Maybe=20
+follow up patches take advantage of it? I didn't see how they all fit=20
+together.
 
-They _MUST_ flush the entries under the PTL to avoid ever seeing
-conflicting information, which will make them really unhappy. They can
-do this because they have TLBI broadcast.
-
-There's a few more details I'm sure, but those seem to have slipped from
-my mind.
+Thanks,
+Nick
