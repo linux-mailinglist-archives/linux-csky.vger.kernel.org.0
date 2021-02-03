@@ -2,68 +2,64 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6E930DB2C
-	for <lists+linux-csky@lfdr.de>; Wed,  3 Feb 2021 14:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE31D30DBE6
+	for <lists+linux-csky@lfdr.de>; Wed,  3 Feb 2021 14:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231757AbhBCN0m (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 3 Feb 2021 08:26:42 -0500
-Received: from 198-20-226-115.unifiedlayer.com ([198.20.226.115]:49464 "EHLO
-        198-20-226-115.unifiedlayer.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231587AbhBCN0j (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 3 Feb 2021 08:26:39 -0500
-X-Greylist: delayed 21638 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 08:26:07 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=carnivalassure.com.bd; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=miRpAdBSO5eDo01VDX+EK9bqGCmqMjXHS3kO16T6iWw=; b=kpCxYUDs/Q6wFBgfe0+bmSS68M
-        zcRYWno/roH+XKBInhEBiKEf4sx8y5/VefxhpIs/9qNGv8WOvWRCUN26vxTSG7tj0WdQmOoQFUzGd
-        zFM6BBul3KRpIf0JTZbu6Gc0tILR3OADCzdq2jQpAr+iKaIbhn9Rm18NZ+GP5i3xtzfKEgr4eVlJ0
-        3dgYZqwo3IWhtiIKzeiK2Z56Y1fDICQvb9Zp0KBuIYmQ0tUoaRYeeoyaIyZf2v3dlk5hTiB2kGqOn
-        CMjmGpZsfobBwAkx8N1sOiSN6V0/cWmqmUGnX19FS5LdTSeXjM2y5OQ+CKiYPJhu4jYoICJGCThbx
-        uLC5ik7A==;
-Received: from [127.0.0.1] (port=46362 helo=dot.dotlines.com.sg)
-        by dot.dotlines.com.sg with esmtpa (Exim 4.93)
-        (envelope-from <noreply@carnivalassure.com.bd>)
-        id 1l7CVi-0005Z8-7H; Wed, 03 Feb 2021 01:23:34 -0600
-MIME-Version: 1.0
-Date:   Wed, 03 Feb 2021 01:23:33 -0600
-From:   Francois Pinault <noreply@carnivalassure.com.bd>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Organization: Donation
-Reply-To: francoispinault1936@outlook.com
-Mail-Reply-To: francoispinault1936@outlook.com
-Message-ID: <da06bea50ecb79383d03c55bea3716bf@carnivalassure.com.bd>
-X-Sender: noreply@carnivalassure.com.bd
-User-Agent: Roundcube Webmail/1.3.15
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - dot.dotlines.com.sg
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - carnivalassure.com.bd
-X-Get-Message-Sender-Via: dot.dotlines.com.sg: authenticated_id: noreply@carnivalassure.com.bd
-X-Authenticated-Sender: dot.dotlines.com.sg: noreply@carnivalassure.com.bd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        id S232143AbhBCNxX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 3 Feb 2021 08:53:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51068 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232517AbhBCNwo (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 3 Feb 2021 08:52:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 47BDD64E4B;
+        Wed,  3 Feb 2021 13:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612360297;
+        bh=YWgD8ncYwKwZy0hA+PhRKY0I9ecfClH6CqH00+ow8xE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fkhcLaq2iPGaM7OuZsS1hfZRN4bAU4f+qm3TKDzAZ5zNnZdbRTifR6QXAN0nD28Mf
+         bHZbnx6AZ3+HZulQUZazt6qtQi5KeVvZZK5Vq78F+NMhElO1aZbgCO62UfduNwk9Cp
+         WXGhnLrZvptw+k4PRGiEemQ0vt9ba4mpbPJQGv6JLRWnXgX8/SuGugmkwZkZ27GiZw
+         L86Y9rRW3Pt0Ontf8WZnhRAoSTr9UjRYBcUkx6PkSCnELCz/CUV6831Gi96TuEjCPI
+         dpfsgPCH/9EskL9TXCYJ0Bt4N7syiIy9Wt8A+K+9A95nvHlc3QFl3rpTAFVrQpdI7D
+         Topu6bxcb5y7w==
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 1/2] drivers/irqchip: Fixup csky,mpintc compile error with CPU_CK610
+Date:   Wed,  3 Feb 2021 21:48:33 +0800
+Message-Id: <20210203134834.2367593-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+From: Guo Ren <guoren@linux.alibaba.com>
 
+The irq-csky-mpintc.c only could support CPU_CK860 and it will
+compile error with CPU_CK610.
 
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Marc Zyngier <maz@kernel.org>
+---
+ drivers/irqchip/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index b147f22a78f4..9be2dd5c6380 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -433,7 +433,7 @@ config QCOM_PDC
+ 
+ config CSKY_MPINTC
+ 	bool "C-SKY Multi Processor Interrupt Controller"
+-	depends on CSKY
++	depends on CSKY && CPU_CK860
+ 	help
+ 	  Say yes here to enable C-SKY SMP interrupt controller driver used
+ 	  for C-SKY SMP system.
 -- 
-Hallo, ich bin Herr Francois Pinault, ich habe Ihnen gespendet. Sie 
-können mein Profil auf Wikipedia, Google oder Forbes überprüfen.
+2.17.1
 
-Für Ihren Spendenanspruch und weitere Informationen kontaktieren Sie 
-mich umgehend unter francoispinault1936@outlook.com
-
-Mit freundlichen Grüßen,
-Herr Francois Pinault
