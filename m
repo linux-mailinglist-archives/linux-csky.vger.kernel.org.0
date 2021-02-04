@@ -2,98 +2,90 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4B030DE8D
-	for <lists+linux-csky@lfdr.de>; Wed,  3 Feb 2021 16:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AB230EB91
+	for <lists+linux-csky@lfdr.de>; Thu,  4 Feb 2021 05:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbhBCPqG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 3 Feb 2021 10:46:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59414 "EHLO mail.kernel.org"
+        id S229698AbhBDEd0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 3 Feb 2021 23:33:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234185AbhBCPpi (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 3 Feb 2021 10:45:38 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E17D64F5D;
-        Wed,  3 Feb 2021 15:44:57 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94)
-        (envelope-from <maz@kernel.org>)
-        id 1l7KKt-00Bn8e-1e; Wed, 03 Feb 2021 15:44:55 +0000
+        id S229609AbhBDEdZ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 3 Feb 2021 23:33:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C4F5064E0A;
+        Thu,  4 Feb 2021 04:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612413165;
+        bh=Ue3Xs9wUJgj8n2DPAwzxQPz9+XDAeJ1+dP20Be2cMmc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kcPYaqRHlCzbhoaLfnC7CyocyIw09KlkNAanE/fLzAfRxSR0rdNVXPpmrzhfL+HAH
+         /k+KNAQxTN4mCmAXhxX6BlRb2mn0JTPuUMlfhQW82iIDeK4HTU1EkrVSMW4qt1ONOg
+         w1sfUAYnTRgnL739k/25VCaW9hpYX/rKquYyqEopm6sPLli8t51AzdTNH9wjfaXbrY
+         efujbLozFRDsJfe13TnRxdZj4L9KKMonANdINkEq6QHBtqNyamPANdU6pAEcs1UZDJ
+         M12hYgkvbx9iUq1/FCs/ysUqKU9ABIhpQJMeS41kuVXP7YspLOqb8ljp273CkXZ8UB
+         UDoPNwM5vxiZQ==
+Received: by mail-lj1-f176.google.com with SMTP id f2so1770967ljp.11;
+        Wed, 03 Feb 2021 20:32:44 -0800 (PST)
+X-Gm-Message-State: AOAM530DatMhVw0/d+bMLYPMAwZzSJwa/97lNuL6FYsOqWYXA7RgIUtW
+        2cpJcMChOTj+DKttz08Hgb4cwn3XAS426ojhTH4=
+X-Google-Smtp-Source: ABdhPJwEAuRxQ4vVpWDAsPEZhML2MX4H3MeAubmQ6/1kmFd2jhVHIwzOpEC2bQi2+maalynHoa+xpMePe7ea04vw+gE=
+X-Received: by 2002:a2e:921a:: with SMTP id k26mr2096814ljg.238.1612413163027;
+ Wed, 03 Feb 2021 20:32:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 03 Feb 2021 15:44:54 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     guoren@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH 1/2] drivers/irqchip: Fixup csky,mpintc compile error with
- CPU_CK610
-In-Reply-To: <20210203134834.2367593-1-guoren@kernel.org>
-References: <20210203134834.2367593-1-guoren@kernel.org>
-User-Agent: Roundcube Webmail/1.4.10
-Message-ID: <652791212cbf9c05a9d83b6da5a83520@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: guoren@kernel.org, linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, guoren@linux.alibaba.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+References: <20210203134834.2367593-1-guoren@kernel.org> <652791212cbf9c05a9d83b6da5a83520@kernel.org>
+In-Reply-To: <652791212cbf9c05a9d83b6da5a83520@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 4 Feb 2021 12:32:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTmBUjrTVmQ+CqGtYtBkLO6C5WguWsT7+rFLOp4n=9diA@mail.gmail.com>
+Message-ID: <CAJF2gTTmBUjrTVmQ+CqGtYtBkLO6C5WguWsT7+rFLOp4n=9diA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drivers/irqchip: Fixup csky,mpintc compile error with CPU_CK610
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 2021-02-03 13:48, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> The irq-csky-mpintc.c only could support CPU_CK860 and it will
-> compile error with CPU_CK610.
-> 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> ---
->  drivers/irqchip/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> index b147f22a78f4..9be2dd5c6380 100644
-> --- a/drivers/irqchip/Kconfig
-> +++ b/drivers/irqchip/Kconfig
-> @@ -433,7 +433,7 @@ config QCOM_PDC
-> 
->  config CSKY_MPINTC
->  	bool "C-SKY Multi Processor Interrupt Controller"
-> -	depends on CSKY
-> +	depends on CSKY && CPU_CK860
->  	help
->  	  Say yes here to enable C-SKY SMP interrupt controller driver used
->  	  for C-SKY SMP system.
+Thx Marc,
 
-I'm not convinced this is the right fix.
+On Wed, Feb 3, 2021 at 11:44 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On 2021-02-03 13:48, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The irq-csky-mpintc.c only could support CPU_CK860 and it will
+> > compile error with CPU_CK610.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  drivers/irqchip/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > index b147f22a78f4..9be2dd5c6380 100644
+> > --- a/drivers/irqchip/Kconfig
+> > +++ b/drivers/irqchip/Kconfig
+> > @@ -433,7 +433,7 @@ config QCOM_PDC
+> >
+> >  config CSKY_MPINTC
+> >       bool "C-SKY Multi Processor Interrupt Controller"
+> > -     depends on CSKY
+> > +     depends on CSKY && CPU_CK860
+> >       help
+> >         Say yes here to enable C-SKY SMP interrupt controller driver used
+> >         for C-SKY SMP system.
+>
+> I'm not convinced this is the right fix.
+>
+> You already select CSKY_MPINTC only when CPU_CK860 is selected,
+> so preventing the user from selecting it should simply be a matter
+> of dropping the string after bool.
+Yes, you are right. I will change it into arch/csky.
 
-You already select CSKY_MPINTC only when CPU_CK860 is selected,
-so preventing the user from selecting it should simply be a matter
-of dropping the string after bool.
-
-Thanks,
-
-         M.
-
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 94920a51c628..2e7b562bbaac 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -432,7 +432,7 @@ config QCOM_PDC
-  	  IRQs for Qualcomm Technologies Inc (QTI) mobile chips.
-
-  config CSKY_MPINTC
--	bool "C-SKY Multi Processor Interrupt Controller"
-+	bool
-  	depends on CSKY
-  	help
-  	  Say yes here to enable C-SKY SMP interrupt controller driver used
 
 -- 
-Jazz is not dead. It just smells funny...
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
