@@ -2,94 +2,124 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBB831212F
-	for <lists+linux-csky@lfdr.de>; Sun,  7 Feb 2021 04:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D06312335
+	for <lists+linux-csky@lfdr.de>; Sun,  7 Feb 2021 10:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbhBGDfr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 6 Feb 2021 22:35:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40914 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229705AbhBGDfq (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 6 Feb 2021 22:35:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E63D764E7D;
-        Sun,  7 Feb 2021 03:35:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612668906;
-        bh=9bozjFasYFNBnvuHUezc3sMHX+mbAWvUqvbfrelUpbg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kaWlG8C0iqFUbvSBKNJ1HaQuDQgDGkvGDPLWmk0uvivTCgqFyH+vNpe8UwH8IxPeM
-         bZLnaxmwUTOOzGxOLN5PrLYDutyLjsJq0yINzGJ8qw+PCkEmfvTlRC1MwPIu/M1uk+
-         BMBAo5yElQoATgpvvgYwjVDzC4EtHRi0C2knajEnz/bswIX1xvgaAS+h7IbeY1wqCl
-         OLC9N3acEqqdo3hDSMQ4gi4MNHHmD0+w2I7CeskzK1mwztVAjOWJeOtI+8SFXpWS+V
-         pHE01xuZr8zNWBHqpP5nSJ3k71Mk1d8BHQtX9kycDoEk1by5SYEdpTWZeJsjdqZvYd
-         xge1hnHLrGkXw==
-Received: by mail-lf1-f48.google.com with SMTP id d3so16873504lfg.10;
-        Sat, 06 Feb 2021 19:35:05 -0800 (PST)
-X-Gm-Message-State: AOAM5330hp6hJ/ReLPrS2aT6UyH+LmFdAbKUhLgkAjUiD2s3dzi4ZclA
-        mcskk0yujnbtivJBSToOei3MY592BqhoLbzWHxc=
-X-Google-Smtp-Source: ABdhPJzjm0X9/WNl5dP1IHd4dZvYAWylL1yDcxs3WKloYBrYNgSZSW5emHmai2qbV1uJfra9HFMk0ZYwArEucRBRXYk=
-X-Received: by 2002:a05:6512:33cb:: with SMTP id d11mr6538893lfg.24.1612668904286;
- Sat, 06 Feb 2021 19:35:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20210204074609.3553018-1-guoren@kernel.org> <20210204074609.3553018-2-guoren@kernel.org>
- <c36b816b-6d80-9542-45fc-507c5cc302fb@linaro.org> <CAJF2gTSe7GUzPRvk6bK8AfQFp2uxae1Oo0w-ZtrtmcJmMWCqPw@mail.gmail.com>
-In-Reply-To: <CAJF2gTSe7GUzPRvk6bK8AfQFp2uxae1Oo0w-ZtrtmcJmMWCqPw@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 7 Feb 2021 11:34:53 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRru-5aT_R=AoCWC6e08oF_isBfL_ALUvdqCSmxBuEgtg@mail.gmail.com>
-Message-ID: <CAJF2gTRru-5aT_R=AoCWC6e08oF_isBfL_ALUvdqCSmxBuEgtg@mail.gmail.com>
+        id S229570AbhBGJab (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 7 Feb 2021 04:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbhBGJab (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 7 Feb 2021 04:30:31 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C44C06174A
+        for <linux-csky@vger.kernel.org>; Sun,  7 Feb 2021 01:29:48 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id b3so13424546wrj.5
+        for <linux-csky@vger.kernel.org>; Sun, 07 Feb 2021 01:29:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=UL89vnp+Ah7/ei61uQ/cC1UZ5VSPsshw07hBlWMQIhU=;
+        b=lU7YfPFMZJCqtk6AnTii2fYNDezcQW7DfFPsoPbvXwew/AgP9bducx1IClkSLNQvoq
+         NodCSkMritojUbrX/aBtF3o6G2OXAehvcNf+58LiAanO3AQBkb+n8Eqybu1Aq0m7hUiZ
+         0Jlmc/gYmUTUKMQS1SoMER8pZCY+SAszaPzCTRZf0JpVCGdYHGCqoeiSxOH98CIzJUnY
+         9NGgVrh4LQy878DNx2irmodSghFh7emf1mcPo+wkj3U7IHOJejacHNjf4xNWeo5r+lIM
+         4mL/jSfq1jHhn0Gt0Kc9gdQ0XH2IunEgQzMVsxW1uz0zdNefY+xPOhwxbML9M4AKoIj+
+         WFKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UL89vnp+Ah7/ei61uQ/cC1UZ5VSPsshw07hBlWMQIhU=;
+        b=nY6Pe3wxwO5SppSwKQwWcrWIo5QJuilci6edg6476O3rkI1PvXxbp2gu0mVS1xSZ5L
+         E1rTvBU21jJRG42d6k1XFhYoUm9O9Po7R4U6QOmfO2ITDlhWsp1vDr2F7a4rjF8QZVEE
+         2PMTDC3WqlKDf96wc6zG5lV7TQVD+nfFw3kuZU4emrLGcFD7OBTxtqyhfP4rI+56YtAT
+         fuQtIpC6lI97PiOctrvEux0Sp8X/atl7F+HFL/6fdZp8LnI44v9CQwk/SN3HE4FOM68F
+         0rWvgdeujIsHPlMJiH9EQL6ly12dX8MQFpg4c6P7CLc3B4RjG3SRsWLJ6a4goB1DXnSc
+         PcSg==
+X-Gm-Message-State: AOAM533x7EIBzCDT/N/zZ+60/zqWRgpgdSC7zJJHcGQ47QX1kzn2A+fZ
+        /bZZSzDeO51O9gSDf4ZdGnQiOIzsiNTXwA==
+X-Google-Smtp-Source: ABdhPJzUVGbU/bEL9iOkuX699SCDThqbdIpM5atlgB62a/y3bFUZAjbzj3xUB59DqLqOj9TuILweyQ==
+X-Received: by 2002:a5d:664c:: with SMTP id f12mr14160049wrw.61.1612690187515;
+        Sun, 07 Feb 2021 01:29:47 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c5af:e183:bc03:d8f5? ([2a01:e34:ed2f:f020:c5af:e183:bc03:d8f5])
+        by smtp.googlemail.com with ESMTPSA id o18sm6762181wmp.19.2021.02.07.01.29.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Feb 2021 01:29:46 -0800 (PST)
 Subject: Re: [PATCH v2 2/2] drivers/clocksource: Fixup csky,mptimer compile
  error with CPU_CK610
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Guo Ren <guoren@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20210204074609.3553018-1-guoren@kernel.org>
+ <20210204074609.3553018-2-guoren@kernel.org>
+ <c36b816b-6d80-9542-45fc-507c5cc302fb@linaro.org>
+ <CAJF2gTSe7GUzPRvk6bK8AfQFp2uxae1Oo0w-ZtrtmcJmMWCqPw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <973602b9-83d1-8e22-60bf-cd77d606a126@linaro.org>
+Date:   Sun, 7 Feb 2021 10:29:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAJF2gTSe7GUzPRvk6bK8AfQFp2uxae1Oo0w-ZtrtmcJmMWCqPw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The same way in IRQ chip:
-
-Link: https://lore.kernel.org/lkml/161245410060.1472442.13488057609914274236.b4-ty@kernel.org/
-
-On Sun, Feb 7, 2021 at 11:31 AM Guo Ren <guoren@kernel.org> wrote:
->
+On 07/02/2021 04:31, Guo Ren wrote:
 > Hi Daniel,
->
+> 
 > On Thu, Feb 4, 2021 at 4:48 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 04/02/2021 08:46, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > The timer-mp-csky.c only could support CPU_CK860 and it will
-> > > compile error with CPU_CK610.
-> > >
-> > > It has been selected in arch/csky/Kconfig.
-> >
-> > It would be better if you fix the root cause of the compilation error.
+>>
+>> On 04/02/2021 08:46, guoren@kernel.org wrote:
+>>> From: Guo Ren <guoren@linux.alibaba.com>
+>>>
+>>> The timer-mp-csky.c only could support CPU_CK860 and it will
+>>> compile error with CPU_CK610.
+>>>
+>>> It has been selected in arch/csky/Kconfig.
+>>
+>> It would be better if you fix the root cause of the compilation error.
 > The timer-mp-csky.c has used specific instructions which only
 > supported by CK860 and timer-mp-csky.c is only design for CK860.
->
+
+I guess you are referring to mfcr() ?
+
 > In arch/csky/Konfig we only select it with CK860.
 >         select CSKY_MPINTC if CPU_CK860
 >         select CSKY_MP_TIMER if CPU_CK860
->
+> 
 > So here let's select timer-mp-csky.c in arch/csky/Kconfig, not in
 > drivers/clocksource/Kconfig.
->
->
-> --
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
 
+The COMPILE_TEST option is there to let other architecture to compile
+drivers and increase the compilation test coverage.
+
+The proposed change just removes the driver from this coverage.
+
+Ideally, it would be better to keep it with the COMPILE_TEST option, so
+changes impacting all the drivers can be caught before submitting the
+patches.
+
+By just adding
+
+#ifndef mfcr
+#define mfcr(a) 0
+#endif
+
+shoud fix the compilation issue, no ?
 
 
 -- 
-Best Regards
- Guo Ren
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-ML: https://lore.kernel.org/linux-csky/
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
