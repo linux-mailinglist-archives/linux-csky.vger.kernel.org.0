@@ -2,68 +2,80 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECAF311DB6
-	for <lists+linux-csky@lfdr.de>; Sat,  6 Feb 2021 15:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CE731212B
+	for <lists+linux-csky@lfdr.de>; Sun,  7 Feb 2021 04:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhBFOhL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 6 Feb 2021 09:37:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbhBFOhK (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 6 Feb 2021 09:37:10 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D940DC061786
-        for <linux-csky@vger.kernel.org>; Sat,  6 Feb 2021 06:36:29 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id m7so10730308oiw.12
-        for <linux-csky@vger.kernel.org>; Sat, 06 Feb 2021 06:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=gHpg/EPVa3o65RxgJ93Dz4FsLimYxfPncA7a2KVCOQwfvvsopgfCoqbGZ3OasuDtBY
-         NLaQ5/frJj5h2jUjGBBJEzaWoP2oO6/7hrQkWhLl+5EeYdY1YwYTV+qr/jcGShOxUfub
-         9E6NngAQD+fMrFXDOTbE4lLu2U7SAW1Elxrfe/Nr1URYUHlfBs8WhANRFcWM6fuVVQxH
-         x7WS+h4ADL1cTauhB3VSQd+Nq08/6sgSHVBcN8f5j9IAhiJ5wNhdGIQu1zdgn3TYRX0s
-         9R0YuDxga+2YbnvpgRs0g2ub6wmafsaWw/5rV/WlV0TiEAzZENWPk+wOZ6eQxtRufx9J
-         CPpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
-        b=FLw1d2cHZDCfHNtuTK6E8RWYqUBgJR5jtLkwLvspgpjKI3vUEYa59iYMlyTs41cKgQ
-         VjDRxVKLmp78kywbCp6tEEl9C6kdiv9ZfIFJl2uaoCFk8hNp0OUqsrQh2SwOMtIexbbh
-         EaIFFSGAmkRRe18PuuZ1KZ+rvn+aXQ5aVOqMPPlhl0HR1gdnQ4FhoRIChsKlyWB291p9
-         r0i8i5jinVLNYDNa5yQUuElF2tYRfRt8vMN7ktlLfFRubT7ocO23TRSRM2bdjeBQQoaz
-         4pzqQgkU+ErGBduiXVD126YyEnP/5SZ3kRe1WMt67zQEZxYmU01gl1jSZy0rhI55ZmEK
-         Uvkg==
-X-Gm-Message-State: AOAM533mtHEnPO7yhbGqiIaZ1zck73w+6jGjwo8+rhxf0CrsWf+iRTz8
-        eZqMr9+BMbAaSEA4C+f/3mknRlhQ8QwqHvisOAk=
-X-Google-Smtp-Source: ABdhPJxxOkZ9eesacHgFT16nNuNsQv0hUyTQOKzDpKw383+60c+4v4cLHAWYmj3m8Pi3iOPWdpWUgdSl8/8QKjZ03zg=
-X-Received: by 2002:aca:d4ce:: with SMTP id l197mr6047804oig.36.1612622188580;
- Sat, 06 Feb 2021 06:36:28 -0800 (PST)
+        id S229681AbhBGDcy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 6 Feb 2021 22:32:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40670 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229613AbhBGDcx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 6 Feb 2021 22:32:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E9D664E7F;
+        Sun,  7 Feb 2021 03:32:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612668732;
+        bh=5q+3AseSjJ73gfEyHtsH1AwnHP9+QRAn8sefYBlZhgo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Tfdpc0fROte/2EfA4jbpqvHuJLpo8gT6MeZUZ6stzvHGQPxMssEYJzyZYzhN1OyEI
+         6e9nAo8d9OjTbMeVgKRRo6ngB+NY+CLcPj8ITHJYRvq/uFHKWaBACDBDKo+LINftQG
+         Iykvb8cWFZsSDZrZ1q+kZRmBvvhb9U/ELeO7Ucuo4sF+8QRtPyo3NJ5V/gCpWxiNl3
+         evrNhmRn929MP/mkSzvs1HHTjHVF9ch5aXW+ud4mGuVzynbwU3OwqC3ssVjt5ZiYCc
+         p+c+lGi3HWbfu58DcJ2kl8UA6d7oN3q+hgSJp8QPqtVOhol85dgF/eVrbFKamahMfy
+         E8Ic+Jj0N8RBg==
+Received: by mail-lj1-f179.google.com with SMTP id c18so12499511ljd.9;
+        Sat, 06 Feb 2021 19:32:12 -0800 (PST)
+X-Gm-Message-State: AOAM532Pgw+vi0SBVjC4t8pAtVN97DJmweV+mzP178O+cQPAUXFlAhb5
+        el6rBZouXl6zeXq/SgmrEa8sFBzcqNu0+hQqWB4=
+X-Google-Smtp-Source: ABdhPJxeX1WqQ4nGoVWb+bT7A7kxtIVu0Xd4yP+o4w8tUS+Z+GDdW96VnaC1q8rPqHW9zJyiE/xRNZ7u0+YiMF8XvhM=
+X-Received: by 2002:a2e:89cd:: with SMTP id c13mr7004902ljk.285.1612668730907;
+ Sat, 06 Feb 2021 19:32:10 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a9d:3e4c:0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:36:28 -0800 (PST)
-Reply-To: lawyer.nba@gmail.com
-From:   Barrister Daven Bango <stephennbada@gmail.com>
-Date:   Sat, 6 Feb 2021 15:36:28 +0100
-Message-ID: <CAO_fDi_zRL0RZsSMJLO0kYQQR8Q-LoDSYrtGDk0k=aEez6w44Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20210204074609.3553018-1-guoren@kernel.org> <20210204074609.3553018-2-guoren@kernel.org>
+ <c36b816b-6d80-9542-45fc-507c5cc302fb@linaro.org>
+In-Reply-To: <c36b816b-6d80-9542-45fc-507c5cc302fb@linaro.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 7 Feb 2021 11:31:59 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSe7GUzPRvk6bK8AfQFp2uxae1Oo0w-ZtrtmcJmMWCqPw@mail.gmail.com>
+Message-ID: <CAJF2gTSe7GUzPRvk6bK8AfQFp2uxae1Oo0w-ZtrtmcJmMWCqPw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drivers/clocksource: Fixup csky,mptimer compile
+ error with CPU_CK610
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
---=20
-Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
-ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
-MMF)
-u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
-dodatne informacije
+Hi Daniel,
 
-Advokat: Daven Bango
-Telefon: +22891667276
-(URED MMF-a LOME TOGO)
+On Thu, Feb 4, 2021 at 4:48 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 04/02/2021 08:46, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The timer-mp-csky.c only could support CPU_CK860 and it will
+> > compile error with CPU_CK610.
+> >
+> > It has been selected in arch/csky/Kconfig.
+>
+> It would be better if you fix the root cause of the compilation error.
+The timer-mp-csky.c has used specific instructions which only
+supported by CK860 and timer-mp-csky.c is only design for CK860.
+
+In arch/csky/Konfig we only select it with CK860.
+        select CSKY_MPINTC if CPU_CK860
+        select CSKY_MP_TIMER if CPU_CK860
+
+So here let's select timer-mp-csky.c in arch/csky/Kconfig, not in
+drivers/clocksource/Kconfig.
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
