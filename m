@@ -2,187 +2,199 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D6C316ED8
-	for <lists+linux-csky@lfdr.de>; Wed, 10 Feb 2021 19:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D6431E470
+	for <lists+linux-csky@lfdr.de>; Thu, 18 Feb 2021 04:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbhBJSgq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 10 Feb 2021 13:36:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59537 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234149AbhBJSen (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 10 Feb 2021 13:34:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612981995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=U/kEUdiVTFSkXdDlFfnN0pNfEfW0SscYP5LvJr9uMD4=;
-        b=R/tfgvZuQ4G37CYzZET2pIZtBvkJ7VLpKg3kEmvqYnS/ufIiuF3FsT5YF+k30ItpFVlbsl
-        0AQ4qKgsb3CtXkE0NsYkFwCtfo+dcHNzGrNCgOp8v17Xx6NG92GbgGCxSyhcrd0T0+WzdS
-        Jsl4DSnCKHyWdMaAUWTdAcS6IeszSnU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-189-7FXvma-PPKic8Esl0H0dDw-1; Wed, 10 Feb 2021 13:33:10 -0500
-X-MC-Unique: 7FXvma-PPKic8Esl0H0dDw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E7678801977;
-        Wed, 10 Feb 2021 18:33:06 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 066025C1BD;
-        Wed, 10 Feb 2021 18:33:01 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Waiman Long <longman@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT
-        (AARCH64 ARCHITECTURE)),
-        linux-mips@vger.kernel.org (open list:MIPS),
-        sparclinux@vger.kernel.org (open list:SPARC + UltraSPARC
-        (sparc/sparc64)),
-        linux-xtensa@linux-xtensa.org (open list:TENSILICA XTENSA PORT (xtensa)),
-        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES),
-        linux-csky@vger.kernel.org (open list:C-SKY ARCHITECTURE)
-Subject: [PATCH] locking/arch: Move qrwlock.h include after qspinlock.h
-Date:   Wed, 10 Feb 2021 13:33:01 -0500
-Message-Id: <20210210183301.453422-1-pbonzini@redhat.com>
+        id S229808AbhBRDOC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 17 Feb 2021 22:14:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:43356 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229553AbhBRDOC (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 17 Feb 2021 22:14:02 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 457C51FB;
+        Wed, 17 Feb 2021 19:13:16 -0800 (PST)
+Received: from net-arm-thunderx2-02.shanghai.arm.com (net-arm-thunderx2-02.shanghai.arm.com [10.169.208.215])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 111C33F694;
+        Wed, 17 Feb 2021 19:13:08 -0800 (PST)
+From:   Jianlin Lv <Jianlin.Lv@arm.com>
+To:     john.garry@huawei.com, will@kernel.org, mathieu.poirier@linaro.org,
+        leo.yan@linaro.org, peterz@infradead.org, mingo@redhat.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, guoren@kernel.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, kjain@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, ravi.bangoria@linux.ibm.com,
+        anju@linux.vnet.ibm.com
+Cc:     Jianlin.Lv@arm.com, iecedge@gmail.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v5] perf tools: Fix arm64 build error with gcc-11
+Date:   Thu, 18 Feb 2021 11:12:45 +0800
+Message-Id: <20210218031245.2078492-1-Jianlin.Lv@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-include/asm-generic/qrwlock.h was trying to get arch_spin_is_locked via
-asm-generic/qspinlock.h.  However, this does not work because architectures
-might be using queued rwlocks but not queued spinlocks (csky), or because they
-might be defining their own queued_* macros before including asm/qspinlock.h.
+gcc version: 11.0.0 20210208 (experimental) (GCC)
 
-To fix this, ensure that asm/spinlock.h always includes qrwlock.h after
-defining arch_spin_is_locked (either directly for csky, or via
-asm/qspinlock.h for other architectures).  The only inclusion elsewhere
-is in kernel/locking/qrwlock.c.  That one is really unnecessary because
-the file is only compiled in SMP configurations (config QUEUED_RWLOCKS
-depends on SMP) and in that case linux/spinlock.h already includes
-asm/qrwlock.h if needed, via asm/spinlock.h.
+Following build error on arm64:
 
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Cc: Waiman Long <longman@redhat.com>
-Fixes: 26128cb6c7e6 ("locking/rwlocks: Add contention detection for rwlocks")
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+.......
+In function ‘printf’,
+    inlined from ‘regs_dump__printf’ at util/session.c:1141:3,
+    inlined from ‘regs__printf’ at util/session.c:1169:2:
+/usr/include/aarch64-linux-gnu/bits/stdio2.h:107:10: \
+  error: ‘%-5s’ directive argument is null [-Werror=format-overflow=]
+
+107 |   return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt, \
+                __va_arg_pack ());
+
+......
+In function ‘fprintf’,
+  inlined from ‘perf_sample__fprintf_regs.isra’ at \
+    builtin-script.c:622:14:
+/usr/include/aarch64-linux-gnu/bits/stdio2.h:100:10: \
+    error: ‘%5s’ directive argument is null [-Werror=format-overflow=]
+  100 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
+  101 |                         __va_arg_pack ());
+
+cc1: all warnings being treated as errors
+.......
+
+This patch fixes Wformat-overflow warnings. Add helper function to
+convert NULL to "unknown".
+
+Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
 ---
-	v1->v2: Fix sparc too.  Add a comment in qrwlock.h itself.
-	Remove unnecessary inclusion in kernel/locking/qrwlock.c
+v2: Add ternary operator to avoid similar errors in other arch.
+v3: Declared reg_name in inner block.
+v4: Add helper function: perf_reg_name_str, update changelog.
+v5: Correct function names to follow common naming conventions.
+---
+ tools/perf/arch/arm/include/perf_regs.h     | 2 +-
+ tools/perf/arch/arm64/include/perf_regs.h   | 2 +-
+ tools/perf/arch/csky/include/perf_regs.h    | 2 +-
+ tools/perf/arch/powerpc/include/perf_regs.h | 2 +-
+ tools/perf/arch/riscv/include/perf_regs.h   | 2 +-
+ tools/perf/arch/s390/include/perf_regs.h    | 2 +-
+ tools/perf/arch/x86/include/perf_regs.h     | 2 +-
+ tools/perf/util/perf_regs.h                 | 7 +++++++
+ 8 files changed, 14 insertions(+), 7 deletions(-)
 
- arch/arm64/include/asm/spinlock.h    | 2 +-
- arch/mips/include/asm/spinlock.h     | 2 +-
- arch/sparc/include/asm/spinlock_64.h | 2 +-
- arch/xtensa/include/asm/spinlock.h   | 2 +-
- include/asm-generic/qrwlock.h        | 3 ++-
- kernel/locking/qrwlock.c             | 1 -
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/arm64/include/asm/spinlock.h b/arch/arm64/include/asm/spinlock.h
-index 9083d6992603..0525c0b089ed 100644
---- a/arch/arm64/include/asm/spinlock.h
-+++ b/arch/arm64/include/asm/spinlock.h
-@@ -5,8 +5,8 @@
- #ifndef __ASM_SPINLOCK_H
- #define __ASM_SPINLOCK_H
+diff --git a/tools/perf/arch/arm/include/perf_regs.h b/tools/perf/arch/arm/include/perf_regs.h
+index ed20e0253e25..4085419283d0 100644
+--- a/tools/perf/arch/arm/include/perf_regs.h
++++ b/tools/perf/arch/arm/include/perf_regs.h
+@@ -15,7 +15,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP	PERF_REG_ARM_PC
+ #define PERF_REG_SP	PERF_REG_ARM_SP
  
--#include <asm/qrwlock.h>
- #include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_ARM_R0:
+diff --git a/tools/perf/arch/arm64/include/perf_regs.h b/tools/perf/arch/arm64/include/perf_regs.h
+index baaa5e64a3fb..fa3e07459f76 100644
+--- a/tools/perf/arch/arm64/include/perf_regs.h
++++ b/tools/perf/arch/arm64/include/perf_regs.h
+@@ -15,7 +15,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP	PERF_REG_ARM64_PC
+ #define PERF_REG_SP	PERF_REG_ARM64_SP
  
- /* See include/linux/spinlock.h */
- #define smp_mb__after_spinlock()	smp_mb()
-diff --git a/arch/mips/include/asm/spinlock.h b/arch/mips/include/asm/spinlock.h
-index 8a88eb265516..6ce2117e49f6 100644
---- a/arch/mips/include/asm/spinlock.h
-+++ b/arch/mips/include/asm/spinlock.h
-@@ -10,7 +10,6 @@
- #define _ASM_SPINLOCK_H
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_ARM64_X0:
+diff --git a/tools/perf/arch/csky/include/perf_regs.h b/tools/perf/arch/csky/include/perf_regs.h
+index 8f336ea1161a..25ac3bdcb9d1 100644
+--- a/tools/perf/arch/csky/include/perf_regs.h
++++ b/tools/perf/arch/csky/include/perf_regs.h
+@@ -15,7 +15,7 @@
+ #define PERF_REG_IP	PERF_REG_CSKY_PC
+ #define PERF_REG_SP	PERF_REG_CSKY_SP
  
- #include <asm/processor.h>
--#include <asm/qrwlock.h>
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_CSKY_A0:
+diff --git a/tools/perf/arch/powerpc/include/perf_regs.h b/tools/perf/arch/powerpc/include/perf_regs.h
+index 63f3ac91049f..004bed228693 100644
+--- a/tools/perf/arch/powerpc/include/perf_regs.h
++++ b/tools/perf/arch/powerpc/include/perf_regs.h
+@@ -73,7 +73,7 @@ static const char *reg_names[] = {
+ 	[PERF_REG_POWERPC_SIER3] = "sier3",
+ };
  
- #include <asm-generic/qspinlock_types.h>
- 
-@@ -27,5 +26,6 @@ static inline void queued_spin_unlock(struct qspinlock *lock)
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	return reg_names[id];
  }
+diff --git a/tools/perf/arch/riscv/include/perf_regs.h b/tools/perf/arch/riscv/include/perf_regs.h
+index 7a8bcde7a2b1..6b02a767c918 100644
+--- a/tools/perf/arch/riscv/include/perf_regs.h
++++ b/tools/perf/arch/riscv/include/perf_regs.h
+@@ -19,7 +19,7 @@
+ #define PERF_REG_IP	PERF_REG_RISCV_PC
+ #define PERF_REG_SP	PERF_REG_RISCV_SP
  
- #include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_RISCV_PC:
+diff --git a/tools/perf/arch/s390/include/perf_regs.h b/tools/perf/arch/s390/include/perf_regs.h
+index bcfbaed78cc2..ce3031526623 100644
+--- a/tools/perf/arch/s390/include/perf_regs.h
++++ b/tools/perf/arch/s390/include/perf_regs.h
+@@ -14,7 +14,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP PERF_REG_S390_PC
+ #define PERF_REG_SP PERF_REG_S390_R15
  
- #endif /* _ASM_SPINLOCK_H */
-diff --git a/arch/sparc/include/asm/spinlock_64.h b/arch/sparc/include/asm/spinlock_64.h
-index 7fc82a233f49..3a9a0b0c7465 100644
---- a/arch/sparc/include/asm/spinlock_64.h
-+++ b/arch/sparc/include/asm/spinlock_64.h
-@@ -11,8 +11,8 @@
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_S390_R0:
+diff --git a/tools/perf/arch/x86/include/perf_regs.h b/tools/perf/arch/x86/include/perf_regs.h
+index b7321337d100..cddc4cdc0d9b 100644
+--- a/tools/perf/arch/x86/include/perf_regs.h
++++ b/tools/perf/arch/x86/include/perf_regs.h
+@@ -23,7 +23,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP PERF_REG_X86_IP
+ #define PERF_REG_SP PERF_REG_X86_SP
  
- #include <asm/processor.h>
- #include <asm/barrier.h>
--#include <asm/qrwlock.h>
- #include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_X86_AX:
+diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
+index a45499126184..eeac181ebccf 100644
+--- a/tools/perf/util/perf_regs.h
++++ b/tools/perf/util/perf_regs.h
+@@ -33,6 +33,13 @@ extern const struct sample_reg sample_reg_masks[];
  
- #endif /* !(__ASSEMBLY__) */
+ int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
  
-diff --git a/arch/xtensa/include/asm/spinlock.h b/arch/xtensa/include/asm/spinlock.h
-index 584b0de6f2ca..41c449ece2d8 100644
---- a/arch/xtensa/include/asm/spinlock.h
-+++ b/arch/xtensa/include/asm/spinlock.h
-@@ -12,8 +12,8 @@
- #define _XTENSA_SPINLOCK_H
- 
- #include <asm/barrier.h>
--#include <asm/qrwlock.h>
- #include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
- 
- #define smp_mb__after_spinlock()	smp_mb()
- 
-diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
-index 0020d3b820a7..7ae0ece07b4e 100644
---- a/include/asm-generic/qrwlock.h
-+++ b/include/asm-generic/qrwlock.h
-@@ -14,7 +14,8 @@
- #include <asm/processor.h>
- 
- #include <asm-generic/qrwlock_types.h>
--#include <asm-generic/qspinlock.h>
++static inline const char *perf_reg_name(int id)
++{
++	const char *reg_name = __perf_reg_name(id);
 +
-+/* Must be included from asm/spinlock.h after defining arch_spin_is_locked.  */
- 
- /*
-  * Writer states & reader shift and bias.
-diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-index fe9ca92faa2a..4786dd271b45 100644
---- a/kernel/locking/qrwlock.c
-+++ b/kernel/locking/qrwlock.c
-@@ -12,7 +12,6 @@
- #include <linux/percpu.h>
- #include <linux/hardirq.h>
- #include <linux/spinlock.h>
--#include <asm/qrwlock.h>
- 
- /**
-  * queued_read_lock_slowpath - acquire read lock of a queue rwlock
++	return reg_name ?: "unknown";
++}
++
+ #else
+ #define PERF_REGS_MASK	0
+ #define PERF_REGS_MAX	0
 -- 
-2.26.2
+2.25.1
 
