@@ -2,237 +2,120 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA2D325D7C
-	for <lists+linux-csky@lfdr.de>; Fri, 26 Feb 2021 07:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAA632654C
+	for <lists+linux-csky@lfdr.de>; Fri, 26 Feb 2021 17:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbhBZGWZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 26 Feb 2021 01:22:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60890 "EHLO mail.kernel.org"
+        id S229707AbhBZQND (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 26 Feb 2021 11:13:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229556AbhBZGWY (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 26 Feb 2021 01:22:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B902564E02;
-        Fri, 26 Feb 2021 06:21:42 +0000 (UTC)
+        id S229566AbhBZQM7 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 26 Feb 2021 11:12:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7822664EBA;
+        Fri, 26 Feb 2021 16:12:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614320503;
-        bh=BX4ANU+deMF/gCnboQiDGoO4O8tphEU0zGUoRnCR8+g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qfHHydEIR/PrCEjFmvW05eOKcqgxnIKVRlNys0hmd4Jt6eF4++8eqlDkNDxD8fMb7
-         z9uFv19hoTaovxU4em4pKiE/pnRtfkxl+Od1tBuqagziI9T7rTErCnaDEtPlyaiPLU
-         SlXlvcZCqdeHj+zE5MfwcqLUwvG4NiEBiM3xrXnoQ59mPLoY3iFTRm+r4i0KULpw2V
-         T4jamGddsxz0q0TNA60vkOYo/tJWe4AWQgCWoj/68JBPzCtlP0esZmvOZVuhaN51WO
-         PRZyjsEEfQqRJAM1cTQmxTlGjW+L2V3MeCXFP4gYjw5wQ4h7NtLN7GBDdGF06i3+ie
-         VZuhpgLH/pU2Q==
-Received: by mail-lj1-f177.google.com with SMTP id a17so9367370ljq.2;
-        Thu, 25 Feb 2021 22:21:42 -0800 (PST)
-X-Gm-Message-State: AOAM531njM7/3G+CoNMyvivOhGJOYIQjXZ0gW2EMaNFQC2G2a2l9MYSY
-        yOVzlex3ZjNRugfjkgxc4ejOjm2o8YiVjL7WnVw=
-X-Google-Smtp-Source: ABdhPJz6GQ02m5yKncjhLrHyBdN+zIU3XRAYgog6pHcVmxWLyha3SvidqvgQS/WKsUsg1QE4UoT+9SSgSw5aoCdPnI4=
-X-Received: by 2002:a2e:919a:: with SMTP id f26mr793595ljg.508.1614320500903;
- Thu, 25 Feb 2021 22:21:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20210225142841.3385428-1-arnd@kernel.org> <20210225142841.3385428-2-arnd@kernel.org>
-In-Reply-To: <20210225142841.3385428-2-arnd@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 26 Feb 2021 14:21:29 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQriSy2rLHkvJ+YwHtyBE3BwneZQ-FqwSUzLjSRc9gRcA@mail.gmail.com>
-Message-ID: <CAJF2gTQriSy2rLHkvJ+YwHtyBE3BwneZQ-FqwSUzLjSRc9gRcA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Documentation: features: refresh feature list
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Arnd Bergmann <arnd@arndb.de>,
+        s=k20201202; t=1614355936;
+        bh=C3YYYvLVQ2aWy1CSZtnNQUvgD7cCZHBGlr/W3FNNMxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DP9nkO3oybnEAnHFCqYU6CdF/AbL2T+K3usNFtsn/N9/Yn70o/rliMJOb8/WaWYBA
+         d57EoBBjnNAhow4GofagZQCF1EjMWeh2qtYWxT7Q2/aOxtXITbSMYBB3lw4CWilLYg
+         Zexl3Qov2U8PKzyAAXLUD/zU1Bkty2FB87MLC4ViEz8Ff/mRR7+Pe6ZmhkIzEwTcNd
+         SqEsb2UDI2IDem/YpMq+qDnEMYGzGJllqU1MqPodlUlmY/Sqw6vZybTE6YpgStqCWX
+         zj09D3CS2CWUt9S2GaQg4mUKko6HBLUIkmvjstoN4N6dRN1g6k1IEc53f669FkOFBz
+         oIlZmTXT7qF5Q==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Xingxing Su <suxingxing@loongson.cn>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        David Daney <david.daney@cavium.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Archer Yan <ayan@wavecomp.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
-        Zong Li <zong.li@sifive.com>, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Marco Elver <elver@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+Subject: [PATCH] [v2] linux/compiler-clang.h: define HAVE_BUILTIN_BSWAP*
+Date:   Fri, 26 Feb 2021 17:11:12 +0100
+Message-Id: <20210226161151.2629097-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx Arnd,
+From: Arnd Bergmann <arnd@arndb.de>
 
-I'm very glad to see C-SKY & RISC-V features updated.
+Separating compiler-clang.h from compiler-gcc.h inadventently dropped the
+definitions of the three HAVE_BUILTIN_BSWAP macros, which requires falling
+back to the open-coded version and hoping that the compiler detects it.
 
-Signed-off-by: Guo Ren <guoren@kernel.org>
+Since all versions of clang support the __builtin_bswap interfaces,
+add back the flags and have the headers pick these up automatically.
 
-On Thu, Feb 25, 2021 at 10:29 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Run the update script to document the recent feature additions
-> on riscv, mips and csky.
->
-> Fixes: c109f42450ec ("csky: Add kmemleak support")
-> Fixes: 8b3165e54566 ("MIPS: Enable GCOV")
-> Fixes: 1ddc96bd42da ("MIPS: kernel: Support extracting off-line stack traces from user-space with perf")
-> Fixes: 74784081aac8 ("riscv: Add uprobes supported")
-> Fixes: 829adda597fe ("riscv: Add KPROBES_ON_FTRACE supported")
-> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
-> Fixes: dcdc7a53a890 ("RISC-V: Implement ptrace regs and stack API")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  Documentation/features/debug/gcov-profile-all/arch-support.txt  | 2 +-
->  Documentation/features/debug/kmemleak/arch-support.txt          | 2 +-
->  Documentation/features/debug/kprobes-on-ftrace/arch-support.txt | 2 +-
->  Documentation/features/debug/kprobes/arch-support.txt           | 2 +-
->  Documentation/features/debug/kretprobes/arch-support.txt        | 2 +-
->  Documentation/features/debug/uprobes/arch-support.txt           | 2 +-
->  Documentation/features/perf/kprobes-event/arch-support.txt      | 2 +-
->  Documentation/features/perf/perf-regs/arch-support.txt          | 2 +-
->  Documentation/features/perf/perf-stackdump/arch-support.txt     | 2 +-
->  Documentation/features/sched/numa-balancing/arch-support.txt    | 2 +-
->  10 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/Documentation/features/debug/gcov-profile-all/arch-support.txt b/Documentation/features/debug/gcov-profile-all/arch-support.txt
-> index 416c70345946..b39c1a5de3f3 100644
-> --- a/Documentation/features/debug/gcov-profile-all/arch-support.txt
-> +++ b/Documentation/features/debug/gcov-profile-all/arch-support.txt
-> @@ -16,7 +16,7 @@
->      |        ia64: | TODO |
->      |        m68k: | TODO |
->      |  microblaze: |  ok  |
-> -    |        mips: | TODO |
-> +    |        mips: |  ok  |
->      |       nds32: | TODO |
->      |       nios2: | TODO |
->      |    openrisc: | TODO |
-> diff --git a/Documentation/features/debug/kmemleak/arch-support.txt b/Documentation/features/debug/kmemleak/arch-support.txt
-> index 915185634611..e9ac415f8aec 100644
-> --- a/Documentation/features/debug/kmemleak/arch-support.txt
-> +++ b/Documentation/features/debug/kmemleak/arch-support.txt
-> @@ -10,7 +10,7 @@
->      |         arc: |  ok  |
->      |         arm: |  ok  |
->      |       arm64: |  ok  |
-> -    |        csky: | TODO |
-> +    |        csky: |  ok  |
->      |       h8300: | TODO |
->      |     hexagon: | TODO |
->      |        ia64: | TODO |
-> diff --git a/Documentation/features/debug/kprobes-on-ftrace/arch-support.txt b/Documentation/features/debug/kprobes-on-ftrace/arch-support.txt
-> index aade7816cb87..96156e8802a7 100644
-> --- a/Documentation/features/debug/kprobes-on-ftrace/arch-support.txt
-> +++ b/Documentation/features/debug/kprobes-on-ftrace/arch-support.txt
-> @@ -22,7 +22,7 @@
->      |    openrisc: | TODO |
->      |      parisc: |  ok  |
->      |     powerpc: |  ok  |
-> -    |       riscv: | TODO |
-> +    |       riscv: |  ok  |
->      |        s390: |  ok  |
->      |          sh: | TODO |
->      |       sparc: | TODO |
-> diff --git a/Documentation/features/debug/kprobes/arch-support.txt b/Documentation/features/debug/kprobes/arch-support.txt
-> index 4b663c124d1c..ee95ed61909a 100644
-> --- a/Documentation/features/debug/kprobes/arch-support.txt
-> +++ b/Documentation/features/debug/kprobes/arch-support.txt
-> @@ -22,7 +22,7 @@
->      |    openrisc: | TODO |
->      |      parisc: |  ok  |
->      |     powerpc: |  ok  |
-> -    |       riscv: | TODO |
-> +    |       riscv: |  ok  |
->      |        s390: |  ok  |
->      |          sh: |  ok  |
->      |       sparc: |  ok  |
-> diff --git a/Documentation/features/debug/kretprobes/arch-support.txt b/Documentation/features/debug/kretprobes/arch-support.txt
-> index 5449bb808442..612cb97d47b8 100644
-> --- a/Documentation/features/debug/kretprobes/arch-support.txt
-> +++ b/Documentation/features/debug/kretprobes/arch-support.txt
-> @@ -22,7 +22,7 @@
->      |    openrisc: | TODO |
->      |      parisc: |  ok  |
->      |     powerpc: |  ok  |
-> -    |       riscv: | TODO |
-> +    |       riscv: |  ok  |
->      |        s390: |  ok  |
->      |          sh: |  ok  |
->      |       sparc: |  ok  |
-> diff --git a/Documentation/features/debug/uprobes/arch-support.txt b/Documentation/features/debug/uprobes/arch-support.txt
-> index 2820177787e1..8bd5548a4485 100644
-> --- a/Documentation/features/debug/uprobes/arch-support.txt
-> +++ b/Documentation/features/debug/uprobes/arch-support.txt
-> @@ -22,7 +22,7 @@
->      |    openrisc: | TODO |
->      |      parisc: | TODO |
->      |     powerpc: |  ok  |
-> -    |       riscv: | TODO |
-> +    |       riscv: |  ok  |
->      |        s390: |  ok  |
->      |          sh: | TODO |
->      |       sparc: |  ok  |
-> diff --git a/Documentation/features/perf/kprobes-event/arch-support.txt b/Documentation/features/perf/kprobes-event/arch-support.txt
-> index 75739a0007e0..78f3fe080f0e 100644
-> --- a/Documentation/features/perf/kprobes-event/arch-support.txt
-> +++ b/Documentation/features/perf/kprobes-event/arch-support.txt
-> @@ -22,7 +22,7 @@
->      |    openrisc: | TODO |
->      |      parisc: |  ok  |
->      |     powerpc: |  ok  |
-> -    |       riscv: | TODO |
-> +    |       riscv: |  ok  |
->      |        s390: |  ok  |
->      |          sh: |  ok  |
->      |       sparc: |  ok  |
-> diff --git a/Documentation/features/perf/perf-regs/arch-support.txt b/Documentation/features/perf/perf-regs/arch-support.txt
-> index ea8b6d96633a..5bf3b1854a1f 100644
-> --- a/Documentation/features/perf/perf-regs/arch-support.txt
-> +++ b/Documentation/features/perf/perf-regs/arch-support.txt
-> @@ -16,7 +16,7 @@
->      |        ia64: | TODO |
->      |        m68k: | TODO |
->      |  microblaze: | TODO |
-> -    |        mips: | TODO |
-> +    |        mips: |  ok  |
->      |       nds32: | TODO |
->      |       nios2: | TODO |
->      |    openrisc: | TODO |
-> diff --git a/Documentation/features/perf/perf-stackdump/arch-support.txt b/Documentation/features/perf/perf-stackdump/arch-support.txt
-> index 87165861037e..d88659bb4fc1 100644
-> --- a/Documentation/features/perf/perf-stackdump/arch-support.txt
-> +++ b/Documentation/features/perf/perf-stackdump/arch-support.txt
-> @@ -16,7 +16,7 @@
->      |        ia64: | TODO |
->      |        m68k: | TODO |
->      |  microblaze: | TODO |
-> -    |        mips: | TODO |
-> +    |        mips: |  ok  |
->      |       nds32: | TODO |
->      |       nios2: | TODO |
->      |    openrisc: | TODO |
-> diff --git a/Documentation/features/sched/numa-balancing/arch-support.txt b/Documentation/features/sched/numa-balancing/arch-support.txt
-> index bfcfaff67a1b..9affb7c2c500 100644
-> --- a/Documentation/features/sched/numa-balancing/arch-support.txt
-> +++ b/Documentation/features/sched/numa-balancing/arch-support.txt
-> @@ -22,7 +22,7 @@
->      |    openrisc: |  ..  |
->      |      parisc: |  ..  |
->      |     powerpc: |  ok  |
-> -    |       riscv: | TODO |
-> +    |       riscv: |  ok  |
->      |        s390: |  ok  |
->      |          sh: |  ..  |
->      |       sparc: | TODO |
-> --
-> 2.29.2
->
+This results in a 4% improvement of compilation speed for arm defconfig.
 
+Note: it might also be worth revisiting which architectures set
+CONFIG_ARCH_USE_BUILTIN_BSWAP for one compiler or the other, today
+this is set on six architectures (arm32, csky, mips, powerpc, s390,
+x86), while another ten architectures define custom helpers (alpha,
+arc, ia64, m68k, mips, nios2, parisc, sh, sparc, xtensa), and the rest
+(arm64, h8300, hexagon, microblaze, nds32, openrisc, riscv) just get
+the unoptimized version and rely on the compiler to detect it.
 
+A long time ago, the compiler builtins were architecture specific, but
+nowadays, all compilers that are able to build the kernel have correct
+implementations of them, though some may not be as optimized as
+the inline asm versions.
+
+The patch that dropped the optimization landed in v4.19, so as discussed
+it would be fairly safe to backport this revert to stable kernels to
+the 4.19/5.4/5.10 stable kernels, but there is a remaining risk for
+regressions, and it has no known side-effects besides compile speed.
+
+Fixes: 815f0ddb346c ("include/linux/compiler*.h: make compiler-*.h mutually exclusive")
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/lkml/20210225164513.3667778-1-arnd@kernel.org/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2:
+ - drop exception for sparse
+ - expand changelog text
+---
+ include/linux/compiler-clang.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
+index 6478bff6fcc2..917f7f88cef0 100644
+--- a/include/linux/compiler-clang.h
++++ b/include/linux/compiler-clang.h
+@@ -33,6 +33,12 @@
+ #define __no_sanitize_thread
+ #endif
+ 
++#if defined(CONFIG_ARCH_USE_BUILTIN_BSWAP)
++#define __HAVE_BUILTIN_BSWAP32__
++#define __HAVE_BUILTIN_BSWAP64__
++#define __HAVE_BUILTIN_BSWAP16__
++#endif /* CONFIG_ARCH_USE_BUILTIN_BSWAP */
++
+ #if __has_feature(undefined_behavior_sanitizer)
+ /* GCC does not have __SANITIZE_UNDEFINED__ */
+ #define __no_sanitize_undefined \
 -- 
-Best Regards
- Guo Ren
+2.29.2
 
-ML: https://lore.kernel.org/linux-csky/
