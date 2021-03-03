@@ -2,94 +2,87 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1143280E6
-	for <lists+linux-csky@lfdr.de>; Mon,  1 Mar 2021 15:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D02EA32C6D5
+	for <lists+linux-csky@lfdr.de>; Thu,  4 Mar 2021 02:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbhCAObO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 1 Mar 2021 09:31:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57406 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236359AbhCAOaw (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 1 Mar 2021 09:30:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D90D64DBA;
-        Mon,  1 Mar 2021 14:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614609011;
-        bh=MucoJTNiFHCFYNwN2fx6G+sQ2VpQS44c0zeeuezrTos=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rbx8gdTS4v7hg0KO2eaeQK1DKUK2N5PyUae0bKPtj1xcqfwK9GuL3iA5dRfa87Md5
-         yqhDHWsH0V28RXC65G0kbq5pd2YTh0WydUc44+d8gFB7N+Y0SvVXNK3oiy73qAlNA3
-         I1wVEcFmeulFH7Ya+U/4kgKkzP0vvDBbQmESCSa2vii3yNwTAvOEJOPxDBjA0KHZFE
-         NLfGwF45GTKehISWdoCSRBJWI0pCPAKXxgMs1xedQcSUKAEv+RvP9qI8YuLeTmoJkJ
-         UE4rElruxCD9TKEF2DkIfI8qDzIzvPZSPk4fFBl8A9kLBpaFJsMczC8rD+kXiLoB+b
-         h9vPdPtctGERA==
-From:   guoren@kernel.org
-To:     guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4/4] perf: csky: Using CPUHP_AP_ONLINE_DYN
-Date:   Mon,  1 Mar 2021 14:28:22 +0000
-Message-Id: <1614608902-85038-4-git-send-email-guoren@kernel.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1614608902-85038-1-git-send-email-guoren@kernel.org>
-References: <1614608902-85038-1-git-send-email-guoren@kernel.org>
+        id S1346626AbhCDAaJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 3 Mar 2021 19:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1839548AbhCCIFA (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 3 Mar 2021 03:05:00 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B798C061797;
+        Wed,  3 Mar 2021 00:04:19 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id l2so15799316pgb.1;
+        Wed, 03 Mar 2021 00:04:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rjVxnqYKDRnpp+0H3PrRTRrCFH/AMSZ2uqlLYU0m0ps=;
+        b=WNHYWayIknRxBTPdExIve2oGMYMBdu/TDsqYRghhgk8vVhbOIfZ5QZ+z8l5Dx3xPtD
+         3NSZSvDd34WmV+dyneHmK3k1m48n6EG7X0Gn6/xrEGlaiFrK3tsOYAwIAW5cyeP0t+/h
+         oNAxdoyslDVzkHxbqelHdd5iF1NEFPQt5MxGOPUIKf6WHZe8qaB9PjNWSgYCH9a1vw9t
+         tN15K+TmuFv+ys64U5uPPvhZDjxfXBInurjz0wRsjCwQ/uKsHPCwDbSUl+RD8wXDH414
+         rzSTvE8cty3+stoKqjV3G0G7hmxrZ2Hsv1VU7ENehCXWCxfCjWawcO587uXVBd9GPSR3
+         obFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rjVxnqYKDRnpp+0H3PrRTRrCFH/AMSZ2uqlLYU0m0ps=;
+        b=YTFTgaZZKc+kPHBMzF6ihSBkELr/ZJ06w5hz0UBkBnvZoQDgHZkeaB2Of8IlAc8fEX
+         /sLjIngUwZPasECiQdrvJo3rPaMGXzapydRM9+FKdzenpTlic+KPBSpU6p7Iysja0wk+
+         lEsljICcO2A+nfriJ3M+ziVWaSMvZAVSwavEKtHhisgWrNuCs9fxBNVp4QaihFMBnCoS
+         1mMBdbktXW2HJRS297PF6AEQAlFUxDAOjvhfIyt+kvS2dmiY7ZVYz1N3f7PUnB8OIY3B
+         Jqr2BQGPD4reLIdE9NvOJaTS7lNhbYD4yxiKktZAbPRS6+kVmcl3pKV0HBZAxIgZzMBe
+         6ORg==
+X-Gm-Message-State: AOAM532zJtR2AM4ayWaO1DGdfUd+l1oZ2uYR3vOSGTpYG/0QZGjP2qi0
+        aGKyLH9a+J3XNLuyLt2ViaknUkjOeZE=
+X-Google-Smtp-Source: ABdhPJyHMBcpjy1TNatRNajWt7A4cSiHkYQiVzk4dlfLIVeLYQwbmLO+z2BISGSyRcQhHfFnqIXWAQ==
+X-Received: by 2002:a05:6a00:1507:b029:1e4:d81:5586 with SMTP id q7-20020a056a001507b02901e40d815586mr7176211pfu.53.1614758658297;
+        Wed, 03 Mar 2021 00:04:18 -0800 (PST)
+Received: from localhost.localdomain ([178.236.46.205])
+        by smtp.gmail.com with ESMTPSA id x1sm5658389pje.40.2021.03.03.00.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 00:04:17 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: zhang.yunkai@zte.com.cn
+To:     linux-csky@vger.kernel.org
+Cc:     guoren@kernel.org, zhang.yunkai@zte.com.cn,
+        jiulong@linux.alibaba.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] module: remove duplicate include in arch/csky/kernel/entry.S
+Date:   Wed,  3 Mar 2021 00:04:10 -0800
+Message-Id: <20210303080410.178702-1-zhang.yunkai@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
 
-Remove C-SKY perf custom definitions in hotplug.h:
- - CPUHP_AP_PERF_CSKY_ONLINE
+'asm/setup.h' included in 'arch/csky/kernel/entry.S' is duplicated.
 
-For coding convention.
-
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Tested-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Link: https://lore.kernel.org/lkml/CAHk-=wjM+kCsKqNdb=c0hKsv=J7-3Q1zmM15vp6_=8S5XfGMtA@mail.gmail.com/
+Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
 ---
- arch/csky/kernel/perf_event.c | 4 ++--
- include/linux/cpuhotplug.h    | 1 -
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ arch/csky/kernel/entry.S | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index e5f1842..ccc27c3 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -1319,10 +1319,10 @@ int csky_pmu_device_probe(struct platform_device *pdev,
- 		pr_notice("[perf] PMU request irq fail!\n");
- 	}
+diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
+index c1bd7a6b4ab6..00e3c8ebf9b8 100644
+--- a/arch/csky/kernel/entry.S
++++ b/arch/csky/kernel/entry.S
+@@ -9,7 +9,6 @@
+ #include <asm/unistd.h>
+ #include <asm/asm-offsets.h>
+ #include <linux/threads.h>
+-#include <asm/setup.h>
+ #include <asm/page.h>
+ #include <asm/thread_info.h>
  
--	ret = cpuhp_setup_state(CPUHP_AP_PERF_CSKY_ONLINE, "AP_PERF_ONLINE",
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "arch/csky/perf_event:starting",
- 				csky_pmu_starting_cpu,
- 				csky_pmu_dying_cpu);
--	if (ret) {
-+	if (ret < 0) {
- 		csky_pmu_free_irq();
- 		free_percpu(csky_pmu.hw_events);
- 		return ret;
-diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-index 7f25b44..3a76019 100644
---- a/include/linux/cpuhotplug.h
-+++ b/include/linux/cpuhotplug.h
-@@ -182,7 +182,6 @@ enum cpuhp_state {
- 	CPUHP_AP_PERF_POWERPC_TRACE_IMC_ONLINE,
- 	CPUHP_AP_PERF_POWERPC_HV_24x7_ONLINE,
- 	CPUHP_AP_PERF_POWERPC_HV_GPCI_ONLINE,
--	CPUHP_AP_PERF_CSKY_ONLINE,
- 	CPUHP_AP_WATCHDOG_ONLINE,
- 	CPUHP_AP_WORKQUEUE_ONLINE,
- 	CPUHP_AP_RCUTREE_ONLINE,
 -- 
-2.7.4
+2.25.1
 
