@@ -2,78 +2,110 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DA232C6D9
-	for <lists+linux-csky@lfdr.de>; Thu,  4 Mar 2021 02:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC3B32F82E
+	for <lists+linux-csky@lfdr.de>; Sat,  6 Mar 2021 05:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376364AbhCDAaL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 3 Mar 2021 19:30:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38340 "EHLO mail.kernel.org"
+        id S229629AbhCFER5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 5 Mar 2021 23:17:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234646AbhCCMHR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 3 Mar 2021 07:07:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 25F056148E;
-        Wed,  3 Mar 2021 12:06:35 +0000 (UTC)
+        id S229642AbhCFERm (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 5 Mar 2021 23:17:42 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 87AC265005;
+        Sat,  6 Mar 2021 04:17:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614773195;
-        bh=LLxjeivOlnK1I7vYA6dpUWq+M3OE00MAiU+GvR9rVkw=;
+        s=k20201202; t=1615004261;
+        bh=JG/2e1lJh6g7lyOKj2exd139cipDVLRkA4E7ybz5KAM=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Z+88v9hVHb+j/C2U4QnnFuccsYx5jaACZhOdi+OYHwU1YtvPpCp3DNVi2LkE7YUzP
-         k2Z5vb4+LcLBMBcUITBSolwj/7WgFXrRdv/iLBqFSafvGXYu5p2mp8DjLjyjXDL6IW
-         sb0eDDDNODDZCf5DkS2agbmV3oWcjobcSvsfiXLsipE2hmxM2f24v23GG3sguCiQ9p
-         vflSJLt59flFjGlwnY7MxAzt1UL0YEc1q5XQW4DPXDN97n7Az/Id16p4bg3T2DoBH5
-         Jigge6niBpce7I3on/cyQcVgsAcSmnpNeVjmylfFYY8gHHNE7P/0XzjmK5lyfu9Is7
-         n/MuDd86q7+jA==
-Received: by mail-lj1-f171.google.com with SMTP id p15so19380061ljc.13;
-        Wed, 03 Mar 2021 04:06:35 -0800 (PST)
-X-Gm-Message-State: AOAM53196E/mXouBRXKeLX37VL0cVOE9D6npZIxgF8nj3AW+3YI5LSW9
-        /UVQaVBH0GQGKde2BinzIV1g/ukXVJQr9br9WzQ=
-X-Google-Smtp-Source: ABdhPJztGn+/1FbW6Bs9appTQ/KNmSvi+QrDcPxVpPJOWvSNN5ODcWjU5SY+33uadcXTnhFyhcJM6tN63331W1ItBBY=
-X-Received: by 2002:a2e:994e:: with SMTP id r14mr15169293ljj.115.1614773193338;
- Wed, 03 Mar 2021 04:06:33 -0800 (PST)
+        b=rzF4uYfPpwlkHigXs2pN/dKWzWnE03d6bQi/zAl81k8BdgRT/G9Diy7tZKpugJg6u
+         7xqa778ijiP0W5PLnTzNSgNbEWjiFSObwYkAPBO0y1NlsCsce8GrSbt25Q2DKBRoDY
+         D5uAH2iIcfGeklm9fZmJDwWaAQE5IzJbzndmWTsVAJRVexnWniJpETQcG7Q894YRub
+         h+b4Q3Fzza4PgKEtxqAGLNKpl+fCTtKofzfZ7cNj2HLCj0e6z9dk0OLry/7saWamqJ
+         YRrR1L1XSYTmemt197Fd35vi4obKf2YlZ+DaH9Tm6Gwh/RWJb4Qafi6BmC0AERemBs
+         Uj2I9TTsReaDg==
+Received: by mail-lf1-f49.google.com with SMTP id v9so8300370lfa.1;
+        Fri, 05 Mar 2021 20:17:41 -0800 (PST)
+X-Gm-Message-State: AOAM533O0hMEMmthhNujJxU/+bwkKu0KelS9HrzV3EtfNPzlisbrIc7P
+        b+wyFb6KeUsEJRrN96vfI+0ekCp3frboMYcjqBo=
+X-Google-Smtp-Source: ABdhPJz39jAeX+gKEfeE96e3+a7VxML1Q9mZmzhl9DwJu4HthFNyF+7vhmUW3RgOMzojnR1rJa4qIajmNoMYXKd1ddU=
+X-Received: by 2002:a05:6512:2288:: with SMTP id f8mr7754188lfu.346.1615004259929;
+ Fri, 05 Mar 2021 20:17:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20210303080410.178702-1-zhang.yunkai@zte.com.cn>
-In-Reply-To: <20210303080410.178702-1-zhang.yunkai@zte.com.cn>
+References: <20210306032314.3186-1-angkery@163.com>
+In-Reply-To: <20210306032314.3186-1-angkery@163.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 3 Mar 2021 20:06:22 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRGyOV_14TjHrW6FAXAE0h56Nos+3PbaAOu_WHSQyTasw@mail.gmail.com>
-Message-ID: <CAJF2gTRGyOV_14TjHrW6FAXAE0h56Nos+3PbaAOu_WHSQyTasw@mail.gmail.com>
-Subject: Re: [PATCH] module: remove duplicate include in arch/csky/kernel/entry.S
-To:     menglong8.dong@gmail.com
-Cc:     linux-csky@vger.kernel.org, zhang.yunkai@zte.com.cn,
-        jiulong@linux.alibaba.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Sat, 6 Mar 2021 12:17:28 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTSx3AYyQ7Z4SD19LX1fygbauAdUFCnRS2aAuUX0XRUQA@mail.gmail.com>
+Message-ID: <CAJF2gTTSx3AYyQ7Z4SD19LX1fygbauAdUFCnRS2aAuUX0XRUQA@mail.gmail.com>
+Subject: Re: [PATCH] csky: fix typos
+To:     angkery <angkery@163.com>
+Cc:     linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Junlin Yang <yangjunlin@yulong.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx, looks good for me.
+Thx,
 
-On Wed, Mar 3, 2021 at 4:04 PM <menglong8.dong@gmail.com> wrote:
+Looks good to me, Signed-off-by.
+
+On Sat, Mar 6, 2021 at 11:23 AM angkery <angkery@163.com> wrote:
 >
-> From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+> From: Junlin Yang <yangjunlin@yulong.com>
 >
-> 'asm/setup.h' included in 'arch/csky/kernel/entry.S' is duplicated.
+> fixes three typos found by codespell.
 >
-> Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+> Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
 > ---
->  arch/csky/kernel/entry.S | 1 -
->  1 file changed, 1 deletion(-)
+>  arch/csky/include/asm/asid.h    | 2 +-
+>  arch/csky/include/asm/barrier.h | 2 +-
+>  arch/csky/include/asm/vdso.h    | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
-> index c1bd7a6b4ab6..00e3c8ebf9b8 100644
-> --- a/arch/csky/kernel/entry.S
-> +++ b/arch/csky/kernel/entry.S
-> @@ -9,7 +9,6 @@
->  #include <asm/unistd.h>
->  #include <asm/asm-offsets.h>
->  #include <linux/threads.h>
-> -#include <asm/setup.h>
->  #include <asm/page.h>
->  #include <asm/thread_info.h>
+> diff --git a/arch/csky/include/asm/asid.h b/arch/csky/include/asm/asid.h
+> index ac08b0f..6ff205a 100644
+> --- a/arch/csky/include/asm/asid.h
+> +++ b/arch/csky/include/asm/asid.h
+> @@ -37,7 +37,7 @@ void asid_new_context(struct asid_info *info, atomic64_t *pasid,
+>   * Check the ASID is still valid for the context. If not generate a new ASID.
+>   *
+>   * @pasid: Pointer to the current ASID batch
+> - * @cpu: current CPU ID. Must have been acquired throught get_cpu()
+> + * @cpu: current CPU ID. Must have been acquired through get_cpu()
+>   */
+>  static inline void asid_check_context(struct asid_info *info,
+>                                       atomic64_t *pasid, unsigned int cpu,
+> diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
+> index 84fc600c..f4045dd 100644
+> --- a/arch/csky/include/asm/barrier.h
+> +++ b/arch/csky/include/asm/barrier.h
+> @@ -64,7 +64,7 @@
 >
+>  /*
+>   * sync:        completion barrier, all sync.xx instructions
+> - *              guarantee the last response recieved by bus transaction
+> + *              guarantee the last response received by bus transaction
+>   *              made by ld/st instructions before sync.s
+>   * sync.s:      inherit from sync, but also shareable to other cores
+>   * sync.i:      inherit from sync, but also flush cpu pipeline
+> diff --git a/arch/csky/include/asm/vdso.h b/arch/csky/include/asm/vdso.h
+> index eb5142f..bdce581 100644
+> --- a/arch/csky/include/asm/vdso.h
+> +++ b/arch/csky/include/asm/vdso.h
+> @@ -16,7 +16,7 @@ struct vdso_data {
+>   * offset of 0, but since the linker must support setting weak undefined
+>   * symbols to the absolute address 0 it also happens to support other low
+>   * addresses even when the code model suggests those low addresses would not
+> - * otherwise be availiable.
+> + * otherwise be available.
+>   */
+>  #define VDSO_SYMBOL(base, name)                                                        \
+>  ({                                                                             \
 > --
-> 2.25.1
+> 1.9.1
+>
 >
 
 
