@@ -2,96 +2,139 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E3D32F8B1
-	for <lists+linux-csky@lfdr.de>; Sat,  6 Mar 2021 08:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CE032FE71
+	for <lists+linux-csky@lfdr.de>; Sun,  7 Mar 2021 03:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbhCFHMJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 6 Mar 2021 02:12:09 -0500
-Received: from m12-13.163.com ([220.181.12.13]:51489 "EHLO m12-13.163.com"
+        id S230023AbhCGCZl (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 6 Mar 2021 21:25:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37972 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229626AbhCFHL5 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 6 Mar 2021 02:11:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=B6X83
-        bcQNaeUonLObXxqgdndMgL+qs4wIAmEBJKgktY=; b=YF2V0kHRjFtCugbvt2I6d
-        HHhA5Wcc4XPJ/phCXxiEHoIuZgDUabIZk6vTOajR+f9Dhhy8JhpVzCwn+2el/zrk
-        OyD29mBW/2YoVwMMHMwMgLUesXxHNIOjL1aCWI4Je2p1KY/1TD2tw4ZlINx62V8J
-        xsVW6OFdlFwFH8YIvxA/QA=
-Received: from yangjunlin.ccdomain.com (unknown [218.17.89.92])
-        by smtp9 (Coremail) with SMTP id DcCowACXczmV9UJgoPQoiA--.4S2;
-        Sat, 06 Mar 2021 11:23:03 +0800 (CST)
-From:   angkery <angkery@163.com>
-To:     guoren@kernel.org
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Junlin Yang <yangjunlin@yulong.com>
-Subject: [PATCH] csky: fix typos
-Date:   Sat,  6 Mar 2021 11:23:14 +0800
-Message-Id: <20210306032314.3186-1-angkery@163.com>
-X-Mailer: git-send-email 2.24.0.windows.2
+        id S229957AbhCGCZK (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 6 Mar 2021 21:25:10 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2295F65056;
+        Sun,  7 Mar 2021 02:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615083910;
+        bh=WhlbkUebwc1GJfXvE/1rpEg/Mf21MpRw1uus7X8kdhM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=P/PmwbHZ6rBXncMvOhHWf1UeeMdm+EzqFTqXWkT46ndkYAfO1qnLQxRFvfotu3sJY
+         Kh5z/TnOtYx6WabQsMWEtpP5NJtcFjN9r9dSYGTnJTR8TziqKn0M45t2L73ISLmSSw
+         8DJVqyWu6l4pssJWUlB2uAn4XSept9KW85JTvRzM0joP4Aal2p2RvdOI+Bx2koToGu
+         Jkew5iPqShZCoORlTR9AwEYJqPKBz23lIfW6nDs7TrTkx/sL/jfKTIhJjam+DJJb1B
+         6a7qVm1pZEvrAU51xaXZoFodiLSwNiuf5JDqNfxfjo10vqlIz7G5Mx70WXjz4D6Hve
+         5Wtbn7puahsJQ==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH 1/2] csky: Enable generic clockevent broadcast
+Date:   Sun,  7 Mar 2021 10:24:45 +0800
+Message-Id: <20210307022446.63732-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcCowACXczmV9UJgoPQoiA--.4S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF1fuw4kXr45XryDJrWkZwb_yoW8urW8pF
-        4Dur95GrZ5urWFyrnrAr1q9F98Ga1kKF13KrWjgryjyr1aqr1jvr4DKr1DCrykXayvqa40
-        9FWak3s8Zw1vqaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jP9NsUUUUU=
-X-Originating-IP: [218.17.89.92]
-X-CM-SenderInfo: 5dqjyvlu16il2tof0z/xtbBRhdNI13l+znGfAAAs-
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Junlin Yang <yangjunlin@yulong.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-fixes three typos found by codespell.
+When percpu-timers are stopped by deep power saving mode, we need
+system timer help to broadcast IPI_TIMER.
 
-Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
+This is first introduced by broken x86 hardware, where the local apic
+timer stops in C3 state. But many other architectures(powerpc, mips,
+arm, hexagon, openrisc, sh) have supported the infrastructure to
+deal with Power Management issues.
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- arch/csky/include/asm/asid.h    | 2 +-
- arch/csky/include/asm/barrier.h | 2 +-
- arch/csky/include/asm/vdso.h    | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/csky/Kconfig      |  2 ++
+ arch/csky/kernel/smp.c | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/arch/csky/include/asm/asid.h b/arch/csky/include/asm/asid.h
-index ac08b0f..6ff205a 100644
---- a/arch/csky/include/asm/asid.h
-+++ b/arch/csky/include/asm/asid.h
-@@ -37,7 +37,7 @@ void asid_new_context(struct asid_info *info, atomic64_t *pasid,
-  * Check the ASID is still valid for the context. If not generate a new ASID.
-  *
-  * @pasid: Pointer to the current ASID batch
-- * @cpu: current CPU ID. Must have been acquired throught get_cpu()
-+ * @cpu: current CPU ID. Must have been acquired through get_cpu()
-  */
- static inline void asid_check_context(struct asid_info *info,
- 				      atomic64_t *pasid, unsigned int cpu,
-diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
-index 84fc600c..f4045dd 100644
---- a/arch/csky/include/asm/barrier.h
-+++ b/arch/csky/include/asm/barrier.h
-@@ -64,7 +64,7 @@
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 34e91224adc3..4328511ac050 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -6,6 +6,7 @@ config CSKY
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
++	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610
+@@ -19,6 +20,7 @@ config CSKY
+ 	select IRQ_DOMAIN
+ 	select HANDLE_DOMAIN_IRQ
+ 	select DW_APB_TIMER_OF
++	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+ 	select GENERIC_IOREMAP
+ 	select GENERIC_LIB_ASHLDI3
+ 	select GENERIC_LIB_ASHRDI3
+diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+index 0f9f5eef9338..76d38d84da70 100644
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -8,6 +8,7 @@
+ #include <linux/kernel_stat.h>
+ #include <linux/notifier.h>
+ #include <linux/cpu.h>
++#include <linux/clockchips.h>
+ #include <linux/percpu.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+@@ -32,6 +33,7 @@ enum ipi_message_type {
+ 	IPI_RESCHEDULE,
+ 	IPI_CALL_FUNC,
+ 	IPI_IRQ_WORK,
++	IPI_TIMER,
+ 	IPI_MAX
+ };
  
- /*
-  * sync:        completion barrier, all sync.xx instructions
-- *              guarantee the last response recieved by bus transaction
-+ *              guarantee the last response received by bus transaction
-  *              made by ld/st instructions before sync.s
-  * sync.s:      inherit from sync, but also shareable to other cores
-  * sync.i:      inherit from sync, but also flush cpu pipeline
-diff --git a/arch/csky/include/asm/vdso.h b/arch/csky/include/asm/vdso.h
-index eb5142f..bdce581 100644
---- a/arch/csky/include/asm/vdso.h
-+++ b/arch/csky/include/asm/vdso.h
-@@ -16,7 +16,7 @@ struct vdso_data {
-  * offset of 0, but since the linker must support setting weak undefined
-  * symbols to the absolute address 0 it also happens to support other low
-  * addresses even when the code model suggests those low addresses would not
-- * otherwise be availiable.
-+ * otherwise be available.
-  */
- #define VDSO_SYMBOL(base, name)							\
- ({										\
+@@ -67,6 +69,13 @@ static irqreturn_t handle_ipi(int irq, void *dev)
+ 			irq_work_run();
+ 		}
+ 
++#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
++		if (ops & (1 << IPI_TIMER)) {
++			stats[IPI_TIMER]++;
++			tick_receive_broadcast();
++		}
++#endif
++
+ 		BUG_ON((ops >> IPI_MAX) != 0);
+ 	}
+ 
+@@ -102,6 +111,7 @@ static const char * const ipi_names[] = {
+ 	[IPI_RESCHEDULE]	= "Rescheduling interrupts",
+ 	[IPI_CALL_FUNC]		= "Function call interrupts",
+ 	[IPI_IRQ_WORK]		= "Irq work interrupts",
++	[IPI_TIMER]		= "Timer broadcast interrupts",
+ };
+ 
+ int arch_show_interrupts(struct seq_file *p, int prec)
+@@ -130,6 +140,13 @@ void arch_send_call_function_single_ipi(int cpu)
+ 	send_ipi_message(cpumask_of(cpu), IPI_CALL_FUNC);
+ }
+ 
++#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
++void tick_broadcast(const struct cpumask *mask)
++{
++	send_ipi_message(mask, IPI_TIMER);
++}
++#endif
++
+ static void ipi_stop(void *unused)
+ {
+ 	while (1);
 -- 
-1.9.1
-
+2.25.1
 
