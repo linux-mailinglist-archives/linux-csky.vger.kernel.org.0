@@ -2,184 +2,94 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E18532FE95
-	for <lists+linux-csky@lfdr.de>; Sun,  7 Mar 2021 04:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B5E3329F9
+	for <lists+linux-csky@lfdr.de>; Tue,  9 Mar 2021 16:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbhCGDqY (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 6 Mar 2021 22:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
+        id S231320AbhCIPPk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 9 Mar 2021 10:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbhCGDqM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 6 Mar 2021 22:46:12 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60916C06174A
-        for <linux-csky@vger.kernel.org>; Sat,  6 Mar 2021 19:46:03 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id f1so13625319lfu.3
-        for <linux-csky@vger.kernel.org>; Sat, 06 Mar 2021 19:46:03 -0800 (PST)
+        with ESMTP id S231883AbhCIPPZ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 9 Mar 2021 10:15:25 -0500
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F25C061760
+        for <linux-csky@vger.kernel.org>; Tue,  9 Mar 2021 07:15:25 -0800 (PST)
+Received: by mail-vs1-xe43.google.com with SMTP id e21so4958191vsh.5
+        for <linux-csky@vger.kernel.org>; Tue, 09 Mar 2021 07:15:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AK42aRGGlm/OwUAIuhucFNHyVgULs1imdF3+9v0RPss=;
-        b=Od2sV+XL9dGBoMe9POd50mG8LzJC512QQXHmO81U27GfgmPEhF34q6AqrDA9r8k0Yd
-         peUUq+yqmbfOckVB2is5/u2tK2nfPuelbHUK9xvG6+Xe5tjWDoTGVMhuMERtgFsLOEPQ
-         EArmVnh15DuxPm1HUuXcSLhAWLmCrPp6e7Gogx4wrzBc85+52Gpx1swUu4MERHz14uAD
-         bW1Ss8o2HbYs6LawyIxuRFdt5hdrRJjYm8xH7mkfKu7jf8xlqvSA40ZHWbLdp21k4f8a
-         czleOcwq1m08z1RN8Dz3r6CybxVIr9PF0Td0kZ3XhSRCDj7GLIEiJtVIOm7qNquV1Dff
-         Nglw==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=oIgMOZORnFpqkLEY4XOkldZ5PI4U4y7tbgltyj4vDmgWQYVEfaC/oOrwpP8nWqOPRA
+         b4lmNkXxmA/dktBzewQGt7+50cmc3Ep2M8YaNg1La+uLUYBnsdlODGpbBrSqMuG1fLu/
+         tnebu6yOS0laGTSO/r2PpKRaP02WaSH+1xvSZSQftCmTo5R9PeWX9DHhonXGuTZrIaSc
+         BDUl5XjuF2kWXKyIYghjMPs1scSrSUcNpIPSGSrWQ3ElYJjXUxuPt50/+usnhZZLRM2W
+         GiRA0lko2x2HsmABW5pfalPFsl8/Bv8XNPHaXb2jti5jgoKsXF62dAmX+50/Vx0v65IZ
+         p2fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AK42aRGGlm/OwUAIuhucFNHyVgULs1imdF3+9v0RPss=;
-        b=d/X0aXgOznkgpUJ+wTnzgD+jdkHKNMkZYsahgdbk7syJaxENQijqW4T19wCbcUIj3g
-         XXsSZFAl6EeZIaI7nybl+LMia0xTqSgUEuq+FHJGIYsy62DTlMVLaeypg+3rfRNgSegl
-         cf7e3kqwVIvVJa3oAHMz61lEL3O/AvfboRUa//UlvLLsQ8ki5I59bA3hRxwrdcoU2kAV
-         LuLaVswercZoPuaWejfgDWF2G9DgGzuucEq+W+6m0DUpUYdlLpqtEoqrUZLmksnHSyjT
-         H2TxEBfPUYImh+HmM8REkafXSnXnJz01wY+zUjJtfeZqAuJFTGlGKO7fBqxuJzDp8hWm
-         rykg==
-X-Gm-Message-State: AOAM530QINEJe4R0SwSFmQGa0S9AC6H6YKBxM/M7imWSOHWcgO/5iQd1
-        x+C0Z1r4VR+cQ+sOlJH+pDHc/SdH7k3BOwrU8IFECg==
-X-Google-Smtp-Source: ABdhPJxRKFoNmd92l+KRp5t2vy9zd1/V7LfqWmVyfpZjV8w8pdakYgr48HMBAWRHVDUXwnNEly1gYfskwlCIa4SYA30=
-X-Received: by 2002:a05:6512:234d:: with SMTP id p13mr10162815lfu.87.1615088761838;
- Sat, 06 Mar 2021 19:46:01 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=GZw/voiWQ7T+e2P8rmvhHxua1gkLRxKvM8pSRFOB/9RV0ao5evGVsHrS8TAplIEl/J
+         zJDbqXQkj4zDFp+hznvHYnPxJJ1db9zv/zOtf0Q1R7tjR71bY2uWm+Lf5UaiYOJjK3fb
+         i8jHiQoiNS822ECZnRdC3ZEQ1D2MV5W5YOLM9dYDumTQzdEoRyjKv0Bm5/0YjTwDefLc
+         HnWETlrKABwX2D5qeA1bIUXhysnxJ6Gwsrhu1r9NzF0QR0Fn5awtVaP1HdCtt7UAAKXj
+         Xiy3FbZyuxrH0pJ25Gmcg6owW8BHYnHplbZ6I5gnZlMzSopalmiR/aFc9vgVm1lXzlmA
+         +riw==
+X-Gm-Message-State: AOAM532xvlKM6W2p0r57kauTNAZSuChp7x43d4wZJJv/Fp0uX74Q3w6f
+        ylM6b9AGpCqW5nm/Ow2xP1bHGIe5Z8q5zogmZCI=
+X-Google-Smtp-Source: ABdhPJw4sZFls8c0q8hsBLLhB+O1yH/NEyVTactV20Z0sheIE0DhFe5oB24VHMwJ0WozGcoOUNpXB8eBkFPftUE//J8=
+X-Received: by 2002:a67:3212:: with SMTP id y18mr16683199vsy.57.1615302924406;
+ Tue, 09 Mar 2021 07:15:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20210307022446.63732-1-guoren@kernel.org> <20210307022446.63732-2-guoren@kernel.org>
-In-Reply-To: <20210307022446.63732-2-guoren@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sun, 7 Mar 2021 09:15:49 +0530
-Message-ID: <CAAhSdy16JtDj81iXgXTY=n2i-svvR4u8y=1WxmxwZgAPNiH7cQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: Enable generic clockevent broadcast
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Greentime Hu <greentime.hu@sifive.com>
+Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Tue, 9 Mar 2021 07:15:23 -0800 (PST)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
+Date:   Tue, 9 Mar 2021 07:15:23 -0800
+Message-ID: <CAH16wSOnOTA2KNzVfHX6xcNiOrwFNyr+iWW_vSGiV_bchKYh=Q@mail.gmail.com>
+Subject: From Mrs.E.Glenn
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Mar 7, 2021 at 7:55 AM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> When percpu-timers are stopped by deep power saving mode, we
-> need system timer help to broadcast IPI_TIMER.
->
-> This is first introduced by broken x86 hardware, where the local apic
-> timer stops in C3 state. But many other architectures(powerpc, mips,
-> arm, hexagon, openrisc, sh) have supported the infrastructure to
-> deal with Power Management issues.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Anup Patel <anup.patel@wdc.com>
-> Cc: Atish Patra <atish.patra@wdc.com>
-> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-> Cc: Greentime Hu <greentime.hu@sifive.com>
+-- 
+Dear Beloved,
 
-Looks good to me.
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+My guess about you may not be accurate because I came across your
+contact at the humanitarian calendar event of the year but I believe
+in God who divinely directed me to you for this solemn proposal of
+charitable work.
 
-Regards,
-Anup
+Therefore I wholeheartedly wish to bequeath my fortune to you as a
+God-fearing person for the continuation of charitable work anywhere
+around the world.
 
-> ---
->  arch/riscv/Kconfig      |  2 ++
->  arch/riscv/kernel/smp.c | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 85d626b8ce5e..8637e7344abe 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -28,6 +28,7 @@ config RISCV
->         select ARCH_HAS_SET_DIRECT_MAP
->         select ARCH_HAS_SET_MEMORY
->         select ARCH_HAS_STRICT_KERNEL_RWX if MMU
-> +       select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->         select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
->         select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
->         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-> @@ -39,6 +40,7 @@ config RISCV
->         select EDAC_SUPPORT
->         select GENERIC_ARCH_TOPOLOGY if SMP
->         select GENERIC_ATOMIC64 if !64BIT
-> +       select GENERIC_CLOCKEVENTS_BROADCAST if SMP
->         select GENERIC_EARLY_IOREMAP
->         select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
->         select GENERIC_IOREMAP
-> diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-> index ea028d9e0d24..8325d33411d8 100644
-> --- a/arch/riscv/kernel/smp.c
-> +++ b/arch/riscv/kernel/smp.c
-> @@ -9,6 +9,7 @@
->   */
->
->  #include <linux/cpu.h>
-> +#include <linux/clockchips.h>
->  #include <linux/interrupt.h>
->  #include <linux/module.h>
->  #include <linux/profile.h>
-> @@ -27,6 +28,7 @@ enum ipi_message_type {
->         IPI_CALL_FUNC,
->         IPI_CPU_STOP,
->         IPI_IRQ_WORK,
-> +       IPI_TIMER,
->         IPI_MAX
->  };
->
-> @@ -176,6 +178,12 @@ void handle_IPI(struct pt_regs *regs)
->                         irq_work_run();
->                 }
->
-> +#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-> +               if (ops & (1 << IPI_TIMER)) {
-> +                       stats[IPI_TIMER]++;
-> +                       tick_receive_broadcast();
-> +               }
-> +#endif
->                 BUG_ON((ops >> IPI_MAX) != 0);
->
->                 /* Order data access and bit testing. */
-> @@ -192,6 +200,7 @@ static const char * const ipi_names[] = {
->         [IPI_CALL_FUNC]         = "Function call interrupts",
->         [IPI_CPU_STOP]          = "CPU stop interrupts",
->         [IPI_IRQ_WORK]          = "IRQ work interrupts",
-> +       [IPI_TIMER]             = "Timer broadcast interrupts",
->  };
->
->  void show_ipi_stats(struct seq_file *p, int prec)
-> @@ -217,6 +226,13 @@ void arch_send_call_function_single_ipi(int cpu)
->         send_ipi_single(cpu, IPI_CALL_FUNC);
->  }
->
-> +#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-> +void tick_broadcast(const struct cpumask *mask)
-> +{
-> +       send_ipi_mask(mask, IPI_TIMER);
-> +}
-> +#endif
-> +
->  void smp_send_stop(void)
->  {
->         unsigned long timeout;
-> --
-> 2.25.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death.
+
+As soon as I receive your quick reply assuring me that you will
+utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
+
+Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
+know what will be my situation in next minute,
+
+I am waiting for your reply.
+
+Yours sincerely,
+Mrs Elizabet Glenn.
