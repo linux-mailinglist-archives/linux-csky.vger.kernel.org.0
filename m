@@ -2,64 +2,63 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EC633E7CA
-	for <lists+linux-csky@lfdr.de>; Wed, 17 Mar 2021 04:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D4533E863
+	for <lists+linux-csky@lfdr.de>; Wed, 17 Mar 2021 05:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhCQDlI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 16 Mar 2021 23:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S229803AbhCQEVb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 17 Mar 2021 00:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhCQDkk (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 16 Mar 2021 23:40:40 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04DAC061760
-        for <linux-csky@vger.kernel.org>; Tue, 16 Mar 2021 20:40:39 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id bt4so339266pjb.5
-        for <linux-csky@vger.kernel.org>; Tue, 16 Mar 2021 20:40:39 -0700 (PDT)
+        with ESMTP id S229761AbhCQEVJ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 17 Mar 2021 00:21:09 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A939C06175F
+        for <linux-csky@vger.kernel.org>; Tue, 16 Mar 2021 21:21:09 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id y5so228222pfn.1
+        for <linux-csky@vger.kernel.org>; Tue, 16 Mar 2021 21:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
         h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
          :content-transfer-encoding;
-        bh=t280vDZQWk0iZZ+xQFR7BI6xACbsATSb7UzAA7K2/a0=;
-        b=Humdt9srb74JTFtTLWQFozZx4MkuAbxcuC0K/hAZ5mVCgDHroQ+B5lp/tFiHSs+1fB
-         38gITDQeMM6jaALv1oRJIz5cyKYq/Klf5POvfPvYtHVUeU3zrlO27iPji+39hoa5tAfi
-         PWVpnulycTQuCx4y5nsc0oV4FK4GErfmmnFNxAl1GKnhOfAr223cbIpIXY0qcBi/h/q6
-         VgrM8+ttoNi4HncnjFBaJKF04RnkD2OL7B2k/kMDKinkug3q9vebo84Bq4mJ0LaTv/bU
-         7npOzBfb0uicwUxurpmoO4aR08rauCjmBjyyBiS46a7dVMNmHkq3ANaOSjgqKGnRbTFe
-         2ZMA==
+        bh=tqygHtIF9C1t29D6guUTjM28SV0efTFg8Sgvi9tq11E=;
+        b=J0Ymz3qqRL/XDEColeHiskhkUudo7yCDzTrMfSli/8EJ0MyWbKw0dmPrQV15VgoqrN
+         z6cmsFBhCAZ1vpXc4gbFeIRLPpmOPNtDesOJwKVKM3JJrPseT+t7CX1mhofT01A/pSW5
+         reO1Wd4CHcxUuPrs+fKjk2FvCWrA/Z3oFSdiIkbjAs9QbQ+AXppXNIFTibNw/oWe4ZVo
+         7p/l/nfJEvu4yslpm6sj6CRpHfKaLkIZFQBqxcUzsKfOnw7X4gd/vJtaBHuyyvsfBiOB
+         0VNSZuQtmJl+RMoQ49XacSpRl46sV46eGn4NFy37zXgBTLTR+q6oI9lOIR96CY734DRK
+         Mi/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
          :mime-version:content-transfer-encoding;
-        bh=t280vDZQWk0iZZ+xQFR7BI6xACbsATSb7UzAA7K2/a0=;
-        b=ONRDJGXSxVKRvJUkdV37WQm+3v2ffBQw7m92Vrk2oDlAdAluVqzOSgc1Vw84VJehnk
-         0TSz1WYLcrlS3QRg5AI6MQL/R7BD92digFvLvtaAMvEDdsQyq1VRZ6O1H2FP7lBYUUsp
-         PC7q0SvJHHF3vdwjkMAT4rAsEruY+Ec2AicWDoc9+tRBp+dFGbPy1ZiQUttaLaQuAWcE
-         L4hRUqcFQc0/+CPHdSechuaL2ArD59zoIO4Zp0fjz+qTR5K11Up40IjBHDlAEnrbX5Db
-         d8FpPQR/MZO9e6cznS41yuTu2U7KXkTTCarRCKZC9vxT3SlH8TB+fId7S/h1CMMK3Sro
-         GN6w==
-X-Gm-Message-State: AOAM531IvfDcj45z778xnElKyQmESMIy0KH0N+kOOEhXaNj9GUZvWXgl
-        b2eH2UFfmMgc5TQOU0M+7bIhUw==
-X-Google-Smtp-Source: ABdhPJw+fTIoWjUDX5CUuSKCp+cvthbxVN3kxlUImWClYDjMZlRLuSxvAy55TEc3ABlo9funImT0rQ==
-X-Received: by 2002:a17:902:ed41:b029:e5:c92d:ec24 with SMTP id y1-20020a170902ed41b02900e5c92dec24mr2356365plb.57.1615952439246;
-        Tue, 16 Mar 2021 20:40:39 -0700 (PDT)
+        bh=tqygHtIF9C1t29D6guUTjM28SV0efTFg8Sgvi9tq11E=;
+        b=KkHV+/cv9GSZgvZRpiNWTH2qEfJtA65rL78E4P3ofL2QyYUU46dC7AzGt/aOR+3pCr
+         ZgQedp6GdEzymWlDg9hALmJky0s8E9uwV8WESjpstajdsQR9n/1pbefQ8w3iMIAhVO7A
+         Guy7gIbfLF9CWcE+MBvxDpoyE7wEa7P3hyqsC1CQ3ar219H61MsfpvJc1mhODBRDii28
+         iZ2A/Yi50xcLua5xyjaLOW/plQNszG6vRbN84GBd0BzxqUJOErgxVAKet3+a1D/C9lmj
+         e1vUI97Iaqx1rO/zzgVkehgoYJz+I+IIY9H8Cbxojucrc/1BuzvQoS+IFl8IzKPKsyDu
+         UHKQ==
+X-Gm-Message-State: AOAM530Cfub7DTLE2cWJaRARNUT+WSQaGIFtCAoA+uCJT83xVCUGt7/7
+        sNJQSutuKDQDW5Y2y2r9koJbgw==
+X-Google-Smtp-Source: ABdhPJyesXfARSvCLvmz8y7QSMQQJ0byeO/pyhC6hJcjwk2HlOZbgELJgKE99SMicIv/QiBfvRGBuA==
+X-Received: by 2002:aa7:9ecf:0:b029:1f4:f737:12d6 with SMTP id r15-20020aa79ecf0000b02901f4f73712d6mr2614833pfq.8.1615954868646;
+        Tue, 16 Mar 2021 21:21:08 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id s200sm17957184pfs.53.2021.03.16.20.40.38
+        by smtp.gmail.com with ESMTPSA id s22sm835188pjs.42.2021.03.16.21.21.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 20:40:38 -0700 (PDT)
-Date:   Tue, 16 Mar 2021 20:40:38 -0700 (PDT)
-X-Google-Original-Date: Tue, 16 Mar 2021 20:40:31 PDT (-0700)
-Subject:     Re: [PATCH 2/2] riscv: Enable generic clockevent broadcast
-In-Reply-To: <20210307022446.63732-2-guoren@kernel.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Tue, 16 Mar 2021 21:21:08 -0700 (PDT)
+Date:   Tue, 16 Mar 2021 21:21:08 -0700 (PDT)
+X-Google-Original-Date: Tue, 16 Mar 2021 21:19:54 PDT (-0700)
+Subject:     Re: [PATCH] ftrace: Fix spelling mistake "disabed" -> "disabled"
+In-Reply-To: <20210311094022.5978-1-colin.king@canonical.com>
+CC:     guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com, rostedt@goodmis.org,
         linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        guoren@linux.alibaba.com, tglx@linutronix.de,
-        daniel.lezcano@linaro.org, Anup Patel <Anup.Patel@wdc.com>,
-        Atish Patra <Atish.Patra@wdc.com>, greentime.hu@sifive.com
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     guoren@kernel.org
-Message-ID: <mhng-25b45eaf-1d0b-4292-9228-1ac3ac68832b@palmerdabbelt-glaptop>
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     colin.king@canonical.com
+Message-ID: <mhng-9cd288c7-8f95-4e86-9b2b-bb405e3f74fe@palmerdabbelt-glaptop>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -67,104 +66,56 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, 06 Mar 2021 18:24:46 PST (-0800), guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, 11 Mar 2021 01:40:22 PST (-0800), colin.king@canonical.com wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 >
-> When percpu-timers are stopped by deep power saving mode, we
-> need system timer help to broadcast IPI_TIMER.
+> There is a spelling mistake in a comment, fix it.
 >
-> This is first introduced by broken x86 hardware, where the local apic
-> timer stops in C3 state. But many other architectures(powerpc, mips,
-> arm, hexagon, openrisc, sh) have supported the infrastructure to
-> deal with Power Management issues.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Anup Patel <anup.patel@wdc.com>
-> Cc: Atish Patra <atish.patra@wdc.com>
-> Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-> Cc: Greentime Hu <greentime.hu@sifive.com>
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 > ---
->  arch/riscv/Kconfig      |  2 ++
->  arch/riscv/kernel/smp.c | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+)
+>  arch/csky/kernel/probes/ftrace.c  | 2 +-
+>  arch/riscv/kernel/probes/ftrace.c | 2 +-
+>  arch/x86/kernel/kprobes/ftrace.c  | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 85d626b8ce5e..8637e7344abe 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -28,6 +28,7 @@ config RISCV
->  	select ARCH_HAS_SET_DIRECT_MAP
->  	select ARCH_HAS_SET_MEMORY
->  	select ARCH_HAS_STRICT_KERNEL_RWX if MMU
-> +	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->  	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
->  	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
->  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-> @@ -39,6 +40,7 @@ config RISCV
->  	select EDAC_SUPPORT
->  	select GENERIC_ARCH_TOPOLOGY if SMP
->  	select GENERIC_ATOMIC64 if !64BIT
-> +	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
->  	select GENERIC_EARLY_IOREMAP
->  	select GENERIC_GETTIMEOFDAY if HAVE_GENERIC_VDSO
->  	select GENERIC_IOREMAP
-> diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-> index ea028d9e0d24..8325d33411d8 100644
-> --- a/arch/riscv/kernel/smp.c
-> +++ b/arch/riscv/kernel/smp.c
-> @@ -9,6 +9,7 @@
->   */
->
->  #include <linux/cpu.h>
-> +#include <linux/clockchips.h>
->  #include <linux/interrupt.h>
->  #include <linux/module.h>
->  #include <linux/profile.h>
-> @@ -27,6 +28,7 @@ enum ipi_message_type {
->  	IPI_CALL_FUNC,
->  	IPI_CPU_STOP,
->  	IPI_IRQ_WORK,
-> +	IPI_TIMER,
->  	IPI_MAX
->  };
->
-> @@ -176,6 +178,12 @@ void handle_IPI(struct pt_regs *regs)
->  			irq_work_run();
->  		}
->
-> +#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-> +		if (ops & (1 << IPI_TIMER)) {
-> +			stats[IPI_TIMER]++;
-> +			tick_receive_broadcast();
-> +		}
-> +#endif
->  		BUG_ON((ops >> IPI_MAX) != 0);
->
->  		/* Order data access and bit testing. */
-> @@ -192,6 +200,7 @@ static const char * const ipi_names[] = {
->  	[IPI_CALL_FUNC]		= "Function call interrupts",
->  	[IPI_CPU_STOP]		= "CPU stop interrupts",
->  	[IPI_IRQ_WORK]		= "IRQ work interrupts",
-> +	[IPI_TIMER]		= "Timer broadcast interrupts",
->  };
->
->  void show_ipi_stats(struct seq_file *p, int prec)
-> @@ -217,6 +226,13 @@ void arch_send_call_function_single_ipi(int cpu)
->  	send_ipi_single(cpu, IPI_CALL_FUNC);
+> diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
+> index ae2b1c7b3b5c..ef2bb9bd9605 100644
+> --- a/arch/csky/kernel/probes/ftrace.c
+> +++ b/arch/csky/kernel/probes/ftrace.c
+> @@ -9,7 +9,7 @@ int arch_check_ftrace_location(struct kprobe *p)
+>  	return 0;
 >  }
 >
-> +#ifdef CONFIG_GENERIC_CLOCKEVENTS_BROADCAST
-> +void tick_broadcast(const struct cpumask *mask)
-> +{
-> +	send_ipi_mask(mask, IPI_TIMER);
-> +}
-> +#endif
-> +
->  void smp_send_stop(void)
+> -/* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> +/* Ftrace callback handler for kprobes -- called under preepmt disabled */
+>  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
 >  {
->  	unsigned long timeout;
+> diff --git a/arch/riscv/kernel/probes/ftrace.c b/arch/riscv/kernel/probes/ftrace.c
+> index 2dfb33fdac74..17ca5e923bb0 100644
+> --- a/arch/riscv/kernel/probes/ftrace.c
+> +++ b/arch/riscv/kernel/probes/ftrace.c
+> @@ -2,7 +2,7 @@
+>
+>  #include <linux/kprobes.h>
+>
+> -/* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> +/* Ftrace callback handler for kprobes -- called under preepmt disabled */
+>  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
+> diff --git a/arch/x86/kernel/kprobes/ftrace.c b/arch/x86/kernel/kprobes/ftrace.c
+> index 373e5fa3ce1f..51c7f5271aee 100644
+> --- a/arch/x86/kernel/kprobes/ftrace.c
+> +++ b/arch/x86/kernel/kprobes/ftrace.c
+> @@ -12,7 +12,7 @@
+>
+>  #include "common.h"
+>
+> -/* Ftrace callback handler for kprobes -- called under preepmt disabed */
+> +/* Ftrace callback handler for kprobes -- called under preepmt disabled */
+>  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
 
-Thanks, this is on for-next.
+Thanks, this is on fixes.
