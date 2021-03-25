@@ -2,79 +2,87 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B7A33FC78
-	for <lists+linux-csky@lfdr.de>; Thu, 18 Mar 2021 02:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121F6348AD3
+	for <lists+linux-csky@lfdr.de>; Thu, 25 Mar 2021 08:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbhCRBCf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 17 Mar 2021 21:02:35 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13185 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbhCRBCF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 17 Mar 2021 21:02:05 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F17w73LVNzmZ6G;
-        Thu, 18 Mar 2021 08:59:35 +0800 (CST)
-Received: from [10.174.177.244] (10.174.177.244) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 18 Mar 2021 09:01:56 +0800
-Subject: Re: [PATCH v2] mm: Move mem_init_print_info() into mm_init()
-To:     Dave Hansen <dave.hansen@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-alpha@vger.kernel.org>,
-        <linux-snps-arc@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-csky@vger.kernel.org>, <linux-hexagon@vger.kernel.org>,
-        <linux-ia64@vger.kernel.org>, <linux-m68k@lists.linux-m68k.org>,
-        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
-        <linux-parisc@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <linux-um@lists.infradead.org>, <linux-xtensa@linux-xtensa.org>,
-        <linux-mm@kvack.org>
-References: <4d488195-7281-9238-b30d-9f89a6100fb9@csgroup.eu>
- <20210317015210.33641-1-wangkefeng.wang@huawei.com>
- <2a7d6e39-b293-7422-87b0-741f1ab0c22c@intel.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-Message-ID: <190f5356-f947-d474-a9fe-bc8e622a426e@huawei.com>
-Date:   Thu, 18 Mar 2021 09:01:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <2a7d6e39-b293-7422-87b0-741f1ab0c22c@intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.177.244]
-X-CFilter-Loop: Reflected
+        id S229664AbhCYH4r (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 25 Mar 2021 03:56:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44598 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229519AbhCYH4q (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 25 Mar 2021 03:56:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D59E761945;
+        Thu, 25 Mar 2021 07:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616659005;
+        bh=/wwJUDyl0L2cZlkv2+pe9ddYhc6OecFJJCkq6BkU3O0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OpFmlg9OBvyO10jNum7/CquDBaJxsFlSi9+zj3wgYdbg2fsOreULnLun9bZCz6SXp
+         JKwPRVJP3lF4PdMljN0mTC0wTK8kewvJUOPRgys0fw7ouGfWsTFjb6vIRXA3yMf+qZ
+         L+fKTi1+5bjzf5RMASfAexFZ7PPKNf7Oq+p+VDvyjeze1j4hDMh43j/hYhvJwtACO/
+         cr93gggBCwAJyE3k053ltgHgXMwridRPmVpdsyS75eCAQdt9IjAebSzKTHGX6Nlerw
+         ZwYdPrxr7fTxULpmjdXr16VMPEokqvEUpzabcJF4cqJXdck/40geNJyQmPgYaaG6C1
+         vgM5pozmDujrA==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, Anup.Patel@wdc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        tech-unixplatformspec@lists.riscv.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH v3 0/4] riscv: Add qspinlock/qrwlock
+Date:   Thu, 25 Mar 2021 07:55:33 +0000
+Message-Id: <1616658937-82063-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On 2021/3/18 2:48, Dave Hansen wrote:
-> On 3/16/21 6:52 PM, Kefeng Wang wrote:
->> mem_init_print_info() is called in mem_init() on each architecture,
->> and pass NULL argument, so using void argument and move it into mm_init().
->>
->> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-> It's not a big deal but you might want to say something like:
->
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com> # x86 bits
->
-> Just to make it clear that I didn't look at the alpha bits at all. :)
-Get it, will be careful, thanks.
-> .
->
+Current riscv is still using baby spinlock implementation. It'll cause
+fairness and cache line bouncing problems. Many people are involved
+and pay the efforts to improve it:
+
+ - The first version of patch was made in 2019.1:
+   https://lore.kernel.org/linux-riscv/20190211043829.30096-1-michaeljclark@mac.com/#r
+
+ - The second version was made in 2020.11:
+   https://lore.kernel.org/linux-riscv/1606225437-22948-2-git-send-email-guoren@kernel.org/
+
+ - A good discussion at Platform HSC.2021-03-08:
+   https://drive.google.com/drive/folders/1ooqdnIsYx7XKor5O1XTtM6D1CHp4hc0p
+
+Hope your comments and Tested-by or Co-developed-by or Reviewed-by ...
+
+Let's kick the qspinlock into riscv right now (Also for the
+architectures which doesn't have short atmoic xchg instructions.)
+
+Change V3:
+ - Fixup short-xchg asm code (slli -> slliw, srli -> srliw)
+ - Coding convention by Peter Zijlstra's advices 
+
+Change V2:
+ - Coding convention in cmpxchg.h
+ - Re-implement short xchg
+ - Remove char & cmpxchg implementations
+
+V1: (by michael)
+
+Guo Ren (3):
+  riscv: cmpxchg.h: Cleanup unused code
+  riscv: cmpxchg.h: Merge macros
+  riscv: cmpxchg.h: Implement xchg for short
+
+Michael Clark (1):
+  riscv: Convert custom spinlock/rwlock to generic qspinlock/qrwlock
+
+ arch/riscv/Kconfig                      |   2 +
+ arch/riscv/include/asm/Kbuild           |   3 +
+ arch/riscv/include/asm/cmpxchg.h        | 211 ++++++------------------
+ arch/riscv/include/asm/spinlock.h       | 126 +-------------
+ arch/riscv/include/asm/spinlock_types.h |  15 +-
+ 5 files changed, 58 insertions(+), 299 deletions(-)
+
+-- 
+2.17.1
+
