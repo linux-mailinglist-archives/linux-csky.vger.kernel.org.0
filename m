@@ -2,183 +2,71 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA50934B8FC
-	for <lists+linux-csky@lfdr.de>; Sat, 27 Mar 2021 19:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABE234B981
+	for <lists+linux-csky@lfdr.de>; Sat, 27 Mar 2021 22:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbhC0SoO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 27 Mar 2021 14:44:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34666 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230043AbhC0Snw (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 27 Mar 2021 14:43:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1616870632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hfHNZcjhdGk5rFhqOZayvcQKCZrifZd2giGyChxT48Y=;
-        b=TKxHDB3fnrzyaWHrRt77XDk8PtoNdoUa0F3hqjREsFawnYj1N5cwBnVjRGSGdVZ/H2XZBN
-        BJJ6BVhE8EUJ+48cVXjje09WO5WWnL5RVP6MPNU49Jp+glrLx0yFpuXsRTkta4yQa5EfWM
-        /CA2hoZXJ4mVrlIYwMcRt8X+AsKjgEc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-565-KTtps0L0MseR04IzHmlZFQ-1; Sat, 27 Mar 2021 14:43:50 -0400
-X-MC-Unique: KTtps0L0MseR04IzHmlZFQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DF5451084C83;
-        Sat, 27 Mar 2021 18:43:47 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-112-10.rdu2.redhat.com [10.10.112.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8471E10013D6;
-        Sat, 27 Mar 2021 18:43:46 +0000 (UTC)
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
- ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-To:     guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        id S230489AbhC0VZ6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 27 Mar 2021 17:25:58 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:47085 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230483AbhC0VZb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 27 Mar 2021 17:25:31 -0400
+Received: from mail-ot1-f53.google.com ([209.85.210.53]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MadGG-1lwa2s3ODS-00c9Tm; Sat, 27 Mar 2021 22:25:29 +0100
+Received: by mail-ot1-f53.google.com with SMTP id t23-20020a0568301e37b02901b65ab30024so8630852otr.4;
+        Sat, 27 Mar 2021 14:25:28 -0700 (PDT)
+X-Gm-Message-State: AOAM531N3hezseYPihghKyTUNAp/DKWstgZHN+W6rhlId/6Lw0VMOnM6
+        8CiQFJlgahi/o2Ar1AJEO4J5jGC81DQ9a0ovG10=
+X-Google-Smtp-Source: ABdhPJy4CJI13L5GI975TAxtN4pti2VMXOxlXdOQo1NAx9KR+JA78towyxq+aLKG36YpX7GoRqVGNCLpoFxBUatRMqE=
+X-Received: by 2002:a9d:316:: with SMTP id 22mr17117443otv.210.1616880327372;
+ Sat, 27 Mar 2021 14:25:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org> <1616868399-82848-3-git-send-email-guoren@kernel.org>
+In-Reply-To: <1616868399-82848-3-git-send-email-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 27 Mar 2021 22:25:12 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0FG3cpqBNUP7kXj3713cMUqV1WcEh-vcRnGKM00WXqxw@mail.gmail.com>
+Message-ID: <CAK8P3a0FG3cpqBNUP7kXj3713cMUqV1WcEh-vcRnGKM00WXqxw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] riscv: cmpxchg.h: Merge macros
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
-References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
- <1616868399-82848-4-git-send-email-guoren@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <b6466a43-6fb3-dc47-e0ef-d493e0930ab2@redhat.com>
-Date:   Sat, 27 Mar 2021 14:43:46 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
-MIME-Version: 1.0
-In-Reply-To: <1616868399-82848-4-git-send-email-guoren@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        Michael Clark <michaeljclark@mac.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:TiYln5qFCOjdYjLSSooDgnD1CnhaEYM4hRCyz0I+t6bEWNBHqFN
+ Naw0TyLHp+5giR3FFzr8E+okwipr5J38scviWbYwZYAC3PyyftZlORE+DySKinvLH28BoiC
+ TLiMml9cyrVrupiHC5vAJQDQ9OnFFokPsAdaMq/aPflF42aPVVbXCiPe+lAYHn+OyBIWWNV
+ MtmRKHOQLFaWd5ZbUfbsQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c5QrygU0lWE=:tLSca2w+CRbY0qN+pZQbb7
+ TUTIwmfs3/TKFavbq5pPI5zmoInvl9pgxFS0FwgCsipUtGDEbnCF45hpo5Smyp+ZCbg7VC8Q8
+ 2ApFumPqegqHlg65NPONJn4Imtxrg0CDtAYXzlAtrspK473NW0Kwi166ej8jXUBRj9+qQKEjw
+ cRAaBt7VBdrD+98gtRl7wyqxWzESWuenmzuzCZyn0v3dQ98IkMm1aZ5Kn8IsBa00z3ZstUUc6
+ 78P7zyvPgLINHrSad5z8jWae3LTaV2UfnRUpRnyseRY6wgDskzv/jAY6zKuqxKVHY4DGdoUSr
+ Gelt4+4+74iwbnFgdMD8HOXJVoBJCnnvr+EVZiH4IL1hkK8IDWTAymOCq93x3J/XNJ82JiuF2
+ 4Et38SBDKbmbzW61Reh2VSQVh0tm3HB1CUUOoLUGLMwTEgx/+O+D+c9zQiYa6Z7LT+ObkW9u0
+ 6ESzrzYz699KG5ibfgICCEGNqYaodJo=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 3/27/21 2:06 PM, guoren@kernel.org wrote:
+On Sat, Mar 27, 2021 at 7:06 PM <guoren@kernel.org> wrote:
+>
 > From: Guo Ren <guoren@linux.alibaba.com>
 >
-> Some architectures don't have sub-word swap atomic instruction,
-> they only have the full word's one.
->
-> The sub-word swap only improve the performance when:
-> NR_CPUS < 16K
->   *  0- 7: locked byte
->   *     8: pending
->   *  9-15: not used
->   * 16-17: tail index
->   * 18-31: tail cpu (+1)
->
-> The 9-15 bits are wasted to use xchg16 in xchg_tail.
->
-> Please let architecture select xchg16/xchg32 to implement
-> xchg_tail.
+> To reduce assembly codes, let's merge duplicate codes into one
+> (xchg_acquire, xchg_release, cmpxchg_release).
 >
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Waiman Long <longman@redhat.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Anup Patel <anup@brainfault.org>
-> ---
->   kernel/Kconfig.locks       |  3 +++
->   kernel/locking/qspinlock.c | 44 +++++++++++++++++++++-----------------
->   2 files changed, 27 insertions(+), 20 deletions(-)
->
-> diff --git a/kernel/Kconfig.locks b/kernel/Kconfig.locks
-> index 3de8fd11873b..d02f1261f73f 100644
-> --- a/kernel/Kconfig.locks
-> +++ b/kernel/Kconfig.locks
-> @@ -239,6 +239,9 @@ config LOCK_SPIN_ON_OWNER
->   config ARCH_USE_QUEUED_SPINLOCKS
->   	bool
->   
-> +config ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-> +	bool
-> +
->   config QUEUED_SPINLOCKS
->   	def_bool y if ARCH_USE_QUEUED_SPINLOCKS
->   	depends on SMP
-> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-> index cbff6ba53d56..54de0632c6a8 100644
-> --- a/kernel/locking/qspinlock.c
-> +++ b/kernel/locking/qspinlock.c
-> @@ -163,26 +163,6 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
->   	WRITE_ONCE(lock->locked_pending, _Q_LOCKED_VAL);
->   }
->   
-> -/*
-> - * xchg_tail - Put in the new queue tail code word & retrieve previous one
-> - * @lock : Pointer to queued spinlock structure
-> - * @tail : The new queue tail code word
-> - * Return: The previous queue tail code word
-> - *
-> - * xchg(lock, tail), which heads an address dependency
-> - *
-> - * p,*,* -> n,*,* ; prev = xchg(lock, node)
-> - */
-> -static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
-> -{
-> -	/*
-> -	 * We can use relaxed semantics since the caller ensures that the
-> -	 * MCS node is properly initialized before updating the tail.
-> -	 */
-> -	return (u32)xchg_relaxed(&lock->tail,
-> -				 tail >> _Q_TAIL_OFFSET) << _Q_TAIL_OFFSET;
-> -}
-> -
->   #else /* _Q_PENDING_BITS == 8 */
->   
->   /**
-> @@ -206,6 +186,30 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
->   {
->   	atomic_add(-_Q_PENDING_VAL + _Q_LOCKED_VAL, &lock->val);
->   }
-> +#endif
-> +
-> +#if _Q_PENDING_BITS == 8 && !defined(CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32)
-> +/*
-> + * xchg_tail - Put in the new queue tail code word & retrieve previous one
-> + * @lock : Pointer to queued spinlock structure
-> + * @tail : The new queue tail code word
-> + * Return: The previous queue tail code word
-> + *
-> + * xchg(lock, tail), which heads an address dependency
-> + *
-> + * p,*,* -> n,*,* ; prev = xchg(lock, node)
-> + */
-> +static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
-> +{
-> +	/*
-> +	 * We can use relaxed semantics since the caller ensures that the
-> +	 * MCS node is properly initialized before updating the tail.
-> +	 */
-> +	return (u32)xchg_relaxed(&lock->tail,
-> +				 tail >> _Q_TAIL_OFFSET) << _Q_TAIL_OFFSET;
-> +}
-> +
-> +#else
->   
->   /**
->    * xchg_tail - Put in the new queue tail code word & retrieve previous one
 
-I don't have any problem adding a 
-CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32 config option to control that.
+This is a nice cleanup, but I wonder if you can go even further by using
+the definitions from atomic-arch-fallback.h like arm64 and x86 do.
 
-One minor nit:
-
-#endif /* _Q_PENDING_BITS == 8 */
-
-You should probably remove the comment at the trailing end of the 
-corresponding "#endif" as it is now wrong.
-
-Cheers,
-Longman
-
+        Arnd
