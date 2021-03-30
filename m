@@ -2,136 +2,87 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450A434E1CE
-	for <lists+linux-csky@lfdr.de>; Tue, 30 Mar 2021 09:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5146334E32A
+	for <lists+linux-csky@lfdr.de>; Tue, 30 Mar 2021 10:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbhC3HM2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 30 Mar 2021 03:12:28 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:36421 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbhC3HMI (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 30 Mar 2021 03:12:08 -0400
-Received: from mail-ot1-f52.google.com ([209.85.210.52]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2m3G-1ld3Gc1HJM-0138q1; Tue, 30 Mar 2021 09:12:06 +0200
-Received: by mail-ot1-f52.google.com with SMTP id t23-20020a0568301e37b02901b65ab30024so14724361otr.4;
-        Tue, 30 Mar 2021 00:12:05 -0700 (PDT)
-X-Gm-Message-State: AOAM5312LOB1OQ+LBYTu/wZBy3A6sVxvfZeTukLGeMj1HbbkPnhNY4Ql
-        x5FkXvVSQHkQlRU8MrwBcbzAzxmnXIn1J3BMayM=
-X-Google-Smtp-Source: ABdhPJxrmSwVSZDP48DP+ikIRCBts1IlD1OfpYYF4tYk3/WxR/8UdJvAQaT3CYFMV6J7JYaeLxkX8qHf4eLpRGNv27Q=
-X-Received: by 2002:a05:6830:148c:: with SMTP id s12mr26882538otq.251.1617088324803;
- Tue, 30 Mar 2021 00:12:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
- <1616868399-82848-4-git-send-email-guoren@kernel.org> <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
- <CAK8P3a2bNH-1VjsZmZJkvGzzZY=ckaaOK9ZGL-oD0DH4jW-+kQ@mail.gmail.com>
- <YGG3JIBVO0w6W3fg@hirez.programming.kicks-ass.net> <YGG6Ms5Rl0AOJL2i@hirez.programming.kicks-ass.net>
- <CAJF2gTRwd0QpUZumDFUN1J=effv67ucUdsQ96PJwjBhPgJ1npw@mail.gmail.com>
- <CAK8P3a3jpQ7dDiVG0s_DQiL6n_MdnhYHMjqFfJ92JJBJFPQZPQ@mail.gmail.com> <CAJF2gTSpnHndT9NkrzvNP6xvqV51_DENwh2BHaduUnGyUE=Jaw@mail.gmail.com>
-In-Reply-To: <CAJF2gTSpnHndT9NkrzvNP6xvqV51_DENwh2BHaduUnGyUE=Jaw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 30 Mar 2021 09:11:50 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0DkbM=4oBBhA2DWvzMV7DwN1sqOU8Wa1qFtpd_w7iWmQ@mail.gmail.com>
-Message-ID: <CAK8P3a0DkbM=4oBBhA2DWvzMV7DwN1sqOU8Wa1qFtpd_w7iWmQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+        id S231340AbhC3Icb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 30 Mar 2021 04:32:31 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:28119 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231187AbhC3IcE (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 30 Mar 2021 04:32:04 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-228-1J3o_GQdNMSaHrENW9vpNw-1; Tue, 30 Mar 2021 09:32:01 +0100
+X-MC-Unique: 1J3o_GQdNMSaHrENW9vpNw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Tue, 30 Mar 2021 09:31:59 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.012; Tue, 30 Mar 2021 09:31:59 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guo Ren' <guoren@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     linux-riscv <linux-riscv@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
+        "Guo Ren" <guoren@linux.alibaba.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         Waiman Long <longman@redhat.com>,
-        Anup Patel <anup@brainfault.org>,
-        Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:dAc5/IYR3tPhlPw55hBn68XavOmrbOPoV9eDq5ASekeKo4KXdBt
- zG1nND9akWPe1zCpdB3g2XyNcD4NsEvHJIMPgk/mRumNTnCkQt1RQoMiYkNknXjTHkEOtSN
- IAKcvC5wsIideRGGjimmJ/lfGh9/wuWpx/XXQQJd62TauGO20yCg+FqVkcAj/VAYGrJg4My
- KAEK8nC3sztcuJUbOpvTw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2Ml0stvVTjU=:kt/2nob/5Op9UcVdXbiJ1B
- +CiIPVdQxeKZ9NN7g3MGau8DSrXSHN8K433EbhL0VRMFnPHHso0rmdopG2y6MzhgcGKzU6IKO
- AwInUVew1aIPfFigXoBbj0Hc2ckCA5VSs+WWzA7U7WMx9lE4DwzzpQJr8WRGhlmV54volstgG
- /d3jb2nLe4HS+yOPTLS9dxyM0s3BEQIV8kHdcQpiFGQ0ltoggLeTVspxm9ZksMEuFJp7RPN9A
- vmUldroy1LIE5rU6ppUKTI4U4BAlqeSxrQSFyGPFujb1PAlhUYvH6ycqMKgYr28ZS3uynl5mU
- xCuRIFl1pQTDamqXonXegn6O15R9wrgp7xzJR7Wv3hEUp++JuoHrrPG7ysvglxbb6+0zTyVg9
- dV5cTXI0iTfu+9W92s7ywrJLA3QXx38j3hkx58m10gY5KSY6Mit1DXkGM+jo9PZafxUCfVIAh
- KTPmigP+pbqNE8A4mX4i5q3Zf3uVZQFU3EA2njg63ToU029Ghwr7pDYBQH+gpvPKz0iaHZGsK
- V2cSLoK6g9vzoS7ZCHc8o1p+rTqfo59K2JztfZ6iHFlHsELaWp5JDNToR+Lp/9s9IvM/LOIjk
- zXkONm/ElG2sb+t6SVf+uyLG+1nUyvY+8X
+        Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
+Subject: RE: [PATCH v4 3/4] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Thread-Topic: [PATCH v4 3/4] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Thread-Index: AQHXJRLqafLiHQrxhUmfjrWfh9X/MKqcMq2w
+Date:   Tue, 30 Mar 2021 08:31:59 +0000
+Message-ID: <d21f5915f9e54a20b39a4fbc2941b0b6@AcuMS.aculab.com>
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org>
+ <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+ <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
+ <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
+In-Reply-To: <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 4:26 AM Guo Ren <guoren@kernel.org> wrote:
-> On Mon, Mar 29, 2021 at 9:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Mon, Mar 29, 2021 at 2:52 PM Guo Ren <guoren@kernel.org> wrote:
-> > > On Mon, Mar 29, 2021 at 7:31 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > >
-> > > > What's the architectural guarantee on LL/SC progress for RISC-V ?
-> >
-> >    "When LR/SC is used for memory locations marked RsrvNonEventual,
-> >      software should provide alternative fall-back mechanisms used when
-> >      lack of progress is detected."
-> >
-> > My reading of this is that if the example you tried stalls, then either
-> > the PMA is not RsrvEventual, and it is wrong to rely on ll/sc on this,
-> > or that the PMA is marked RsrvEventual but the implementation is
-> > buggy.
->
-> Yes, PMA just defines physical memory region attributes, But in our
-> processor, when MMU is enabled (satp's value register > 2) in s-mode,
-> it will look at our custom PTE's attributes BIT(63) ref [1]:
->
->    PTE format:
->    | 63 | 62 | 61 | 60 | 59 | 58-8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
->      SO   C    B    SH   SE    RSW   D   A   G   U   X   W   R   V
->      ^    ^    ^    ^    ^
->    BIT(63): SO - Strong Order
->    BIT(62): C  - Cacheable
->    BIT(61): B  - Bufferable
->    BIT(60): SH - Shareable
->    BIT(59): SE - Security
->
-> So the memory also could be RsrvNone/RsrvEventual.
+RnJvbTogR3VvIFJlbg0KPiBTZW50OiAzMCBNYXJjaCAyMDIxIDA0OjE0DQouLi4NCj4gPiBTdGVw
+IDEgd291bGQgYmUgdG8gZ2V0IHlvdXIgYXJjaGl0ZWN1dGUgZml4ZWQgc3VjaCB0aGF0IGl0IGNh
+biBwcm92aWRlDQo+ID4gZndkIHByb2dyZXNzIGd1YXJhbnRlZXMgZm9yIExML1NDLiBPdGhlcndp
+c2UgdGhlcmUncyBhYnNvbHV0ZWx5IG5vIHBvaW50DQo+ID4gaW4gYnVpbGRpbmcgY29tcGxleCBz
+eXN0ZW1zIHdpdGggaXQuDQo+IA0KPiBRdW90ZSBXYWltYW4ncyBjb21tZW50IFsxXSBvbiB4Y2hn
+MTYgb3B0aW1pemF0aW9uOg0KPiANCj4gIlRoaXMgb3B0aW1pemF0aW9uIGlzIG5lZWRlZCB0byBt
+YWtlIHRoZSBxc3BpbmxvY2sgYWNoaWV2ZSBwZXJmb3JtYW5jZQ0KPiBwYXJpdHkgd2l0aCB0aWNr
+ZXQgc3BpbmxvY2sgYXQgbGlnaHQgbG9hZC4iDQo+IA0KPiBbMV0gaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcva3ZtLzE0Mjk5MDE4MDMtMjk3NzEtNi1naXQtc2VuZC1lbWFpbC1XYWltYW4uTG9uZ0Bo
+cC5jb20vDQo+IA0KPiBTbyBmb3IgYSBub24teGhnMTYgbWFjaGluZToNCj4gIC0gdGlja2V0LWxv
+Y2sgZm9yIHNtYWxsIG51bWJlcnMgb2YgQ1BVcw0KPiAgLSBxc3BpbmxvY2sgZm9yIGxhcmdlIG51
+bWJlcnMgb2YgQ1BVcw0KPiANCj4gT2theSwgSSdsbCBwdXQgYWxsIG9mIHRoZW0gaW50byB0aGUg
+bmV4dCBwYXRjaCA6UA0KDQpEb2Vzbid0IHRoYXQgYWxzbyBpbXBseSB0aGF0IHlvdSBuZWVkIHRp
+Y2tldC1sb2NrcyBmb3INCmxpZ2h0bHkgY29udGVuZGVkIGxvY2tzIGV2ZW4gd2l0aCBhIGxvdCBv
+ZiBDUFVzPw0KDQpJZiB5b3UgYWN0dWFsbHkgZ2V0IGEgbG90IG9mIENQVXMgd2FpdGluZyBvbiB0
+aGUgc2FtZSBzcGlubG9jaw0KeW91IHByb2JhYmx5IG91Z2h0IHRvIGNoYW5nZSB0aGUgY29kZSB0
+byByZWR1Y2UgbG9jayBjb250ZW50aW9uLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
+ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
+MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-I was not talking about RsrvNone, which would clearly mean that
-you cannot use lr/sc at all (trap would trap, right?), but "RsrvNonEventual",
-which would explain the behavior you described in an earlier reply:
-
-| u32 a = 0x55aa66bb;
-| u16 *ptr = &a;
-|
-| CPU0                       CPU1
-| =========             =========
-| xchg16(ptr, new)     while(1)
-|                                     WRITE_ONCE(*(ptr + 1), x);
-|
-| When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
-
-As I understand, this example must not cause a deadlock on
-a compliant hardware implementation when the underlying memory
-has RsrvEventual behavior, but could deadlock in case of
-RsrvNonEventual
-
-> [1] https://github.com/c-sky/csky-linux/commit/e837aad23148542771794d8a2fcc52afd0fcbf88
->
-> >
-> > It also seems that the current "amoswap" based implementation
-> > would be reliable independent of RsrvEventual/RsrvNonEventual.
->
-> Yes, the hardware implementation of AMO could be different from LR/SC.
-> AMO could use ACE snoop holding to lock the bus in hw coherency
-> design, but LR/SC uses an exclusive monitor without locking the bus.
->
-> RISC-V hasn't CAS instructions, and it uses LR/SC for cmpxchg. I don't
-> think LR/SC would be slower than CAS, and CAS is just good for code
-> size.
-
-What I meant here is that the current spinlock uses a simple amoswap,
-which presumably does not suffer from the lack of forward process you
-described.
-
-        Arnd
