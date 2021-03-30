@@ -2,48 +2,52 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 382B134E9E6
-	for <lists+linux-csky@lfdr.de>; Tue, 30 Mar 2021 16:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F279B34ED38
+	for <lists+linux-csky@lfdr.de>; Tue, 30 Mar 2021 18:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbhC3OKC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 30 Mar 2021 10:10:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20623 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231764AbhC3OJf (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 30 Mar 2021 10:09:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617113374;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JjceWuLqxTVqN7nJGF6xvHg+l6EBFWCS4ZdW7zopx+w=;
-        b=dhpE/RhrYgLidF7X7B9JDgkD4RSZoDLZppXPktfq3nC+CaHxKy9Ty8ytijjZXE7c1xUC1B
-        UX7BvcN/ZGcWytYkAfethEUWEHGFSaHegzeaGBQzLisZQFEQlWojkzuxV5eHo8aRngxc9z
-        JR5FlDiEHwkbX1Nj3e47fCTYMbTTAL4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-168-KiW6mmzYOV6OSjZf91Aqfg-1; Tue, 30 Mar 2021 10:09:32 -0400
-X-MC-Unique: KiW6mmzYOV6OSjZf91Aqfg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 903ECDF8A0;
-        Tue, 30 Mar 2021 14:09:30 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-118-202.rdu2.redhat.com [10.10.118.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CE2A35D9CC;
-        Tue, 30 Mar 2021 14:09:27 +0000 (UTC)
-Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
- ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-To:     Guo Ren <guoren@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+        id S231933AbhC3QJW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 30 Mar 2021 12:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231627AbhC3QIx (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 30 Mar 2021 12:08:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F26DC061574;
+        Tue, 30 Mar 2021 09:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dZ/Ko/eJj6YQh9R0IXOj9k0rl82twQEwfEUFGonDznQ=; b=l9DJBYRNfsQ39ItnBtJnvAyo3M
+        QMMoRI+Wj38GmNnAOqTypBJXrHcLbR7knvvW9cJkoWZjNfCqlpv36Pm36Rj+78wrHBfdkPyS64QPR
+        9wFqTuJsBRoxvriItVBHO3nw8EGsWOJyESrfBlOVX7HG5fsHO4QXLEBU9vpzybSuqwU2gOWiFpH7A
+        jEsMRv1JaZpDHaulu9pTTzVPhJvrISL7c75yIXwEtFHdOdSF3QIhsJUud2f88Sh+zX/0sOH+X39M1
+        QzF5TJvAviahNOZCjbBQFZxc9DGuFusfmWE7uwB4JoalNzmGA3oFfhwu0+Vrd/FZD93rUi9t6J2r2
+        GK0F5RWw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lRGv3-004J3i-LK; Tue, 30 Mar 2021 16:08:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 392AA3010CF;
+        Tue, 30 Mar 2021 18:08:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 266312B85BA0A; Tue, 30 Mar 2021 18:08:40 +0200 (CEST)
+Date:   Tue, 30 Mar 2021 18:08:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guo Ren <guoren@kernel.org>
 Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org,
         linux-arch <linux-arch@vger.kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
+ ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+Message-ID: <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net>
 References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
  <1616868399-82848-4-git-send-email-guoren@kernel.org>
  <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
@@ -52,38 +56,33 @@ References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
  <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
  <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
  <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <4d0dbaa0-1f96-470c-0ed0-04f6827ea384@redhat.com>
-Date:   Tue, 30 Mar 2021 10:09:27 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 3/29/21 11:13 PM, Guo Ren wrote:
+On Tue, Mar 30, 2021 at 11:13:55AM +0800, Guo Ren wrote:
 > On Mon, Mar 29, 2021 at 8:50 PM Peter Zijlstra <peterz@infradead.org> wrote:
->> On Mon, Mar 29, 2021 at 08:01:41PM +0800, Guo Ren wrote:
->>> u32 a = 0x55aa66bb;
->>> u16 *ptr = &a;
->>>
->>> CPU0                       CPU1
->>> =========             =========
->>> xchg16(ptr, new)     while(1)
->>>                                      WRITE_ONCE(*(ptr + 1), x);
->>>
->>> When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
->> Then I think your LL/SC is broken.
->>
->> That also means you really don't want to build super complex locking
->> primitives on top, because that live-lock will percolate through.
+> >
+> > On Mon, Mar 29, 2021 at 08:01:41PM +0800, Guo Ren wrote:
+> > > u32 a = 0x55aa66bb;
+> > > u16 *ptr = &a;
+> > >
+> > > CPU0                       CPU1
+> > > =========             =========
+> > > xchg16(ptr, new)     while(1)
+> > >                                     WRITE_ONCE(*(ptr + 1), x);
+> > >
+> > > When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
+> >
+> > Then I think your LL/SC is broken.
+> >
+> > That also means you really don't want to build super complex locking
+> > primitives on top, because that live-lock will percolate through.
+
 > Do you mean the below implementation has live-lock risk?
 > +static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
 > +{
@@ -99,33 +98,26 @@ On 3/29/21 11:13 PM, Guo Ren wrote:
 > +       }
 > +       return old;
 > +}
-If there is a continuous stream of incoming spinlock takers, it is 
-possible that some cpus may have to wait a long time to set the tail 
-right. However, this should only happen on artificial workload. I doubt 
-it will happen with real workload or with limit number of cpus.
->
->> Step 1 would be to get your architecute fixed such that it can provide
->> fwd progress guarantees for LL/SC. Otherwise there's absolutely no point
->> in building complex systems with it.
-> Quote Waiman's comment [1] on xchg16 optimization:
->
-> "This optimization is needed to make the qspinlock achieve performance
-> parity with ticket spinlock at light load."
->
-> [1] https://lore.kernel.org/kvm/1429901803-29771-6-git-send-email-Waiman.Long@hp.com/
->
-> So for a non-xhg16 machine:
->   - ticket-lock for small numbers of CPUs
->   - qspinlock for large numbers of CPUs
->
-> Okay, I'll put all of them into the next patch :P
->
-It is true that qspinlock may not offer much advantage when the number 
-of cpus is small. It shines for systems with many cpus. You may use 
-NR_CPUS to determine if the default should be ticket or qspinlock with 
-user override. To determine the right NR_CPUS threshold, you may need to 
-run on real SMP RISCV systems to find out.
 
-Cheers,
-Longman
+That entirely depends on the architecture (and cmpxchg() impementation).
 
+There are a number of cases:
+
+ * architecture has cmpxchg() instruction (x86, s390, sparc, etc.).
+
+  - architecture provides fwd progress (x86)
+  - architecture requires backoff for progress (sparc)
+
+ * architecture does not have cmpxchg, and implements it using LL/SC.
+
+  and here things get *really* interesting, because while an
+  architecture can have LL/SC fwd progress, that does not translate into
+  cmpxchg() also having the same guarantees and all bets are off.
+
+The real bummer is that C can do cmpxchg(), but there is no way it can
+do LL/SC. And even if we'd teach C how to do LL/SC, it couldn't be
+generic because architectures lacking it can't emulate it using
+cmpxchg() (there's a fun class of bugs there).
+
+So while the above code might be the best we can do in generic code,
+it's really up to the architecture to make it work.
