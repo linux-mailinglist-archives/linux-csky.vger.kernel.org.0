@@ -2,234 +2,186 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F66E3559AF
-	for <lists+linux-csky@lfdr.de>; Tue,  6 Apr 2021 18:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBB5355A41
+	for <lists+linux-csky@lfdr.de>; Tue,  6 Apr 2021 19:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346654AbhDFQxV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 6 Apr 2021 12:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S232593AbhDFRZf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 6 Apr 2021 13:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346649AbhDFQxU (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 6 Apr 2021 12:53:20 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902F4C06174A;
-        Tue,  6 Apr 2021 09:53:12 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id h7so11671894qtx.3;
-        Tue, 06 Apr 2021 09:53:12 -0700 (PDT)
+        with ESMTP id S232578AbhDFRZf (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 6 Apr 2021 13:25:35 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A429C06174A;
+        Tue,  6 Apr 2021 10:25:27 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id fn8so2709266qvb.5;
+        Tue, 06 Apr 2021 10:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=1O6341K+omlIB9wJ2hXLKkbsOLGoNgyMzo2Q8jp14ns=;
-        b=FbSNaujCj4GQzt69czEYT9yzhdS82ILA0XySjA6WjU4aT1lYaj3SHxv1vX2vdur6FA
-         YTPONs9m8qYw+wIijaGHll5+ej9HxKg+KQFlasntXZAtvkkwMbwniIgts8YWN+JrAH8w
-         t36s62MjwnpWse52CNM+le4w4F/04vOQA3nJDDv342SOv74Z/0cWBHZ/gdXD8UNv9bpp
-         BXz5kIUkEtqWteih/Slzdl0lXYk3whfXldJhCGinRXTLZRQW7X8u9XyIrFGgg8ywjhjL
-         /t5bDygYdKZ/ZR3zXYOZevX0iznuq6YpLkE3K4148KcvXxeVyj5tP0mDaxzX/P41zFxB
-         PxwQ==
+        bh=HjIY6aWZ/uvHhM5BKnP3jscK0FBNItngTC5eimC1oFI=;
+        b=V+JG4luCR0b56/p+Hv4EgOuljif4M7BrF1R+nfoI5OsEwCVXQqTm/WwMZ681EicIT+
+         jf1Uwmh7DH9rA54IBEqp/nq7K6NXga/xs1A+ItmZm9vokyJcjNPKYj7O5qcA53sA/Twp
+         2o8bvMag0JtT8juqcTglS+J12WkTotgnB/WApgui2mLBFslT1KL/GQ6e+qHE8b9eravs
+         GdiEE9jfH5w/LeYxWmNa5+3jLpkvlMXRlL5RYS0sYuwKUTcVktfyuynNAASH3pallAwB
+         wq2kdPf+QEEK58vg9OfEGamcBLde0344bTdvxQutG8G6qYTURwgul5zLA6SXB1tqWxa/
+         8Q7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1O6341K+omlIB9wJ2hXLKkbsOLGoNgyMzo2Q8jp14ns=;
-        b=a63Bhp6CVKPdC4eCimmOPON56WGevWTKqJpqQEcUBtycOdNGlnR7X5I/ySVT7B7HC8
-         r+K3fm18uLqcJQgH5SMMa+B8326MKaDb0HhXkK1Of0sS6WrbEJYWlS5M3ivgq1Wrul/M
-         0p50Hu+e5pA2gscpDV1ZFiWz0P1zaw6EnIglym+Pfgpai0sQVjBWFM7M9uXPe7mhUbaV
-         TQe7Eo8JOnR8yaB9qtDEfBce5rzDQUnEpeMSaGkBF5ivgewOpd+w60CP4xqCvqKLrM3C
-         xzn5Sd01u9pqTfSDSURzCH5UA6XjM+bmp4DOdrFQRJDARVz3DfVE0ycyONjwsqTh+otN
-         ZURA==
-X-Gm-Message-State: AOAM5307ctOorx7fYHb9V8bvN4hJET5QlsZ1qE11HNKzebXKgXdoAglu
-        5/uzPTFRQyaZCTDcVlUy/1sxHgQ4auY=
-X-Google-Smtp-Source: ABdhPJyW4+S5F6l2W1agZlUj1gpYEr0Uf+t0W/YgCPZTn1gKNE1/+tdskKTlKeUZn69qOWB+q27VRQ==
-X-Received: by 2002:ac8:48c9:: with SMTP id l9mr27015485qtr.45.1617727991808;
-        Tue, 06 Apr 2021 09:53:11 -0700 (PDT)
+        bh=HjIY6aWZ/uvHhM5BKnP3jscK0FBNItngTC5eimC1oFI=;
+        b=SsnW7AMJlmBZ45JfFWikH6O/K0TuRalBy98amYpwsFHg6/vrYxwqfvYVSWRIjGWwqt
+         OiPDM5eBnab6/rw90dOpFi3Cb7q6xGA+T/8MxIynkAiS/nU1BPNDIphEzng6wrkNX3oo
+         5w5xZCS0tjyva9MwM3hjROkVbHRfhTe5N3R38YMqVA1aAkAMvairyUzumaRI7iLQVWE+
+         MkBjsc/pSySUtct3Hjsnox9RUG2hxjEms/eLbKP48Uo1k2aBEyDzgcHmvVHKp016kzxY
+         eO3usm8VnjGT3keW2/4jN4vAog+sERXaETzXX5/la63+kuX3En1fSIOiL/zs38AKs2kQ
+         u5SQ==
+X-Gm-Message-State: AOAM530ARfPsK5AUDnFDVmLsZHTWMLbWMwj0MiIfYBzmifyLzLGTa3bH
+        1z/zsQUe0egXbL38wS/VlcfE1TYpeJw=
+X-Google-Smtp-Source: ABdhPJxCnqpDDoiwmSWHUEP6xAQGZGQrKRlH4kuk7ohk/vvF7w4FMdf+MUERXRCuXqWJW7LJHmQ98Q==
+X-Received: by 2002:ad4:4cca:: with SMTP id i10mr29832924qvz.49.1617729926315;
+        Tue, 06 Apr 2021 10:25:26 -0700 (PDT)
 Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id h9sm14206728qtk.6.2021.04.06.09.53.10
+        by smtp.gmail.com with ESMTPSA id x14sm16025449qkx.112.2021.04.06.10.25.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 09:53:11 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7F86C27C0054;
-        Tue,  6 Apr 2021 12:53:10 -0400 (EDT)
+        Tue, 06 Apr 2021 10:25:25 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 2BABF27C0054;
+        Tue,  6 Apr 2021 13:25:25 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 06 Apr 2021 12:53:10 -0400
-X-ME-Sender: <xms:9JFsYMMMB4elRpqW88wslIO0VD_ZuVTszgiLe53m6RtFpubegkKdjw>
-    <xme:9JFsYE8MXi0atf2wVteuwUs_we8loq8w63R9a0MILCua2xmzVrjDONtnAkG70Nh2J
-    6TEDAN_p0HEj2d89A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudejhedgheefucetufdoteggodetrfdotf
+  by compute5.internal (MEProxy); Tue, 06 Apr 2021 13:25:25 -0400
+X-ME-Sender: <xms:g5lsYIxIxkxRsm1u6D9obZmveykknLjLNrx5HhDgTnZymPCGIb97rQ>
+    <xme:g5lsYMTHoGaNMpVBsIRTBuuyOp4jEgOQapucYXhNADKna11cwzYvMxOaIhrMgOmw0
+    NBEFE7HOzpWeoRaZg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudejhedgiedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehttdortddttddvnecuhfhrohhmpeeuohhquhhn
     ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
-    htvghrnhepieffvdeitdetheffuddugffggedvjeejieffheeltdeghfehueehteehleeg
-    heffnecukfhppedufedurddutdejrddugeejrdduvdeinecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
-    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
-    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:9JFsYMq4YxOfdEdokTwtHIt8Xs3fdMVumzM05UrAuCb885zHu1qeOQ>
-    <xmx:9JFsYG4f2ABAf5xcYkJq3i8ICvFbYvLRcOhmAelzMj2mqBPDUoaonQ>
-    <xmx:9JFsYMMiVadePONpSxOFiYg59L0Ic8noXkJMwuZM5NpPxpf-w62L2g>
-    <xmx:9pFsYLzWGz8_ImuEDqJ-UV6sD7gYKwTJ_oEj70-Phbq1gZbukxLw1hZzov7S0x96>
+    htvghrnheptdevvdfhkeevuedtueetgeefvdeuveehteelfeehfeelteetuefffeelleel
+    ueevnecuffhomhgrihhnpehrihhstghvrdhorhhgpdhkvghrnhgvlhdrohhrghenucfkph
+    epudefuddruddtjedrudegjedruddvieenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonh
+    grlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghnghep
+    pehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:g5lsYKV-_z2SguaFtbhfCJ_73Ja-6OesVU2kkZ2n8RTMu-IurrW8VA>
+    <xmx:g5lsYGiWkAz5xAFkJkGL0tkmjZUfpf4A8CQ4JDWNJfV1vd8d1jRdGA>
+    <xmx:g5lsYKA-1VQnwa1SqZrZgp5GROmrPdFSt59yP5dm2J2RQhrMXae4mg>
+    <xmx:hZlsYO64iCXqEXTU581wijEu5WviGywcF7AjNoRq6Y12ZTfFP3TWmhnPzEUafgz4>
 Received: from localhost (unknown [131.107.147.126])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0F9261080066;
-        Tue,  6 Apr 2021 12:53:07 -0400 (EDT)
-Date:   Wed, 7 Apr 2021 00:51:56 +0800
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9C6FD1080063;
+        Tue,  6 Apr 2021 13:25:23 -0400 (EDT)
+Date:   Wed, 7 Apr 2021 01:24:12 +0800
 From:   Boqun Feng <boqun.feng@gmail.com>
-To:     guoren@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xtensa@linux-xtensa.org,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
         Waiman Long <longman@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
-Subject: Re: [PATCH v6 1/9] locking/qspinlock: Add
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
  ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <YGyRrBjomDCPOBUd@boqun-archlinux>
-References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
- <1617201040-83905-2-git-send-email-guoren@kernel.org>
+Message-ID: <YGyZPCxJYGOvqYZQ@boqun-archlinux>
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org>
+ <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+ <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
+ <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1617201040-83905-2-git-send-email-guoren@kernel.org>
+In-Reply-To: <CAJF2gTS4jexKsSiXBY=5rz53LjcLUZ1K4pxjYJDVQCWx_8JTuA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi,
+On Wed, Mar 31, 2021 at 11:22:35PM +0800, Guo Ren wrote:
+> On Mon, Mar 29, 2021 at 8:50 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Mon, Mar 29, 2021 at 08:01:41PM +0800, Guo Ren wrote:
+> > > u32 a = 0x55aa66bb;
+> > > u16 *ptr = &a;
+> > >
+> > > CPU0                       CPU1
+> > > =========             =========
+> > > xchg16(ptr, new)     while(1)
+> > >                                     WRITE_ONCE(*(ptr + 1), x);
+> > >
+> > > When we use lr.w/sc.w implement xchg16, it'll cause CPU0 deadlock.
+> >
+> > Then I think your LL/SC is broken.
+> No, it's not broken LR.W/SC.W. Quote <8.3 Eventual Success of
+> Store-Conditional Instructions>:
+> 
+> "As a consequence of the eventuality guarantee, if some harts in an
+> execution environment are
+> executing constrained LR/SC loops, and no other harts or devices in
+> the execution environment
+> execute an unconditional store or AMO to that reservation set, then at
+> least one hart will
+> eventually exit its constrained LR/SC loop. By contrast, if other
+> harts or devices continue to
+> write to that reservation set, it is not guaranteed that any hart will
+> exit its LR/SC loop."
+> 
+> So I think it's a feature of LR/SC. How does the above code (also use
+> ll.w/sc.w to implement xchg16) running on arm64?
+> 
+> 1: ldxr
+>     eor
+>     cbnz ... 2f
+>     stxr
+>     cbnz ... 1b   // I think it would deadlock for arm64.
+> 
+> "LL/SC fwd progress" which you have mentioned could guarantee stxr
+> success? How hardware could do that?
+> 
 
-On Wed, Mar 31, 2021 at 02:30:32PM +0000, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Some architectures don't have sub-word swap atomic instruction,
-> they only have the full word's one.
-> 
-> The sub-word swap only improve the performance when:
-> NR_CPUS < 16K
->  *  0- 7: locked byte
->  *     8: pending
->  *  9-15: not used
->  * 16-17: tail index
->  * 18-31: tail cpu (+1)
-> 
-> The 9-15 bits are wasted to use xchg16 in xchg_tail.
-> 
-> Please let architecture select xchg16/xchg32 to implement
-> xchg_tail.
-> 
+Actually, "old" riscv standard does provide fwd progress ;-) In
 
-If the architecture doesn't have sub-word swap atomic, won't it generate
-the same/similar code no matter which version xchg_tail() is used? That
-is even CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y, xchg_tail() acts
-similar to an xchg16() implemented by cmpxchg(), which means we still
-don't have forward progress guarantee. So this configuration doesn't
-solve the problem.
+	https://riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf
 
-I think it's OK to introduce this config and don't provide xchg16() for
-risc-v. But I don't see the point of converting other architectures to
-use it.
+Section "7.2 Load-Reserved/Store-Conditional Instructions":
+
+"""
+One advantage of CAS is that it guarantees that some hart eventually
+makes progress, whereas an LR/SC atomic sequence could livelock
+indefinitely on some systems. To avoid this concern, we added an
+architectural guarantee of forward progress to LR/SC atomic sequences.
+The restrictions on LR/SC sequence contents allows an implementation to
+**capture a cache line on the LR and complete the LR/SC sequence by
+holding off remote cache interventions for a bounded short time**.
+"""
+
+The guarantee is removed later due to "Earlier versions of this
+specification imposed a stronger starvation-freedom guarantee. However,
+the weaker livelock-freedom guarantee is sufficient to implement the C11
+and C++11 languages, and is substantially easier to provide in some
+microarchitectural styles."
+
+But I take it as an example that hardware can guarantee this.
 
 Regards,
 Boqun
 
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Waiman Long <longman@redhat.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Anup Patel <anup@brainfault.org>
-> ---
->  kernel/Kconfig.locks       |  3 +++
->  kernel/locking/qspinlock.c | 46 +++++++++++++++++++++-----------------
->  2 files changed, 28 insertions(+), 21 deletions(-)
+> >
+> > That also means you really don't want to build super complex locking
+> > primitives on top, because that live-lock will percolate through.
+> >
+> > Step 1 would be to get your architecute fixed such that it can provide
+> > fwd progress guarantees for LL/SC. Otherwise there's absolutely no point
+> > in building complex systems with it.
+> --
+> Best Regards
+>  Guo Ren
 > 
-> diff --git a/kernel/Kconfig.locks b/kernel/Kconfig.locks
-> index 3de8fd11873b..d02f1261f73f 100644
-> --- a/kernel/Kconfig.locks
-> +++ b/kernel/Kconfig.locks
-> @@ -239,6 +239,9 @@ config LOCK_SPIN_ON_OWNER
->  config ARCH_USE_QUEUED_SPINLOCKS
->  	bool
->  
-> +config ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-> +	bool
-> +
->  config QUEUED_SPINLOCKS
->  	def_bool y if ARCH_USE_QUEUED_SPINLOCKS
->  	depends on SMP
-> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-> index cbff6ba53d56..4bfaa969bd15 100644
-> --- a/kernel/locking/qspinlock.c
-> +++ b/kernel/locking/qspinlock.c
-> @@ -163,26 +163,6 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
->  	WRITE_ONCE(lock->locked_pending, _Q_LOCKED_VAL);
->  }
->  
-> -/*
-> - * xchg_tail - Put in the new queue tail code word & retrieve previous one
-> - * @lock : Pointer to queued spinlock structure
-> - * @tail : The new queue tail code word
-> - * Return: The previous queue tail code word
-> - *
-> - * xchg(lock, tail), which heads an address dependency
-> - *
-> - * p,*,* -> n,*,* ; prev = xchg(lock, node)
-> - */
-> -static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
-> -{
-> -	/*
-> -	 * We can use relaxed semantics since the caller ensures that the
-> -	 * MCS node is properly initialized before updating the tail.
-> -	 */
-> -	return (u32)xchg_relaxed(&lock->tail,
-> -				 tail >> _Q_TAIL_OFFSET) << _Q_TAIL_OFFSET;
-> -}
-> -
->  #else /* _Q_PENDING_BITS == 8 */
->  
->  /**
-> @@ -206,6 +186,30 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
->  {
->  	atomic_add(-_Q_PENDING_VAL + _Q_LOCKED_VAL, &lock->val);
->  }
-> +#endif /* _Q_PENDING_BITS == 8 */
-> +
-> +#if _Q_PENDING_BITS == 8 && !defined(CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32)
-> +/*
-> + * xchg_tail - Put in the new queue tail code word & retrieve previous one
-> + * @lock : Pointer to queued spinlock structure
-> + * @tail : The new queue tail code word
-> + * Return: The previous queue tail code word
-> + *
-> + * xchg(lock, tail), which heads an address dependency
-> + *
-> + * p,*,* -> n,*,* ; prev = xchg(lock, node)
-> + */
-> +static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
-> +{
-> +	/*
-> +	 * We can use relaxed semantics since the caller ensures that the
-> +	 * MCS node is properly initialized before updating the tail.
-> +	 */
-> +	return (u32)xchg_relaxed(&lock->tail,
-> +				 tail >> _Q_TAIL_OFFSET) << _Q_TAIL_OFFSET;
-> +}
-> +
-> +#else
->  
->  /**
->   * xchg_tail - Put in the new queue tail code word & retrieve previous one
-> @@ -236,7 +240,7 @@ static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
->  	}
->  	return old;
->  }
-> -#endif /* _Q_PENDING_BITS == 8 */
-> +#endif
->  
->  /**
->   * queued_fetch_set_pending_acquire - fetch the whole lock value and set pending
-> -- 
-> 2.17.1
-> 
+> ML: https://lore.kernel.org/linux-csky/
