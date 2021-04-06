@@ -2,121 +2,102 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3EF354AE4
-	for <lists+linux-csky@lfdr.de>; Tue,  6 Apr 2021 04:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF18354B65
+	for <lists+linux-csky@lfdr.de>; Tue,  6 Apr 2021 05:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238161AbhDFCfO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 5 Apr 2021 22:35:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51100 "EHLO mail.kernel.org"
+        id S238770AbhDFDu7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 5 Apr 2021 23:50:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50998 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232271AbhDFCfO (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 5 Apr 2021 22:35:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 753F7611C0;
-        Tue,  6 Apr 2021 02:35:06 +0000 (UTC)
+        id S233639AbhDFDu7 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 5 Apr 2021 23:50:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D895D611EE;
+        Tue,  6 Apr 2021 03:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617676506;
-        bh=f9B2Cj+hZMbB5RuZ1sOGqngVS1EXgeT4YM4yx3FshDQ=;
+        s=k20201202; t=1617681052;
+        bh=szRR4JcrQICDR26E7y2EmbZ8ojtgg1rHPlcrE0/d3ls=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Yom7z9fZfosZgKwqFBu1VcNKC2tWYb+vxAk/gfPCqtCFQT/LJfRFXN8Alqvz6sMnW
-         18LyYQJ88id/3NsvwzFOkaET6QhrhL3EaWKIdF4HzsO5bdvHCKtWJ7cQ7O9UJdKfEJ
-         dbQFUKf0jxpZ1h/7/8iyJdmx+RSdZJ+F+BosQhFPUDmG+3/rp5kDjzyiNnDDD2eXHA
-         JDRt4Wid4Q/m7RrLOkqmtG6PueQGEjnYd4kzqgDUKORsulJ/sjeYpPzagHaInBE2jL
-         jJlCyGoWqrFUONkqJmDGHbKavWEKzeKvZOzBfKXGzoZkzCo4E+9oVxPPdN82s97tGV
-         i5sKYWXGJPMjQ==
-Received: by mail-lf1-f52.google.com with SMTP id n138so20338593lfa.3;
-        Mon, 05 Apr 2021 19:35:06 -0700 (PDT)
-X-Gm-Message-State: AOAM530zG5s3zpilvWCuL+ONq7Rug0QDvtsxes4E3SvMbofFsbZQxV71
-        q/HhLl2h8UdIpHGrKob/8qcuMxezpWRnyeZhX7g=
-X-Google-Smtp-Source: ABdhPJwkNqq3eNyWXjNY6FLAzSJ3Xq4BbMccPyJ1XTpHu76xQ2eqW+tnmCtDjTLnjfKKj522KdjfQH1WnRWnwTsTbg8=
-X-Received: by 2002:ac2:5e26:: with SMTP id o6mr19862530lfg.355.1617676504847;
- Mon, 05 Apr 2021 19:35:04 -0700 (PDT)
+        b=Xh7LyhlX8SgYtaHo207MEW2YT8a8f1clTe8y0Yi2E7VuF9cUTfe3JNTF/XGwPyFR1
+         7J0Gpiyo8cIbAloHohpmQUYB4YgDXxaKIbx9OdCUDVq2Mfr7ffFqOl5g2SeEDwbRJp
+         kjeZVx00J+1BGWp5Uu85JuFeWRfHJDIk+Y9CTprTvQJ9+wtB9KeZgyeXFLxGYq+9UD
+         oUYNEKYxSHPACshu3nkz63R73hwAtR4zoTEqdh2ulp7EwSnwEN/5VZNrTZIXtGpeHz
+         C6yA+io5tq4xzb/4cKCGwLiVQjlYVXb7m29lq4j4/n9F1YwCFYKJZyxY5au3/vHiU6
+         Uz++RocqdA5lQ==
+Received: by mail-lf1-f46.google.com with SMTP id o126so20585175lfa.0;
+        Mon, 05 Apr 2021 20:50:51 -0700 (PDT)
+X-Gm-Message-State: AOAM533DWFYAOKbErtDhkmiv6Pt+TRtpTW4b1FbvGxLSC0Oa/IfKgI9I
+        udcqeKbkCI64nwa3zJq+0s/jfwjLDha9qFtXmbM=
+X-Google-Smtp-Source: ABdhPJxz7vekhbYxQi/US2gfIUiFffiADC+caHLoxoXMbnk8SvvFWk5EFQrEYzPpfuBRSNV+B6LNPvDCyqdYyVLCZPM=
+X-Received: by 2002:a19:f501:: with SMTP id j1mr20502473lfb.231.1617681050232;
+ Mon, 05 Apr 2021 20:50:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <1617673695-102193-1-git-send-email-yang.lee@linux.alibaba.com>
-In-Reply-To: <1617673695-102193-1-git-send-email-yang.lee@linux.alibaba.com>
+References: <1616868399-82848-1-git-send-email-guoren@kernel.org>
+ <1616868399-82848-4-git-send-email-guoren@kernel.org> <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net> <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net> <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
+ <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net> <20210330223514.GE1171117@lianli.shorne-pla.net>
+ <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 6 Apr 2021 10:34:53 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRuW=TP6jZSAkDCNyq5aeEsbhZFpOQFTiCoapN3EU0ydw@mail.gmail.com>
-Message-ID: <CAJF2gTRuW=TP6jZSAkDCNyq5aeEsbhZFpOQFTiCoapN3EU0ydw@mail.gmail.com>
-Subject: Re: [PATCH] csky: remove unused including <linux/version.h>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Tue, 6 Apr 2021 11:50:38 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com>
+Message-ID: <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Stafford Horne <shorne@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Anup Patel <anup@brainfault.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Acked by
+On Wed, Mar 31, 2021 at 3:23 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, Mar 31, 2021 at 12:35 AM Stafford Horne <shorne@gmail.com> wrote:
+> >
+> > I just want to chime in here, there may be a better spot in the thread to
+> > mention this but, for OpenRISC I did implement some generic 8/16-bit xchg code
+> > which I have on my todo list somwhere to replace the other generic
+> > implementations like that in mips.
+> >
+> >   arch/openrisc/include/asm/cmpxchg.h
+> >
+> > The idea would be that architectures just implement these methods:
+> >
+> >   long cmpxchg_u32(*ptr,old,new)
+> >   long xchg_u32(*ptr,val)
+> >
+> > Then the rest of the generic header would implement cmpxchg.
+>
+> I like the idea of generalizing it a little further. I'd suggest staying a
+> little closer to the existing naming here though, as we already have
+> cmpxchg() for the type-agnostic version, and cmpxchg64() for the
+> fixed-length 64-bit version.
+>
+> I think a nice interface between architecture-specific and architecture
+> independent code would be to have architectures provide
+> arch_cmpxchg32()/arch_xchg32() as the most basic version, as well
+> as arch_cmpxchg8()/arch_cmpxchg16()/arch_xchg8()/arch_xchg16()
+> if they have instructions for those.
+>
+> The common code can then build cmpxchg16()/xchg16() on top of
+> either the 16-bit or the 32-bit primitives, and build the cmpxchg()/xchg()
+> wrapper around those (or alternatively we can decide to have them
+> only deal with fixed-32-bit and long/pointer sized atomics).
+I think these emulation codes are suitable for some architectures but not riscv.
 
-On Tue, Apr 6, 2021 at 9:48 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
->
-> Fix the following versioncheck warnings:
-> ./arch/csky/include/asm/io.h: 8 linux/version.h not needed.
-> ./arch/csky/include/asm/uaccess.h: 14 linux/version.h not needed.
-> ./arch/csky/kernel/process.c: 5 linux/version.h not needed.
-> ./arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  arch/csky/include/asm/io.h      | 1 -
->  arch/csky/include/asm/uaccess.h | 1 -
->  arch/csky/kernel/process.c      | 1 -
->  arch/csky/mm/dma-mapping.c      | 1 -
->  4 files changed, 4 deletions(-)
->
-> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-> index f826540..ed53f0b 100644
-> --- a/arch/csky/include/asm/io.h
-> +++ b/arch/csky/include/asm/io.h
-> @@ -5,7 +5,6 @@
->
->  #include <linux/pgtable.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->
->  /*
->   * I/O memory access primitives. Reads are ordered relative to any
-> diff --git a/arch/csky/include/asm/uaccess.h b/arch/csky/include/asm/uaccess.h
-> index 3dec272..841e421 100644
-> --- a/arch/csky/include/asm/uaccess.h
-> +++ b/arch/csky/include/asm/uaccess.h
-> @@ -11,7 +11,6 @@
->  #include <linux/types.h>
->  #include <linux/sched.h>
->  #include <linux/string.h>
-> -#include <linux/version.h>
->  #include <asm/segment.h>
->
->  static inline int access_ok(const void *addr, unsigned long size)
-> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-> index 3d0ca22..5de0470 100644
-> --- a/arch/csky/kernel/process.c
-> +++ b/arch/csky/kernel/process.c
-> @@ -2,7 +2,6 @@
->  // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
->
->  #include <linux/module.h>
-> -#include <linux/version.h>
->  #include <linux/sched.h>
->  #include <linux/sched/task_stack.h>
->  #include <linux/sched/debug.h>
-> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-> index c3a775a..8244702 100644
-> --- a/arch/csky/mm/dma-mapping.c
-> +++ b/arch/csky/mm/dma-mapping.c
-> @@ -9,7 +9,6 @@
->  #include <linux/mm.h>
->  #include <linux/scatterlist.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->  #include <asm/cache.h>
->
->  static inline void cache_op(phys_addr_t paddr, size_t size,
-> --
-> 1.8.3.1
->
-
+We shouldn't export xchg16/cmpxchg16(emulated by lr.w/sc.w) in riscv,
+We should forbid these sub-word atomic primitive and lets the
+programmers consider their atomic design.
 
 -- 
 Best Regards
