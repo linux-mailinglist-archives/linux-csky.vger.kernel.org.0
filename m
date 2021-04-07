@@ -2,36 +2,43 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC728356EDD
-	for <lists+linux-csky@lfdr.de>; Wed,  7 Apr 2021 16:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F90357121
+	for <lists+linux-csky@lfdr.de>; Wed,  7 Apr 2021 17:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235284AbhDGOgy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 7 Apr 2021 10:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S236112AbhDGPze (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 7 Apr 2021 11:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235011AbhDGOgv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 7 Apr 2021 10:36:51 -0400
+        with ESMTP id S232716AbhDGPze (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 7 Apr 2021 11:55:34 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6A9C06175F;
-        Wed,  7 Apr 2021 07:36:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E3FC061756;
+        Wed,  7 Apr 2021 08:55:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=umJ6Er88RJ+kjsFdQDsASA99MroOE5xNDgI/QiCH4QM=; b=fhTqx06EzmDXnqGUU8Hs6T2OIO
-        GJheMtfFNne1USTF67q0QdoIrXWnu7eBYLi2ZHmbcI7sUCTZXQKqe0UZW90UqjzGJA8YSkDp80XuM
-        mZ9QxwKvvOiZeBewK5EjK/1DSyld9HuVW6qFKyL30Og1aOCFrgMxdz5AbLkzDwzLSQsUKoyaMmtJr
-        ESsC8Z7fUNoef76ssY+daUwApH2StlHtsqwlZcA+xos4mpyDJ7Cg8FqKR4qMFg3Wc1g1hZYbVtvhU
-        sT5qdbMuxxq+vFQcHComPMpEQMaJtiSsIuc1AZUOvOiHFwfVj+fcBq8djBeDRVzQDTcfz5jQtScev
-        lIpiXB+A==;
-Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lU9GF-00EbQv-KT; Wed, 07 Apr 2021 14:34:58 +0000
-Date:   Wed, 7 Apr 2021 15:34:27 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Christoph M??llner <christophm30@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Guo Ren <guoren@kernel.org>,
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=a8elwdZOsCHEPMraxac9e3Y9q00OjQSrAqqfC563Li0=; b=hT6rnPygmAOYuDBJ32gkAH24DN
+        y0EskBQYVhmESQygX/JL1U9CFVN+vrw/X7f9JTPcPCgdQ0LfUq9HawJDre8t8SVigUPAP7gB/glVm
+        qgAIylcHxk4Si+FR+ujhExsOgHLe7mhsLbe5p7LaCwVlflxb5He+EL7JVv1UnjRMWP6inKBD5KMwv
+        nu0686GQIB6TMS465yR1qCNjO7osE7Oz1r2O1wVhf1N2AdhYQEaUzwHGexje1/o1iKA3DErFp/mQM
+        fUWkDL41gAFBEkN8r5Uj8W9Nj8cxy31EKCUCk8SAm9oHb9jRFGbmZMBzzEb00QQllAZzoElXkIyXB
+        1r8acCwQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lUASU-00Ehp1-Ej; Wed, 07 Apr 2021 15:51:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 994483015D3;
+        Wed,  7 Apr 2021 17:51:07 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 42E382BF09268; Wed,  7 Apr 2021 17:51:07 +0200 (CEST)
+Date:   Wed, 7 Apr 2021 17:51:07 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christoph =?iso-8859-1?Q?M=FCllner?= <christophm30@gmail.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, Guo Ren <guoren@kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org,
@@ -42,7 +49,7 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>
 Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
  ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <20210407143427.GA3479728@infradead.org>
+Message-ID: <YG3U677P9QKqFGMY@hirez.programming.kicks-ass.net>
 References: <1616868399-82848-4-git-send-email-guoren@kernel.org>
  <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
  <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
@@ -54,18 +61,20 @@ References: <1616868399-82848-4-git-send-email-guoren@kernel.org>
  <20210407094224.GA3393992@infradead.org>
  <CAHB2gtROGuoNzv5f9QrhWX=3ZtZmUM=SAjYhKqP7dTiTTQwkqA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <CAHB2gtROGuoNzv5f9QrhWX=3ZtZmUM=SAjYhKqP7dTiTTQwkqA@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 04:29:12PM +0200, Christoph M??llner wrote:
-> Gentlemen, please rethink your wording.
-> RISC-V is neither "crap" nor a "trainwreck", regardless if you like it or not.
+On Wed, Apr 07, 2021 at 04:29:12PM +0200, Christoph Müllner wrote:
+> Further, it is not the case that RISC-V has no guarantees at all.
+> It just does not provide a forward progress guarantee for a
+> synchronization implementation,
+> that writes in an endless loop to a memory location while trying to
+> complete an LL/SC
+> loop on the same memory location at the same time.
 
-No, by all objective standards the RISC-V memory model and privileged
-architecture is a trainwreck.  Anyone who disagrees is way out there in
-the sky.
+Userspace can DoS the kernel that way, see futex.
