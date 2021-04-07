@@ -2,123 +2,139 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D59D2355FC2
-	for <lists+linux-csky@lfdr.de>; Wed,  7 Apr 2021 01:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8151735673E
+	for <lists+linux-csky@lfdr.de>; Wed,  7 Apr 2021 10:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242885AbhDFXwX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 6 Apr 2021 19:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbhDFXwW (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 6 Apr 2021 19:52:22 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEEEC06174A;
-        Tue,  6 Apr 2021 16:52:11 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id b8-20020a17090a5508b029014d0fbe9b64so286002pji.5;
-        Tue, 06 Apr 2021 16:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r0Ha/Gv3pAkjmgqqsKcPiH9tlZnqWzms79uqmOiSHMs=;
-        b=DoH08R29BGwmuj6eSbyG3BUk0CMYUOgrE7l1ib0WohqefmBPVt3sY22jJOdDf2ba3M
-         OraAYZNzGMrAjzLBt/oLKxSGP5xVkpQwVYlEyQ+FCAxk1AucZMSXaKaX4yes8IpuX9bx
-         k/PK2mwZ7S6C7V1Otv/hHIYsXqEQzWVrSgtZ7Smoc3vdWQK5bfkyy5fWevoxUBoneWfM
-         UlLNvmrFvT/LKV17m0n35Iq2WXwO1WQ94cKquKeKdq4Eo0jQbOkxVxjhAnmnUDMrZ/jw
-         sjVzOf22KCT3mTqKrrakDQ7hCLtkS68PqKVrr3avChCGt1YUrsIst96sJ5oXc8I6D0zL
-         +AxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r0Ha/Gv3pAkjmgqqsKcPiH9tlZnqWzms79uqmOiSHMs=;
-        b=aSfq4wLV33gZoxXuQxAynvZwOvSHfBBeqCtoVnLo8iFCLJGj+NsK/Rpc3EAgbou/0s
-         X/0lvT5XDgYjvocVAxntjaMiBxsxokPy/MuHLBOvDKBpY8kmOQOuPwr7s6t/8iDPvGSe
-         /VlkWvbiJXnL8tee6A/M4hWLcjiIDDVZXgcccO2UfFCxX4E7HuesGtqTSxnc2ENzv83d
-         ynONeFI0S6Ih1TbyXY2svmCGT+VQS0H7+hT+/RO7Tgu4ZLlH9k0+gWJladRdDxgZBSSu
-         GQZ+s7U194ACcRGOq8HEtSlkdT/CqDA5J2x2HixvC4u1daaGh7pxv9ogNy4AWbF9b+3k
-         Guqg==
-X-Gm-Message-State: AOAM533y51c6yROMdvXiUe/0YwWezevgdqIaUz3M1gHFSG2NFwTBPU9f
-        iZsDQbYWmnIZc3PGUj0JcxI=
-X-Google-Smtp-Source: ABdhPJxtumeckyy0f77HdPuOn8G6N6f+xOhLUrB9QPIL+nP1d3kOEbilw2AHpr0vnTb2lu4tnB14Mw==
-X-Received: by 2002:a17:90a:6385:: with SMTP id f5mr590598pjj.212.1617753131320;
-        Tue, 06 Apr 2021 16:52:11 -0700 (PDT)
-Received: from localhost (g139.124-45-193.ppp.wakwak.ne.jp. [124.45.193.139])
-        by smtp.gmail.com with ESMTPSA id k21sm19587938pfi.28.2021.04.06.16.52.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 16:52:10 -0700 (PDT)
-Date:   Wed, 7 Apr 2021 08:52:08 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     guoren@kernel.org, linux-arch@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        Anup Patel <anup@brainfault.org>, sparclinux@vger.kernel.org,
-        Waiman Long <longman@redhat.com>,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [OpenRISC] [PATCH v6 1/9] locking/qspinlock: Add
- ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <20210406235208.GG3288043@lianli.shorne-pla.net>
-References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
- <1617201040-83905-2-git-send-email-guoren@kernel.org>
- <YGyRrBjomDCPOBUd@boqun-archlinux>
+        id S1345741AbhDGIyw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 7 Apr 2021 04:54:52 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:41131 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349703AbhDGIxM (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 7 Apr 2021 04:53:12 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M1Yl9-1lS9AN1MRn-0034Af; Wed, 07 Apr 2021 10:43:08 +0200
+Received: by mail-ot1-f47.google.com with SMTP id 68-20020a9d0f4a0000b02901b663e6258dso17263939ott.13;
+        Wed, 07 Apr 2021 01:43:07 -0700 (PDT)
+X-Gm-Message-State: AOAM533Dd0ClEcFro0aqnnX61V76Ru0dKrla0GERBoBHH9EkSR4/jA1l
+        KjsXspYwrQQKRtzwmTw8mkVsbR4r3/mK4c+h3Zo=
+X-Google-Smtp-Source: ABdhPJyEzzeePiTksGgoW6JxcSZ73Zq5OLkAoMy2RnSW8XEgaIbyDDdmoeKSyjV9qiGXc17VtYYeor2UEEylyRze7MQ=
+X-Received: by 2002:a9d:758b:: with SMTP id s11mr2061872otk.305.1617784986795;
+ Wed, 07 Apr 2021 01:43:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YGyRrBjomDCPOBUd@boqun-archlinux>
+References: <YGGGqftfr872/4CU@hirez.programming.kicks-ass.net>
+ <CAJF2gTQNV+_txMHJw0cmtS-xcnuaCja-F7XBuOL_J0yN39c+uQ@mail.gmail.com>
+ <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net> <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net> <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
+ <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net> <20210330223514.GE1171117@lianli.shorne-pla.net>
+ <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
+ <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com> <20210406085626.GE3288043@lianli.shorne-pla.net>
+In-Reply-To: <20210406085626.GE3288043@lianli.shorne-pla.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 7 Apr 2021 10:42:50 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3Pf3TbGoVP7JP7gfPV-WDM8MHV_hdqSwNKKFDr1Sb3zQ@mail.gmail.com>
+Message-ID: <CAK8P3a3Pf3TbGoVP7JP7gfPV-WDM8MHV_hdqSwNKKFDr1Sb3zQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add ARCH_USE_QUEUED_SPINLOCKS_XCHG32
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     Guo Ren <guoren@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Anup Patel <anup@brainfault.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:PmTwyMLNDw3MbtxJXND6wULilPufj1Rr7LxvRNWwVMx0KuqZ/7M
+ ZzPLIXfGxqYz3RbTbz0HscLdlVr/oldvgKYrICHJjwdTY+EQpkfFv2Y+2mMWRcC8PdFLVLF
+ kYIKEDdO4Idr98XRoEMBehSww26IUhuQVCpUJDpyFdxMw5XMfXbKZK5vQGnn3+gDJylFl6E
+ V57sqwGdA+ENNzLyCT2qA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:f06RPnhyB94=:ifLiOCkPnY9l9pXL4RFEcb
+ 0Zp1KK0RhXvmZTDpr8syaMUSk51t26nYVE+bvUdTWDepTJkwidUG2eWzqrCBGo/PmbFk+qNaP
+ sRksuQk1X3MzsgiJ91J5rPpdj6OlMwmhCX+qVTm/Cf2UA5OXxgsFV7REYfJ8tB3CriSXRWdnO
+ xQfe4WQN7XEhh9F0rYCQr2ZcINGNfsiYHUsgpPuTFo0vVAWbEl33OrCq58YapUtU/b0qx7RU3
+ rKNtJ1XI/4PFfR5ijFsMfh0BHZlfKvXXSZBpWCtWIgUb2GoBg8Asb3VV+qM4Iqydg+xblB2je
+ puVy7ZiRgtx7Z/T4tyfxu5a2HoJG4mNpar88CjZgULnq76XsE5G3i0V4vvmpbQq39k96QEAz0
+ md1LN54waqAo/0RQzm4rUMM1CIrGSxkQaCpakRymWPeoHMgX06izu98JMMqD5T+AqcmLSTG58
+ 2x3Oawb20xVtpIJEUMTvyBw/zWsK8+8neeakDSCy1d4HZRRAUBSd46YScttjlb+7dWWq4zTAi
+ rPy9xM7y8N2ALmUBZrxo5xiloDA4aDXFodQ/FT2cTvzunTZotsZ2EZj+coucMV5JT3dHBB1u5
+ IrUA/N9S0oc0hRD5nywZWRj9YZ09V4euxo
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 12:51:56AM +0800, Boqun Feng wrote:
-> Hi,
-> 
-> On Wed, Mar 31, 2021 at 02:30:32PM +0000, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> > 
-> > Some architectures don't have sub-word swap atomic instruction,
-> > they only have the full word's one.
-> > 
-> > The sub-word swap only improve the performance when:
-> > NR_CPUS < 16K
-> >  *  0- 7: locked byte
-> >  *     8: pending
-> >  *  9-15: not used
-> >  * 16-17: tail index
-> >  * 18-31: tail cpu (+1)
-> > 
-> > The 9-15 bits are wasted to use xchg16 in xchg_tail.
-> > 
-> > Please let architecture select xchg16/xchg32 to implement
-> > xchg_tail.
-> > 
-> 
-> If the architecture doesn't have sub-word swap atomic, won't it generate
-> the same/similar code no matter which version xchg_tail() is used? That
-> is even CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y, xchg_tail() acts
-> similar to an xchg16() implemented by cmpxchg(), which means we still
-> don't have forward progress guarantee. So this configuration doesn't
-> solve the problem.
-> 
-> I think it's OK to introduce this config and don't provide xchg16() for
-> risc-v. But I don't see the point of converting other architectures to
-> use it.
+On Tue, Apr 6, 2021 at 10:56 AM Stafford Horne <shorne@gmail.com> wrote:
+> On Tue, Apr 06, 2021 at 11:50:38AM +0800, Guo Ren wrote:
+> > On Wed, Mar 31, 2021 at 3:23 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Wed, Mar 31, 2021 at 12:35 AM Stafford Horne <shorne@gmail.com> wrote:
+> >
+> > We shouldn't export xchg16/cmpxchg16(emulated by lr.w/sc.w) in riscv,
+> > We should forbid these sub-word atomic primitive and lets the
+> > programmers consider their atomic design.
+>
+> Fair enough, having the generic sub-word emulation would be something that
+> an architecture can select to use/export.
 
-Hello,
+I still have the feeling that we should generalize and unify the exact behavior
+across architectures as much as possible here, while possibly also trying to
+simplify the interface a little.
 
-For OpenRISC I did ack the patch to convert to
-CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y.  But I think you are right, the
-generic code in xchg_tail and the xchg16 emulation code in produced by OpenRISC
-using xchg32 would produce very similar code.  I have not compared instructions,
-but it does seem like duplicate functionality.
+Looking through the various xchg()/cmpxchg() implementations, I find eight
+distinct ways to do 8-bit and 16-bit atomics:
 
-Why doesn't RISC-V add the xchg16 emulation code similar to OpenRISC?  For
-OpenRISC we added xchg16 and xchg8 emulation code to enable qspinlocks.  So
-one thought is with CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y, can we remove our
-xchg16/xchg8 emulation code?
+Full support:
+      ia64, m68k (Atari only), x86, arm32 (v6k+), arm64
 
--Stafford
+gcc/clang __sync_{val,bool}_compare_and_swap:
+     s390
+
+Emulated through ll/sc:
+      alpha, powerpc
+
+Emulated through cmpxchg loop:
+      mips, openrisc, xtensa (xchg but not cmpxchg), sparc64 (cmpxchg_u8,
+      xchg_u16 but not cmpxchg_u16 and xchg_u8!)
+
+Emulated through local_irq_save (non SMP only):
+        h8300, m68k (most), microblaze, mips, nds32, nios2
+
+Emulated through hashed spinlock:
+        parisc (8-bit only added in 2020, 16-bit still missing)
+
+Forced compile-time error:
+       arm32 (v4/v5/v6 non-SMP), arc, csky, riscv, parisc (16 bit), sparc32,
+       sparc64, xtensa (cmpxchg)
+
+Silently broken:
+        hexagon
+
+Since there are really only a handful of instances in the kernel
+that use the cmpxchg() or xchg() on u8/u16 variables, it would seem
+best to just disallow those completely and have a separate set of
+functions here, with only 64-bit architectures using any variable-type
+wrapper to handle both 32-bit and 64-bit arguments.
+
+Interestingly, the s390 version using __sync_val_compare_and_swap()
+seems to produce nice output on all architectures that have atomic
+instructions, with any supported compiler, to the point where I think
+we could just use that to replace most of the inline-asm versions except
+for arm64:
+
+#define cmpxchg(ptr, o, n)                                              \
+({                                                                      \
+        __typeof__(*(ptr)) __o = (o);                                   \
+        __typeof__(*(ptr)) __n = (n);                                   \
+        (__typeof__(*(ptr))) __sync_val_compare_and_swap((ptr),__o,__n);\
+})
+
+Not how gcc's acquire/release behavior of __sync_val_compare_and_swap()
+relates to what the kernel wants here.
+
+The gcc documentation also recommends using the standard
+__atomic_compare_exchange_n() builtin instead, which would allow
+constructing release/acquire/relaxed versions as well, but I could not
+get it to produce equally good output. (possibly I was using it wrong)
+
+       Arnd
