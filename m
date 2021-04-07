@@ -2,79 +2,107 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 787C3356853
-	for <lists+linux-csky@lfdr.de>; Wed,  7 Apr 2021 11:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E58B356B5E
+	for <lists+linux-csky@lfdr.de>; Wed,  7 Apr 2021 13:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350286AbhDGJsp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 7 Apr 2021 05:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        id S1347092AbhDGLhK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 7 Apr 2021 07:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350284AbhDGJsp (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 7 Apr 2021 05:48:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D6EC061756;
-        Wed,  7 Apr 2021 02:48:35 -0700 (PDT)
+        with ESMTP id S235017AbhDGLhK (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 7 Apr 2021 07:37:10 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DE2C061756;
+        Wed,  7 Apr 2021 04:37:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+qSokmLjMhdEnOSkSopblq5MKalEi8UUYD3QbqGxqos=; b=eC2rQ34nM7cRrzDAhzzhEN3wPe
-        kTzKVXiPYsQriyTitj8XaOZiOMYSs2CmPna+vSZrzx2X+AyYzDfGkh6XwDeUaP/R2Sdhw0fUQHZoE
-        xcIkVZ9BgwAGrHrQdPx1JVxc28uo8a4iZ5LllVP7TnFFfJ9CG+a4lOMAZ0xT4W5AUDITT4PKOzipn
-        iYX5eNIGnsNYC8ByBciAnWPp9g9vDQf8R7DSJ/g+l6EF+CP1ntsJaOLY4qb8I0kMJDUqs+viQJKqd
-        up6N4jP4nowpqWEIhSTtf6tIwQksMPnvi+P/KtQNQPk3PhCqoIF2gV1qmvrv5jzGvLRrNMJHVDhzZ
-        FeCH/O7Q==;
+        bh=2t0FxK0eZ9tbM+DeDFFhi/Gfb5dxvlFCBC8Lc3GTEVc=; b=eu1QGQ+xTWtWV/pDVqaRjoR9in
+        umqpvmIlS2xj4iQzqX+NQh9c/SqNW+BQ94JOjLI+oIxPu/q65tC4XlR6WB0hDa6cFosY7pnhBfmpe
+        /fIEyDMEj3+lAgjXFbtVeUVJsI7eteDFxnY+ozO4/A0mdDspFTfYZYdU3258xlXaWocHbHSZ+vm4P
+        LV4o+de+6wSxUmdpJtyAricd4yRdhD+REoFgz1Yiutyf/hIisjliBcoxOOjasArYbxxctlMM7+zR4
+        25AMoqKeYu9cz0p3x+6htfPpkwOjJ5YXYx3J6Dh1XMjj7d4jnvMNZKK0cBVeCsVGMvL8sTXW7aptZ
+        n58nqxdA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lU4ms-00EGP6-RS; Wed, 07 Apr 2021 09:47:54 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lU6UI-004tQo-A8; Wed, 07 Apr 2021 11:36:50 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 44BCF300119;
-        Wed,  7 Apr 2021 11:47:49 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 66B363001FB;
+        Wed,  7 Apr 2021 13:36:45 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 27BB724403DB8; Wed,  7 Apr 2021 11:47:49 +0200 (CEST)
-Date:   Wed, 7 Apr 2021 11:47:49 +0200
+        id 4D45A23D3AF81; Wed,  7 Apr 2021 13:36:45 +0200 (CEST)
+Date:   Wed, 7 Apr 2021 13:36:45 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, guoren@kernel.org,
-        linux-arch@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Stafford Horne <shorne@gmail.com>, Guo Ren <guoren@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, Anup Patel <anup@brainfault.org>,
-        sparclinux@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [OpenRISC] [PATCH v6 1/9] locking/qspinlock: Add
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v4 3/4] locking/qspinlock: Add
  ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-Message-ID: <YG1/xRgWlLHD4j/8@hirez.programming.kicks-ass.net>
-References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
- <1617201040-83905-2-git-send-email-guoren@kernel.org>
- <YGyRrBjomDCPOBUd@boqun-archlinux>
- <20210406235208.GG3288043@lianli.shorne-pla.net>
+Message-ID: <YG2ZTSFMGrikYWuL@hirez.programming.kicks-ass.net>
+References: <YGG5c4QGq6q+lKZI@hirez.programming.kicks-ass.net>
+ <CAJF2gTQUe237NY-kh+4_Yk4DTFJmA5_xgNQ5+BMpFZpUDUEYdw@mail.gmail.com>
+ <YGHM2/s4FpWZiEQ6@hirez.programming.kicks-ass.net>
+ <CAJF2gTRncV1+GT7nBpYkvfpyaG57o9ecaHBjoR6gEQAkG2ELrg@mail.gmail.com>
+ <YGNNCEAMSWbBU+hd@hirez.programming.kicks-ass.net>
+ <20210330223514.GE1171117@lianli.shorne-pla.net>
+ <CAK8P3a0hj2pYr-CuNJkjO==RafZ=J+6kCo4HTWEwvvRXPcngJA@mail.gmail.com>
+ <CAJF2gTRxPMURTE3M5WMQ_0q1yZ6K8nraGsFjGLUmpG9nYS_hng@mail.gmail.com>
+ <20210406085626.GE3288043@lianli.shorne-pla.net>
+ <CAK8P3a3Pf3TbGoVP7JP7gfPV-WDM8MHV_hdqSwNKKFDr1Sb3zQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210406235208.GG3288043@lianli.shorne-pla.net>
+In-Reply-To: <CAK8P3a3Pf3TbGoVP7JP7gfPV-WDM8MHV_hdqSwNKKFDr1Sb3zQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 08:52:08AM +0900, Stafford Horne wrote:
-> Why doesn't RISC-V add the xchg16 emulation code similar to OpenRISC?  For
-> OpenRISC we added xchg16 and xchg8 emulation code to enable qspinlocks.  So
-> one thought is with CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y, can we remove our
-> xchg16/xchg8 emulation code?
+On Wed, Apr 07, 2021 at 10:42:50AM +0200, Arnd Bergmann wrote:
+> Since there are really only a handful of instances in the kernel
+> that use the cmpxchg() or xchg() on u8/u16 variables, it would seem
+> best to just disallow those completely 
 
-CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32 is guaranteed crap.
+Not going to happen. xchg16 is optimal for qspinlock and if we replace
+that with a cmpxchg loop on x86 we're regressing.
 
-All the architectures that have wanted it are RISC style LL/SC archs,
-and for them a cmpxchg loop is a daft thing to do, since it reduces the
-chance of it behaving sanely.
+> Interestingly, the s390 version using __sync_val_compare_and_swap()
+> seems to produce nice output on all architectures that have atomic
+> instructions, with any supported compiler, to the point where I think
+> we could just use that to replace most of the inline-asm versions except
+> for arm64:
+> 
+> #define cmpxchg(ptr, o, n)                                              \
+> ({                                                                      \
+>         __typeof__(*(ptr)) __o = (o);                                   \
+>         __typeof__(*(ptr)) __n = (n);                                   \
+>         (__typeof__(*(ptr))) __sync_val_compare_and_swap((ptr),__o,__n);\
+> })
 
-Why would we provide something that's known to be suboptimal? If an
-architecture chooses to not care about determinism and or fwd progress,
-then that's their choice. But not one, I feel, we should encourage.
+It generates the LL/SC loop, but doesn't do sensible optimizations when
+it's again used in a loop itself. That is, it generates a loop of a
+loop, just like what you'd expect, which is sub-optimal for LL/SC.
 
+> Not how gcc's acquire/release behavior of __sync_val_compare_and_swap()
+> relates to what the kernel wants here.
+> 
+> The gcc documentation also recommends using the standard
+> __atomic_compare_exchange_n() builtin instead, which would allow
+> constructing release/acquire/relaxed versions as well, but I could not
+> get it to produce equally good output. (possibly I was using it wrong)
+
+I'm scared to death of the C11 crap, the compiler will 'optimize' them
+when it feels like it and use the C11 memory model rules for it, which
+are not compatible with the kernel rules.
+
+But the same thing applies, it won't do the right thing for composites.
