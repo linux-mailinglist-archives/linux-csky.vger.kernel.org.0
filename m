@@ -2,86 +2,102 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDED358D25
-	for <lists+linux-csky@lfdr.de>; Thu,  8 Apr 2021 21:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E5835B1D8
+	for <lists+linux-csky@lfdr.de>; Sun, 11 Apr 2021 07:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbhDHTBj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 8 Apr 2021 15:01:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25768 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232874AbhDHTBg (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 8 Apr 2021 15:01:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617908468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gYj2NbbPHdZxWOqVjXDc+Fhrs0vHkYF53Hr5bnrf7Wk=;
-        b=F8a0PaSC73inoKk2PXNrM3Ut//TPar/dx/S6sKGAwzgEz7yAJ1NYGwn2gWMlnHEUvPyfAQ
-        5EtmeKTBfiN3T2DuQNP7lipFN3TfS6pE3KSJzOSk/6QZGeT7T9GtThvUpE8yQWuwjvNVRr
-        8MbX/8vqgd4n4afJHlfb41lqHEDh+vA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-362-nv9j8raePK-o-0Web69C_A-1; Thu, 08 Apr 2021 15:01:04 -0400
-X-MC-Unique: nv9j8raePK-o-0Web69C_A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C25331883527;
-        Thu,  8 Apr 2021 19:01:02 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-119-36.rdu2.redhat.com [10.10.119.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 12A63101F501;
-        Thu,  8 Apr 2021 19:00:59 +0000 (UTC)
-Subject: Re: [OpenRISC] [PATCH v6 1/9] locking/qspinlock: Add
- ARCH_USE_QUEUED_SPINLOCKS_XCHG32
-To:     Stafford Horne <shorne@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     guoren@kernel.org, linux-arch@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        Anup Patel <anup@brainfault.org>, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        Ingo Molnar <mingo@redhat.com>
-References: <1617201040-83905-1-git-send-email-guoren@kernel.org>
- <1617201040-83905-2-git-send-email-guoren@kernel.org>
- <YGyRrBjomDCPOBUd@boqun-archlinux>
- <20210406235208.GG3288043@lianli.shorne-pla.net>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <1199af5f-275a-5812-fc73-f1d33449036b@redhat.com>
-Date:   Thu, 8 Apr 2021 15:00:59 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S230103AbhDKFyH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 11 Apr 2021 01:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229792AbhDKFyH (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 11 Apr 2021 01:54:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2A6C06138B;
+        Sat, 10 Apr 2021 22:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=SaNBURFA0COj7csdi3RrmkJ1pw97mCX9cbVvlM/9+g8=; b=bIe+F5I1L6nn9iWW8iQEFhxYaD
+        Fuz75mOt8HRpbB44011Fsk4+wkhJ4o7BoEXeCszj2O0XcaBRL/yo1+ifZmveaYVSbyh0Wa/1NI5ZH
+        Un+n+36mLmLB1ZM4pYIAqbZv6m09IqwRO/kAlp8RzzGkqziFMmn78lcDKr8R7TBLZmuZblGjoDLcs
+        azM/+se24lDreM45gtgDRmHwOWe8zUJ683RZ2NPAJvypulwofA3jdzOVzlqxcvcwQM2yHC2oCK1Pa
+        3burDeVZtLCsJ/GJPltB8yTrovcsTBT4HJ/eW2iTPHCBYUARpolw7SOQKX5zaFQ3NdVvxurcPD5fE
+        0PJmb5jg==;
+Received: from [2601:1c0:6280:3f0::e0e1] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lVT2T-002cUV-HL; Sun, 11 Apr 2021 05:53:43 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
+Subject: [PATCH RESEND] csky: change a Kconfig symbol name to fix e1000 build error
+Date:   Sat, 10 Apr 2021 22:53:35 -0700
+Message-Id: <20210411055335.7111-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20210406235208.GG3288043@lianli.shorne-pla.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 4/6/21 7:52 PM, Stafford Horne wrote:
->
-> For OpenRISC I did ack the patch to convert to
-> CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y.  But I think you are right, the
-> generic code in xchg_tail and the xchg16 emulation code in produced by OpenRISC
-> using xchg32 would produce very similar code.  I have not compared instructions,
-> but it does seem like duplicate functionality.
->
-> Why doesn't RISC-V add the xchg16 emulation code similar to OpenRISC?  For
-> OpenRISC we added xchg16 and xchg8 emulation code to enable qspinlocks.  So
-> one thought is with CONFIG_ARCH_USE_QUEUED_SPINLOCKS_XCHG32=y, can we remove our
-> xchg16/xchg8 emulation code?
+e1000's #define of CONFIG_RAM_BASE conflicts with a Kconfig symbol in
+arch/csky/Kconfig.
+The symbol in e1000 has been around longer, so change arch/csky/
+to use DRAM_BASE instead of RAM_BASE to remove the conflict.
+(although e1000 is also a 2-line change)
 
-For the record, the latest qspinlock code doesn't use xchg8 anymore. It 
-still need xchg16, though.
+Now build-tested.
 
-Cheers,
-Longman
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: intel-wired-lan@lists.osuosl.org
+Cc: Guo Ren <guoren@linux.alibaba.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Acked-by: Guo Ren <guoren@kernel.org>
+---
+Andrew, please merge.
 
+v2: Add Acked-by: Guo Ren
+    Has now been build-tested.
+
+IMO "CONFIG_" namespace should belong to Kconfig files, not
+individual drivers, but e1000 isn't the only driver that uses
+CONFIG_ symbols.
+
+ arch/csky/Kconfig            |    2 +-
+ arch/csky/include/asm/page.h |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--- linux-next-20210409.orig/arch/csky/include/asm/page.h
++++ linux-next-20210409/arch/csky/include/asm/page.h
+@@ -28,7 +28,7 @@
+ #define SSEG_SIZE	0x20000000
+ #define LOWMEM_LIMIT	(SSEG_SIZE * 2)
+ 
+-#define PHYS_OFFSET_OFFSET (CONFIG_RAM_BASE & (SSEG_SIZE - 1))
++#define PHYS_OFFSET_OFFSET (CONFIG_DRAM_BASE & (SSEG_SIZE - 1))
+ 
+ #ifndef __ASSEMBLY__
+ 
+--- linux-next-20210409.orig/arch/csky/Kconfig
++++ linux-next-20210409/arch/csky/Kconfig
+@@ -314,7 +314,7 @@ config FORCE_MAX_ZONEORDER
+ 	int "Maximum zone order"
+ 	default "11"
+ 
+-config RAM_BASE
++config DRAM_BASE
+ 	hex "DRAM start addr (the same with memory-section in dts)"
+ 	default 0x0
+ 
