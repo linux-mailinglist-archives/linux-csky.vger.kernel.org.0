@@ -2,66 +2,76 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 546413604E0
-	for <lists+linux-csky@lfdr.de>; Thu, 15 Apr 2021 10:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF093360A51
+	for <lists+linux-csky@lfdr.de>; Thu, 15 Apr 2021 15:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbhDOIxB (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 15 Apr 2021 04:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbhDOIxB (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 15 Apr 2021 04:53:01 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF35FC061574;
-        Thu, 15 Apr 2021 01:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4CBfBwbeMsKIjwkyJR8CxYymWxWHjQjc6bfUFfaI+Gs=; b=QBDzWwCqnCVNNJJRT76eqhcTut
-        LJyRWhwc+cIYbhVTOqkQGWi8yzOpqbWFL7LnP+ig0xblXqVeDfiwKS8mxZHxfCuCHgDI26Q1SKUip
-        SpSPh9jEZO/jl+4AmGezYhmakcrF3eLNvr5+WXdlE2auoWnTq/p57pHByXajtxuzVaZiBdXoc+5eK
-        zRe4DFDcdkusDn/wXnN71n1RP6tOTnGAo5k7qDpmG5BGvh2BfCj138t/ZFnna4utbjxiGi3bp5Igs
-        KginFPVdzlX0JCklTMbn4AJWL/L5N8Ff4d4IkUIJgcVFhU4lwsqIGi1A8kUFMzY1nh7RF8kAQLD0f
-        9T315q8g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lWxjk-00FPvr-8a; Thu, 15 Apr 2021 08:52:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6ED28300033;
-        Thu, 15 Apr 2021 10:52:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 566E32022422C; Thu, 15 Apr 2021 10:52:31 +0200 (CEST)
-Date:   Thu, 15 Apr 2021 10:52:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     guoren@kernel.org
-Cc:     Anup.Patel@wdc.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        id S232716AbhDONQJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 15 Apr 2021 09:16:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230202AbhDONQI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 15 Apr 2021 09:16:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 629C161249;
+        Thu, 15 Apr 2021 13:15:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618492545;
+        bh=CBNjr3AxBARmjy8Ci1TwNIUkQ2u/unZwMvqua1P3OmA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lAe/oBzGAkjcRpE1psbxEBjcOuUPSnZHWgAIP492dc+WaHiyaFzNP/blo5D0aM9s5
+         kcpPAxWNPbzRdR+sDHpnds82ItqaKSM4IePKgU2ZP2pjFcSoixJGFFBXDLlv1rD5Tx
+         396TxqC5l+hq7FCVtrdZ92WLqeQQr3ReAVSmuoPho8YwOAGKephnWH2wNDRufWzhCo
+         8Rrd9BYz/7XrTHvUsyNHl5IETovmtbxxjMCI4eZt+t6BrRMuGJIFB7D0gHpBl98bjN
+         0LTebYclB0ln647iF2s6F82eHUjdSaeM5wEzFp7pVdo/uFg42VRGETrMQxjTSJYKU7
+         nJ1uqORBC0g/Q==
+Received: by mail-lf1-f48.google.com with SMTP id 12so39001046lfq.13;
+        Thu, 15 Apr 2021 06:15:45 -0700 (PDT)
+X-Gm-Message-State: AOAM530dpbQ/W+jrfWeicNub8+EAmoI039jw5Ck1gW57NoFp8tcVCKoJ
+        Dzfd7PJ8/DuZ3CPSh/CrcSFJtLDyADvHPtZWD0g=
+X-Google-Smtp-Source: ABdhPJzwnmsP4WZeNpgfK/xKMZPMcbAQIJRnbGcOLkvM8+Q7NnxMly071ZBmAQhcthXX2SrLsntKAnToaUnnxNkn9gE=
+X-Received: by 2002:ac2:55b8:: with SMTP id y24mr2529050lfg.24.1618492543822;
+ Thu, 15 Apr 2021 06:15:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <1618472362-85193-1-git-send-email-guoren@kernel.org> <YHf+z0AotZmjvaJ/@hirez.programming.kicks-ass.net>
+In-Reply-To: <YHf+z0AotZmjvaJ/@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 15 Apr 2021 21:15:32 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT7ft8xNkQcAef1XFuWsVdNHcoGMZt-mWFmk47fKh0ecg@mail.gmail.com>
+Message-ID: <CAJF2gTT7ft8xNkQcAef1XFuWsVdNHcoGMZt-mWFmk47fKh0ecg@mail.gmail.com>
+Subject: Re: [PATCH] riscv: atomic: Using ARCH_ATOMIC in asm/atomic.h
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Anup Patel <Anup.Patel@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup@brainfault.org>,
         Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH] riscv: atomic: Using ARCH_ATOMIC in asm/atomic.h
-Message-ID: <YHf+z0AotZmjvaJ/@hirez.programming.kicks-ass.net>
-References: <1618472362-85193-1-git-send-email-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1618472362-85193-1-git-send-email-guoren@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Apr 15, 2021 at 07:39:22AM +0000, guoren@kernel.org wrote:
->  - Add atomic_andnot_* operation
+Sorry, forgot riscv32. I would fix that.
 
-> @@ -76,6 +59,12 @@ ATOMIC_OPS(sub, add, -i)
->  ATOMIC_OPS(and, and,  i)
->  ATOMIC_OPS( or,  or,  i)
->  ATOMIC_OPS(xor, xor,  i)
-> +ATOMIC_OPS(andnot, and,  -i)
+On Thu, Apr 15, 2021 at 4:52 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Apr 15, 2021 at 07:39:22AM +0000, guoren@kernel.org wrote:
+> >  - Add atomic_andnot_* operation
+>
+> > @@ -76,6 +59,12 @@ ATOMIC_OPS(sub, add, -i)
+> >  ATOMIC_OPS(and, and,  i)
+> >  ATOMIC_OPS( or,  or,  i)
+> >  ATOMIC_OPS(xor, xor,  i)
+> > +ATOMIC_OPS(andnot, and,  -i)
+>
+> ~i, surely.
 
-~i, surely.
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
