@@ -2,236 +2,696 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EA0360123
-	for <lists+linux-csky@lfdr.de>; Thu, 15 Apr 2021 06:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EE6360388
+	for <lists+linux-csky@lfdr.de>; Thu, 15 Apr 2021 09:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbhDOEkU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 15 Apr 2021 00:40:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:37228 "EHLO foss.arm.com"
+        id S231403AbhDOHkn (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 15 Apr 2021 03:40:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229450AbhDOEkT (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 15 Apr 2021 00:40:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0098113E;
-        Wed, 14 Apr 2021 21:39:55 -0700 (PDT)
-Received: from [10.163.73.114] (unknown [10.163.73.114])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A6073F73B;
-        Wed, 14 Apr 2021 21:39:49 -0700 (PDT)
-Subject: Re: [PATCH] mm: Define ARCH_HAS_FIRST_USER_ADDRESS
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     linux-s390@vger.kernel.org, x86@kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-References: <1618368899-20311-1-git-send-email-anshuman.khandual@arm.com>
- <f29ba8e2-3071-c963-1e9f-e8c88526ed8d@csgroup.eu>
- <6d24d3cc-b2df-f0d7-f4bf-f505f679c77e@arm.com>
- <ec7bbb30-dbbd-197b-4d65-eb3600fe6413@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <e9d1a342-b444-efd5-d11f-79aa4d11fabc@arm.com>
-Date:   Thu, 15 Apr 2021 10:10:38 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <ec7bbb30-dbbd-197b-4d65-eb3600fe6413@csgroup.eu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S231215AbhDOHkm (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Thu, 15 Apr 2021 03:40:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 852A76101D;
+        Thu, 15 Apr 2021 07:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618472419;
+        bh=4blNk4FjFiRNb1cmNjCunvUnxGhRMibYmE7cNitTlPU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YYoKP/d82VU7zr7mn7PtJ0mTGacBQUeWbye2cBV/TWPYAHOdmSCL9fcAIML8wEtV/
+         YAZQZ+tyd5gjRPl6mhtZnZ/7tlnQjyQ0spsD6Cl7tMK0jkKPk20JhnK4T3KhrV504V
+         dVRL+CQLBh/cU10cME+5YaK7isq90SjDzVNH2PEQMyxrr/zcsoudOVX2XqVMOYNe5Q
+         JMioyVWFHKFEH1edD1hIS2oX+K8kfeB6DPrutzg/BF0ktg6kt4oNsPe/BGs4zCzrFP
+         tQgE88bV/14soIV+aXbrcQHYao+7A8TJ9Flz2X76BuqDzhVL5BaXCkpWaRBPcEnPlc
+         I28eAeo18Wu5g==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, Anup.Patel@wdc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: [PATCH] riscv: atomic: Using ARCH_ATOMIC in asm/atomic.h
+Date:   Thu, 15 Apr 2021 07:39:22 +0000
+Message-Id: <1618472362-85193-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 4/14/21 11:40 AM, Christophe Leroy wrote:
-> 
-> 
-> Le 14/04/2021 à 07:59, Anshuman Khandual a écrit :
->>
->>
->> On 4/14/21 10:52 AM, Christophe Leroy wrote:
->>>
->>>
->>> Le 14/04/2021 à 04:54, Anshuman Khandual a écrit :
->>>> Currently most platforms define FIRST_USER_ADDRESS as 0UL duplicating the
->>>> same code all over. Instead define a new option ARCH_HAS_FIRST_USER_ADDRESS
->>>> for those platforms which would override generic default FIRST_USER_ADDRESS
->>>> value 0UL. This makes it much cleaner with reduced code.
->>>>
->>>> Cc: linux-alpha@vger.kernel.org
->>>> Cc: linux-snps-arc@lists.infradead.org
->>>> Cc: linux-arm-kernel@lists.infradead.org
->>>> Cc: linux-csky@vger.kernel.org
->>>> Cc: linux-hexagon@vger.kernel.org
->>>> Cc: linux-ia64@vger.kernel.org
->>>> Cc: linux-m68k@lists.linux-m68k.org
->>>> Cc: linux-mips@vger.kernel.org
->>>> Cc: openrisc@lists.librecores.org
->>>> Cc: linux-parisc@vger.kernel.org
->>>> Cc: linuxppc-dev@lists.ozlabs.org
->>>> Cc: linux-riscv@lists.infradead.org
->>>> Cc: linux-s390@vger.kernel.org
->>>> Cc: linux-sh@vger.kernel.org
->>>> Cc: sparclinux@vger.kernel.org
->>>> Cc: linux-um@lists.infradead.org
->>>> Cc: linux-xtensa@linux-xtensa.org
->>>> Cc: x86@kernel.org
->>>> Cc: linux-mm@kvack.org
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> ---
->>>>    arch/alpha/include/asm/pgtable.h             | 1 -
->>>>    arch/arc/include/asm/pgtable.h               | 6 ------
->>>>    arch/arm/Kconfig                             | 1 +
->>>>    arch/arm64/include/asm/pgtable.h             | 2 --
->>>>    arch/csky/include/asm/pgtable.h              | 1 -
->>>>    arch/hexagon/include/asm/pgtable.h           | 3 ---
->>>>    arch/ia64/include/asm/pgtable.h              | 1 -
->>>>    arch/m68k/include/asm/pgtable_mm.h           | 1 -
->>>>    arch/microblaze/include/asm/pgtable.h        | 2 --
->>>>    arch/mips/include/asm/pgtable-32.h           | 1 -
->>>>    arch/mips/include/asm/pgtable-64.h           | 1 -
->>>>    arch/nds32/Kconfig                           | 1 +
->>>>    arch/nios2/include/asm/pgtable.h             | 2 --
->>>>    arch/openrisc/include/asm/pgtable.h          | 1 -
->>>>    arch/parisc/include/asm/pgtable.h            | 2 --
->>>>    arch/powerpc/include/asm/book3s/pgtable.h    | 1 -
->>>>    arch/powerpc/include/asm/nohash/32/pgtable.h | 1 -
->>>>    arch/powerpc/include/asm/nohash/64/pgtable.h | 2 --
->>>>    arch/riscv/include/asm/pgtable.h             | 2 --
->>>>    arch/s390/include/asm/pgtable.h              | 2 --
->>>>    arch/sh/include/asm/pgtable.h                | 2 --
->>>>    arch/sparc/include/asm/pgtable_32.h          | 1 -
->>>>    arch/sparc/include/asm/pgtable_64.h          | 3 ---
->>>>    arch/um/include/asm/pgtable-2level.h         | 1 -
->>>>    arch/um/include/asm/pgtable-3level.h         | 1 -
->>>>    arch/x86/include/asm/pgtable_types.h         | 2 --
->>>>    arch/xtensa/include/asm/pgtable.h            | 1 -
->>>>    include/linux/mm.h                           | 4 ++++
->>>>    mm/Kconfig                                   | 4 ++++
->>>>    29 files changed, 10 insertions(+), 43 deletions(-)
->>>>
->>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
->>>> index 8ba434287387..47098ccd715e 100644
->>>> --- a/include/linux/mm.h
->>>> +++ b/include/linux/mm.h
->>>> @@ -46,6 +46,10 @@ extern int sysctl_page_lock_unfairness;
->>>>      void init_mm_internals(void);
->>>>    +#ifndef ARCH_HAS_FIRST_USER_ADDRESS
->>>
->>> I guess you didn't test it ..... :)
->>
->> In fact I did :) Though just booted it on arm64 and cross compiled on
->> multiple others platforms.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I guess for all platforms, ARCH_HAS_FIRST_USER_ADDRESS would have just
-evaluated to be false hence falling back on the generic definition. So
-this never complained during build any where or during boot on arm64.
+The linux/atomic-arch-fallback.h has been there for a while, but
+only x86 & arm64 support it. Let's make riscv follow the
+linux/arch/* development trendy and make the codes more readable
+and maintainable.
 
->>
->>>
->>> should be #ifndef CONFIG_ARCH_HAS_FIRST_USER_ADDRESS
->>
->> Right, meant that instead.
->>
->>>
->>>> +#define FIRST_USER_ADDRESS    0UL
->>>> +#endif
->>>
->>> But why do we need a config option at all for that ?
->>>
->>> Why not just:
->>>
->>> #ifndef FIRST_USER_ADDRESS
->>> #define FIRST_USER_ADDRESS    0UL
->>> #endif
->>
->> This sounds simpler. But just wondering, would not there be any possibility
->> of build problems due to compilation sequence between arch and generic code ?
->>
-> 
-> For sure it has to be addresses carefully, but there are already a lot of stuff like that around pgtables.h
-> 
-> For instance, pte_offset_kernel() has a generic definition in linux/pgtables.h based on whether it is already defined or not.
-> 
-> Taking into account that FIRST_USER_ADDRESS is today in the architectures's asm/pgtables.h, I think putting the fallback definition in linux/pgtable.h would do the trick.
+This patch also cleanup some codes:
+ - Add atomic_andnot_* operation
+ - Using amoswap.w.rl & amoswap.w.aq instructions in xchg
+ - Remove cmpxchg_acquire/release unnecessary optimization
 
-Agreed, <linux/pgtable.h> includes <asm/pgtable.h> at the beginning and
-if the arch defines FIRST_USER_ADDRESS, the generic one afterwards would
-be skipped. The following change builds on multiple platforms.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Link: https://lore.kernel.org/linux-riscv/CAK8P3a0FG3cpqBNUP7kXj3713cMUqV1WcEh-vcRnGKM00WXqxw@mail.gmail.com/
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+---
+ arch/riscv/include/asm/atomic.h  | 230 +++++++++++++++------------------------
+ arch/riscv/include/asm/cmpxchg.h | 199 ++-------------------------------
+ 2 files changed, 99 insertions(+), 330 deletions(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index ad086e6d7155..5da96f5df48f 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -7,7 +7,6 @@ config ARM
- 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
- 	select ARCH_HAS_DMA_WRITE_COMBINE if !ARM_DMA_MEM_BUFFERABLE
- 	select ARCH_HAS_ELF_RANDOMIZE
--	select ARCH_HAS_FIRST_USER_ADDRESS
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_KEEPINITRD
- 	select ARCH_HAS_KCOV
-diff --git a/arch/nds32/Kconfig b/arch/nds32/Kconfig
-index 23ec4fcc0d0f..62313902d75d 100644
---- a/arch/nds32/Kconfig
-+++ b/arch/nds32/Kconfig
-@@ -8,7 +8,6 @@ config NDS32
- 	def_bool y
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_HAS_DMA_PREP_COHERENT
--	select ARCH_HAS_FIRST_USER_ADDRESS
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
- 	select ARCH_WANT_FRAME_POINTERS if FTRACE
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 47098ccd715e..8ba434287387 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -46,10 +46,6 @@ extern int sysctl_page_lock_unfairness;
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index 400a8c8..7436981 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -8,13 +8,8 @@
+ #ifndef _ASM_RISCV_ATOMIC_H
+ #define _ASM_RISCV_ATOMIC_H
  
- void init_mm_internals(void);
- 
--#ifndef ARCH_HAS_FIRST_USER_ADDRESS
--#define FIRST_USER_ADDRESS	0UL
+-#ifdef CONFIG_GENERIC_ATOMIC64
+-# include <asm-generic/atomic64.h>
+-#else
+-# if (__riscv_xlen < 64)
+-#  error "64-bit atomics require XLEN to be at least 64"
+-# endif
 -#endif
--
- #ifndef CONFIG_NEED_MULTIPLE_NODES	/* Don't use mapnrs, do it properly */
- extern unsigned long max_mapnr;
++#include <linux/compiler.h>
++#include <linux/types.h>
  
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 5e772392a379..f3da6a5cc35a 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -28,6 +28,10 @@
- #define USER_PGTABLES_CEILING	0UL
+ #include <asm/cmpxchg.h>
+ #include <asm/barrier.h>
+@@ -25,25 +20,13 @@
+ #define __atomic_release_fence()					\
+ 	__asm__ __volatile__(RISCV_RELEASE_BARRIER "" ::: "memory");
+ 
+-static __always_inline int atomic_read(const atomic_t *v)
+-{
+-	return READ_ONCE(v->counter);
+-}
+-static __always_inline void atomic_set(atomic_t *v, int i)
+-{
+-	WRITE_ONCE(v->counter, i);
+-}
++#define arch_atomic_read(v)			__READ_ONCE((v)->counter)
++#define arch_atomic_set(v, i)			__WRITE_ONCE(((v)->counter), (i))
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-#define ATOMIC64_INIT(i) { (i) }
+-static __always_inline s64 atomic64_read(const atomic64_t *v)
+-{
+-	return READ_ONCE(v->counter);
+-}
+-static __always_inline void atomic64_set(atomic64_t *v, s64 i)
+-{
+-	WRITE_ONCE(v->counter, i);
+-}
++#define ATOMIC64_INIT				ATOMIC_INIT
++#define arch_atomic64_read			arch_atomic_read
++#define arch_atomic64_set			arch_atomic_set
  #endif
  
-+#ifndef FIRST_USER_ADDRESS
-+#define FIRST_USER_ADDRESS	0UL
+ /*
+@@ -53,7 +36,7 @@ static __always_inline void atomic64_set(atomic64_t *v, s64 i)
+  */
+ #define ATOMIC_OP(op, asm_op, I, asm_type, c_type, prefix)		\
+ static __always_inline							\
+-void atomic##prefix##_##op(c_type i, atomic##prefix##_t *v)		\
++void arch_atomic##prefix##_##op(c_type i, atomic##prefix##_t *v)	\
+ {									\
+ 	__asm__ __volatile__ (						\
+ 		"	amo" #asm_op "." #asm_type " zero, %1, %0"	\
+@@ -76,6 +59,12 @@ ATOMIC_OPS(sub, add, -i)
+ ATOMIC_OPS(and, and,  i)
+ ATOMIC_OPS( or,  or,  i)
+ ATOMIC_OPS(xor, xor,  i)
++ATOMIC_OPS(andnot, and,  -i)
++
++#define arch_atomic_andnot	arch_atomic_andnot
++#ifndef CONFIG_GENERIC_ATOMIC64
++#define arch_atomic64_andnot	arch_atomic64_andnot
++#endif
+ 
+ #undef ATOMIC_OP
+ #undef ATOMIC_OPS
+@@ -87,7 +76,7 @@ ATOMIC_OPS(xor, xor,  i)
+  */
+ #define ATOMIC_FETCH_OP(op, asm_op, I, asm_type, c_type, prefix)	\
+ static __always_inline							\
+-c_type atomic##prefix##_fetch_##op##_relaxed(c_type i,			\
++c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,		\
+ 					     atomic##prefix##_t *v)	\
+ {									\
+ 	register c_type ret;						\
+@@ -99,7 +88,7 @@ c_type atomic##prefix##_fetch_##op##_relaxed(c_type i,			\
+ 	return ret;							\
+ }									\
+ static __always_inline							\
+-c_type atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
++c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)\
+ {									\
+ 	register c_type ret;						\
+ 	__asm__ __volatile__ (						\
+@@ -112,15 +101,16 @@ c_type atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
+ 
+ #define ATOMIC_OP_RETURN(op, asm_op, c_op, I, asm_type, c_type, prefix)	\
+ static __always_inline							\
+-c_type atomic##prefix##_##op##_return_relaxed(c_type i,			\
++c_type arch_atomic##prefix##_##op##_return_relaxed(c_type i,		\
+ 					      atomic##prefix##_t *v)	\
+ {									\
+-        return atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
++        return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
+ }									\
+ static __always_inline							\
+-c_type atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
++c_type arch_atomic##prefix##_##op##_return(c_type i,			\
++						atomic##prefix##_t *v)	\
+ {									\
+-        return atomic##prefix##_fetch_##op(i, v) c_op I;		\
++        return arch_atomic##prefix##_fetch_##op(i, v) c_op I;		\
+ }
+ 
+ #ifdef CONFIG_GENERIC_ATOMIC64
+@@ -138,26 +128,26 @@ c_type atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
+ ATOMIC_OPS(add, add, +,  i)
+ ATOMIC_OPS(sub, add, +, -i)
+ 
+-#define atomic_add_return_relaxed	atomic_add_return_relaxed
+-#define atomic_sub_return_relaxed	atomic_sub_return_relaxed
+-#define atomic_add_return		atomic_add_return
+-#define atomic_sub_return		atomic_sub_return
++#define arch_atomic_add_return_relaxed		arch_atomic_add_return_relaxed
++#define arch_atomic_sub_return_relaxed		arch_atomic_sub_return_relaxed
++#define arch_atomic_add_return			arch_atomic_add_return
++#define arch_atomic_sub_return			arch_atomic_sub_return
+ 
+-#define atomic_fetch_add_relaxed	atomic_fetch_add_relaxed
+-#define atomic_fetch_sub_relaxed	atomic_fetch_sub_relaxed
+-#define atomic_fetch_add		atomic_fetch_add
+-#define atomic_fetch_sub		atomic_fetch_sub
++#define arch_atomic_fetch_add_relaxed		arch_atomic_fetch_add_relaxed
++#define arch_atomic_fetch_sub_relaxed		arch_atomic_fetch_sub_relaxed
++#define arch_atomic_fetch_add			arch_atomic_fetch_add
++#define arch_atomic_fetch_sub			arch_atomic_fetch_sub
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-#define atomic64_add_return_relaxed	atomic64_add_return_relaxed
+-#define atomic64_sub_return_relaxed	atomic64_sub_return_relaxed
+-#define atomic64_add_return		atomic64_add_return
+-#define atomic64_sub_return		atomic64_sub_return
+-
+-#define atomic64_fetch_add_relaxed	atomic64_fetch_add_relaxed
+-#define atomic64_fetch_sub_relaxed	atomic64_fetch_sub_relaxed
+-#define atomic64_fetch_add		atomic64_fetch_add
+-#define atomic64_fetch_sub		atomic64_fetch_sub
++#define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
++#define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
++#define arch_atomic64_add_return		arch_atomic64_add_return
++#define arch_atomic64_sub_return		arch_atomic64_sub_return
++
++#define arch_atomic64_fetch_add_relaxed		arch_atomic64_fetch_add_relaxed
++#define arch_atomic64_fetch_sub_relaxed		arch_atomic64_fetch_sub_relaxed
++#define arch_atomic64_fetch_add			arch_atomic64_fetch_add
++#define arch_atomic64_fetch_sub			arch_atomic64_fetch_sub
+ #endif
+ 
+ #undef ATOMIC_OPS
+@@ -172,23 +162,28 @@ ATOMIC_OPS(sub, add, +, -i)
+ #endif
+ 
+ ATOMIC_OPS(and, and, i)
++ATOMIC_OPS(andnot, and, -i)
+ ATOMIC_OPS( or,  or, i)
+ ATOMIC_OPS(xor, xor, i)
+ 
+-#define atomic_fetch_and_relaxed	atomic_fetch_and_relaxed
+-#define atomic_fetch_or_relaxed		atomic_fetch_or_relaxed
+-#define atomic_fetch_xor_relaxed	atomic_fetch_xor_relaxed
+-#define atomic_fetch_and		atomic_fetch_and
+-#define atomic_fetch_or			atomic_fetch_or
+-#define atomic_fetch_xor		atomic_fetch_xor
++#define arch_atomic_fetch_and_relaxed		arch_atomic_fetch_and_relaxed
++#define arch_atomic_fetch_andnot_relaxed	arch_atomic_fetch_andnot_relaxed
++#define arch_atomic_fetch_or_relaxed		arch_atomic_fetch_or_relaxed
++#define arch_atomic_fetch_xor_relaxed		arch_atomic_fetch_xor_relaxed
++#define arch_atomic_fetch_and			arch_atomic_fetch_and
++#define arch_atomic_fetch_andnot		arch_atomic_fetch_andnot
++#define arch_atomic_fetch_or			arch_atomic_fetch_or
++#define arch_atomic_fetch_xor			arch_atomic_fetch_xor
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-#define atomic64_fetch_and_relaxed	atomic64_fetch_and_relaxed
+-#define atomic64_fetch_or_relaxed	atomic64_fetch_or_relaxed
+-#define atomic64_fetch_xor_relaxed	atomic64_fetch_xor_relaxed
+-#define atomic64_fetch_and		atomic64_fetch_and
+-#define atomic64_fetch_or		atomic64_fetch_or
+-#define atomic64_fetch_xor		atomic64_fetch_xor
++#define arch_atomic64_fetch_and_relaxed		arch_atomic64_fetch_and_relaxed
++#define arch_atomic64_fetch_andnot_relaxed	arch_atomic64_fetch_andnot_relaxed
++#define arch_atomic64_fetch_or_relaxed		arch_atomic64_fetch_or_relaxed
++#define arch_atomic64_fetch_xor_relaxed		arch_atomic64_fetch_xor_relaxed
++#define arch_atomic64_fetch_and			arch_atomic64_fetch_and
++#define arch_atomic64_fetch_andnot		arch_atomic64_fetch_andnot
++#define arch_atomic64_fetch_or			arch_atomic64_fetch_or
++#define arch_atomic64_fetch_xor			arch_atomic64_fetch_xor
+ #endif
+ 
+ #undef ATOMIC_OPS
+@@ -197,7 +192,7 @@ ATOMIC_OPS(xor, xor, i)
+ #undef ATOMIC_OP_RETURN
+ 
+ /* This is required to provide a full barrier on success. */
+-static __always_inline int atomic_fetch_add_unless(atomic_t *v, int a, int u)
++static __always_inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
+ {
+        int prev, rc;
+ 
+@@ -214,10 +209,10 @@ static __always_inline int atomic_fetch_add_unless(atomic_t *v, int a, int u)
+ 		: "memory");
+ 	return prev;
+ }
+-#define atomic_fetch_add_unless atomic_fetch_add_unless
++#define arch_atomic_fetch_add_unless arch_atomic_fetch_add_unless
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-static __always_inline s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
++static __always_inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
+ {
+        s64 prev;
+        long rc;
+@@ -235,82 +230,10 @@ static __always_inline s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u
+ 		: "memory");
+ 	return prev;
+ }
+-#define atomic64_fetch_add_unless atomic64_fetch_add_unless
++#define arch_atomic64_fetch_add_unless		arch_atomic64_fetch_add_unless
+ #endif
+ 
+-/*
+- * atomic_{cmp,}xchg is required to have exactly the same ordering semantics as
+- * {cmp,}xchg and the operations that return, so they need a full barrier.
+- */
+-#define ATOMIC_OP(c_t, prefix, size)					\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg_relaxed(atomic##prefix##_t *v, c_t n)		\
+-{									\
+-	return __xchg_relaxed(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg_acquire(atomic##prefix##_t *v, c_t n)		\
+-{									\
+-	return __xchg_acquire(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg_release(atomic##prefix##_t *v, c_t n)		\
+-{									\
+-	return __xchg_release(&(v->counter), n, size);			\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_xchg(atomic##prefix##_t *v, c_t n)			\
+-{									\
+-	return __xchg(&(v->counter), n, size);				\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg_relaxed(atomic##prefix##_t *v,		\
+-				     c_t o, c_t n)			\
+-{									\
+-	return __cmpxchg_relaxed(&(v->counter), o, n, size);		\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg_acquire(atomic##prefix##_t *v,		\
+-				     c_t o, c_t n)			\
+-{									\
+-	return __cmpxchg_acquire(&(v->counter), o, n, size);		\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg_release(atomic##prefix##_t *v,		\
+-				     c_t o, c_t n)			\
+-{									\
+-	return __cmpxchg_release(&(v->counter), o, n, size);		\
+-}									\
+-static __always_inline							\
+-c_t atomic##prefix##_cmpxchg(atomic##prefix##_t *v, c_t o, c_t n)	\
+-{									\
+-	return __cmpxchg(&(v->counter), o, n, size);			\
+-}
+-
+-#ifdef CONFIG_GENERIC_ATOMIC64
+-#define ATOMIC_OPS()							\
+-	ATOMIC_OP(int,   , 4)
+-#else
+-#define ATOMIC_OPS()							\
+-	ATOMIC_OP(int,   , 4)						\
+-	ATOMIC_OP(s64, 64, 8)
+-#endif
+-
+-ATOMIC_OPS()
+-
+-#define atomic_xchg_relaxed atomic_xchg_relaxed
+-#define atomic_xchg_acquire atomic_xchg_acquire
+-#define atomic_xchg_release atomic_xchg_release
+-#define atomic_xchg atomic_xchg
+-#define atomic_cmpxchg_relaxed atomic_cmpxchg_relaxed
+-#define atomic_cmpxchg_acquire atomic_cmpxchg_acquire
+-#define atomic_cmpxchg_release atomic_cmpxchg_release
+-#define atomic_cmpxchg atomic_cmpxchg
+-
+-#undef ATOMIC_OPS
+-#undef ATOMIC_OP
+-
+-static __always_inline int atomic_sub_if_positive(atomic_t *v, int offset)
++static __always_inline int arch_atomic_sub_if_positive(atomic_t *v, int offset)
+ {
+        int prev, rc;
+ 
+@@ -327,11 +250,11 @@ static __always_inline int atomic_sub_if_positive(atomic_t *v, int offset)
+ 		: "memory");
+ 	return prev - offset;
+ }
++#define arch_atomic_dec_if_positive(v)	arch_atomic_sub_if_positive(v, 1)
+ 
+-#define atomic_dec_if_positive(v)	atomic_sub_if_positive(v, 1)
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-static __always_inline s64 atomic64_sub_if_positive(atomic64_t *v, s64 offset)
++static __always_inline s64 arch_atomic64_sub_if_positive(atomic64_t *v, s64 offset)
+ {
+        s64 prev;
+        long rc;
+@@ -349,8 +272,35 @@ static __always_inline s64 atomic64_sub_if_positive(atomic64_t *v, s64 offset)
+ 		: "memory");
+ 	return prev - offset;
+ }
++#define arch_atomic64_dec_if_positive(v)	arch_atomic64_sub_if_positive(v, 1)
 +#endif
 +
- /*
-  * A page table page can be thought of an array like this: pXd_t[PTRS_PER_PxD]
-  *
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 373fbe377075..4494501aa403 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -807,9 +807,6 @@ config VMAP_PFN
- config ARCH_USES_HIGH_VMA_FLAGS
- 	bool
++#define arch_atomic_xchg_relaxed(v, new) \
++	arch_xchg_relaxed(&((v)->counter), (new))
++#define arch_atomic_xchg_acquire(v, new) \
++	arch_xchg_acquire(&((v)->counter), (new))
++#define arch_atomic_xchg_release(v, new) \
++	arch_xchg_release(&((v)->counter), (new))
++#define arch_atomic_xchg(v, new) \
++	arch_xchg(&((v)->counter), (new))
++
++#define arch_atomic_cmpxchg_relaxed(v, old, new) \
++	arch_cmpxchg_relaxed(&((v)->counter), (old), (new))
++#define arch_atomic_cmpxchg_acquire(v, old, new) \
++	arch_cmpxchg_acquire(&((v)->counter), (old), (new))
++#define arch_atomic_cmpxchg_release(v, old, new) \
++	arch_cmpxchg_release(&((v)->counter), (old), (new))
++#define arch_atomic_cmpxchg(v, old, new) \
++	arch_cmpxchg(&((v)->counter), (old), (new))
  
--config ARCH_HAS_FIRST_USER_ADDRESS
--	bool
+-#define atomic64_dec_if_positive(v)	atomic64_sub_if_positive(v, 1)
++#ifndef CONFIG_GENERIC_ATOMIC64
++#define arch_atomic64_xchg_relaxed		arch_atomic_xchg_relaxed
++#define arch_atomic64_xchg			arch_atomic_xchg
++
++#define arch_atomic64_cmpxchg_relaxed		arch_atomic_cmpxchg_relaxed
++#define arch_atomic64_cmpxchg			arch_atomic_cmpxchg
+ #endif
+ 
++#define ARCH_ATOMIC
++
+ #endif /* _ASM_RISCV_ATOMIC_H */
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 262e5bb..16195a6 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -37,7 +37,7 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg_relaxed(ptr, x)						\
++#define arch_xchg_relaxed(ptr, x)					\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg_relaxed((ptr),			\
+@@ -52,16 +52,14 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			"	amoswap.w %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
++			"	amoswap.w.aq %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			"	amoswap.d %0, %2, %1\n"			\
+-			RISCV_ACQUIRE_BARRIER				\
++			"	amoswap.d.aq %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+@@ -72,7 +70,7 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg_acquire(ptr, x)						\
++#define arch_xchg_acquire(ptr, x)					\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg_acquire((ptr),			\
+@@ -87,16 +85,14 @@
+ 	switch (size) {							\
+ 	case 4:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.w %0, %2, %1\n"			\
++			"	amoswap.w.rl %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+ 		break;							\
+ 	case 8:								\
+ 		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"	amoswap.d %0, %2, %1\n"			\
++			"	amoswap.d.rl %0, %2, %1\n"		\
+ 			: "=r" (__ret), "+A" (*__ptr)			\
+ 			: "r" (__new)					\
+ 			: "memory");					\
+@@ -107,7 +103,7 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg_release(ptr, x)						\
++#define arch_xchg_release(ptr, x)					\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg_release((ptr),			\
+@@ -140,24 +136,12 @@
+ 	__ret;								\
+ })
+ 
+-#define xchg(ptr, x)							\
++#define arch_xchg(ptr, x)						\
+ ({									\
+ 	__typeof__(*(ptr)) _x_ = (x);					\
+ 	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
+ })
+ 
+-#define xchg32(ptr, x)							\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	xchg((ptr), (x));						\
+-})
 -
- config ARCH_HAS_PKEYS
- 	bool
+-#define xchg64(ptr, x)							\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+-	xchg((ptr), (x));						\
+-})
+-
+ /*
+  * Atomic compare and exchange.  Compare OLD with MEM, if identical,
+  * store NEW in MEM.  Return the initial value in MEM.  Success is
+@@ -199,7 +183,7 @@
+ 	__ret;								\
+ })
  
+-#define cmpxchg_relaxed(ptr, o, n)					\
++#define arch_cmpxchg_relaxed(ptr, o, n)					\
+ ({									\
+ 	__typeof__(*(ptr)) _o_ = (o);					\
+ 	__typeof__(*(ptr)) _n_ = (n);					\
+@@ -207,169 +191,4 @@
+ 					_o_, _n_, sizeof(*(ptr)));	\
+ })
+ 
+-#define __cmpxchg_acquire(ptr, old, new, size)				\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(*(ptr)) __old = (old);				\
+-	__typeof__(*(ptr)) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;					\
+-	register unsigned int __rc;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.w %0, %2\n"				\
+-			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			RISCV_ACQUIRE_BARRIER				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" ((long)__old), "rJ" (__new)		\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.d %0, %2\n"				\
+-			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			RISCV_ACQUIRE_BARRIER				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" (__old), "rJ" (__new)			\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define cmpxchg_acquire(ptr, o, n)					\
+-({									\
+-	__typeof__(*(ptr)) _o_ = (o);					\
+-	__typeof__(*(ptr)) _n_ = (n);					\
+-	(__typeof__(*(ptr))) __cmpxchg_acquire((ptr),			\
+-					_o_, _n_, sizeof(*(ptr)));	\
+-})
+-
+-#define __cmpxchg_release(ptr, old, new, size)				\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(*(ptr)) __old = (old);				\
+-	__typeof__(*(ptr)) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;					\
+-	register unsigned int __rc;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"0:	lr.w %0, %2\n"				\
+-			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" ((long)__old), "rJ" (__new)		\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			RISCV_RELEASE_BARRIER				\
+-			"0:	lr.d %0, %2\n"				\
+-			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" (__old), "rJ" (__new)			\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define cmpxchg_release(ptr, o, n)					\
+-({									\
+-	__typeof__(*(ptr)) _o_ = (o);					\
+-	__typeof__(*(ptr)) _n_ = (n);					\
+-	(__typeof__(*(ptr))) __cmpxchg_release((ptr),			\
+-					_o_, _n_, sizeof(*(ptr)));	\
+-})
+-
+-#define __cmpxchg(ptr, old, new, size)					\
+-({									\
+-	__typeof__(ptr) __ptr = (ptr);					\
+-	__typeof__(*(ptr)) __old = (old);				\
+-	__typeof__(*(ptr)) __new = (new);				\
+-	__typeof__(*(ptr)) __ret;					\
+-	register unsigned int __rc;					\
+-	switch (size) {							\
+-	case 4:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.w %0, %2\n"				\
+-			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w.rl %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" ((long)__old), "rJ" (__new)		\
+-			: "memory");					\
+-		break;							\
+-	case 8:								\
+-		__asm__ __volatile__ (					\
+-			"0:	lr.d %0, %2\n"				\
+-			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d.rl %1, %z4, %2\n"			\
+-			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+-			"1:\n"						\
+-			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+-			: "rJ" (__old), "rJ" (__new)			\
+-			: "memory");					\
+-		break;							\
+-	default:							\
+-		BUILD_BUG();						\
+-	}								\
+-	__ret;								\
+-})
+-
+-#define cmpxchg(ptr, o, n)						\
+-({									\
+-	__typeof__(*(ptr)) _o_ = (o);					\
+-	__typeof__(*(ptr)) _n_ = (n);					\
+-	(__typeof__(*(ptr))) __cmpxchg((ptr),				\
+-				       _o_, _n_, sizeof(*(ptr)));	\
+-})
+-
+-#define cmpxchg_local(ptr, o, n)					\
+-	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+-
+-#define cmpxchg32(ptr, o, n)						\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	cmpxchg((ptr), (o), (n));					\
+-})
+-
+-#define cmpxchg32_local(ptr, o, n)					\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	cmpxchg_relaxed((ptr), (o), (n))				\
+-})
+-
+-#define cmpxchg64(ptr, o, n)						\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+-	cmpxchg((ptr), (o), (n));					\
+-})
+-
+-#define cmpxchg64_local(ptr, o, n)					\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+-	cmpxchg_relaxed((ptr), (o), (n));				\
+-})
+-
+ #endif /* _ASM_RISCV_CMPXCHG_H */
 -- 
-2.20.1
+2.7.4
+
