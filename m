@@ -2,84 +2,100 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA83640C0
-	for <lists+linux-csky@lfdr.de>; Mon, 19 Apr 2021 13:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4E8364B8C
+	for <lists+linux-csky@lfdr.de>; Mon, 19 Apr 2021 22:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238784AbhDSLq1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 19 Apr 2021 07:46:27 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:37137 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238744AbhDSLq0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 19 Apr 2021 07:46:26 -0400
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MOQyE-1l9e4F06Pu-00Prg5; Mon, 19 Apr 2021 13:45:53 +0200
-Received: by mail-wr1-f49.google.com with SMTP id j5so32720883wrn.4;
-        Mon, 19 Apr 2021 04:45:52 -0700 (PDT)
-X-Gm-Message-State: AOAM530QKBOUUSndPbMfEemTC1qgG6pY9ZIATFppttSdjjs3iLfa7qq8
-        mrnsztQMMJnegneShc7YtiTpKp+nE+LRRLpYS/E=
-X-Google-Smtp-Source: ABdhPJwEqpvEXhMjLLqp97csmcwNcY1rK/VijtLf0UEkkA3KI3NlkzigrzsU6Qsva0ZTIp6OfFYbsu+GilDGIMNVtJQ=
-X-Received: by 2002:adf:db4f:: with SMTP id f15mr14108786wrj.99.1618832752710;
- Mon, 19 Apr 2021 04:45:52 -0700 (PDT)
+        id S240201AbhDSUpD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 19 Apr 2021 16:45:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54402 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242472AbhDSUon (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 19 Apr 2021 16:44:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F0EC2613C0;
+        Mon, 19 Apr 2021 20:44:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618865053;
+        bh=z5k/Yw3mIMmrDwp95XRcKjZzM8UMyfFp0EcQmjpQa1E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b9pxoWd+T3UBBjZvXlfOrmYlMR2xy/Vf74rCbQ+NEblOGedKEK1pg+Vl3FPyahTFH
+         eIJJKUWsooV9dpqwRd1vQlGOWR5KFmK5ThwAjQ16h6tDlmYTiyshhveTgMYLIS8FCh
+         xpc+KRgp1us5p/kKLo1+7flh8c9m2zxxlBdzFpKAsMmRhwItTirbfZoL72P5H818WQ
+         V7Qv1Oe+AQu5219rfpah16dSEyJLRFVtO3fwuSGOhYLj7/mFYAFEt4V9fAAS44dwFA
+         X7UFhKcx9O1m9ltIvbNCtG6OAtGhLZdBnWwGIinuI8E1HOoV1GxO9zzrUi2QHIWFcv
+         7Lv6sUd07Laxg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 19/23] csky: change a Kconfig symbol name to fix e1000 build error
+Date:   Mon, 19 Apr 2021 16:43:38 -0400
+Message-Id: <20210419204343.6134-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210419204343.6134-1-sashal@kernel.org>
+References: <20210419204343.6134-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <1618634729-88821-1-git-send-email-guoren@kernel.org> <1618634729-88821-2-git-send-email-guoren@kernel.org>
-In-Reply-To: <1618634729-88821-2-git-send-email-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 19 Apr 2021 13:45:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1ygwS7jTXqYXCfppEEonCASqG_5GM9O_AtE9YgdgNqVQ@mail.gmail.com>
-Message-ID: <CAK8P3a1ygwS7jTXqYXCfppEEonCASqG_5GM9O_AtE9YgdgNqVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 (RESEND) 2/2] riscv: atomic: Using ARCH_ATOMIC in asm/atomic.h
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/v+Ntzuu+oEx7mXJs+9U83ipuch3R+HU1Mc5V4Vwtb3/cDrBTM5
- MVydlzM2hUQ0SLrNEW0zWMNtxHILFpROn6evPse6X3VSR2wuvlnDWjjEPJwMouh6P4VbiQ0
- sUltmWKc8GhWWBG4XXIUwffYcsGPMKyj6kBbGfhzqxegwbRvYVHHRijB0BD3ohmKNUkQGGM
- /oJ/772ZMfAZD2At0kygQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:r+QeLt5zhcY=:vxainJgUAu4xe+666gbgYF
- a+Bs/fCihEyKI8xCSBB6K7EAyGbZUr21GmmoxLAtjpfyOUdZHsQJJB4CogRTlEPzcV543z9L7
- gX8q29c84D70h5AK+nPfaTCXlCG+OntQWvh6Vv7D0cRyiuno6HzEczpEkcY7rjG2GW/trz+8h
- kA2l3tUsBk7mPOlW3+MYx8bM33PcktiCXvpTWsqMdLjmtucqVRaRZ8ro7VDTFJcA1irDj4io7
- gevh1CZXRf49ZKc1+ZuQB7Kas3rKmydJErysVP6V3uJzh0U1vAEbStrFyCeXJtGgpVuBc/wfV
- x+jh/PxxgFwOS9l8Wdx53bHKlAJ/MujhFWlY+6ZXhZt9sa0TrE0e7QcLUw71loXlTTZnkomaT
- /ZDzFztDO0BbIcRq59fw28hm7+EMghyAhRPRfVLL1kHcEk9W50eRC4vK9OObpWo7UqrNljXFk
- EbntW6FAF6QcDRuCOsEIKxQKwKL+M0Qvf4QIX/jAOCfIzd4b8zzbb5DEHqKgLwB9gbveKLTLs
- dYBwG2CFEjXAYjspmVkf6I=
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Apr 17, 2021 at 6:45 AM <guoren@kernel.org> wrote:
-> +#define arch_atomic_read(v)                    __READ_ONCE((v)->counter)
-> +#define arch_atomic_set(v, i)                  __WRITE_ONCE(((v)->counter), (i))
+From: Randy Dunlap <rdunlap@infradead.org>
 
-> +#define ATOMIC64_INIT                          ATOMIC_INIT
-> +#define arch_atomic64_read                     arch_atomic_read
-> +#define arch_atomic64_set                      arch_atomic_set
->  #endif
+[ Upstream commit d199161653d612b8fb96ac51bfd5b2d2782ecef3 ]
 
-I think it's a bit confusing to define arch_atomic64_read() etc in terms
-of arch_atomic_read(), given that they operate on different types.
+e1000's #define of CONFIG_RAM_BASE conflicts with a Kconfig symbol in
+arch/csky/Kconfig.
 
-IMHO the clearest would be to define both in terms of the open-coded
-version you have for the 32-bit atomics.
+The symbol in e1000 has been around longer, so change arch/csky/ to use
+DRAM_BASE instead of RAM_BASE to remove the conflict.  (although e1000
+is also a 2-line change)
 
-Also, given that all three architectures (x86, arm64, riscv) use the same
-definitions for the six macros above, maybe those can just get moved
-into a common file with a possible override?
+Link: https://lkml.kernel.org/r/20210411055335.7111-1-rdunlap@infradead.org
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Guo Ren <guoren@kernel.org>
+Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/csky/Kconfig            | 2 +-
+ arch/csky/include/asm/page.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-x86 uses an inline function here instead of the macro. This would also
-be my preference, but it may add complexity to avoid circular header
-dependencies.
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 89dd2fcf38fa..3b16d081b4d7 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -292,7 +292,7 @@ config FORCE_MAX_ZONEORDER
+ 	int "Maximum zone order"
+ 	default "11"
+ 
+-config RAM_BASE
++config DRAM_BASE
+ 	hex "DRAM start addr (the same with memory-section in dts)"
+ 	default 0x0
+ 
+diff --git a/arch/csky/include/asm/page.h b/arch/csky/include/asm/page.h
+index 9b98bf31d57c..16878240ef9a 100644
+--- a/arch/csky/include/asm/page.h
++++ b/arch/csky/include/asm/page.h
+@@ -28,7 +28,7 @@
+ #define SSEG_SIZE	0x20000000
+ #define LOWMEM_LIMIT	(SSEG_SIZE * 2)
+ 
+-#define PHYS_OFFSET_OFFSET (CONFIG_RAM_BASE & (SSEG_SIZE - 1))
++#define PHYS_OFFSET_OFFSET (CONFIG_DRAM_BASE & (SSEG_SIZE - 1))
+ 
+ #ifndef __ASSEMBLY__
+ 
+-- 
+2.30.2
 
-The rest of this patch looks good to me.
-
-        Arnd
