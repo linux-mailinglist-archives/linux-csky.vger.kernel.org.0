@@ -2,27 +2,27 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4E8364B8C
-	for <lists+linux-csky@lfdr.de>; Mon, 19 Apr 2021 22:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEA1364BCF
+	for <lists+linux-csky@lfdr.de>; Mon, 19 Apr 2021 22:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240201AbhDSUpD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 19 Apr 2021 16:45:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54402 "EHLO mail.kernel.org"
+        id S242909AbhDSUqc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 19 Apr 2021 16:46:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242472AbhDSUon (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 19 Apr 2021 16:44:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F0EC2613C0;
-        Mon, 19 Apr 2021 20:44:11 +0000 (UTC)
+        id S242443AbhDSUpW (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 19 Apr 2021 16:45:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FF83613BC;
+        Mon, 19 Apr 2021 20:44:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618865053;
-        bh=z5k/Yw3mIMmrDwp95XRcKjZzM8UMyfFp0EcQmjpQa1E=;
+        s=k20201202; t=1618865087;
+        bh=czNKm0mqDxsUeA3xKoBQNmTrg6kgyI/Wl2LfDy6++18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9pxoWd+T3UBBjZvXlfOrmYlMR2xy/Vf74rCbQ+NEblOGedKEK1pg+Vl3FPyahTFH
-         eIJJKUWsooV9dpqwRd1vQlGOWR5KFmK5ThwAjQ16h6tDlmYTiyshhveTgMYLIS8FCh
-         xpc+KRgp1us5p/kKLo1+7flh8c9m2zxxlBdzFpKAsMmRhwItTirbfZoL72P5H818WQ
-         V7Qv1Oe+AQu5219rfpah16dSEyJLRFVtO3fwuSGOhYLj7/mFYAFEt4V9fAAS44dwFA
-         X7UFhKcx9O1m9ltIvbNCtG6OAtGhLZdBnWwGIinuI8E1HOoV1GxO9zzrUi2QHIWFcv
-         7Lv6sUd07Laxg==
+        b=qjq7Vq1W8OiX318Sg4blDdFSa5iqJDc2bINzj0PGfd055rgebHwg/ocipvjqrUG4v
+         K0bSSb3EGl5xmclB6FcwvCm20iFUYVKnCORI/eGvVfWBNWU2mPvugz9aM1iNSEU4j8
+         rqwiNIdTPe2/TTDfcY/gGOrPY7cfuqVDlHbLynJHV1B6rwX/VJKrZgF2Ye49qxkPYm
+         jx+C14IIlReWdYq00U7FkrgC6oc70H7e05cwY79V7B5dfuC+Geu2Nd/Q4BU28+fX1g
+         mY8Hccl4wtpOpvuHiXo8oWa1G+0GCOUUIeIqtO7fR41B5Z2qUGeCJokITFSdDJlS9u
+         DwkLgMbova4+w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
@@ -32,12 +32,12 @@ Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 19/23] csky: change a Kconfig symbol name to fix e1000 build error
-Date:   Mon, 19 Apr 2021 16:43:38 -0400
-Message-Id: <20210419204343.6134-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 17/21] csky: change a Kconfig symbol name to fix e1000 build error
+Date:   Mon, 19 Apr 2021 16:44:15 -0400
+Message-Id: <20210419204420.6375-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210419204343.6134-1-sashal@kernel.org>
-References: <20210419204343.6134-1-sashal@kernel.org>
+In-Reply-To: <20210419204420.6375-1-sashal@kernel.org>
+References: <20210419204420.6375-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,7 +71,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 89dd2fcf38fa..3b16d081b4d7 100644
+index 268fad5f51cf..7bf0a617e94c 100644
 --- a/arch/csky/Kconfig
 +++ b/arch/csky/Kconfig
 @@ -292,7 +292,7 @@ config FORCE_MAX_ZONEORDER
