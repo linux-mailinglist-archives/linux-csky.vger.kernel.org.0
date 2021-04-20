@@ -2,98 +2,76 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D654E364FCF
-	for <lists+linux-csky@lfdr.de>; Tue, 20 Apr 2021 03:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE5F365A4C
+	for <lists+linux-csky@lfdr.de>; Tue, 20 Apr 2021 15:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbhDTBXR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 19 Apr 2021 21:23:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33538 "EHLO mail.kernel.org"
+        id S232597AbhDTNi2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 20 Apr 2021 09:38:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51794 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231751AbhDTBXR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 19 Apr 2021 21:23:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 863F561026;
-        Tue, 20 Apr 2021 01:22:46 +0000 (UTC)
+        id S231422AbhDTNi1 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 20 Apr 2021 09:38:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A69B6113C;
+        Tue, 20 Apr 2021 13:37:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618881766;
-        bh=SSh/fCkAeoAWllWsDSR3ydZ10BhcC+iH1ETqUqxNxqY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AtKaVklDeGRTzVhY+VZa+8zYM1l1j0puh23Gm/qFyb/1hzEamHdxXSx4RBkYqz0j3
-         T6WRibKOcfZlWhyy2CAcH1Os5dO5W/II8O93C6xbXCtVHB0lX7sxl9rBFPfbsk50kp
-         DNaGI/T4WKpUxdUlt+6h3jEAeDD2u6ivUsQUzoMyXWW7WqKa5ROPBND8YoJVEcSMOH
-         nuW5KPzInhdvVotlFS3lab8wVXAhNLVRA+WidkMd2L+Ln/vPjTwgc4FdnvlI1kzbly
-         eZCIOD88XVEtZLTFDqIWODgMaY3sfbOUYHbDzCpbuEwWP1Av1/JL/VH9NAwA43gOeq
-         mDxqzPgZ2IfOg==
-Received: by mail-lf1-f47.google.com with SMTP id x19so28559904lfa.2;
-        Mon, 19 Apr 2021 18:22:46 -0700 (PDT)
-X-Gm-Message-State: AOAM533ScPmtd1mrt6m2pvP8lfJwARvtpdsZ37GsdDt+cEeNYteX6wGo
-        PQxJE8p25eY1LZbmhyxvObQEZY/D/yUDCd40+LQ=
-X-Google-Smtp-Source: ABdhPJyNkQ4waQWIRsWkLecTECs70MszIvNEP1jOKg4Id9kxfy7inXyBd0MPgLbxDuc0+3tpeauHn3eDAQDDCpZY2gY=
-X-Received: by 2002:a05:6512:3050:: with SMTP id b16mr6731861lfb.24.1618881764817;
- Mon, 19 Apr 2021 18:22:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <1618634729-88821-1-git-send-email-guoren@kernel.org>
- <1618634729-88821-2-git-send-email-guoren@kernel.org> <CAK8P3a1ygwS7jTXqYXCfppEEonCASqG_5GM9O_AtE9YgdgNqVQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a1ygwS7jTXqYXCfppEEonCASqG_5GM9O_AtE9YgdgNqVQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 20 Apr 2021 09:22:33 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRkWD6NcfriQhLBYL0eBafNmLx1Kw_Rmaex3851SzVBWQ@mail.gmail.com>
-Message-ID: <CAJF2gTRkWD6NcfriQhLBYL0eBafNmLx1Kw_Rmaex3851SzVBWQ@mail.gmail.com>
-Subject: Re: [PATCH v2 (RESEND) 2/2] riscv: atomic: Using ARCH_ATOMIC in asm/atomic.h
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1618925876;
+        bh=UlQ0FBFsDr4ODbTFSXPy69eUKK+0YYAXdTX//RlJ41c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gwcM3ibBCh9KFA73MXiOekuiNcAJLtZFiZqnuCXM7m/SyRz+JvbVUSiWpYeNJshRx
+         mMTv9sF1eGfonecI2ub7KcXqAf1i+YfE/PZI449ys8zG2iJPTDNlJ0t83r1gZKts4h
+         pQwbO+lfQbMqlpnEmIgYdV6+mAXfy+OwGidHNLEMRnRE+d2xs256/wkv8UC0ZKFyPz
+         ENxdYXUxv60+kDtUYWI+iG5X2qSsZOMh3Kav9VrIShcO6eAGScREe9mUZ5Tcpl5yYh
+         AmvpRlar+6k/ahU6qWU9yQv3tDAElujPXLqogCxCOeklmel/0z/kV2qs3L14daZHnY
+         nrgwPUPsELP0A==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 1/3] nds32: Cleanup deprecated function strlen_user
+Date:   Tue, 20 Apr 2021 13:37:07 +0000
+Message-Id: <1618925829-90071-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Apr 19, 2021 at 7:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Apr 17, 2021 at 6:45 AM <guoren@kernel.org> wrote:
-> > +#define arch_atomic_read(v)                    __READ_ONCE((v)->counter)
-> > +#define arch_atomic_set(v, i)                  __WRITE_ONCE(((v)->counter), (i))
->
-> > +#define ATOMIC64_INIT                          ATOMIC_INIT
-> > +#define arch_atomic64_read                     arch_atomic_read
-> > +#define arch_atomic64_set                      arch_atomic_set
-> >  #endif
->
-> I think it's a bit confusing to define arch_atomic64_read() etc in terms
-> of arch_atomic_read(), given that they operate on different types.
->
-> IMHO the clearest would be to define both in terms of the open-coded
-> version you have for the 32-bit atomics.
-Okay:
+From: Guo Ren <guoren@linux.alibaba.com>
 
- +#define arch_atomic64_read                     __READ_ONCE((v)->counter)
- +#define arch_atomic64_set
-__WRITE_ONCE(((v)->counter), (i))
+$ grep strlen_user * -r
+arch/csky/include/asm/uaccess.h:#define strlen_user(str) strnlen_user(str, 32767)
+arch/csky/lib/usercopy.c: * strlen_user: - Get the size of a string in user space.
+arch/ia64/lib/strlen.S: // Please note that in the case of strlen() as opposed to strlen_user()
+arch/mips/lib/strnlen_user.S: *  make strlen_user and strnlen_user access the first few KSEG0
+arch/nds32/include/asm/uaccess.h:extern __must_check long strlen_user(const char __user * str);
+arch/nios2/include/asm/uaccess.h:extern __must_check long strlen_user(const char __user *str);
+arch/riscv/include/asm/uaccess.h:extern long __must_check strlen_user(const char __user *str);
+kernel/trace/trace_probe_tmpl.h:static nokprobe_inline int fetch_store_strlen_user(unsigned long addr);
+kernel/trace/trace_probe_tmpl.h:                        ret += fetch_store_strlen_user(val + code->offset);
+kernel/trace/trace_uprobe.c:fetch_store_strlen_user(unsigned long addr)
+kernel/trace/trace_kprobe.c:fetch_store_strlen_user(unsigned long addr)
+kernel/trace/trace_kprobe.c:            return fetch_store_strlen_user(addr);
 
->
-> Also, given that all three architectures (x86, arm64, riscv) use the same
-> definitions for the six macros above, maybe those can just get moved
-> into a common file with a possible override?
-I'll try it with a separate patch.
+See grep result, nobody uses it.
 
->
-> x86 uses an inline function here instead of the macro. This would also
-> be my preference, but it may add complexity to avoid circular header
-> dependencies.
->
-> The rest of this patch looks good to me.
->
->         Arnd
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/nds32/include/asm/uaccess.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-
-
+diff --git a/arch/nds32/include/asm/uaccess.h b/arch/nds32/include/asm/uaccess.h
+index 010ba5f..d4cbf06 100644
+--- a/arch/nds32/include/asm/uaccess.h
++++ b/arch/nds32/include/asm/uaccess.h
+@@ -260,7 +260,6 @@ do {									\
+ 
+ extern unsigned long __arch_clear_user(void __user * addr, unsigned long n);
+ extern long strncpy_from_user(char *dest, const char __user * src, long count);
+-extern __must_check long strlen_user(const char __user * str);
+ extern __must_check long strnlen_user(const char __user * str, long n);
+ extern unsigned long __arch_copy_from_user(void *to, const void __user * from,
+                                            unsigned long n);
 -- 
-Best Regards
- Guo Ren
+2.7.4
 
-ML: https://lore.kernel.org/linux-csky/
