@@ -2,65 +2,95 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 593C83663DF
-	for <lists+linux-csky@lfdr.de>; Wed, 21 Apr 2021 05:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10F83666FA
+	for <lists+linux-csky@lfdr.de>; Wed, 21 Apr 2021 10:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbhDUDKt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 20 Apr 2021 23:10:49 -0400
-Received: from smtp37.cstnet.cn ([159.226.251.37]:46506 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233982AbhDUDKt (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 20 Apr 2021 23:10:49 -0400
-Received: by ajax-webmail-APP-12 (Coremail) ; Wed, 21 Apr 2021 11:08:27
- +0800 (GMT+08:00)
-X-Originating-IP: [121.232.27.162]
-Date:   Wed, 21 Apr 2021 11:08:27 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?546L5L+K5by6?= <wangjunqiang@iscas.ac.cn>
-To:     "Randy Dunlap" <rdunlap@infradead.org>
-Cc:     guoren@kernel.org, guoren@linux.alibaba.com,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Li Weiwei" <liweiwei@iscas.ac.cn>
-Subject: Re: Re: [PATCH 2/2] csky: add CONFIG_CPU_HAS_MATHEMU and use in
- traps
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2021 www.mailtech.cn cnic.cn
-In-Reply-To: <8bb2a70f-7f3a-26f1-98ed-e6b7b2220798@infradead.org>
-References: <20210421024916.13603-1-wangjunqiang@iscas.ac.cn>
- <8bb2a70f-7f3a-26f1-98ed-e6b7b2220798@infradead.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        id S234938AbhDUI3f (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 21 Apr 2021 04:29:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39764 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234632AbhDUI3e (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 21 Apr 2021 04:29:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 82A3D6142C;
+        Wed, 21 Apr 2021 08:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618993741;
+        bh=PlDQaFaPk/kK/krQ9Bde4x/76KoZ9JGgl7x0Ep6sHVk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pO4njqXE6uBEbx7G0wZlpJqd1p67dfNA7DkA542Htbybn2qZOAeINQEBvtbR0yfD+
+         +laEtyvzotfzONDY7GUxCcU+DfEaGDwy3pIK4fuPtZtCKsnYphOKhPjJyNP8zbL8i6
+         0oJAxKrvFMkrd8JSevVqFzmQA4JD1q2vehc35jNjw/dXeDuMwHScKLsll2gnDWjQtm
+         UtjkQCqY0xXSPnYT5heGL8ZZgifqb5n2DWESfobdYjmTtPJAC+6N5wxQhHL+VTfEQ+
+         2uvhALFQZNX+3ztsJ/2yAuILymkQUThB6HBxQQcfuP7I9MmRGCkKT5gFlGZPxqLZxb
+         AXABIwbNdIhCQ==
+Received: by mail-lf1-f54.google.com with SMTP id 4so5769291lfp.11;
+        Wed, 21 Apr 2021 01:29:01 -0700 (PDT)
+X-Gm-Message-State: AOAM531Af6FekkVT9zBhiW2RGJ7cDxd11/64oYKjJ7rHNRBWWKT0nVuL
+        I9bPxOtM7Vj4u02GFn3lnktWAktxZNtckjvx0oQ=
+X-Google-Smtp-Source: ABdhPJyLGHbOYUo5kuRuRui9Du9S01mLmss+HOmeO1VcFN20rB5jfa8IKdI3kVIvvkC7cLrIhIA+yBJKbfVJGWJ89/A=
+X-Received: by 2002:a19:e34c:: with SMTP id c12mr19212590lfk.555.1618993739734;
+ Wed, 21 Apr 2021 01:28:59 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <152262a1.2e207.178f2668250.Coremail.wangjunqiang@iscas.ac.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: tgCowAC35VQrl39gObwCAA--.35080W
-X-CM-SenderInfo: pzdqwy5xqtxt1qj6x2xfdvhtffof0/1tbiCwoSAFz4kATtrAAAsi
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+References: <1618925829-90071-1-git-send-email-guoren@kernel.org>
+ <1618925829-90071-2-git-send-email-guoren@kernel.org> <CAK8P3a1aNDomNiX7W1USWnmdw1VR21ALX7NvJYGW9LBO+jvA4A@mail.gmail.com>
+In-Reply-To: <CAK8P3a1aNDomNiX7W1USWnmdw1VR21ALX7NvJYGW9LBO+jvA4A@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 21 Apr 2021 16:28:48 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ7LPW7tb-Q+mPVnVbfqUCaBotqOQhwk32N7tr59HZU9A@mail.gmail.com>
+Message-ID: <CAJF2gTQ7LPW7tb-Q+mPVnVbfqUCaBotqOQhwk32N7tr59HZU9A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] nios2: Cleanup deprecated function strlen_user
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-dGhhbmtzLCBJIHdpbGwgZml4IGl0CgoiUmFuZHkgRHVubGFwIiAmbHQ7cmR1bmxhcEBpbmZyYWRl
-YWQub3JnJmd0O+WGmemBk++8mgomZ3Q7IEhpLS0KJmd0OyAKJmd0OyBPbiA0LzIwLzIxIDc6NDkg
-UE0sIFdhbmcgSnVucWlhbmcgd3JvdGU6CiZndDsgJmd0OyBkaWZmIC0tZ2l0IGEvYXJjaC9jc2t5
-L0tjb25maWcgYi9hcmNoL2Nza3kvS2NvbmZpZwomZ3Q7ICZndDsgaW5kZXggMzRlOTEyMjRhZGMz
-Li5hNDE0MjI1NTcwYzEgMTAwNjQ0CiZndDsgJmd0OyAtLS0gYS9hcmNoL2Nza3kvS2NvbmZpZwom
-Z3Q7ICZndDsgKysrIGIvYXJjaC9jc2t5L0tjb25maWcKJmd0OyAmZ3Q7IEBAIC05Nyw2ICs5Nyw5
-IEBAIGNvbmZpZyBDUFVfSEFTX0NBQ0hFVjIKJmd0OyAmZ3Q7ICBjb25maWcgQ1BVX0hBU19GUFVW
-MgomZ3Q7ICZndDsgIAlib29sCiZndDsgJmd0OyAgCiZndDsgJmd0OyArY29uZmlnIENQVV9IQVNf
-TUFUSEVNVQomZ3Q7ICZndDsgKwlib29sCiZndDsgJmd0OyArCiZndDsgCiZndDsgV2h5IGRvIHlv
-dSBoYXZlIHRoaXMgbmV3IGtjb25maWcgc3ltYm9sIHR3byB0aW1lcyBpbiB0aGUgc2FtZSBmaWxl
-PwomZ3Q7IAomZ3Q7ICZndDsgIGNvbmZpZyBDUFVfSEFTX0hJTE8KJmd0OyAmZ3Q7ICAJYm9vbAom
-Z3Q7ICZndDsgIAomZ3Q7ICZndDsgQEAgLTI4MSw2ICsyODQsMTEgQEAgY29uZmlnIENQVV9IQVNf
-VkRTUAomZ3Q7ICZndDsgIAlib29sICJDUFUgaGFzIFZEU1AgY29wcm9jZXNzb3IiCiZndDsgJmd0
-OyAgCWRlcGVuZHMgb24gQ1BVX0hBU19GUFUgJmFtcDsmYW1wOyBDUFVfSEFTX0ZQVVYyCiZndDsg
-Jmd0OyAgCiZndDsgJmd0OyArY29uZmlnIENQVV9IQVNfTUFUSEVNVQomZ3Q7ICZndDsgKwlib29s
-ICJDUFUgaGFzIEZQVSBNYXRoZW11IEluc3RydWN0aW9ucyIKJmd0OyAmZ3Q7ICsJZGVwZW5kcyBv
-biBDUFVfQ0s4MTAgfHwgQ1BVX0NLODYwCiZndDsgJmd0OyArCWRlZmF1bHQgbgomZ3Q7ICZndDsg
-KwomZ3Q7ICZndDsgIGNvbmZpZyBDUFVfSEFTX0ZQVQomZ3Q7ICZndDsgIAlib29sICJDUFUgaGFz
-IEZQVSBjb3Byb2Nlc3NvciIKJmd0OyAmZ3Q7ICAJZGVwZW5kcyBvbiBDUFVfQ0s4MDcgfHwgQ1BV
-X0NLODEwIHx8IENQVV9DSzg2MAomZ3Q7IAomZ3Q7IAomZ3Q7IHRoYW5rcy4KJmd0OyAtLSAKJmd0
-OyB+UmFuZHkK
+Thx Arnd,
+
+On Tue, Apr 20, 2021 at 10:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Apr 20, 2021 at 3:37 PM <guoren@kernel.org> wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > $ grep strlen_user * -r
+> > arch/csky/include/asm/uaccess.h:#define strlen_user(str) strnlen_user(str, 32767)
+> > arch/csky/lib/usercopy.c: * strlen_user: - Get the size of a string in user space.
+> > arch/ia64/lib/strlen.S: // Please note that in the case of strlen() as opposed to strlen_user()
+> > arch/mips/lib/strnlen_user.S: *  make strlen_user and strnlen_user access the first few KSEG0
+> > arch/nds32/include/asm/uaccess.h:extern __must_check long strlen_user(const char __user * str);
+> > arch/nios2/include/asm/uaccess.h:extern __must_check long strlen_user(const char __user *str);
+> > arch/riscv/include/asm/uaccess.h:extern long __must_check strlen_user(const char __user *str);
+> > kernel/trace/trace_probe_tmpl.h:static nokprobe_inline int fetch_store_strlen_user(unsigned long addr);
+> > kernel/trace/trace_probe_tmpl.h:                        ret += fetch_store_strlen_user(val + code->offset);
+> > kernel/trace/trace_uprobe.c:fetch_store_strlen_user(unsigned long addr)
+> > kernel/trace/trace_kprobe.c:fetch_store_strlen_user(unsigned long addr)
+> > kernel/trace/trace_kprobe.c:            return fetch_store_strlen_user(addr);
+>
+> I would suggest using "grep strlen_user * -rw", to let the whole-word match
+> filter out the irrelevant ones for the changelog.
+>
+> > See grep result, nobody uses it.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+>
+> All three patches
+>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Do you want me to pick them up in the asm-generic tree?
+Yes, please take them.
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
