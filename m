@@ -2,390 +2,321 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F483368271
-	for <lists+linux-csky@lfdr.de>; Thu, 22 Apr 2021 16:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C1836C835
+	for <lists+linux-csky@lfdr.de>; Tue, 27 Apr 2021 17:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236396AbhDVOaJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 22 Apr 2021 10:30:09 -0400
-Received: from foss.arm.com ([217.140.110.172]:52210 "EHLO foss.arm.com"
+        id S235303AbhD0PDS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 27 Apr 2021 11:03:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36614 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236341AbhDVOaI (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 22 Apr 2021 10:30:08 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 989271424;
-        Thu, 22 Apr 2021 07:29:33 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.22.241])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF6393F73B;
-        Thu, 22 Apr 2021 07:29:31 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 15:29:29 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] asm-generic: atomic64: handle ARCH_ATOMIC builds (was
- "Re: [PATCH v3 1/2] locking/atomics: Fixup GENERIC_ATOMIC64 conflict") with
- atomic-arch-fallback.h
-Message-ID: <20210422142929.GC66392@C02TD0UTHF1T.local>
-References: <1619009626-93453-1-git-send-email-guoren@kernel.org>
- <20210422105945.GB62037@C02TD0UTHF1T.local>
- <CAJF2gTQSrBM5rBH+2cG8-iTAw8C+A20S-WGtE33hjVVLVLCpJA@mail.gmail.com>
+        id S236710AbhD0PDS (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 27 Apr 2021 11:03:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE36560FEE;
+        Tue, 27 Apr 2021 15:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619535754;
+        bh=v6dpb92S48cVgsyVg0NHPQz3vwm2P2qTme5oG4502sQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Zl82g4t27sdPe96hHArMxrlch6ZTYzI/YKcPhkODzeyobFHcDTNEKD/3KpTj9ja2c
+         jXlW3OKo3mc4STomnXpXGnQzLCgDQME+p4YS4k0Sue5t3i3K10u0qXdMTAmnbkgp4g
+         Fi+pPBddn0ZJlKqhmdCgb2AJXBnS9iDjZjaSG4RorjHp2smB0/xaUvx/Oo+uND+urW
+         CQMSwx1PiiVA19HzJm2xHFpZ5LsNlDo26OnUgXrqy2zodLoAfClEcdt4InsDNQXbXg
+         PAJC+W9iHQ1/JAMu6keDjvMbXqmbmDEftTbquGRTBhkA8JUwf6itDYVOoncKrni+Ch
+         Pa5Zj1OqGQxWw==
+Received: by mail-lf1-f49.google.com with SMTP id x19so63831122lfa.2;
+        Tue, 27 Apr 2021 08:02:34 -0700 (PDT)
+X-Gm-Message-State: AOAM530MZKd7/+wQN9Izif7WK1OgN/cUvDiBKlN7FsrTc0IDvSu/e0r+
+        nuzq8T5n1Hf4JRLFZKXBCs0DftjG/X0hg6pE1a0=
+X-Google-Smtp-Source: ABdhPJx7WQ4uxUrCKE+edstD5RVMQ6sjSpKHrRUMTRYqG7u3UheU3kwGFAHxV980YSA94a0c1VnsoQZBapad/AJ0zY8=
+X-Received: by 2002:a19:e34c:: with SMTP id c12mr17383076lfk.555.1619535752877;
+ Tue, 27 Apr 2021 08:02:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQSrBM5rBH+2cG8-iTAw8C+A20S-WGtE33hjVVLVLCpJA@mail.gmail.com>
+References: <20210421024916.13603-1-wangjunqiang@iscas.ac.cn>
+In-Reply-To: <20210421024916.13603-1-wangjunqiang@iscas.ac.cn>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 27 Apr 2021 23:02:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS+DNPJomuuVn3ZocO5BXKd_zmqqSP_1R0o1-p4NR925Q@mail.gmail.com>
+Message-ID: <CAJF2gTS+DNPJomuuVn3ZocO5BXKd_zmqqSP_1R0o1-p4NR925Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] csky: add CONFIG_CPU_HAS_MATHEMU and use in traps
+To:     Wang Junqiang <wangjunqiang@iscas.ac.cn>
+Cc:     Guo Ren <guoren@linux.alibaba.com>, linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Li Weiwei <liweiwei@iscas.ac.cn>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 09:12:19PM +0800, Guo Ren wrote:
-> On Thu, Apr 22, 2021 at 6:59 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > Hi Guo,
-> >
-> > On Wed, Apr 21, 2021 at 12:53:45PM +0000, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Current GENERIC_ATOMIC64 in atomic-arch-fallback.h is broken. When a 32-bit
-> > > arch use atomic-arch-fallback.h will cause compile error.
-> > >
-> > > In file included from include/linux/atomic.h:81,
-> > >                     from include/linux/rcupdate.h:25,
-> > >                     from include/linux/rculist.h:11,
-> > >                     from include/linux/pid.h:5,
-> > >                     from include/linux/sched.h:14,
-> > >                     from arch/riscv/kernel/asm-offsets.c:10:
-> > >    include/linux/atomic-arch-fallback.h: In function 'arch_atomic64_inc':
-> > > >> include/linux/atomic-arch-fallback.h:1447:2: error: implicit declaration of function 'arch_atomic64_add'; did you mean 'arch_atomic_add'? [-Werror=implicit-function-declaration]
-> > >     1447 |  arch_atomic64_add(1, v);
-> > >          |  ^~~~~~~~~~~~~~~~~
-> > >          |  arch_atomic_add
-> >
-> > This is expected; GENERIC_ATOMIC64 doesn't implement arch_atomic64_*(),
-> > and thus violates the expectations of the fallback code.
-> >
-> > To make GENERIC_ATOMIC64 compatible with ARCH_ATOMIC, the
-> > GENERIC_ATOMIC64 implementation *must* provide arch_atomic64_*()
-> > functions.
-> How do you let a "static __always_inline" of
-> "asm-generic/atomic-instrumented.h" call a real function? See
-> lib/atomic64.c.
+Hi Wang & Li,
 
-Can you rephrase the question? I don't understand what you're asking
-here.
-
-If you're asking about how the calls are directed to
-generic_atomic64_*(), the atomic-instrumented atomic64_<foo>() function
-will try to call arch_atomic64_<foo>(), and the pre-processor
-definitions in asm-generic/atomic64.h will direct that to
-generic_atomic64_<foo>().
-
-If you're asking about inlining specifically, I'm afraid I don't
-understand. It's legitimate for a static __always_inline function A to
-call a non-inlined function B, and this works just fine. In that case, A
-will get inlined into its caller, and B will not, but nothing stops A
-from calling B.
-
-> > > The atomic-arch-fallback.h & atomic-fallback.h &
-> > > atomic-instrumented.h are generated by gen-atomic-fallback.sh &
-> > > gen-atomic-instrumented.sh, so just take care the bash files.
-> > >
-> > > Remove the dependency of atomic-*-fallback.h in atomic64.h.
-> >
-> > Please don't duplicate the fallbacks; this'll make it harder to move
-> > other over and eventually remove the non-ARCH_ATOMIC implementations.
-> >
-> > Does the patch below make things work for you, or have I missed
-> > something?
-> RISC-V combines 32bit & 64bit together just like x86. Current
-> ARCH_ATOMIC could work perfectly with RV64, but not RV32.
+On Wed, Apr 21, 2021 at 10:56 AM Wang Junqiang <wangjunqiang@iscas.ac.cn> wrote:
 >
-> RV32 still could use ARCH_ATOMIC to improve kasan check.
+> This patch contains the use of fpu instruction emulation by trap_c.
+> It defined _fcr, _fesr for user space in ptrace.h which is used in fpu.c
+> and instruction emulation. During initialization, all fpe are enabled,
+> and the configuration that read/write fcr and fesr in glibc library is captured
+> when privilege exception is triggerd by mfcr and mtcr < ,15>.
+>
+> steps:
+>  1.enable all fpe interrupts
+>  2.mfcr/mtcr trigger privilege exception
+>  3.synchronize fcr and fesr of user app through fpu_libc_helper function
+>  4.fpe interrupt at runtime
+>  5.fpu instruction simulation is based on user_fcr and user_fesr
+>  6.clearing interrupts and synchronizing fcr fesr
+>  7.state restore and continue running
+>
+> Signed-off-by: Wang Junqiang <wangjunqiang@iscas.ac.cn>
+> Signed-off-by: Li Weiwei <liweiwei@iscas.ac.cn>
+> ---
+>  arch/csky/Kconfig                   |  8 ++++++++
+>  arch/csky/Makefile                  |  1 +
+>  arch/csky/abiv2/fpu.c               | 31 ++++++++++++++++++++++++-----
+>  arch/csky/abiv2/inc/abi/fpu.h       |  9 ++++++++-
+>  arch/csky/include/uapi/asm/ptrace.h |  6 ++++++
+>  arch/csky/kernel/traps.c            | 30 +++++++++++++++++++++++++---
+>  6 files changed, 76 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 34e91224adc3..a414225570c1 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -97,6 +97,9 @@ config CPU_HAS_CACHEV2
+>  config CPU_HAS_FPUV2
+>         bool
+>
+> +config CPU_HAS_MATHEMU
+> +       bool
+> +
+Duplicated
 
-I understand that (and I want riscv to use ARCH_ATOMIC), but that
-doesn't answer my question.
+>  config CPU_HAS_HILO
+>         bool
+>
+> @@ -281,6 +284,11 @@ config CPU_HAS_VDSP
+>         bool "CPU has VDSP coprocessor"
+>         depends on CPU_HAS_FPU && CPU_HAS_FPUV2
+>
+> +config CPU_HAS_MATHEMU
+> +       bool "CPU has FPU Mathemu Instructions"
+> +       depends on CPU_CK810 || CPU_CK860
+> +       default n
+No need "default n", only "default y" need.
 
-I went and built this locally, starting with v5.12-rc8, applying my
-patch, then applying your second patch atop. Both defconfig and
-rv32_defconfig build just fine, though I wasn't able to check KASAN with
-GCC 10.1.0.
+> +
+>  config CPU_HAS_FPU
+>         bool "CPU has FPU coprocessor"
+>         depends on CPU_CK807 || CPU_CK810 || CPU_CK860
+> diff --git a/arch/csky/Makefile b/arch/csky/Makefile
+> index 37f593a4bf53..495f3a2fad6a 100644
+> --- a/arch/csky/Makefile
+> +++ b/arch/csky/Makefile
+> @@ -64,6 +64,7 @@ head-y := arch/csky/kernel/head.o
+>  core-y += arch/csky/kernel/
+>  core-y += arch/csky/mm/
+>  core-y += arch/csky/$(CSKYABI)/
+> +core-$(CONFIG_CPU_HAS_MATHEMU) += arch/csky/math-emu/
+>
+>  libs-y += arch/csky/lib/ \
+>         $(shell $(CC) $(KBUILD_CFLAGS) $(KCFLAGS) -print-libgcc-file-name)
+> diff --git a/arch/csky/abiv2/fpu.c b/arch/csky/abiv2/fpu.c
+> index 5acc5c2e544e..3cd17cf9319e 100644
+> --- a/arch/csky/abiv2/fpu.c
+> +++ b/arch/csky/abiv2/fpu.c
+> @@ -38,8 +38,11 @@ int fpu_libc_helper(struct pt_regs *regs)
+>                 return 0;
+>
+>         tinstr = instr_hi | ((unsigned long)instr_low << 16);
+> -
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+> +       if (((tinstr >> 21) & 0x1F) != 15)
+> +#else
+>         if (((tinstr >> 21) & 0x1F) != 2)
+> +#endif
+>                 return 0;
+>
+>         if ((tinstr & MTCR_MASK) == MTCR_DIST) {
+> @@ -53,10 +56,19 @@ int fpu_libc_helper(struct pt_regs *regs)
+>
+>                 regx =  *(&regs->a0 + index);
+>
+> -               if (tmp == 1)
+> +               if (tmp == 1) {
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+> +                       mtcr("cr<1, 2>", regx | 0x3f);
+> +                       current->thread.user_fp.user_fcr = regx;
+> +#else
+>                         mtcr("cr<1, 2>", regx);
+> -               else if (tmp == 2)
+> +#endif
+> +               } else if (tmp == 2) {
+>                         mtcr("cr<2, 2>", regx);
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+> +                       current->thread.user_fp.user_fesr = regx;
+> +#endif
+> +               }
+>                 else
+>                         return 0;
+>
+> @@ -73,10 +85,19 @@ int fpu_libc_helper(struct pt_regs *regs)
+>                 if (tmp > 2)
+>                         return 0;
+>
+> -               if (tmp == 1)
+> +               if (tmp == 1) {
+> +#ifndef CONFIG_CPU_HAS_MATHEMU
+>                         regx = mfcr("cr<1, 2>");
+> -               else if (tmp == 2)
+> +#else
+> +                       regx = current->thread.user_fp.user_fcr;
+> +#endif
+> +               } else if (tmp == 2) {
+> +#ifndef CONFIG_CPU_HAS_MATHEMU
+>                         regx = mfcr("cr<2, 2>");
+> +#else
+> +                       regx = current->thread.user_fp.user_fesr;
+> +#endif
+> +               }
+>                 else
+>                         return 0;
+>
+> diff --git a/arch/csky/abiv2/inc/abi/fpu.h b/arch/csky/abiv2/inc/abi/fpu.h
+> index aabb79355013..c3509ace542c 100644
+> --- a/arch/csky/abiv2/inc/abi/fpu.h
+> +++ b/arch/csky/abiv2/inc/abi/fpu.h
+> @@ -9,7 +9,14 @@
+>  int fpu_libc_helper(struct pt_regs *regs);
+>  void fpu_fpe(struct pt_regs *regs);
+>
+> -static inline void init_fpu(void) { mtcr("cr<1, 2>", 0); }
+> +static inline void init_fpu(void)
+> +{
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+> +       mtcr("cr<1, 2>", 0x3f);
+> +#else
+> +       mtcr("cr<1, 2>", 0);
+> +#endif
+> +}
+Could we put all CONFIG_CPU_HAS_MATHEMU differences in fpu.h?
 
-Is there a problem that I've missed, or does my patch work?
+#ifdef CONFIG_CPU_HAS_MATHEMU
+#define MFCR_FESR       current->thread.user_fp.user_fesr
+#define MFCR_FCR        current->thread.user_fp.user_fcr
+#define MTCR_FESR(regx) {current->thread.user_fp.user_fesr = regx; ...}
+#define MTCR_FCR(regx)  {current->thread.user_fp.user_fcr = regx; ...}
+#define CR_NUM          15
+#else
+#define MFCR_FESR(regx) mtcr("cr<1, 2>", regx)
+#define MFCR_FESR(regx) mtcr("cr<1, 2>", regx)
+...
+#define CR_NUM    2
+#endif
 
-Thanks,
-Mark.
+>
+>  void save_to_user_fp(struct user_fp *user_fp);
+>  void restore_from_user_fp(struct user_fp *user_fp);
+> diff --git a/arch/csky/include/uapi/asm/ptrace.h b/arch/csky/include/uapi/asm/ptrace.h
+> index 3be9c14334a6..1ffb6190686a 100644
+> --- a/arch/csky/include/uapi/asm/ptrace.h
+> +++ b/arch/csky/include/uapi/asm/ptrace.h
+> @@ -45,6 +45,12 @@ struct user_fp {
+>         unsigned long   fesr;
+>         unsigned long   fid;
+>         unsigned long   reserved;
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+> +       unsigned long   user_fcr;
+> +       unsigned long   user_fesr;
+> +       unsigned long   reserved1;
+> +       unsigned long   reserved2;
+> +#endif
+>  };
+No, we couldn't modify user_fp, it'll break the old version toolchain.
+(signal context)
 
-> > I've given this a basic build test on an arm config using
-> > GENERIC_ATOMIC64 (but not ARCH_ATOMIC).
-> >
-> > Thanks,
-> > Mark.
-> > ---->8----
-> > From 7f0389c8a1f41ecb5b2700f6ba38ff2ba093eb33 Mon Sep 17 00:00:00 2001
-> > From: Mark Rutland <mark.rutland@arm.com>
-> > Date: Thu, 22 Apr 2021 11:26:04 +0100
-> > Subject: [PATCH] asm-generic: atomic64: handle ARCH_ATOMIC builds
-> >
-> > We'd like all architectures to convert to ARCH_ATOMIC, as this will
-> > enable functionality, and once all architectures are converted it will
-> > be possible to make significant cleanups to the atomic headers.
-> >
-> > A number of architectures use GENERIC_ATOMIC64, and it's impractical to
-> > convert them all in one go. To make it possible to convert them
-> > one-by-one, let's make the GENERIC_ATOMIC64 implementation function as
-> > either atomic64_*() or arch_atomic64_*() depending on whether
-> > ARCH_ATOMIC is selected. To do this, the C implementations are prefixed
-> > as generic_atomic64_*(), and the asm-generic/atomic64.h header maps
-> > atomic64_*()/arch_atomic64_*() onto these as appropriate via teh
-> > preprocessor.
-> >
-> > Once all users are moved over to ARCH_ATOMIC the ifdeffery in the header
-> > can be simplified and/or removed entirely.
-> >
-> > For existing users (none of which select ARCH_ATOMIC), there should be
-> > no functional change as a result of this patch.
-> >
-> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > ---
-> >  include/asm-generic/atomic64.h | 74 ++++++++++++++++++++++++++++++++++--------
-> >  lib/atomic64.c                 | 36 ++++++++++----------
-> >  2 files changed, 79 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/include/asm-generic/atomic64.h b/include/asm-generic/atomic64.h
-> > index 370f01d4450f..45c7ff8c9477 100644
-> > --- a/include/asm-generic/atomic64.h
-> > +++ b/include/asm-generic/atomic64.h
-> > @@ -15,19 +15,17 @@ typedef struct {
-> >
-> >  #define ATOMIC64_INIT(i)       { (i) }
-> >
-> > -extern s64 atomic64_read(const atomic64_t *v);
-> > -extern void atomic64_set(atomic64_t *v, s64 i);
-> > -
-> > -#define atomic64_set_release(v, i)     atomic64_set((v), (i))
-> > +extern s64 generic_atomic64_read(const atomic64_t *v);
-> > +extern void generic_atomic64_set(atomic64_t *v, s64 i);
-> >
-> >  #define ATOMIC64_OP(op)                                                        \
-> > -extern void     atomic64_##op(s64 a, atomic64_t *v);
-> > +extern void generic_atomic64_##op(s64 a, atomic64_t *v);
-> >
-> >  #define ATOMIC64_OP_RETURN(op)                                         \
-> > -extern s64 atomic64_##op##_return(s64 a, atomic64_t *v);
-> > +extern s64 generic_atomic64_##op##_return(s64 a, atomic64_t *v);
-> >
-> >  #define ATOMIC64_FETCH_OP(op)                                          \
-> > -extern s64 atomic64_fetch_##op(s64 a, atomic64_t *v);
-> > +extern s64 generic_atomic64_fetch_##op(s64 a, atomic64_t *v);
-> >
-> >  #define ATOMIC64_OPS(op)       ATOMIC64_OP(op) ATOMIC64_OP_RETURN(op) ATOMIC64_FETCH_OP(op)
-> >
-> > @@ -46,11 +44,61 @@ ATOMIC64_OPS(xor)
-> >  #undef ATOMIC64_OP_RETURN
-> >  #undef ATOMIC64_OP
-> >
-> > -extern s64 atomic64_dec_if_positive(atomic64_t *v);
-> > -#define atomic64_dec_if_positive atomic64_dec_if_positive
-> > -extern s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n);
-> > -extern s64 atomic64_xchg(atomic64_t *v, s64 new);
-> > -extern s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u);
-> > -#define atomic64_fetch_add_unless atomic64_fetch_add_unless
-> > +extern s64 generic_atomic64_dec_if_positive(atomic64_t *v);
-> > +extern s64 generic_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n);
-> > +extern s64 generic_atomic64_xchg(atomic64_t *v, s64 new);
-> > +extern s64 generic_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u);
-> > +
-> > +#ifdef ARCH_ATOMIC
-> > +
-> > +#define arch_atomic64_read             generic_atomic64_read
-> > +#define arch_atomic64_set              generic_atomic64_set
-> > +#define arch_atomic64_set_release      generic_atomic64_set
-> > +
-> > +#define        arch_atomic64_add               generic_atomic64_add
-> > +#define        arch_atomic64_add_return        generic_atomic64_add_return
-> > +#define        arch_atomic64_fetch_add         generic_atomic64_fetch_add
-> > +#define        arch_atomic64_sub               generic_atomic64_sub
-> > +#define        arch_atomic64_sub_return        generic_atomic64_sub_return
-> > +#define        arch_atomic64_fetch_sub         generic_atomic64_fetch_sub
-> > +
-> > +#define        arch_atomic64_and               generic_atomic64_and
-> > +#define        arch_atomic64_fetch_and         generic_atomic64_fetch_and
-> > +#define        arch_atomic64_or                generic_atomic64_or
-> > +#define        arch_atomic64_fetch_or          generic_atomic64_fetch_or
-> > +#define        arch_atomic64_xor               generic_atomic64_xor
-> > +#define        arch_atomic64_fetch_xor         generic_atomic64_fetch_xor
-> > +
-> > +#define arch_atomic64_dec_if_positive  generic_atomic64_dec_if_positive
-> > +#define arch_atomic64_cmpxchg          generic_atomic64_cmpxchg
-> > +#define arch_atomic64_xchg             generic_atomic64_xchg
-> > +#define arch_atomic64_fetch_add_unless generic_atomic64_fetch_add_unless
-> > +
-> > +#else /* ARCH_ATOMIC */
-> > +
-> > +#define atomic64_read                  generic_atomic64_read
-> > +#define atomic64_set                   generic_atomic64_set
-> > +#define atomic64_set_release           generic_atomic64_set
-> > +
-> > +#define        atomic64_add                    generic_atomic64_add
-> > +#define        atomic64_add_return             generic_atomic64_add_return
-> > +#define        atomic64_fetch_add              generic_atomic64_fetch_add
-> > +#define        atomic64_sub                    generic_atomic64_sub
-> > +#define        atomic64_sub_return             generic_atomic64_sub_return
-> > +#define        atomic64_fetch_sub              generic_atomic64_fetch_sub
-> > +
-> > +#define        atomic64_and                    generic_atomic64_and
-> > +#define        atomic64_fetch_and              generic_atomic64_fetch_and
-> > +#define        atomic64_or                     generic_atomic64_or
-> > +#define        atomic64_fetch_or               generic_atomic64_fetch_or
-> > +#define        atomic64_xor                    generic_atomic64_xor
-> > +#define        atomic64_fetch_xor              generic_atomic64_fetch_xor
-> > +
-> > +#define atomic64_dec_if_positive       generic_atomic64_dec_if_positive
-> > +#define atomic64_cmpxchg               generic_atomic64_cmpxchg
-> > +#define atomic64_xchg                  generic_atomic64_xchg
-> > +#define atomic64_fetch_add_unless      generic_atomic64_fetch_add_unless
-> > +
-> > +#endif /* ARCH_ATOMIC */
-> >
-> >  #endif  /*  _ASM_GENERIC_ATOMIC64_H  */
-> > diff --git a/lib/atomic64.c b/lib/atomic64.c
-> > index e98c85a99787..3df653994177 100644
-> > --- a/lib/atomic64.c
-> > +++ b/lib/atomic64.c
-> > @@ -42,7 +42,7 @@ static inline raw_spinlock_t *lock_addr(const atomic64_t *v)
-> >         return &atomic64_lock[addr & (NR_LOCKS - 1)].lock;
-> >  }
-> >
-> > -s64 atomic64_read(const atomic64_t *v)
-> > +s64 generic_atomic64_read(const atomic64_t *v)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -53,9 +53,9 @@ s64 atomic64_read(const atomic64_t *v)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_read);
-> > +EXPORT_SYMBOL(generic_atomic64_read);
-> >
-> > -void atomic64_set(atomic64_t *v, s64 i)
-> > +void generic_atomic64_set(atomic64_t *v, s64 i)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -64,10 +64,10 @@ void atomic64_set(atomic64_t *v, s64 i)
-> >         v->counter = i;
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >  }
-> > -EXPORT_SYMBOL(atomic64_set);
-> > +EXPORT_SYMBOL(generic_atomic64_set);
-> >
-> >  #define ATOMIC64_OP(op, c_op)                                          \
-> > -void atomic64_##op(s64 a, atomic64_t *v)                               \
-> > +void generic_atomic64_##op(s64 a, atomic64_t *v)                       \
-> >  {                                                                      \
-> >         unsigned long flags;                                            \
-> >         raw_spinlock_t *lock = lock_addr(v);                            \
-> > @@ -76,10 +76,10 @@ void atomic64_##op(s64 a, atomic64_t *v)                            \
-> >         v->counter c_op a;                                              \
-> >         raw_spin_unlock_irqrestore(lock, flags);                        \
-> >  }                                                                      \
-> > -EXPORT_SYMBOL(atomic64_##op);
-> > +EXPORT_SYMBOL(generic_atomic64_##op);
-> >
-> >  #define ATOMIC64_OP_RETURN(op, c_op)                                   \
-> > -s64 atomic64_##op##_return(s64 a, atomic64_t *v)                       \
-> > +s64 generic_atomic64_##op##_return(s64 a, atomic64_t *v)               \
-> >  {                                                                      \
-> >         unsigned long flags;                                            \
-> >         raw_spinlock_t *lock = lock_addr(v);                            \
-> > @@ -90,10 +90,10 @@ s64 atomic64_##op##_return(s64 a, atomic64_t *v)                    \
-> >         raw_spin_unlock_irqrestore(lock, flags);                        \
-> >         return val;                                                     \
-> >  }                                                                      \
-> > -EXPORT_SYMBOL(atomic64_##op##_return);
-> > +EXPORT_SYMBOL(generic_atomic64_##op##_return);
-> >
-> >  #define ATOMIC64_FETCH_OP(op, c_op)                                    \
-> > -s64 atomic64_fetch_##op(s64 a, atomic64_t *v)                          \
-> > +s64 generic_atomic64_fetch_##op(s64 a, atomic64_t *v)                  \
-> >  {                                                                      \
-> >         unsigned long flags;                                            \
-> >         raw_spinlock_t *lock = lock_addr(v);                            \
-> > @@ -105,7 +105,7 @@ s64 atomic64_fetch_##op(s64 a, atomic64_t *v)                               \
-> >         raw_spin_unlock_irqrestore(lock, flags);                        \
-> >         return val;                                                     \
-> >  }                                                                      \
-> > -EXPORT_SYMBOL(atomic64_fetch_##op);
-> > +EXPORT_SYMBOL(generic_atomic64_fetch_##op);
-> >
-> >  #define ATOMIC64_OPS(op, c_op)                                         \
-> >         ATOMIC64_OP(op, c_op)                                           \
-> > @@ -130,7 +130,7 @@ ATOMIC64_OPS(xor, ^=)
-> >  #undef ATOMIC64_OP_RETURN
-> >  #undef ATOMIC64_OP
-> >
-> > -s64 atomic64_dec_if_positive(atomic64_t *v)
-> > +s64 generic_atomic64_dec_if_positive(atomic64_t *v)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -143,9 +143,9 @@ s64 atomic64_dec_if_positive(atomic64_t *v)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_dec_if_positive);
-> > +EXPORT_SYMBOL(generic_atomic64_dec_if_positive);
-> >
-> > -s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
-> > +s64 generic_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -158,9 +158,9 @@ s64 atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_cmpxchg);
-> > +EXPORT_SYMBOL(generic_atomic64_cmpxchg);
-> >
-> > -s64 atomic64_xchg(atomic64_t *v, s64 new)
-> > +s64 generic_atomic64_xchg(atomic64_t *v, s64 new)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -172,9 +172,9 @@ s64 atomic64_xchg(atomic64_t *v, s64 new)
-> >         raw_spin_unlock_irqrestore(lock, flags);
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_xchg);
-> > +EXPORT_SYMBOL(generic_atomic64_xchg);
-> >
-> > -s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
-> > +s64 generic_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
-> >  {
-> >         unsigned long flags;
-> >         raw_spinlock_t *lock = lock_addr(v);
-> > @@ -188,4 +188,4 @@ s64 atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
-> >
-> >         return val;
-> >  }
-> > -EXPORT_SYMBOL(atomic64_fetch_add_unless);
-> > +EXPORT_SYMBOL(generic_atomic64_fetch_add_unless);
-> > --
-> > 2.11.0
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
+A new struct of saving them in thread struct is enough.
+
+>
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
+> index e5fbf8653a21..053a4f7dff9e 100644
+> --- a/arch/csky/kernel/traps.c
+> +++ b/arch/csky/kernel/traps.c
+> @@ -27,6 +27,10 @@
+>
+>  #ifdef CONFIG_CPU_HAS_FPU
+>  #include <abi/fpu.h>
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+> +extern inline unsigned int get_fpu_insn(struct pt_regs *regs);
+> +extern inline int do_fpu_insn(unsigned int inst, struct pt_regs *regs);
+> +#endif
+>  #endif
+>
+>  int show_unhandled_signals = 1;
+> @@ -186,8 +190,19 @@ asmlinkage void do_trap_bkpt(struct pt_regs *regs)
+>
+>  asmlinkage void do_trap_illinsn(struct pt_regs *regs)
+>  {
+> -       current->thread.trap_no = trap_no(regs);
+> +#ifdef CONFIG_CPU_HAS_FPU
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+CONFIG_CPU_HAS_FPU && CONFIG_CPU_HAS_MATHEMU ?
+
+> +       unsigned int inst;
+> +
+> +       inst = get_fpu_insn(regs);
+> +       if (inst && !do_fpu_insn(inst, regs)) {
+> +               regs->pc += 4;
+> +               return;
+> +       }
+> +#endif
+> +#endif
+Don't double.
+
+>
+> +       current->thread.trap_no = trap_no(regs);
+>  #ifdef CONFIG_KPROBES
+>         if (kprobe_breakpoint_handler(regs))
+>                 return;
+> @@ -209,7 +224,16 @@ asmlinkage void do_trap_illinsn(struct pt_regs *regs)
+>
+>  asmlinkage void do_trap_fpe(struct pt_regs *regs)
+>  {
+> -#ifdef CONFIG_CPU_HAS_FP
+Thx for fixup.
+
+> +#ifdef CONFIG_CPU_HAS_FPU
+> +#ifdef CONFIG_CPU_HAS_MATHEMU
+> +       unsigned int inst;
+> +
+> +       inst = get_fpu_insn(regs);
+> +       if (inst && !do_fpu_insn(inst, regs)) {
+> +               regs->pc += 4;
+> +               return;
+> +       }
+> +#endif
+Move above into fpu_fpe.
+
+>         return fpu_fpe(regs);
+>  #else
+>         do_trap_error(regs, SIGILL, ILL_ILLOPC, regs->pc,
+> @@ -219,7 +243,7 @@ asmlinkage void do_trap_fpe(struct pt_regs *regs)
+>
+>  asmlinkage void do_trap_priv(struct pt_regs *regs)
+>  {
+> -#ifdef CONFIG_CPU_HAS_FP
+Thx for fixup.
+
+> +#ifdef CONFIG_CPU_HAS_FPU
+>         if (user_mode(regs) && fpu_libc_helper(regs))
+>                 return;
+>  #endif
+> --
+> 2.17.1
+>
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
