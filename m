@@ -2,60 +2,83 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F50E3721C8
-	for <lists+linux-csky@lfdr.de>; Mon,  3 May 2021 22:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C708D372663
+	for <lists+linux-csky@lfdr.de>; Tue,  4 May 2021 09:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbhECUqC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 3 May 2021 16:46:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51596 "EHLO mail.kernel.org"
+        id S229951AbhEDHQf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 4 May 2021 03:16:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38858 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229766AbhECUp7 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 3 May 2021 16:45:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9414A610C8;
-        Mon,  3 May 2021 20:45:05 +0000 (UTC)
+        id S229879AbhEDHQb (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 4 May 2021 03:16:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A93D1611AC;
+        Tue,  4 May 2021 07:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620074705;
-        bh=1F6+JdYLwP5EEoYq0ZoUt/GniSDWi8wSsSObVn3JkiE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=KGZ8krZ1HgWGyMiwk3DZ6oUeY57w7Ayx7ESQ2Gv51Czn4RjZ4mwVEMsmaGfnxGiTo
-         J1MHvX3CGNq5XJYEcgb1ecqPaEtbtQlvwMNIhBC72P0Kl+u6ESZtOi0OJLlUojg2zJ
-         0qcky4Cn+h6VcIKVsNSqD6shmSOJZksJnCliMtgmWOCBZoY1S2W0lyA0pbeP+4PjwS
-         z/F+1MZoZIFoz6ythY3vEG3OmPwu106cxoroITIdeirBrm3kc36QlOAf4tnDT1crb9
-         wcVxgzMiyzygDyjzcDByzziLF2cgu3/GqrVlekRVQEx97/dlMp9F2KJD9t0fWZju9d
-         6xOjs01vBPHCQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 81FFC609E9;
-        Mon,  3 May 2021 20:45:05 +0000 (UTC)
-Subject: Re: [GIT PULL] csky changes for v5.13-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210503164518.33972-1-guoren@kernel.org>
-References: <20210503164518.33972-1-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-csky.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210503164518.33972-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.13-rc1
-X-PR-Tracked-Commit-Id: e58a41c2226847fb1446f3942dc1b55af8acfe02
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cda689f8708b6bef0b921c3a17fcdecbe959a079
-Message-Id: <162007470547.4403.10162729492427609078.pr-tracker-bot@kernel.org>
-Date:   Mon, 03 May 2021 20:45:05 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
+        s=k20201202; t=1620112537;
+        bh=4SEVfhe9YJjHKwFp0+1zh+kDJG9VneL2VrT++65GFoc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qbaNkHX2AuopviLcvDUprjolrLlxoNYuO69c6aIBI940/5L4+t23Duc+2Vf0hEtxH
+         MXDWGBHTgtHspfm5KIbP1upRWxUd/KS9PSEuodpphx9taYTQoPhUiIGLccGhLcuSef
+         gSKOtl/sT2bvMO4k8SbK/8Tc7t7xL+INBHjGI0ksaNRLGwL3xK93Fosb9wRmMdt7/X
+         KyN1ds4p1IR+0BVoRwAAvKBQFAYGP9fcjKsXZY31tXoV1lCQRbcKkaJg6AevJZpHYA
+         QKYXfYFyJzF/vJ5nFAy0VrG7i3V9hrkWvHG15O20z3EhfgwJZpCWyf1FSTO1QoN5k2
+         +OHehJffuYcYg==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] csky: syscache: Fixup duplicate cache flush
+Date:   Tue,  4 May 2021 07:14:48 +0000
+Message-Id: <1620112488-18773-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The pull request you sent on Tue,  4 May 2021 00:45:18 +0800:
+From: Guo Ren <guoren@linux.alibaba.com>
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.13-rc1
+The current csky logic of sys_cacheflush is wrong, it'll cause
+icache flush call dcache flush again. Now fixup it with a
+conditional "break & fallthrough".
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cda689f8708b6bef0b921c3a17fcdecbe959a079
+Fixes: 997153b9a75c ("csky: Add flush_icache_mm to defer flush icache all")
+Fixes: 0679d29d3e23 ("csky: fix syscache.c fallthrough warning")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/csky/mm/syscache.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Thank you!
-
+diff --git a/arch/csky/mm/syscache.c b/arch/csky/mm/syscache.c
+index 4e51d63..a7b53b0 100644
+--- a/arch/csky/mm/syscache.c
++++ b/arch/csky/mm/syscache.c
+@@ -12,15 +12,18 @@ SYSCALL_DEFINE3(cacheflush,
+ 		int, cache)
+ {
+ 	switch (cache) {
+-	case ICACHE:
+ 	case BCACHE:
+-		flush_icache_mm_range(current->mm,
+-				(unsigned long)addr,
+-				(unsigned long)addr + bytes);
+-		fallthrough;
+ 	case DCACHE:
+ 		dcache_wb_range((unsigned long)addr,
+ 				(unsigned long)addr + bytes);
++		if (cache == BCACHE)
++			fallthrough;
++		else
++			break;
++	case ICACHE:
++		flush_icache_mm_range(current->mm,
++				(unsigned long)addr,
++				(unsigned long)addr + bytes);
+ 		break;
+ 	default:
+ 		return -EINVAL;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.7.4
+
