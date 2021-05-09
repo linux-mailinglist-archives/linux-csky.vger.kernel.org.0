@@ -2,81 +2,66 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0C2376C9E
-	for <lists+linux-csky@lfdr.de>; Sat,  8 May 2021 00:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A0C37764C
+	for <lists+linux-csky@lfdr.de>; Sun,  9 May 2021 13:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbhEGWZt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 7 May 2021 18:25:49 -0400
-Received: from bosmailout03.eigbox.net ([66.96.186.3]:45669 "EHLO
-        bosmailout03.eigbox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhEGWZo (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 7 May 2021 18:25:44 -0400
-X-Greylist: delayed 1816 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 18:25:34 EDT
-Received: from bosmailscan08.eigbox.net ([10.20.15.8])
-        by bosmailout03.eigbox.net with esmtp (Exim)
-        id 1lf8QM-0003Fa-7M; Fri, 07 May 2021 17:54:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=godsofu4.com; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aM9bUFGSTpfnep8zAVAJMnojqhcwpuHDFPgQnPqW4M4=; b=I+6Bb1DJY/YYTRas0wZTN+AC1D
-        vtIg40M7SDAM/b29+/wY3GjGjzug9/OzX2aPoevJgNlEKSTs0SrEPfP3WhSQM0PCLHlkQfkyX8QT9
-        UZ7TTwAz03WtyNGtE+DdqqC0pYUcPkHvqE4MDSKlo5Vm1z1vJqGpkJRtWe2MFWIr6++JBuHOfV7Fd
-        34Die1lJ1lpPfDh70Zq++IiTaMjdlcGGo7pbn4hVn1WweIC9h772TR5+6npXCISSeeyCgPsBbikdE
-        ZWIrJkpukBwvBgblKKCxDugovauKoCEDbS56mNadJP+sg7ztteNlHrnEQFJYYsCNrcdD1v8ilxnSi
-        f8nqykSw==;
-Received: from [10.115.3.32] (helo=bosimpout12)
-        by bosmailscan08.eigbox.net with esmtp (Exim)
-        id 1lf8QK-0002fP-Rn; Fri, 07 May 2021 17:54:16 -0400
-Received: from boswebmail06.eigbox.net ([10.20.16.6])
-        by bosimpout12 with 
-        id 1xuC2500D07qujN01xuFUj; Fri, 07 May 2021 17:54:16 -0400
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from [127.0.0.1] (helo=homestead)
-        by boswebmail06.eigbox.net with esmtp (Exim)
-        id 1lf8PX-0006IT-Ae; Fri, 07 May 2021 17:53:27 -0400
-Received: from [197.239.81.229]
- by emailmg.homestead.com
- with HTTP (HTTP/1.1 POST); Fri, 07 May 2021 17:53:27 -0400
-MIME-Version: 1.0
-Date:   Fri, 07 May 2021 21:53:27 +0000
-From:   Mrs Suzara Maling Wan <fast65@godsofu4.com>
-To:     undisclosed-recipients:;
-Subject: URGENT REPLY NEEDED
-Reply-To: suzara2017malingwan@gmail.com
-Mail-Reply-To: suzara2017malingwan@gmail.com
-Message-ID: <4c6a48748f6731dac9b66cce1916443b@godsofu4.com>
-X-Sender: fast65@godsofu4.com
-User-Agent: Roundcube Webmail/1.3.14
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-EN-AuthUser: fast65@godsofu4.com
-Sender:  Mrs Suzara Maling Wan <fast65@godsofu4.com>
+        id S229658AbhEILQF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 9 May 2021 07:16:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37264 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229614AbhEILQE (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 9 May 2021 07:16:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2A6A613E5;
+        Sun,  9 May 2021 11:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620558901;
+        bh=dhpv0r+oSYAmFPsd5evBbwf7jZuMlo7Ox0mCiCvxolQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nrs7zKk7p3eRRlNze8Icr/6a/9+J7ewlNh8kbi18Me3K347rkyas8v+mAvArnk2xs
+         B6nQneRUCdY/MTMhsvzggkKmAtdoiU7JofWn4zsx5LJyYvXiffkMNB/FgqyA/nzOqG
+         CQsSxhlzqdLcwLFUskxCKnykWPFQQaF9C2dOUfdL57ouKECo7JyU8jvXrxZC+VjGCC
+         pAmFohjzEcj+Z0u8ulo5Bwz/toicpnqQ8ifcvEFCemJjkcxm2k96mlJmBqp6rMzN3j
+         u0T7qAYpLwDO1CSRF5yQ0qcmmEToeQENq57SyZ1aNCR+NfWQXmoF1VEkx5L7VQ3paH
+         ogqye1ATyBpAA==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: Fixup 610 bootup failed
+Date:   Sun,  9 May 2021 11:14:17 +0000
+Message-Id: <1620558857-22425-1-git-send-email-guoren@kernel.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+From: Guo Ren <guoren@linux.alibaba.com>
 
+Actually, there is only one 610 product is in the market(gx6605s).
 
-My names are Mrs Suzara Maling Wan, I am a Nationality of the Republic
-of the Philippine presently base in West Africa B/F, dealing with
-exportation of Gold, I was diagnose of blood Causal decease, and my
-doctor have announce to me that I have few days to leave due to the
-condition of my sickness.
+The soc's DRAM base is 0x10000000, so make it default for 610.
 
-I have a desire to build an orphanage home in your country of which i
-cannot execute the project myself due to my present health condition,
-I am willing to hand over the project under your care for you to help
-me fulfill my dreams and desire of building an orphanage home in your
-country.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/csky/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Reply in you are will to help so that I can direct you to my bank for
-the urgent transfer of the fund/money require for the project to your
-account as I have already made the fund/money available.
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 8de5b98..4d59d66 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -316,7 +316,9 @@ config FORCE_MAX_ZONEORDER
+ 
+ config DRAM_BASE
+ 	hex "DRAM start addr (the same with memory-section in dts)"
+-	default 0x0
++	default 0x10000000	if (CPU_CK610)
++	default 0x0		if (!CPU_CK610)
++
+ 
+ config HOTPLUG_CPU
+ 	bool "Support for hot-pluggable CPUs"
+-- 
+2.7.4
 
-With kind regards
-Mrs Suzara Maling Wan
