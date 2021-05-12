@@ -2,207 +2,369 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8458437B433
-	for <lists+linux-csky@lfdr.de>; Wed, 12 May 2021 04:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE0837B797
+	for <lists+linux-csky@lfdr.de>; Wed, 12 May 2021 10:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhELCmN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 11 May 2021 22:42:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57886 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229951AbhELCe6 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 11 May 2021 22:34:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC2DB616ED;
-        Wed, 12 May 2021 02:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620786822;
-        bh=xqZbwCyE8nxSLmtMoLnpjhoPdg0FHuoWAMNJYrN/75E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=F5h7bSy6043IfwzAJSDQVXQe7fzkrg5baNzjW2LRMTdWivNfxcL5Tt1iXAqZH/b5R
-         zuFaFnWpzaawJr2VwreVIS0DEcsmcKQL5WkuxdV0+BcLRFhqP+NfRwn4czlj9UZ6of
-         EYT2qZ3hBpC8MuuriJyKvz+k0dKZqab4iekLUVely4DHucdZoSiCFMM7S1GQ8bojHQ
-         ae6EOgTRhtODZ0KEEZ8CaX2uCstKggN0l1jZueB6zPwx2j20vRrSMDues8Wm9YKBwl
-         WC99NV4+WyYhsywL3Yo7/6F6UxWNyKcl2UnY74prx3eGknwtA1j/OC2uWdTFe+5TX2
-         j5D7psdE6fDqg==
-Received: by mail-lj1-f180.google.com with SMTP id v5so27666688ljg.12;
-        Tue, 11 May 2021 19:33:42 -0700 (PDT)
-X-Gm-Message-State: AOAM531fG/eOnEXTkU9Eagj4mGrgPeiAiru7Zpa75P0XdpZo/R1Ft1qh
-        pRk8ZnA/4Vl2qdkEeU/e7n0Jqj7n1wW4f4caHe0=
-X-Google-Smtp-Source: ABdhPJzFWd6QZalPnljkVBWzSRmWMEc6JwLshWOm2oZC+5mG3gQUUhWoaqrkSWMLSb457PwohEGWMm8Sbkma3Xx/z1M=
-X-Received: by 2002:a05:651c:1307:: with SMTP id u7mr26598055lja.498.1620786821112;
- Tue, 11 May 2021 19:33:41 -0700 (PDT)
+        id S230211AbhELINe (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 12 May 2021 04:13:34 -0400
+Received: from condef-01.nifty.com ([202.248.20.66]:40285 "EHLO
+        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230176AbhELINd (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 12 May 2021 04:13:33 -0400
+X-Greylist: delayed 332 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 May 2021 04:13:33 EDT
+Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-01.nifty.com with ESMTP id 14C84U3t002321;
+        Wed, 12 May 2021 17:04:30 +0900
+Received: from grover.RMN.KIBA.LAB.jp (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 14C7vbPs028192;
+        Wed, 12 May 2021 16:57:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 14C7vbPs028192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1620806261;
+        bh=wIUNhcOB6btFOL0gSpr92RlYruAqiaKJ+SP4MHn4OAA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MEPfaL+dgaQHelu1aORa4dkshKUoXyML9ToegfF2X/+DDlDkT2NTxvVtRobsDkp3y
+         w6q0OMUPClkMLevvjlJySVaAGk9chQn5JmHYb+Sby+ocz18EmUyh5EfwgbghPbCUMs
+         BfqHu2GczlJunlpKBWtiGYnb5THa+fwMAHT17a+4GK1J+KWFOc18MvDzUYfMdu9apT
+         X6Smfz3LDGjObml+5VUPVmYQNjXkkTpqKOuY3LDfkxKy7PEEqqJdMx9ujR6UWsgJpM
+         n0Q+gHtNpnXSYPWFtp4AhWmiwdi6gcYpdR3mkS/pbX/h/3dXftILrjdVKvAqW4utJB
+         bGXpxDJOBDv8Q==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Cain <bcain@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greentime Hu <green.hu@gmail.com>, Guo Ren <guoren@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jeff Dike <jdike@addtoit.com>, Jonas Bonn <jonas@southpole.se>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Michal Simek <monstr@monstr.eu>,
+        Nick Hu <nickhu@andestech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
+        x86@kernel.org
+Subject: [PATCH 1/5] kbuild: require all architectures to have arch/$(SRCARCH)/Kbuild
+Date:   Wed, 12 May 2021 16:57:25 +0900
+Message-Id: <20210512075729.60291-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20210511132257.1272-1-wangjunqiang@iscas.ac.cn> <202105120013.CKxQukHu-lkp@intel.com>
-In-Reply-To: <202105120013.CKxQukHu-lkp@intel.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 12 May 2021 10:33:29 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSeG5AeytW5cyjsp+tVkK9RvRkz43HWbxWC-u2gg7PQCg@mail.gmail.com>
-Message-ID: <CAJF2gTSeG5AeytW5cyjsp+tVkK9RvRkz43HWbxWC-u2gg7PQCg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] csky: add CSKY 810/860 FPU instruction simulation
-To:     kernel test robot <lkp@intel.com>
-Cc:     Wang Junqiang <wangjunqiang@iscas.ac.cn>, kbuild-all@lists.01.org,
-        Guo Ren <guoren@linux.alibaba.com>, linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Li Weiwei <liweiwei@iscas.ac.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-gcc 860 is on the way:
-https://gcc.gnu.org/pipermail/gcc-patches/2021-April/569272.html
+arch/$(SRCARCH)/Kbuild is useful for Makefile cleanups because you can
+use the obj-y syntax.
 
-On Wed, May 12, 2021 at 1:15 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Wang,
->
-> Thank you for the patch! Yet something to improve:
->
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on v5.13-rc1 next-20210511]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Wang-Junqiang/csky-add-C=
-SKY-810-860-FPU-instruction-simulation/20210511-212648
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t 1140ab592e2ebf8153d2b322604031a8868ce7a5
-> config: csky-randconfig-r005-20210511 (attached as .config)
-> compiler: csky-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/ba3d3b92b548373cb84c691=
-5a02dda46ef1c5d38
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Wang-Junqiang/csky-add-CSKY-810-=
-860-FPU-instruction-simulation/20210511-212648
->         git checkout ba3d3b92b548373cb84c6915a02dda46ef1c5d38
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cros=
-s W=3D1 ARCH=3Dcsky
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> error: arch/csky/include/uapi/asm/siginfo.h: missing "WITH Linux-sysca=
-ll-note" for SPDX-License-Identifier
->    make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm/siginfo=
-.h] Error 1
->    make[2]: Target '__headers' not remade because of errors.
->    make[1]: *** [Makefile:1334: headers] Error 2
->    make[1]: Target 'headers_install' not remade because of errors.
->    make: *** [Makefile:215: __sub-make] Error 2
->    make: Target 'headers_install' not remade because of errors.
-> --
->    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
->    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
-ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
-3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
- ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
-ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
-3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
-10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
- ck810v; did you mean 'ck810'?
-> >> error: arch/csky/include/uapi/asm/siginfo.h: missing "WITH Linux-sysca=
-ll-note" for SPDX-License-Identifier
->    make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm/siginfo=
-.h] Error 1
->    make[2]: Target '__headers' not remade because of errors.
->    make[1]: *** [Makefile:1334: headers] Error 2
->    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
->    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
-ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
-3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
- ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
-ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
-3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
-10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
- ck810v; did you mean 'ck810'?
->    make[2]: *** [scripts/Makefile.build:272: scripts/mod/empty.o] Error 1
->    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
->    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
-ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
-3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
- ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
-ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
-3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
-10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
- ck810v; did you mean 'ck810'?
->    make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offs=
-ets.s] Error 1
->    make[2]: Target '__build' not remade because of errors.
->    make[1]: *** [Makefile:1226: prepare0] Error 2
->    make[1]: Target 'modules_prepare' not remade because of errors.
->    make: *** [Makefile:215: __sub-make] Error 2
->    make: Target 'modules_prepare' not remade because of errors.
-> --
->    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
->    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
-ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
-3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
- ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
-ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
-3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
-10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
- ck810v; did you mean 'ck810'?
->    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflic=
-ts-sr]
->    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconfli=
-cts-rr]
-> >> error: arch/csky/include/uapi/asm/siginfo.h: missing "WITH Linux-sysca=
-ll-note" for SPDX-License-Identifier
->    make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm/siginfo=
-.h] Error 1
->    make[2]: Target '__headers' not remade because of errors.
->    make[1]: *** [Makefile:1334: headers] Error 2
->    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
->    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
-ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
-3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
- ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
-ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
-3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
-10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
- ck810v; did you mean 'ck810'?
->    make[2]: *** [scripts/Makefile.build:272: scripts/mod/empty.o] Error 1
->    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
->    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
-ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
-3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
- ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
-ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
-3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
-10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
- ck810v; did you mean 'ck810'?
->    make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offs=
-ets.s] Error 1
->    make[2]: Target '__build' not remade because of errors.
->    make[1]: *** [Makefile:1226: prepare0] Error 2
->    make[1]: Target 'prepare' not remade because of errors.
->    make: *** [Makefile:215: __sub-make] Error 2
->    make: Target 'prepare' not remade because of errors.
->
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for LOCKDEP
->    Depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && (FRAME_POINTER ||=
- MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86)
->    Selected by
->    - LOCK_STAT && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
->    - DEBUG_LOCK_ALLOC && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Add an empty file if it is missing in arch/$(SRCARCH)/.
 
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
+ Makefile               | 2 +-
+ arch/alpha/Kbuild      | 1 +
+ arch/arc/Makefile      | 3 ---
+ arch/arm/Makefile      | 1 -
+ arch/arm64/Makefile    | 1 -
+ arch/csky/Kbuild       | 1 +
+ arch/h8300/Kbuild      | 1 +
+ arch/hexagon/Kbuild    | 1 +
+ arch/ia64/Kbuild       | 1 +
+ arch/microblaze/Kbuild | 1 +
+ arch/mips/Makefile     | 3 ---
+ arch/nds32/Kbuild      | 1 +
+ arch/nios2/Kbuild      | 1 +
+ arch/openrisc/Makefile | 1 -
+ arch/parisc/Kbuild     | 1 +
+ arch/powerpc/Makefile  | 3 ---
+ arch/riscv/Makefile    | 1 -
+ arch/s390/Makefile     | 3 ---
+ arch/sh/Kbuild         | 1 +
+ arch/sparc/Makefile    | 3 ---
+ arch/um/Kbuild         | 1 +
+ arch/x86/Makefile      | 3 ---
+ arch/xtensa/Kbuild     | 1 +
+ 23 files changed, 13 insertions(+), 23 deletions(-)
+ create mode 100644 arch/alpha/Kbuild
+ create mode 100644 arch/csky/Kbuild
+ create mode 100644 arch/h8300/Kbuild
+ create mode 100644 arch/hexagon/Kbuild
+ create mode 100644 arch/ia64/Kbuild
+ create mode 100644 arch/microblaze/Kbuild
+ create mode 100644 arch/nds32/Kbuild
+ create mode 100644 arch/nios2/Kbuild
+ create mode 100644 arch/parisc/Kbuild
+ create mode 100644 arch/sh/Kbuild
+ create mode 100644 arch/um/Kbuild
+ create mode 100644 arch/xtensa/Kbuild
 
---=20
-Best Regards
- Guo Ren
+diff --git a/Makefile b/Makefile
+index 15b6476d0f89..7df040b1b023 100644
+--- a/Makefile
++++ b/Makefile
+@@ -658,7 +658,7 @@ endif
+ 
+ ifeq ($(KBUILD_EXTMOD),)
+ # Objects we will link into vmlinux / subdirs we need to visit
+-core-y		:= init/ usr/
++core-y		:= init/ usr/ arch/$(SRCARCH)/
+ drivers-y	:= drivers/ sound/
+ drivers-$(CONFIG_SAMPLES) += samples/
+ drivers-$(CONFIG_NET) += net/
+diff --git a/arch/alpha/Kbuild b/arch/alpha/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/alpha/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/arc/Makefile b/arch/arc/Makefile
+index 4392c9c189c4..3e6d4b84797f 100644
+--- a/arch/arc/Makefile
++++ b/arch/arc/Makefile
+@@ -85,9 +85,6 @@ KBUILD_LDFLAGS	+= $(ldflags-y)
+ 
+ head-y		:= arch/arc/kernel/head.o
+ 
+-# See arch/arc/Kbuild for content of core part of the kernel
+-core-y		+= arch/arc/
+-
+ # w/o this dtb won't embed into kernel binary
+ core-y		+= arch/arc/boot/dts/
+ 
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 415c3514573a..173da685a52e 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -252,7 +252,6 @@ endif
+ 
+ export	TEXT_OFFSET GZFLAGS MMUEXT
+ 
+-core-y				+= arch/arm/
+ # If we have a machine-specific directory, then include it in the build.
+ core-y				+= $(machdirs) $(platdirs)
+ 
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 7ef44478560d..b73c151f3a53 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -149,7 +149,6 @@ KBUILD_CFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+ KBUILD_CPPFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+ KBUILD_AFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+ 
+-core-y		+= arch/arm64/
+ libs-y		:= arch/arm64/lib/ $(libs-y)
+ libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+ 
+diff --git a/arch/csky/Kbuild b/arch/csky/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/csky/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/h8300/Kbuild b/arch/h8300/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/h8300/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/hexagon/Kbuild b/arch/hexagon/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/hexagon/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/ia64/Kbuild b/arch/ia64/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/ia64/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/microblaze/Kbuild b/arch/microblaze/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/microblaze/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 258234c35a09..4e942b7ef022 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -332,9 +332,6 @@ head-y := arch/mips/kernel/head.o
+ libs-y			+= arch/mips/lib/
+ libs-$(CONFIG_MIPS_FP_SUPPORT) += arch/mips/math-emu/
+ 
+-# See arch/mips/Kbuild for content of core part of the kernel
+-core-y += arch/mips/
+-
+ drivers-y			+= arch/mips/crypto/
+ 
+ # suspend and hibernation support
+diff --git a/arch/nds32/Kbuild b/arch/nds32/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/nds32/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/nios2/Kbuild b/arch/nios2/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/nios2/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/openrisc/Makefile b/arch/openrisc/Makefile
+index 410e7abfac69..c52de526e518 100644
+--- a/arch/openrisc/Makefile
++++ b/arch/openrisc/Makefile
+@@ -42,7 +42,6 @@ endif
+ 
+ head-y 		:= arch/openrisc/kernel/head.o
+ 
+-core-y		+= arch/openrisc/
+ libs-y		+= $(LIBGCC)
+ 
+ PHONY += vmlinux.bin
+diff --git a/arch/parisc/Kbuild b/arch/parisc/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/parisc/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index 3212d076ac6a..af669aa75b73 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -267,9 +267,6 @@ head-$(CONFIG_PPC_FPU)		+= arch/powerpc/kernel/fpu.o
+ head-$(CONFIG_ALTIVEC)		+= arch/powerpc/kernel/vector.o
+ head-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)  += arch/powerpc/kernel/prom_init.o
+ 
+-# See arch/powerpc/Kbuild for content of core part of the kernel
+-core-y += arch/powerpc/
+-
+ # Default to zImage, override when needed
+ all: zImage
+ 
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 3eb9590a0775..c5f359540862 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -90,7 +90,6 @@ endif
+ 
+ head-y := arch/riscv/kernel/head.o
+ 
+-core-y += arch/riscv/
+ core-$(CONFIG_RISCV_ERRATA_ALTERNATIVE) += arch/riscv/errata/
+ 
+ libs-y += arch/riscv/lib/
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index e443ed9947bd..37b61645694c 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -128,9 +128,6 @@ OBJCOPYFLAGS	:= -O binary
+ 
+ head-y		:= arch/s390/kernel/head64.o
+ 
+-# See arch/s390/Kbuild for content of core part of the kernel
+-core-y		+= arch/s390/
+-
+ libs-y		+= arch/s390/lib/
+ drivers-y	+= drivers/s390/
+ 
+diff --git a/arch/sh/Kbuild b/arch/sh/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/sh/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+index bee99e65fe23..4e65245bc755 100644
+--- a/arch/sparc/Makefile
++++ b/arch/sparc/Makefile
+@@ -58,9 +58,6 @@ endif
+ 
+ head-y                 := arch/sparc/kernel/head_$(BITS).o
+ 
+-# See arch/sparc/Kbuild for the core part of the kernel
+-core-y                 += arch/sparc/
+-
+ libs-y                 += arch/sparc/prom/
+ libs-y                 += arch/sparc/lib/
+ 
+diff --git a/arch/um/Kbuild b/arch/um/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/um/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index c77c5d8a7b3e..4307bf48ec53 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -239,9 +239,6 @@ head-y += arch/x86/kernel/platform-quirks.o
+ 
+ libs-y  += arch/x86/lib/
+ 
+-# See arch/x86/Kbuild for content of core part of the kernel
+-core-y += arch/x86/
+-
+ # drivers-y are linked after core-y
+ drivers-$(CONFIG_MATH_EMULATION) += arch/x86/math-emu/
+ drivers-$(CONFIG_PCI)            += arch/x86/pci/
+diff --git a/arch/xtensa/Kbuild b/arch/xtensa/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/xtensa/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+-- 
+2.27.0
 
-ML: https://lore.kernel.org/linux-csky/
