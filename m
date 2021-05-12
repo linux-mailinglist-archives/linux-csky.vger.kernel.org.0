@@ -2,305 +2,206 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CCC37B418
-	for <lists+linux-csky@lfdr.de>; Wed, 12 May 2021 04:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8458437B433
+	for <lists+linux-csky@lfdr.de>; Wed, 12 May 2021 04:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbhELCOz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 11 May 2021 22:14:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34372 "EHLO mail.kernel.org"
+        id S229932AbhELCmN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 11 May 2021 22:42:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229920AbhELCOz (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 11 May 2021 22:14:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 58E77616E8;
-        Wed, 12 May 2021 02:13:48 +0000 (UTC)
+        id S229951AbhELCe6 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 11 May 2021 22:34:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC2DB616ED;
+        Wed, 12 May 2021 02:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620785628;
-        bh=ORI2FIntMXJEdc9XGc1cHCVFCdGZJ1M84YKy7WGkAPY=;
+        s=k20201202; t=1620786822;
+        bh=xqZbwCyE8nxSLmtMoLnpjhoPdg0FHuoWAMNJYrN/75E=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sulqtEffHIXMLXA9V3mnN1foS+7K4T0o+QXIyA2oQlgBCbvNjY3JeXv1WXDSJuU4Z
-         YI1ij/eZf7JVMCJ719P77DU0lTxKT4+L2x19gu/tA2b6QKXEvutiXp9V0/VUCvE8Yf
-         22i1UqvUzPUyky55eEiNqDfZrw/FYxW9XSS98ehd0dzKJsTMHClWvJ0gLAxolwHgWG
-         qOridnlrQmYJ8NKHaKhgHTb7wJg+2G8qj4IlAjwpvdoIPUgE7utYDuQLW1dn1STY1t
-         UdDllF6HRL9MZ2Ci6SdRleJHf9cP4gokFUA+QqsCXfmYMxJgta/UZRYY51ELA5ZPQY
-         y/vBpFGvxpLnw==
-Received: by mail-lj1-f176.google.com with SMTP id w4so27643484ljw.9;
-        Tue, 11 May 2021 19:13:48 -0700 (PDT)
-X-Gm-Message-State: AOAM533MRKG3/7T+HkSfJvMsA8n604ZLOm0I9rWbSzGOqZOs8wXLAAwp
-        hxaJWuu5U5qxrDVST0dsyNstQkozwwWXHRqMWXE=
-X-Google-Smtp-Source: ABdhPJz9YufAB/LixXU0RwfrsDh9yXF1fl9qWsS+kel4T6YFESEN8JVIQJhuLQ94GIzqp5wohQGZWg8YtNfSr6RbpzM=
-X-Received: by 2002:a05:651c:1307:: with SMTP id u7mr26544982lja.498.1620785626595;
- Tue, 11 May 2021 19:13:46 -0700 (PDT)
+        b=F5h7bSy6043IfwzAJSDQVXQe7fzkrg5baNzjW2LRMTdWivNfxcL5Tt1iXAqZH/b5R
+         zuFaFnWpzaawJr2VwreVIS0DEcsmcKQL5WkuxdV0+BcLRFhqP+NfRwn4czlj9UZ6of
+         EYT2qZ3hBpC8MuuriJyKvz+k0dKZqab4iekLUVely4DHucdZoSiCFMM7S1GQ8bojHQ
+         ae6EOgTRhtODZ0KEEZ8CaX2uCstKggN0l1jZueB6zPwx2j20vRrSMDues8Wm9YKBwl
+         WC99NV4+WyYhsywL3Yo7/6F6UxWNyKcl2UnY74prx3eGknwtA1j/OC2uWdTFe+5TX2
+         j5D7psdE6fDqg==
+Received: by mail-lj1-f180.google.com with SMTP id v5so27666688ljg.12;
+        Tue, 11 May 2021 19:33:42 -0700 (PDT)
+X-Gm-Message-State: AOAM531fG/eOnEXTkU9Eagj4mGrgPeiAiru7Zpa75P0XdpZo/R1Ft1qh
+        pRk8ZnA/4Vl2qdkEeU/e7n0Jqj7n1wW4f4caHe0=
+X-Google-Smtp-Source: ABdhPJzFWd6QZalPnljkVBWzSRmWMEc6JwLshWOm2oZC+5mG3gQUUhWoaqrkSWMLSb457PwohEGWMm8Sbkma3Xx/z1M=
+X-Received: by 2002:a05:651c:1307:: with SMTP id u7mr26598055lja.498.1620786821112;
+ Tue, 11 May 2021 19:33:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210511132257.1272-1-wangjunqiang@iscas.ac.cn> <20210511132257.1272-2-wangjunqiang@iscas.ac.cn>
-In-Reply-To: <20210511132257.1272-2-wangjunqiang@iscas.ac.cn>
+References: <20210511132257.1272-1-wangjunqiang@iscas.ac.cn> <202105120013.CKxQukHu-lkp@intel.com>
+In-Reply-To: <202105120013.CKxQukHu-lkp@intel.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 12 May 2021 10:13:33 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTpK=8FxybgY85pHTRRq_hEq3_tUMuhnYqxM_ZKWzMvrQ@mail.gmail.com>
-Message-ID: <CAJF2gTTpK=8FxybgY85pHTRRq_hEq3_tUMuhnYqxM_ZKWzMvrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] csky: add CONFIG_CPU_HAS_MATHEMU and use in traps
-To:     Wang Junqiang <wangjunqiang@iscas.ac.cn>
-Cc:     Guo Ren <guoren@linux.alibaba.com>, linux-csky@vger.kernel.org,
+Date:   Wed, 12 May 2021 10:33:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSeG5AeytW5cyjsp+tVkK9RvRkz43HWbxWC-u2gg7PQCg@mail.gmail.com>
+Message-ID: <CAJF2gTSeG5AeytW5cyjsp+tVkK9RvRkz43HWbxWC-u2gg7PQCg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] csky: add CSKY 810/860 FPU instruction simulation
+To:     kernel test robot <lkp@intel.com>
+Cc:     Wang Junqiang <wangjunqiang@iscas.ac.cn>, kbuild-all@lists.01.org,
+        Guo Ren <guoren@linux.alibaba.com>, linux-csky@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Li Weiwei <liweiwei@iscas.ac.cn>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Wang,
+gcc 860 is on the way:
+https://gcc.gnu.org/pipermail/gcc-patches/2021-April/569272.html
 
-On Tue, May 11, 2021 at 9:23 PM Wang Junqiang <wangjunqiang@iscas.ac.cn> wrote:
+On Wed, May 12, 2021 at 1:15 AM kernel test robot <lkp@intel.com> wrote:
 >
-> This patch contains the use of fpu instruction emulation by trap_c.
-> It defined _fcr, _fesr for user space in processor.h which is used in fpu.c
-> and instruction emulation. During initialization, all fpe are enabled,
-> and the config that read/write fcr and fesr in glibc library is captured
-> when privilege exception is triggered by mfcr and mtcr < ,15>.
+> Hi Wang,
 >
-> steps:
->  1.enable all fpe interrupts
->  2.mfcr/mtcr trigger privilege exception
->  3.synchronize fcr and fesr of user app through fpu_libc_helper function
->  4.fpe interrupt at runtime
->  5.fpu instruction simulation is based on user_fcr and user_fesr
->  6.clearing interrupts and synchronizing fcr fesr
->  7.state restore and continue running
+> Thank you for the patch! Yet something to improve:
 >
-> Change in v2:
->  - fixup Kconfig bug by Randy and Guo Ren
->  - move CONFIG_CPU_HAS_MATHEMU to fpu.h by define macro
->  - del usr_fcr usr_fesr in struct user_fp and define in processor.h
->  - del mathemu use in do_trap_ and use in fpu_fpe
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v5.13-rc1 next-20210511]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 >
-> Signed-off-by: Wang Junqiang <wangjunqiang@iscas.ac.cn>
-> Signed-off-by: Li Weiwei <liweiwei@iscas.ac.cn>
-> ---
->  arch/csky/Kconfig                 |  7 +++++++
->  arch/csky/Makefile                |  1 +
->  arch/csky/abiv2/fpu.c             | 21 +++++++++++++------
->  arch/csky/abiv2/inc/abi/fpu.h     | 34 +++++++++++++++++++++++++++++--
->  arch/csky/include/asm/processor.h | 11 ++++++++++
->  arch/csky/kernel/traps.c          |  5 ++---
->  6 files changed, 68 insertions(+), 11 deletions(-)
+> url:    https://github.com/0day-ci/linux/commits/Wang-Junqiang/csky-add-C=
+SKY-810-860-FPU-instruction-simulation/20210511-212648
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t 1140ab592e2ebf8153d2b322604031a8868ce7a5
+> config: csky-randconfig-r005-20210511 (attached as .config)
+> compiler: csky-linux-gcc (GCC) 9.3.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/ba3d3b92b548373cb84c691=
+5a02dda46ef1c5d38
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Wang-Junqiang/csky-add-CSKY-810-=
+860-FPU-instruction-simulation/20210511-212648
+>         git checkout ba3d3b92b548373cb84c6915a02dda46ef1c5d38
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cros=
+s W=3D1 ARCH=3Dcsky
 >
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 8de5b987edb9..1f47ff2294c9 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -285,6 +285,13 @@ config CPU_HAS_FPU
->         bool "CPU has FPU coprocessor"
->         depends on CPU_CK807 || CPU_CK810 || CPU_CK860
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 >
-> +config CPU_HAS_MATHEMU
-> +       bool "CPU has FPU Mathemu Instructions"
-> +       depends on (CPU_CK810 || CPU_CK860) && CPU_HAS_FPU
-Just: depends on CPU_HAS_FPU
-For fpu, CK807 = CK810 and CK610 hasn't FPU.
-
-> +       default y
-> +       help
-> +         Say Y/N here to allow turning FPU Instructions simulation on/off.
-> +
->  config CPU_HAS_ICACHE_INS
->         bool "CPU has Icache invalidate instructions"
->         depends on CPU_HAS_CACHEV2
-> diff --git a/arch/csky/Makefile b/arch/csky/Makefile
-> index 37f593a4bf53..495f3a2fad6a 100644
-> --- a/arch/csky/Makefile
-> +++ b/arch/csky/Makefile
-> @@ -64,6 +64,7 @@ head-y := arch/csky/kernel/head.o
->  core-y += arch/csky/kernel/
->  core-y += arch/csky/mm/
->  core-y += arch/csky/$(CSKYABI)/
-> +core-$(CONFIG_CPU_HAS_MATHEMU) += arch/csky/math-emu/
+> All errors (new ones prefixed by >>):
 >
->  libs-y += arch/csky/lib/ \
->         $(shell $(CC) $(KBUILD_CFLAGS) $(KCFLAGS) -print-libgcc-file-name)
-> diff --git a/arch/csky/abiv2/fpu.c b/arch/csky/abiv2/fpu.c
-> index 5acc5c2e544e..a7f6f0bb8537 100644
-> --- a/arch/csky/abiv2/fpu.c
-> +++ b/arch/csky/abiv2/fpu.c
-> @@ -38,8 +38,7 @@ int fpu_libc_helper(struct pt_regs *regs)
->                 return 0;
->
->         tinstr = instr_hi | ((unsigned long)instr_low << 16);
-> -
-> -       if (((tinstr >> 21) & 0x1F) != 2)
-> +       if (((tinstr >> 21) & 0x1F) != CR_NUM)
->                 return 0;
->
->         if ((tinstr & MTCR_MASK) == MTCR_DIST) {
-> @@ -54,9 +53,9 @@ int fpu_libc_helper(struct pt_regs *regs)
->                 regx =  *(&regs->a0 + index);
->
->                 if (tmp == 1)
-> -                       mtcr("cr<1, 2>", regx);
-> +                       MTCR_FCR(regx)
->                 else if (tmp == 2)
-> -                       mtcr("cr<2, 2>", regx);
-> +                       MTCR_FESR(regx)
->                 else
->                         return 0;
->
-> @@ -74,9 +73,9 @@ int fpu_libc_helper(struct pt_regs *regs)
->                         return 0;
->
->                 if (tmp == 1)
-> -                       regx = mfcr("cr<1, 2>");
-> +                       regx = MFCR_FCR;
->                 else if (tmp == 2)
-> -                       regx = mfcr("cr<2, 2>");
-> +                       regx = MFCR_FESR;
->                 else
->                         return 0;
->
-> @@ -94,6 +93,16 @@ void fpu_fpe(struct pt_regs *regs)
->         int sig, code;
->         unsigned int fesr;
->
-> +#ifdef CONFIG_CPU_HAS_MATHEMU
-> +       unsigned int inst;
-> +
-> +       inst = get_fpu_insn(regs);
-> +       if (inst && !do_fpu_insn(inst, regs)) {
-> +               regs->pc += 4;
-> +               return;
-> +       }
-> +#endif
-> +
->         fesr = mfcr("cr<2, 2>");
->
->         sig = SIGFPE;
-> diff --git a/arch/csky/abiv2/inc/abi/fpu.h b/arch/csky/abiv2/inc/abi/fpu.h
-> index aabb79355013..6521f8814fd1 100644
-> --- a/arch/csky/abiv2/inc/abi/fpu.h
-> +++ b/arch/csky/abiv2/inc/abi/fpu.h
-> @@ -6,14 +6,44 @@
->  #include <asm/sigcontext.h>
->  #include <asm/ptrace.h>
->
-> +
-> +#ifdef CONFIG_CPU_HAS_MATHEMU
-> +#define FPU_INIT               mtcr("cr<1, 2>", 0x3f)
-static inline void init_fpu(void)
-{
-       mtcr("cr<1, 2>", 0x3f);
-}
-
-> +#define MFCR_FCR        current->thread.emul_fp.user_fcr
-> +#define MFCR_FESR       current->thread.emul_fp.user_fesr
-> +#define MTCR_FCR(regx)         \
-> +               {       \
-> +                       mtcr("cr<1, 2>", regx | 0x3f);  \
-> +                       current->thread.emul_fp.user_fcr = regx;        \
-> +               }
-> +#define MTCR_FESR(regx)                \
-> +               {       \
-> +                       mtcr("cr<2, 2>", regx); \
-> +                       current->thread.emul_fp.user_fesr = regx;       \
-> +               }
-> +#define CR_NUM          15
-> +
-> +inline unsigned int get_fpu_insn(struct pt_regs *regs);
-> +inline int do_fpu_insn(unsigned int inst, struct pt_regs *regs);
-> +#else
-> +#define FPU_INIT               mtcr("cr<1, 2>", 0)
-static inline void init_fpu(void)
-{
-       mtcr("cr<1, 2>", 0);
-}
-
-> +#define MFCR_FCR mfcr("cr<1, 2>")
-> +#define MFCR_FESR mfcr("cr<2, 2>")
-> +#define MTCR_FCR(regx)         { mtcr("cr<1, 2>", regx); }
-> +#define MTCR_FESR(regx)                { mtcr("cr<2, 2>", regx); }
-> +#define CR_NUM    2
-> +#endif
-> +
->  int fpu_libc_helper(struct pt_regs *regs);
->  void fpu_fpe(struct pt_regs *regs);
->
-> -static inline void init_fpu(void) { mtcr("cr<1, 2>", 0); }
-> +static inline void init_fpu(void)
-> +{
-> +       FPU_INIT;
-> +}
-Remove it and move it to above.
-
->
->  void save_to_user_fp(struct user_fp *user_fp);
->  void restore_from_user_fp(struct user_fp *user_fp);
-> -
->  /*
->   * Define the fesr bit for fpe handle.
->   */
-> diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
-> index 9e933021fe8e..645b6b27841d 100644
-> --- a/arch/csky/include/asm/processor.h
-> +++ b/arch/csky/include/asm/processor.h
-> @@ -21,6 +21,14 @@ struct cpuinfo_csky {
->
->  extern struct cpuinfo_csky cpu_data[];
->
-> +#ifdef CONFIG_CPU_HAS_MATHEMU
-> +struct emul_fp {
-> +       unsigned long   user_fcr;
-> +       unsigned long   user_fesr;
-> +       unsigned long   reserved1;
-> +       unsigned long   reserved2;
-> +};
-> +#endif
->  /*
->   * User space process size: 2GB. This is hardcoded into a few places,
->   * so don't change it unless you know what you are doing.  TASK_SIZE
-> @@ -45,6 +53,9 @@ struct thread_struct {
->
->         /* FPU regs */
->         struct user_fp __aligned(16) user_fp;
-> +#ifdef CONFIG_CPU_HAS_MATHEMU
-> +       struct emul_fp __aligned(16) emul_fp;
-> +#endif
->  };
->
->  #define INIT_THREAD  { \
-> diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
-> index e5fbf8653a21..a63a56eca0a2 100644
-> --- a/arch/csky/kernel/traps.c
-> +++ b/arch/csky/kernel/traps.c
-> @@ -187,7 +187,6 @@ asmlinkage void do_trap_bkpt(struct pt_regs *regs)
->  asmlinkage void do_trap_illinsn(struct pt_regs *regs)
->  {
->         current->thread.trap_no = trap_no(regs);
-> -
-No need.
-
->  #ifdef CONFIG_KPROBES
->         if (kprobe_breakpoint_handler(regs))
->                 return;
-> @@ -209,7 +208,7 @@ asmlinkage void do_trap_illinsn(struct pt_regs *regs)
->
->  asmlinkage void do_trap_fpe(struct pt_regs *regs)
->  {
-> -#ifdef CONFIG_CPU_HAS_FP
-> +#ifdef CONFIG_CPU_HAS_FPU
->         return fpu_fpe(regs);
->  #else
->         do_trap_error(regs, SIGILL, ILL_ILLOPC, regs->pc,
-> @@ -219,7 +218,7 @@ asmlinkage void do_trap_fpe(struct pt_regs *regs)
->
->  asmlinkage void do_trap_priv(struct pt_regs *regs)
->  {
-> -#ifdef CONFIG_CPU_HAS_FP
-> +#ifdef CONFIG_CPU_HAS_FPU
->         if (user_mode(regs) && fpu_libc_helper(regs))
->                 return;
->  #endif
+> >> error: arch/csky/include/uapi/asm/siginfo.h: missing "WITH Linux-sysca=
+ll-note" for SPDX-License-Identifier
+>    make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm/siginfo=
+.h] Error 1
+>    make[2]: Target '__headers' not remade because of errors.
+>    make[1]: *** [Makefile:1334: headers] Error 2
+>    make[1]: Target 'headers_install' not remade because of errors.
+>    make: *** [Makefile:215: __sub-make] Error 2
+>    make: Target 'headers_install' not remade because of errors.
 > --
-> 2.17.1
+>    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
+>    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
+ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
+3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
+ ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
+ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
+3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
+10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
+ ck810v; did you mean 'ck810'?
+> >> error: arch/csky/include/uapi/asm/siginfo.h: missing "WITH Linux-sysca=
+ll-note" for SPDX-License-Identifier
+>    make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm/siginfo=
+.h] Error 1
+>    make[2]: Target '__headers' not remade because of errors.
+>    make[1]: *** [Makefile:1334: headers] Error 2
+>    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
+>    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
+ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
+3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
+ ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
+ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
+3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
+10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
+ ck810v; did you mean 'ck810'?
+>    make[2]: *** [scripts/Makefile.build:272: scripts/mod/empty.o] Error 1
+>    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
+>    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
+ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
+3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
+ ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
+ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
+3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
+10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
+ ck810v; did you mean 'ck810'?
+>    make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offs=
+ets.s] Error 1
+>    make[2]: Target '__build' not remade because of errors.
+>    make[1]: *** [Makefile:1226: prepare0] Error 2
+>    make[1]: Target 'modules_prepare' not remade because of errors.
+>    make: *** [Makefile:215: __sub-make] Error 2
+>    make: Target 'modules_prepare' not remade because of errors.
+> --
+>    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
+>    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
+ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
+3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
+ ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
+ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
+3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
+10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
+ ck810v; did you mean 'ck810'?
+>    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflic=
+ts-sr]
+>    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconfli=
+cts-rr]
+> >> error: arch/csky/include/uapi/asm/siginfo.h: missing "WITH Linux-sysca=
+ll-note" for SPDX-License-Identifier
+>    make[2]: *** [scripts/Makefile.headersinst:63: usr/include/asm/siginfo=
+.h] Error 1
+>    make[2]: Target '__headers' not remade because of errors.
+>    make[1]: *** [Makefile:1334: headers] Error 2
+>    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
+>    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
+ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
+3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
+ ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
+ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
+3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
+10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
+ ck810v; did you mean 'ck810'?
+>    make[2]: *** [scripts/Makefile.build:272: scripts/mod/empty.o] Error 1
+>    csky-linux-gcc: error: unrecognized argument in option '-mcpu=3Dck860'
+>    csky-linux-gcc: note: valid arguments to '-mcpu=3D' are: ck801 ck801t =
+ck802 ck802j ck802t ck803 ck803e ck803ef ck803efh ck803efhr1 ck803efht ck80=
+3efhtr1 ck803efr1 ck803eft ck803eftr1 ck803eh ck803ehr1 ck803eht ck803ehtr1=
+ ck803er1 ck803et ck803etr1 ck803f ck803fh ck803fhr1 ck803fr1 ck803ft ck803=
+ftr1 ck803h ck803hr1 ck803ht ck803htr1 ck803r1 ck803s ck803se ck803sef ck80=
+3seft ck803sf ck803st ck803t ck803tr1 ck807 ck807e ck807ef ck807f ck810 ck8=
+10e ck810ef ck810eft ck810et ck810f ck810ft ck810ftv ck810fv ck810t ck810tv=
+ ck810v; did you mean 'ck810'?
+>    make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offs=
+ets.s] Error 1
+>    make[2]: Target '__build' not remade because of errors.
+>    make[1]: *** [Makefile:1226: prepare0] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:215: __sub-make] Error 2
+>    make: Target 'prepare' not remade because of errors.
 >
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for LOCKDEP
+>    Depends on DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT && (FRAME_POINTER ||=
+ MIPS || PPC || S390 || MICROBLAZE || ARM || ARC || X86)
+>    Selected by
+>    - LOCK_STAT && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
+>    - DEBUG_LOCK_ALLOC && DEBUG_KERNEL && LOCK_DEBUGGING_SUPPORT
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
 
--- 
+
+--=20
 Best Regards
  Guo Ren
 
