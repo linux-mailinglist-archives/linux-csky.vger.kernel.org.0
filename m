@@ -2,271 +2,397 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE203823E2
-	for <lists+linux-csky@lfdr.de>; Mon, 17 May 2021 07:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3FF391A6D
+	for <lists+linux-csky@lfdr.de>; Wed, 26 May 2021 16:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbhEQF72 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 17 May 2021 01:59:28 -0400
-Received: from smtp21.cstnet.cn ([159.226.251.21]:34444 "EHLO cstnet.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231503AbhEQF7F (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 17 May 2021 01:59:05 -0400
-Received: from localhost.localdomain (unknown [121.232.13.213])
-        by APP-01 (Coremail) with SMTP id qwCowAB3MIyuBaJgYcEJAA--.16203S3;
-        Mon, 17 May 2021 13:57:04 +0800 (CST)
-From:   Wang Junqiang <wangjunqiang@iscas.ac.cn>
-To:     guoren@kernel.org
-Cc:     guoren@linux.alibaba.com, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Li Weiwei <liweiwei@iscas.ac.cn>
-Subject: [PATCH v3 2/2] csky: add CONFIG_CPU_HAS_MATHEMU and use in traps
-Date:   Mon, 17 May 2021 13:57:16 +0800
-Message-Id: <20210517055716.26144-2-wangjunqiang@iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210517055716.26144-1-wangjunqiang@iscas.ac.cn>
-References: <20210517055716.26144-1-wangjunqiang@iscas.ac.cn>
-X-CM-TRANSID: qwCowAB3MIyuBaJgYcEJAA--.16203S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF4xGr47XryUWrWktF4xWFg_yoWxCry8pF
-        Z8Aas3GFW8GF1jg3yfAw4kWa93trZ5KrsrZr4xG34YyF1UA397XF18tan8Zrs8ZFykWr1x
-        XFWSkw17CFn7X3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBS14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GrWl42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUO2-eDUUUU
-X-Originating-IP: [121.232.13.213]
-X-CM-SenderInfo: pzdqwy5xqtxt1qj6x2xfdvhtffof0/1tbiCQcEAF02aLurlwAAsO
+        id S234632AbhEZOjj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 26 May 2021 10:39:39 -0400
+Received: from condef-09.nifty.com ([202.248.20.74]:32364 "EHLO
+        condef-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234432AbhEZOjj (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 26 May 2021 10:39:39 -0400
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-09.nifty.com with ESMTP id 14QEXHP3027035;
+        Wed, 26 May 2021 23:33:17 +0900
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 14QEX0hZ030416;
+        Wed, 26 May 2021 23:33:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 14QEX0hZ030416
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1622039581;
+        bh=K2JBpUyGmknhlRJpT71wl4Baxz8GsbPi2HBWhe0fUJY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cnmXS+DqWdAPC0p8MNIg0X+ZuRBIktoOUUR+EQB4vPPRCGwGVlLjEGNDw3EmAqZlv
+         xlyoU4qIgALC1L++WZgyjKMXDzp+GxzDeYEL0F6IhJRd7Rpw2XWDIFJ8o7cQRW8BJc
+         58bmB0Jh48QslQPtKIaufL8A/fujJ7UQngW2AlQLs93Fom+msv11CPKYfc9S8R6atG
+         3OOPiA7jJYoMBhNmRyZsxR2MDGv0EVvIwT7A7e7yI9l8/pHrO3j3QQFOzjOgPaV2AN
+         D3pbKwvq9+nlzItRdCDnwVjN2eBR7ykeJ5nQmYRfOW40+I524Aqu+Vsx77vDiJBmu1
+         zIUzibiWGcAvw==
+X-Nifty-SrcIP: [209.85.214.181]
+Received: by mail-pl1-f181.google.com with SMTP id d20so700064pls.13;
+        Wed, 26 May 2021 07:33:00 -0700 (PDT)
+X-Gm-Message-State: AOAM530GOUOKnQj3QL/c4ZQ46GiqErhr0ztzPNR1/JAnM+d4jhe3s5UJ
+        GuU5kapvCyfdDuHaoVR2HnibyZ/eo5oliR92Jac=
+X-Google-Smtp-Source: ABdhPJw/7i4Yr5Lur94Y0RHgLFU9NY7pValTqlXUvZTdqsgLwd6wmbbeeFmUfP1tSYkLq/bZEryNx1br7CSMU1EHLow=
+X-Received: by 2002:a17:902:541:b029:f0:3187:409b with SMTP id
+ 59-20020a1709020541b02900f03187409bmr36247746plf.47.1622039579510; Wed, 26
+ May 2021 07:32:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210512075729.60291-1-masahiroy@kernel.org>
+In-Reply-To: <20210512075729.60291-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 26 May 2021 23:32:22 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS7cEj9h=Hi0O-AoFjJPg2mxp0zbi8boXj4O9aYt_yg6Q@mail.gmail.com>
+Message-ID: <CAK7LNAS7cEj9h=Hi0O-AoFjJPg2mxp0zbi8boXj4O9aYt_yg6Q@mail.gmail.com>
+Subject: Re: [PATCH 1/5] kbuild: require all architectures to have arch/$(SRCARCH)/Kbuild
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Cain <bcain@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greentime Hu <green.hu@gmail.com>, Guo Ren <guoren@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Jeff Dike <jdike@addtoit.com>, Jonas Bonn <jonas@southpole.se>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Michal Simek <monstr@monstr.eu>,
+        Nick Hu <nickhu@andestech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        linux-um@lists.infradead.org,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        openrisc@lists.librecores.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This patch contains the use of fpu instruction emulation by trap_c.
-It defined _fcr, _fesr for user space in processor.h which is used in fpu.c
-and instruction emulation. During initialization, all fpe are enabled,
-and the config that read/write fcr and fesr in glibc library is captured
-when privilege exception is triggered by mfcr and mtcr < ,15>.
+On Wed, May 12, 2021 at 5:00 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> arch/$(SRCARCH)/Kbuild is useful for Makefile cleanups because you can
+> use the obj-y syntax.
+>
+> Add an empty file if it is missing in arch/$(SRCARCH)/.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-steps:
- 1.enable all fpe interrupts
- 2.mfcr/mtcr trigger privilege exception
- 3.synchronize fcr and fesr of user app through fpu_libc_helper function
- 4.fpe interrupt at runtime
- 5.fpu instruction simulation is based on user_fcr and user_fesr
- 6.clearing interrupts and synchronizing fcr fesr
- 7.state restore and continue running
 
-Change in v3:
- - update init_fpu by Guo Ren's review
+Applied to linux-kbuild.
 
-Change in v2:
- - fixup Kconfig bug by Randy and Guo Ren
- - move CONFIG_CPU_HAS_MATHEMU to fpu.h by define macro
- - del usr_fcr usr_fesr in struct user_fp and define in processor.h
- - del mathemu use in do_trap_ and use in fpu_fpe
+>
+>  Makefile               | 2 +-
+>  arch/alpha/Kbuild      | 1 +
+>  arch/arc/Makefile      | 3 ---
+>  arch/arm/Makefile      | 1 -
+>  arch/arm64/Makefile    | 1 -
+>  arch/csky/Kbuild       | 1 +
+>  arch/h8300/Kbuild      | 1 +
+>  arch/hexagon/Kbuild    | 1 +
+>  arch/ia64/Kbuild       | 1 +
+>  arch/microblaze/Kbuild | 1 +
+>  arch/mips/Makefile     | 3 ---
+>  arch/nds32/Kbuild      | 1 +
+>  arch/nios2/Kbuild      | 1 +
+>  arch/openrisc/Makefile | 1 -
+>  arch/parisc/Kbuild     | 1 +
+>  arch/powerpc/Makefile  | 3 ---
+>  arch/riscv/Makefile    | 1 -
+>  arch/s390/Makefile     | 3 ---
+>  arch/sh/Kbuild         | 1 +
+>  arch/sparc/Makefile    | 3 ---
+>  arch/um/Kbuild         | 1 +
+>  arch/x86/Makefile      | 3 ---
+>  arch/xtensa/Kbuild     | 1 +
+>  23 files changed, 13 insertions(+), 23 deletions(-)
+>  create mode 100644 arch/alpha/Kbuild
+>  create mode 100644 arch/csky/Kbuild
+>  create mode 100644 arch/h8300/Kbuild
+>  create mode 100644 arch/hexagon/Kbuild
+>  create mode 100644 arch/ia64/Kbuild
+>  create mode 100644 arch/microblaze/Kbuild
+>  create mode 100644 arch/nds32/Kbuild
+>  create mode 100644 arch/nios2/Kbuild
+>  create mode 100644 arch/parisc/Kbuild
+>  create mode 100644 arch/sh/Kbuild
+>  create mode 100644 arch/um/Kbuild
+>  create mode 100644 arch/xtensa/Kbuild
+>
+> diff --git a/Makefile b/Makefile
+> index 15b6476d0f89..7df040b1b023 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -658,7 +658,7 @@ endif
+>
+>  ifeq ($(KBUILD_EXTMOD),)
+>  # Objects we will link into vmlinux / subdirs we need to visit
+> -core-y         := init/ usr/
+> +core-y         := init/ usr/ arch/$(SRCARCH)/
+>  drivers-y      := drivers/ sound/
+>  drivers-$(CONFIG_SAMPLES) += samples/
+>  drivers-$(CONFIG_NET) += net/
+> diff --git a/arch/alpha/Kbuild b/arch/alpha/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/alpha/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/arc/Makefile b/arch/arc/Makefile
+> index 4392c9c189c4..3e6d4b84797f 100644
+> --- a/arch/arc/Makefile
+> +++ b/arch/arc/Makefile
+> @@ -85,9 +85,6 @@ KBUILD_LDFLAGS        += $(ldflags-y)
+>
+>  head-y         := arch/arc/kernel/head.o
+>
+> -# See arch/arc/Kbuild for content of core part of the kernel
+> -core-y         += arch/arc/
+> -
+>  # w/o this dtb won't embed into kernel binary
+>  core-y         += arch/arc/boot/dts/
+>
+> diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+> index 415c3514573a..173da685a52e 100644
+> --- a/arch/arm/Makefile
+> +++ b/arch/arm/Makefile
+> @@ -252,7 +252,6 @@ endif
+>
+>  export TEXT_OFFSET GZFLAGS MMUEXT
+>
+> -core-y                         += arch/arm/
+>  # If we have a machine-specific directory, then include it in the build.
+>  core-y                         += $(machdirs) $(platdirs)
+>
+> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+> index 7ef44478560d..b73c151f3a53 100644
+> --- a/arch/arm64/Makefile
+> +++ b/arch/arm64/Makefile
+> @@ -149,7 +149,6 @@ KBUILD_CFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+>  KBUILD_CPPFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+>  KBUILD_AFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+>
+> -core-y         += arch/arm64/
+>  libs-y         := arch/arm64/lib/ $(libs-y)
+>  libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+>
+> diff --git a/arch/csky/Kbuild b/arch/csky/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/csky/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/h8300/Kbuild b/arch/h8300/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/h8300/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/hexagon/Kbuild b/arch/hexagon/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/hexagon/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/ia64/Kbuild b/arch/ia64/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/ia64/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/microblaze/Kbuild b/arch/microblaze/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/microblaze/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> index 258234c35a09..4e942b7ef022 100644
+> --- a/arch/mips/Makefile
+> +++ b/arch/mips/Makefile
+> @@ -332,9 +332,6 @@ head-y := arch/mips/kernel/head.o
+>  libs-y                 += arch/mips/lib/
+>  libs-$(CONFIG_MIPS_FP_SUPPORT) += arch/mips/math-emu/
+>
+> -# See arch/mips/Kbuild for content of core part of the kernel
+> -core-y += arch/mips/
+> -
+>  drivers-y                      += arch/mips/crypto/
+>
+>  # suspend and hibernation support
+> diff --git a/arch/nds32/Kbuild b/arch/nds32/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/nds32/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/nios2/Kbuild b/arch/nios2/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/nios2/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/openrisc/Makefile b/arch/openrisc/Makefile
+> index 410e7abfac69..c52de526e518 100644
+> --- a/arch/openrisc/Makefile
+> +++ b/arch/openrisc/Makefile
+> @@ -42,7 +42,6 @@ endif
+>
+>  head-y                 := arch/openrisc/kernel/head.o
+>
+> -core-y         += arch/openrisc/
+>  libs-y         += $(LIBGCC)
+>
+>  PHONY += vmlinux.bin
+> diff --git a/arch/parisc/Kbuild b/arch/parisc/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/parisc/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+> index 3212d076ac6a..af669aa75b73 100644
+> --- a/arch/powerpc/Makefile
+> +++ b/arch/powerpc/Makefile
+> @@ -267,9 +267,6 @@ head-$(CONFIG_PPC_FPU)              += arch/powerpc/kernel/fpu.o
+>  head-$(CONFIG_ALTIVEC)         += arch/powerpc/kernel/vector.o
+>  head-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)  += arch/powerpc/kernel/prom_init.o
+>
+> -# See arch/powerpc/Kbuild for content of core part of the kernel
+> -core-y += arch/powerpc/
+> -
+>  # Default to zImage, override when needed
+>  all: zImage
+>
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 3eb9590a0775..c5f359540862 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -90,7 +90,6 @@ endif
+>
+>  head-y := arch/riscv/kernel/head.o
+>
+> -core-y += arch/riscv/
+>  core-$(CONFIG_RISCV_ERRATA_ALTERNATIVE) += arch/riscv/errata/
+>
+>  libs-y += arch/riscv/lib/
+> diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+> index e443ed9947bd..37b61645694c 100644
+> --- a/arch/s390/Makefile
+> +++ b/arch/s390/Makefile
+> @@ -128,9 +128,6 @@ OBJCOPYFLAGS        := -O binary
+>
+>  head-y         := arch/s390/kernel/head64.o
+>
+> -# See arch/s390/Kbuild for content of core part of the kernel
+> -core-y         += arch/s390/
+> -
+>  libs-y         += arch/s390/lib/
+>  drivers-y      += drivers/s390/
+>
+> diff --git a/arch/sh/Kbuild b/arch/sh/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/sh/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+> index bee99e65fe23..4e65245bc755 100644
+> --- a/arch/sparc/Makefile
+> +++ b/arch/sparc/Makefile
+> @@ -58,9 +58,6 @@ endif
+>
+>  head-y                 := arch/sparc/kernel/head_$(BITS).o
+>
+> -# See arch/sparc/Kbuild for the core part of the kernel
+> -core-y                 += arch/sparc/
+> -
+>  libs-y                 += arch/sparc/prom/
+>  libs-y                 += arch/sparc/lib/
+>
+> diff --git a/arch/um/Kbuild b/arch/um/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/um/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index c77c5d8a7b3e..4307bf48ec53 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -239,9 +239,6 @@ head-y += arch/x86/kernel/platform-quirks.o
+>
+>  libs-y  += arch/x86/lib/
+>
+> -# See arch/x86/Kbuild for content of core part of the kernel
+> -core-y += arch/x86/
+> -
+>  # drivers-y are linked after core-y
+>  drivers-$(CONFIG_MATH_EMULATION) += arch/x86/math-emu/
+>  drivers-$(CONFIG_PCI)            += arch/x86/pci/
+> diff --git a/arch/xtensa/Kbuild b/arch/xtensa/Kbuild
+> new file mode 100644
+> index 000000000000..a4e40e534e6a
+> --- /dev/null
+> +++ b/arch/xtensa/Kbuild
+> @@ -0,0 +1 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> --
+> 2.27.0
+>
 
-Signed-off-by: Wang Junqiang <wangjunqiang@iscas.ac.cn>
-Signed-off-by: Li Weiwei <liweiwei@iscas.ac.cn>
----
- arch/csky/Kconfig                 |  7 +++++++
- arch/csky/Makefile                |  1 +
- arch/csky/abiv2/fpu.c             | 21 +++++++++++++++------
- arch/csky/abiv2/inc/abi/fpu.h     | 31 ++++++++++++++++++++++++++++---
- arch/csky/include/asm/processor.h | 11 +++++++++++
- arch/csky/kernel/traps.c          |  4 ++--
- 6 files changed, 64 insertions(+), 11 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 8de5b987edb9..82fd9d8b594d 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -285,6 +285,13 @@ config CPU_HAS_FPU
- 	bool "CPU has FPU coprocessor"
- 	depends on CPU_CK807 || CPU_CK810 || CPU_CK860
- 
-+config CPU_HAS_MATHEMU
-+	bool "CPU has FPU Mathemu Instructions"
-+	depends on CPU_HAS_FPU
-+	default y
-+	help
-+	  Say Y/N here to allow turning FPU Instructions simulation on/off.
-+
- config CPU_HAS_ICACHE_INS
- 	bool "CPU has Icache invalidate instructions"
- 	depends on CPU_HAS_CACHEV2
-diff --git a/arch/csky/Makefile b/arch/csky/Makefile
-index 37f593a4bf53..495f3a2fad6a 100644
---- a/arch/csky/Makefile
-+++ b/arch/csky/Makefile
-@@ -64,6 +64,7 @@ head-y := arch/csky/kernel/head.o
- core-y += arch/csky/kernel/
- core-y += arch/csky/mm/
- core-y += arch/csky/$(CSKYABI)/
-+core-$(CONFIG_CPU_HAS_MATHEMU) += arch/csky/math-emu/
- 
- libs-y += arch/csky/lib/ \
- 	$(shell $(CC) $(KBUILD_CFLAGS) $(KCFLAGS) -print-libgcc-file-name)
-diff --git a/arch/csky/abiv2/fpu.c b/arch/csky/abiv2/fpu.c
-index 5acc5c2e544e..a7f6f0bb8537 100644
---- a/arch/csky/abiv2/fpu.c
-+++ b/arch/csky/abiv2/fpu.c
-@@ -38,8 +38,7 @@ int fpu_libc_helper(struct pt_regs *regs)
- 		return 0;
- 
- 	tinstr = instr_hi | ((unsigned long)instr_low << 16);
--
--	if (((tinstr >> 21) & 0x1F) != 2)
-+	if (((tinstr >> 21) & 0x1F) != CR_NUM)
- 		return 0;
- 
- 	if ((tinstr & MTCR_MASK) == MTCR_DIST) {
-@@ -54,9 +53,9 @@ int fpu_libc_helper(struct pt_regs *regs)
- 		regx =  *(&regs->a0 + index);
- 
- 		if (tmp == 1)
--			mtcr("cr<1, 2>", regx);
-+			MTCR_FCR(regx)
- 		else if (tmp == 2)
--			mtcr("cr<2, 2>", regx);
-+			MTCR_FESR(regx)
- 		else
- 			return 0;
- 
-@@ -74,9 +73,9 @@ int fpu_libc_helper(struct pt_regs *regs)
- 			return 0;
- 
- 		if (tmp == 1)
--			regx = mfcr("cr<1, 2>");
-+			regx = MFCR_FCR;
- 		else if (tmp == 2)
--			regx = mfcr("cr<2, 2>");
-+			regx = MFCR_FESR;
- 		else
- 			return 0;
- 
-@@ -94,6 +93,16 @@ void fpu_fpe(struct pt_regs *regs)
- 	int sig, code;
- 	unsigned int fesr;
- 
-+#ifdef CONFIG_CPU_HAS_MATHEMU
-+	unsigned int inst;
-+
-+	inst = get_fpu_insn(regs);
-+	if (inst && !do_fpu_insn(inst, regs)) {
-+		regs->pc += 4;
-+		return;
-+	}
-+#endif
-+
- 	fesr = mfcr("cr<2, 2>");
- 
- 	sig = SIGFPE;
-diff --git a/arch/csky/abiv2/inc/abi/fpu.h b/arch/csky/abiv2/inc/abi/fpu.h
-index aabb79355013..0ca8a258567b 100644
---- a/arch/csky/abiv2/inc/abi/fpu.h
-+++ b/arch/csky/abiv2/inc/abi/fpu.h
-@@ -6,14 +6,39 @@
- #include <asm/sigcontext.h>
- #include <asm/ptrace.h>
- 
--int fpu_libc_helper(struct pt_regs *regs);
--void fpu_fpe(struct pt_regs *regs);
- 
-+#ifdef CONFIG_CPU_HAS_MATHEMU
-+static inline void init_fpu(void) { mtcr("cr<1, 2>", 0x3f); }
-+#define MFCR_FCR        current->thread.emul_fp.user_fcr
-+#define MFCR_FESR       current->thread.emul_fp.user_fesr
-+#define MTCR_FCR(regx)		\
-+		{	\
-+			mtcr("cr<1, 2>", regx | 0x3f);	\
-+			current->thread.emul_fp.user_fcr = regx;	\
-+		}
-+#define MTCR_FESR(regx)		\
-+		{	\
-+			mtcr("cr<2, 2>", regx); \
-+			current->thread.emul_fp.user_fesr = regx;	\
-+		}
-+#define CR_NUM          15
-+
-+inline unsigned int get_fpu_insn(struct pt_regs *regs);
-+inline int do_fpu_insn(unsigned int inst, struct pt_regs *regs);
-+#else
- static inline void init_fpu(void) { mtcr("cr<1, 2>", 0); }
-+#define MFCR_FCR mfcr("cr<1, 2>")
-+#define MFCR_FESR mfcr("cr<2, 2>")
-+#define MTCR_FCR(regx)		{ mtcr("cr<1, 2>", regx); }
-+#define MTCR_FESR(regx)		{ mtcr("cr<2, 2>", regx); }
-+#define CR_NUM    2
-+#endif
-+
-+int fpu_libc_helper(struct pt_regs *regs);
-+void fpu_fpe(struct pt_regs *regs);
- 
- void save_to_user_fp(struct user_fp *user_fp);
- void restore_from_user_fp(struct user_fp *user_fp);
--
- /*
-  * Define the fesr bit for fpe handle.
-  */
-diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
-index 9e933021fe8e..645b6b27841d 100644
---- a/arch/csky/include/asm/processor.h
-+++ b/arch/csky/include/asm/processor.h
-@@ -21,6 +21,14 @@ struct cpuinfo_csky {
- 
- extern struct cpuinfo_csky cpu_data[];
- 
-+#ifdef CONFIG_CPU_HAS_MATHEMU
-+struct emul_fp {
-+	unsigned long	user_fcr;
-+	unsigned long	user_fesr;
-+	unsigned long	reserved1;
-+	unsigned long	reserved2;
-+};
-+#endif
- /*
-  * User space process size: 2GB. This is hardcoded into a few places,
-  * so don't change it unless you know what you are doing.  TASK_SIZE
-@@ -45,6 +53,9 @@ struct thread_struct {
- 
- 	/* FPU regs */
- 	struct user_fp __aligned(16) user_fp;
-+#ifdef CONFIG_CPU_HAS_MATHEMU
-+	struct emul_fp __aligned(16) emul_fp;
-+#endif
- };
- 
- #define INIT_THREAD  { \
-diff --git a/arch/csky/kernel/traps.c b/arch/csky/kernel/traps.c
-index e5fbf8653a21..2020af88b636 100644
---- a/arch/csky/kernel/traps.c
-+++ b/arch/csky/kernel/traps.c
-@@ -209,7 +209,7 @@ asmlinkage void do_trap_illinsn(struct pt_regs *regs)
- 
- asmlinkage void do_trap_fpe(struct pt_regs *regs)
- {
--#ifdef CONFIG_CPU_HAS_FP
-+#ifdef CONFIG_CPU_HAS_FPU
- 	return fpu_fpe(regs);
- #else
- 	do_trap_error(regs, SIGILL, ILL_ILLOPC, regs->pc,
-@@ -219,7 +219,7 @@ asmlinkage void do_trap_fpe(struct pt_regs *regs)
- 
- asmlinkage void do_trap_priv(struct pt_regs *regs)
- {
--#ifdef CONFIG_CPU_HAS_FP
-+#ifdef CONFIG_CPU_HAS_FPU
- 	if (user_mode(regs) && fpu_libc_helper(regs))
- 		return;
- #endif
 -- 
-2.17.1
-
+Best Regards
+Masahiro Yamada
