@@ -2,89 +2,106 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D63FC394E9E
-	for <lists+linux-csky@lfdr.de>; Sun, 30 May 2021 02:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D815E39B359
+	for <lists+linux-csky@lfdr.de>; Fri,  4 Jun 2021 08:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbhE3AY4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 29 May 2021 20:24:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53776 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229546AbhE3AY4 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 29 May 2021 20:24:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2EE3D6109E;
-        Sun, 30 May 2021 00:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622334199;
-        bh=l7fJ1rvgich0C3XV0SqFIRoaMcntzInwVPHPG2ByWUA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tvuVKUC9i7AtzrAGyPQhmQq4cjZnBICps6GSMn9R1r2rdCYx7WK75y1QRYvN3D78Z
-         Xnb9P5bNfW7jgw8oxSew0mQ4QNDFTXqwELh3f2pOd+pkkNhlzAYp3pg59FnEu9RGP9
-         yMu6OTRkefFzcz2AM48MHcXs+kWSv1Tjwg3cHKffVsd82b9Dm1BiBCStiHETVcVQv8
-         ai3Osw/z7+rzwaNMvuJdjil67mTXRb5bggtrD0T4lW0m2oNf0Vibd0U2FLUR5caki9
-         G6TgXcaTBdIdeG01EedyQjXJCZ/prQlJfbHQgPi9Jc8Kmh0ZCJeelb/aNL1LgEaolP
-         +sCijt3jOrWSQ==
-Received: by mail-lf1-f52.google.com with SMTP id q7so11077246lfr.6;
-        Sat, 29 May 2021 17:23:19 -0700 (PDT)
-X-Gm-Message-State: AOAM530dSiVUeuiAEm9k5gEsVz6WGHDNNGt/t/YYgxiK7EuTNbAR88A1
-        mvQqzccQaVeQZipqsKMaeS68+eWXj/wResvDhpg=
-X-Google-Smtp-Source: ABdhPJxi9g+STuD26tX0+U15VfZZUiRc0hXknd0ey6aTNrm609q1LUvr8g/CxShqaeL3MUWpZHv3P6kfdJl4e7V/SvY=
-X-Received: by 2002:a05:6512:3993:: with SMTP id j19mr10942351lfu.231.1622334197446;
- Sat, 29 May 2021 17:23:17 -0700 (PDT)
+        id S229996AbhFDG7m (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 4 Jun 2021 02:59:42 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:4347 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229817AbhFDG7l (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 4 Jun 2021 02:59:41 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4FxD5B749vz63gb;
+        Fri,  4 Jun 2021 14:54:06 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 4 Jun 2021 14:57:53 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 4 Jun 2021 14:57:52 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        <linux-snps-arc@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-csky@vger.kernel.org>,
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        <linux-m68k@lists.linux-m68k.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-sh@vger.kernel.org>, <linux-s390@vger.kernel.org>
+Subject: [PATCH v2 00/15] init_mm: cleanup ARCH's text/data/brk setup code
+Date:   Fri, 4 Jun 2021 15:06:18 +0800
+Message-ID: <20210604070633.32363-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210529105504.180544-1-wangkefeng.wang@huawei.com> <20210529105504.180544-6-wangkefeng.wang@huawei.com>
-In-Reply-To: <20210529105504.180544-6-wangkefeng.wang@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 30 May 2021 08:23:05 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQpjgKrO72aSt-wzs77N7Lu6uahgURL1YDZ89sARYoFRw@mail.gmail.com>
-Message-ID: <CAJF2gTQpjgKrO72aSt-wzs77N7Lu6uahgURL1YDZ89sARYoFRw@mail.gmail.com>
-Subject: Re: [PATCH 05/15] csky: convert to setup_initial_init_mm()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Add setup_initial_init_mm() helper, then use it
+to cleanup the text, data and brk setup code.
 
-Thx
+v2:
+- change argument from "char *" to "void *" setup_initial_init_mm()
+  suggested by Geert Uytterhoeven
+- use NULL instead of (void *)0 on h8300 and m68k
+- collect ACKs
 
-On Sat, May 29, 2021 at 6:46 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->
-> Use setup_initial_init_mm() helper to simplify code.
->
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: linux-csky@vger.kernel.org
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  arch/csky/kernel/setup.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
-> index e93bc6f74432..c64e7be2045b 100644
-> --- a/arch/csky/kernel/setup.c
-> +++ b/arch/csky/kernel/setup.c
-> @@ -78,10 +78,7 @@ void __init setup_arch(char **cmdline_p)
->         pr_info("Phys. mem: %ldMB\n",
->                 (unsigned long) memblock_phys_mem_size()/1024/1024);
->
-> -       init_mm.start_code = (unsigned long) _stext;
-> -       init_mm.end_code = (unsigned long) _etext;
-> -       init_mm.end_data = (unsigned long) _edata;
-> -       init_mm.brk = (unsigned long) _end;
-> +       setup_initial_init_mm(_stext, _etext, _edata, _end);
->
->         parse_early_param();
->
-> --
-> 2.26.2
->
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: uclinux-h8-devel@lists.sourceforge.jp
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: openrisc@lists.librecores.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Kefeng Wang (15):
+  mm: add setup_initial_init_mm() helper
+  arc: convert to setup_initial_init_mm()
+  arm: convert to setup_initial_init_mm()
+  arm64: convert to setup_initial_init_mm()
+  csky: convert to setup_initial_init_mm()
+  h8300: convert to setup_initial_init_mm()
+  m68k: convert to setup_initial_init_mm()
+  nds32: convert to setup_initial_init_mm()
+  nios2: convert to setup_initial_init_mm()
+  openrisc: convert to setup_initial_init_mm()
+  powerpc: convert to setup_initial_init_mm()
+  riscv: convert to setup_initial_init_mm()
+  s390: convert to setup_initial_init_mm()
+  sh: convert to setup_initial_init_mm()
+  x86: convert to setup_initial_init_mm()
 
+ arch/arc/mm/init.c                 | 5 +----
+ arch/arm/kernel/setup.c            | 5 +----
+ arch/arm64/kernel/setup.c          | 5 +----
+ arch/csky/kernel/setup.c           | 5 +----
+ arch/h8300/kernel/setup.c          | 5 +----
+ arch/m68k/kernel/setup_mm.c        | 5 +----
+ arch/m68k/kernel/setup_no.c        | 5 +----
+ arch/nds32/kernel/setup.c          | 5 +----
+ arch/nios2/kernel/setup.c          | 5 +----
+ arch/openrisc/kernel/setup.c       | 5 +----
+ arch/powerpc/kernel/setup-common.c | 5 +----
+ arch/riscv/kernel/setup.c          | 5 +----
+ arch/s390/kernel/setup.c           | 5 +----
+ arch/sh/kernel/setup.c             | 5 +----
+ arch/x86/kernel/setup.c            | 5 +----
+ include/linux/mm_types.h           | 8 ++++++++
+ 16 files changed, 23 insertions(+), 60 deletions(-)
 
 -- 
-Best Regards
- Guo Ren
+2.26.2
 
-ML: https://lore.kernel.org/linux-csky/
