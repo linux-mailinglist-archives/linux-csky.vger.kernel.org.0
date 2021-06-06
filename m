@@ -2,74 +2,120 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 179AE39B364
-	for <lists+linux-csky@lfdr.de>; Fri,  4 Jun 2021 08:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D461C39D1A2
+	for <lists+linux-csky@lfdr.de>; Sun,  6 Jun 2021 23:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbhFDG7s (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 4 Jun 2021 02:59:48 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:3055 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbhFDG7q (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 4 Jun 2021 02:59:46 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FxD484lc0zWrbL;
-        Fri,  4 Jun 2021 14:53:12 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 4 Jun 2021 14:57:56 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 4 Jun 2021 14:57:55 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-mm@kvack.org>, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guo Ren <guoren@kernel.org>, <linux-csky@vger.kernel.org>
-Subject: [PATCH v2 05/15] csky: convert to setup_initial_init_mm()
-Date:   Fri, 4 Jun 2021 15:06:23 +0800
-Message-ID: <20210604070633.32363-6-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210604070633.32363-1-wangkefeng.wang@huawei.com>
+        id S230289AbhFFVbJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 6 Jun 2021 17:31:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51778 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230270AbhFFVbJ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 6 Jun 2021 17:31:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 953E4613B6;
+        Sun,  6 Jun 2021 21:29:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623014959;
+        bh=4t5DawWhLmQPAFGRKhX1jFE4WEqbArxXgmERWe2C0xQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wu/fyJA4UR/3OsXx5PdnZuKJmqUDl6cQ0I5qOPmOobYB/YwD3loa7CHDMxmjDs7+O
+         /+vTonUI3DKMDg+OJCEqqvIqeoGeqCBaFfCM6MGkwmW6KvTZO5CLkleOMNy5KmfR4d
+         PteqC/M3+gPE1uiUsTSHvYSMYrpSkJ75a30BXywU3cSKzUfAv/A0+aJ76/IGuUYyhl
+         S6LUi9EmnHUL5lEcDnAewWs8EsYomaOBUCef/cImLCqjaabNrEeHJoCWkyMWvCEGV1
+         9+bVS1xXN0QGlOiLh2r3UXefQeesEuK/PQnscumw1S0RmHISk2eF6NrfUP8ytWcSpP
+         sTzKK7DJdkKEw==
+Date:   Mon, 7 Jun 2021 00:29:09 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v2 00/15] init_mm: cleanup ARCH's text/data/brk setup code
+Message-ID: <YL0+Jargm+y9aqx1@kernel.org>
 References: <20210604070633.32363-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210604070633.32363-1-wangkefeng.wang@huawei.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Use setup_initial_init_mm() helper to simplify code.
+Hello Kefeng,
 
-Acked-by: Guo Ren <guoren@kernel.org>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- arch/csky/kernel/setup.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+On Fri, Jun 04, 2021 at 03:06:18PM +0800, Kefeng Wang wrote:
+> Add setup_initial_init_mm() helper, then use it
+> to cleanup the text, data and brk setup code.
+> 
+> v2:
+> - change argument from "char *" to "void *" setup_initial_init_mm()
+>   suggested by Geert Uytterhoeven
+> - use NULL instead of (void *)0 on h8300 and m68k
+> - collect ACKs
+> 
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-csky@vger.kernel.org
+> Cc: uclinux-h8-devel@lists.sourceforge.jp
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: openrisc@lists.librecores.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: linux-s390@vger.kernel.org
+> Kefeng Wang (15):
+>   mm: add setup_initial_init_mm() helper
+>   arc: convert to setup_initial_init_mm()
+>   arm: convert to setup_initial_init_mm()
+>   arm64: convert to setup_initial_init_mm()
+>   csky: convert to setup_initial_init_mm()
+>   h8300: convert to setup_initial_init_mm()
+>   m68k: convert to setup_initial_init_mm()
+>   nds32: convert to setup_initial_init_mm()
+>   nios2: convert to setup_initial_init_mm()
+>   openrisc: convert to setup_initial_init_mm()
+>   powerpc: convert to setup_initial_init_mm()
+>   riscv: convert to setup_initial_init_mm()
+>   s390: convert to setup_initial_init_mm()
+>   sh: convert to setup_initial_init_mm()
+>   x86: convert to setup_initial_init_mm()
 
-diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
-index e93bc6f74432..c64e7be2045b 100644
---- a/arch/csky/kernel/setup.c
-+++ b/arch/csky/kernel/setup.c
-@@ -78,10 +78,7 @@ void __init setup_arch(char **cmdline_p)
- 	pr_info("Phys. mem: %ldMB\n",
- 		(unsigned long) memblock_phys_mem_size()/1024/1024);
+I might be missing something, but AFAIU the init_mm.start_code and other
+fields are not used really early so the new setup_initial_init_mm()
+function can be called in the generic code outside setup_arch(), e.g in
+mm_init().
  
--	init_mm.start_code = (unsigned long) _stext;
--	init_mm.end_code = (unsigned long) _etext;
--	init_mm.end_data = (unsigned long) _edata;
--	init_mm.brk = (unsigned long) _end;
-+	setup_initial_init_mm(_stext, _etext, _edata, _end);
- 
- 	parse_early_param();
- 
+>  arch/arc/mm/init.c                 | 5 +----
+>  arch/arm/kernel/setup.c            | 5 +----
+>  arch/arm64/kernel/setup.c          | 5 +----
+>  arch/csky/kernel/setup.c           | 5 +----
+>  arch/h8300/kernel/setup.c          | 5 +----
+>  arch/m68k/kernel/setup_mm.c        | 5 +----
+>  arch/m68k/kernel/setup_no.c        | 5 +----
+>  arch/nds32/kernel/setup.c          | 5 +----
+>  arch/nios2/kernel/setup.c          | 5 +----
+>  arch/openrisc/kernel/setup.c       | 5 +----
+>  arch/powerpc/kernel/setup-common.c | 5 +----
+>  arch/riscv/kernel/setup.c          | 5 +----
+>  arch/s390/kernel/setup.c           | 5 +----
+>  arch/sh/kernel/setup.c             | 5 +----
+>  arch/x86/kernel/setup.c            | 5 +----
+>  include/linux/mm_types.h           | 8 ++++++++
+>  16 files changed, 23 insertions(+), 60 deletions(-)
+> 
+> -- 
+> 2.26.2
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
 -- 
-2.26.2
-
+Sincerely yours,
+Mike.
