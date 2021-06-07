@@ -2,148 +2,80 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 341DC39D770
-	for <lists+linux-csky@lfdr.de>; Mon,  7 Jun 2021 10:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39C439D8C9
+	for <lists+linux-csky@lfdr.de>; Mon,  7 Jun 2021 11:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbhFGIcg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 7 Jun 2021 04:32:36 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3444 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbhFGIcf (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Jun 2021 04:32:35 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Fz61l5hvdz6wPm;
-        Mon,  7 Jun 2021 16:27:39 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 7 Jun 2021 16:30:41 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 7 Jun 2021 16:30:40 +0800
+        id S229436AbhFGJd0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 7 Jun 2021 05:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230242AbhFGJd0 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Jun 2021 05:33:26 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E386EC061766;
+        Mon,  7 Jun 2021 02:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=MlvkgxFcyawWgLbaD1anFAhejhA4mPswAd0WEOPLbd0=; b=cetr6/k8ZHIlURSNkBDEkxOd3
+        puNo+HwooQUeJn9AaPBl4regJ9NkcXwohGBb5OPUoX7XTTODh5d6IsuhC8Hnw3taLmVn0F8+4hF1o
+        ArioCmyKCJRUZ5c5W9Ct8Cw0Zpb4xNWdK87xHBWnc3daFNyrTg9aLL7A/E6TbbFPNgdTXMtoLpPh1
+        VNTboFgYQtPgYxGziLgboqSm+C9rc0zETM+h5ZE5kg+2kGPOkoZAIe8MZfd5JZNTDNazJFXr/S6Gm
+        YDi+dqX3d1L4b71QKMOqk7jvcXPp8QSgQdX3C28GtCjdiTWKtuBWWAYuFwAi7GnVSCXRZB8Zx7iVW
+        ALDutps2w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:44784)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1lqBbS-0000Eu-Fv; Mon, 07 Jun 2021 10:31:26 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1lqBbN-0005oE-UB; Mon, 07 Jun 2021 10:31:21 +0100
+Date:   Mon, 7 Jun 2021 10:31:21 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mm@kvack.org,
+        linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH v2 00/15] init_mm: cleanup ARCH's text/data/brk setup code
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mike Rapoport <rppt@kernel.org>
-CC:     <uclinux-h8-devel@lists.sourceforge.jp>,
-        <linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-m68k@lists.linux-m68k.org>,
-        <openrisc@lists.librecores.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        <linux-snps-arc@lists.infradead.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
+Message-ID: <20210607093121.GC22278@shell.armlinux.org.uk>
 References: <20210604070633.32363-1-wangkefeng.wang@huawei.com>
  <YL0+Jargm+y9aqx1@kernel.org>
  <481056ab-686e-9f42-3b8a-b31941f58af6@huawei.com>
  <006eb573-5a20-1ac7-6234-338d11346a08@csgroup.eu>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-Message-ID: <f6051a1c-f7c3-6665-2d0a-5a3bf872fdb1@huawei.com>
-Date:   Mon, 7 Jun 2021 16:30:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <006eb573-5a20-1ac7-6234-338d11346a08@csgroup.eu>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-
-On 2021/6/7 13:48, Christophe Leroy wrote:
+On Mon, Jun 07, 2021 at 07:48:54AM +0200, Christophe Leroy wrote:
 > Hi Kefeng,
->
-> Le 07/06/2021 à 02:55, Kefeng Wang a écrit :
->>
->> On 2021/6/7 5:29, Mike Rapoport wrote:
->>> Hello Kefeng,
->>>
->>> On Fri, Jun 04, 2021 at 03:06:18PM +0800, Kefeng Wang wrote:
->>>> Add setup_initial_init_mm() helper, then use it
->>>> to cleanup the text, data and brk setup code.
->>>>
->>>> v2:
->>>> - change argument from "char *" to "void *" setup_initial_init_mm()
->>>>    suggested by Geert Uytterhoeven
->>>> - use NULL instead of (void *)0 on h8300 and m68k
->>>> - collect ACKs
->>>>
->>>> Cc: linux-snps-arc@lists.infradead.org
->>>> Cc: linux-arm-kernel@lists.infradead.org
->>>> Cc: linux-csky@vger.kernel.org
->>>> Cc: uclinux-h8-devel@lists.sourceforge.jp
->>>> Cc: linux-m68k@lists.linux-m68k.org
->>>> Cc: openrisc@lists.librecores.org
->>>> Cc: linuxppc-dev@lists.ozlabs.org
->>>> Cc: linux-riscv@lists.infradead.org
->>>> Cc: linux-sh@vger.kernel.org
->>>> Cc: linux-s390@vger.kernel.org
->>>> Kefeng Wang (15):
->>>>    mm: add setup_initial_init_mm() helper
->>>>    arc: convert to setup_initial_init_mm()
->>>>    arm: convert to setup_initial_init_mm()
->>>>    arm64: convert to setup_initial_init_mm()
->>>>    csky: convert to setup_initial_init_mm()
->>>>    h8300: convert to setup_initial_init_mm()
->>>>    m68k: convert to setup_initial_init_mm()
->>>>    nds32: convert to setup_initial_init_mm()
->>>>    nios2: convert to setup_initial_init_mm()
->>>>    openrisc: convert to setup_initial_init_mm()
->>>>    powerpc: convert to setup_initial_init_mm()
->>>>    riscv: convert to setup_initial_init_mm()
->>>>    s390: convert to setup_initial_init_mm()
->>>>    sh: convert to setup_initial_init_mm()
->>>>    x86: convert to setup_initial_init_mm()
->>> I might be missing something, but AFAIU the init_mm.start_code and 
->>> other
->>> fields are not used really early so the new setup_initial_init_mm()
->>> function can be called in the generic code outside setup_arch(), e.g in
->>> mm_init().
->>
->> Hi Mike， each architecture has their own value, not the same, eg m68K 
->> and
->>
->> h8300, also the name of the text/code/brk is different in some arch, 
->> so I keep
->>
->> unchanged.
->
-> What you could do is to define a __weak function that architectures 
-> can override and call that function from mm_init() as suggested by Mike,
->
-> Something like:
->
-> void __weak setup_initial_init_mm(void)
-> {
->     init_mm.start_code = (unsigned long)_stext;
->     init_mm.end_code = (unsigned long)_etext;
->     init_mm.end_data = (unsigned long)_edata;
->     init_mm.brk = (unsigned long)_end;
-> }
->
-> Then only the few architecture that are different would override it.
->
-> I see a few archictectures are usigne PAGE_OFFSET to set .start_code, 
-> but it is likely that this is equivalent to _stext.
+> 
+> What you could do is to define a __weak function that architectures can
+> override and call that function from mm_init() as suggested by Mike,
 
+The problem with weak functions is that they bloat the kernel. Each
+time a weak function is overriden, it becomes dead unreachable code
+within the kernel image.
 
-Yes,  the __weak function is option, but the change is only covered 14 
-archs, there are 7 other archs（alpha  hexagon  ia64
+At some point we're probabily going to have to enable -ffunction-sections
+to (hopefully) allow the dead code to be discarded.
 
-microblaze  mips sparc  um xtensa）without related setup code. Also like 
-x86, it has own brk , maybe there are some
-
-other different in some arch, so I think let's keep unchanged for now,  
-thanks.
-
->
-> Christophe
-> .
->
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
