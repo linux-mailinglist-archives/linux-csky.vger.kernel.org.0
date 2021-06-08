@@ -2,80 +2,106 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D39C439D8C9
-	for <lists+linux-csky@lfdr.de>; Mon,  7 Jun 2021 11:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E358439F0CE
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Jun 2021 10:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbhFGJd0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 7 Jun 2021 05:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbhFGJd0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Jun 2021 05:33:26 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E386EC061766;
-        Mon,  7 Jun 2021 02:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=MlvkgxFcyawWgLbaD1anFAhejhA4mPswAd0WEOPLbd0=; b=cetr6/k8ZHIlURSNkBDEkxOd3
-        puNo+HwooQUeJn9AaPBl4regJ9NkcXwohGBb5OPUoX7XTTODh5d6IsuhC8Hnw3taLmVn0F8+4hF1o
-        ArioCmyKCJRUZ5c5W9Ct8Cw0Zpb4xNWdK87xHBWnc3daFNyrTg9aLL7A/E6TbbFPNgdTXMtoLpPh1
-        VNTboFgYQtPgYxGziLgboqSm+C9rc0zETM+h5ZE5kg+2kGPOkoZAIe8MZfd5JZNTDNazJFXr/S6Gm
-        YDi+dqX3d1L4b71QKMOqk7jvcXPp8QSgQdX3C28GtCjdiTWKtuBWWAYuFwAi7GnVSCXRZB8Zx7iVW
-        ALDutps2w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:44784)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1lqBbS-0000Eu-Fv; Mon, 07 Jun 2021 10:31:26 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1lqBbN-0005oE-UB; Mon, 07 Jun 2021 10:31:21 +0100
-Date:   Mon, 7 Jun 2021 10:31:21 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        uclinux-h8-devel@lists.sourceforge.jp, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mm@kvack.org,
-        linux-m68k@lists.linux-m68k.org, openrisc@lists.librecores.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 00/15] init_mm: cleanup ARCH's text/data/brk setup code
-Message-ID: <20210607093121.GC22278@shell.armlinux.org.uk>
-References: <20210604070633.32363-1-wangkefeng.wang@huawei.com>
- <YL0+Jargm+y9aqx1@kernel.org>
- <481056ab-686e-9f42-3b8a-b31941f58af6@huawei.com>
- <006eb573-5a20-1ac7-6234-338d11346a08@csgroup.eu>
+        id S231235AbhFHI1z (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 8 Jun 2021 04:27:55 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:3793 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230389AbhFHI1v (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 8 Jun 2021 04:27:51 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Fzjqk3LPtzWspY;
+        Tue,  8 Jun 2021 16:21:06 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 8 Jun 2021 16:25:53 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 8 Jun 2021 16:25:52 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        <linux-snps-arc@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-csky@vger.kernel.org>,
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        <linux-m68k@lists.linux-m68k.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-sh@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <x86@kernel.org>
+Subject: [PATCH v3 resend 01/15] mm: add setup_initial_init_mm() helper
+Date:   Tue, 8 Jun 2021 16:34:04 +0800
+Message-ID: <20210608083418.137226-2-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210608083418.137226-1-wangkefeng.wang@huawei.com>
+References: <20210608083418.137226-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <006eb573-5a20-1ac7-6234-338d11346a08@csgroup.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 07:48:54AM +0200, Christophe Leroy wrote:
-> Hi Kefeng,
-> 
-> What you could do is to define a __weak function that architectures can
-> override and call that function from mm_init() as suggested by Mike,
+Add setup_initial_init_mm() helper to setup kernel text,
+data and brk.
 
-The problem with weak functions is that they bloat the kernel. Each
-time a weak function is overriden, it becomes dead unreachable code
-within the kernel image.
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: uclinux-h8-devel@lists.sourceforge.jp
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: openrisc@lists.librecores.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: x86@kernel.org
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ include/linux/mm.h | 3 +++
+ mm/init-mm.c       | 9 +++++++++
+ 2 files changed, 12 insertions(+)
 
-At some point we're probabily going to have to enable -ffunction-sections
-to (hopefully) allow the dead code to be discarded.
-
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index c274f75efcf9..02aa057540b7 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -244,6 +244,9 @@ int __add_to_page_cache_locked(struct page *page, struct address_space *mapping,
+ 
+ #define lru_to_page(head) (list_entry((head)->prev, struct page, lru))
+ 
++void setup_initial_init_mm(void *start_code, void *end_code,
++			   void *end_data, void *brk);
++
+ /*
+  * Linux kernel virtual memory manager primitives.
+  * The idea being to have a "virtual" mm in the same way
+diff --git a/mm/init-mm.c b/mm/init-mm.c
+index 153162669f80..b4a6f38fb51d 100644
+--- a/mm/init-mm.c
++++ b/mm/init-mm.c
+@@ -40,3 +40,12 @@ struct mm_struct init_mm = {
+ 	.cpu_bitmap	= CPU_BITS_NONE,
+ 	INIT_MM_CONTEXT(init_mm)
+ };
++
++void setup_initial_init_mm(void *start_code, void *end_code,
++			   void *end_data, void *brk)
++{
++	init_mm.start_code = (unsigned long)start_code;
++	init_mm.end_code = (unsigned long)end_code;
++	init_mm.end_data = (unsigned long)end_data;
++	init_mm.brk = (unsigned long)brk;
++}
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.26.2
+
