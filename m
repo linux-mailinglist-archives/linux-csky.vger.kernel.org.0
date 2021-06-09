@@ -2,39 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A09733A1761
-	for <lists+linux-csky@lfdr.de>; Wed,  9 Jun 2021 16:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E294D3A178E
+	for <lists+linux-csky@lfdr.de>; Wed,  9 Jun 2021 16:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237682AbhFIOhm (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 9 Jun 2021 10:37:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51798 "EHLO mail.kernel.org"
+        id S238066AbhFIOj7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 9 Jun 2021 10:39:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237622AbhFIOhl (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 9 Jun 2021 10:37:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 867766139A;
-        Wed,  9 Jun 2021 14:35:45 +0000 (UTC)
+        id S238058AbhFIOj5 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 9 Jun 2021 10:39:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 54D776139A;
+        Wed,  9 Jun 2021 14:38:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623249347;
-        bh=YzF2yEukArZPBNz+f4q5sfBw+esz/4m/ijdFg7xOkhI=;
+        s=k20201202; t=1623249483;
+        bh=c/d7qioHGhsgcbStmtLsnhXN4JCw3TjbgwcNTkOimok=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lVFmT5nPfKGX7gDHV3MQ4XS0LhqO1ZaxRiCmqb/WdbIjSf2hVNK51oxznG1S38lnt
-         W+aAqZBD0GKbtn1dCPXA6GbpnddaFj/KrYVuZcLty700tRcNaAiCptPd4pT2XLpOuV
-         Kmkf4GF5k5jKLrW0hsruA0Wh7125N19chRnDOSmDp/MIECX36nxWhDaHLmqcnmSjjb
-         rICqEYU64zjGPHqgxiI67p8xGus/yTmQaJbcLttinLWyX1Zrj71Qt1T7iWMib0c/le
-         AEPrlzg/0UeOl9RKx0rYasIvpqubWCLFtQ3RCvTWwMZGKLN8aQZdvuzkGXmvQhXMNl
-         kpc0b/58km91A==
-Date:   Wed, 9 Jun 2021 23:35:43 +0900
+        b=p8q4nqOEs5Bz4At1/Tb+00/sLBPvbeQqMdtKJamCNuFVLlPmc8dcWP8SLu0l3WdGc
+         Uaw2x8wzbuUVoDw8VZISJMOg42S/kOMhwnWHHwuoCPT4KM95dZmkc5peVVimUxQumL
+         7qOpPpR9knUlcb89y7gwd+tWvgg43oKzTBolIW36j/eCja18r4qYaImNpxZw5wwAjt
+         LKHez411fulmWl43OxpdHnM4vgnJbVXAs2Y4IP7boiyYLxLPzyCt2APi/1BKdaSw0T
+         7IsJt7DqP930irRXOJ791PMUDfUt2ektGkGSCrv5ToDAA72HB/jeglsS/IciQGbBBe
+         lUApDJJG0CGFA==
+Date:   Wed, 9 Jun 2021 23:37:59 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Punit Agrawal <punitagrawal@gmail.com>
 Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
         davem@davemloft.net, linux-kernel@vger.kernel.org,
         guoren@kernel.org, linux-csky@vger.kernel.org
-Subject: Re: [PATCH 1/5] kprobes: Do not use local variable when creating
- debugfs file
-Message-Id: <20210609233543.e846251ccaa227317de26b11@kernel.org>
-In-Reply-To: <20210609105019.3626677-2-punitagrawal@gmail.com>
+Subject: Re: [RFC PATCH 2/5] kprobes: Use helper to parse boolean input from
+ userspace
+Message-Id: <20210609233759.f89ac48532832ac373bb2d02@kernel.org>
+In-Reply-To: <20210609105019.3626677-3-punitagrawal@gmail.com>
 References: <20210609105019.3626677-1-punitagrawal@gmail.com>
-        <20210609105019.3626677-2-punitagrawal@gmail.com>
+        <20210609105019.3626677-3-punitagrawal@gmail.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -43,57 +43,72 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed,  9 Jun 2021 19:50:15 +0900
+On Wed,  9 Jun 2021 19:50:16 +0900
 Punit Agrawal <punitagrawal@gmail.com> wrote:
 
-> debugfs_create_file() takes a pointer argument that can be used during
-> file operation callbacks (accessible via i_private in the inode
-> structure). An obvious requirement is for the pointer to refer to
-> valid memory when used.
+> The "enabled" file provides a debugfs interface to arm / disarm
+> kprobes in the kernel. In order to parse the buffer containing the
+> values written from userspace, the callback manually parses the user
+> input to convert it to a boolean value.
 > 
-> When creating the debugfs file to dynamically enable / disable
-> kprobes, a pointer to local variable is passed to
-> debugfs_create_file(); which will go out of scope when the init
-> function returns. The reason this hasn't triggered random memory
-> corruption is because the pointer is not accessed during the debugfs
-> file callbacks.
-> 
-> Fix the incorrect (and unnecessary) usage of local variable during
-> debugfs_file_create() by passing NULL instead.
-> 
+> As taking a string value from userspace and converting it to boolean
+> is a common operation, a helper kstrtobool_from_user() is already
+> available in the kernel. Update the callback to use the common helper
+> to parse the write buffer from userspace.
 
-Good catch! Since the enabled state is managed by the kprobes_all_disabled
-global variable, it is not needed.
+Looks good to me.
 
-Fixes: bf8f6e5b3e51 ("Kprobes: The ON/OFF knob thru debugfs")
 Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 
 Thank you!
 
+> 
 > Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
 > ---
->  kernel/kprobes.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  kernel/kprobes.c | 28 ++++++----------------------
+>  1 file changed, 6 insertions(+), 22 deletions(-)
 > 
 > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 745f08fdd7a6..fdb1ea2e963b 100644
+> index fdb1ea2e963b..1a11d3c411bf 100644
 > --- a/kernel/kprobes.c
 > +++ b/kernel/kprobes.c
-> @@ -2816,13 +2816,12 @@ static const struct file_operations fops_kp = {
->  static int __init debugfs_kprobe_init(void)
+> @@ -2777,30 +2777,14 @@ static ssize_t read_enabled_file_bool(struct file *file,
+>  static ssize_t write_enabled_file_bool(struct file *file,
+>  	       const char __user *user_buf, size_t count, loff_t *ppos)
 >  {
->  	struct dentry *dir;
-> -	unsigned int value = 1;
+> -	char buf[32];
+> -	size_t buf_size;
+> -	int ret = 0;
+> -
+> -	buf_size = min(count, (sizeof(buf)-1));
+> -	if (copy_from_user(buf, user_buf, buf_size))
+> -		return -EFAULT;
+> +	bool enable;
+> +	int ret;
 >  
->  	dir = debugfs_create_dir("kprobes", NULL);
+> -	buf[buf_size] = '\0';
+> -	switch (buf[0]) {
+> -	case 'y':
+> -	case 'Y':
+> -	case '1':
+> -		ret = arm_all_kprobes();
+> -		break;
+> -	case 'n':
+> -	case 'N':
+> -	case '0':
+> -		ret = disarm_all_kprobes();
+> -		break;
+> -	default:
+> -		return -EINVAL;
+> -	}
+> +	ret = kstrtobool_from_user(user_buf, count, &enable);
+> +	if (ret)
+> +		return ret;
 >  
->  	debugfs_create_file("list", 0400, dir, NULL, &kprobes_fops);
+> +	ret = enable ? arm_all_kprobes() : disarm_all_kprobes();
+>  	if (ret)
+>  		return ret;
 >  
-> -	debugfs_create_file("enabled", 0600, dir, &value, &fops_kp);
-> +	debugfs_create_file("enabled", 0600, dir, NULL, &fops_kp);
->  
->  	debugfs_create_file("blacklist", 0400, dir, NULL,
->  			    &kprobe_blacklist_fops);
 > -- 
 > 2.30.2
 > 
