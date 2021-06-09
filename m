@@ -2,44 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8661A3A1746
-	for <lists+linux-csky@lfdr.de>; Wed,  9 Jun 2021 16:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09733A1761
+	for <lists+linux-csky@lfdr.de>; Wed,  9 Jun 2021 16:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234767AbhFIOcD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 9 Jun 2021 10:32:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48744 "EHLO mail.kernel.org"
+        id S237682AbhFIOhm (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 9 Jun 2021 10:37:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51798 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236007AbhFIOb6 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 9 Jun 2021 10:31:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A5EDC61364;
-        Wed,  9 Jun 2021 14:30:01 +0000 (UTC)
+        id S237622AbhFIOhl (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 9 Jun 2021 10:37:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 867766139A;
+        Wed,  9 Jun 2021 14:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623249003;
-        bh=D31J9ARRh9ELvjX6pTEQbRNy1KIC+gmUtHCUZpQK0L4=;
+        s=k20201202; t=1623249347;
+        bh=YzF2yEukArZPBNz+f4q5sfBw+esz/4m/ijdFg7xOkhI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CRydjYwiIPrKLvOX29Gc54/BO66vTFutfDGmAXbX5CRU17WwQ3mh5c058fnTOER0I
-         orTMXUh1siwzdHwiP97n35NtVbPEbHbNWO4RtnkvtE4ACgAvRMgpjt8X06fTtv2bDw
-         SHLRYS3E5BycmrCYaPMtxbF2O9WSjHIMGCEfNh3oAYjB+SiI9kp4dioJVGWnxh+j1z
-         1KlfD3Mm8CoVDiLPgnSX9V1v1YdgQmLZTilID96JIdzGouxjoi4bAunfVJvYKTDMc9
-         dS27HrR15U20Xgtj7FhqpPA2pZFhsVe88Mdr+Y9lr/iKyyzjqhbpxGBHe7gYxb3viO
-         LEY3gtTLECeXw==
-Date:   Wed, 9 Jun 2021 23:29:59 +0900
+        b=lVFmT5nPfKGX7gDHV3MQ4XS0LhqO1ZaxRiCmqb/WdbIjSf2hVNK51oxznG1S38lnt
+         W+aAqZBD0GKbtn1dCPXA6GbpnddaFj/KrYVuZcLty700tRcNaAiCptPd4pT2XLpOuV
+         Kmkf4GF5k5jKLrW0hsruA0Wh7125N19chRnDOSmDp/MIECX36nxWhDaHLmqcnmSjjb
+         rICqEYU64zjGPHqgxiI67p8xGus/yTmQaJbcLttinLWyX1Zrj71Qt1T7iWMib0c/le
+         AEPrlzg/0UeOl9RKx0rYasIvpqubWCLFtQ3RCvTWwMZGKLN8aQZdvuzkGXmvQhXMNl
+         kpc0b/58km91A==
+Date:   Wed, 9 Jun 2021 23:35:43 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Punit Agrawal <punitagrawal@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        David Miller <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [RFC PATCH 4/5] csky: ftrace: Drop duplicate implementation of
- arch_check_ftrace_location()
-Message-Id: <20210609232959.3b94659c00ad66a602653bde@kernel.org>
-In-Reply-To: <CAJF2gTS_tmOYFNaLYQmJvbwZwksMctPPbE6GAGgUYTwvLLwE=w@mail.gmail.com>
+To:     Punit Agrawal <punitagrawal@gmail.com>
+Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        guoren@kernel.org, linux-csky@vger.kernel.org
+Subject: Re: [PATCH 1/5] kprobes: Do not use local variable when creating
+ debugfs file
+Message-Id: <20210609233543.e846251ccaa227317de26b11@kernel.org>
+In-Reply-To: <20210609105019.3626677-2-punitagrawal@gmail.com>
 References: <20210609105019.3626677-1-punitagrawal@gmail.com>
-        <20210609105019.3626677-5-punitagrawal@gmail.com>
-        <CAJF2gTS_tmOYFNaLYQmJvbwZwksMctPPbE6GAGgUYTwvLLwE=w@mail.gmail.com>
+        <20210609105019.3626677-2-punitagrawal@gmail.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -48,67 +43,60 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Guo,
+On Wed,  9 Jun 2021 19:50:15 +0900
+Punit Agrawal <punitagrawal@gmail.com> wrote:
 
-On Wed, 9 Jun 2021 20:33:18 +0800
-Guo Ren <guoren@kernel.org> wrote:
-
-> csky using -mcount not -fpatchable-function-entry, so
->                 /* Given address is not on the instruction boundary */
->                 if ((unsigned long)p->addr != ftrace_addr)
->                         return -EILSEQ;
-> all right?
-
-Even if -mcount is used, that check is still needed since the
-ftrace hooked address will be the ftrace_addr. If user tries to
-probe the second instruction in mcount code, kprobes needs to stop it.
-
-Thank you,
-
+> debugfs_create_file() takes a pointer argument that can be used during
+> file operation callbacks (accessible via i_private in the inode
+> structure). An obvious requirement is for the pointer to refer to
+> valid memory when used.
 > 
-> On Wed, Jun 9, 2021 at 6:51 PM Punit Agrawal <punitagrawal@gmail.com> wrote:
-> >
-> > The csky specific arch_check_ftrace_location() shadows a weak
-> > implementation of the function in core code that offers the same
-> > functionality but with additional error checking.
-> >
-> > Drop the architecture specific function as a step towards further
-> > cleanup in core code.
-> >
-> > Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
-> > Cc: Guo Ren <guoren@linux.alibaba.com>
-> > ---
-> >  arch/csky/kernel/probes/ftrace.c | 7 -------
-> >  1 file changed, 7 deletions(-)
-> >
-> > diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
-> > index ef2bb9bd9605..b388228abbf2 100644
-> > --- a/arch/csky/kernel/probes/ftrace.c
-> > +++ b/arch/csky/kernel/probes/ftrace.c
-> > @@ -2,13 +2,6 @@
-> >
-> >  #include <linux/kprobes.h>
-> >
-> > -int arch_check_ftrace_location(struct kprobe *p)
-> > -{
-> > -       if (ftrace_location((unsigned long)p->addr))
-> > -               p->flags |= KPROBE_FLAG_FTRACE;
-> > -       return 0;
-> > -}
-> > -
-> >  /* Ftrace callback handler for kprobes -- called under preepmt disabled */
-> >  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> >                            struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > --
-> > 2.30.2
-> >
+> When creating the debugfs file to dynamically enable / disable
+> kprobes, a pointer to local variable is passed to
+> debugfs_create_file(); which will go out of scope when the init
+> function returns. The reason this hasn't triggered random memory
+> corruption is because the pointer is not accessed during the debugfs
+> file callbacks.
 > 
+> Fix the incorrect (and unnecessary) usage of local variable during
+> debugfs_file_create() by passing NULL instead.
 > 
+
+Good catch! Since the enabled state is managed by the kprobes_all_disabled
+global variable, it is not needed.
+
+Fixes: bf8f6e5b3e51 ("Kprobes: The ON/OFF knob thru debugfs")
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you!
+
+> Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
+> ---
+>  kernel/kprobes.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 745f08fdd7a6..fdb1ea2e963b 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -2816,13 +2816,12 @@ static const struct file_operations fops_kp = {
+>  static int __init debugfs_kprobe_init(void)
+>  {
+>  	struct dentry *dir;
+> -	unsigned int value = 1;
+>  
+>  	dir = debugfs_create_dir("kprobes", NULL);
+>  
+>  	debugfs_create_file("list", 0400, dir, NULL, &kprobes_fops);
+>  
+> -	debugfs_create_file("enabled", 0600, dir, &value, &fops_kp);
+> +	debugfs_create_file("enabled", 0600, dir, NULL, &fops_kp);
+>  
+>  	debugfs_create_file("blacklist", 0400, dir, NULL,
+>  			    &kprobe_blacklist_fops);
 > -- 
-> Best Regards
->  Guo Ren
+> 2.30.2
 > 
-> ML: https://lore.kernel.org/linux-csky/
 
 
 -- 
