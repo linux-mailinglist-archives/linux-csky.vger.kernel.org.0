@@ -2,135 +2,93 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B20C03A1A16
-	for <lists+linux-csky@lfdr.de>; Wed,  9 Jun 2021 17:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56093A212C
+	for <lists+linux-csky@lfdr.de>; Thu, 10 Jun 2021 02:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbhFIPti (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 9 Jun 2021 11:49:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37326 "EHLO mail.kernel.org"
+        id S229797AbhFJAJ5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 9 Jun 2021 20:09:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54260 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235930AbhFIPth (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 9 Jun 2021 11:49:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 35F896139A;
-        Wed,  9 Jun 2021 15:47:43 +0000 (UTC)
+        id S229705AbhFJAJ5 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 9 Jun 2021 20:09:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9732613F0;
+        Thu, 10 Jun 2021 00:08:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623253663;
-        bh=y2iT1KaKtWXjVA9Qr2dgdN0hQdcFSVwVBcGncn6FSMg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=U6ryXcI15yXTe1pRr2qJ5YvmkBxCRmgsA6aMDlR3YY8GuNly4LxwheFv4Kwex5oX2
-         ucLMX48VrEgNSSPYWpAfzS3ZDEYgi8FGbMriwiDf/tyhaClrOdr0B2JS1kcE1qMNJ8
-         cjkuYiHbc6xR0oBEWTWOh20x5EjXY4OnQrZWEjTBs6hkQA5l7sSC2VeQv/6uFzMf4S
-         slVcdkeiYM1KgazjJA/XiV3SBcXSmuJCDZ/3NtPEUhY/dtsOCFaWq5l/EAfZsd3yg7
-         Aax694BSaKSXxdhonzuoKTgfK47+7lu/XX+gM2n0FQHC9Z/HwsDQhGEFVL6VhSWnUh
-         udz1keWTyzQQQ==
-Received: by mail-lf1-f53.google.com with SMTP id f30so38797352lfj.1;
-        Wed, 09 Jun 2021 08:47:43 -0700 (PDT)
-X-Gm-Message-State: AOAM531910dhXZDHaEhjSKB5I33W2QjtrzlfZnWGLgk9rFScimCkcf3u
-        io/7gNIwIFdGdRvXxJnJBfj3ji2L5mW3ZGjyqQc=
-X-Google-Smtp-Source: ABdhPJwpZc1pXubxiYhUED9hZrt4IMeD1eY08EFNm6wFm/ojJscVpxBCM8rUdseYGSPswFlfe255346Px3BL8x22ZQk=
-X-Received: by 2002:ac2:57c1:: with SMTP id k1mr110048lfo.231.1623253661486;
- Wed, 09 Jun 2021 08:47:41 -0700 (PDT)
-MIME-Version: 1.0
+        s=k20201202; t=1623283682;
+        bh=32g+BqOqkw9hiIJzBLCIC3Ni7y/3goorKlmjTRTpk9Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XA3F7/s63rv1gJ9FmZ5a22Iz+HRzB2YnOKglK+ZJOnMmM2eL5z75rp2l2oUNTtR+f
+         VO24MYvi4Bvw9BiAuWy80hgLdFpOahKvrO7fq9UeiomGziauOIiyNRB+YukukNBbE9
+         0PifGwJjSYiii6Tlvw3sdTpfHvoJvR6zvblFNLhHdWyw+aGbsHq7T06Hc3Wst9hyZV
+         8F3hzyK4e7Ar4wiVWMBeedRAyu6Y9PxkdyGFZhY9XuCaeTZujktZqAGZEUZ7DgDvZU
+         2iMjSruxIzDDsqvr1vDUfkWhRf+YqO/Lcd0IlrEfTQGTL/oKerC/NTyjYn3tavtFMb
+         3PlV6uNBA54KA==
+Date:   Thu, 10 Jun 2021 09:07:58 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Punit Agrawal <punitagrawal@gmail.com>
+Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        guoren@kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [RFC PATCH 4/5] csky: ftrace: Drop duplicate implementation of
+ arch_check_ftrace_location()
+Message-Id: <20210610090758.dfb02db4d804ffaf319d77a5@kernel.org>
+In-Reply-To: <20210609105019.3626677-5-punitagrawal@gmail.com>
 References: <20210609105019.3626677-1-punitagrawal@gmail.com>
- <20210609105019.3626677-5-punitagrawal@gmail.com> <CAJF2gTS_tmOYFNaLYQmJvbwZwksMctPPbE6GAGgUYTwvLLwE=w@mail.gmail.com>
- <20210609232959.3b94659c00ad66a602653bde@kernel.org>
-In-Reply-To: <20210609232959.3b94659c00ad66a602653bde@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 9 Jun 2021 23:47:30 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTSFaexHqbZfHp2tMh-VbmRu+9sJPrWtKv14t6Vassv5A@mail.gmail.com>
-Message-ID: <CAJF2gTTSFaexHqbZfHp2tMh-VbmRu+9sJPrWtKv14t6Vassv5A@mail.gmail.com>
-Subject: Re: [RFC PATCH 4/5] csky: ftrace: Drop duplicate implementation of arch_check_ftrace_location()
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Punit Agrawal <punitagrawal@gmail.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        David Miller <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        <20210609105019.3626677-5-punitagrawal@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Jun 9, 2021 at 10:30 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Hi Guo,
->
-> On Wed, 9 Jun 2021 20:33:18 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > csky using -mcount not -fpatchable-function-entry, so
-> >                 /* Given address is not on the instruction boundary */
-> >                 if ((unsigned long)p->addr != ftrace_addr)
-> >                         return -EILSEQ;
-> > all right?
->
-> Even if -mcount is used, that check is still needed since the
-> ftrace hooked address will be the ftrace_addr. If user tries to
-> probe the second instruction in mcount code, kprobes needs to stop it.
-Make sense. It guarantees p->addr is the first instruction of function
--mcount call site.
+On Wed,  9 Jun 2021 19:50:18 +0900
+Punit Agrawal <punitagrawal@gmail.com> wrote:
 
-Thx
+> The csky specific arch_check_ftrace_location() shadows a weak
+> implementation of the function in core code that offers the same
+> functionality but with additional error checking.
+> 
+> Drop the architecture specific function as a step towards further
+> cleanup in core code.
+> 
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Looks good to me.
 
->
-> Thank you,
->
-> >
-> > On Wed, Jun 9, 2021 at 6:51 PM Punit Agrawal <punitagrawal@gmail.com> wrote:
-> > >
-> > > The csky specific arch_check_ftrace_location() shadows a weak
-> > > implementation of the function in core code that offers the same
-> > > functionality but with additional error checking.
-> > >
-> > > Drop the architecture specific function as a step towards further
-> > > cleanup in core code.
-> > >
-> > > Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
-> > > Cc: Guo Ren <guoren@linux.alibaba.com>
-> > > ---
-> > >  arch/csky/kernel/probes/ftrace.c | 7 -------
-> > >  1 file changed, 7 deletions(-)
-> > >
-> > > diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
-> > > index ef2bb9bd9605..b388228abbf2 100644
-> > > --- a/arch/csky/kernel/probes/ftrace.c
-> > > +++ b/arch/csky/kernel/probes/ftrace.c
-> > > @@ -2,13 +2,6 @@
-> > >
-> > >  #include <linux/kprobes.h>
-> > >
-> > > -int arch_check_ftrace_location(struct kprobe *p)
-> > > -{
-> > > -       if (ftrace_location((unsigned long)p->addr))
-> > > -               p->flags |= KPROBE_FLAG_FTRACE;
-> > > -       return 0;
-> > > -}
-> > > -
-> > >  /* Ftrace callback handler for kprobes -- called under preepmt disabled */
-> > >  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
-> > >                            struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > > --
-> > > 2.30.2
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
-> >
-> > ML: https://lore.kernel.org/linux-csky/
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 
+Thank you,
+
+> Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
+> Cc: Guo Ren <guoren@linux.alibaba.com>
+> ---
+>  arch/csky/kernel/probes/ftrace.c | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/arch/csky/kernel/probes/ftrace.c b/arch/csky/kernel/probes/ftrace.c
+> index ef2bb9bd9605..b388228abbf2 100644
+> --- a/arch/csky/kernel/probes/ftrace.c
+> +++ b/arch/csky/kernel/probes/ftrace.c
+> @@ -2,13 +2,6 @@
+>  
+>  #include <linux/kprobes.h>
+>  
+> -int arch_check_ftrace_location(struct kprobe *p)
+> -{
+> -	if (ftrace_location((unsigned long)p->addr))
+> -		p->flags |= KPROBE_FLAG_FTRACE;
+> -	return 0;
+> -}
+> -
+>  /* Ftrace callback handler for kprobes -- called under preepmt disabled */
+>  void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+>  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> -- 
+> 2.30.2
+> 
 
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Masami Hiramatsu <mhiramat@kernel.org>
