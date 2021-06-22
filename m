@@ -2,46 +2,51 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17E13B006F
-	for <lists+linux-csky@lfdr.de>; Tue, 22 Jun 2021 11:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A53C3B0081
+	for <lists+linux-csky@lfdr.de>; Tue, 22 Jun 2021 11:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbhFVJlD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 22 Jun 2021 05:41:03 -0400
-Received: from mga04.intel.com ([192.55.52.120]:56666 "EHLO mga04.intel.com"
+        id S229896AbhFVJpq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 22 Jun 2021 05:45:46 -0400
+Received: from mga18.intel.com ([134.134.136.126]:20208 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229490AbhFVJlC (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 22 Jun 2021 05:41:02 -0400
-IronPort-SDR: 7+6yYYodvtbKJ3DFVkb8RsJ0OPLjPAhwJrHmfC26R/+HjW8PNQu07T7wJiDakJuT04DL7vEt7w
- 9IzpNqIP/lOQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10022"; a="205195349"
+        id S229890AbhFVJpl (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 22 Jun 2021 05:45:41 -0400
+IronPort-SDR: jc1rrm9Avvs9uH3fgf6rKx0YpUnzQYQAOuSrvW9WZL25hfq6a7go0ZrTaNwpR6tRrP17wy5LAl
+ Mcf+ApvP2ghQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10022"; a="194330921"
 X-IronPort-AV: E=Sophos;i="5.83,291,1616482800"; 
-   d="scan'208";a="205195349"
+   d="scan'208";a="194330921"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2021 02:38:40 -0700
-IronPort-SDR: YjghSkQQhfpqXchU5FmETDRBEKjg++NYbLVqNiZ3bX2P3p3aIdtsxEvlzAZ3khA29zw8feGTq5
- hSRTxjz0q+eg==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2021 02:43:23 -0700
+IronPort-SDR: YT0UXablTbHFjVGOUphLdQZI3IoiFPL8yBc2UqJr8G7mpfASBqseVxlrWsQj5BcIMDyWLT+dx2
+ b78pMKFrVOjA==
 X-IronPort-AV: E=Sophos;i="5.83,291,1616482800"; 
-   d="scan'208";a="641599201"
+   d="scan'208";a="641600114"
 Received: from vmm_a4_icx.sh.intel.com (HELO localhost.localdomain) ([10.239.53.245])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2021 02:38:37 -0700
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2021 02:43:17 -0700
 From:   Zhu Lingshan <lingshan.zhu@intel.com>
-To:     lingshan.zhu@live.com
-Cc:     Like Xu <like.xu@linux.intel.com>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
+To:     peterz@infradead.org, pbonzini@redhat.com
+Cc:     bp@alien8.de, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        weijiang.yang@intel.com, kan.liang@linux.intel.com,
+        ak@linux.intel.com, wei.w.wang@intel.com, eranian@google.com,
+        liuxiangdong5@huawei.com, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org, like.xu.linux@gmail.com,
+        Like Xu <like.xu@linux.intel.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
         xen-devel@lists.xenproject.org,
-        Peter Zijlstra <peterz@infradead.org>,
         Zhu Lingshan <lingshan.zhu@intel.com>
 Subject: [PATCH V7 01/18] perf/core: Use static_call to optimize perf_guest_info_callbacks
-Date:   Tue, 22 Jun 2021 17:38:06 +0800
-Message-Id: <20210622093823.8215-2-lingshan.zhu@intel.com>
+Date:   Tue, 22 Jun 2021 17:42:49 +0800
+Message-Id: <20210622094306.8336-2-lingshan.zhu@intel.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210622093823.8215-1-lingshan.zhu@intel.com>
-References: <20210622093823.8215-1-lingshan.zhu@intel.com>
+In-Reply-To: <20210622094306.8336-1-lingshan.zhu@intel.com>
+References: <20210622094306.8336-1-lingshan.zhu@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
