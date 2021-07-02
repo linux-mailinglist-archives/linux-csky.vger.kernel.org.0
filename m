@@ -2,42 +2,30 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A12C3B9FC1
-	for <lists+linux-csky@lfdr.de>; Fri,  2 Jul 2021 13:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD983BA310
+	for <lists+linux-csky@lfdr.de>; Fri,  2 Jul 2021 18:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbhGBLZZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 2 Jul 2021 07:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbhGBLZZ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Jul 2021 07:25:25 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A051C061762;
-        Fri,  2 Jul 2021 04:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=O5Uqso+ww5amQ01DKigcD3vJJ7N3bwtD7LxAeQZ8NGo=; b=JYJbKRCaTtVjDzb/7N8Vg5ALJK
-        Z9z+lgf5/nby+DFt32t6/4uiGrBJeKjTLVqqlBekOg4CgVhfQqk4bd+I/0DRjmpHrmNI77IlDRhYn
-        JTJlDJI2+gb1fvdiaPk1sAjttTyO6N8hHeBFR/6wiUzGir5xO+zjr18vT2GDa7ueMv3jA0DvapxgS
-        sORLkZ7+5aVcnyqMrOOh2sxuewdQjUzEt/H8Pa02qexOzNdz5irUkHr2OVQIQ7TUGNBbfjA6/qU55
-        KLYzKy4dbIvNoL9okqBh6IPngAIxJ8W8lD+1vYchcUWAbhBempd1bUMgvDJN85yD8fulHZbpEdfXJ
-        Z5/MAk+w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lzHFD-00DqNT-HJ; Fri, 02 Jul 2021 11:22:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 43862300091;
-        Fri,  2 Jul 2021 13:22:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D797A20244CE2; Fri,  2 Jul 2021 13:22:00 +0200 (CEST)
-Date:   Fri, 2 Jul 2021 13:22:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhu Lingshan <lingshan.zhu@intel.com>
+        id S229817AbhGBQKj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 2 Jul 2021 12:10:39 -0400
+Received: from smtprelay0018.hostedemail.com ([216.40.44.18]:54622 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229455AbhGBQKj (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Jul 2021 12:10:39 -0400
+X-Greylist: delayed 452 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Jul 2021 12:10:38 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id E1B421813C436;
+        Fri,  2 Jul 2021 16:00:34 +0000 (UTC)
+Received: from omf08.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 5E8CE181D207E;
+        Fri,  2 Jul 2021 16:00:33 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 850751A29F9;
+        Fri,  2 Jul 2021 16:00:25 +0000 (UTC)
+Message-ID: <7379289718c6826dd1affec5824b749be2aee0a4.camel@perches.com>
+Subject: Re: [PATCH V7 01/18] perf/core: Use static_call to optimize
+ perf_guest_info_callbacks
+From:   Joe Perches <joe@perches.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Zhu Lingshan <lingshan.zhu@intel.com>
 Cc:     pbonzini@redhat.com, bp@alien8.de, seanjc@google.com,
         vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
         joro@8bytes.org, weijiang.yang@intel.com,
@@ -52,47 +40,84 @@ Cc:     pbonzini@redhat.com, bp@alien8.de, seanjc@google.com,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
         xen-devel@lists.xenproject.org
-Subject: Re: [PATCH V7 01/18] perf/core: Use static_call to optimize
- perf_guest_info_callbacks
-Message-ID: <YN722HIrzc6Z2+oD@hirez.programming.kicks-ass.net>
+Date:   Fri, 02 Jul 2021 09:00:22 -0700
+In-Reply-To: <YN722HIrzc6Z2+oD@hirez.programming.kicks-ass.net>
 References: <20210622094306.8336-1-lingshan.zhu@intel.com>
- <20210622094306.8336-2-lingshan.zhu@intel.com>
+         <20210622094306.8336-2-lingshan.zhu@intel.com>
+         <YN722HIrzc6Z2+oD@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210622094306.8336-2-lingshan.zhu@intel.com>
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 850751A29F9
+X-Spam-Status: No, score=-1.40
+X-Stat-Signature: shha9bwa3wcuy6qog6sh3abeec4qbbut
+X-Rspamd-Server: rspamout03
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18c3UUJH2LcjAG65GSZ68xha895S86OjZI=
+X-HE-Tag: 1625241625-20610
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 05:42:49PM +0800, Zhu Lingshan wrote:
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index 8f71dd72ef95..c71af4cfba9b 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -90,6 +90,27 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_pebs_aliases, *x86_pmu.pebs_aliases);
->   */
->  DEFINE_STATIC_CALL_RET0(x86_pmu_guest_get_msrs, *x86_pmu.guest_get_msrs);
->  
-> +DEFINE_STATIC_CALL_RET0(x86_guest_state, *(perf_guest_cbs->state));
-> +DEFINE_STATIC_CALL_RET0(x86_guest_get_ip, *(perf_guest_cbs->get_ip));
-> +DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
-> +
-> +void arch_perf_update_guest_cbs(void)
-> +{
-> +	static_call_update(x86_guest_state, (void *)&__static_call_return0);
-> +	static_call_update(x86_guest_get_ip, (void *)&__static_call_return0);
-> +	static_call_update(x86_guest_handle_intel_pt_intr, (void *)&__static_call_return0);
-> +
-> +	if (perf_guest_cbs && perf_guest_cbs->state)
-> +		static_call_update(x86_guest_state, perf_guest_cbs->state);
-> +
-> +	if (perf_guest_cbs && perf_guest_cbs->get_ip)
-> +		static_call_update(x86_guest_get_ip, perf_guest_cbs->get_ip);
-> +
-> +	if (perf_guest_cbs && perf_guest_cbs->handle_intel_pt_intr)
-> +		static_call_update(x86_guest_handle_intel_pt_intr,
-> +				   perf_guest_cbs->handle_intel_pt_intr);
-> +}
+On Fri, 2021-07-02 at 13:22 +0200, Peter Zijlstra wrote:
+> On Tue, Jun 22, 2021 at 05:42:49PM +0800, Zhu Lingshan wrote:
+> > diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+[]
+> > @@ -90,6 +90,27 @@ DEFINE_STATIC_CALL_NULL(x86_pmu_pebs_aliases, *x86_pmu.pebs_aliases);
+> >   */
+> >  DEFINE_STATIC_CALL_RET0(x86_pmu_guest_get_msrs, *x86_pmu.guest_get_msrs);
+> >  
+> > 
+> > +DEFINE_STATIC_CALL_RET0(x86_guest_state, *(perf_guest_cbs->state));
+> > +DEFINE_STATIC_CALL_RET0(x86_guest_get_ip, *(perf_guest_cbs->get_ip));
+> > +DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
+> > +
+> > +void arch_perf_update_guest_cbs(void)
+> > +{
+> > +	static_call_update(x86_guest_state, (void *)&__static_call_return0);
+> > +	static_call_update(x86_guest_get_ip, (void *)&__static_call_return0);
+> > +	static_call_update(x86_guest_handle_intel_pt_intr, (void *)&__static_call_return0);
+> > +
+> > +	if (perf_guest_cbs && perf_guest_cbs->state)
+> > +		static_call_update(x86_guest_state, perf_guest_cbs->state);
+> > +
+> > +	if (perf_guest_cbs && perf_guest_cbs->get_ip)
+> > +		static_call_update(x86_guest_get_ip, perf_guest_cbs->get_ip);
+> > +
+> > +	if (perf_guest_cbs && perf_guest_cbs->handle_intel_pt_intr)
+> > +		static_call_update(x86_guest_handle_intel_pt_intr,
+> > +				   perf_guest_cbs->handle_intel_pt_intr);
+> > +}
+> 
+> Coding style wants { } on that last if().
 
-Coding style wants { } on that last if().
+That's just your personal preference.
+
+The coding-style document doesn't require that.
+
+It just says single statement.  It's not the number of
+vertical lines or characters required for the statement.
+
+----------------------------------
+
+Do not unnecessarily use braces where a single statement will do.
+
+.. code-block:: c
+
+	if (condition)
+		action();
+
+and
+
+.. code-block:: none
+
+	if (condition)
+		do_this();
+	else
+		do_that();
+
+This does not apply if only one branch of a conditional statement is a single
+statement; in the latter case use braces in both branches:
+
+
