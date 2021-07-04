@@ -2,65 +2,60 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F1D3BACB3
-	for <lists+linux-csky@lfdr.de>; Sun,  4 Jul 2021 12:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA203BAEAF
+	for <lists+linux-csky@lfdr.de>; Sun,  4 Jul 2021 22:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbhGDKOA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 4 Jul 2021 06:14:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45750 "EHLO mail.kernel.org"
+        id S229907AbhGDUMW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 4 Jul 2021 16:12:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60598 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229476AbhGDKOA (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 4 Jul 2021 06:14:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A2391613F7;
-        Sun,  4 Jul 2021 10:11:23 +0000 (UTC)
+        id S229874AbhGDUMV (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 4 Jul 2021 16:12:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E0C9E613F3;
+        Sun,  4 Jul 2021 20:09:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625393485;
-        bh=Z+/9jj6fSBcVHfl30yREhfjROWMcG0Qwh5mocBBC6aQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oecyY/fy4ZdQg5L+WF9XIcFwplcgd6mBMqD7PJ58eIwyZB7jktGHx/ZWEw1G00SfB
-         F7NHme/nTusjeZOsxYN0iE4fOfVPARFdR7eJFUPhx9pHEaxvLjNzlWinKeuUs3Xh5w
-         k/Fsb8atKfsN/B7aFKMbJ+TOsPzkKISAMJTd72xy+Ot8prAjyd1c2jaPludefO+SjF
-         Z4hZHYB92/b6KHttlosIvUhiatItdKfpXD/M7rmnf2p/+D5bI1NYdaQeITbMRTdABT
-         iTaCKm2nQF8ScTPTSCYrz8oLQGAsf4mDaa6XWh9mCXG6Nv0BgWLDxLBo6u2LtjJKD3
-         3bjFu/Sg75TnQ==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky changes for v5.14-rc1
-Date:   Sun,  4 Jul 2021 18:11:20 +0800
-Message-Id: <20210704101120.104842-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1625429385;
+        bh=fk/pRVVFRm1ZB46JXCjJehDy/PCH9P0qyJUvF/CWCaQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=i27VcSFAPWJOnLfn/RSvHXzeOvmh+DTnPIsieHJp1O1TRGb3cCGVwtGppYhf6CaS1
+         cXTEHPTBV1RL4HcNXlJpCJCXTKortREJF/SCK0yr/9lkEUF9mk3Fc+8hJR4TFT9Kgd
+         5iJE1NdiOFX+x3NBrrlkLzKGdLtr4PjO96glkHUjsjT6egq/wwuj198Q8nRaxuorlJ
+         BUXHK5Y+ScXaV8YW6FQF/uXoo7aGmqE0Emd+yOBTeNkFCIb5SwTGIpuScHROY6Bm7a
+         NrfaoPz+X+vBzh1GEfBqahCzziajiaV6Qp4HviGUsj2XHyrExB20FAAf9usxz82Lum
+         MZNs01EkyL7ZQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DB05A60A27;
+        Sun,  4 Jul 2021 20:09:45 +0000 (UTC)
+Subject: Re: [GIT PULL] csky changes for v5.14-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20210704101120.104842-1-guoren@kernel.org>
+References: <20210704101120.104842-1-guoren@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20210704101120.104842-1-guoren@kernel.org>
+X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.14-rc1
+X-PR-Tracked-Commit-Id: 90dc8c0e664efcb14e2f133309d84bfdcb0b3d24
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0d4d4c6ff6debde4c44a418c59b304d4b514541c
+Message-Id: <162542938589.15409.6406821157697805083.pr-tracker-bot@kernel.org>
+Date:   Sun, 04 Jul 2021 20:09:45 +0000
+To:     guoren@kernel.org
+Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Sun,  4 Jul 2021 18:11:20 +0800:
 
-The following changes since commit 13311e74253fe64329390df80bed3f07314ddd61:
+> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.14-rc1
 
-  Linux 5.13-rc7 (2021-06-20 15:03:15 -0700)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0d4d4c6ff6debde4c44a418c59b304d4b514541c
 
-are available in the Git repository at:
+Thank you!
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.14-rc1
-
-for you to fetch changes up to 90dc8c0e664efcb14e2f133309d84bfdcb0b3d24:
-
-  csky: Kconfig: Remove unused selects (2021-07-04 17:39:54 +0800)
-
-----------------------------------------------------------------
-arch/csky patches for 5.14-rc1
-
-Two small cleanup & fixup.
-
-----------------------------------------------------------------
-Guo Ren (2):
-      csky: syscache: Fixup duplicate cache flush
-      csky: Kconfig: Remove unused selects
-
- arch/csky/Kconfig       |  3 ---
- arch/csky/mm/syscache.c | 12 +++++++-----
- 2 files changed, 7 insertions(+), 8 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
