@@ -2,160 +2,65 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 718513BA365
-	for <lists+linux-csky@lfdr.de>; Fri,  2 Jul 2021 18:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F1D3BACB3
+	for <lists+linux-csky@lfdr.de>; Sun,  4 Jul 2021 12:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbhGBQ7f (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 2 Jul 2021 12:59:35 -0400
-Received: from smtprelay0179.hostedemail.com ([216.40.44.179]:38772 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229455AbhGBQ7e (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 2 Jul 2021 12:59:34 -0400
-Received: from omf04.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 1BBDF837F27E;
-        Fri,  2 Jul 2021 16:57:01 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id D6515D1517;
-        Fri,  2 Jul 2021 16:56:52 +0000 (UTC)
-Message-ID: <7a2ef915bd08a1c0277b9633e20905c0ca62c568.camel@perches.com>
-Subject: Re: [PATCH V7 01/18] perf/core: Use static_call to optimize
- perf_guest_info_callbacks
-From:   Joe Perches <joe@perches.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Zhu Lingshan <lingshan.zhu@intel.com>, wanpengli@tencent.com,
-        Like Xu <like.xu@linux.intel.com>, eranian@google.com,
-        weijiang.yang@intel.com, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org, Will Deacon <will@kernel.org>,
-        kvmarm@lists.cs.columbia.edu, kan.liang@linux.intel.com,
-        ak@linux.intel.com, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, joro@8bytes.org, x86@kernel.org,
-        linux-csky@vger.kernel.org, wei.w.wang@intel.com,
-        xen-devel@lists.xenproject.org, liuxiangdong5@huawei.com,
-        bp@alien8.de, Paul Walmsley <paul.walmsley@sifive.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-arm-kernel@lists.infradead.org, jmattson@google.com,
-        like.xu.linux@gmail.com, Nick Hu <nickhu@andestech.com>,
-        seanjc@google.com, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, vkuznets@redhat.com
-Date:   Fri, 02 Jul 2021 09:56:51 -0700
-In-Reply-To: <20210702163836.GB94260@C02TD0UTHF1T.local>
-References: <20210622094306.8336-1-lingshan.zhu@intel.com>
-         <20210622094306.8336-2-lingshan.zhu@intel.com>
-         <YN722HIrzc6Z2+oD@hirez.programming.kicks-ass.net>
-         <7379289718c6826dd1affec5824b749be2aee0a4.camel@perches.com>
-         <20210702163836.GB94260@C02TD0UTHF1T.local>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        id S229543AbhGDKOA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 4 Jul 2021 06:14:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45750 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229476AbhGDKOA (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sun, 4 Jul 2021 06:14:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2391613F7;
+        Sun,  4 Jul 2021 10:11:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625393485;
+        bh=Z+/9jj6fSBcVHfl30yREhfjROWMcG0Qwh5mocBBC6aQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oecyY/fy4ZdQg5L+WF9XIcFwplcgd6mBMqD7PJ58eIwyZB7jktGHx/ZWEw1G00SfB
+         F7NHme/nTusjeZOsxYN0iE4fOfVPARFdR7eJFUPhx9pHEaxvLjNzlWinKeuUs3Xh5w
+         k/Fsb8atKfsN/B7aFKMbJ+TOsPzkKISAMJTd72xy+Ot8prAjyd1c2jaPludefO+SjF
+         Z4hZHYB92/b6KHttlosIvUhiatItdKfpXD/M7rmnf2p/+D5bI1NYdaQeITbMRTdABT
+         iTaCKm2nQF8ScTPTSCYrz8oLQGAsf4mDaa6XWh9mCXG6Nv0BgWLDxLBo6u2LtjJKD3
+         3bjFu/Sg75TnQ==
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky changes for v5.14-rc1
+Date:   Sun,  4 Jul 2021 18:11:20 +0800
+Message-Id: <20210704101120.104842-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.40
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: D6515D1517
-X-Stat-Signature: yfcchsbgyrrjqd9annscud3jta5gtkxi
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/FrPSf3Ewjv8gI9yMKoa9Lq2JHlpGAS2Q=
-X-HE-Tag: 1625245012-826405
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, 2021-07-02 at 17:38 +0100, Mark Rutland wrote:
-> On Fri, Jul 02, 2021 at 09:00:22AM -0700, Joe Perches wrote:
-> > On Fri, 2021-07-02 at 13:22 +0200, Peter Zijlstra wrote:
-> > > On Tue, Jun 22, 2021 at 05:42:49PM +0800, Zhu Lingshan wrote:
-[]
-> > > > +	if (perf_guest_cbs && perf_guest_cbs->handle_intel_pt_intr)
-> > > > +		static_call_update(x86_guest_handle_intel_pt_intr,
-> > > > +				   perf_guest_cbs->handle_intel_pt_intr);
-> > > > +}
-> > > 
-> > > Coding style wants { } on that last if().
-> > 
-> > That's just your personal preference.
-> > 
-> > The coding-style document doesn't require that.
-> > 
-> > It just says single statement.  It's not the number of
-> > vertical lines or characters required for the statement.
-> > 
-> > ----------------------------------
-> > 
-> > Do not unnecessarily use braces where a single statement will do.
-> > 
-> > .. code-block:: c
-> > 
-> > 	if (condition)
-> > 		action();
-> > 
-> > and
-> > 
-> > .. code-block:: none
-> > 
-> > 	if (condition)
-> > 		do_this();
-> > 	else
-> > 		do_that();
-> > 
-> > This does not apply if only one branch of a conditional statement is a single
-> > statement; in the latter case use braces in both branches:
-> 
-> Immediately after this, we say:
-> 
-> > Also, use braces when a loop contains more than a single simple statement:
-> > 
-> > .. code-block:: c
-> > 
-> >         while (condition) {
-> >                 if (test)
-> >                         do_something();
-> >         }
-> > 
-> 
-> ... and while that says "a loop", the principle is obviously supposed to
-> apply to conditionals too; structurally they're no different. We should
-> just fix the documentation to say "a loop or conditional", or something
-> to that effect.
+Hi Linus,
 
-<shrug>  Maybe.
+The following changes since commit 13311e74253fe64329390df80bed3f07314ddd61:
 
-I think there are _way_ too many existing obvious uses where the
-statement that follows a conditional is multi-line.
+  Linux 5.13-rc7 (2021-06-20 15:03:15 -0700)
 
-	if (foo)
-		printk(fmt,
-		       args...);
+are available in the Git repository at:
 
-where the braces wouldn't add anything other than more vertical space.
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.14-rc1
 
-I don't much care one way or another other than Peter's somewhat ambiguous
-use of the phrase "coding style".
+for you to fetch changes up to 90dc8c0e664efcb14e2f133309d84bfdcb0b3d24:
 
-checkpatch doesn't emit a message either way.
------------------------------------------
-$ cat t_multiline.c
-// SPDX-License-Identifier: GPL-2.0-only
+  csky: Kconfig: Remove unused selects (2021-07-04 17:39:54 +0800)
 
-void foo(void)
-{
-	if (foo) {
-		pr_info(fmt,
-			args);
-	}
+----------------------------------------------------------------
+arch/csky patches for 5.14-rc1
 
-	if (foo)
-		pr_info(fmt,
-			args);
+Two small cleanup & fixup.
 
-	if (foo)
-		pr_info(fmt, args);
-}
+----------------------------------------------------------------
+Guo Ren (2):
+      csky: syscache: Fixup duplicate cache flush
+      csky: Kconfig: Remove unused selects
 
-$ ./scripts/checkpatch.pl -f --strict t_multiline.c
-total: 0 errors, 0 warnings, 0 checks, 16 lines checked
-
-t_multiline.c has no obvious style problems and is ready for submission.
------------------------------------------
-
-cheers, Joe
-
-
+ arch/csky/Kconfig       |  3 ---
+ arch/csky/mm/syscache.c | 12 +++++++-----
+ 2 files changed, 7 insertions(+), 8 deletions(-)
