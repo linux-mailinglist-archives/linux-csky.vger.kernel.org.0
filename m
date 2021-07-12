@@ -2,36 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 998913C4B0D
-	for <lists+linux-csky@lfdr.de>; Mon, 12 Jul 2021 12:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AD23C50D2
+	for <lists+linux-csky@lfdr.de>; Mon, 12 Jul 2021 12:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbhGLGz2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 12 Jul 2021 02:55:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53294 "EHLO mail.kernel.org"
+        id S1344346AbhGLHfV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 12 Jul 2021 03:35:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240839AbhGLGyD (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 12 Jul 2021 02:54:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 99B5760FDB;
-        Mon, 12 Jul 2021 06:51:15 +0000 (UTC)
+        id S1344499AbhGLH3e (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 12 Jul 2021 03:29:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3A7F261419;
+        Mon, 12 Jul 2021 07:25:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626072676;
+        s=korg; t=1626074731;
         bh=0Mhtj2ALqFzzEzlMYegUNK373szXjXHWvZKnVqs60so=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CLKKeQ2yxHty2ldd7ythW0aKH/gTuX1mIbyw1ZFjIXKf4LytwBpdBTRK4lHCGRk3A
-         v+uoKT/DRiELwHGXl80jiJB+JpdPuGKiACcjadtMi/NJqtBxbcjWPrk+VHLjE8o3K+
-         ALU9brEn45AfhhcKDGIg2oBFD81cd/FART6PR7bo=
+        b=ypWljUF782jr0MS2nHPK7malTi+hXRgMnG+R3xaf8SL9DYmfmKtViFqE2HqH4lxTJ
+         sPsz4YUzxRhywMK12P+RVx2dueiUb7JAeQ/ZiQUJg9k09mv729dqQ9IxMJsFNtFjKP
+         1sKrPlbFM3QXS66Cmq9yf+oX/v+ZBI1KVOt99/JI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
         Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 578/593] csky: fix syscache.c fallthrough warning
-Date:   Mon, 12 Jul 2021 08:12:18 +0200
-Message-Id: <20210712060958.712874417@linuxfoundation.org>
+Subject: [PATCH 5.12 679/700] csky: fix syscache.c fallthrough warning
+Date:   Mon, 12 Jul 2021 08:12:42 +0200
+Message-Id: <20210712061048.132835607@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210712060843.180606720@linuxfoundation.org>
-References: <20210712060843.180606720@linuxfoundation.org>
+In-Reply-To: <20210712060924.797321836@linuxfoundation.org>
+References: <20210712060924.797321836@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
