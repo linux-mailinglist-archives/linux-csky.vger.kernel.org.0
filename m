@@ -2,25 +2,47 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FD73C6CED
-	for <lists+linux-csky@lfdr.de>; Tue, 13 Jul 2021 11:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C99A3C7C7D
+	for <lists+linux-csky@lfdr.de>; Wed, 14 Jul 2021 05:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbhGMJOK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 13 Jul 2021 05:14:10 -0400
-Received: from verein.lst.de ([213.95.11.211]:57900 "EHLO verein.lst.de"
+        id S237503AbhGNDQO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 13 Jul 2021 23:16:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234916AbhGMJOK (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Tue, 13 Jul 2021 05:14:10 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9AF1767373; Tue, 13 Jul 2021 11:11:14 +0200 (CEST)
-Date:   Tue, 13 Jul 2021 11:11:14 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S237368AbhGNDQO (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 13 Jul 2021 23:16:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 86777613B2;
+        Wed, 14 Jul 2021 03:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626232403;
+        bh=eHqXqU0BSC/4FXMxbMmPUP5y/NWhQgyVoBJ51q6I6VI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RneN6lR7Gk+SyuzkEGUgXr7XT7IriiK0Ld1//j6zYRb/qjM02yKdHFlCHwgq90qaq
+         OPjucaISjtpHs8RTbetzrdLw0tATbov36tOsLzqUKF7hgRqLXL5M0yHnn/NxKihWk6
+         XATsATEQtu6TsePkHQkvwWzzh8U31KxpN30+TtitWfM10iGQUE9q/fcjs7X+unaStk
+         ZHtv2y0Nl7o/khL5FkiHbf6WW2QL+zHAkOE6vysdoTfYAllTgQtdsaRVGM7lQfpLRT
+         dmpkufnoyEh3lCAwyau7PA+Fd+WvV0VZCuzN3IWCM8tiQ264dk4mqkI34mlyVof+4q
+         TRVyTjlfWJ2GQ==
+Received: by mail-lf1-f51.google.com with SMTP id f30so1030255lfj.1;
+        Tue, 13 Jul 2021 20:13:23 -0700 (PDT)
+X-Gm-Message-State: AOAM530pSEqh7KJjPhG2VJJFCX81jVTCkMwj+xPGFp/iTIsvS6iWV+XB
+        7P8QBLGWQxm+IlIYtxD0RijxGQ8AC2XoBmB5Wcg=
+X-Google-Smtp-Source: ABdhPJxjtzRmeK8gT6oxvZVQIbBescQdPKCDPRyAmUuPGRj8zSZMbMltcH961OP7xUnOjUvePsuZ4INz3sZLDriTjNw=
+X-Received: by 2002:ac2:42d6:: with SMTP id n22mr6034055lfl.41.1626232401837;
+ Tue, 13 Jul 2021 20:13:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210712060928.4161649-1-hch@lst.de>
+In-Reply-To: <20210712060928.4161649-1-hch@lst.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 14 Jul 2021 11:13:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRaRp2nVKGp3+vVnQ3RCvaDxsgHh_vhPTuOxnT51XBXFg@mail.gmail.com>
+Message-ID: <CAJF2gTRaRp2nVKGp3+vVnQ3RCvaDxsgHh_vhPTuOxnT51XBXFg@mail.gmail.com>
+Subject: Re: flush_kernel_dcache_page fixes and removal
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Guo Ren <guoren@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Russell King <linux@armlinux.org.uk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
@@ -31,79 +53,71 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Geoff Levand <geoff@infradead.org>,
         Paul Cercueil <paul@crapouillou.net>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Alex Shi <alexs@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org
-Subject: Re: flush_kernel_dcache_page fixes and removal
-Message-ID: <20210713091113.GA23518@lst.de>
-References: <20210712060928.4161649-1-hch@lst.de> <20210713084648.GF22278@shell.armlinux.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210713084648.GF22278@shell.armlinux.org.uk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        Alex Shi <alexs@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Linux-MM <linux-mm@kvack.org>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 09:46:48AM +0100, Russell King (Oracle) wrote:
-> I think you need to be careful - I seem to have a recollection that the
-> reason we ended up with flush_kernel_dcache_page() was the need to avoid
-> the taking of the mmap lock for 32-bit ARM VIVT based CPUs in
-> flush_dcache_page(). 32-bit ARM flush_dcache_page() can block.
+Acked-by for csky abiv1 part.=EF=BC=88No change to our execution path after
+the patch set.=EF=BC=89
 
-Where can arm32 flush_dcache_page block?  __flush_dcache_aliases does
-walk mapping->i_mmap, but using a spinlock hidden under
-flush_dcache_mmap_lock.  If flush_dcache_page did block plenty of code
-already calling it e.g. from interrupt and block submission contexts
-in various mmc/sdcard drivers would be rather unhappy.  Even today
-calls to flush_kernel_dcache_page page in the block I/O path are
-vastly outnumber by calls to flush_dcache_page.
+On Mon, Jul 12, 2021 at 2:10 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Hi all,
+>
+> while looking to convert the block layer away from kmap_atomic towards
+> kmap_local_page and prefeably the helpers that abstract it away I noticed
+> that a few block drivers directly or implicitly call
+> flush_kernel_dcache_page before kunmapping a page that has been written
+> to.  flush_kernel_dcache_page is documented to to be used in such cases,
+> but flush_dcache_page is actually required when the page could be in
+> the page cache and mapped to userspace, which is pretty much always the
+> case when kmapping an arbitrary page.  Unfortunately the documentation
+> doesn't exactly make that clear, which lead to this misused.  And it turn=
+s
+> out that only the copy_strings / copy_string_kernel in the exec code
+> were actually correct users of flush_kernel_dcache_page, which is why
+> I think we should just remove it and eat the very minor overhead in
+> exec rather than confusing poor driver writers.
+>
+> Diffstat:
+>  Documentation/core-api/cachetlb.rst                    |   86 +++++++---=
+-------
+>  Documentation/translations/zh_CN/core-api/cachetlb.rst |    9 -
+>  arch/arm/include/asm/cacheflush.h                      |    4
+>  arch/arm/mm/flush.c                                    |   33 ------
+>  arch/arm/mm/nommu.c                                    |    6 -
+>  arch/csky/abiv1/cacheflush.c                           |   11 --
+>  arch/csky/abiv1/inc/abi/cacheflush.h                   |    4
+>  arch/mips/include/asm/cacheflush.h                     |    8 -
+>  arch/nds32/include/asm/cacheflush.h                    |    3
+>  arch/nds32/mm/cacheflush.c                             |    9 -
+>  arch/parisc/include/asm/cacheflush.h                   |    8 -
+>  arch/parisc/kernel/cache.c                             |    3
+>  arch/sh/include/asm/cacheflush.h                       |    8 -
+>  block/blk-map.c                                        |    2
+>  drivers/block/ps3disk.c                                |    2
+>  drivers/mmc/host/jz4740_mmc.c                          |    4
+>  drivers/mmc/host/mmc_spi.c                             |    2
+>  drivers/scsi/aacraid/aachba.c                          |    1
+>  fs/exec.c                                              |    6 -
+>  include/linux/highmem.h                                |    5
+>  lib/scatterlist.c                                      |    5
+>  tools/testing/scatterlist/linux/mm.h                   |    1
+>  22 files changed, 55 insertions(+), 165 deletions(-)
 
-> The second issue I have is that, when we are reading a page into a page
-> cache page, how can that page be mapped to userspace? Isn't that a
-> violation of semantics? If the page is mapped to userspace but does not
-> contain data from the underlying storage device, then the page contains
-> stale data (if it's a new page, lets hope that's zeroed and not some
-> previous contents - which would be a massive security hole.)
 
-I did not come up with the rules, but these are the existing documented
-ones for flush_dcache_page:
 
-        Any time the kernel writes to a page cache page, _OR_
-	the kernel is about to read from a page cache page and
-	user space shared/writable mappings of this page potentially
-	exist, this routine is called.
+--=20
+Best Regards
+ Guo Ren
 
-So writing to (aka reading into) a page cache page is not conditional
-on it being mapped yet.  Only the kernel reading from the page cache
-page has this condition.
-
-> As I
-> understand it, the flush_kernel_dcache_page() calls in the block layer
-> are primarily there to cope with drivers that do PIO read to write to a
-> page cache page to ensure that later userspace mappings can see the data
-> in the page cache page - by ensuring that the page cache pages are in
-> the same state as far as caches go as if they had been DMA'd to.
-
-PIO is one big case, but also kernel generated data and all kinds of
-bounce buffering schemes.
-
-> We know that the current implementation works fine - you're now
-> proposing to radically change it, asserting that it's buggy. I'm
-> nervous about this change.
-
-Do we know it works?  There are very few calls to
-flush_dcache_kernel_page and very few implementations that differ from
-flush_dcache_page.  For arm32 the relevant drivers would mostly be
-mmc drivers using the sg_miter interface, are they even used much on
-the platforms where the difference exists?
-
-> 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
----end quoted text---
+ML: https://lore.kernel.org/linux-csky/
