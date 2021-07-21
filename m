@@ -2,99 +2,103 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EB73CE2A0
-	for <lists+linux-csky@lfdr.de>; Mon, 19 Jul 2021 18:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188713D0E71
+	for <lists+linux-csky@lfdr.de>; Wed, 21 Jul 2021 14:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245177AbhGSPbH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 19 Jul 2021 11:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S238866AbhGULWk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 21 Jul 2021 07:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348511AbhGSPYx (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 19 Jul 2021 11:24:53 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A601CC08E88C;
-        Mon, 19 Jul 2021 08:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=DEv5AMPYTsRvufOgvEX+iyR62xQvFefugMO+OsVkHzc=; b=DdKXacyQxn7Hz8fN7PJPr6m9x
-        d4hT/T0CJ5vKsm+NrCyfhhcEa16qr7fh5ZmNRudBMiNsh2jWmw+8ed7lCBIMi/jmkxYayCvxuuGFK
-        4hGzvSFep0kUFA1ZNBEEQeCQdSfzUhQ6zgFkq82drCAMx1t9UybqRKDrNW6URJC1JvCwW0DMXWT0J
-        m8V5Vgh2JPge/tTVm8IONzCUUTFB5PbqFmG7VItuZoc2Wg8A7OONJFrHCYD+gnCyml/DiKV1jbrlh
-        EcOJfYmvL8Ub22suPEmn9SZalhR+cT/W6dvmJJoHr8kHoEp/k9Sarl2dHD3wp1WISKxfd40O6Ylfs
-        YGaL+yUww==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46332)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1m5VPo-00054L-KD; Mon, 19 Jul 2021 16:42:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1m5VPi-00066F-Ex; Mon, 19 Jul 2021 16:42:38 +0100
-Date:   Mon, 19 Jul 2021 16:42:38 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     hch@lst.de, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, James.Bottomley@hansenpartnership.com,
-        guoren@kernel.org, tsbogend@alpha.franken.de, nickhu@andestech.com,
-        green.hu@gmail.com, deanbo422@gmail.com, deller@gmx.de,
-        ysato@users.sourceforge.jp, dalias@libc.org, geoff@infradead.org,
-        paul@crapouillou.net, ulf.hansson@linaro.org, alexs@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org
-Subject: Re: flush_kernel_dcache_page fixes and removal
-Message-ID: <20210719154238.GS22278@shell.armlinux.org.uk>
-References: <20210713084648.GF22278@shell.armlinux.org.uk>
- <20210719053851.GA16780@gondor.apana.org.au>
+        with ESMTP id S238612AbhGULRQ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 21 Jul 2021 07:17:16 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B08C0613F0;
+        Wed, 21 Jul 2021 04:57:15 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id r21so1604708pgv.13;
+        Wed, 21 Jul 2021 04:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1aayxhP7LR5pbpYNWPExB3m6iym6gHf5XQMlRKlxp94=;
+        b=Gb3sYMtxc/kWDCMnCmYUN5o70Tvt9W/hvjABaQVw6GepiW6AF7jJcANbzNBRV1gq0H
+         KVgsqId2MY+RXzDpDGY6dPw0M9zOWZUAQNGPy7PM2rys/HzrGgdYJ1JWxUE1QI9btZVV
+         O6Nge5AQbsqTmzXcQomJIje10kgbOVDLOw6CAEgavNSXA2gO45gvZInn+kY7JYMZv+qO
+         7oKYPWFeZHS6IplBXQIb7MGoEHkzU7p7v5SEAUS6Qb0XpyY5ciKG5wbqqw5mBV2thXmN
+         kc5wkdciG83RddYCL0ig7AXvXY6vLlAn6fNTtakKWWWjb2B/kLBoNRRLEWJHhmSw7M5h
+         laRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1aayxhP7LR5pbpYNWPExB3m6iym6gHf5XQMlRKlxp94=;
+        b=uJEdn8tjxHhJCruSReDaV0ZOgAvLnu9yr9M4loyMMjVorvNRI0CYggM0nItHGV/y4v
+         fieSuGoLFpwDT/XXuS+gM64Sjj0W6AT5HzwrX5Ph0y7uv3PDcgLT7PLn6tZJVll5MGVN
+         yFpU9xFiWxc5uFdr6rDxXqPFTVigl6yPKDvLp+s84o2uk6AYbXAsy45gr3OG6doqqLu0
+         DrpvWLutgCnYfW50E/71xlc5Jj+GljbnAHdkxKsPZ924ifcjGuJ+IjRAfwGqCS+dElAA
+         B+Sp4menyDj3PuG6tPvkbLsTyvNjXT9vq5CBuKjC883hThd2b6/yTQ8dxca48gHY6Ifh
+         LV3Q==
+X-Gm-Message-State: AOAM532FYp72Pa9LPt1LJFVv3hWiXCVJRtTJ2D8LnsQ3tTnqiaOlNSnA
+        MN8mlY8IECGg3QQjRsIPyyQ=
+X-Google-Smtp-Source: ABdhPJx8Jc6D+8J2xe+jplPG6WjflufBXyqLNydLZmg9K2ukmxfm1tClEJcFPfqxf5GDpWMtdTO8gQ==
+X-Received: by 2002:a63:a01:: with SMTP id 1mr35267098pgk.360.1626868633306;
+        Wed, 21 Jul 2021 04:57:13 -0700 (PDT)
+Received: from Likes-MacBook-Pro.local ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id j12sm25930570pfj.208.2021.07.21.04.57.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jul 2021 04:57:12 -0700 (PDT)
+To:     Zhu Lingshan <lingshan.zhu@intel.com>
+Cc:     bp@alien8.de, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        kan.liang@linux.intel.com, ak@linux.intel.com,
+        wei.w.wang@intel.com, eranian@google.com, liuxiangdong5@huawei.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        boris.ostrvsky@oracle.com, Like Xu <like.xu@linux.intel.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        xen-devel@lists.xenproject.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20210716085325.10300-1-lingshan.zhu@intel.com>
+ <20210716085325.10300-2-lingshan.zhu@intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [PATCH V8 01/18] perf/core: Use static_call to optimize
+ perf_guest_info_callbacks
+Message-ID: <fd117e37-8063-63a4-43cd-7cb555e5bab5@gmail.com>
+Date:   Wed, 21 Jul 2021 19:57:01 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210719053851.GA16780@gondor.apana.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20210716085325.10300-2-lingshan.zhu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 01:38:51PM +0800, Herbert Xu wrote:
-> Russell King Oracle <linux@armlinux.org.uk> wrote:
-> >
-> > I think you need to be careful - I seem to have a recollection that the
-> > reason we ended up with flush_kernel_dcache_page() was the need to avoid
-> > the taking of the mmap lock for 32-bit ARM VIVT based CPUs in
-> > flush_dcache_page(). 32-bit ARM flush_dcache_page() can block.
-> > 
-> > If you're sure that all these changes you're making do not end up
-> > calling flush_dcache_page() from a path where we are atomic, then fine.
-> 
-> The Crypto API has been calling flush_dcache_page from softirq
-> context since before the advent of git (see crypto/scatterwalk.c
-> from the initial import).  So if 32-bit ARM blocks on it then this
-> has been broken for almost 20 years.
+On 16/7/2021 4:53 pm, Zhu Lingshan wrote:
+> +	} else if (xenpmu_data->pmu.r.regs.cpl & 3)
 
-I think what's confusing me is the naming of flush_dcache_mmap_lock().
-The mmap lock is a read-write semaphore (see linux/mmap-lock.h), and
-is even called "mmap_lock" in mm_struct, but this has nothing to do
-with flush_dcache_mmap_lock().
+Lingshan, serious for this version ?
 
-So no, flush_dcache_mmap_lock() doesn't block as I first thought, and
-therefore flush_dcache_page() doesn't block either.
+arch/x86/xen/pmu.c:438:9: error: expected identifier or ‘(’ before ‘return’
+   438 |         return state;
+       |         ^~~~~~
+arch/x86/xen/pmu.c:439:1: error: expected identifier or ‘(’ before ‘}’ token
+   439 | }
+       | ^
+arch/x86/xen/pmu.c: In function ‘xen_guest_state’:
+arch/x86/xen/pmu.c:436:9: error: control reaches end of non-void 
+function [-Werror=return-type]
+   436 |         }
+       |         ^
+cc1: some warnings being treated as errors
 
-Sorry for the noise.
-
-However, I now seem to remember some discussion in the past when I was
-trying to get people to use flush_dcache_page() to solve the coherency
-problems when block drivers were doing PIO to page cache pages. I seem
-to remember there being objections to it, which is one of the reasons
-we ended up with a lighter weight flush_kernel_dcache_page(). But
-shrug, dim and distant memories.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> +			state |= PERF_GUEST_USER;
+>   	}
