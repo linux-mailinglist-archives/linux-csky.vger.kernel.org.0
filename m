@@ -2,53 +2,27 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 188713D0E71
-	for <lists+linux-csky@lfdr.de>; Wed, 21 Jul 2021 14:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC61E3D1BD2
+	for <lists+linux-csky@lfdr.de>; Thu, 22 Jul 2021 04:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238866AbhGULWk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 21 Jul 2021 07:22:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238612AbhGULRQ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 21 Jul 2021 07:17:16 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B08C0613F0;
-        Wed, 21 Jul 2021 04:57:15 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id r21so1604708pgv.13;
-        Wed, 21 Jul 2021 04:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1aayxhP7LR5pbpYNWPExB3m6iym6gHf5XQMlRKlxp94=;
-        b=Gb3sYMtxc/kWDCMnCmYUN5o70Tvt9W/hvjABaQVw6GepiW6AF7jJcANbzNBRV1gq0H
-         KVgsqId2MY+RXzDpDGY6dPw0M9zOWZUAQNGPy7PM2rys/HzrGgdYJ1JWxUE1QI9btZVV
-         O6Nge5AQbsqTmzXcQomJIje10kgbOVDLOw6CAEgavNSXA2gO45gvZInn+kY7JYMZv+qO
-         7oKYPWFeZHS6IplBXQIb7MGoEHkzU7p7v5SEAUS6Qb0XpyY5ciKG5wbqqw5mBV2thXmN
-         kc5wkdciG83RddYCL0ig7AXvXY6vLlAn6fNTtakKWWWjb2B/kLBoNRRLEWJHhmSw7M5h
-         laRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1aayxhP7LR5pbpYNWPExB3m6iym6gHf5XQMlRKlxp94=;
-        b=uJEdn8tjxHhJCruSReDaV0ZOgAvLnu9yr9M4loyMMjVorvNRI0CYggM0nItHGV/y4v
-         fieSuGoLFpwDT/XXuS+gM64Sjj0W6AT5HzwrX5Ph0y7uv3PDcgLT7PLn6tZJVll5MGVN
-         yFpU9xFiWxc5uFdr6rDxXqPFTVigl6yPKDvLp+s84o2uk6AYbXAsy45gr3OG6doqqLu0
-         DrpvWLutgCnYfW50E/71xlc5Jj+GljbnAHdkxKsPZ924ifcjGuJ+IjRAfwGqCS+dElAA
-         B+Sp4menyDj3PuG6tPvkbLsTyvNjXT9vq5CBuKjC883hThd2b6/yTQ8dxca48gHY6Ifh
-         LV3Q==
-X-Gm-Message-State: AOAM532FYp72Pa9LPt1LJFVv3hWiXCVJRtTJ2D8LnsQ3tTnqiaOlNSnA
-        MN8mlY8IECGg3QQjRsIPyyQ=
-X-Google-Smtp-Source: ABdhPJx8Jc6D+8J2xe+jplPG6WjflufBXyqLNydLZmg9K2ukmxfm1tClEJcFPfqxf5GDpWMtdTO8gQ==
-X-Received: by 2002:a63:a01:: with SMTP id 1mr35267098pgk.360.1626868633306;
-        Wed, 21 Jul 2021 04:57:13 -0700 (PDT)
-Received: from Likes-MacBook-Pro.local ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id j12sm25930570pfj.208.2021.07.21.04.57.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jul 2021 04:57:12 -0700 (PDT)
-To:     Zhu Lingshan <lingshan.zhu@intel.com>
+        id S230384AbhGVB5g (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 21 Jul 2021 21:57:36 -0400
+Received: from mga03.intel.com ([134.134.136.65]:49574 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230367AbhGVB5e (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 21 Jul 2021 21:57:34 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10052"; a="211612850"
+X-IronPort-AV: E=Sophos;i="5.84,259,1620716400"; 
+   d="scan'208";a="211612850"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 19:38:09 -0700
+X-IronPort-AV: E=Sophos;i="5.84,259,1620716400"; 
+   d="scan'208";a="512014134"
+Received: from lingshan-mobl5.ccr.corp.intel.com (HELO [10.255.29.38]) ([10.255.29.38])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2021 19:38:02 -0700
+Subject: Re: [PATCH V8 01/18] perf/core: Use static_call to optimize
+ perf_guest_info_callbacks
+To:     Like Xu <like.xu.linux@gmail.com>
 Cc:     bp@alien8.de, seanjc@google.com, vkuznets@redhat.com,
         wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
         kan.liang@linux.intel.com, ak@linux.intel.com,
@@ -66,39 +40,47 @@ Cc:     bp@alien8.de, seanjc@google.com, vkuznets@redhat.com,
         Paolo Bonzini <pbonzini@redhat.com>
 References: <20210716085325.10300-1-lingshan.zhu@intel.com>
  <20210716085325.10300-2-lingshan.zhu@intel.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH V8 01/18] perf/core: Use static_call to optimize
- perf_guest_info_callbacks
-Message-ID: <fd117e37-8063-63a4-43cd-7cb555e5bab5@gmail.com>
-Date:   Wed, 21 Jul 2021 19:57:01 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
+ <fd117e37-8063-63a4-43cd-7cb555e5bab5@gmail.com>
+From:   "Zhu, Lingshan" <lingshan.zhu@intel.com>
+Message-ID: <c5fad2b5-2c2f-9b06-6f45-629776a690fa@intel.com>
+Date:   Thu, 22 Jul 2021 10:38:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210716085325.10300-2-lingshan.zhu@intel.com>
+In-Reply-To: <fd117e37-8063-63a4-43cd-7cb555e5bab5@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 16/7/2021 4:53 pm, Zhu Lingshan wrote:
-> +	} else if (xenpmu_data->pmu.r.regs.cpl & 3)
 
-Lingshan, serious for this version ?
 
-arch/x86/xen/pmu.c:438:9: error: expected identifier or ‘(’ before ‘return’
-   438 |         return state;
-       |         ^~~~~~
-arch/x86/xen/pmu.c:439:1: error: expected identifier or ‘(’ before ‘}’ token
-   439 | }
-       | ^
-arch/x86/xen/pmu.c: In function ‘xen_guest_state’:
-arch/x86/xen/pmu.c:436:9: error: control reaches end of non-void 
-function [-Werror=return-type]
-   436 |         }
-       |         ^
-cc1: some warnings being treated as errors
+On 7/21/2021 7:57 PM, Like Xu wrote:
+> On 16/7/2021 4:53 pm, Zhu Lingshan wrote:
+>> +    } else if (xenpmu_data->pmu.r.regs.cpl & 3)
+oh, my typo, will fix in V9
 
-> +			state |= PERF_GUEST_USER;
->   	}
+Thanks
+>
+> Lingshan, serious for this version ?
+>
+> arch/x86/xen/pmu.c:438:9: error: expected identifier or ‘(’ before 
+> ‘return’
+>   438 |         return state;
+>       |         ^~~~~~
+> arch/x86/xen/pmu.c:439:1: error: expected identifier or ‘(’ before ‘}’ 
+> token
+>   439 | }
+>       | ^
+> arch/x86/xen/pmu.c: In function ‘xen_guest_state’:
+> arch/x86/xen/pmu.c:436:9: error: control reaches end of non-void 
+> function [-Werror=return-type]
+>   436 |         }
+>       |         ^
+> cc1: some warnings being treated as errors
+>
+>> +            state |= PERF_GUEST_USER;
+>>       }
+
