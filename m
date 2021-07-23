@@ -2,95 +2,130 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D56D93D3A63
-	for <lists+linux-csky@lfdr.de>; Fri, 23 Jul 2021 14:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012B63D3D51
+	for <lists+linux-csky@lfdr.de>; Fri, 23 Jul 2021 18:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234847AbhGWMD6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 23 Jul 2021 08:03:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234601AbhGWMD5 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 23 Jul 2021 08:03:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E4AD260F36;
-        Fri, 23 Jul 2021 12:44:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627044271;
-        bh=I8EG8KvdkCZRoKrlaYWdZuQlSurV1+XMVadCAjX5YV4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nVxmkMHvcnPo9v2E4P0wQkD5Ik+U5FdrwPKUZdVAwInoplBd5SiBtgDftaE8WbUSd
-         BzDFLWC46eIel1r1PDWlUs6Aa7qRa4QBxa4elUzKQ+IZiE/8G95d/2F9hgXMYEZdbj
-         sMg3Wb+lKhTRCHN7stY+1Hm1oedJnMmb/UTzIC/Vk8Wp7DpG0reeVfShYalWOAASME
-         GM9qN4Fvf0xu0543uk/BuTpand2x7kIefBwqsjbqNcc4Yj9KqV03mrOAWGUpjW9/0z
-         6728tFNaWvzzzLYtTMR2BbywvcxIJp5tfi5cQRx10e2gbHJ+GgD00wTQ9Gtzrcn5RS
-         PPsrAmO3PGAhw==
-Received: by mail-wm1-f41.google.com with SMTP id b128so727887wmb.4;
-        Fri, 23 Jul 2021 05:44:30 -0700 (PDT)
-X-Gm-Message-State: AOAM530pEiLHbtrp3jdZkPLGXMKufU3nLI1ESMmpJg/iRvkMLuEpgQqI
-        +7whXfT1cGOA3uT552r5OrFDJeASxj74HubVceU=
-X-Google-Smtp-Source: ABdhPJybmE1yWKNDIQhUELIEmJrbg4IG3VwSlneVoVTxcOHKvr1IKdvANRWVax10Jjs87DppXb3M6ypgcLHba74gdzk=
-X-Received: by 2002:a1c:4e0c:: with SMTP id g12mr13900636wmh.120.1627044269416;
- Fri, 23 Jul 2021 05:44:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210722124814.778059-1-arnd@kernel.org> <20210722124814.778059-10-arnd@kernel.org>
- <29adc1c164805e355b37d1d4668ebda9fb7fa872.camel@sipsolutions.net>
- <CAK8P3a0xZAHknG8_kc62aaKrKdzD-QwQYHT61_wTbFDYADu-zw@mail.gmail.com> <YPnQAksI2+YBivHb@osiris>
-In-Reply-To: <YPnQAksI2+YBivHb@osiris>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 23 Jul 2021 14:44:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0VDtatPx93FAa4ZUszZbcHPyX+aQWnZ2aTuL-dHZ_x5A@mail.gmail.com>
-Message-ID: <CAK8P3a0VDtatPx93FAa4ZUszZbcHPyX+aQWnZ2aTuL-dHZ_x5A@mail.gmail.com>
-Subject: Re: [PATCH v3 9/9] asm-generic: reverse GENERIC_{STRNCPY_FROM,
- STRNLEN}_USER symbols
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        id S229771AbhGWPfn (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 23 Jul 2021 11:35:43 -0400
+Received: from mail.efficios.com ([167.114.26.124]:47378 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229949AbhGWPfn (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 23 Jul 2021 11:35:43 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 1888B350A80;
+        Fri, 23 Jul 2021 12:16:16 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id aPzyjXoQ3_IB; Fri, 23 Jul 2021 12:16:15 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 846A73508A3;
+        Fri, 23 Jul 2021 12:16:15 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 846A73508A3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1627056975;
+        bh=95s2F+cT5wwIKh+ydHTlzlAyCT8rxwwFrE1kTmyohVM=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=Sk7ckczb0x/0Hpn2HVSgUGa4SOcs57UDrWWgJ4ZQlBFyJPOxLyaPZmADRWbgv62d6
+         POxvgpnSYmSgKvQVE9gYcX62SrJc9Cf55xdf37gT2QXydPxm6HhCwg7MqR5N3P2vq7
+         GOzcYFZ25VCqbCs2cwZRf8D0ckR+h0757bEIzIj9NgY+yHF4yeZzry/tZMyhGfO3tR
+         doF3v/zapFGcjVC3FN2JX072vnkfImm2ZFv4H8l/nHVA5Y2ZtdsZZ6VZcFprDRRGyG
+         hIvOcgfkExBTfDOXAA+4v/EXhC40P/A0hlbz4JQxpA211sM0J3UJmKYRULgSWiGhuK
+         vLs816C+z7cfg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eBnDLygJjPN4; Fri, 23 Jul 2021 12:16:15 -0400 (EDT)
+Received: from thinkos.etherlink (192-222-188-69.qc.cable.ebox.net [192.222.188.69])
+        by mail.efficios.com (Postfix) with ESMTPSA id 44874350A13;
+        Fri, 23 Jul 2021 12:16:15 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Brian Cain <bcain@codeaurora.org>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Christoph Hellwig <hch@lst.de>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>, Jeff Dike <jdike@addtoit.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michal Simek <monstr@monstr.eu>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>
-Content-Type: text/plain; charset="UTF-8"
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-csky@vger.kernel.org
+Subject: [RFC PATCH 1/2] Revert "csky: Fixup CONFIG_DEBUG_RSEQ"
+Date:   Fri, 23 Jul 2021 12:15:59 -0400
+Message-Id: <20210723161600.19688-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 10:07 PM Heiko Carstens <hca@linux.ibm.com> wrote:
->
-> Feel free to add the s390 patch below on top of your series.
+This reverts commit f36e0aab6f1f78d770ce859df3f07a9c5763ce5f.
 
-Thanks a lot, added now.
+The csky rseq support has been merged without ever notifying the rseq
+maintainers, and without any of the required asssembler glue in the rseq
+selftests, which means it is entirely untested.
 
-> However one question: the strncpy_from_user() prototype now comes everywhere
-> without the __must_check attribute. Is there any reason for that?
->
-> At least for s390 I want to keep that.
+It is also derived from a non-upstream riscv patch which has known bugs.
 
-Makes sense, I'll add a patch for that as well.
+The assembly part of this revert should be carefully reviewed by the
+architecture maintainer because it touches code which has changed since
+the merge of the reverted patch.
 
-        Arnd
+The rseq selftests assembly glue should be introduced at the same time
+as the architecture rseq support. Without the presence of any test, I
+recommend reverting rseq support from csky for now.
+
+Link: https://lore.kernel.org/lkml/1257037909.25426.1626705790861.JavaMai=
+l.zimbra@efficios.com/
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-csky@vger.kernel.org
+---
+ arch/csky/kernel/entry.S | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/arch/csky/kernel/entry.S b/arch/csky/kernel/entry.S
+index 00e3c8ebf9b8..d89afe3b24cc 100644
+--- a/arch/csky/kernel/entry.S
++++ b/arch/csky/kernel/entry.S
+@@ -50,11 +50,15 @@ ENTRY(csky_systemcall)
+ 	SAVE_ALL TRAP0_SIZE
+ 	zero_fp
+ 	context_tracking
++#ifdef CONFIG_RSEQ_DEBUG
++	mov     a0, sp
++	jbsr    rseq_syscall
++#endif
+ 	psrset  ee, ie
+=20
+ 	lrw     r9, __NR_syscalls
+ 	cmphs   syscallid, r9		/* Check nr of syscall */
+-	bt      1f
++	bt      ret_from_exception
+=20
+ 	lrw     r9, sys_call_table
+ 	ixw     r9, syscallid
+@@ -80,11 +84,6 @@ ENTRY(csky_systemcall)
+ 	jsr     syscallid
+ #endif
+ 	stw     a0, (sp, LSAVE_A0)      /* Save return value */
+-1:
+-#ifdef CONFIG_DEBUG_RSEQ
+-	mov	a0, sp
+-	jbsr	rseq_syscall
+-#endif
+ 	jmpi    ret_from_exception
+=20
+ csky_syscall_trace:
+@@ -113,10 +112,6 @@ csky_syscall_trace:
+ 	stw	a0, (sp, LSAVE_A0)	/* Save return value */
+=20
+ 1:
+-#ifdef CONFIG_DEBUG_RSEQ
+-	mov	a0, sp
+-	jbsr	rseq_syscall
+-#endif
+ 	mov     a0, sp                  /* right now, sp --> pt_regs */
+ 	jbsr    syscall_trace_exit
+ 	br	ret_from_exception
+--=20
+2.20.1
+
