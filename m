@@ -2,124 +2,94 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 100CD3D76E3
-	for <lists+linux-csky@lfdr.de>; Tue, 27 Jul 2021 15:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB4A3D8424
+	for <lists+linux-csky@lfdr.de>; Wed, 28 Jul 2021 01:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236644AbhG0NfR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 27 Jul 2021 09:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236711AbhG0NfQ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 27 Jul 2021 09:35:16 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CAFC061760;
-        Tue, 27 Jul 2021 06:35:16 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id i10so12689304pla.3;
-        Tue, 27 Jul 2021 06:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9TP6CxDY7H/n3wctXVLoN8fg4wjE6OdPNG/Gq2ojCMo=;
-        b=W8H82ET2uXZcrxq9/n3Eqe4eJzDzFOXU9cSfpVlrZMXp8EzxaooiEEP6JfXx0fO8F7
-         QkW1y2pkYHCSWMYvxTKTMTafCNCVIHMyvpIIy818bGQS9E1rbr98vmN4KnlxhpUHD3dA
-         dUpAVBptm36DquWQXzkh15wfYcLhy7glkvfDifuTYPzQ0jy0tKc2ApRNpC380QtcyQn/
-         PjNvS7qBMIztQO8L5BvYE61fCmSxGOLVaIMHfL9fe0J2d3G383NF26Hr1MU9DGdj6MPm
-         fZpxY053OQg6BCvKL0fiYssXtB3aI+/fu1k26tKOr463CZs/j5NV4nijDZeeNY3WmuKJ
-         dBvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9TP6CxDY7H/n3wctXVLoN8fg4wjE6OdPNG/Gq2ojCMo=;
-        b=mlM/znAMHpmIu0CPPFRRc4vITATxrnfnjZ3B4iLm/evvqZGr/SX8i3/YK4d+WDL6yh
-         hslQxs4B4FHtvPUsfM8GyiSmZz2pfammXFvoylsyYdGbrVUUiviEcDCo6JYFCIdNG2Yz
-         SsWBHN8H4IG7psxrMweo6vaCxzO1EP46sSQe7fhaNt/M01pUvOLdDErzXTL+r3ODFfAE
-         CazXaNWOnQ18+Oz2vpsrvPK8F19wozxgOPvyNYPzTUmtg+dOie27cWM9R0ULw8S9qLYD
-         CjMF7Uv3+Yc5DXmqwbN72LHOtZZlNgs5x76A8xJ1sCk2yPrgLefDcngiDKeugxRObl5O
-         d+bA==
-X-Gm-Message-State: AOAM532bRlit+VmxMPUoYE7zfdwsnfsWtPSKN/pi96Rkm+hCIrsOl3Xe
-        yF9SzjL67TQjwdVrcUIuIdk=
-X-Google-Smtp-Source: ABdhPJyKeAMoFZRNNiTINae6lBywxqlT0Pg93U1AU98I9H4QbRIFANiE0tH7dEiGvuRssOqPyQ4eWg==
-X-Received: by 2002:a65:5603:: with SMTP id l3mr23828057pgs.190.1627392916325;
-        Tue, 27 Jul 2021 06:35:16 -0700 (PDT)
-Received: from localhost (122x211x248x161.ap122.ftth.ucom.ne.jp. [122.211.248.161])
-        by smtp.gmail.com with ESMTPSA id c23sm3856991pfo.174.2021.07.27.06.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jul 2021 06:35:15 -0700 (PDT)
-From:   Punit Agrawal <punitagrawal@gmail.com>
-To:     mhiramat@kernel.org, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, davem@davemloft.net
-Cc:     Punit Agrawal <punitagrawal@gmail.com>,
-        linux-kernel@vger.kernel.org, guoren@kernel.org,
-        linux-csky@vger.kernel.org
-Subject: [PATCH v2 5/5] kprobes: Make arch_check_ftrace_location static
-Date:   Tue, 27 Jul 2021 22:34:26 +0900
-Message-Id: <20210727133426.2919710-6-punitagrawal@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        id S232766AbhG0XjR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 27 Jul 2021 19:39:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232735AbhG0XjQ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 27 Jul 2021 19:39:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B1FA160F6B;
+        Tue, 27 Jul 2021 23:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627429156;
+        bh=DxpSRtxm2P8cztzLVTsCpms38y/1YnNRSm6MTuy0rc8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=o8kbwQSd+gt4igaPaxGlY7salvUr6BDve9UVrE/uUygw2+NghvPI5a5NdUzcmBuLq
+         /lTmklU1ziy3k8RLnsijmltr+6eWJB3YT0m182HYp4expzC6XWabtYnyohKhppZZ8s
+         Wmt3wvfeWvFytvcZ/WdeEoT6AN3H8rDwRzhLezt9WuM0vfn7efqMHIiQZsZRDR3e3l
+         A2umItypmcx+3Tohwo6bFwD9C6J2ukqNq5PTp8Bn2b2y4TWwarQRS6cGDXzTbb6u1J
+         8XAV7yiwK64xvWwH57K7Ish/KQmUxMjDx7+0wqUeFQogMyrbPBv2J8qVoaznUjy5MM
+         VMVkOKxg8BFJA==
+Date:   Wed, 28 Jul 2021 08:39:13 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Punit Agrawal <punitagrawal@gmail.com>
+Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        guoren@kernel.org, linux-csky@vger.kernel.org, x86@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 0/5] kprobes: Bugfix and improvements
+Message-Id: <20210728083913.bcf0fa991e4a2b819f457543@kernel.org>
 In-Reply-To: <20210727133426.2919710-1-punitagrawal@gmail.com>
 References: <20210727133426.2919710-1-punitagrawal@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-arch_check_ftrace_location() was introduced as a weak function in
-commit f7f242ff004499 ("kprobes: introduce weak
-arch_check_ftrace_location() helper function") to allow architectures
-to handle kprobes call site on their own.
+Hi Punit,
 
-Recently, the only architecture (csky) to implement
-arch_check_ftrace_location() was migrated to using the common
-version.
+Thanks for resending this series.
 
-As a result, further cleanup the code to drop the weak attribute and
-rename the function to remove the architecture specific
-implementation.
+Ingo, could you pick this patch too?
+I'll resend my series on this series. 
 
-Signed-off-by: Punit Agrawal <punitagrawal@gmail.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- include/linux/kprobes.h | 2 --
- kernel/kprobes.c        | 4 ++--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+Thank you,
 
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 0b75549b2815..8a9412bb0d5e 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -361,8 +361,6 @@ static inline int arch_prepare_kprobe_ftrace(struct kprobe *p)
- }
- #endif
- 
--int arch_check_ftrace_location(struct kprobe *p);
--
- /* Get the kprobe at this addr (if any) - called with preemption disabled */
- struct kprobe *get_kprobe(void *addr);
- 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index cfa9d3c263eb..30199bfcc74a 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1524,7 +1524,7 @@ static inline int warn_kprobe_rereg(struct kprobe *p)
- 	return ret;
- }
- 
--int __weak arch_check_ftrace_location(struct kprobe *p)
-+static int check_ftrace_location(struct kprobe *p)
- {
- 	unsigned long ftrace_addr;
- 
-@@ -1547,7 +1547,7 @@ static int check_kprobe_address_safe(struct kprobe *p,
- {
- 	int ret;
- 
--	ret = arch_check_ftrace_location(p);
-+	ret = check_ftrace_location(p);
- 	if (ret)
- 		return ret;
- 	jump_label_lock();
+On Tue, 27 Jul 2021 22:34:21 +0900
+Punit Agrawal <punitagrawal@gmail.com> wrote:
+
+> Hi,
+> 
+> This is the second posting of patches previously posted at
+> [0]. Although the patches were reviewed / acked in the previous cycle
+> but for some didn't end up getting picked up for this cycle.
+> 
+> This posting rebases the patches to 5.14-rc3 and makes some minor
+> improvements to the commit log in Patch 1. I've also added the tags as
+> appropriate from the previous posting.
+> 
+> It would be great if the patches can be picked up this time around.
+> 
+> Thanks,
+> Punit
+> 
+> 
+> [0] https://lore.kernel.org/linux-csky/20210609105019.3626677-1-punitagrawal@gmail.com/
+> 
+> Punit Agrawal (5):
+>   kprobes: Do not use local variable when creating debugfs file
+>   kprobes: Use helper to parse boolean input from userspace
+>   kprobe: Simplify prepare_kprobe() by dropping redundant version
+>   csky: ftrace: Drop duplicate implementation of
+>     arch_check_ftrace_location()
+>   kprobes: Make arch_check_ftrace_location static
+> 
+>  arch/csky/kernel/probes/ftrace.c |  7 ----
+>  include/linux/kprobes.h          |  7 ++--
+>  kernel/kprobes.c                 | 58 ++++++++++----------------------
+>  3 files changed, 23 insertions(+), 49 deletions(-)
+> 
+> -- 
+> 2.30.2
+> 
+
+
 -- 
-2.30.2
-
+Masami Hiramatsu <mhiramat@kernel.org>
