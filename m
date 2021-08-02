@@ -2,74 +2,100 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A24A3DCF41
-	for <lists+linux-csky@lfdr.de>; Mon,  2 Aug 2021 06:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C294E3DDCDD
+	for <lists+linux-csky@lfdr.de>; Mon,  2 Aug 2021 17:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbhHBEYN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbhHBEYM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 2 Aug 2021 00:24:12 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3856C0617A1
-        for <linux-csky@vger.kernel.org>; Sun,  1 Aug 2021 21:23:58 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id y7so20426428eda.5
-        for <linux-csky@vger.kernel.org>; Sun, 01 Aug 2021 21:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=czeOQMYeZau4ejaBbgDdCuklRCyHoHRlo6xUfJcAj3bciaGtFBitiUib5a5MwOumE9
-         w7/Jn7bBNsLcP1+CHZ7cIXH8h+QOe2ioJtROZD2bqhS/lqEvaNcrldVE+LZBhK9CNKw9
-         GasUZeZx/Kcocc9jX4O3VqyeOrpbJXFle0t9OXPFTLvjA0ffc0WpqgkYu8CQSXrFRLzD
-         Yc8UR7mKpLCqpwn4ZFojN5x09EwrnOTDpyVyuL9REZStwkguR4uL/4srDE+vjWW4JCu8
-         Sy5z9ei3l3c7g9TC5s6E8Wj1tuL0hGAP5lkkVvlHQCNnMoccEAC8Z+koQ2tbRnEruEUY
-         O8Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=BweW3TLXnzgAHf0qXU/t9jv0Jo4pYgcRvCVtHnqV4J0RvTxuyCNROmnr1U1WF53dCX
-         zBcP5L3o4Z8Sckxbc8RwMUZzUELwnYPctVVN/xw8uVvGQsu7TdKifQ8JazMozmAEAvAu
-         6omAl9tmwKz7ilOR1e9zXabQ2isbb0/c9AhyYDv8U3ajKC3gJQU6kGntgmNt2Zajjixk
-         pMGih9tGMe1YPyPMuYmQLPfBwUgXlW0AXWDFT3bfcbyfXArNwJGhsbtixJLTOGJnyl6A
-         L/JsH9EsuTT1aNt9WAy57/ALfcn15TtCEWi6EOO+urptwUif+sxKbiu4pr0h0y+ZDrtx
-         91pA==
-X-Gm-Message-State: AOAM5323Amdx73Hd7YJ34TDBUFkOhdaDhx7KThGuvVlCAGBidzEuuORf
-        d0Zt/hq6fb66TlgOhZkII3u9XfXd5ixjCpQVF8g=
-X-Google-Smtp-Source: ABdhPJxItSnYdNOJr/eCcDJG9Ed81FEJCtux30e3VMRN30hf/TzQyuXNRWDf+H2IgaMscJY+xnmH/x8e0HLuRnwx6WI=
-X-Received: by 2002:a50:d70a:: with SMTP id t10mr16749153edi.253.1627878237019;
- Sun, 01 Aug 2021 21:23:57 -0700 (PDT)
+        id S229979AbhHBPzq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 2 Aug 2021 11:55:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54854 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233995AbhHBPzp (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 2 Aug 2021 11:55:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3008461107;
+        Mon,  2 Aug 2021 15:55:25 +0000 (UTC)
+Date:   Mon, 2 Aug 2021 16:55:22 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>, x86@kernel.org,
+        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-riscv@lists.infradead.org, YiFei Zhu <yifeifz2@illinois.edu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Michal Simek <monstr@monstr.eu>, Helge Deller <deller@gmx.de>,
+        linux-sh@vger.kernel.org, Vineet Gupta <vgupta@synopsys.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Guo Ren <guoren@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Richard Weinberger <richard@nod.at>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-hexagon@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        linux-s390@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-um@lists.infradead.org,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Cain <bcain@codeaurora.org>, linux-csky@vger.kernel.org,
+        Stafford Horne <shorne@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Chris Zankel <chris@zankel.net>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-snps-arc@lists.infradead.org,
+        Jonas Bonn <jonas@southpole.se>, linux-parisc@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Vincent Chen <deanbo422@gmail.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org
+Subject: Re: [PATCH 2/3] trace: refactor TRACE_IRQFLAGS_SUPPORT in Kconfig
+Message-ID: <20210802155521.GI18685@arm.com>
+References: <20210731052233.4703-1-masahiroy@kernel.org>
+ <20210731052233.4703-2-masahiroy@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:23:56
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:23:56 +0100
-Message-ID: <CAKwBCXvLzgfEHCKMKUxki4k1yYap9oH1ox=muoK9koBZXish5g@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210731052233.4703-2-masahiroy@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
--- 
-Dear Partner,
+On Sat, Jul 31, 2021 at 02:22:32PM +0900, Masahiro Yamada wrote:
+> Make architectures select TRACE_IRQFLAGS_SUPPORT instead of
+> having many defines.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
+For arm64:
 
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
-
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
-
-
-Regards :  Abdoulahi Kazim
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
