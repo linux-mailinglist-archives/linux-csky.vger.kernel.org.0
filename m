@@ -2,127 +2,140 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1D03EEC24
-	for <lists+linux-csky@lfdr.de>; Tue, 17 Aug 2021 14:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AADF3EF698
+	for <lists+linux-csky@lfdr.de>; Wed, 18 Aug 2021 02:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbhHQMH7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 17 Aug 2021 08:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
+        id S235556AbhHRAM6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 17 Aug 2021 20:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbhHQMHy (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 17 Aug 2021 08:07:54 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E640C061764;
-        Tue, 17 Aug 2021 05:07:20 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id qe12-20020a17090b4f8c00b00179321cbae7so5997252pjb.2;
-        Tue, 17 Aug 2021 05:07:20 -0700 (PDT)
+        with ESMTP id S235496AbhHRAM6 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 17 Aug 2021 20:12:58 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D26C061764
+        for <linux-csky@vger.kernel.org>; Tue, 17 Aug 2021 17:12:24 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id w201-20020a25dfd2000000b00594695384d1so933511ybg.20
+        for <linux-csky@vger.kernel.org>; Tue, 17 Aug 2021 17:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=+5n9TqAiu1H4FcQtrL8rLL2Jy8NntZP6iTPwMf+KVbM=;
-        b=s9/P3WSuqf+kJmX92+mfrdwRXNaltWf7BqWIPNrFMJnxpJts3rjfzc788xZ2ZtGjkT
-         27/3Et7/WvsCW/SlmDJl+ry7DVJX9pOyU0Iemi7Ar0hnlumvRgycuUSLNNrRR68Yqv+g
-         UiboG8pZl370G26VILEUmTvz1Flju2d8qDYhG0Kdib6sdAZuJYpRed2DeEThQdYDOCqL
-         5z/qO1tIWmliuTkNytf7yWHAVPypakXJ+g5vtRfee/KrMLqJejfKFBdg38FlYttTCElG
-         jQEk9TFOFSt4yH2aPE6eeBE7IUn15ZuZmZWbQDgx4c6WqTToo+G1ZO5tzasQdeu9xsZP
-         IbPA==
+        d=google.com; s=20161025;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=JTnvoGQPkzSY6sftzgGOupURPM7Ep9m5Wy1FXJgvwt8=;
+        b=fyeUao6f185gl09ZYsAcdA7yqynUAarWJxtZWYjEguvdRD3P7FagvzAviDCjWFv9rL
+         hkTapS9n0MejNBYX2Q5yho2bHtiNxihusqY+CxIRaDELLoNGX+rLqUW5lJrnEo/Mnm0e
+         tdASNb+sSeLR5tAQ8VguxhX7xu/etGncJN6MqDGLgROWk+szWdS+QKryOwUk7KtLD9kc
+         VIB77hKdU4R/GCrKDGfJV45g5i0FA1HckPWMpfpc96fmGXzvuG0a3+dtXdvgVNUn85ch
+         0fl8hUM/hx3+Jt5MkdC3np01fB7+YS8SSyrKtslPuKN3R0rpXVrltaB4IU7mkT2jcj3C
+         EtqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=+5n9TqAiu1H4FcQtrL8rLL2Jy8NntZP6iTPwMf+KVbM=;
-        b=UOCCBAFGIAgez7A+XKmYplT2BpCXZQvcyM7yt2XKN3e14TdlWnNWJ0Cd/Wowikz0bM
-         OIbAnbyBddvUlznTeLNxAyVlZxxNxkeO+ICQN8mmfC0cbN37nNUCFL4g8acRwgFIkL5M
-         F+mLrylEAxnxUQ0mJMwIwjQzBXECkRzPRBWevzqT1GhPUlKRq8Yl4LIpR+9Ffuk+hrTx
-         oOaWHT+6lidCbQoaYPkVtG5+GcQIyK7VIDYwHFVh0D5orWkAdz4U6D0tvi5zVkWdiGQ5
-         1LlmJwczdTDphY+O0s6OFB3gToom08Uajy2XcsDq8mZj/DG+YPrAMRC3VhTjH1/KXYPh
-         eiqg==
-X-Gm-Message-State: AOAM5326ndUn6pTDMhtXYz7su7dyCYUFyAlTswc90G2DNUSqe3ObLM0T
-        NIuHSIXs/0ymJ+XsNBr92b4=
-X-Google-Smtp-Source: ABdhPJxxP0uPnQpjKT9PatWHS5w+rXQPKa30fSNuq7jRU7zz16Fz+/6BGvFo6GzLOm4lOJU83Gxwjw==
-X-Received: by 2002:a17:90a:f98f:: with SMTP id cq15mr3379942pjb.74.1629202040024;
-        Tue, 17 Aug 2021 05:07:20 -0700 (PDT)
-Received: from localhost (122x211x248x161.ap122.ftth.ucom.ne.jp. [122.211.248.161])
-        by smtp.gmail.com with ESMTPSA id w18sm2317365pjg.50.2021.08.17.05.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 05:07:18 -0700 (PDT)
-From:   Punit Agrawal <punitagrawal@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        guoren@kernel.org, linux-csky@vger.kernel.org, x86@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 0/5] kprobes: Bugfix and improvements
-References: <20210727133426.2919710-1-punitagrawal@gmail.com>
-        <20210728083913.bcf0fa991e4a2b819f457543@kernel.org>
-Date:   Tue, 17 Aug 2021 21:07:16 +0900
-In-Reply-To: <20210728083913.bcf0fa991e4a2b819f457543@kernel.org> (Masami
-        Hiramatsu's message of "Wed, 28 Jul 2021 08:39:13 +0900")
-Message-ID: <87fsv8s2a3.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=JTnvoGQPkzSY6sftzgGOupURPM7Ep9m5Wy1FXJgvwt8=;
+        b=XC6fF3+DgGJjYsia7HqfcoWGDTLlaltuHzS2bpMbDKp17Xm2obLYOiZRNgzN2ntsbV
+         0FQNSIqMxEL4S9782FueunL5DhJ5psUNBwyrC4GySrLUJWhZAL2aCc7FtUDvIV82qcK/
+         1Z1s7xfuJ5t7+Wirau/AJkRrZTHFjtaj91blMvtVKCROTi1peesA1hzMPxJQvRWYdo5u
+         /MdVu/e4+ykBWCBM3yL+eUhUv088gwFTAnCKt7eteiYzIrofZBz7OvM51wmB7ZwIHXPv
+         ZPKhG2TXqAHaul0RM5bh20aKdMH5THcvMecTdTHXFr/2tUbg9dloeJCPMFlUIIVjZRcJ
+         JXRw==
+X-Gm-Message-State: AOAM531Fp7OJcGF03k0mhBfdQS5c8Gg3Gy17+g/4WToAe/jLa7tvtG9V
+        y8/gGdU2L/UXQKMMFSk/OI5ejviixcA=
+X-Google-Smtp-Source: ABdhPJx/sMOLc7HCSgjqqqa43Z4/KNb0h6Qo8TurrCfZhkWk410D/oOp9imaDI4DVCS6cpPHQf2wmOXKS3s=
+X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:158e:55a:74dd:5197])
+ (user=seanjc job=sendgmr) by 2002:a25:7743:: with SMTP id s64mr7874463ybc.214.1629245543687;
+ Tue, 17 Aug 2021 17:12:23 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 17 Aug 2021 17:12:05 -0700
+Message-Id: <20210818001210.4073390-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.rc1.237.g0d66db33f3-goog
+Subject: [PATCH 0/5] KVM: rseq: Fix and a test for a KVM+rseq bug
+From:   Sean Christopherson <seanjc@google.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Masami Hiramatsu <mhiramat@kernel.org> writes:
+Patch 1 fixes a KVM+rseq bug where KVM's handling of TIF_NOTIFY_RESUME,
+e.g. for task migration, clears the flag without informing rseq and leads
+to stale data in userspace's rseq struct.
 
-> Hi Punit,
->
-> Thanks for resending this series.
->
-> Ingo, could you pick this patch too?
-> I'll resend my series on this series.
+Patch 2 is a cleanup to try and make future bugs less likely.  It's also
+a baby step towards moving and renaming tracehook_notify_resume() since
+it has nothing to do with tracing.  It kills me to not do the move/rename
+as part of this series, but having a dedicated series/discussion seems
+more appropriate given the sheer number of architectures that call
+tracehook_notify_resume() and the lack of an obvious home for the code.
 
-I couldn't find the patches on any of the branches in tip - have they
-been queued?
+Patch 3 is a fix/cleanup to stop overriding x86's unistd_{32,64}.h when
+the include path (intentionally) omits tools' uapi headers.  KVM's
+selftests do exactly that so that they can pick up the uapi headers from
+the installed kernel headers, and still use various tools/ headers that
+mirror kernel code, e.g. linux/types.h.  This allows the new test in
+patch 4 to reference __NR_rseq without having to manually define it.
 
-Please let me know if there anything else I need to do in order for them
-to be picked up.
+Patch 4 is a regression test for the KVM+rseq bug.
 
-Thanks,
-Punit
+Patch 5 is a cleanup made possible by patch 3.
 
->
-> Thank you,
->
-> On Tue, 27 Jul 2021 22:34:21 +0900
-> Punit Agrawal <punitagrawal@gmail.com> wrote:
->
->> Hi,
->> 
->> This is the second posting of patches previously posted at
->> [0]. Although the patches were reviewed / acked in the previous cycle
->> but for some didn't end up getting picked up for this cycle.
->> 
->> This posting rebases the patches to 5.14-rc3 and makes some minor
->> improvements to the commit log in Patch 1. I've also added the tags as
->> appropriate from the previous posting.
->> 
->> It would be great if the patches can be picked up this time around.
->> 
->> Thanks,
->> Punit
->> 
->> 
->> [0] https://lore.kernel.org/linux-csky/20210609105019.3626677-1-punitagrawal@gmail.com/
->> 
->> Punit Agrawal (5):
->>   kprobes: Do not use local variable when creating debugfs file
->>   kprobes: Use helper to parse boolean input from userspace
->>   kprobe: Simplify prepare_kprobe() by dropping redundant version
->>   csky: ftrace: Drop duplicate implementation of
->>     arch_check_ftrace_location()
->>   kprobes: Make arch_check_ftrace_location static
->> 
->>  arch/csky/kernel/probes/ftrace.c |  7 ----
->>  include/linux/kprobes.h          |  7 ++--
->>  kernel/kprobes.c                 | 58 ++++++++++----------------------
->>  3 files changed, 23 insertions(+), 49 deletions(-)
->> 
->> -- 
->> 2.30.2
->> 
+
+Sean Christopherson (5):
+  KVM: rseq: Update rseq when processing NOTIFY_RESUME on xfer to KVM
+    guest
+  entry: rseq: Call rseq_handle_notify_resume() in
+    tracehook_notify_resume()
+  tools: Move x86 syscall number fallbacks to .../uapi/
+  KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration
+    bugs
+  KVM: selftests: Remove __NR_userfaultfd syscall fallback
+
+ arch/arm/kernel/signal.c                      |   1 -
+ arch/arm64/kernel/signal.c                    |   1 -
+ arch/csky/kernel/signal.c                     |   4 +-
+ arch/mips/kernel/signal.c                     |   4 +-
+ arch/powerpc/kernel/signal.c                  |   4 +-
+ arch/s390/kernel/signal.c                     |   1 -
+ include/linux/tracehook.h                     |   2 +
+ kernel/entry/common.c                         |   4 +-
+ kernel/rseq.c                                 |   4 +-
+ .../x86/include/{ => uapi}/asm/unistd_32.h    |   0
+ .../x86/include/{ => uapi}/asm/unistd_64.h    |   3 -
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ tools/testing/selftests/kvm/rseq_test.c       | 131 ++++++++++++++++++
+ 14 files changed, 143 insertions(+), 20 deletions(-)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_32.h (100%)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_64.h (83%)
+ create mode 100644 tools/testing/selftests/kvm/rseq_test.c
+
+-- 
+2.33.0.rc1.237.g0d66db33f3-goog
+
