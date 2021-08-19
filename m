@@ -2,240 +2,189 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBAA3F1952
-	for <lists+linux-csky@lfdr.de>; Thu, 19 Aug 2021 14:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED4C3F2252
+	for <lists+linux-csky@lfdr.de>; Thu, 19 Aug 2021 23:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239680AbhHSMbm (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 19 Aug 2021 08:31:42 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:14277 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239503AbhHSMbj (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 19 Aug 2021 08:31:39 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Gr3yf16r9z87rt;
-        Thu, 19 Aug 2021 20:30:50 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 19 Aug 2021 20:30:58 +0800
-Received: from linux-ibm.site (10.175.102.37) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 19 Aug 2021 20:30:57 +0800
-From:   Hanjun Guo <guohanjun@huawei.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, <stable@vger.kernel.org>
-CC:     Jianlin Lv <Jianlin.Lv@arm.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Anju T Sudhakar <anju@linux.vnet.ibm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        "Guo Ren" <guoren@kernel.org>, Kajol Jain <kjain@linux.ibm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        id S233890AbhHSVjz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 19 Aug 2021 17:39:55 -0400
+Received: from mail.efficios.com ([167.114.26.124]:57280 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229619AbhHSVjy (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 19 Aug 2021 17:39:54 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 0AFE8378536;
+        Thu, 19 Aug 2021 17:39:17 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id sqgMh8PS9est; Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 7F9FE3784AD;
+        Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 7F9FE3784AD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1629409152;
+        bh=5UmwxCORiN5yLIQm2BJu9shxBCOVFj1bc8s4bRqQFQo=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=MF1eZ97b/KNT5hI9VL2d8/bJnxRVnz1puSaP8aXdbA0Yr8sbq1UW1Xnp5ROlOTAxA
+         BrBHYFiVE9fyDS+W6acYJK/dsDcXuZ5FxN6/TGgq81Ge5A7ri3UTyOOmZCNrrwpGaX
+         CaJRQA/6RdzkBds+FVqCWioAvW9dS868z5YzJqUiWVEa1eSWq/ub7V3SdNutNGYaHW
+         /BGNriEzzY77HlrWaGIlJrha5VHDUBgHaX9E9aF4RYwTeW4avIB2YHkFNmb79XRV+u
+         RMSG+xk/uZO1X64FabUncXvFyriO1d5efn0OTQ8xv/HTN1zVXC9OXfvrjvq/mcfJyu
+         98fIeMx5uJpUQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gNagT47KYem3; Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 5C6F23784AA;
+        Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+Date:   Thu, 19 Aug 2021 17:39:12 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Oleg Nesterov <oleg@redhat.com>, rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, <iecedge@gmail.com>,
-        <linux-csky@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Arnaldo Carvalho de Melo" <acme@redhat.com>,
-        Hanjun Guo <guohanjun@huawei.com>
-Subject: [PATCH 5.10.y 4/6] perf tools: Fix arm64 build error with gcc-11
-Date:   Thu, 19 Aug 2021 20:19:10 +0800
-Message-ID: <1629375552-51897-5-git-send-email-guohanjun@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
-In-Reply-To: <1629375552-51897-1-git-send-email-guohanjun@huawei.com>
-References: <1629375552-51897-1-git-send-email-guohanjun@huawei.com>
+        Andy Lutomirski <luto@kernel.org>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Ben Gardon <bgardon@google.com>
+Message-ID: <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20210818001210.4073390-2-seanjc@google.com>
+References: <20210818001210.4073390-1-seanjc@google.com> <20210818001210.4073390-2-seanjc@google.com>
+Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing
+ NOTIFY_RESUME on xfer to KVM guest
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.102.37]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
+Thread-Topic: rseq: Update rseq when processing NOTIFY_RESUME on xfer to KVM guest
+Thread-Index: bvPQyLDSoOg+aSRtrktKYXzxAVZwCA==
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Jianlin Lv <Jianlin.Lv@arm.com>
+----- On Aug 17, 2021, at 8:12 PM, Sean Christopherson seanjc@google.com wrote:
 
-commit 067012974c8ae31a8886046df082aeba93592972 upstream.
+> Invoke rseq's NOTIFY_RESUME handler when processing the flag prior to
+> transferring to a KVM guest, which is roughly equivalent to an exit to
+> userspace and processes many of the same pending actions.  While the task
+> cannot be in an rseq critical section as the KVM path is reachable only
+> via ioctl(KVM_RUN), the side effects that apply to rseq outside of a
+> critical section still apply, e.g. the CPU ID needs to be updated if the
+> task is migrated.
+> 
+> Clearing TIF_NOTIFY_RESUME without informing rseq can lead to segfaults
+> and other badness in userspace VMMs that use rseq in combination with KVM,
+> e.g. due to the CPU ID being stale after task migration.
 
-gcc version: 11.0.0 20210208 (experimental) (GCC)
+I agree with the problem assessment, but I would recommend a small change
+to this fix.
 
-Following build error on arm64:
+> 
+> Fixes: 72c3c0fe54a3 ("x86/kvm: Use generic xfer to guest work function")
+> Reported-by: Peter Foley <pefoley@google.com>
+> Bisected-by: Doug Evans <dje@google.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+> kernel/entry/kvm.c | 4 +++-
+> kernel/rseq.c      | 4 ++--
+> 2 files changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
+> index 49972ee99aff..049fd06b4c3d 100644
+> --- a/kernel/entry/kvm.c
+> +++ b/kernel/entry/kvm.c
+> @@ -19,8 +19,10 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu,
+> unsigned long ti_work)
+> 		if (ti_work & _TIF_NEED_RESCHED)
+> 			schedule();
+> 
+> -		if (ti_work & _TIF_NOTIFY_RESUME)
+> +		if (ti_work & _TIF_NOTIFY_RESUME) {
+> 			tracehook_notify_resume(NULL);
+> +			rseq_handle_notify_resume(NULL, NULL);
+> +		}
+> 
+> 		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
+> 		if (ret)
+> diff --git a/kernel/rseq.c b/kernel/rseq.c
+> index 35f7bd0fced0..58c79a7918cd 100644
+> --- a/kernel/rseq.c
+> +++ b/kernel/rseq.c
+> @@ -236,7 +236,7 @@ static bool in_rseq_cs(unsigned long ip, struct rseq_cs
+> *rseq_cs)
+> 
+> static int rseq_ip_fixup(struct pt_regs *regs)
+> {
+> -	unsigned long ip = instruction_pointer(regs);
+> +	unsigned long ip = regs ? instruction_pointer(regs) : 0;
+> 	struct task_struct *t = current;
+> 	struct rseq_cs rseq_cs;
+> 	int ret;
+> @@ -250,7 +250,7 @@ static int rseq_ip_fixup(struct pt_regs *regs)
+> 	 * If not nested over a rseq critical section, restart is useless.
+> 	 * Clear the rseq_cs pointer and return.
+> 	 */
+> -	if (!in_rseq_cs(ip, &rseq_cs))
+> +	if (!regs || !in_rseq_cs(ip, &rseq_cs))
 
-.......
-In function ‘printf’,
-    inlined from ‘regs_dump__printf’ at util/session.c:1141:3,
-    inlined from ‘regs__printf’ at util/session.c:1169:2:
-/usr/include/aarch64-linux-gnu/bits/stdio2.h:107:10: \
-  error: ‘%-5s’ directive argument is null [-Werror=format-overflow=]
+I think clearing the thread's rseq_cs unconditionally here when regs is NULL
+is not the behavior we want when this is called from xfer_to_guest_mode_work.
 
-107 |   return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt, \
-                __va_arg_pack ());
+If we have a scenario where userspace ends up calling this ioctl(KVM_RUN)
+from within a rseq c.s., we really want a CONFIG_DEBUG_RSEQ=y kernel to
+kill this application in the rseq_syscall handler when exiting back to usermode
+when the ioctl eventually returns.
 
-......
-In function ‘fprintf’,
-  inlined from ‘perf_sample__fprintf_regs.isra’ at \
-    builtin-script.c:622:14:
-/usr/include/aarch64-linux-gnu/bits/stdio2.h:100:10: \
-    error: ‘%5s’ directive argument is null [-Werror=format-overflow=]
-  100 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
-  101 |                         __va_arg_pack ());
+However, clearing the thread's rseq_cs will prevent this from happening.
 
-cc1: all warnings being treated as errors
-.......
+So I would favor an approach where we simply do:
 
-This patch fixes Wformat-overflow warnings. Add helper function to
-convert NULL to "unknown".
+if (!regs)
+     return 0;
 
-Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Anju T Sudhakar <anju@linux.vnet.ibm.com>
-Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Kajol Jain <kjain@linux.ibm.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: iecedge@gmail.com
-Cc: linux-csky@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org
-Link: http://lore.kernel.org/lkml/20210218031245.2078492-1-Jianlin.Lv@arm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
----
- tools/perf/arch/arm/include/perf_regs.h     | 2 +-
- tools/perf/arch/arm64/include/perf_regs.h   | 2 +-
- tools/perf/arch/csky/include/perf_regs.h    | 2 +-
- tools/perf/arch/powerpc/include/perf_regs.h | 2 +-
- tools/perf/arch/riscv/include/perf_regs.h   | 2 +-
- tools/perf/arch/s390/include/perf_regs.h    | 2 +-
- tools/perf/arch/x86/include/perf_regs.h     | 2 +-
- tools/perf/util/perf_regs.h                 | 7 +++++++
- 8 files changed, 14 insertions(+), 7 deletions(-)
+Immediately at the beginning of rseq_ip_fixup, before getting the instruction
+pointer, so effectively skip all side-effects of the ip fixup code. Indeed, it
+is not relevant to do any fixup here, because it is nested in a ioctl system
+call.
 
-diff --git a/tools/perf/arch/arm/include/perf_regs.h b/tools/perf/arch/arm/include/perf_regs.h
-index ed20e02..4085419 100644
---- a/tools/perf/arch/arm/include/perf_regs.h
-+++ b/tools/perf/arch/arm/include/perf_regs.h
-@@ -15,7 +15,7 @@
- #define PERF_REG_IP	PERF_REG_ARM_PC
- #define PERF_REG_SP	PERF_REG_ARM_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_ARM_R0:
-diff --git a/tools/perf/arch/arm64/include/perf_regs.h b/tools/perf/arch/arm64/include/perf_regs.h
-index baaa5e6..fa3e0745 100644
---- a/tools/perf/arch/arm64/include/perf_regs.h
-+++ b/tools/perf/arch/arm64/include/perf_regs.h
-@@ -15,7 +15,7 @@
- #define PERF_REG_IP	PERF_REG_ARM64_PC
- #define PERF_REG_SP	PERF_REG_ARM64_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_ARM64_X0:
-diff --git a/tools/perf/arch/csky/include/perf_regs.h b/tools/perf/arch/csky/include/perf_regs.h
-index 8f336ea..25ac3bd 100644
---- a/tools/perf/arch/csky/include/perf_regs.h
-+++ b/tools/perf/arch/csky/include/perf_regs.h
-@@ -15,7 +15,7 @@
- #define PERF_REG_IP	PERF_REG_CSKY_PC
- #define PERF_REG_SP	PERF_REG_CSKY_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_CSKY_A0:
-diff --git a/tools/perf/arch/powerpc/include/perf_regs.h b/tools/perf/arch/powerpc/include/perf_regs.h
-index 63f3ac9..004bed2 100644
---- a/tools/perf/arch/powerpc/include/perf_regs.h
-+++ b/tools/perf/arch/powerpc/include/perf_regs.h
-@@ -73,7 +73,7 @@
- 	[PERF_REG_POWERPC_SIER3] = "sier3",
- };
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	return reg_names[id];
- }
-diff --git a/tools/perf/arch/riscv/include/perf_regs.h b/tools/perf/arch/riscv/include/perf_regs.h
-index 7a8bcde..6b02a76 100644
---- a/tools/perf/arch/riscv/include/perf_regs.h
-+++ b/tools/perf/arch/riscv/include/perf_regs.h
-@@ -19,7 +19,7 @@
- #define PERF_REG_IP	PERF_REG_RISCV_PC
- #define PERF_REG_SP	PERF_REG_RISCV_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_RISCV_PC:
-diff --git a/tools/perf/arch/s390/include/perf_regs.h b/tools/perf/arch/s390/include/perf_regs.h
-index bcfbaed..ce30315 100644
---- a/tools/perf/arch/s390/include/perf_regs.h
-+++ b/tools/perf/arch/s390/include/perf_regs.h
-@@ -14,7 +14,7 @@
- #define PERF_REG_IP PERF_REG_S390_PC
- #define PERF_REG_SP PERF_REG_S390_R15
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_S390_R0:
-diff --git a/tools/perf/arch/x86/include/perf_regs.h b/tools/perf/arch/x86/include/perf_regs.h
-index b732133..cddc4cd 100644
---- a/tools/perf/arch/x86/include/perf_regs.h
-+++ b/tools/perf/arch/x86/include/perf_regs.h
-@@ -23,7 +23,7 @@
- #define PERF_REG_IP PERF_REG_X86_IP
- #define PERF_REG_SP PERF_REG_X86_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_X86_AX:
-diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-index a454991..eeac181 100644
---- a/tools/perf/util/perf_regs.h
-+++ b/tools/perf/util/perf_regs.h
-@@ -33,6 +33,13 @@ enum {
- 
- int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
- 
-+static inline const char *perf_reg_name(int id)
-+{
-+	const char *reg_name = __perf_reg_name(id);
-+
-+	return reg_name ?: "unknown";
-+}
-+
- #else
- #define PERF_REGS_MASK	0
- #define PERF_REGS_MAX	0
+Effectively, this would preserve the SIGSEGV behavior when this ioctl is
+erroneously called by user-space from a rseq critical section.
+
+Thanks for looking into this !
+
+Mathieu
+
+> 		return clear_rseq_cs(t);
+> 	ret = rseq_need_restart(t, rseq_cs.flags);
+> 	if (ret <= 0)
+> --
+> 2.33.0.rc1.237.g0d66db33f3-goog
+
 -- 
-1.7.12.4
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
