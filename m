@@ -2,171 +2,70 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E25653F23D2
-	for <lists+linux-csky@lfdr.de>; Fri, 20 Aug 2021 01:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97EB3F3256
+	for <lists+linux-csky@lfdr.de>; Fri, 20 Aug 2021 19:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbhHSXtS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 19 Aug 2021 19:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236809AbhHSXtN (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 19 Aug 2021 19:49:13 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CF3C0613CF
-        for <linux-csky@vger.kernel.org>; Thu, 19 Aug 2021 16:48:37 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id hv22-20020a17090ae416b0290178c579e424so5994376pjb.3
-        for <linux-csky@vger.kernel.org>; Thu, 19 Aug 2021 16:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=peyh3WLA8DgwuaakoXbly04TuP2J4HXY0owEUug9y1c=;
-        b=BbFJLtvxbxBG+7picsXObo5Qj8iquJ+C6Q7w5pe27YupZ7+zDXLN540+QU8HPzkPh2
-         WwzvQTknLR7mJUL2ZtsslkF86UhNT3PUimzJd1W/xc0YsfWgxj0uNN/X65pRaldPuQy1
-         Svz/l9I2+rXfrKEmbGry3ew82Uw0db0pKDxq9ukmqwtSMFXcHcAuMrcqlCqOeGH1V/uC
-         AqRS5aTXg3eyxy84gMMrOJhW6Ac+BzpVGDyg6q+eRN+OlPt5iJkRzEHzotLklvgBWCCO
-         ThS3AjXFs8AEz4pcXFmbRPSyBU/T0LhtGGlVC0DabZEeUTxAm2SIBNQHSE15qMVZvLr/
-         ceIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=peyh3WLA8DgwuaakoXbly04TuP2J4HXY0owEUug9y1c=;
-        b=XRmo+nQJ4OQ3rYN69oTfq840YgWKhvWEPr9zVnU6+vvD/IAAblUw+FKK2TKkIusYii
-         PHk99DjUU2e//WAQmYNI4c7EoNzj6GapC91r67NfxamyZn6cgUrrY4nDJZ2eanZbjXEo
-         bp5ZESDSGY6wt00Tjm2zTh2IzR3IJ6Z9euccsITEEJVuwWb8Rd+umcU3P1XY1cP11L+C
-         xu3VCCpF9qksnVTOcwbT9KNZzUAHUowPSgpMr/wrbjWN2yLyfUPhlnkBB85yEqOHHzfw
-         uWKel6hXPpLcGGT3AXn8d95WHv0DlgqtTvNKnXCspwHVQTZA31c385Z/msd39j7WRA5p
-         Ql4Q==
-X-Gm-Message-State: AOAM5301rmxOClhHUhJk/gSxozGJzdMi57+tfitnLg+tMTawqeAr2nei
-        NtWY57d7MZIuR3P2HiGRXVToiQ==
-X-Google-Smtp-Source: ABdhPJwX9PVK0tEzKb91C/ktX1nj3RcgHWNnmrdk1FjTlt3T+0IB78U5SgxuhlVnRMNmyLPH0lN5vw==
-X-Received: by 2002:a17:90b:80c:: with SMTP id bk12mr1415764pjb.134.1629416916083;
-        Thu, 19 Aug 2021 16:48:36 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a4sm4880315pfk.0.2021.08.19.16.48.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 16:48:35 -0700 (PDT)
-Date:   Thu, 19 Aug 2021 23:48:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Oleg Nesterov <oleg@redhat.com>, rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing NOTIFY_RESUME
- on xfer to KVM guest
-Message-ID: <YR7tzZ98XC6OV2vu@google.com>
-References: <20210818001210.4073390-1-seanjc@google.com>
- <20210818001210.4073390-2-seanjc@google.com>
- <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+        id S233386AbhHTRhA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 20 Aug 2021 13:37:00 -0400
+Received: from smtprelay0091.hostedemail.com ([216.40.44.91]:46964 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229516AbhHTRhA (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 20 Aug 2021 13:37:00 -0400
+X-Greylist: delayed 498 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Aug 2021 13:37:00 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id E28011818BF6B
+        for <linux-csky@vger.kernel.org>; Fri, 20 Aug 2021 17:28:04 +0000 (UTC)
+Received: from omf19.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id C2CF5101CE23F;
+        Fri, 20 Aug 2021 17:28:02 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id D00E220D764;
+        Fri, 20 Aug 2021 17:28:00 +0000 (UTC)
+Message-ID: <37ec9a36a5f7c71a8e23ab45fd3b7f20efd5da24.camel@perches.com>
+Subject: What is the oldest perl version being used with the kernel ? update
+ oldest supported to 5.14 ?
+From:   Joe Perches <joe@perches.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        LukasBulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        linux-csky@vger.kernel.org
+Date:   Fri, 20 Aug 2021 10:27:59 -0700
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=2.59
+X-Stat-Signature: wojh18d5ecfq9mr8d36u5p8pct8mmia8
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: D00E220D764
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX18C1in7YDsawPZeoRsFE518C5c7FR0zQJA=
+X-HE-Tag: 1629480480-234339
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Aug 19, 2021, Mathieu Desnoyers wrote:
-> ----- On Aug 17, 2021, at 8:12 PM, Sean Christopherson seanjc@google.com wrote:
-> > @@ -250,7 +250,7 @@ static int rseq_ip_fixup(struct pt_regs *regs)
-> > 	 * If not nested over a rseq critical section, restart is useless.
-> > 	 * Clear the rseq_cs pointer and return.
-> > 	 */
-> > -	if (!in_rseq_cs(ip, &rseq_cs))
-> > +	if (!regs || !in_rseq_cs(ip, &rseq_cs))
-> 
-> I think clearing the thread's rseq_cs unconditionally here when regs is NULL
-> is not the behavior we want when this is called from xfer_to_guest_mode_work.
-> 
-> If we have a scenario where userspace ends up calling this ioctl(KVM_RUN)
-> from within a rseq c.s., we really want a CONFIG_DEBUG_RSEQ=y kernel to
-> kill this application in the rseq_syscall handler when exiting back to usermode
-> when the ioctl eventually returns.
-> 
-> However, clearing the thread's rseq_cs will prevent this from happening.
-> 
-> So I would favor an approach where we simply do:
-> 
-> if (!regs)
->      return 0;
-> 
-> Immediately at the beginning of rseq_ip_fixup, before getting the instruction
-> pointer, so effectively skip all side-effects of the ip fixup code. Indeed, it
-> is not relevant to do any fixup here, because it is nested in a ioctl system
-> call.
-> 
-> Effectively, this would preserve the SIGSEGV behavior when this ioctl is
-> erroneously called by user-space from a rseq critical section.
+Perl 5.8 is nearly 20 years old now.
 
-Ha, that's effectively what I implemented first, but I changed it because of the
-comment in clear_rseq_cs() that says:
+https://en.wikipedia.org/wiki/Perl_5_version_history
 
-  The rseq_cs field is set to NULL on preemption or signal delivery ... as well
-  as well as on top of code outside of the rseq assembly block.
+checkpatch uses regexes that are incompatible with perl versions
+earlier than 5.10, but these uses are currently runtime checked
+and skipped if the perl version is too old.  This runtime checking
+skips several useful tests.
 
-Which makes it sound like something might rely on clearing rseq_cs?
+There is also some desire for tools like kernel-doc, checkpatch and
+get_maintainer to use a common library of regexes and functions:
+https://lore.kernel.org/lkml/YR2lexDd9N0sWxIW@casper.infradead.org/
 
-Ah, or is it the case that rseq_cs is non-NULL if and only if userspace is in an
-rseq critical section, and because syscalls in critical sections are illegal, by
-definition clearing rseq_cs is a nop unless userspace is misbehaving.
+It'd be useful to set the minimum perl version to something more modern.
 
-If that's true, what about explicitly checking that at NOTIFY_RESUME?  Or is it
-not worth the extra code to detect an error that will likely be caught anyways?
+I believe perl 5.14, now only a decade old, is a reasonable target.
 
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index 35f7bd0fced0..28b8342290b0 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -282,6 +282,13 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
+Any objections or suggestions for a newer minimum version?
 
-        if (unlikely(t->flags & PF_EXITING))
-                return;
-+       if (!regs) {
-+#ifdef CONFIG_DEBUG_RSEQ
-+               if (t->rseq && rseq_get_rseq_cs(t, &rseq_cs))
-+                       goto error;
-+#endif
-+               return;
-+       }
-        ret = rseq_ip_fixup(regs);
-        if (unlikely(ret < 0))
-                goto error;
-
-> Thanks for looking into this !
-> 
-> Mathieu
-> 
-> > 		return clear_rseq_cs(t);
-> > 	ret = rseq_need_restart(t, rseq_cs.flags);
-> > 	if (ret <= 0)
-> > --
-> > 2.33.0.rc1.237.g0d66db33f3-goog
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
