@@ -2,116 +2,112 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D103F36CE
-	for <lists+linux-csky@lfdr.de>; Sat, 21 Aug 2021 00:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8AB3F38E3
+	for <lists+linux-csky@lfdr.de>; Sat, 21 Aug 2021 07:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241015AbhHTWvV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 20 Aug 2021 18:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S231942AbhHUFnu (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 21 Aug 2021 01:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240919AbhHTWvQ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 20 Aug 2021 18:51:16 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1DFC0613A3
-        for <linux-csky@vger.kernel.org>; Fri, 20 Aug 2021 15:50:36 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w201-20020a25dfd2000000b00594695384d1so11159555ybg.20
-        for <linux-csky@vger.kernel.org>; Fri, 20 Aug 2021 15:50:36 -0700 (PDT)
+        with ESMTP id S231738AbhHUFnu (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 21 Aug 2021 01:43:50 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB28C0613CF
+        for <linux-csky@vger.kernel.org>; Fri, 20 Aug 2021 22:43:11 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id m17so109777plc.6
+        for <linux-csky@vger.kernel.org>; Fri, 20 Aug 2021 22:43:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=Ut0lClAqKM9RGqTS5MESEM+F5WoPZRTQUckNTBRjTyg=;
-        b=TA/KEkzCm9eGIgSQhw9KNiaLFa6mERWpjzl8Sm2LP0D8MHshBELhR9PNTUHRE29ifz
-         mo90lRoRaNLAOUKwpDqprlo0/pMwtc5l0/AtaGDQuwQPp72yFVvsNL3ynlMO5kSBRj5m
-         LzAltW2EylkOxsEkvhRVhVSBOVOdYc11dmbjDqZ/XhKiygxbSFOOyUayIR4kGClbFLgR
-         /kFKufJdXalO6BD5koMO2tBk/9JBu0VO4U4stsueIYQrrElmsEUFhO7RIz6hEZLybaDq
-         KKumExIW2OSfE2RbrTkormhrvk3570q+R6kLizKIzC3ltGy9bDIK5NfDidM6k/fKRiu/
-         zAPw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9sE8/Gezsq3ktVT1yBNWUnjMOxfVYbA50Rdyo+0rKjg=;
+        b=i+WrkoXjNKg4kf7Ku0gUlQx7eIoc5b0b0YLG92TKYL9BVo0rPqj+uzdLB+MjPabU3J
+         HjWDWfEsdrVtR+NH2G9+XReIX26V18hHaRdIgzgV8JpSXS7H5HUc9NyL4mjtoZdJexDM
+         PZIXoQghEQmI+ZcvoTlg3lVMhlUTAKbTqJLVM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=Ut0lClAqKM9RGqTS5MESEM+F5WoPZRTQUckNTBRjTyg=;
-        b=lkn5n4eONsbGfqDAlG4psOmg0uiQiBfw8TBA19mQ79sFVeokcbBizDA+vVYptGNWdF
-         qWOZ7W45Je3F1Zlfs24HP5TA7gOHuMsc2I5ytsDYJlY5OK9YK+zhekprDMOa67FSHud3
-         gIq/OOS/nDIDyx7Wkl10Vm5/9eqLdpD2D/cn9cWm/ORXGgcmS0TCMC4X9KWMJNWJMRsi
-         snm1Tbmead3itR5wn+VKnDe/N0Oz+DeyV95LiaNN1IvNCUWWAstn1MUwNwnNy+CQq9kz
-         gSyQKQF9XvmXqasJ5/8nC8Hr1VVWRdgWfFeZnxOt5Jk07iKw+AuldC4MiVxJLqnv2n5W
-         PneA==
-X-Gm-Message-State: AOAM531t7u/+OsKhGibqe2d+hlJo5CtfLKPsIQ1IafncBrstDkpNR8hX
-        DNOHajN6DrEnxkfK7s4PbuWzvALhPKU=
-X-Google-Smtp-Source: ABdhPJx3Gy465odAHrKuwh+xxU3EOcrY9EoPkXADk8KHQbivIS4NsZANbgwhJ1nQlBB3M+0Hs3NCAAyvqg4=
-X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:f11d:a281:af9b:5de6])
- (user=seanjc job=sendgmr) by 2002:a25:acc4:: with SMTP id x4mr8790476ybd.376.1629499835531;
- Fri, 20 Aug 2021 15:50:35 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 20 Aug 2021 15:50:02 -0700
-In-Reply-To: <20210820225002.310652-1-seanjc@google.com>
-Message-Id: <20210820225002.310652-6-seanjc@google.com>
-Mime-Version: 1.0
-References: <20210820225002.310652-1-seanjc@google.com>
-X-Mailer: git-send-email 2.33.0.rc2.250.ged5fa647cd-goog
-Subject: [PATCH v2 5/5] KVM: selftests: Remove __NR_userfaultfd syscall fallback
-From:   Sean Christopherson <seanjc@google.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9sE8/Gezsq3ktVT1yBNWUnjMOxfVYbA50Rdyo+0rKjg=;
+        b=mChgXSUvvu4iyT73PnDvvNnUeMIk7c4ToKUzTuk+Xasn9efRCs5d1aW25c7CGgfHwT
+         SQ12wey0zVoya+17NfyHKBuy6X25VTsBYzn8ZKq/+3N3xa80r4LDq+mgRlb7i22Bq00c
+         Q+shyXESFlz9i+aCk7ObkRmGlSQEYrlDn1lOQc72EQdBoJYF2ALnvgR5rYI41ZxxbezE
+         h98Czusco2VMwSrhcX3mLzaJ3ezGHmAvZXYCjc0qYPkfn1gZ1PSqjNv1HpKYgfoRSatJ
+         OvWQwl4hZCjT0zlJd5QoSPqvRAK3cQduNvZsgliPCS7x1kvfrepT6xO4xAsEg4/Whatc
+         0zdA==
+X-Gm-Message-State: AOAM530g38+QYrZImcBUYhqa2lPXaeTF6uzWMl6j8km5m3d81x7H00gX
+        lvliSBQT7OA21PG5cCtlKIOd7g==
+X-Google-Smtp-Source: ABdhPJzgQUYdkk9J8dqAROFTOnmvvqyCpq+uP6WafjZ2SeuiM0a5Vtnmi8qv2wGXx2oleUl8CurB6g==
+X-Received: by 2002:a17:902:bb92:b0:12d:ad99:7fb6 with SMTP id m18-20020a170902bb9200b0012dad997fb6mr19095378pls.49.1629524590503;
+        Fri, 20 Aug 2021 22:43:10 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n11sm7570761pjf.17.2021.08.20.22.43.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Aug 2021 22:43:09 -0700 (PDT)
+Date:   Fri, 20 Aug 2021 22:43:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        LukasBulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        linux-csky@vger.kernel.org
+Subject: Re: What is the oldest perl version being used with the kernel ?
+ update oldest supported to 5.14 ?
+Message-ID: <202108201856.41AB391@keescook>
+References: <37ec9a36a5f7c71a8e23ab45fd3b7f20efd5da24.camel@perches.com>
+ <YR/zrjiCwnzMMcmA@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YR/zrjiCwnzMMcmA@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Revert the __NR_userfaultfd syscall fallback added for KVM selftests now
-that x86's unistd_{32,63}.h overrides are under uapi/ and thus not in
-KVM sefltests' search path, i.e. now that KVM gets x86 syscall numbers
-from the installed kernel headers.
+On Fri, Aug 20, 2021 at 07:25:50PM +0100, Matthew Wilcox wrote:
+> On Fri, Aug 20, 2021 at 10:27:59AM -0700, Joe Perches wrote:
+> > Perl 5.8 is nearly 20 years old now.
+> > 
+> > https://en.wikipedia.org/wiki/Perl_5_version_history
+> > 
+> > checkpatch uses regexes that are incompatible with perl versions
+> > earlier than 5.10, but these uses are currently runtime checked
+> > and skipped if the perl version is too old.  This runtime checking
+> > skips several useful tests.
+> > 
+> > There is also some desire for tools like kernel-doc, checkpatch and
+> > get_maintainer to use a common library of regexes and functions:
+> > https://lore.kernel.org/lkml/YR2lexDd9N0sWxIW@casper.infradead.org/
+> > 
+> > It'd be useful to set the minimum perl version to something more modern.
+> > 
+> > I believe perl 5.14, now only a decade old, is a reasonable target.
+> > 
+> > Any objections or suggestions for a newer minimum version?
+> 
+> Not an objection per se, but some data points.
+> 
+> Oracle Linux 5 (released 2007, still under support) has perl 5.8.8
+> Oracle Linux 6 (released 2011) has perl 5.10.1
+> Oracle Linux 7 (released 2014) has perl 5.16.3
+> Oracle Linux 8 (released 2019) has perl 5.26.3
+> 
+> I don't know that we need to be able to build on a distro from 2007
+> or even from 2011.  I think it's reasonable to require updating to a
+> 2014 distro in order to build a 2021 kernel.
+> 
+> For comparison, we currently require gcc-4.9 to build the kernel, and
+> 4.9.0 was released in 2014.  So perl-5.16 wouldn't be an unreasonable
+> requirement, I believe.
 
-No functional change intended.
+Ubuntu name/version mapping: https://wiki.ubuntu.com/
+Ubuntu Perl versions: https://launchpad.net/ubuntu/+source/perl
 
-Cc: Ben Gardon <bgardon@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/arch/x86/include/uapi/asm/unistd_64.h | 3 ---
- 1 file changed, 3 deletions(-)
+The oldest publicly supported Ubuntu (18.04 Bionic) uses Perl 5.26.
 
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-index 4205ed4158bf..cb52a3a8b8fc 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-@@ -1,7 +1,4 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __NR_userfaultfd
--#define __NR_userfaultfd 282
--#endif
- #ifndef __NR_perf_event_open
- # define __NR_perf_event_open 298
- #endif
 -- 
-2.33.0.rc2.250.ged5fa647cd-goog
-
+Kees Cook
