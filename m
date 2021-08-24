@@ -2,117 +2,103 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 866883F53BF
-	for <lists+linux-csky@lfdr.de>; Tue, 24 Aug 2021 01:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8FC3F5807
+	for <lists+linux-csky@lfdr.de>; Tue, 24 Aug 2021 08:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbhHWXrc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 23 Aug 2021 19:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        id S230227AbhHXGRh (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 24 Aug 2021 02:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbhHWXrZ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 23 Aug 2021 19:47:25 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A00C0613C1
-        for <linux-csky@vger.kernel.org>; Mon, 23 Aug 2021 16:46:41 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id b4so9232058ilr.11
-        for <linux-csky@vger.kernel.org>; Mon, 23 Aug 2021 16:46:41 -0700 (PDT)
+        with ESMTP id S230130AbhHXGRh (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 24 Aug 2021 02:17:37 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994C6C061575;
+        Mon, 23 Aug 2021 23:16:53 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id bk29so16243345qkb.8;
+        Mon, 23 Aug 2021 23:16:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DoLC1EF3mIR0GlW76GBSt/BwmQNgwhehtB+DBCRZ1+A=;
-        b=ieObiuqzWjKenmS5fhA2KlEkngO02xDQilv8lvyC4D+Pum4HGeAM9YxrBJ5RPaEH5c
-         PGwcQsuTYK9YcMbFvagX/tRluioVmxc7JQ/E+ZVw74iOQ6LsUBKtpPK4jaP5BXHtEL4x
-         SmlfHvpixi+DllUCXuPzWjk6zA/bHNc5X7kKlPwDC7KYnYUitdlnuKoubqVwn2cV7gOG
-         ulU1tZsjuJop5z0MpLhwF91iwokwJU9Z3bomsD5Bk6Y7d8MArYcUfNpo8XIx8Hi+8Kxs
-         KqiQ43yho6JDD+dtIDSv50yTeg4macRVXUgyVaAuhZWmWsa290Q1RghpXqQhiy4RJxzC
-         WFEw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rhGctr00MDH5AefJ5cazxvCpO3NXQOU2Z+d0KTndb6o=;
+        b=Dpcdrq/lu9oS/ukuh2/Sr7BUiU0CvGAHfBFJU7OVJZkwzMVdbfPIQB6DjfM6Pbl8nw
+         bsZSvNZ4VEocYJBncIUzmAGUM54BlqbRrt0XXffl9B5u/90qTI3OT6iG1p/1uPziaE5w
+         O+tUC/Z0mWi8vaAGAGjgEA3ao235XzOORTGE3Q59w4kf94vy7kPFoWbuWc5FVF2p0tiM
+         defcn6nIZGN6aXbaxYO/ucOSYda/GxcCZCPUElsE+76RCMGbjZqernQmcq5CeVjh/WUG
+         uGzzll3vvDf00z1SaqXyd1x+IIn6+7io+FSamt9dUP+X7I0F8Jr34U3G+zVsCOLR3/ed
+         CVFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DoLC1EF3mIR0GlW76GBSt/BwmQNgwhehtB+DBCRZ1+A=;
-        b=fQPzFQp1YhPVdPuH2Luww+FJvnDR6dQiHjX2+av4l5tU6J+vX9/xCz0qdjjJtviIWV
-         WyLu2By9Jl6nnqb3ChJCRbNbShJcpiFU1fORfcQMe/XUKCg7JGwIlXk8yyytzfh3DRz3
-         vd/VU3iPVoaHOzU52HhXD6J8fFkawOf/rHCLwS6gg+Q9lnxZZ9gNHnuIfOXMuCsGIq4l
-         c2W3+U05BmQQ3rcLj6tnrAaqRE19tbB48ccgNciSczVy3s41CNi5R1IPyzZ93PVxN/Hi
-         e+MoMCA/fT3NHJkYT2VYQjAjKRUWreTT/lo6sFsHJAgzXWToBXAKXQmNH7njXT6FL2Uc
-         Z2jA==
-X-Gm-Message-State: AOAM530VRit4c98I6AUFWmHmbY4UDAJeh0QlcAlf9sZlHfjo3yPrtC13
-        enLgvTM32f3m3vB+9aolTMS24k/Df0DattQwSoKroQ==
-X-Google-Smtp-Source: ABdhPJyUnfiO2iZsMzYl0bECsz2yA5wsBXuFbRA5eIkM+UStG915jCcxL3fRugWbjAHUfvQrnihJ/kDPcNr29FpWrqY=
-X-Received: by 2002:a05:6e02:524:: with SMTP id h4mr24801438ils.203.1629762401039;
- Mon, 23 Aug 2021 16:46:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rhGctr00MDH5AefJ5cazxvCpO3NXQOU2Z+d0KTndb6o=;
+        b=f52XevGCa2M0V71vHd/JmE1ptIAmyDNESnSsC8maagLTxi/6PThRfUsi7KujXEhkTz
+         db2Dvrd1BDmlpGANSYLYTHzzfIJ36BeUUMQ5+r/mrheSyQcOTmtQdDhcXs5MrWO5ZYaE
+         hOia45QPmRyUsRszFK37T4mDHkZGz5AxEKdXwhpD0BUTU3BTuhmSCcXOvNyMc9My4wjs
+         23FD7mQ6alqIWXkQR/SjLOd2GBgsbYAfaQQlVE3na3fBB8u4b1+lubSu/2xHlv0X2IrY
+         khmC8Iky+PWgojEysVVdfoMVuYQYVMDslQJQ6/+1cSU6dMEcOEVeXEU9QJkzvXoxT7zI
+         7Iaw==
+X-Gm-Message-State: AOAM532PYcqwlAWpsvIR3Ehz4+6y6zlBedPdkaA8wkIBRdRUYhWB5TH7
+        d/OyseZCwzbwEO63J6p2N9zkMJoa31o=
+X-Google-Smtp-Source: ABdhPJymIsLCVH7QSFYUy4MyOmDMrxDtHCs3R9ndTKy2pTkMto3D00cFUN4mXsH/EdxRPQ2IIY72Kg==
+X-Received: by 2002:a37:e14:: with SMTP id 20mr25135483qko.229.1629785812862;
+        Mon, 23 Aug 2021 23:16:52 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y185sm10234818qkb.36.2021.08.23.23.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Aug 2021 23:16:52 -0700 (PDT)
+From:   CGEL <cgel.zte@gmail.com>
+X-Google-Original-From: CGEL <deng.changcheng@zte.com.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Jing Yangyang <jing.yangyang@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] irqchip: fix boolreturn.cocci warnings
+Date:   Mon, 23 Aug 2021 23:16:46 -0700
+Message-Id: <20210824061646.59320-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210820225002.310652-1-seanjc@google.com> <20210820225002.310652-6-seanjc@google.com>
-In-Reply-To: <20210820225002.310652-6-seanjc@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 23 Aug 2021 16:46:30 -0700
-Message-ID: <CANgfPd_Vh52oWyMMcqL2iTVgcXQp3QDsM5MrAZxr=xe33rPMhg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] KVM: selftests: Remove __NR_userfaultfd syscall fallback
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, kvm <kvm@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 3:50 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Revert the __NR_userfaultfd syscall fallback added for KVM selftests now
-> that x86's unistd_{32,63}.h overrides are under uapi/ and thus not in
-> KVM sefltests' search path, i.e. now that KVM gets x86 syscall numbers
-> from the installed kernel headers.
->
-> No functional change intended.
->
-> Cc: Ben Gardon <bgardon@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+From: Jing Yangyang <jing.yangyang@zte.com.cn>
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+./drivers/irqchip/irq-csky-apb-intc.c:139:9-10:WARNING:return of 0/1 in
+function 'handle_irq_perbit' with return type bool
 
-> ---
->  tools/arch/x86/include/uapi/asm/unistd_64.h | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-> index 4205ed4158bf..cb52a3a8b8fc 100644
-> --- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-> +++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-> @@ -1,7 +1,4 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -#ifndef __NR_userfaultfd
-> -#define __NR_userfaultfd 282
-> -#endif
->  #ifndef __NR_perf_event_open
->  # define __NR_perf_event_open 298
->  #endif
-> --
-> 2.33.0.rc2.250.ged5fa647cd-goog
->
+Return statements in functions returning bool should use true/false
+instead of 1/0.
+
+Generated by: scripts/coccinelle/misc/boolreturn.cocci
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
+---
+ drivers/irqchip/irq-csky-apb-intc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/irqchip/irq-csky-apb-intc.c b/drivers/irqchip/irq-csky-apb-intc.c
+index ab91afa..5d044ad 100644
+--- a/drivers/irqchip/irq-csky-apb-intc.c
++++ b/drivers/irqchip/irq-csky-apb-intc.c
+@@ -136,11 +136,11 @@ static inline bool handle_irq_perbit(struct pt_regs *regs, u32 hwirq,
+ 				     u32 irq_base)
+ {
+ 	if (hwirq == 0)
+-		return 0;
++		return false;
+ 
+ 	handle_domain_irq(root_domain, irq_base + __fls(hwirq), regs);
+ 
+-	return 1;
++	return true;
+ }
+ 
+ /* gx6605s 64 irqs interrupt controller */
+-- 
+1.8.3.1
+
+
