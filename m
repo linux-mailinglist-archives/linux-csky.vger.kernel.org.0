@@ -2,151 +2,113 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FED3F9BA3
-	for <lists+linux-csky@lfdr.de>; Fri, 27 Aug 2021 17:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDD13F9DFF
+	for <lists+linux-csky@lfdr.de>; Fri, 27 Aug 2021 19:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245411AbhH0PX2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 27 Aug 2021 11:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S237288AbhH0RYd (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 27 Aug 2021 13:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245373AbhH0PX2 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Aug 2021 11:23:28 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5BC061796
-        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 08:22:39 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id t42so5940568pfg.12
-        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 08:22:39 -0700 (PDT)
+        with ESMTP id S1343493AbhH0RYW (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Aug 2021 13:24:22 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A02C0612A4
+        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 10:23:10 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id m26so6272149pff.3
+        for <linux-csky@vger.kernel.org>; Fri, 27 Aug 2021 10:23:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=QatDM27fKYA9pWDzVSAqlJ2DDoFQbm13fmaaMfb9ulg=;
-        b=LbfQeRJPD2tlThKAHYznAy0sM0IgIfh1wTpRJBZ2a8T56zVu98PuMUUVUbHs4fqFWr
-         6+86/kLM/nQLlWQf9dDa+no5hVa+6sXIHhmX9R3rM1SD9hRro8HWA2j/NGyx2O8VrgV+
-         oGP6lA9WOmK8FVw2oSIVs+avOR5GJ+s6JTH9S2ut8a2dmjwSmakGT8siao8WSM0rYY/D
-         l8AtqZP9IsjFRz1XRX7SFZjz8ry7nluU0QO8loudJxQXIIhTLPgOJCI+sU7b8vw4rsbo
-         7ceZSl6gyIwnJ0+ZB+tg2Cex82NuQqvIiek/SOq2xNCKjHmmV/miz2C81kIq6WQooMor
-         pjmw==
+        bh=pW2KRXINIECq2UqrMAjVuApe68m2StZHA9v7va6qTiU=;
+        b=rYBmoVs975N+yu2934Kl7Ag8dNi2tkW5MPQBPsQWMJceqaAUViMJX5p8VTsmrLat2L
+         1kJT1N4rNPJvHYN4v8xV4LZQQiN0gVYVxxZoK0AWZMQtgbtlsholocVLBSLsdQUjTc7K
+         EO/n6pcBnNhyHknntLRnjl3c7dPZnYup1ZY4k8dYXcB6+XwMELnSDRN8GScTXVD9wLYw
+         72HE/X1LKTlO7T9MyRzf3/jBybVrYz/zMXfVi26QTtQIvfOSsE3Kyet1JW3IoRhxG7Z4
+         s9RsOEhsC/QREunQ94/foNgn4vxgTRk3Re13QZxXDPqu5Xx6dQ43rKJdU90h8PsbIabZ
+         TDVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QatDM27fKYA9pWDzVSAqlJ2DDoFQbm13fmaaMfb9ulg=;
-        b=t0vqmW+biFc+nn4YBS0zCmYJKpRHeZLGGPlr8ZQlvECtwx59XGdVSA8QAPPvl7IXoE
-         4ozZxg20p9jQVCKFHfAU0Yf5z90Lp+L857xAthGcGH2zkNWt1dyUMEb04dOTj8u+dAOF
-         C6wmgIccrTlGcAEKdaKTWJ0TBqoN1neDtnzPJJ3M0bk5ivVciydQIvuL1+a3jY0yltcx
-         Y+mB/ET65FcjqGTC5EEA2inAnEZqzoDMg5AXb4Uq+MKGLRL0VpGsnEGboY1FNkRgtktX
-         Ke+33E6eahuVZ0GeYPEOQN7ZS/5fpwS9wzdg1h00vkZZCsKmzF+AjuHjBCoMAtnrF7Fz
-         6FuA==
-X-Gm-Message-State: AOAM532wKoYastr9EVWYFiXili9bdJkuxlD+Z7JMz6e17grb2N0/F8cl
-        IynRDBoH5eO5o/RZxu1Gqvdxng==
-X-Google-Smtp-Source: ABdhPJzEumx17gqrFfS4IgX2tHxkXDWTQYfyqElR8d63vRz/R/VGX/kHlh1uWjTReV2Ta0/ixjnVag==
-X-Received: by 2002:a05:6a00:26f6:b0:3ed:834e:153 with SMTP id p54-20020a056a0026f600b003ed834e0153mr9605926pfw.53.1630077758383;
-        Fri, 27 Aug 2021 08:22:38 -0700 (PDT)
+        bh=pW2KRXINIECq2UqrMAjVuApe68m2StZHA9v7va6qTiU=;
+        b=Gsa2qvQYkGx2769FBORCA4oRPOZEp0NIDfNEme7xWIrerisFcDptZ5FnuyRliGUxbK
+         rzBe3rRWaY2UqtVQ5nDKqLhDKN3nYp9FG9ZIGQ9AyOO+1PteKuxJWrsW/U5HynIfOM/G
+         mK0YsDUsmfFNkVpER7A2A1VLNoD6Okf23tHjqZSYNbQMwcF6yVgSET5APQ2c5kvDekt4
+         8Jh00ehbmEpBOt26Pyak64brhVwbhyYPTD2xUmjHhJOhrjaLe8gMUqyQKYrUdNGj3YHS
+         SIBtQbVBNCJKo0/NV8ykFEEhU0AUOYNnz4OKHfN08BlPLA1MbRAEP53Qk9iw7Gt0hklc
+         JsaA==
+X-Gm-Message-State: AOAM530EDGoWBdgW1MPYirBnSpZcGJk/JUn+B/cdHSwvmXrAS1h9bM/j
+        MjDVEenLKH+4QE6M5ltRFyZGcQ==
+X-Google-Smtp-Source: ABdhPJz+T5dgH3sIVem/Dht2xu+EGET8qPyEg43yvrgPII1mSQTEgb7AA1JRyZkdBQMuVGObTA+XjQ==
+X-Received: by 2002:a63:ef14:: with SMTP id u20mr8773852pgh.13.1630084990019;
+        Fri, 27 Aug 2021 10:23:10 -0700 (PDT)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q3sm7448697pgf.18.2021.08.27.08.22.37
+        by smtp.gmail.com with ESMTPSA id n24sm7386923pgv.60.2021.08.27.10.23.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 08:22:37 -0700 (PDT)
-Date:   Fri, 27 Aug 2021 15:22:33 +0000
+        Fri, 27 Aug 2021 10:23:09 -0700 (PDT)
+Date:   Fri, 27 Aug 2021 17:23:05 +0000
 From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
+To:     Zhu Lingshan <lingshan.zhu@intel.com>
+Cc:     peterz@infradead.org, pbonzini@redhat.com, bp@alien8.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, kan.liang@linux.intel.com, ak@linux.intel.com,
+        wei.w.wang@intel.com, eranian@google.com, liuxiangdong5@huawei.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        like.xu.linux@gmail.com, boris.ostrvsky@oracle.com,
+        Like Xu <like.xu@linux.intel.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Artem Kashkanov <artem.kashkanov@intel.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>
-Subject: Re: [PATCH 05/15] perf: Track guest callbacks on a per-CPU basis
-Message-ID: <YSkDOWze5dBHkJnA@google.com>
-References: <20210827005718.585190-1-seanjc@google.com>
- <20210827005718.585190-6-seanjc@google.com>
- <YSiRBQQE7md7ZrNC@hirez.programming.kicks-ass.net>
- <YSj7jq32U8Euf38o@google.com>
- <YSj9LQfbKxOhxqcP@hirez.programming.kicks-ass.net>
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH V10 01/18] perf/core: Use static_call to optimize
+ perf_guest_info_callbacks
+Message-ID: <YSkfeXcd6nUT3AOJ@google.com>
+References: <20210806133802.3528-1-lingshan.zhu@intel.com>
+ <20210806133802.3528-2-lingshan.zhu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YSj9LQfbKxOhxqcP@hirez.programming.kicks-ass.net>
+In-Reply-To: <20210806133802.3528-2-lingshan.zhu@intel.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Aug 27, 2021, Peter Zijlstra wrote:
-> On Fri, Aug 27, 2021 at 02:49:50PM +0000, Sean Christopherson wrote:
-> > On Fri, Aug 27, 2021, Peter Zijlstra wrote:
-> > > On Thu, Aug 26, 2021 at 05:57:08PM -0700, Sean Christopherson wrote:
-> > > > Use a per-CPU pointer to track perf's guest callbacks so that KVM can set
-> > > > the callbacks more precisely and avoid a lurking NULL pointer dereference.
-> > > 
-> > > I'm completely failing to see how per-cpu helps anything here...
-> > 
-> > It doesn't help until KVM is converted to set the per-cpu pointer in flows that
-> > are protected against preemption, and more specifically when KVM only writes to
-> > the pointer from the owning CPU.  
-> 
-> So the 'problem' I have with this is that sane (!KVM using) people, will
-> still have to suffer that load, whereas with the static_call() we patch
-> in an 'xor %rax,%rax' and only have immediate code flow.
+On Fri, Aug 06, 2021, Zhu Lingshan wrote:
+> @@ -2944,18 +2966,21 @@ static unsigned long code_segment_base(struct pt_regs *regs)
+>  
+>  unsigned long perf_instruction_pointer(struct pt_regs *regs)
+>  {
+> -	if (perf_guest_cbs && perf_guest_cbs->is_in_guest())
+> -		return perf_guest_cbs->get_guest_ip();
+> +	unsigned long ip = static_call(x86_guest_get_ip)();
+> +
+> +	if (likely(!ip))
 
-Again, I've no objection to the static_call() approach.  I didn't even see the
-patch until I had finished testing my series :-/
+Pivoting on ip==0 isn't correct, it's perfectly legal for a guest to execute
+from %rip=0.  Unless there's some static_call() magic that supports this with a
+default function:
+	
+	if (unlikely(!static_call(x86_guest_get_ip)(&ip)))
+		regs->ip + code_segment_base(regs)
 
-> > Ignoring static call for the moment, I don't see how the unreg side can be safe
-> > using a bare single global pointer.  There is no way for KVM to prevent an NMI
-> > from running in parallel on a different CPU.  If there's a more elegant solution,
-> > especially something that can be backported, e.g. an rcu-protected pointer, I'm
-> > all for it.  I went down the per-cpu path because it allowed for cleanups in KVM,
-> > but similar cleanups can be done without per-cpu perf callbacks.
-> 
-> If all the perf_guest_cbs dereferences are with preemption disabled
-> (IRQs disabled, IRQ context, NMI context included), then the sequence:
-> 
-> 	WRITE_ONCE(perf_guest_cbs, NULL);
-> 	synchronize_rcu();
-> 
-> Ensures that all prior observers of perf_guest_csb will have completed
-> and future observes must observe the NULL value.
+	return ip;
 
-That alone won't be sufficient, as the read side also needs to ensure it doesn't
-reload perf_guest_cbs between NULL checks and dereferences.  But that's easy
-enough to solve with a READ_ONCE and maybe a helper to make it more cumbersome
-to use perf_guest_cbs directly.
+The easiest thing is keep the existing:
 
-How about this for a series?
+	if (unlikely(static_call(x86_guest_state)()))
+		return static_call(x86_guest_get_ip)();
 
-  1. Use READ_ONCE/WRITE_ONCE + synchronize_rcu() to fix the underlying bug
-  2. Fix KVM PT interrupt handler bug
-  3. Kill off perf_guest_cbs usage in architectures that don't need the callbacks
-  4. Replace ->is_in_guest()/->is_user_mode() with ->state(), and s/get_guest_ip/get_ip
-  5. Implement static_call() support
-  6. Cleanups, if there are any
-  6..N KVM cleanups, e.g. to eliminate current_vcpu and share x86+arm64 callbacks
+	return regs->ip + code_segment_base(regs);
+
+It's an extra call for PMIs in guest, but I don't think any of the KVM folks care
+_that_ much about the performance in this case.
+
+> +		ip = regs->ip + code_segment_base(regs);
+>  
+> -	return regs->ip + code_segment_base(regs);
+> +	return ip;
+>  }
