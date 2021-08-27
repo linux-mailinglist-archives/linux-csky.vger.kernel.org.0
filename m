@@ -2,40 +2,40 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB4E3F950D
-	for <lists+linux-csky@lfdr.de>; Fri, 27 Aug 2021 09:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50363F952C
+	for <lists+linux-csky@lfdr.de>; Fri, 27 Aug 2021 09:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244395AbhH0H0T (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 27 Aug 2021 03:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S244287AbhH0HfS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 27 Aug 2021 03:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244351AbhH0H0S (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Aug 2021 03:26:18 -0400
+        with ESMTP id S231345AbhH0HfR (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Aug 2021 03:35:17 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16776C061757;
-        Fri, 27 Aug 2021 00:25:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8042DC061757;
+        Fri, 27 Aug 2021 00:34:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=neG8mg28UHUzHJK70IF++gxfO1zx12p3aLda6nUX0F8=; b=AukJ9GkzIV3P3F+0ekocwQawBL
-        tFlCkXpct0NjVzxDAYN3qp6dW8DFOR5++b6oO+2oFghCLwWlQldR9xUKOxe6O9xGeZ3SF85D2ScKC
-        RFt1tMii/X4MA5Hvk4XKVnCAHMtwMT7KO94Zi39lswz81eHv7+EWswbpXCxLYyjwAhehjD4Pj9zhD
-        /QGUZAd7iD4iU9YTu64FgKEGL0luhMV0hc4vrnvpZFSqjXRBBxUSDax4g0UrRpI2dleksB66sSbSW
-        I8F5HQkpMUSSv+Lz7wFRfoB+E5euI/bbEB/SVUaXfnNNAHO9evgCgJrPXZXun2y+vLo5dnB1ozeVf
-        G62jQfjw==;
+        bh=pX/U+rVEPbfrs2KxIK3fTT5zek69Vi8l41Blp4tBLok=; b=Yc/w61MYBYU/2XovOdaG/1LI+3
+        ofvXZY72T/bqQpEDQIopTT41ymuCj9LCYB3YpGsaZsw8I7lr88Q2nTCRx2MpWUAJi2+3qnashJI4R
+        pq0hm4wrqjtQzjgnu14Y0Hv71MTmXVlwUtR00yaCrR+u7hNfiDC4NQgkVvvO74M9TS46PVdKtznHr
+        cI35oR72a6g4a2mZG68PMOuldBKtE8eyE5BYPjhe0gvPrNhQPT9HfquqIFtVn1+9kmnU1uaROxDf6
+        T9v8X9G4zCE0HsYiDhrr3Coe9vaArCNE5m8ZWnIbYQ2Ri33yjkJEKLCpR695YXtWTkmMXBqMBOcvc
+        uj1qfSCA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mJWBM-00EFSX-VT; Fri, 27 Aug 2021 07:22:07 +0000
+        id 1mJWJz-00EFo3-0q; Fri, 27 Aug 2021 07:30:56 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A41C630035D;
-        Fri, 27 Aug 2021 09:21:43 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0C6F23005AD;
+        Fri, 27 Aug 2021 09:30:37 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 80EAF2C6670E9; Fri, 27 Aug 2021 09:21:43 +0200 (CEST)
-Date:   Fri, 27 Aug 2021 09:21:43 +0200
+        id E07822C6670E9; Fri, 27 Aug 2021 09:30:36 +0200 (CEST)
+Date:   Fri, 27 Aug 2021 09:30:36 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
@@ -73,50 +73,43 @@ Cc:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
         Artem Kashkanov <artem.kashkanov@intel.com>,
         Like Xu <like.xu.linux@gmail.com>,
         Zhu Lingshan <lingshan.zhu@intel.com>
-Subject: Re: [PATCH 06/15] KVM: x86: Register perf callbacks only when
- actively handling interrupt
-Message-ID: <YSiShwJeBvAVPVKe@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH 07/15] KVM: Use dedicated flag to track if KVM is
+ handling an NMI from guest
+Message-ID: <YSiUnDbi/aZ3nunT@hirez.programming.kicks-ass.net>
 References: <20210827005718.585190-1-seanjc@google.com>
- <20210827005718.585190-7-seanjc@google.com>
+ <20210827005718.585190-8-seanjc@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210827005718.585190-7-seanjc@google.com>
+In-Reply-To: <20210827005718.585190-8-seanjc@google.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Aug 26, 2021 at 05:57:09PM -0700, Sean Christopherson wrote:
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 9bc1375d6ed9..2f28d9d8dc94 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -6485,6 +6485,18 @@ static void perf_pending_event(struct irq_work *entry)
->  #ifdef CONFIG_HAVE_GUEST_PERF_EVENTS
->  DEFINE_PER_CPU(struct perf_guest_info_callbacks *, perf_guest_cbs);
+On Thu, Aug 26, 2021 at 05:57:10PM -0700, Sean Christopherson wrote:
+> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+> index 5cedc0e8a5d5..4c5ba4128b38 100644
+> --- a/arch/x86/kvm/x86.h
+> +++ b/arch/x86/kvm/x86.h
+> @@ -395,9 +395,10 @@ static inline void kvm_unregister_perf_callbacks(void)
 >  
-> +void __perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
-> +{
-> +	__this_cpu_write(perf_guest_cbs, cbs);
-> +}
-> +EXPORT_SYMBOL_GPL(__perf_register_guest_info_callbacks);
-> +
-> +void __perf_unregister_guest_info_callbacks(void)
-> +{
-> +	__this_cpu_write(perf_guest_cbs, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(__perf_unregister_guest_info_callbacks);
+>  DECLARE_PER_CPU(struct kvm_vcpu *, current_vcpu);
+>  
+> -static inline void kvm_before_interrupt(struct kvm_vcpu *vcpu)
+> +static inline void kvm_before_interrupt(struct kvm_vcpu *vcpu, bool is_nmi)
+>  {
+>  	__this_cpu_write(current_vcpu, vcpu);
+> +	WRITE_ONCE(vcpu->arch.handling_nmi_from_guest, is_nmi);
+>  
+>  	kvm_register_perf_callbacks();
+>  }
+> @@ -406,6 +407,7 @@ static inline void kvm_after_interrupt(struct kvm_vcpu *vcpu)
+>  {
+>  	kvm_unregister_perf_callbacks();
+>  
+> +	WRITE_ONCE(vcpu->arch.handling_nmi_from_guest, false);
+>  	__this_cpu_write(current_vcpu, NULL);
+>  }
 
-This is 100% broken, and a prime example of why I hate modules.
-
-It provides an interface for all modules, and completely fails to
-validate even the most basic usage.
-
-By using __this_cpu*() it omits the preemption checks, so you can call
-this with preemption enabled, no problem.
-
-By not checking the previous state, multiple modules can call this
-interleaved without issue.
-
-Basically assume any EXPORTed function is hostile, binary modules and
-out-of-tree modules *are* just that. It's a cesspit out there.
+Does this rely on kvm_{,un}register_perf_callback() being a function
+call and thus implying a sequence point to order the stores? 
