@@ -2,222 +2,155 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CF13FDB6D
-	for <lists+linux-csky@lfdr.de>; Wed,  1 Sep 2021 15:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E24C3FE3FB
+	for <lists+linux-csky@lfdr.de>; Wed,  1 Sep 2021 22:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344987AbhIAMll (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 1 Sep 2021 08:41:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40946 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344959AbhIAMkQ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 1 Sep 2021 08:40:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E7E29610A8;
-        Wed,  1 Sep 2021 12:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1630499781;
-        bh=IyBs0Ttn5k1kj2OJJ3KtLLvVATiHqMBn2+zRTIXVeL0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ylGQXxjmUOD/zU0U/M4Y3F0buyxNmofLl4NR1Lu4Ex2sMrfMfF2y6d82j4kM0ynOY
-         bkuV5seN68gJF/W+9V1+BnkhEMkMWV53DvnzWpsa/hw3S85ovxuLawNHZt+BCsqGVw
-         bI/7ldwezixwcTOinLb7u9lbynqM4j357gFrsrGA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianlin Lv <Jianlin.Lv@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Anju T Sudhakar <anju@linux.vnet.ibm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        Guo Ren <guoren@kernel.org>, Kajol Jain <kjain@linux.ibm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        id S231342AbhIAUbf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 1 Sep 2021 16:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230320AbhIAUbc (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 1 Sep 2021 16:31:32 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B6EC061764
+        for <linux-csky@vger.kernel.org>; Wed,  1 Sep 2021 13:30:35 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n202-20020a25d6d3000000b005991fd2f912so644050ybg.20
+        for <linux-csky@vger.kernel.org>; Wed, 01 Sep 2021 13:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=W1dxeMSnjrWamgGdUCD0sYJfSJN9IbPKQnQHF6ba9Zk=;
+        b=IQ3nzeVkBaQ3+GaVFpdDRiwa1F5iA/5Zp/cm/bF8X3UWxA4Toc92TTI+eIn+naxoj4
+         ET+Zt+Rvu2Fr2/xquoH0yyIu1XZMcmT6cboCyI5rR64pNT2lIrUM9xsZrqNNRFzptE9I
+         wsjHcW+VBGjjK0s1f/t7DFUqU3PrzpUZIO7H21qkNMgtq3NBIoSIXL8a6Wi2vk1qkqG1
+         BaUOcKIMQ08Iy5Y7BqvrFMwn+huvKoc2AWIhhSBz+VoHhzJ2fNfVJZIWBlgZKOH4ctt1
+         0w2Bp1svSX94Jl0zODWdtTreSksXnGqUiHiy/S7N6hf8RY5t4uNFQqLBoR2dt7fhnNYr
+         B6yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=W1dxeMSnjrWamgGdUCD0sYJfSJN9IbPKQnQHF6ba9Zk=;
+        b=eC0Xw06KhtBo13YyDDgSUaQ0C2hyxeNAPbxd2rSHU+PgSE/MxxA+M/fj7OJBJOatzC
+         Ft45jir+x+Ky6/AJoNhXUaQbd+FIZoxD9pbNoFRMVCfBTkAKGXVSxK3bs3vGD7A6cIqw
+         BbsG3+AiNjx+PURsuWbjy+5eGEQjRT9tl/WK/8Pvo3tGVxPzMPskzS+T/jufsYRLvFuC
+         7yVoXkY8YRkuGri8Wt++5Zpq4JJ1SZINHPgRw65mHj1u1CxJIqecQ7dmPEKecNSlJsnL
+         +Y+Lj3lp8KNFyuruZhe64FUr+8OVgs2a+vsI40NvGrNUyvHzCV9E7i8p34I09Qy14gKZ
+         vJqg==
+X-Gm-Message-State: AOAM530Pb2ypyFMUUGG1RHHvGRODFNw/rOtCvkN4Ig0/R+f4uJkElggT
+        I4f6wWGLhYM6cBrH8fokdUrcXUqWrbA=
+X-Google-Smtp-Source: ABdhPJztMghe8pf2r0RN3BmnZkigpSEdqe6AO5tWh0SkJaCpcvF1MtRyRWIuMac/iI8RQmjvTQ8oDXGaxcw=
+X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:9935:5a5e:c7b6:e649])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:513:: with SMTP id
+ x19mr1875181ybs.90.1630528234743; Wed, 01 Sep 2021 13:30:34 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  1 Sep 2021 13:30:25 -0700
+Message-Id: <20210901203030.1292304-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
+Subject: [PATCH v3 0/5] KVM: rseq: Fix and a test for a KVM+rseq bug
+From:   Sean Christopherson <seanjc@google.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, iecedge@gmail.com,
-        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Hanjun Guo <guohanjun@huawei.com>
-Subject: [PATCH 5.10 083/103] perf tools: Fix arm64 build error with gcc-11
-Date:   Wed,  1 Sep 2021 14:28:33 +0200
-Message-Id: <20210901122303.343927141@linuxfoundation.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210901122300.503008474@linuxfoundation.org>
-References: <20210901122300.503008474@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Andy Lutomirski <luto@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Jianlin Lv <Jianlin.Lv@arm.com>
+Patch 1 fixes a KVM+rseq bug where KVM's handling of TIF_NOTIFY_RESUME,
+e.g. for task migration, clears the flag without informing rseq and leads
+to stale data in userspace's rseq struct.
 
-commit 067012974c8ae31a8886046df082aeba93592972 upstream.
+Patch 2 is a cleanup to try and make future bugs less likely.  It's also
+a baby step towards moving and renaming tracehook_notify_resume() since
+it has nothing to do with tracing.
 
-gcc version: 11.0.0 20210208 (experimental) (GCC)
+Patch 3 is a fix/cleanup to stop overriding x86's unistd_{32,64}.h when
+the include path (intentionally) omits tools' uapi headers.  KVM's
+selftests do exactly that so that they can pick up the uapi headers from
+the installed kernel headers, and still use various tools/ headers that
+mirror kernel code, e.g. linux/types.h.  This allows the new test in
+patch 4 to reference __NR_rseq without having to manually define it.
 
-Following build error on arm64:
+Patch 4 is a regression test for the KVM+rseq bug.
 
-.......
-In function ‘printf’,
-    inlined from ‘regs_dump__printf’ at util/session.c:1141:3,
-    inlined from ‘regs__printf’ at util/session.c:1169:2:
-/usr/include/aarch64-linux-gnu/bits/stdio2.h:107:10: \
-  error: ‘%-5s’ directive argument is null [-Werror=format-overflow=]
+Patch 5 is a cleanup made possible by patch 3.
 
-107 |   return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt, \
-                __va_arg_pack ());
+Based on commit 835d31d319d9 ("Merge tag 'media/v5.15-1' of ...").
 
-......
-In function ‘fprintf’,
-  inlined from ‘perf_sample__fprintf_regs.isra’ at \
-    builtin-script.c:622:14:
-/usr/include/aarch64-linux-gnu/bits/stdio2.h:100:10: \
-    error: ‘%5s’ directive argument is null [-Werror=format-overflow=]
-  100 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
-  101 |                         __va_arg_pack ());
+v3:
+  - Collect Ack/Review. [Mathieu, Ben]
+  - Add explicit smp_wmb() instead of relying on atomic_inc() to do a full
+    barrier. [Mathieu]
+  - Add lots and lots of comments in the selftest, especially around why
+    the migration thread needs a udelay(). [Mathieu]
+  - Delay between 1us and 10us to reduce the odds of having a hard
+    dependency on arch/kernel behavior.  [Mathieu]
+  - Dropped an s390 change in patch 2 after a rebase to upstream master.
 
-cc1: all warnings being treated as errors
-.......
+v2:
+  - https://lkml.kernel.org/r/20210820225002.310652-1-seanjc@google.com
+  - Don't touch rseq_cs when handling KVM case so that rseq_syscall() will
+    still detect a naughty userspace. [Mathieu]
+  - Use a sequence counter + retry in the test to ensure the process isn't
+    migrated between sched_getcpu() and reading rseq.cpu_id, i.e. to
+    avoid a flaky test. [Mathieu]
+  - Add Mathieu's ack for patch 2.
+  - Add more comments in the test.
 
-This patch fixes Wformat-overflow warnings. Add helper function to
-convert NULL to "unknown".
+v1: https://lkml.kernel.org/r/20210818001210.4073390-1-seanjc@google.com
 
-Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Anju T Sudhakar <anju@linux.vnet.ibm.com>
-Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Kajol Jain <kjain@linux.ibm.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: iecedge@gmail.com
-Cc: linux-csky@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org
-Link: http://lore.kernel.org/lkml/20210218031245.2078492-1-Jianlin.Lv@arm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- tools/perf/arch/arm/include/perf_regs.h     |    2 +-
- tools/perf/arch/arm64/include/perf_regs.h   |    2 +-
- tools/perf/arch/csky/include/perf_regs.h    |    2 +-
- tools/perf/arch/powerpc/include/perf_regs.h |    2 +-
- tools/perf/arch/riscv/include/perf_regs.h   |    2 +-
- tools/perf/arch/s390/include/perf_regs.h    |    2 +-
- tools/perf/arch/x86/include/perf_regs.h     |    2 +-
- tools/perf/util/perf_regs.h                 |    7 +++++++
- 8 files changed, 14 insertions(+), 7 deletions(-)
+Sean Christopherson (5):
+  KVM: rseq: Update rseq when processing NOTIFY_RESUME on xfer to KVM
+    guest
+  entry: rseq: Call rseq_handle_notify_resume() in
+    tracehook_notify_resume()
+  tools: Move x86 syscall number fallbacks to .../uapi/
+  KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration
+    bugs
+  KVM: selftests: Remove __NR_userfaultfd syscall fallback
 
---- a/tools/perf/arch/arm/include/perf_regs.h
-+++ b/tools/perf/arch/arm/include/perf_regs.h
-@@ -15,7 +15,7 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP	PERF_REG_ARM_PC
- #define PERF_REG_SP	PERF_REG_ARM_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_ARM_R0:
---- a/tools/perf/arch/arm64/include/perf_regs.h
-+++ b/tools/perf/arch/arm64/include/perf_regs.h
-@@ -15,7 +15,7 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP	PERF_REG_ARM64_PC
- #define PERF_REG_SP	PERF_REG_ARM64_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_ARM64_X0:
---- a/tools/perf/arch/csky/include/perf_regs.h
-+++ b/tools/perf/arch/csky/include/perf_regs.h
-@@ -15,7 +15,7 @@
- #define PERF_REG_IP	PERF_REG_CSKY_PC
- #define PERF_REG_SP	PERF_REG_CSKY_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_CSKY_A0:
---- a/tools/perf/arch/powerpc/include/perf_regs.h
-+++ b/tools/perf/arch/powerpc/include/perf_regs.h
-@@ -73,7 +73,7 @@ static const char *reg_names[] = {
- 	[PERF_REG_POWERPC_SIER3] = "sier3",
- };
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	return reg_names[id];
- }
---- a/tools/perf/arch/riscv/include/perf_regs.h
-+++ b/tools/perf/arch/riscv/include/perf_regs.h
-@@ -19,7 +19,7 @@
- #define PERF_REG_IP	PERF_REG_RISCV_PC
- #define PERF_REG_SP	PERF_REG_RISCV_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_RISCV_PC:
---- a/tools/perf/arch/s390/include/perf_regs.h
-+++ b/tools/perf/arch/s390/include/perf_regs.h
-@@ -14,7 +14,7 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP PERF_REG_S390_PC
- #define PERF_REG_SP PERF_REG_S390_R15
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_S390_R0:
---- a/tools/perf/arch/x86/include/perf_regs.h
-+++ b/tools/perf/arch/x86/include/perf_regs.h
-@@ -23,7 +23,7 @@ void perf_regs_load(u64 *regs);
- #define PERF_REG_IP PERF_REG_X86_IP
- #define PERF_REG_SP PERF_REG_X86_SP
- 
--static inline const char *perf_reg_name(int id)
-+static inline const char *__perf_reg_name(int id)
- {
- 	switch (id) {
- 	case PERF_REG_X86_AX:
---- a/tools/perf/util/perf_regs.h
-+++ b/tools/perf/util/perf_regs.h
-@@ -33,6 +33,13 @@ extern const struct sample_reg sample_re
- 
- int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
- 
-+static inline const char *perf_reg_name(int id)
-+{
-+	const char *reg_name = __perf_reg_name(id);
-+
-+	return reg_name ?: "unknown";
-+}
-+
- #else
- #define PERF_REGS_MASK	0
- #define PERF_REGS_MAX	0
+ arch/arm/kernel/signal.c                      |   1 -
+ arch/arm64/kernel/signal.c                    |   1 -
+ arch/csky/kernel/signal.c                     |   4 +-
+ arch/mips/kernel/signal.c                     |   4 +-
+ arch/powerpc/kernel/signal.c                  |   4 +-
+ include/linux/tracehook.h                     |   2 +
+ kernel/entry/common.c                         |   4 +-
+ kernel/rseq.c                                 |  14 +-
+ .../x86/include/{ => uapi}/asm/unistd_32.h    |   0
+ .../x86/include/{ => uapi}/asm/unistd_64.h    |   3 -
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ tools/testing/selftests/kvm/rseq_test.c       | 236 ++++++++++++++++++
+ 13 files changed, 257 insertions(+), 20 deletions(-)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_32.h (100%)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_64.h (83%)
+ create mode 100644 tools/testing/selftests/kvm/rseq_test.c
 
+-- 
+2.33.0.153.gba50c8fa24-goog
 
