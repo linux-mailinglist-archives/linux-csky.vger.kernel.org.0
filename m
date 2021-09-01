@@ -2,223 +2,222 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D575F3FA780
-	for <lists+linux-csky@lfdr.de>; Sat, 28 Aug 2021 22:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CF13FDB6D
+	for <lists+linux-csky@lfdr.de>; Wed,  1 Sep 2021 15:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbhH1UPe (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 28 Aug 2021 16:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbhH1UPe (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 28 Aug 2021 16:15:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D88C061756;
-        Sat, 28 Aug 2021 13:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5eM46mJiedShkh/qp5ZYvdDK6rHNXNQh8cRsw3NT0wc=; b=PCb7ByQnKwg1Y1b5amksoxMC18
-        750jnriAADg3ZMPkZsQ1S64I3SWooq8RAWKHR6gvS8yq6sBTJRW/xpIDhQdtdqFGSMkbRqvzaoVOX
-        RbHrtpxkLKFZ4QPToWsR2xgD4PPVFivtUlICzQb4AuxKKXG0q5V1I06RklmKdc6wzT/DQawC2aUYR
-        bAQTfuPsxVqPKCnKmPQWMt4oHoj06J+I7g5V81Vo50dn/UBfFPxoTMXUOcQzRt6ogYKOXQM3TuwyX
-        U9SU7AVxzEm+BWC1B9V1zMc+Wy5pDKewEdcHo9SqQqbovYL6/IUQxLHaa9mf9upz2wZvb/AUhs050
-        1IIDrKxg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mK4hs-00Dw8H-MQ; Sat, 28 Aug 2021 20:13:43 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1A47F9868D7; Sat, 28 Aug 2021 22:13:36 +0200 (CEST)
-Date:   Sat, 28 Aug 2021 22:13:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        id S1344987AbhIAMll (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 1 Sep 2021 08:41:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344959AbhIAMkQ (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 1 Sep 2021 08:40:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E7E29610A8;
+        Wed,  1 Sep 2021 12:36:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1630499781;
+        bh=IyBs0Ttn5k1kj2OJJ3KtLLvVATiHqMBn2+zRTIXVeL0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ylGQXxjmUOD/zU0U/M4Y3F0buyxNmofLl4NR1Lu4Ex2sMrfMfF2y6d82j4kM0ynOY
+         bkuV5seN68gJF/W+9V1+BnkhEMkMWV53DvnzWpsa/hw3S85ovxuLawNHZt+BCsqGVw
+         bI/7ldwezixwcTOinLb7u9lbynqM4j357gFrsrGA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jianlin Lv <Jianlin.Lv@arm.com>,
+        John Garry <john.garry@huawei.com>,
         Jiri Olsa <jolsa@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Anju T Sudhakar <anju@linux.vnet.ibm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+        Guo Ren <guoren@kernel.org>, Kajol Jain <kjain@linux.ibm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Namhyung Kim <namhyung@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, iecedge@gmail.com,
         linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Artem Kashkanov <artem.kashkanov@intel.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>
-Subject: Re: [PATCH v2 00/13] perf: KVM: Fix, optimize, and clean up callbacks
-Message-ID: <20210828201336.GD4353@worktop.programming.kicks-ass.net>
-References: <20210828003558.713983-1-seanjc@google.com>
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Hanjun Guo <guohanjun@huawei.com>
+Subject: [PATCH 5.10 083/103] perf tools: Fix arm64 build error with gcc-11
+Date:   Wed,  1 Sep 2021 14:28:33 +0200
+Message-Id: <20210901122303.343927141@linuxfoundation.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210901122300.503008474@linuxfoundation.org>
+References: <20210901122300.503008474@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210828003558.713983-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 05:35:45PM -0700, Sean Christopherson wrote:
-> Like Xu (2):
->   perf/core: Rework guest callbacks to prepare for static_call support
->   perf/core: Use static_call to optimize perf_guest_info_callbacks
-> 
-> Sean Christopherson (11):
->   perf: Ensure perf_guest_cbs aren't reloaded between !NULL check and
->     deref
->   KVM: x86: Register perf callbacks after calling vendor's
->     hardware_setup()
->   KVM: x86: Register Processor Trace interrupt hook iff PT enabled in
->     guest
->   perf: Stop pretending that perf can handle multiple guest callbacks
->   perf: Force architectures to opt-in to guest callbacks
->   KVM: x86: Drop current_vcpu for kvm_running_vcpu + kvm_arch_vcpu
->     variable
->   KVM: x86: More precisely identify NMI from guest when handling PMI
->   KVM: Move x86's perf guest info callbacks to generic KVM
->   KVM: x86: Move Intel Processor Trace interrupt handler to vmx.c
->   KVM: arm64: Convert to the generic perf callbacks
->   KVM: arm64: Drop perf.c and fold its tiny bits of code into arm.c /
->     pmu.c
+From: Jianlin Lv <Jianlin.Lv@arm.com>
 
-Lets keep the whole intel_pt crud inside x86...
+commit 067012974c8ae31a8886046df082aeba93592972 upstream.
 
+gcc version: 11.0.0 20210208 (experimental) (GCC)
+
+Following build error on arm64:
+
+.......
+In function ‘printf’,
+    inlined from ‘regs_dump__printf’ at util/session.c:1141:3,
+    inlined from ‘regs__printf’ at util/session.c:1169:2:
+/usr/include/aarch64-linux-gnu/bits/stdio2.h:107:10: \
+  error: ‘%-5s’ directive argument is null [-Werror=format-overflow=]
+
+107 |   return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt, \
+                __va_arg_pack ());
+
+......
+In function ‘fprintf’,
+  inlined from ‘perf_sample__fprintf_regs.isra’ at \
+    builtin-script.c:622:14:
+/usr/include/aarch64-linux-gnu/bits/stdio2.h:100:10: \
+    error: ‘%5s’ directive argument is null [-Werror=format-overflow=]
+  100 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
+  101 |                         __va_arg_pack ());
+
+cc1: all warnings being treated as errors
+.......
+
+This patch fixes Wformat-overflow warnings. Add helper function to
+convert NULL to "unknown".
+
+Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
+Reviewed-by: John Garry <john.garry@huawei.com>
+Acked-by: Jiri Olsa <jolsa@redhat.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Anju T Sudhakar <anju@linux.vnet.ibm.com>
+Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: iecedge@gmail.com
+Cc: linux-csky@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Link: http://lore.kernel.org/lkml/20210218031245.2078492-1-Jianlin.Lv@arm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-Index: linux-2.6/arch/x86/events/core.c
-===================================================================
---- linux-2.6.orig/arch/x86/events/core.c
-+++ linux-2.6/arch/x86/events/core.c
-@@ -92,7 +92,7 @@ DEFINE_STATIC_CALL_RET0(x86_pmu_guest_ge
+ tools/perf/arch/arm/include/perf_regs.h     |    2 +-
+ tools/perf/arch/arm64/include/perf_regs.h   |    2 +-
+ tools/perf/arch/csky/include/perf_regs.h    |    2 +-
+ tools/perf/arch/powerpc/include/perf_regs.h |    2 +-
+ tools/perf/arch/riscv/include/perf_regs.h   |    2 +-
+ tools/perf/arch/s390/include/perf_regs.h    |    2 +-
+ tools/perf/arch/x86/include/perf_regs.h     |    2 +-
+ tools/perf/util/perf_regs.h                 |    7 +++++++
+ 8 files changed, 14 insertions(+), 7 deletions(-)
+
+--- a/tools/perf/arch/arm/include/perf_regs.h
++++ b/tools/perf/arch/arm/include/perf_regs.h
+@@ -15,7 +15,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP	PERF_REG_ARM_PC
+ #define PERF_REG_SP	PERF_REG_ARM_SP
  
- DEFINE_STATIC_CALL_RET0(x86_guest_state, *(perf_guest_cbs->state));
- DEFINE_STATIC_CALL_RET0(x86_guest_get_ip, *(perf_guest_cbs->get_ip));
--DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
-+DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, unsigned int (*)(void));
- 
- void arch_perf_update_guest_cbs(struct perf_guest_info_callbacks *guest_cbs)
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
  {
-@@ -103,14 +103,6 @@ void arch_perf_update_guest_cbs(struct p
- 		static_call_update(x86_guest_state, (void *)&__static_call_return0);
- 		static_call_update(x86_guest_get_ip, (void *)&__static_call_return0);
- 	}
--
--	/* Implementing ->handle_intel_pt_intr is optional. */
--	if (guest_cbs && guest_cbs->handle_intel_pt_intr)
--		static_call_update(x86_guest_handle_intel_pt_intr,
--				   guest_cbs->handle_intel_pt_intr);
--	else
--		static_call_update(x86_guest_handle_intel_pt_intr,
--				   (void *)&__static_call_return0);
- }
+ 	switch (id) {
+ 	case PERF_REG_ARM_R0:
+--- a/tools/perf/arch/arm64/include/perf_regs.h
++++ b/tools/perf/arch/arm64/include/perf_regs.h
+@@ -15,7 +15,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP	PERF_REG_ARM64_PC
+ #define PERF_REG_SP	PERF_REG_ARM64_SP
  
- u64 __read_mostly hw_cache_event_ids
-Index: linux-2.6/arch/x86/events/intel/core.c
-===================================================================
---- linux-2.6.orig/arch/x86/events/intel/core.c
-+++ linux-2.6/arch/x86/events/intel/core.c
-@@ -2782,7 +2782,7 @@ static void intel_pmu_reset(void)
- 	local_irq_restore(flags);
- }
- 
--DECLARE_STATIC_CALL(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
-+DECLARE_STATIC_CALL(x86_guest_handle_intel_pt_intr, unsigned int (*)(void));
- 
- static int handle_pmi_common(struct pt_regs *regs, u64 status)
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
  {
-Index: linux-2.6/arch/x86/kvm/x86.c
-===================================================================
---- linux-2.6.orig/arch/x86/kvm/x86.c
-+++ linux-2.6/arch/x86/kvm/x86.c
-@@ -10960,7 +10960,14 @@ int kvm_arch_hardware_setup(void *opaque
- 	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
- 	kvm_ops_static_call_update();
+ 	switch (id) {
+ 	case PERF_REG_ARM64_X0:
+--- a/tools/perf/arch/csky/include/perf_regs.h
++++ b/tools/perf/arch/csky/include/perf_regs.h
+@@ -15,7 +15,7 @@
+ #define PERF_REG_IP	PERF_REG_CSKY_PC
+ #define PERF_REG_SP	PERF_REG_CSKY_SP
  
--	kvm_register_perf_callbacks(ops->handle_intel_pt_intr);
-+	kvm_register_perf_callbacks();
-+	if (ops->handle_intel_pt_intr) {
-+		static_call_update(x86_guest_handle_intel_pt_intr,
-+				   ops->handle_intel_pt_intr);
-+	} else {
-+		static_call_update(x86_guest_handle_intel_pt_intr,
-+				   (void *)&__static_call_return0);
-+	}
- 
- 	if (!kvm_cpu_cap_has(X86_FEATURE_XSAVES))
- 		supported_xss = 0;
-Index: linux-2.6/include/linux/perf_event.h
-===================================================================
---- linux-2.6.orig/include/linux/perf_event.h
-+++ linux-2.6/include/linux/perf_event.h
-@@ -32,7 +32,6 @@
- struct perf_guest_info_callbacks {
- 	unsigned int			(*state)(void);
- 	unsigned long			(*get_ip)(void);
--	unsigned int			(*handle_intel_pt_intr)(void);
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_CSKY_A0:
+--- a/tools/perf/arch/powerpc/include/perf_regs.h
++++ b/tools/perf/arch/powerpc/include/perf_regs.h
+@@ -73,7 +73,7 @@ static const char *reg_names[] = {
+ 	[PERF_REG_POWERPC_SIER3] = "sier3",
  };
  
- #ifdef CONFIG_HAVE_HW_BREAKPOINT
-Index: linux-2.6/virt/kvm/kvm_main.c
-===================================================================
---- linux-2.6.orig/virt/kvm/kvm_main.c
-+++ linux-2.6/virt/kvm/kvm_main.c
-@@ -5374,12 +5374,10 @@ static unsigned long kvm_guest_get_ip(vo
- static struct perf_guest_info_callbacks kvm_guest_cbs = {
- 	.state			= kvm_guest_state,
- 	.get_ip			= kvm_guest_get_ip,
--	.handle_intel_pt_intr	= NULL,
- };
- 
--void kvm_register_perf_callbacks(unsigned int (*pt_intr_handler)(void))
-+void kvm_register_perf_callbacks(void)
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
  {
--	kvm_guest_cbs.handle_intel_pt_intr = pt_intr_handler;
- 	perf_register_guest_info_callbacks(&kvm_guest_cbs);
+ 	return reg_names[id];
  }
- #endif
-Index: linux-2.6/arch/arm64/kvm/arm.c
-===================================================================
---- linux-2.6.orig/arch/arm64/kvm/arm.c
-+++ linux-2.6/arch/arm64/kvm/arm.c
-@@ -1749,7 +1749,7 @@ static int init_subsystems(void)
- 		goto out;
+--- a/tools/perf/arch/riscv/include/perf_regs.h
++++ b/tools/perf/arch/riscv/include/perf_regs.h
+@@ -19,7 +19,7 @@
+ #define PERF_REG_IP	PERF_REG_RISCV_PC
+ #define PERF_REG_SP	PERF_REG_RISCV_SP
  
- 	kvm_pmu_init();
--	kvm_register_perf_callbacks(NULL);
-+	kvm_register_perf_callbacks();
- 
- 	kvm_sys_reg_table_init();
- 
-Index: linux-2.6/include/linux/kvm_host.h
-===================================================================
---- linux-2.6.orig/include/linux/kvm_host.h
-+++ linux-2.6/include/linux/kvm_host.h
-@@ -1121,7 +1121,7 @@ static inline bool kvm_arch_intc_initial
- #ifdef __KVM_WANT_PERF_CALLBACKS
- unsigned long kvm_arch_vcpu_get_ip(struct kvm_vcpu *vcpu);
- 
--void kvm_register_perf_callbacks(unsigned int (*pt_intr_handler)(void));
-+void kvm_register_perf_callbacks(void);
- static inline void kvm_unregister_perf_callbacks(void)
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
  {
- 	perf_unregister_guest_info_callbacks();
+ 	switch (id) {
+ 	case PERF_REG_RISCV_PC:
+--- a/tools/perf/arch/s390/include/perf_regs.h
++++ b/tools/perf/arch/s390/include/perf_regs.h
+@@ -14,7 +14,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP PERF_REG_S390_PC
+ #define PERF_REG_SP PERF_REG_S390_R15
+ 
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_S390_R0:
+--- a/tools/perf/arch/x86/include/perf_regs.h
++++ b/tools/perf/arch/x86/include/perf_regs.h
+@@ -23,7 +23,7 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REG_IP PERF_REG_X86_IP
+ #define PERF_REG_SP PERF_REG_X86_SP
+ 
+-static inline const char *perf_reg_name(int id)
++static inline const char *__perf_reg_name(int id)
+ {
+ 	switch (id) {
+ 	case PERF_REG_X86_AX:
+--- a/tools/perf/util/perf_regs.h
++++ b/tools/perf/util/perf_regs.h
+@@ -33,6 +33,13 @@ extern const struct sample_reg sample_re
+ 
+ int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
+ 
++static inline const char *perf_reg_name(int id)
++{
++	const char *reg_name = __perf_reg_name(id);
++
++	return reg_name ?: "unknown";
++}
++
+ #else
+ #define PERF_REGS_MASK	0
+ #define PERF_REGS_MAX	0
+
+
