@@ -2,52 +2,52 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557E540ECB9
-	for <lists+linux-csky@lfdr.de>; Thu, 16 Sep 2021 23:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E37840ECBF
+	for <lists+linux-csky@lfdr.de>; Thu, 16 Sep 2021 23:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbhIPVjf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 16 Sep 2021 17:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33480 "EHLO
+        id S235388AbhIPVm1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 16 Sep 2021 17:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbhIPVjJ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 16 Sep 2021 17:39:09 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9BDC061766
-        for <linux-csky@vger.kernel.org>; Thu, 16 Sep 2021 14:37:48 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id j1so5498154pjv.3
-        for <linux-csky@vger.kernel.org>; Thu, 16 Sep 2021 14:37:48 -0700 (PDT)
+        with ESMTP id S234566AbhIPVm1 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 16 Sep 2021 17:42:27 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CF7C061766
+        for <linux-csky@vger.kernel.org>; Thu, 16 Sep 2021 14:41:06 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id n2so2182701plk.12
+        for <linux-csky@vger.kernel.org>; Thu, 16 Sep 2021 14:41:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=HRmclIUd+IXQYZmIP/8HeB41v2sSRX/lMU3hqPZHzVc=;
-        b=Y5uK5usJpzBqYTtETIZzqzrlpEcCGhV1j72nBokzqPxRHfzfqcv9p8/VHqtByMLMa0
-         7qnKk2mXRWZ/QVGLWlLUF5fmAtrANk6SVsEq1yvp8Onbj0l+EW2VdhbQ4ssaqq3XvXG+
-         UIKM1VSQcdm2YELLCqHTNz0YRbJwYR+FmuDGCbuEaAumq4dsS2jCwrqpahV4jYDPFBXn
-         +EFOprbkB9HNvtLDp/UkAPEYfLhp0RIxcvNz5Sev+mrGTECnwFfzaEXBv/uyDuKWSXl9
-         MKEl69zQIthFjeiLPFYtD50iSHjTDfTtVEJ8PfVuNwd6e3VXHqiBdyMOjirUU+xrvFcM
-         TwGA==
+        bh=H6MB2ODxA8ncTb3aji91NU1uUQ9q1AebxOl6ENeKyck=;
+        b=MXQC+ZfLxlKAl3MhEJW1BaTu7x3eZBr25vDIOP4P1K/hKKNsBxR9bYAbQrcXeqx0IT
+         UwrZDJawrFH60RbkF94BswFhIwo0cou0aN+gLacubbeU6IcTTMJrkdfHEYWn3Q3CVBfY
+         FWOlqrCFMP2DA28EATBAk/sg6Cxl8pCwP9qJHgGrwzQTOnAwwW0mxDrD/8RBAtDi8Sen
+         7O4AbiMouCC1KnoWzOLrohcS9Vtb2Dd0sBl4eKlMlTi8+NrzRnGujJOfnGMsmwaTYUXB
+         tHZDCMU2HvcsbXJF8DOiqaPVnBEOB3kiFk+1tNf5dSr4/Tt9/mMCbKmuD1xBAf0iTv/g
+         rERQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=HRmclIUd+IXQYZmIP/8HeB41v2sSRX/lMU3hqPZHzVc=;
-        b=1aYqjzgQUwQYA0ueWNdRg8Q/iC/d+h7izZW4zipqAfV6YKvMU0w2El/tr0rY5fWyBV
-         Qs+2z6RX5TH3YDn77MZk/mfkMtH3JHjsUP5y2D44gdSpOf+zlWkFvdViM6MIIRd7B+8w
-         yDLSbSRU7dZaX0gmxuEHc9nyhaHKuThTfhEpPWSJ9P4MUmXQpA1ECM3WYOb+e/m7g1C6
-         wyuEm2ejNSAsadIZhYxkUhXnyQ9/OaOuJUO1cqo6smLZMygxuyG4Ce4ZTx1mh7iJjLuR
-         rmtCssjuEM05QxuiiatEMIeScFP7sCqpQTBEMO2soZF9ghh5+5dQ63k19NJq6QCrTFtS
-         oW/Q==
-X-Gm-Message-State: AOAM532xrgzqLaZr3HqeAbQzIfG1l7jz/Wjt1HBy4snswz5fIT7vuYHq
-        TZgHdboHZ6eZ45IwGWH15J+HLA==
-X-Google-Smtp-Source: ABdhPJxrNs7jIZy34jmkRTyON4Y+9pNnsbkx7GECTLo7e1rXLwAWohi0Xxo5Jb11PEVRFoL9wO4HSQ==
-X-Received: by 2002:a17:90b:1291:: with SMTP id fw17mr6609537pjb.135.1631828268138;
-        Thu, 16 Sep 2021 14:37:48 -0700 (PDT)
+        bh=H6MB2ODxA8ncTb3aji91NU1uUQ9q1AebxOl6ENeKyck=;
+        b=v5Ip/A+/fEvqqz14gV7tVvICaGhZEVmA8l34u8m2x6VqIHIWRD3lV4bisR2IGPD1Xa
+         7gpH2qiO0Q2+V9BFc/Bs3aKbMly3PTx/fFr+ZK+Y/rZyPukMJIP/OcDQuVhyy/f4KPZX
+         tBrhPmVzNOaE1vxq4E+6ZtsQ26RK07RbNmyG1mgZ6VWUdsXRKt0CAGo2h6hiMQdZXzVz
+         2DhQaoiqre92O5vyITmzHZ048EDbGl0jGLyd84UzMiLicg8NQSrooXni49SXCCj7nVie
+         OBOgDJcuWk/GXDoM4iul7RGChJXN0vxOIU6Bes8DFHqk+AQSDVlOR0jzrRIyMHgoVXYn
+         wDyQ==
+X-Gm-Message-State: AOAM5315Nvy6wd1HiiDRwaX7b5B9e9vgB2YH/KMc91Cc5V63TkuDfM+S
+        pcUKh1X0KNxw4K9l+Y2xlYstNg==
+X-Google-Smtp-Source: ABdhPJyEB8CLbdwiUNdfZdvrZtOKbQbkduopskaqSrtZd3BkA7cXNgyeY28844ULJzTSWyVMUXnICw==
+X-Received: by 2002:a17:903:244e:b0:13c:802d:92c with SMTP id l14-20020a170903244e00b0013c802d092cmr6486996pls.78.1631828465371;
+        Thu, 16 Sep 2021 14:41:05 -0700 (PDT)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t15sm4013977pgk.13.2021.09.16.14.37.47
+        by smtp.gmail.com with ESMTPSA id z11sm4163558pff.144.2021.09.16.14.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Sep 2021 14:37:47 -0700 (PDT)
-Date:   Thu, 16 Sep 2021 21:37:43 +0000
+        Thu, 16 Sep 2021 14:41:04 -0700 (PDT)
+Date:   Thu, 16 Sep 2021 21:41:01 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Ingo Molnar <mingo@redhat.com>,
@@ -86,67 +86,55 @@ Cc:     Ingo Molnar <mingo@redhat.com>,
         Artem Kashkanov <artem.kashkanov@intel.com>,
         Like Xu <like.xu.linux@gmail.com>,
         Zhu Lingshan <lingshan.zhu@intel.com>
-Subject: Re: [PATCH v2 00/13] perf: KVM: Fix, optimize, and clean up callbacks
-Message-ID: <YUO5J/jTMa2KGbsq@google.com>
+Subject: Re: [PATCH v2 01/13] perf: Ensure perf_guest_cbs aren't reloaded
+ between !NULL check and deref
+Message-ID: <YUO57TlEGlUk2Q03@google.com>
 References: <20210828003558.713983-1-seanjc@google.com>
- <20210828201336.GD4353@worktop.programming.kicks-ass.net>
+ <20210828003558.713983-2-seanjc@google.com>
+ <20210828194421.GB4353@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210828201336.GD4353@worktop.programming.kicks-ass.net>
+In-Reply-To: <20210828194421.GB4353@worktop.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 On Sat, Aug 28, 2021, Peter Zijlstra wrote:
-> On Fri, Aug 27, 2021 at 05:35:45PM -0700, Sean Christopherson wrote:
-> > Like Xu (2):
-> >   perf/core: Rework guest callbacks to prepare for static_call support
-> >   perf/core: Use static_call to optimize perf_guest_info_callbacks
-> > 
-> > Sean Christopherson (11):
-> >   perf: Ensure perf_guest_cbs aren't reloaded between !NULL check and
-> >     deref
-> >   KVM: x86: Register perf callbacks after calling vendor's
-> >     hardware_setup()
-> >   KVM: x86: Register Processor Trace interrupt hook iff PT enabled in
-> >     guest
-> >   perf: Stop pretending that perf can handle multiple guest callbacks
-> >   perf: Force architectures to opt-in to guest callbacks
-> >   KVM: x86: Drop current_vcpu for kvm_running_vcpu + kvm_arch_vcpu
-> >     variable
-> >   KVM: x86: More precisely identify NMI from guest when handling PMI
-> >   KVM: Move x86's perf guest info callbacks to generic KVM
-> >   KVM: x86: Move Intel Processor Trace interrupt handler to vmx.c
-> >   KVM: arm64: Convert to the generic perf callbacks
-> >   KVM: arm64: Drop perf.c and fold its tiny bits of code into arm.c /
-> >     pmu.c
+> On Fri, Aug 27, 2021 at 05:35:46PM -0700, Sean Christopherson wrote:
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index 464917096e73..2126f6327321 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -6491,14 +6491,19 @@ struct perf_guest_info_callbacks *perf_guest_cbs;
+> >  
+> >  int perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
+> >  {
+> > -	perf_guest_cbs = cbs;
+> > +	if (WARN_ON_ONCE(perf_guest_cbs))
+> > +		return -EBUSY;
+> > +
+> > +	WRITE_ONCE(perf_guest_cbs, cbs);
+> > +	synchronize_rcu();
+> 
+> You're waiting for all NULL users to go away? :-) IOW, we can do without
+> this synchronize_rcu() call.
 
-Argh, sorry, I somehow managed to miss all of your replies.  I'll get back to
-this series next week.  Thanks for the quick response!
+Doh, right.  I was thinking KVM needed to wait for in-progress NMI to exit to
+ensure guest PT interrupts are handled correctly, but obviously the NMI handler
+needs to exit for that CPU to get into a guest...
 
-> Lets keep the whole intel_pt crud inside x86...
+> >  	return 0;
+> >  }
+> >  EXPORT_SYMBOL_GPL(perf_register_guest_info_callbacks);
+> >  
+> >  int perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)
+> >  {
+> > -	perf_guest_cbs = NULL;
+> 
+> 	if (WARN_ON_ONCE(perf_guest_cbs != cbs))
+> 		return -EBUSY;
+> 
+> ?
 
-In theory, I like the idea of burying intel_pt inside x86 (and even in Intel+VMX code
-for the most part), but the actual implementation is a bit gross.  Because of the
-whole "KVM can be a module" thing, either the static call and __static_call_return0
-would need to be exported, or a new register/unregister pair would have to be exported.
-
-The unregister path would also need its own synchronize_rcu().  In general, I
-don't love duplicating the logic, but it's not the end of the world.
-
-Either way works for me.  Paolo or Peter, do either of you have a preference?
-
-> ---
-> Index: linux-2.6/arch/x86/events/core.c
-> ===================================================================
-> --- linux-2.6.orig/arch/x86/events/core.c
-> +++ linux-2.6/arch/x86/events/core.c
-> @@ -92,7 +92,7 @@ DEFINE_STATIC_CALL_RET0(x86_pmu_guest_ge
->  
->  DEFINE_STATIC_CALL_RET0(x86_guest_state, *(perf_guest_cbs->state));
->  DEFINE_STATIC_CALL_RET0(x86_guest_get_ip, *(perf_guest_cbs->get_ip));
-> -DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
-> +DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, unsigned int (*)(void));
-
-FWIW, the param needs to be a raw function, not a function pointer. 
+Works for me.  I guess I'm more optimistic about people not being morons :-)
