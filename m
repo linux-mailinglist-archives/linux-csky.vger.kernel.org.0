@@ -2,104 +2,97 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C1240F162
-	for <lists+linux-csky@lfdr.de>; Fri, 17 Sep 2021 06:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2197440F238
+	for <lists+linux-csky@lfdr.de>; Fri, 17 Sep 2021 08:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244688AbhIQEkS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 17 Sep 2021 00:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244662AbhIQEkK (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 17 Sep 2021 00:40:10 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D1FC061574;
-        Thu, 16 Sep 2021 21:38:49 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id j66so12235567oih.12;
-        Thu, 16 Sep 2021 21:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iHKwZS+aimcKzvLWTq+aBcYwRb/TW8RNbTdMXIa9CSw=;
-        b=d8ELRas3EOVWZpf+bhTwTqVH24OSAlOW7uDbIDF3QA5TvhvQQjLpumarjo1xKSMSD1
-         Ji/J6FLRBGRW4Ut787UtGnPIxOS/xYBc1wYbqX9Re3L06dnhHXj81Ab23GgeEqwaCmsr
-         MXEpIskptKZ9d1e9d9B/QLAFakM8/MQBrBPeOF+IWH7l90EOq6swDS726wdELYd3WyUL
-         qBn3tbmcAkG2rjCrjcp7k9gOmMWEERJ8EQcjymcMscfiGYffhrG5J4boBMgLCoksFcae
-         GTK3HE8XXfQTiZD3J4iGj8MLA3taDnPt1DsKvjzOgs5lBGmMOsfgLnB5GXZ+ZaJODsl9
-         bBdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=iHKwZS+aimcKzvLWTq+aBcYwRb/TW8RNbTdMXIa9CSw=;
-        b=oKhBMIyjzUNe/I93x8xrqeW09uYvcHIDLGblJ7K1KgRzNdjSewZb2SBaJex3YdXOB3
-         MaQ+JWfPjy4K7OYWHgDcKYlqUwhU4Jwg0Xc0ph5bm/BO8JA0EtcILEuDlJlJZMkm2Wkr
-         f0imucW8GH3hdll+96ZOkn1/Ak6naraAFrIAq9GiT+yFLNLre3HYsJb3hp1FpewTZd8Y
-         SgAPCcEzjA1DCpTXaec4RhPgc3YztAkRx+2xQCc87yQvhe0EKpG7e7s6EuNzCSq88Og6
-         qHOs8IiakTgPqFNnWvgFzj6HkslZ1/+th5ld2pJdwHOmQvmdW03jso2KFSg6n1LCYsS5
-         GS4g==
-X-Gm-Message-State: AOAM533LJ5MT2WWrnrvbR3vai0w45DiQTmkViggUb3YBAKX2eqYbQQxO
-        evxYyh2Kh+rQ40C31MfHAioTSORd3W4=
-X-Google-Smtp-Source: ABdhPJx4QnYFReu0mXkc43H5vzSp7fNs0ddsBsga+bNHSX1vHzAqS8kpoWYYSU0qeE7uOD9YxfAtIQ==
-X-Received: by 2002:aca:5d04:: with SMTP id r4mr11744366oib.94.1631853528576;
-        Thu, 16 Sep 2021 21:38:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n23sm607816otj.70.2021.09.16.21.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Sep 2021 21:38:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH 3/3] csky: Make HAVE_TCM depend on !COMPILE_TEST
-Date:   Thu, 16 Sep 2021 21:38:38 -0700
-Message-Id: <20210917043838.3514789-4-linux@roeck-us.net>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210917043838.3514789-1-linux@roeck-us.net>
-References: <20210917043838.3514789-1-linux@roeck-us.net>
+        id S231555AbhIQGV1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 17 Sep 2021 02:21:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37702 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229474AbhIQGV1 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 17 Sep 2021 02:21:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BB0436103C;
+        Fri, 17 Sep 2021 06:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631859605;
+        bh=1Nit0NWU/BQMpjN9xQFwjbTFQ11n4UzaM6ahT36Z4Uk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uTQdBwEQH9nApxqG5lIRvQ9A8WPX8pMnVeTXmYyVA2q1ta9xHr3TrXvEkYO1ECCXy
+         6tLW0pikhSOoNrKJVWePELS5OxJCsiHgqXEIY9KnTResBpFlJufc/XBpzfmJQlEnE8
+         D1ZDEG0jfNMxYj2YsPVNH0Hq765xIBossyhFFP5vthI0So48eJL2PUVVS4p0LdeVC+
+         TLf+70cmSub0Ub1y9/D80PZwodhb7F30ar8GvcsYJ8QlEtgWmAckg0HOLiYZ4xnuZM
+         nKbtPlM/iPKMmo1xN6f21PjmyA/rfCQKcyqEOkhE6hURlhYbqQ40uZvGZkqY+JH2CP
+         /BAyXS5IUO2lg==
+Received: by mail-lf1-f48.google.com with SMTP id b15so10004696lfe.7;
+        Thu, 16 Sep 2021 23:20:05 -0700 (PDT)
+X-Gm-Message-State: AOAM530EEh43gpxIk6Vtp1pGlqf6igIv1BEa96Nf74JwyBebgVokZFs3
+        4r57XdInuXAxwS7qyBgRtUiG4+T0QEozfivzs78=
+X-Google-Smtp-Source: ABdhPJxKYK7g0ZGUrJmwoweTscq2mCURTlX+AFb0KObcnOEzLmsbXzw8+xBrNthTJH05apDukakqxh3DKcOq8K2cZ7U=
+X-Received: by 2002:a05:6512:44a:: with SMTP id y10mr6758095lfk.60.1631859604056;
+ Thu, 16 Sep 2021 23:20:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210917043838.3514789-1-linux@roeck-us.net> <20210917043838.3514789-4-linux@roeck-us.net>
+In-Reply-To: <20210917043838.3514789-4-linux@roeck-us.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 17 Sep 2021 14:19:53 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSqKZKnUw-UQt5Tiag3T0D04dBW9FijaxPX7Q985=+j7w@mail.gmail.com>
+Message-ID: <CAJF2gTSqKZKnUw-UQt5Tiag3T0D04dBW9FijaxPX7Q985=+j7w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] csky: Make HAVE_TCM depend on !COMPILE_TEST
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Building csky:allmodconfig results in the following build errors.
+Acked, thx. It'll in next-tree.
 
-arch/csky/mm/tcm.c:9:2: error:
-		#error "You should define ITCM_RAM_BASE"
-    9 | #error "You should define ITCM_RAM_BASE"
-      |  ^~~~~
-arch/csky/mm/tcm.c:14:2: error:
-		#error "You should define DTCM_RAM_BASE"
-   14 | #error "You should define DTCM_RAM_BASE"
-      |  ^~~~~
-arch/csky/mm/tcm.c:18:2: error:
-		#error "You should define correct DTCM_RAM_BASE"
-   18 | #error "You should define correct DTCM_RAM_BASE"
+On Fri, Sep 17, 2021 at 12:38 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Building csky:allmodconfig results in the following build errors.
+>
+> arch/csky/mm/tcm.c:9:2: error:
+>                 #error "You should define ITCM_RAM_BASE"
+>     9 | #error "You should define ITCM_RAM_BASE"
+>       |  ^~~~~
+> arch/csky/mm/tcm.c:14:2: error:
+>                 #error "You should define DTCM_RAM_BASE"
+>    14 | #error "You should define DTCM_RAM_BASE"
+>       |  ^~~~~
+> arch/csky/mm/tcm.c:18:2: error:
+>                 #error "You should define correct DTCM_RAM_BASE"
+>    18 | #error "You should define correct DTCM_RAM_BASE"
+>
+> This is seen with compile tests since those enable HAVE_TCM,
+> but do not provide useful default values for ITCM_RAM_BASE or
+> DTCM_RAM_BASE. Disable HAVE_TCM for commpile tests to avoid
+> the error.
+>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  arch/csky/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 58ca3ef02bab..823d3d5a9e11 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -241,6 +241,7 @@ endchoice
+>
+>  menuconfig HAVE_TCM
+>         bool "Tightly-Coupled/Sram Memory"
+> +       depends on !COMPILE_TEST
+>         help
+>           The implementation are not only used by TCM (Tightly-Coupled Meory)
+>           but also used by sram on SOC bus. It follow existed linux tcm
+> --
+> 2.33.0
+>
 
-This is seen with compile tests since those enable HAVE_TCM,
-but do not provide useful default values for ITCM_RAM_BASE or
-DTCM_RAM_BASE. Disable HAVE_TCM for commpile tests to avoid
-the error.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- arch/csky/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 58ca3ef02bab..823d3d5a9e11 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -241,6 +241,7 @@ endchoice
- 
- menuconfig HAVE_TCM
- 	bool "Tightly-Coupled/Sram Memory"
-+	depends on !COMPILE_TEST
- 	help
- 	  The implementation are not only used by TCM (Tightly-Coupled Meory)
- 	  but also used by sram on SOC bus. It follow existed linux tcm
 -- 
-2.33.0
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
