@@ -2,90 +2,139 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3282E40F23A
-	for <lists+linux-csky@lfdr.de>; Fri, 17 Sep 2021 08:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B2140F345
+	for <lists+linux-csky@lfdr.de>; Fri, 17 Sep 2021 09:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbhIQGV6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 17 Sep 2021 02:21:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37782 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229474AbhIQGV5 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 17 Sep 2021 02:21:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F25B06103C;
-        Fri, 17 Sep 2021 06:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631859636;
-        bh=SUfmlBFiiigTcztXFPQlPQmAAGaznw7fdM5Uf1sxBRI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IgrEbzLPeKZxGTW6apiYzlY5kwC7cFkYgVkzMgv6eJ1z/w9eRyHm7YR+LML8zI71N
-         DyXxuPRkX+U8ocM9rA3Q31anXmODGUqYI1R4FAC8k5mfhB8r/SiNabuXhIt/v3RiD6
-         YUvopDZs/6KkdQfZEfxa4od9gVDHRhjNrDfjv2scb0F6xQqRqNA+f8e81m5OPQRwrE
-         +Z96VmBXJiuK424Pq1aA0nxefd+8IsT/sgZxus9/grM+LqZK1pNWlYlnCOTAxa4bYO
-         fpwJjVn6i4gvK7Jt6q0zV6Jq06H8y9ujUDeN8Legp3c3Aio8Y1ihmmNP1nJf3/jqGj
-         2qmP8n3AxIAbg==
-Received: by mail-lf1-f53.google.com with SMTP id t10so22807865lfd.8;
-        Thu, 16 Sep 2021 23:20:35 -0700 (PDT)
-X-Gm-Message-State: AOAM530vKzmD5q713QWe4fhPjGV9j4l6YJMQUxJN22wXtNbxKDoZ3oZ8
-        cWf6h26D+4o5zk7+ULf4A0FaPJfQbp6pbSQ0mRs=
-X-Google-Smtp-Source: ABdhPJz//P1LNmStqogkfYSD37psrQnuLqjbASNi7Y6sSnhKxqRef1aXjg02gQp/3X7AXEpn4KL/QFuILqg0qtxf/kg=
-X-Received: by 2002:a2e:750b:: with SMTP id q11mr8099654ljc.172.1631859634334;
- Thu, 16 Sep 2021 23:20:34 -0700 (PDT)
+        id S240348AbhIQHbM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 17 Sep 2021 03:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236843AbhIQHbL (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 17 Sep 2021 03:31:11 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026FC061574;
+        Fri, 17 Sep 2021 00:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=17mkqfuKdfnPg9YSAeGWHc/O4GLOFEnsaFTJ4hUb1Qc=; b=R175PzEhjMPDTuiig9T+/8FvBN
+        wCwITbQjI86keC2UZcKL3oHklcXqScPxlhfsprjzgtQHXNUwlN8OYqdLQ7ztxGmPqLPGGL1HvK5TW
+        8un1CwadAtDZMXP8kHm7KJ60CKQlzq6kBsXmSOCidcFaqUG49FGQ/Q91WQSCSzrudnHUpN1n/dtAK
+        3oCiHTPea1eYl35kiZcqB3afHwTSqwkSRYpje8CyTQKsMtTXOUjDfhQXOeCpbGDLw3jXUuiLQwU+o
+        fpmbPjE5lGD64IJe7KimQfKhdgCV7/TWkKj798HvtN0fT0soP/DzPI91f4RdvEreoDEx02Cp2qq0O
+        NM1LgiIg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mR8Ig-003p42-0g; Fri, 17 Sep 2021 07:28:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 64E5430031A;
+        Fri, 17 Sep 2021 09:28:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EBC3F2B27F98D; Fri, 17 Sep 2021 09:28:41 +0200 (CEST)
+Date:   Fri, 17 Sep 2021 09:28:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Artem Kashkanov <artem.kashkanov@intel.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>
+Subject: Re: [PATCH v2 00/13] perf: KVM: Fix, optimize, and clean up callbacks
+Message-ID: <YURDqVZ1UXKCiKPV@hirez.programming.kicks-ass.net>
+References: <20210828003558.713983-1-seanjc@google.com>
+ <20210828201336.GD4353@worktop.programming.kicks-ass.net>
+ <YUO5J/jTMa2KGbsq@google.com>
 MIME-Version: 1.0
-References: <20210917043838.3514789-1-linux@roeck-us.net> <20210917043838.3514789-2-linux@roeck-us.net>
-In-Reply-To: <20210917043838.3514789-2-linux@roeck-us.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 17 Sep 2021 14:20:23 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQXD0Kz483FK+NT=OS8y0O4XqhZTRDNXJZP=o0T5htJGg@mail.gmail.com>
-Message-ID: <CAJF2gTQXD0Kz483FK+NT=OS8y0O4XqhZTRDNXJZP=o0T5htJGg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] csky: Select ARCH_WANT_FRAME_POINTERS only if
- compiler supports it
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YUO5J/jTMa2KGbsq@google.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Acked, thx. It'll in next-tree.
+On Thu, Sep 16, 2021 at 09:37:43PM +0000, Sean Christopherson wrote:
+> On Sat, Aug 28, 2021, Peter Zijlstra wrote:
 
-On Fri, Sep 17, 2021 at 12:38 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Compiling csky:allmodconfig with an upstream C compiler results
-> in the following error.
->
-> csky-linux-gcc: error:
->         unrecognized command-line option '-mbacktrace';
->         did you mean '-fbacktrace'?
->
-> Select ARCH_WANT_FRAME_POINTERS only if gcc supports it to
-> avoid the error.
->
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  arch/csky/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index 9d4d898df76b..58ca3ef02bab 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -8,7 +8,7 @@ config CSKY
->         select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->         select ARCH_USE_BUILTIN_BSWAP
->         select ARCH_USE_QUEUED_RWLOCKS
-> -       select ARCH_WANT_FRAME_POINTERS if !CPU_CK610
-> +       select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
->         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
->         select COMMON_CLK
->         select CLKSRC_MMIO
-> --
-> 2.33.0
->
+> Argh, sorry, I somehow managed to miss all of your replies.  I'll get back to
+> this series next week.  Thanks for the quick response!
+> 
+> > Lets keep the whole intel_pt crud inside x86...
+> 
+> In theory, I like the idea of burying intel_pt inside x86 (and even in
+> Intel+VMX code for the most part), but the actual implementation is a
+> bit gross.  Because of the whole "KVM can be a module" thing,
+
+ARGH!! we should really fix that. I've heard other archs have made much
+better choices here.
+
+> either
+> the static call and __static_call_return0 would need to be exported,
+> or a new register/unregister pair would have to be exported.
+
+So I don't mind exporting __static_call_return0, but exporting a raw
+static_call is much like exporting a function pointer :/
+
+> The unregister path would also need its own synchronize_rcu().  In general, I
+> don't love duplicating the logic, but it's not the end of the world.
+> 
+> Either way works for me.  Paolo or Peter, do either of you have a preference?
+
+Can we de-feature kvm as a module and only have this PT functionality
+when built-in? :-)
 
 
--- 
-Best Regards
- Guo Ren
+> > ---
+> > Index: linux-2.6/arch/x86/events/core.c
+> > ===================================================================
+> > --- linux-2.6.orig/arch/x86/events/core.c
+> > +++ linux-2.6/arch/x86/events/core.c
+> > @@ -92,7 +92,7 @@ DEFINE_STATIC_CALL_RET0(x86_pmu_guest_ge
+> >  
+> >  DEFINE_STATIC_CALL_RET0(x86_guest_state, *(perf_guest_cbs->state));
+> >  DEFINE_STATIC_CALL_RET0(x86_guest_get_ip, *(perf_guest_cbs->get_ip));
+> > -DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, *(perf_guest_cbs->handle_intel_pt_intr));
+> > +DEFINE_STATIC_CALL_RET0(x86_guest_handle_intel_pt_intr, unsigned int (*)(void));
+> 
+> FWIW, the param needs to be a raw function, not a function pointer. 
 
-ML: https://lore.kernel.org/linux-csky/
+Yeah, I keep making that mistake.. and I wrote the bloody thing :/
+
+I have a 'fix' for that, but I need to finish that and also flag-day
+change :-(
+
+  https://lkml.kernel.org/r/YS+0eIeAJsRRArk4@hirez.programming.kicks-ass.net
