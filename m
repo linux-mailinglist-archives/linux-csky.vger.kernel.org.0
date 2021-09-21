@@ -2,65 +2,67 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0894123A5
-	for <lists+linux-csky@lfdr.de>; Mon, 20 Sep 2021 20:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF63C4137BD
+	for <lists+linux-csky@lfdr.de>; Tue, 21 Sep 2021 18:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352078AbhITS03 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 20 Sep 2021 14:26:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39122 "EHLO
+        id S229490AbhIUQqI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 21 Sep 2021 12:46:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50115 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378313AbhITSYY (ORCPT
+        by vger.kernel.org with ESMTP id S229499AbhIUQqH (ORCPT
         <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 20 Sep 2021 14:24:24 -0400
+        Tue, 21 Sep 2021 12:46:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632162176;
+        s=mimecast20190719; t=1632242678;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vRI2avQuBNPO4mZTVFj4yY0DXqukEShEdAk6taZEnJk=;
-        b=cV+rEkxVVpi8hgrpFdw8Oj9BL4m66kM4kVd3EyEFhjQLUr5rb3Se5XI9amNgg5bZPN8AS6
-        GW5HMHgVscLcHGQERaRfgeuELNomHJxNu4lXg/s2P6om1IgbiZLDJ1/wtAussDC3xFrSST
-        BxwWvG2BpeXuEYebkdWe/9JMTYiKnUg=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-537-sBrJkr9yOuK5fTsdM_PDGQ-1; Mon, 20 Sep 2021 14:22:55 -0400
-X-MC-Unique: sBrJkr9yOuK5fTsdM_PDGQ-1
-Received: by mail-ed1-f71.google.com with SMTP id r11-20020aa7cfcb000000b003d4fbd652b9so16462788edy.14
-        for <linux-csky@vger.kernel.org>; Mon, 20 Sep 2021 11:22:55 -0700 (PDT)
+        bh=2MOh25Z0CXinUksqYDluCoredOuFNiGvVHCwdZh/BTA=;
+        b=fMQBRvFbKUREv2fA+AGvkCsmlbU6zexpDH0XZ7f9S+6tOtWrksGDgEYq1tJD5g/1pJpAQq
+        NHx71FG/3pPj+hPpQHV/wluvJjANYWDxvg7ZaRm3yIhXhA62L9X0LzWiTFHHhN7KL3a8tk
+        6O8nSkJsGIEhmzcttRNJ67nAEZ8utTA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-157-VfpabcVXMtaHl3d7SJA-Aw-1; Tue, 21 Sep 2021 12:44:37 -0400
+X-MC-Unique: VfpabcVXMtaHl3d7SJA-Aw-1
+Received: by mail-wr1-f72.google.com with SMTP id m18-20020adfe952000000b0015b0aa32fd6so9332320wrn.12
+        for <linux-csky@vger.kernel.org>; Tue, 21 Sep 2021 09:44:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=vRI2avQuBNPO4mZTVFj4yY0DXqukEShEdAk6taZEnJk=;
-        b=pJ8uUnNacx9OVHcg7mQM58Y+mIOu2TWUHWrWmoyHGHV3Yl0/BF4CpKHAaeuMa9kN5W
-         JJMAsa6vBK64clW4ZBINIEQbUppD+iXW7FymSRGjnnrGGneNBx2BOqQ2GWgjL36z0LRw
-         RcRV8lL7bFiGBHCNILpN1uE37ePqoAhIgxZ2E9oizjUoWM6gymV0/C0zqqDOKYMWbac+
-         ruGET1w5beB4Yy6hSQW7QTKRjnBAtFxoy6K3gPdozn0refoURdQA7OCa1VzlPPbLAxc5
-         o5vv3K/W+GWUwrjAFDsLzCmOxxKUktITgzzWq55DB0dyckcZxQ2cD/9nU8MJNr0/xjxZ
-         jBEA==
-X-Gm-Message-State: AOAM531lEvrMpK3jVz2qr+YbA5AlOC1u+lDrHGF4kVjQe7N2YO3qqXLf
-        UdOau7JF/GsuUzfQNh44SBxiIqUnSzicXOqMgB8yUOQ4mErsqDwss8hM2KzSy59omMHEv6DgARP
-        aKepZ29/Xy8q3KRCWB22MeQ==
-X-Received: by 2002:a17:907:76b2:: with SMTP id jw18mr31101784ejc.120.1632162173785;
-        Mon, 20 Sep 2021 11:22:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzSoRFsPRM/7K22YQ1jPmATj4IuvLfgFOqCYFtPnEIPU80lrUpqlQ2FpuvfaQh3tH7XvhJmFg==
-X-Received: by 2002:a17:907:76b2:: with SMTP id jw18mr31101728ejc.120.1632162173428;
-        Mon, 20 Sep 2021 11:22:53 -0700 (PDT)
+        bh=2MOh25Z0CXinUksqYDluCoredOuFNiGvVHCwdZh/BTA=;
+        b=posyiQ78tHUALPMGnRnSZbTWlmiQZ6+95VRcM4sDY0mg0r54NVjkoVipeeAG/3mUCU
+         WwMEzk82LUen4Xi8zWwK+POHcsldRm6JD0GPl2zv9amGC5wnbAiCu9fV01LWG1LiBtqN
+         1iXHyUpqwKuKwPKIH8lqyb5Bjrcm92vIS4Kgk0M6TxXyP98dj9TB2Qv5gqW652nafZUy
+         Gbam3bHq0i6WtAs6qRzm7S3UsiRiFpsnfbrkT4yolmoQsfwZKaxY6l60DDs3zhVks5vu
+         OE8+8fUDPQfvAqe7h85AKCSMPPsBXWOj0wzOiNulosrcEuo+rgGd06xNsFJ34jge+rdq
+         CXHA==
+X-Gm-Message-State: AOAM531Lh2E+ucFzHw8CQZMZwBXMDmKXTmrfhyhSOMX1hHJAD4uWg7S6
+        uLb2Puz1w0leSqnUNcj1Tl544MmrvwGQg1F8BYbBDezsgs1JDbPcHyvo1ELncT6xnzBJRFevCbY
+        riw4r60uO2jtNlBQzvEKGRg==
+X-Received: by 2002:adf:ef02:: with SMTP id e2mr35671889wro.401.1632242676303;
+        Tue, 21 Sep 2021 09:44:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzsCp5ZrdIqXk735XH8pFAzorkNCbfLAUPGTe1MtIGjUyvp4uSPpnZgIUWeU9z8tn602zxqYg==
+X-Received: by 2002:adf:ef02:: with SMTP id e2mr35671861wro.401.1632242676096;
+        Tue, 21 Sep 2021 09:44:36 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id w25sm7281095edi.22.2021.09.20.11.22.51
+        by smtp.gmail.com with ESMTPSA id k1sm20272243wrz.61.2021.09.21.09.44.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Sep 2021 11:22:52 -0700 (PDT)
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        Tue, 21 Sep 2021 09:44:35 -0700 (PDT)
+Subject: Re: [PATCH v2 05/13] perf: Force architectures to opt-in to guest
+ callbacks
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Will Deacon <will@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -90,59 +92,31 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Like Xu <like.xu.linux@gmail.com>,
         Zhu Lingshan <lingshan.zhu@intel.com>
 References: <20210828003558.713983-1-seanjc@google.com>
- <20210828201336.GD4353@worktop.programming.kicks-ass.net>
- <YUO5J/jTMa2KGbsq@google.com>
- <YURDqVZ1UXKCiKPV@hirez.programming.kicks-ass.net>
- <662e93f9-e858-689d-d203-742731ecad2c@redhat.com>
- <87tuifv3mb.wl-maz@kernel.org>
- <7a5825d1-d6e9-8ac8-5df2-cce693525da7@redhat.com>
- <87o88nuzzc.wl-maz@kernel.org>
+ <20210828003558.713983-6-seanjc@google.com>
+ <20210828194752.GC4353@worktop.programming.kicks-ass.net>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 00/13] perf: KVM: Fix, optimize, and clean up callbacks
-Message-ID: <0eb2d4b1-23a4-c318-9f91-8dce78c6c8ad@redhat.com>
-Date:   Mon, 20 Sep 2021 20:22:50 +0200
+Message-ID: <8ee13a69-f2c4-2413-2d6c-b6c0a559286e@redhat.com>
+Date:   Tue, 21 Sep 2021 18:44:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <87o88nuzzc.wl-maz@kernel.org>
+In-Reply-To: <20210828194752.GC4353@worktop.programming.kicks-ass.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 20/09/21 15:40, Marc Zyngier wrote:
->>> At least not before we
->>> declare the arm64 single kernel image policy to be obsolete.
->>
->> --verbose please.:)   I am sure you're right, but I don't understand
->> the link between the two.
->
-> To start making KVM/arm64 modular, you'd have to build it such as
-> there is no support for the nVHE hypervisor anymore. Which would mean
-> two different configs (one that can only work with VHE, and one for
-> the rest) and contradicts the current single kernel image policy.
+On 28/08/21 21:47, Peter Zijlstra wrote:
+>> +config HAVE_GUEST_PERF_EVENTS
+>> +	bool
+> 	depends on HAVE_KVM
 
-Ah okay, I interpreted the policy as "it's possible to build a single 
-kernel image but it would be possible to build an image for a subset of 
-the features as well".
+It won't really do anything, since Kconfig does not detects conflicts 
+between select' and 'depends on' clauses.
 
-In that case you could have one config that can work either with or 
-without VHE (and supports y/n) and one config that can only work with 
-VHE (and supports y/m/n).  The code to enter VHE EL2 would of course 
-always be builtin.
-
-> It is bad enough that we have to support 3 sets of page sizes.
-> Doubling the validation space for the sake of being able to unload KVM
-> seems a dubious prospect.
-
-It's not even a configuration that matches kconfig very well, since it 
-does have a way to build something *only as a module*, but not a way to 
-build something only as built-in.
-
-That said, if you had the possibility to unload/reload KVM, you'll 
-quickly become unable to live without it. :)
+Rather, should the symbol be selected by KVM, instead of ARM64 and X86?
 
 Paolo
 
