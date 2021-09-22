@@ -2,58 +2,60 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F601413E73
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Sep 2021 02:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A614141A1
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Sep 2021 08:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbhIVAJZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Sep 2021 20:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbhIVAJD (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Sep 2021 20:09:03 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42816C0617BF
-        for <linux-csky@vger.kernel.org>; Tue, 21 Sep 2021 17:06:19 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id e22-20020a05620a209600b003d5ff97bff7so6331667qka.1
-        for <linux-csky@vger.kernel.org>; Tue, 21 Sep 2021 17:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=4BBDHyzTmFJD2PGtjmXQGbVqPzRCZc8ppu5cY3KZ5Y8=;
-        b=i1hLF6bC7QippVnwD+QfcurzwPql0DTYdtvpNMOXEcTNGevY7UnIQHp4F8TFxhWOcC
-         y5khcTlTsxcY03DM6I7OGwJdsNRusHePnZs48VJgz9iDl9BCd/WdBAHgBd08BkVlEctl
-         qgkp34acvdJvQRinIA310i906+1pI4VRGGbTHUSEWOTyISF582eEBN0uohWrXglJ4Vha
-         UiRiAJR9+rHm1hSoN64l3MLHm8i51hrtd5lKdh0LN16chuzJEtOj6NO2pvuQiZZnchZT
-         2+/Nzn1kX3D5dvOeb3mhXnOtnZBTLnXfaqpsFhvkCaK7qjG4cSZxh2Y/t71DvQNuI5L1
-         pIfA==
+        id S232662AbhIVGZH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Sep 2021 02:25:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53171 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232630AbhIVGZH (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 22 Sep 2021 02:25:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632291817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zooka9gAajsg8DCKduDSvz7LupNnOu3u1TFHi7y68Yc=;
+        b=TxIE912/sclScoAzCqcd+GJT9rXC021QMVlM4pFrNJfStcaI3ENrIqV38xS2zgkQR2CEP/
+        n7aZ6qmr9HATYOqc6h2B71+cYyYtEaYAvPs0Ga2L8hOcZnQlbnScm3KlotWOcG/HSc2pqm
+        CbW/ZT1dZfz8WI9yv0jFBvFatv1lPOA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-414-daHPuxUlNvKaOX_01yCwiw-1; Wed, 22 Sep 2021 02:23:36 -0400
+X-MC-Unique: daHPuxUlNvKaOX_01yCwiw-1
+Received: by mail-wr1-f69.google.com with SMTP id h5-20020a5d6885000000b0015e21e37523so1129919wru.10
+        for <linux-csky@vger.kernel.org>; Tue, 21 Sep 2021 23:23:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=4BBDHyzTmFJD2PGtjmXQGbVqPzRCZc8ppu5cY3KZ5Y8=;
-        b=iptrcSlJ/UrPMTt/gBOVcq9CBuzK2E/3Zidmt+Wp7xhli1e9IRiMXvIM6qyCoFUFQV
-         ajjbZL9e+PV5mBege581pIeaKEwBBuqoc5Tl/tK0di2lIP0EhUIbqu0Bg++8VMVbqX3O
-         7/9fnx0RE+Oa3PvzOPtqedNd45qlnF6Tzj5MtcUPkrQvUNnE/l/b4Ipc4gcTNLjyWYP6
-         9T4Ez8To/By5T/DFU8pNmuCZgxHwOYmbKx70MBRemcX5Frsb7oT+VfQlwyEWqFeUriUv
-         hvQ4jibC2M2+8T2BYxoZ8voPfAenZodtiHImnsnRiGZSY0ABDa2MOfbkMwFZMp2bw/lO
-         zWmA==
-X-Gm-Message-State: AOAM532mGS+8BkUn8R4w4TzV9oKzg9WJ5fVx+Vl9eCCW6E6L1Dm77LhV
-        VBamXH/PMnrJwGoEIXXoRIsdFUPqJq4=
-X-Google-Smtp-Source: ABdhPJzV8/bAA+bVdBd7d54Vy+1c6C23hub/FF/gkHwdARHRitfqPelJ1Pr98qSi4K4qg/f1+Xhzcbcxu/4=
-X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:b022:92d6:d37b:686c])
- (user=seanjc job=sendgmr) by 2002:ad4:466a:: with SMTP id z10mr32596974qvv.47.1632269178759;
- Tue, 21 Sep 2021 17:06:18 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 21 Sep 2021 17:05:33 -0700
-In-Reply-To: <20210922000533.713300-1-seanjc@google.com>
-Message-Id: <20210922000533.713300-17-seanjc@google.com>
-Mime-Version: 1.0
-References: <20210922000533.713300-1-seanjc@google.com>
-X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH v3 16/16] perf: Drop guest callback (un)register stubs
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Zooka9gAajsg8DCKduDSvz7LupNnOu3u1TFHi7y68Yc=;
+        b=SmIJCQzxQxOsGpQ89BJu7R7fccduY3CSxjYUZUx+EP2OC3fw/bx0cieHp3noh55cYU
+         jz3sMdYSIvuz9oS9yuTMiScs53w/qEaRIYkdzgIIsmXuahr0qnoGfC/mGD5dLI6ijISO
+         ep614Un9va1NQIZ/gvQBEqK2ynnBdfK9YBltdoc4BQjUmSPPT/PsXXTp96C4PougPWu/
+         gu8A7vRa+wTRG4gBHD7lGboTBDfmgDIKQpVn4Pvr6HPc5iQYE50YvHkBKU1V5OQYSMO7
+         8EzBVhU4kQ/I7XO5I/iqmlwY8ThLqp0a0kz8lIBp5m6rzhz245zt7DVzK+s3X4QftWBI
+         uTCg==
+X-Gm-Message-State: AOAM530ITW/2nAwJnaF3VY8a1uQ0HlRgbLikKwe24mBH/vKTYZ2F3/Bl
+        xiQg8pIk62BQ66NhneWkcbf4E4GBR/zeNdpUlux9GISfP6/vrE60aBLBYSgK1V3Rb+VjYh2wKoY
+        fAMMbiNBn2MjZYkiSrvbF7w==
+X-Received: by 2002:a7b:c3cc:: with SMTP id t12mr8423412wmj.68.1632291814961;
+        Tue, 21 Sep 2021 23:23:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx4Cxl6B3FvPynsb4jNEGdd2w6uOOFopYtreXbLymB/TUbaoz5flccfGAb2LTh0HveeWZIomg==
+X-Received: by 2002:a7b:c3cc:: with SMTP id t12mr8423394wmj.68.1632291814600;
+        Tue, 21 Sep 2021 23:23:34 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id o1sm1112414wru.91.2021.09.21.23.23.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Sep 2021 23:23:34 -0700 (PDT)
+Subject: Re: [PATCH v3 02/16] KVM: x86: Register perf callbacks after calling
+ vendor's hardware_setup()
+To:     Sean Christopherson <seanjc@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Will Deacon <will@kernel.org>,
@@ -65,7 +67,6 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Juergen Gross <jgross@suse.com>
 Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -74,7 +75,6 @@ Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
@@ -88,38 +88,81 @@ Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Artem Kashkanov <artem.kashkanov@intel.com>,
         Like Xu <like.xu.linux@gmail.com>,
         Zhu Lingshan <lingshan.zhu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20210922000533.713300-1-seanjc@google.com>
+ <20210922000533.713300-3-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <6e31f767-ae3d-ec87-9880-5a8ebc381192@redhat.com>
+Date:   Wed, 22 Sep 2021 08:23:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210922000533.713300-3-seanjc@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Drop perf's stubs for (un)registering guest callbacks now that KVM
-registration of callbacks is hidden behind GUEST_PERF_EVENTS=y.  The only
-other user is x86 XEN_PV, and x86 unconditionally selects PERF_EVENTS.
+On 22/09/21 02:05, Sean Christopherson wrote:
+> Wait to register perf callbacks until after doing vendor hardaware setup.
+> VMX's hardware_setup() configures Intel Processor Trace (PT) mode, and a
+> future fix to register the Intel PT guest interrupt hook if and only if
+> Intel PT is exposed to the guest will consume the configured PT mode.
+> 
+> Delaying registration to hardware setup is effectively a nop as KVM's perf
+> hooks all pivot on the per-CPU current_vcpu, which is non-NULL only when
+> KVM is handling an IRQ/NMI in a VM-Exit path.  I.e. current_vcpu will be
+> NULL throughout both kvm_arch_init() and kvm_arch_hardware_setup().
+> 
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Artem Kashkanov <artem.kashkanov@intel.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/kvm/x86.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 86539c1686fa..fb6015f97f9e 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8426,8 +8426,6 @@ int kvm_arch_init(void *opaque)
+>   
+>   	kvm_timer_init();
+>   
+> -	perf_register_guest_info_callbacks(&kvm_guest_cbs);
+> -
+>   	if (boot_cpu_has(X86_FEATURE_XSAVE)) {
+>   		host_xcr0 = xgetbv(XCR_XFEATURE_ENABLED_MASK);
+>   		supported_xcr0 = host_xcr0 & KVM_SUPPORTED_XCR0;
+> @@ -8461,7 +8459,6 @@ void kvm_arch_exit(void)
+>   		clear_hv_tscchange_cb();
+>   #endif
+>   	kvm_lapic_exit();
+> -	perf_unregister_guest_info_callbacks(&kvm_guest_cbs);
+>   
+>   	if (!boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
+>   		cpufreq_unregister_notifier(&kvmclock_cpufreq_notifier_block,
+> @@ -11064,6 +11061,8 @@ int kvm_arch_hardware_setup(void *opaque)
+>   	memcpy(&kvm_x86_ops, ops->runtime_ops, sizeof(kvm_x86_ops));
+>   	kvm_ops_static_call_update();
+>   
+> +	perf_register_guest_info_callbacks(&kvm_guest_cbs);
+> +
+>   	if (!kvm_cpu_cap_has(X86_FEATURE_XSAVES))
+>   		supported_xss = 0;
+>   
+> @@ -11091,6 +11090,8 @@ int kvm_arch_hardware_setup(void *opaque)
+>   
+>   void kvm_arch_hardware_unsetup(void)
+>   {
+> +	perf_unregister_guest_info_callbacks(&kvm_guest_cbs);
+> +
+>   	static_call(kvm_x86_hardware_unsetup)();
+>   }
+>   
+> 
 
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- include/linux/perf_event.h | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index d582dfeb4e20..20327d1046bb 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1505,11 +1505,6 @@ perf_sw_event(u32 event_id, u64 nr, struct pt_regs *regs, u64 addr)	{ }
- static inline void
- perf_bp_event(struct perf_event *event, void *data)			{ }
- 
--static inline void perf_register_guest_info_callbacks
--(struct perf_guest_info_callbacks *cbs)					{ }
--static inline void perf_unregister_guest_info_callbacks
--(struct perf_guest_info_callbacks *cbs)					{ }
--
- static inline void perf_event_mmap(struct vm_area_struct *vma)		{ }
- 
- typedef int (perf_ksymbol_get_name_f)(char *name, int name_len, void *data);
--- 
-2.33.0.464.g1972c5931b-goog
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
