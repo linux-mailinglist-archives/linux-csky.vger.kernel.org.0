@@ -2,71 +2,70 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFB34151C0
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Sep 2021 22:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480D8416CE5
+	for <lists+linux-csky@lfdr.de>; Fri, 24 Sep 2021 09:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237796AbhIVU42 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Sep 2021 16:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237802AbhIVU41 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Sep 2021 16:56:27 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7207C0613CF
-        for <linux-csky@vger.kernel.org>; Wed, 22 Sep 2021 13:54:56 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id u8so16633457lff.9
-        for <linux-csky@vger.kernel.org>; Wed, 22 Sep 2021 13:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=fr8lNb1tzuroNDnbJJtYWeXOCGZbssrkZvaRy8HVdYCeSSxS96vSwd3R2+r1vg3M6/
-         ex66FoD7Oi9BZ+eroN2ctcLno3UxJhL89X1t6yEsFayGc2q4Pz0zZQBaUGqcHr3s/S1+
-         lgIwwHuJ4O8SDnA5oR3zC/CFwa9fWO84703n6I2aQyNKP1VzeqgyNRTdZaVTG81gy6Vx
-         t6u58+esbUQxWBZY5IFD1w784RDrV2U7d72/V+RQAoF8LyHU+KHsqwJTuZK+RI9xoYHQ
-         hU/k+XKo5P60J+yjbN5r0LQMnBzU5qvJitpMdoh7dt6f9DChJ/lZbweVN/xESakomSrI
-         Tc/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=ijKrByR1/KtEp2Ut8Wj0vMi00kBZm/A/r1gPwOEYZIg=;
-        b=cywoMu+tTO33OLaapAoWxsEATb5iTCiJz53geMfFSXh98R9yjO2xdKCAaqkBR93kme
-         uHHjXiO7yrF8SDczLPAtZUqnfyFffOSvENEpTUS7dJPb3TQlUXA+tOlwAfgisqPKOqrz
-         tkNhmemoV9MV/SBm7Eb7VqIK8DxN+Pz2mEduGHl3Du+cQgQAeurRrZhXdjmerFN5hpVW
-         JEZwZE+MAAxjNRUJiY6bBuexLaiH/lRvN4NUshbm/IoBD6OfCuug57541a8unOz3ZJKK
-         y7PjBxFfc73bbw1/E7D7XJL7XYaprSGhNpcITRxDz+1mnBv3AP6xlaEbvO5XI/GWSYsm
-         95Ww==
-X-Gm-Message-State: AOAM530Of/L3gVEAJZtcrpwilJ7W9nXIGRQpHVCpLR6ruQPeZ3ag+p7g
-        sIFP3r0KymxTU0RAOKNWUxLaUpV+BfNN51CDG4s=
-X-Google-Smtp-Source: ABdhPJwYYn7ZwazUxB30/XTxKCOf4dlZaC6TfP1ljKsU4ZNb40cpLRsdAvw7sAb51nYQkeG7S6W5vU7Cgq+lC3FYxgE=
-X-Received: by 2002:a05:651c:1546:: with SMTP id y6mr1383813ljp.53.1632344095088;
- Wed, 22 Sep 2021 13:54:55 -0700 (PDT)
+        id S231921AbhIXHiY (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 24 Sep 2021 03:38:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48866 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244344AbhIXHiY (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 24 Sep 2021 03:38:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 964F260E08;
+        Fri, 24 Sep 2021 07:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632469011;
+        bh=LpHb8A+wUT0ue+o052SvF/xrnFqr5rMpVkjCEtBXzBg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EONxVMBVcJeRE2R02Y+usrP5eWq+D26Y6GvrrJrJSftkXNjp/5qOKVff17PnXtwGe
+         qdswHKFQHmSz43b3SZzvKkOEgjhpjGkSxjEJn22FAx3DBEqjtDd7ZRnqnuNmHGwkqE
+         VnAsdJQF+frVHQMqIxfoMHkm2hJKTXfzaLFb9OYOk2IfWK5U3VTxjrSACxFwTD6WWV
+         5EY1SOzG/MIZkAMG+K+LRzBuI35qcBbB25eYsFTKAke05/Wmq+tPbGoXkJYP083dQn
+         UZQjdFYefr/0rA/OaDq+wzpBu9XvXYPV4y5OhgWnxxd/krrWieK6JkVvdgzOr2o21+
+         ttgHYiuW0BFKw==
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH] csky: Fixup regs.sr broken in ptrace
+Date:   Fri, 24 Sep 2021 15:36:45 +0800
+Message-Id: <20210924073645.1145907-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: ratcliffijames58@gmail.com
-Received: by 2002:a05:6504:5067:0:0:0:0 with HTTP; Wed, 22 Sep 2021 13:54:54
- -0700 (PDT)
-From:   Aisha Al-Qaddafi <aisha.gdaffi24@gmail.com>
-Date:   Wed, 22 Sep 2021 21:54:54 +0100
-X-Google-Sender-Auth: B3PIuwFz7UcaHNCffYC8akvbLEk
-Message-ID: <CAKVTYWSPSMf085dB7FkhkLr9XtoZHkjbvunoMard5qsSPn4ZOg@mail.gmail.com>
-Subject: My Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Assalamu alaikum,
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological,
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children. I have investment funds
-worth Twenty Seven Million Five Hundred Thousand United State Dollar
-($27.500.000.00 ) and i need a trusted  investment Manager/Partner
-because of my current refugee status, however, I am interested in you
-for investment project assistance in your country. If you are willing
-to handle this project on my behalf kindly reply urgently to enable me
-to provide you more information about the investment
-funds.
-Best Regards
+From: Guo Ren <guoren@linux.alibaba.com>
+
+gpr_get() return the entire pt_regs (include sr) to userspace, if we
+don't restore the C bit in gpr_set, it may break the ALU result in
+that context. So the C flag bit is part of gpr context, that's why
+riscv totally remove the C bit in the ISA. That makes sr reg clear
+from userspace to supervisor privilege.
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+---
+ arch/csky/kernel/ptrace.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/csky/kernel/ptrace.c b/arch/csky/kernel/ptrace.c
+index 0105ac81b432..1a5f54e0d272 100644
+--- a/arch/csky/kernel/ptrace.c
++++ b/arch/csky/kernel/ptrace.c
+@@ -99,7 +99,8 @@ static int gpr_set(struct task_struct *target,
+ 	if (ret)
+ 		return ret;
+ 
+-	regs.sr = task_pt_regs(target)->sr;
++	/* BIT(0) of regs.sr is Condition Code/Carry bit */
++	regs.sr = (regs.sr & BIT(0)) | (task_pt_regs(target)->sr & ~BIT(0));
+ #ifdef CONFIG_CPU_HAS_HILO
+ 	regs.dcsr = task_pt_regs(target)->dcsr;
+ #endif
+-- 
+2.25.1
+
