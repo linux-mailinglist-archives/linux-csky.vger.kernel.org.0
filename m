@@ -2,73 +2,62 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFBA417FD1
-	for <lists+linux-csky@lfdr.de>; Sat, 25 Sep 2021 07:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F1341906D
+	for <lists+linux-csky@lfdr.de>; Mon, 27 Sep 2021 10:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243259AbhIYFSp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 25 Sep 2021 01:18:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230453AbhIYFSm (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sat, 25 Sep 2021 01:18:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB6176127A;
-        Sat, 25 Sep 2021 05:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632547028;
-        bh=dTWWEEku3Bu2EIy1EXAkhLeT4qw1irEelkTYP/6N8i8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uawpFkzY+arW26+J7Jtlm8z+jK4X7ZP8BRm7l8iOpBrvDceWt2q91g1LyisSX0mhF
-         5WVhZJwVYzbEPBegPG2WvWzdfT90scqgEOHhv3LVQda0FdrVJXkIJ0RJQZJbsIOQkK
-         VrXdZC4vL9qpkP/hNS3uVioWg5N8LnkyQIt2kyzH+9KnWbxXmGZR/y0vwMSHJkio7w
-         TIbpHPY4DsN1PuEL5mliPuMSL455rF4R1G4/DysZJ5v/Twzrib89WIclnGpFqDDVrE
-         JuDoSp+PEOWkNRK+zVNAgWJ5tw/QgK4Df5cmpY3CErMQIpoSrCVKvW+roHqIg/yHqY
-         KMXqA4+WHEPVQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, stable@vger.kernel.org
-Subject: [PATCH V2 2/2] csky: Fixup regs.sr broken in ptrace
-Date:   Sat, 25 Sep 2021 13:16:47 +0800
-Message-Id: <20210925051647.1162829-2-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210925051647.1162829-1-guoren@kernel.org>
-References: <20210925051647.1162829-1-guoren@kernel.org>
+        id S233369AbhI0IM5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 27 Sep 2021 04:12:57 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:12842 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233283AbhI0IM4 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 27 Sep 2021 04:12:56 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HHwFr6XVnz8ypH;
+        Mon, 27 Sep 2021 16:06:40 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Mon, 27 Sep 2021 16:11:17 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Mon, 27 Sep 2021 16:11:17 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH 0/3] Cleanup MAY_HAVE_SPARSE_IRQ
+Date:   Mon, 27 Sep 2021 16:13:59 +0800
+Message-ID: <20210927081402.191717-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Most ARCHs support SPARSE_IRQ, and MAY_HAVE_SPARSE_IRQ is useless, and
+only sh and csky select it, but the could use SPARSE_IRQ too, let's
+kill MAY_HAVE_SPARSE_IRQ, also cleanup the kernel/irq/Kconfig a little.
 
-gpr_get() return the entire pt_regs (include sr) to userspace, if we
-don't restore the C bit in gpr_set, it may break the ALU result in
-that context. So the C flag bit is part of gpr context, that's why
-riscv totally remove the C bit in the ISA. That makes sr reg clear
-from userspace to supervisor privilege.
+Kefeng Wang (3):
+  sh: Cleanup about SPARSE_IRQ
+  csky: Use SPARSE_IRQ
+  genirq: Cleanup Kconfig
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: stable@vger.kernel.org
----
- arch/csky/kernel/ptrace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/csky/Kconfig         |  2 +-
+ arch/sh/Kconfig           |  1 -
+ arch/sh/include/asm/irq.h |  9 -------
+ kernel/irq/Kconfig        | 50 ++++++++++++++++-----------------------
+ 4 files changed, 21 insertions(+), 41 deletions(-)
 
-diff --git a/arch/csky/kernel/ptrace.c b/arch/csky/kernel/ptrace.c
-index 0105ac81b432..1a5f54e0d272 100644
---- a/arch/csky/kernel/ptrace.c
-+++ b/arch/csky/kernel/ptrace.c
-@@ -99,7 +99,8 @@ static int gpr_set(struct task_struct *target,
- 	if (ret)
- 		return ret;
- 
--	regs.sr = task_pt_regs(target)->sr;
-+	/* BIT(0) of regs.sr is Condition Code/Carry bit */
-+	regs.sr = (regs.sr & BIT(0)) | (task_pt_regs(target)->sr & ~BIT(0));
- #ifdef CONFIG_CPU_HAS_HILO
- 	regs.dcsr = task_pt_regs(target)->dcsr;
- #endif
 -- 
-2.25.1
+2.26.2
 
