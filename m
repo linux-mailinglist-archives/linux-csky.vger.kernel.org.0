@@ -2,45 +2,46 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDE8419668
-	for <lists+linux-csky@lfdr.de>; Mon, 27 Sep 2021 16:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E01641A61A
+	for <lists+linux-csky@lfdr.de>; Tue, 28 Sep 2021 05:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbhI0Obd (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 27 Sep 2021 10:31:33 -0400
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:33658 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234921AbhI0Obb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 27 Sep 2021 10:31:31 -0400
-Received: by mail-ua1-f54.google.com with SMTP id r8so12423149uap.0;
-        Mon, 27 Sep 2021 07:29:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G9nizv9GkJMYH6DdVVrnBumEJDaVbOlmnn+hAvH58aA=;
-        b=UNGgjHmEvQaDXF0VvdhKm1gm2uF8ooAC3dfSVXtdR5cUHyhDCDDdJmR71u3HZX4I7Y
-         oPB7Ido254F1DEeWBbVBRPWVlGgrSiDCGHeotw/dI8QU7ZAjb2cGJQJBrH6WKpXCb79/
-         NcVv4WQANKdNV1ugQQvX4lm/7GRfatEYduC0EHe8k1XDqe5aaxgOipFOwIN4gLBmp7uf
-         cmxMbclo7akE0ydfgS2TR5VwC45+ZnuPejrqhWozcInJgyJz+rsGlFKAF4mFrPKKtoGk
-         1HVa9HPKLokyCzNmBPYnkZJW81SVTJDRvNmUzFNn8C8lYMsLeIQ5YGAKe9nupYTXo9pY
-         +SZw==
-X-Gm-Message-State: AOAM530oZyCEQSlEaXa5K6Bto1o3oadoUnewqeReZATiJoQ8nEg0IcfY
-        q2Fx4D+jc8ieyTrxJGUUStTWaqrJiGonftvNMDQ=
-X-Google-Smtp-Source: ABdhPJz66AcPtBjy0uphPGt6FmuIQQzoqOP0aQhxO6op69AK8A/BV/QlNry/bou0tAxXIFo6+0hNzZT6L9KJrz7Be1I=
-X-Received: by 2002:ab0:540d:: with SMTP id n13mr20580uaa.78.1632752991762;
- Mon, 27 Sep 2021 07:29:51 -0700 (PDT)
+        id S238830AbhI1DlA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 27 Sep 2021 23:41:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46986 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238745AbhI1DlA (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 27 Sep 2021 23:41:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 281D661266;
+        Tue, 28 Sep 2021 03:39:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632800361;
+        bh=cZS0uYwzEHLzghBzzjPNkkQ9XIFN1URXtq1heMtHKCw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MUJf2APCeRGbwQpJps2UX8I5MHZrcvDl21Na4Gx5xu2+94E7zweYNklL04tIXrwgo
+         Xm5LN+ahM4dhzTn1iFRzmTHIil/jupaNVWRBlCECQxvYXW9YBbm4DnwOY9MhQ9mOfi
+         T0GQiB0NGFvKZ4GgLPwbOZJgNAooMrgf6RZQsVKzn00mpqe3L2/l1fVg7w4dNHBFvv
+         rQ0T17UAQLexqyxXk03KnTatr6yJcInDOmZyCndI46eFq6AYRPzNw8GtjYQtup55f1
+         +v2CRylZ0yDkmqYRqQo5fTjKgFhQbDB2q4XE8PwRT88rEEGkahOYpLOb846kfpg059
+         EV0sdpf/xoQPA==
+Received: by mail-vk1-f178.google.com with SMTP id h132so7881269vke.8;
+        Mon, 27 Sep 2021 20:39:21 -0700 (PDT)
+X-Gm-Message-State: AOAM531eCpPi6CTzqoPXIgpYwrdAMWoJI70BZNrPKf0H9BTgVMV7jbVW
+        2JD/1COEOKHe2tbb0OMXbmjpdzEaDz60B7suuFo=
+X-Google-Smtp-Source: ABdhPJxF6sQbpuA1/9xzp++9k1gswI0ej1fatzgOpSYnn05SO1D7JxUwDMQJLSFzVl8F1CTC7pIiXxxwBkzQ8oMBW+Q=
+X-Received: by 2002:a1f:1844:: with SMTP id 65mr3177491vky.3.1632800360350;
+ Mon, 27 Sep 2021 20:39:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210927081402.191717-1-wangkefeng.wang@huawei.com> <20210927081402.191717-2-wangkefeng.wang@huawei.com>
-In-Reply-To: <20210927081402.191717-2-wangkefeng.wang@huawei.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Sep 2021 16:29:40 +0200
-Message-ID: <CAMuHMdUC9FtGhXCQFTsGVf3yfX=WUZ4V30SGL9BzgAhOMYaH_A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] sh: Cleanup about SPARSE_IRQ
+References: <20210927081402.191717-1-wangkefeng.wang@huawei.com> <20210927081402.191717-3-wangkefeng.wang@huawei.com>
+In-Reply-To: <20210927081402.191717-3-wangkefeng.wang@huawei.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 28 Sep 2021 11:39:09 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT1oM6L+R4c6bKKJV5xnHre+P4+779vH5h7xG9Hf-ZKCQ@mail.gmail.com>
+Message-ID: <CAJF2gTT1oM6L+R4c6bKKJV5xnHre+P4+779vH5h7xG9Hf-ZKCQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] csky: Use SPARSE_IRQ
 To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-csky@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -48,50 +49,46 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Kefeng,
-
-On Mon, Sep 27, 2021 at 10:11 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-> After commit 37744feebc08 ("sh: remove sh5 support"), sh always
-> enable SPARSE_IRQ, kill unused MAY_HAVE_SPARSE_IRQ and NR_IRQS
-> define under !CONFIG_SPARSE_IRQ.
+On Mon, Sep 27, 2021 at 4:11 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 >
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
+> The sparse IRQ framework is preferred, switch over to it,
+> and Kill MAY_HAVE_SPARSE_IRQ.
+>
+> Cc: Guo Ren <guoren@kernel.org>
 > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-
-Thanks for your patch!
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-One question below...
-
-> --- a/arch/sh/include/asm/irq.h
-> +++ b/arch/sh/include/asm/irq.h
-> @@ -5,16 +5,7 @@
->  #include <linux/cpumask.h>
->  #include <asm/machvec.h>
+> ---
+>  arch/csky/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> -/*
-> - * Only legacy non-sparseirq platforms have to set a reasonably sane
-> - * value here. sparseirq platforms allocate their irq_descs on the fly,
-> - * so will expand automatically based on the number of registered IRQs.
-> - */
-> -#ifdef CONFIG_SPARSE_IRQ
->  # define NR_IRQS               8
-> -#else
-> -# define NR_IRQS               512
-> -#endif
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 9d4d898df76b..3d720a577be7 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -69,7 +69,6 @@ config CSKY
+>         select HAVE_RSEQ
+>         select HAVE_STACKPROTECTOR
+>         select HAVE_SYSCALL_TRACEPOINTS
+> -       select MAY_HAVE_SPARSE_IRQ
+>         select MODULES_USE_ELF_RELA if MODULES
+>         select OF
+>         select OF_EARLY_FLATTREE
+> @@ -82,6 +81,7 @@ config CSKY
+>         select PCI_SYSCALL if PCI
+>         select PCI_MSI if PCI
+>         select SET_FS
+> +       select SPARSE_IRQ
+Most csky platforms use !SPARSE_IRQ, so please remove the above line.
 
-I'm wondering if we can go even further, and just remove the definition
-of NR_IRQS, and fall back to the default in include/asm-generic/irq.h?
+>         select TRACE_IRQFLAGS_SUPPORT
+>
+>  config LOCKDEP_SUPPORT
+> --
+> 2.26.2
+>
 
-Gr{oetje,eeting}s,
-
-                        Geert
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Best Regards
+ Guo Ren
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ML: https://lore.kernel.org/linux-csky/
