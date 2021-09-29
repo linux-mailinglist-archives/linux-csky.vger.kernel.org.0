@@ -2,177 +2,97 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2CE41BCD5
-	for <lists+linux-csky@lfdr.de>; Wed, 29 Sep 2021 04:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F51A41BFC9
+	for <lists+linux-csky@lfdr.de>; Wed, 29 Sep 2021 09:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243861AbhI2Cfi (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 28 Sep 2021 22:35:38 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:12965 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243851AbhI2CfY (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 28 Sep 2021 22:35:24 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HK0lC0RyYzWZG7;
-        Wed, 29 Sep 2021 10:32:23 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 29 Sep 2021 10:33:41 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 29 Sep 2021 10:33:41 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>
-CC:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3 3/3] genirq: Cleanup Kconfig
-Date:   Wed, 29 Sep 2021 10:35:22 +0800
-Message-ID: <20210929023522.57732-4-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210929023522.57732-1-wangkefeng.wang@huawei.com>
-References: <20210929023522.57732-1-wangkefeng.wang@huawei.com>
+        id S244577AbhI2HXs (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 29 Sep 2021 03:23:48 -0400
+Received: from mail-vk1-f176.google.com ([209.85.221.176]:42985 "EHLO
+        mail-vk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244284AbhI2HXs (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 29 Sep 2021 03:23:48 -0400
+Received: by mail-vk1-f176.google.com with SMTP id o204so694047vko.9;
+        Wed, 29 Sep 2021 00:22:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hpAjqd6jtBapvZHG3sZE9JvtpBjBfjvuAlUrFfuoZVg=;
+        b=LsjO96FuqJpwMDNCSa/uNRshpZgsfPI9I2koHWLWAvGHrscS18cdCyftcz9xXv2g9J
+         feNdzati/vrIbh4kzmZXLSIxUFvr66k3ZO9kUDSefodXEzJyp8V3/2D5HwcGPbJewTL3
+         dAZVQdMy/+qsKGfVw0CzA6BZqC3YyJT+y+YygfvyrshMNuiitrfgN4kljujeCwAiCoF5
+         d2xsjeyZIPCZbOJxGGiYSi5AUq/xZOy66CUAImGrai7+H+h6X9APshK7CyO2VMkj40n3
+         f6OK1TzaJc3sXhp6zsF1msTbUwl+I4DSBFrxiRM71985JSrHfMiAE+dGE3gKOVaH2wjs
+         8Htw==
+X-Gm-Message-State: AOAM532gtnGrkGlyMA1T/4aIyRpZ/pYPI6eJ8K4n4bBpbwQqF1CArgjB
+        kab+BMjRMi9Zv6+sgiDoXEZFQJNqTD3SGRRH8nnn0+M83Uc=
+X-Google-Smtp-Source: ABdhPJyshoR9y4AOppOE55f+1Qt+xdAPpSdcIPDoMtHbneQD8flGNWiLU13LziA6qNzmauYDZYLZkHmKFFXyVP+85qw=
+X-Received: by 2002:a1f:3a4b:: with SMTP id h72mr8265739vka.19.1632900126825;
+ Wed, 29 Sep 2021 00:22:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+References: <20210929023522.57732-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20210929023522.57732-1-wangkefeng.wang@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 29 Sep 2021 09:21:55 +0200
+Message-ID: <CAMuHMdVjfBEcvKMCvcG2P+K4rs+SZHDcf4OKsGzyFjtOHNFyqw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Cleanup MAY_HAVE_SPARSE_IRQ
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-As the last user of MAY_HAVE_SPARSE_IRQ is gone, kill it, and clean
-up the SPARSE_IRQ description, covert the help text into comment.
+Hi Kefeng,
 
-Also move GENERIC_IRQ_MULTI_HANDLER into menu, and change all spaces
-to tabs to fix alignment issue.
+On Wed, Sep 29, 2021 at 4:35 AM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> Most ARCHs support SPARSE_IRQ, the dynamical and statical irq
+> description allocation are alternative.
+>
+> The last user of MAY_HAVE_SPARSE_IRQ is sh/csky, but the sh use
+> SPARSE_IRQ, MAY_HAVE_SPARSE_IRQ could be kill. and for csky, it
+> uses statical allocation by default.
+>
+> So MAY_HAVE_SPARSE_IRQ seems to be useless, no need to maintain a
+> separate MAY_HAVE_SPARSE_IRQ config, kill it.
+>
+> Also cleanup the kernel/irq/Kconfig a little.
+>
+> v2:
+> - drop all the NR_IRQS suggested by Geert
+> - don' use SPARSE_IRQ for csky by default, suggested by Guo.
+>
+> Kefeng Wang (3):
+>   sh: Cleanup about SPARSE_IRQ
+>   csky: Kill MAY_HAVE_SPARSE_IRQ
+>   genirq: Cleanup Kconfig
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- kernel/irq/Kconfig | 50 +++++++++++++++++++---------------------------
- 1 file changed, 20 insertions(+), 30 deletions(-)
+Thanks for the update!
 
-diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
-index fbc54c2a7f23..aa7d0e3edea6 100644
---- a/kernel/irq/Kconfig
-+++ b/kernel/irq/Kconfig
-@@ -2,13 +2,9 @@
- menu "IRQ subsystem"
- # Options selectable by the architecture code
- 
--# Make sparse irq Kconfig switch below available
--config MAY_HAVE_SPARSE_IRQ
--       bool
--
- # Legacy support, required for itanic
- config GENERIC_IRQ_LEGACY
--       bool
-+	bool
- 
- # Enable the generic irq autoprobe mechanism
- config GENERIC_IRQ_PROBE
-@@ -16,15 +12,15 @@ config GENERIC_IRQ_PROBE
- 
- # Use the generic /proc/interrupts implementation
- config GENERIC_IRQ_SHOW
--       bool
-+	bool
- 
- # Print level/edge extra information
- config GENERIC_IRQ_SHOW_LEVEL
--       bool
-+	bool
- 
- # Supports effective affinity mask
- config GENERIC_IRQ_EFFECTIVE_AFF_MASK
--       bool
-+	bool
- 
- # Support for delayed migration from interrupt context
- config GENERIC_PENDING_IRQ
-@@ -36,7 +32,7 @@ config GENERIC_IRQ_MIGRATION
- 
- # Alpha specific irq affinity mechanism
- config AUTO_IRQ_AFFINITY
--       bool
-+	bool
- 
- # Interrupt injection mechanism
- config GENERIC_IRQ_INJECTION
-@@ -44,16 +40,16 @@ config GENERIC_IRQ_INJECTION
- 
- # Tasklet based software resend for pending interrupts on enable_irq()
- config HARDIRQS_SW_RESEND
--       bool
-+	bool
- 
- # Edge style eoi based handler (cell)
- config IRQ_EDGE_EOI_HANDLER
--       bool
-+	bool
- 
- # Generic configurable interrupt chip implementation
- config GENERIC_IRQ_CHIP
--       bool
--       select IRQ_DOMAIN
-+	bool
-+	select IRQ_DOMAIN
- 
- # Generic irq_domain hw <--> linux irq number translation
- config IRQ_DOMAIN
-@@ -103,6 +99,10 @@ config HANDLE_DOMAIN_IRQ
- config IRQ_TIMINGS
- 	bool
- 
-+# Allow to specify the low level IRQ handler at run time.
-+config GENERIC_IRQ_MULTI_HANDLER
-+	bool
-+
- config GENERIC_IRQ_MATRIX_ALLOCATOR
- 	bool
- 
-@@ -111,20 +111,15 @@ config GENERIC_IRQ_RESERVATION_MODE
- 
- # Support forced irq threading
- config IRQ_FORCED_THREADING
--       bool
-+	bool
- 
-+# Sparse irq numbering is useful for distro kernels that want
-+# to define a high CONFIG_NR_CPUS value but still want to have
-+# low kernel memory footprint on smaller machines.
-+# Sparse irqs can also be beneficial on NUMA boxes, as they spread
-+# out the interrupt descriptors in a more NUMA-friendly way.
- config SPARSE_IRQ
--	bool "Support sparse irq numbering" if MAY_HAVE_SPARSE_IRQ
--	help
--
--	  Sparse irq numbering is useful for distro kernels that want
--	  to define a high CONFIG_NR_CPUS value but still want to have
--	  low kernel memory footprint on smaller machines.
--
--	  ( Sparse irqs can also be beneficial on NUMA boxes, as they spread
--	    out the interrupt descriptors in a more NUMA-friendly way. )
--
--	  If you don't know what to do here, say N.
-+	bool
- 
- config GENERIC_IRQ_DEBUGFS
- 	bool "Expose irq internals in debugfs"
-@@ -139,8 +134,3 @@ config GENERIC_IRQ_DEBUGFS
- 	  If you don't know what to do here, say N.
- 
- endmenu
--
--config GENERIC_IRQ_MULTI_HANDLER
--	bool
--	help
--	  Allow to specify the low level IRQ handler at run time.
+Tested on SH on landisk (real) and rts7751r2d (qemu), so
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+P.S. Please use the same version number in all patches of the series,
+     to avoid confusing tools like b4.
+
+https://lore.kernel.org/all/20210929023522.57732-1-wangkefeng.wang@huawei.com/
+2021-09-29  2:35 ` [PATCH v1 1/3] sh: Cleanup about SPARSE_IRQ Kefeng Wang
+2021-09-29  2:35 ` [PATCH v2 2/3] csky: Kill MAY_HAVE_SPARSE_IRQ Kefeng Wang
+2021-09-29  2:35 ` [PATCH v3 3/3] genirq: Cleanup Kconfig Kefeng Wang
+                          ^^
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.26.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
