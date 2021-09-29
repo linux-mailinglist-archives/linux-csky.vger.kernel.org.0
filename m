@@ -2,66 +2,74 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D134F41A739
-	for <lists+linux-csky@lfdr.de>; Tue, 28 Sep 2021 07:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1BB41BCD3
+	for <lists+linux-csky@lfdr.de>; Wed, 29 Sep 2021 04:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235621AbhI1Fo7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 28 Sep 2021 01:44:59 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:26922 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235647AbhI1Fo7 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 28 Sep 2021 01:44:59 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HJSx14wHkzbmQH;
-        Tue, 28 Sep 2021 13:39:01 +0800 (CST)
+        id S243886AbhI2Cfc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 28 Sep 2021 22:35:32 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:22383 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243864AbhI2CfV (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 28 Sep 2021 22:35:21 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HK0gl07wrzQjGq;
+        Wed, 29 Sep 2021 10:29:23 +0800 (CST)
 Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
  dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Tue, 28 Sep 2021 13:43:17 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
+ 15.1.2308.8; Wed, 29 Sep 2021 10:33:40 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.8; Tue, 28 Sep 2021 13:43:17 +0800
-Message-ID: <3cd69b8f-c1af-baaa-31aa-f2e61e4c84b6@huawei.com>
-Date:   Tue, 28 Sep 2021 13:43:16 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH 0/3] Cleanup MAY_HAVE_SPARSE_IRQ
-Content-Language: en-US
-To:     Guo Ren <guoren@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Wed, 29 Sep 2021 10:33:39 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-csky@vger.kernel.org>
-References: <20210927081402.191717-1-wangkefeng.wang@huawei.com>
- <CAJF2gTRoXWqcMTkuu=L6gkF2cL79GonN6XBj86BMMptJnmz3zw@mail.gmail.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <CAJF2gTRoXWqcMTkuu=L6gkF2cL79GonN6XBj86BMMptJnmz3zw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
+        <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH v2 0/3] Cleanup MAY_HAVE_SPARSE_IRQ
+Date:   Wed, 29 Sep 2021 10:35:19 +0800
+Message-ID: <20210929023522.57732-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpemm500001.china.huawei.com (7.185.36.107)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+Most ARCHs support SPARSE_IRQ, the dynamical and statical irq
+description allocation are alternative.
 
-On 2021/9/28 13:08, Guo Ren wrote:
-> On Mon, Sep 27, 2021 at 4:11 PM Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->> Most ARCHs support SPARSE_IRQ, and MAY_HAVE_SPARSE_IRQ is useless, and
->> only sh and csky select it, but the could use SPARSE_IRQ too, let's
->> kill MAY_HAVE_SPARSE_IRQ, also cleanup the kernel/irq/Kconfig a little.
-> Can you elaborate the reason on why we need to kill MAY_HAVE_SPARSE_IRQ?
-> What are the benefits after the patch? (As you know we couldn't drop
-> "!SPARSE_IRQ".)
+The last user of MAY_HAVE_SPARSE_IRQ is sh/csky, but the sh use
+SPARSE_IRQ, MAY_HAVE_SPARSE_IRQ could be kill. and for csky, it
+uses statical allocation by default. 
 
-If csky want to keep MAY_HAVE_SPARSE_IRQ, then I won't kill it, or no 
-one use it,
+So MAY_HAVE_SPARSE_IRQ seems to be useless, no need to maintain a
+separate MAY_HAVE_SPARSE_IRQ config, kill it.
 
-then cleanup it.
+Also cleanup the kernel/irq/Kconfig a little.
 
+v2: 
+- drop all the NR_IRQS suggested by Geert
+- don' use SPARSE_IRQ for csky by default, suggested by Guo.
+
+Kefeng Wang (3):
+  sh: Cleanup about SPARSE_IRQ
+  csky: Kill MAY_HAVE_SPARSE_IRQ
+  genirq: Cleanup Kconfig
+
+ arch/csky/Kconfig         |  1 -
+ arch/sh/Kconfig           |  1 -
+ arch/sh/include/asm/irq.h | 11 ---------
+ kernel/irq/Kconfig        | 50 ++++++++++++++++-----------------------
+ 4 files changed, 20 insertions(+), 43 deletions(-)
+
+-- 
+2.26.2
 
