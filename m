@@ -2,40 +2,76 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B386941E2D3
-	for <lists+linux-csky@lfdr.de>; Thu, 30 Sep 2021 22:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84DC41E47E
+	for <lists+linux-csky@lfdr.de>; Fri,  1 Oct 2021 00:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344554AbhI3Uuu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-csky@lfdr.de>); Thu, 30 Sep 2021 16:50:50 -0400
-Received: from bizcloud-pnr-engineering.com.sg ([157.245.196.68]:50866 "EHLO
-        bizcloud-pnr-engineering.com.sg" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S245523AbhI3Uuu (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 30 Sep 2021 16:50:50 -0400
-X-Greylist: delayed 455 seconds by postgrey-1.27 at vger.kernel.org; Thu, 30 Sep 2021 16:50:49 EDT
-Received: from [5.135.230.141] (bizcloud-pnr-engineering.com.sg [IPv6:::1])
-        by bizcloud-pnr-engineering.com.sg (Postfix) with ESMTP id E951C6A782
-        for <linux-csky@vger.kernel.org>; Thu, 30 Sep 2021 20:40:55 +0000 (UTC)
-Reply-To: luisfernandezconsultant@gmail.com
-From:   Luis Fernandez <luisfernandezfirm@consultant.com>
-To:     linux-csky@vger.kernel.org
-Subject: Re:Urgent Response
-Date:   30 Sep 2021 13:40:54 -0700
-Message-ID: <20210930134053.F1B729E978283F3C@consultant.com>
+        id S245139AbhI3XAr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 30 Sep 2021 19:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348270AbhI3XAq (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 30 Sep 2021 19:00:46 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6D8C061770
+        for <linux-csky@vger.kernel.org>; Thu, 30 Sep 2021 15:59:03 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id g41so31270510lfv.1
+        for <linux-csky@vger.kernel.org>; Thu, 30 Sep 2021 15:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=FNbkl0bLjYpdykyqjlAE/YIKgfLjK/9naLKNeyJPQxWYeknu/Vef3WmTG20XVBOkkT
+         4NWyiNKDAHo81kjWWGrKkUCYWsQcigyGewd7zugPnOU/ndyIXGaq3UtdPwihPavDyPjE
+         vynClMdZ38W65OQjwvdyhc0Ip9v2B+fclTonLPWKB8SN+YlfO9GQEJUAAfYCjuqr+g5J
+         Ga+vPKBUZFoKQ587K7F/VAFYerYrQxaTkDwUTHIFdmFOMJASDFKuaK7BWMFoU/vZXWUE
+         G4Zsnhaus3ev94rrkYy78Ylwc7Y/nn4tdaANj3E8uIDmwaZSVVBZVgcGDdwNsUEVofvC
+         Qzdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AnIUtRQtDgk3YDJAatwz+LXUKRWPbctJNdAprjwvZ5o=;
+        b=j/7Aq1puFBXzhwyxe9qonYW16SZcQV09xmIcC/Kds0yfCckQbUPEP/zoHvyNfSS+9L
+         oXI6FO559oaLx0dNM0gZOm/oH5/jZyFWeUrQAohgCtt+ukT1ajCk8iwXcLOM1aeCmGx0
+         lpRWN2vWIyhTSLieqX4wloteEH2QHqkUTs4G2QuArVWnQZ4oaBDXPJlgnDHdp1agIQCP
+         KfKa5aWUbsgANY+9aY1pItKlNbohmhbjrQ7ijhw1XCJOZfJAhaeJx9l8kzYTU3qbCg9a
+         v6jEX9oa5yziKRFL23ya6INNIjcjtTT8LH2zymGHMCF2FfRL2AqAzddUK6w/H691/EK8
+         qNgQ==
+X-Gm-Message-State: AOAM532ntmB55IxuYkgOh7Ig3l7Y2CoWdFIWoQJHg42Xbo30vp/iWxai
+        LTwpjuMJ6DtqkOJFqsRkPlVh8RGfMTzSWMoqB1U=
+X-Google-Smtp-Source: ABdhPJzadxoIKjLfvvZm4FKgi8Y0YtZAfA9awwHrp7yq9dJOC2oAE4PdXAMTFIssO0RsKOlfo0VaaDM7w7AWku6MKd4=
+X-Received: by 2002:a05:6512:705:: with SMTP id b5mr1868259lfs.82.1633042741247;
+ Thu, 30 Sep 2021 15:59:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Received: by 2002:a05:6512:5d8:0:0:0:0 with HTTP; Thu, 30 Sep 2021 15:59:00
+ -0700 (PDT)
+Reply-To: southwestloanco59@gmail.com
+From:   SOUTHWESTLOANCO <saniabdullahinng2020@gmail.com>
+Date:   Thu, 30 Sep 2021 15:59:00 -0700
+Message-ID: <CA+3X9TwK-FMYOyx2piAdkb+da69-0cQtf6FJPOdAOZdawwJ8Ww@mail.gmail.com>
+Subject: Dear owner,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+-- 
 Good day,
+          Do you need a loan ? We offer any kind of loan to repay in
+6months with just 2% interest
 
-My name is Luis Fernandez.I would like to discuss something 
-important that will benefit both of us. I will send you more 
-details upon your response
+Kindly Reply with below information
+
+NAME...............
+ADDRESS..........
+OCCUPATION....
+AGE...................
+PHONE..............
+AMOUNT NEEDED......
 
 Regards
 
-Luis Fernandez
+Contact  Mr Gary Edward +13182955380
+
+Remittance Department southwestloanco59@gmail.com
