@@ -2,83 +2,118 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA0341FBA5
-	for <lists+linux-csky@lfdr.de>; Sat,  2 Oct 2021 14:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6404242F3
+	for <lists+linux-csky@lfdr.de>; Wed,  6 Oct 2021 18:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233069AbhJBMLQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 2 Oct 2021 08:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbhJBMLP (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 2 Oct 2021 08:11:15 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A36C061570
-        for <linux-csky@vger.kernel.org>; Sat,  2 Oct 2021 05:09:30 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id b6so13406801ilv.0
-        for <linux-csky@vger.kernel.org>; Sat, 02 Oct 2021 05:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=Whx5mJJfsoTUhjL/bK83gAes3S2TBr4pbGetCNrWFiCU9Zu65OG3XYqddSUEZ3mu1D
-         00W/WAiFKMfAG1QNA3ye10A7/2apSF7Ay78fen9taDGptSmmf3DdllObjy/+3KKIbfp8
-         8pDCwep8YmX6K1Ql/e4oxbruBm88CH+f2oz3UTqr7YUn9xqgiAi9GsvZ7xlNIJDVhcK1
-         Tewltjoga2gNp5LUm5cPCgL5CsaRyNUjkJpMtKMvT7BUZqL7jjNzzPzNqkejkAosm71z
-         qat7b1oOyXGY4gqi2QRMlsGiR4hN4IBGz92a4mXvo/htId9JqlOxWxWOTOz4IG+ITXJC
-         gH2g==
+        id S233666AbhJFQpa (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 6 Oct 2021 12:45:30 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:42793 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231484AbhJFQp2 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Oct 2021 12:45:28 -0400
+Received: by mail-oi1-f175.google.com with SMTP id x187so2464276oix.9;
+        Wed, 06 Oct 2021 09:43:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=1tNofERhuBDN5+66//soKoQeG5N6gyDQ65nRLm6E/ZT1U0xCytl1eErbiyIeGKpuZA
-         gxO6fIugHe3ONnNhEj2jKbtPfNEw/+7ZNtr0iKFsJ4/S5Y/nEwFMrb7lOsKAExgWxN3k
-         tv1Iv/lUb97LP2ftRf5GJ3VA8ekyGEQD7lI8V6HGUd8Z7EZCBuQ4w45jjbXpOZP0ASmU
-         XSh9Yd9vW7TpalX451rRpNb6bALRkOtfTOq291WlkxVuYSKFdspfdIOUHufnL6M8fU+W
-         U0EcoHsY6M7TZdFIn3ONNRiQqJ5QSVNEClg2o5JyzFuWmCroN1gysHk/VR+DR6AlaM36
-         yuUA==
-X-Gm-Message-State: AOAM533IjcwHTvJISQXMs4R5k7uSaI+QAJLO78cTbTcdtn9lQOwyV/NW
-        02gTlFnTZ15TfECgFF+zZvTGiHbsjKz3TpwZjN8=
-X-Google-Smtp-Source: ABdhPJzq3zr79ZSDXfzYf2m7RBrlM/FL/w2ct/1R28B5/VsB3HYYV5pfggIszb7CgPTdqtIq2Mtwbq8lYRmgkblOMyI=
-X-Received: by 2002:a05:6e02:1524:: with SMTP id i4mr2352846ilu.252.1633176569357;
- Sat, 02 Oct 2021 05:09:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jBzMvIMgnR7M/3yhI7B+vslrQk5E3C0Pdi0d+USOXmM=;
+        b=lKAeLC9r17NMcHj0W2tJAF27RAB1XfMR5afeQawc9v55LcLokP8Q3ou8GzO7qSBm0y
+         cM4kwUZOwBsCnieLBo0vkzBSQYa2saturs8bXxE2benYdciWglT7e2IG0nwB2PHUyVU/
+         YnIIpJYDQbFIDOQivrp+skZmgZnpVY4CTW8pvYKNLy25LuKJHidKSgNEPx7goAn4OGLo
+         1tq48eaytUxxezZd2xCzMahOly8TEYixkecUZAORcIrv1PGVX1osBBA5psSxReGyFJt2
+         YqLI+8nc4zfyDYt1XEykLqsFIYICT6Szq9iph7gpp/3z1dEP48qEp0ZsCrrEvDLFGaiD
+         H78w==
+X-Gm-Message-State: AOAM532najdQMh0/57fxxP1ii9hOgyyftOHITSqh8tILxG1UFe+ejvJ/
+        FDu4pNeAg80YxkqOX+vjTg==
+X-Google-Smtp-Source: ABdhPJx7CXhXT5M1W0CAhtBp2h8eMcQ5I0cRndKVwy8olo5SejcUQh3JemHdw8Jrz5VsbxC5vFcqCA==
+X-Received: by 2002:a05:6808:2221:: with SMTP id bd33mr8117373oib.64.1633538615382;
+        Wed, 06 Oct 2021 09:43:35 -0700 (PDT)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id s29sm4236628otg.60.2021.10.06.09.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Oct 2021 09:43:34 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>,
+        James Morse <james.morse@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 00/12] DT: CPU h/w id parsing clean-ups and cacheinfo id support
+Date:   Wed,  6 Oct 2021 11:43:20 -0500
+Message-Id: <20211006164332.1981454-1-robh@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 05:09:29 -0700 (PDT)
-Reply-To: unitednnation0@gmail.com
-From:   "U.n" <wadebaye33@gmail.com>
-Date:   Sat, 2 Oct 2021 00:09:29 -1200
-Message-ID: <CACE0T5WjMG_Az1KCqvzi-xfWU7enov8Uod7qH1DYw6x3UWAYkQ@mail.gmail.com>
-Subject: Attention
-To:     unitednnation0@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
---=20
+The first 10 patches add a new function, of_get_cpu_hwid(), which parses
+CPU DT node 'reg' property, and then use it to replace all the open
+coded versions of parsing CPU node 'reg' properties.
 
+The last 2 patches add support for populating the cacheinfo 'id' on DT
+platforms. The minimum associated CPU hwid is used for the id. The id is
+optional, but necessary for resctrl which is being adapted for Arm MPAM.
 
-Attention Sir/Madam
-This is the United Nation (UN). We the United Nations (UN) Globally
-has approved (US$2.500,000)( two Million Five hundred thousand
-dollars) compensation as part of our responsibilities for humanitarian
-Aid for fighting against CoronaVirus and you are among the lucky ones.
+Tested on arm64. Compile tested on arm, x86 and powerpc.
 
+Rob
 
-This compensation is for the most affected countries, communities and
-families across the global. Your funds were deposited with Bank in USA
-to transfer your funds to you via Internet Banking. You have to send
-your full details as state below:with this email Address
-  ( unitednnation0@gmail.com )
-Your full names:
-Address:
-Telephone:
-Occupation:
+Rob Herring (12):
+  of: Add of_get_cpu_hwid() to read hardware ID from CPU nodes
+  ARM: Use of_get_cpu_hwid()
+  ARM: broadcom: Use of_get_cpu_hwid()
+  arm64: Use of_get_cpu_hwid()
+  csky: Use of_get_cpu_hwid()
+  openrisc: Use of_get_cpu_hwid()
+  powerpc: Use of_get_cpu_hwid()
+  riscv: Use of_get_cpu_hwid()
+  sh: Use of_get_cpu_hwid()
+  x86: dt: Use of_get_cpu_hwid()
+  cacheinfo: Allow for >32-bit cache 'id'
+  cacheinfo: Set cache 'id' based on DT data
 
+ arch/arm/kernel/devtree.c       | 22 ++-------------------
+ arch/arm/mach-bcm/bcm63xx_pmb.c |  6 +++---
+ arch/arm64/kernel/smp.c         | 31 ++----------------------------
+ arch/csky/kernel/smp.c          |  6 ++----
+ arch/openrisc/kernel/smp.c      |  6 +-----
+ arch/powerpc/kernel/smp.c       |  7 +------
+ arch/riscv/kernel/cpu.c         |  3 ++-
+ arch/sh/boards/of-generic.c     |  5 ++---
+ arch/x86/kernel/devicetree.c    |  5 ++---
+ drivers/base/cacheinfo.c        | 34 ++++++++++++++++++++++++++++++++-
+ drivers/of/base.c               | 22 +++++++++++++++++++++
+ include/linux/cacheinfo.h       |  2 +-
+ include/linux/of.h              |  1 +
+ 13 files changed, 74 insertions(+), 76 deletions(-)
 
+-- 
+2.30.2
 
-Yours Sincerely
-Mr. Ant=C3=B3nio Guterres
-United Nations (UN).
