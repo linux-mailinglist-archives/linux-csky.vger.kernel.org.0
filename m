@@ -2,118 +2,147 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2AA426862
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Oct 2021 13:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4445E4289BB
+	for <lists+linux-csky@lfdr.de>; Mon, 11 Oct 2021 11:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240165AbhJHLDZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 8 Oct 2021 07:03:25 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:34297 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240117AbhJHLDY (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 8 Oct 2021 07:03:24 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S235476AbhJKJhv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 11 Oct 2021 05:37:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235443AbhJKJhv (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 11 Oct 2021 05:37:51 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HQlcH5cyHz4xbV;
-        Fri,  8 Oct 2021 22:01:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1633690887;
-        bh=B4qzHAigKKJHhzM+dPDATq6BWHA36ShynfcFOX354Uw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ecgb6jGX08YbAx5B1reNn4h/kU3Gen7kievibOO69w+92xKGfimzG9blAbi2wPVuT
-         bzRQvpw1Gsq6L5OISVmfgRGEMrtpfffTD3SxPCSAMjCA7BaSe9z1Uwt8UhxvwagCXt
-         RG8jZ9yVbHmz/oZlWgdyytG8dpN+zilnWPdwvHzOrKK+z9cUFtnbh9EiaF6DvYThDq
-         y+nA3s2Jr7OnqG1H9G2arDaiYJ9T+Ocn4v009hMVegWkEyhfV3tBa+fnPnVWJ1bKT9
-         NTxKKbhG9DIb5b2JYg+QufFs7CUHZN2G28KnkHe3XTX54qxanjx0qe1ihehNmLNt3p
-         OX9W1GxfbYAzQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rob Herring <robh@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 7730860E8B;
+        Mon, 11 Oct 2021 09:35:51 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mZrin-00FyQD-Cg; Mon, 11 Oct 2021 10:35:49 +0100
+Date:   Mon, 11 Oct 2021 10:35:48 +0100
+Message-ID: <87wnmjq4y3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 07/12] powerpc: Use of_get_cpu_hwid()
-In-Reply-To: <20211006164332.1981454-8-robh@kernel.org>
-References: <20211006164332.1981454-1-robh@kernel.org>
- <20211006164332.1981454-8-robh@kernel.org>
-Date:   Fri, 08 Oct 2021 22:01:15 +1100
-Message-ID: <8735pbok5g.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Artem Kashkanov <artem.kashkanov@intel.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>
+Subject: Re: [PATCH v3 12/16] KVM: Move x86's perf guest info callbacks to generic KVM
+In-Reply-To: <20210922000533.713300-13-seanjc@google.com>
+References: <20210922000533.713300-1-seanjc@google.com>
+        <20210922000533.713300-13-seanjc@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, will@kernel.org, mark.rutland@arm.com, guoren@kernel.org, nickhu@andestech.com, green.hu@gmail.com, deanbo422@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, pbonzini@redhat.com, boris.ostrovsky@oracle.com, jgross@suse.com, alexander.shishkin@linux.intel.com, jolsa@redhat.com, namhyung@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, sstabellini@kernel.org, linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, artem.kashkanov@intel.com, like.xu.linux@gmail.com, lingshan.zhu@intel.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Rob Herring <robh@kernel.org> writes:
-> Replace open coded parsing of CPU nodes' 'reg' property with
-> of_get_cpu_hwid().
->
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Wed, 22 Sep 2021 01:05:29 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
+> 
+> Move x86's perf guest callbacks into common KVM, as they are semantically
+> identical to arm64's callbacks (the only other such KVM callbacks).
+> arm64 will convert to the common versions in a future patch.
+> 
+> Implement the necessary arm64 arch hooks now to avoid having to provide
+> stubs or a temporary #define (from x86) to avoid arm64 compilation errors
+> when CONFIG_GUEST_PERF_EVENTS=y.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  arch/powerpc/kernel/smp.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-> index 9cc7d3dbf439..d96b0e361a73 100644
-> --- a/arch/powerpc/kernel/smp.c
-> +++ b/arch/powerpc/kernel/smp.c
-> @@ -1313,18 +1313,13 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
->  int cpu_to_core_id(int cpu)
+>  arch/arm64/include/asm/kvm_host.h |  8 +++++
+>  arch/arm64/kvm/arm.c              |  5 +++
+>  arch/x86/include/asm/kvm_host.h   |  3 ++
+>  arch/x86/kvm/x86.c                | 53 +++++++------------------------
+>  include/linux/kvm_host.h          | 10 ++++++
+>  virt/kvm/kvm_main.c               | 44 +++++++++++++++++++++++++
+>  6 files changed, 81 insertions(+), 42 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index ed940aec89e0..828b6eaa2c56 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -673,6 +673,14 @@ int io_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa);
+>  void kvm_perf_init(void);
+>  void kvm_perf_teardown(void);
+>  
+> +#ifdef CONFIG_GUEST_PERF_EVENTS
+> +static inline bool kvm_arch_pmi_in_guest(struct kvm_vcpu *vcpu)
+
+Pardon my x86 ignorance, what is PMI? PMU Interrupt?
+
+> +{
+> +	/* Any callback while a vCPU is loaded is considered to be in guest. */
+> +	return !!vcpu;
+> +}
+> +#endif
+
+Do you really need this #ifdef?
+
+> +
+>  long kvm_hypercall_pv_features(struct kvm_vcpu *vcpu);
+>  gpa_t kvm_init_stolen_time(struct kvm_vcpu *vcpu);
+>  void kvm_update_stolen_time(struct kvm_vcpu *vcpu);
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index e9a2b8f27792..2b542fdc237e 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -500,6 +500,11 @@ bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu)
+>  	return vcpu_mode_priv(vcpu);
+>  }
+>  
+> +unsigned long kvm_arch_vcpu_get_ip(struct kvm_vcpu *vcpu)
+> +{
+> +	return *vcpu_pc(vcpu);
+> +}
+> +
+>  /* Just ensure a guest exit from a particular CPU */
+>  static void exit_vm_noop(void *info)
 >  {
->  	struct device_node *np;
-> -	const __be32 *reg;
->  	int id = -1;
->  
->  	np = of_get_cpu_node(cpu, NULL);
->  	if (!np)
->  		goto out;
->  
-> -	reg = of_get_property(np, "reg", NULL);
-> -	if (!reg)
-> -		goto out;
-> -
-> -	id = be32_to_cpup(reg);
-> +	id = of_get_cpu_hwid(np, 0);
->  out:
->  	of_node_put(np);
->  	return id;
 
-This looks OK to me.
+The above nits notwithstanding,
 
-All the systems I can find have a /cpus/#address-cells of 1, so the
-change to use of_n_addr_cells() in of_get_cpu_hwid() should be fine.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-I booted it on a bunch of systems with no issues.
+	M.
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
-
-cheers
+-- 
+Without deviation from the norm, progress is not possible.
