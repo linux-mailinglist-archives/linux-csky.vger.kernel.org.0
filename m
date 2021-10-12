@@ -2,123 +2,86 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9C6429373
-	for <lists+linux-csky@lfdr.de>; Mon, 11 Oct 2021 17:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA17429D3B
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Oct 2021 07:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235140AbhJKPfh (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 11 Oct 2021 11:35:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54654 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233815AbhJKPff (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 11 Oct 2021 11:35:35 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3481760C49;
-        Mon, 11 Oct 2021 15:33:35 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mZxIy-00G3oP-Qe; Mon, 11 Oct 2021 16:33:33 +0100
-Date:   Mon, 11 Oct 2021 16:33:31 +0100
-Message-ID: <87lf2zpodw.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        id S231856AbhJLFlZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 12 Oct 2021 01:41:25 -0400
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:33227 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229688AbhJLFlY (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 12 Oct 2021 01:41:24 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0UrXmxxi_1634017156;
+Received: from testdeMacBook-Pro.local(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0UrXmxxi_1634017156)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 12 Oct 2021 13:39:18 +0800
+From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
+To:     Guo Ren <guoren@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org,
-        Artem Kashkanov <artem.kashkanov@intel.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>
-Subject: Re: [PATCH v3 12/16] KVM: Move x86's perf guest info callbacks to generic KVM
-In-Reply-To: <YWROQSGPuPf3wfC9@google.com>
-References: <20210922000533.713300-1-seanjc@google.com>
-        <20210922000533.713300-13-seanjc@google.com>
-        <87wnmjq4y3.wl-maz@kernel.org>
-        <YWROQSGPuPf3wfC9@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: seanjc@google.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, will@kernel.org, mark.rutland@arm.com, guoren@kernel.org, nickhu@andestech.com, green.hu@gmail.com, deanbo422@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, pbonzini@redhat.com, boris.ostrovsky@oracle.com, jgross@suse.com, alexander.shishkin@linux.intel.com, jolsa@redhat.com, namhyung@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, sstabellini@kernel.org, linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, artem.kashkanov@intel.com, like.xu.linux@gmail.com, lingshan.zhu@intel.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        live-patching@vger.kernel.org
+Subject: [PATCH 0/2] ftrace: make sure preemption disabled on recursion
+ testing
+Message-ID: <8c7de46d-9869-aa5e-2bb9-5dbc2eda395e@linux.alibaba.com>
+Date:   Tue, 12 Oct 2021 13:39:16 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, 11 Oct 2021 15:46:25 +0100,
-Sean Christopherson <seanjc@google.com> wrote:
-> 
-> On Mon, Oct 11, 2021, Marc Zyngier wrote:
-> > On Wed, 22 Sep 2021 01:05:29 +0100, Sean Christopherson <seanjc@google.com> wrote:
-> > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> > > index ed940aec89e0..828b6eaa2c56 100644
-> > > --- a/arch/arm64/include/asm/kvm_host.h
-> > > +++ b/arch/arm64/include/asm/kvm_host.h
-> > > @@ -673,6 +673,14 @@ int io_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa);
-> > >  void kvm_perf_init(void);
-> > >  void kvm_perf_teardown(void);
-> > >  
-> > > +#ifdef CONFIG_GUEST_PERF_EVENTS
-> > > +static inline bool kvm_arch_pmi_in_guest(struct kvm_vcpu *vcpu)
-> > 
-> > Pardon my x86 ignorance, what is PMI? PMU Interrupt?
-> 
-> Ya, Performance Monitoring Interrupt.  I didn't realize the term wasn't
-> common perf terminology.  Maybe kvm_arch_perf_events_in_guest() to be
-> less x86-centric?
+The testing show that perf_ftrace_function_call() are using
+smp_processor_id() with preemption enabled, all the checking
+on CPU could be wrong after preemption, PATCH 1/2 will fix
+that.
 
-Up to you. I would be happy with just a comment.
+Besides, as Peter point out, the testing of recursion within
+the section between ftrace_test_recursion_trylock()/_unlock()
+pair also need the preemption disabled as the documentation
+explained, PATCH 2/2 will make sure on that.
 
-> 
-> > > +{
-> > > +	/* Any callback while a vCPU is loaded is considered to be in guest. */
-> > > +	return !!vcpu;
-> > > +}
-> > > +#endif
-> > 
-> > Do you really need this #ifdef?
-> 
-> Nope, should compile fine without it, though simply dropping the #ifdef
-> would make make the semantics of the function wrong, even if nothing
-> consumes it.  Tweak it to use IS_ENABLED()?
-> 
-> 	return IS_ENABLED(CONFIG_GUEST_PERF_EVENTS) && !!vcpu;
+Michael Wang (2):
+  ftrace: disable preemption on the testing of recursion
+  ftrace: prevent preemption in perf_ftrace_function_call()
 
-LGTM.
-
-	M.
+ arch/csky/kernel/probes/ftrace.c     |  2 --
+ arch/parisc/kernel/ftrace.c          |  2 --
+ arch/powerpc/kernel/kprobes-ftrace.c |  2 --
+ arch/riscv/kernel/probes/ftrace.c    |  2 --
+ arch/x86/kernel/kprobes/ftrace.c     |  2 --
+ include/linux/trace_recursion.h      | 10 +++++++++-
+ kernel/livepatch/patch.c             |  6 ------
+ kernel/trace/trace_event_perf.c      | 17 +++++++++++++----
+ kernel/trace/trace_functions.c       |  5 -----
+ 9 files changed, 22 insertions(+), 26 deletions(-)
 
 -- 
-Without deviation from the norm, progress is not possible.
+1.8.3.1
+
