@@ -2,145 +2,146 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FAD42B825
-	for <lists+linux-csky@lfdr.de>; Wed, 13 Oct 2021 08:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A175242B9BA
+	for <lists+linux-csky@lfdr.de>; Wed, 13 Oct 2021 09:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238168AbhJMHBU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 13 Oct 2021 03:01:20 -0400
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:46020 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbhJMHBT (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Oct 2021 03:01:19 -0400
-Received: by mail-ua1-f42.google.com with SMTP id 64so2466055uab.12;
-        Tue, 12 Oct 2021 23:59:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vLmWoWym/1fKiJu7c9gpS1cDGT+57poTvw7kTscrC00=;
-        b=Gg+JGh/RyVv0o+fGhBa/WFOeEb2LNvd/qL4Tom37dhPYvviNUEwuLUQtdctYvsC2zO
-         dXxTr6BCjLALaPjwKnpYkaMsJEG4PS0aehh9MrByP4nyPyqJu3p81T/w9dqicVwv9yLp
-         dN18x6SzUIAsuKay+DiAAObgmB95M0qESd/IMJBkREfjiPfypsXJ+G0Kxg6DK8yLz6xr
-         t+zJTsY8hEJg60v2sBuClsciRjfkcXlxfQ/ML2jTqaE6MR7f9/EGOpsPW4sFtwMzSWRw
-         oRZew4j7Fk2Fo4n/N+blry6VUeqkJOXy7rC1NuLsBt936oXaxOQM1jLfSFadS4JA7FzP
-         CdgA==
-X-Gm-Message-State: AOAM5327PtGL95WWpRA6LPgNlrxRV6JY7GWmyYquyUn9e9UJz8ka6TBT
-        6JBxFIUJEgVv6akYZmd2u7CeD/PsniKn8S6JxRQ=
-X-Google-Smtp-Source: ABdhPJzwsQvQy07KzSSKF36slqOOCBmzhi7G4XFKh+MxO1aqVfgv6UylAsUlKqrZrwFEymqmWaysD4XtAMh8gSFAJlY=
-X-Received: by 2002:a67:d583:: with SMTP id m3mr36353545vsj.41.1634108355035;
- Tue, 12 Oct 2021 23:59:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211013063622.548590-1-masahiroy@kernel.org> <20211013063622.548590-2-masahiroy@kernel.org>
-In-Reply-To: <20211013063622.548590-2-masahiroy@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 13 Oct 2021 08:59:03 +0200
-Message-ID: <CAMuHMdUQVpvvq=ZqjL97gV6AxS5eGm4mRS=gL4PPwWiBS-v5AA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kbuild: use more subdir- for visiting subdirectories
- while cleaning
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greentime Hu <green.hu@gmail.com>, Guo Ren <guoren@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Julien Thierry <jthierry@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
+        id S238626AbhJMH5Y (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 13 Oct 2021 03:57:24 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:54944 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233015AbhJMH5X (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Oct 2021 03:57:23 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 99BD022296;
+        Wed, 13 Oct 2021 07:55:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1634111719; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i7IGip/6gbVvmHRaMhrhBlPAbqtmi4yf9VEPWWlaFeE=;
+        b=Ej27NFvhi/+3F1LnXiuEvJ3SmzHirAxauJBsGjgulCIyOssPQw6F6KwTNa9IaM5Au65bVy
+        pwr2XAZtxLt0rxZlJr0A7utwkQQTqhil/0XYYwHKx8ILmEECDzgVsKv24qdJ71W4uV3deH
+        oxQvor4tfFIz/5mrWPBwtKjE3PhLc20=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1634111719;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i7IGip/6gbVvmHRaMhrhBlPAbqtmi4yf9VEPWWlaFeE=;
+        b=+w9Az0Z3KJ2VxO6gzBE7ap3QeAyDlZfweavR7c1nDpq45ogh1GvakBs8gocNDgbltKk/J+
+        vJikc3lgCt4lGSCQ==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5FC20A3B88;
+        Wed, 13 Oct 2021 07:55:18 +0000 (UTC)
+Date:   Wed, 13 Oct 2021 09:55:18 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     =?ISO-2022-JP?Q?=1B$B2&lV=1B=28J?= <yun.wang@linux.alibaba.com>
+cc:     Guo Ren <guoren@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Michal Simek <monstr@monstr.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rich Felker <dalias@libc.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Rob Herring <robh@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Thomas Gleixner <tglx@linutronix.de>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        William Cohen <wcohen@redhat.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        live-patching@vger.kernel.org
+Subject: Re: [RESEND PATCH v2 1/2] ftrace: disable preemption between
+ ftrace_test_recursion_trylock/unlock()
+In-Reply-To: <75ee86ac-02f2-d687-ab1e-9c8c33032495@linux.alibaba.com>
+Message-ID: <alpine.LSU.2.21.2110130948120.5647@pobox.suse.cz>
+References: <b1d7fe43-ce84-0ed7-32f7-ea1d12d0b716@linux.alibaba.com> <75ee86ac-02f2-d687-ab1e-9c8c33032495@linux.alibaba.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 8:43 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> Documentation/kbuild/makefiles.rst suggests to use "archclean" for
-> cleaning arch/$(SRCARCH)/boot/.
->
-> Since commit d92cc4d51643 ("kbuild: require all architectures to have
-> arch/$(SRCARCH)/Kbuild"), we can use the "subdir- += boot" trick for
-> all architectures. This can take advantage of the parallel option (-j)
-> for "make clean".
->
-> I also cleaned up the comments. The "archdep" target does not exist.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
+> index a9f9c57..101e1fb 100644
+> --- a/include/linux/trace_recursion.h
+> +++ b/include/linux/trace_recursion.h
+> @@ -208,13 +208,29 @@ static __always_inline void trace_clear_recursion(int bit)
+>   * Use this for ftrace callbacks. This will detect if the function
+>   * tracing recursed in the same context (normal vs interrupt),
+>   *
+> + * The ftrace_test_recursion_trylock() will disable preemption,
+> + * which is required for the variant of synchronize_rcu() that is
+> + * used to allow patching functions where RCU is not watching.
+> + * See klp_synchronize_transition() for more details.
+> + *
 
->  arch/m68k/Makefile                 |  4 +---
+I think that you misunderstood. Steven proposed to put the comment before 
+ftrace_test_recursion_trylock() call site in klp_ftrace_handler().
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>   * Returns: -1 if a recursion happened.
+>   *           >= 0 if no recursion
+>   */
+>  static __always_inline int ftrace_test_recursion_trylock(unsigned long ip,
+>  							 unsigned long parent_ip)
+>  {
+> -	return trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START, TRACE_FTRACE_MAX);
+> +	int bit;
+> +
+> +	bit = trace_test_and_set_recursion(ip, parent_ip, TRACE_FTRACE_START, TRACE_FTRACE_MAX);
+> +	/*
+> +	 * The zero bit indicate we are nested
+> +	 * in another trylock(), which means the
+> +	 * preemption already disabled.
+> +	 */
+> +	if (bit > 0)
+> +		preempt_disable_notrace();
+> +
+> +	return bit;
+>  }
 
-Gr{oetje,eeting}s,
+[...]
 
-                        Geert
+> diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
+> index e8029ae..6e66ccd 100644
+> --- a/kernel/livepatch/patch.c
+> +++ b/kernel/livepatch/patch.c
+> @@ -52,11 +52,6 @@ static void notrace klp_ftrace_handler(unsigned long ip,
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Here
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+>  	if (WARN_ON_ONCE(bit < 0))
+>  		return;
+> -	/*
+> -	 * A variant of synchronize_rcu() is used to allow patching functions
+> -	 * where RCU is not watching, see klp_synchronize_transition().
+> -	 */
+> -	preempt_disable_notrace();
+> 
+>  	func = list_first_or_null_rcu(&ops->func_stack, struct klp_func,
+>  				      stack_node);
+> @@ -120,7 +115,6 @@ static void notrace klp_ftrace_handler(unsigned long ip,
+>  	klp_arch_set_pc(fregs, (unsigned long)func->new_func);
+> 
+>  unlock:
+> -	preempt_enable_notrace();
+>  	ftrace_test_recursion_unlock(bit);
+>  }
+
+Side note... the comment will eventually conflict with peterz's 
+https://lore.kernel.org/all/20210929152429.125997206@infradead.org/.
+
+Miroslav
