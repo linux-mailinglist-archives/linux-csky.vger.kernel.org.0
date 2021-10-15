@@ -2,36 +2,23 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D6742F7F4
-	for <lists+linux-csky@lfdr.de>; Fri, 15 Oct 2021 18:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9454C42FA63
+	for <lists+linux-csky@lfdr.de>; Fri, 15 Oct 2021 19:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241211AbhJOQT6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 15 Oct 2021 12:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236917AbhJOQT6 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 15 Oct 2021 12:19:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC6BC061570;
-        Fri, 15 Oct 2021 09:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4G571e+7WIYw8I8DxxzASA83VdzBwRS9bXXbSuaKaJk=; b=BOf7V74lD3FXPUP4kCK2U0TLoV
-        SAznVCk8FeJ+WeewdASQRvl3LuAkpeUPeUYt7Yezk4dwcdYMeynJPLMmXX2ketg/uIbydVfP3fx8i
-        4IFF/PRVghZskAnfs53YUmskIsiWSmMUiZqjhTPe2PmaC9LPuznv8Q8JxnB/Lk+IXoOffuE21e2zN
-        4QFyJJFjuCIGlI7Rxldtg9k0stkjBnL/ARkashob96yYMpeLCBfkQx787ELuOwu+KLpO4wtbU8EZc
-        64hcntxiBp7R1+VdlnNysKcyoHyA19AEgiAw6E5CIm3GsV2jlF1r0Te0gVoh+BTh2SRD+pD6oIJjU
-        sHkd9clg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mbPtJ-00A1p8-2k; Fri, 15 Oct 2021 16:17:05 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 02CA79857C7; Fri, 15 Oct 2021 18:17:02 +0200 (CEST)
-Date:   Fri, 15 Oct 2021 18:17:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
+        id S238131AbhJORhU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 15 Oct 2021 13:37:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238194AbhJORhP (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 15 Oct 2021 13:37:15 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B4A2E61151;
+        Fri, 15 Oct 2021 17:35:05 +0000 (UTC)
+Date:   Fri, 15 Oct 2021 13:35:04 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@redhat.com>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -56,25 +43,37 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Jisheng Zhang <jszhang@kernel.org>, linux-csky@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, live-patching@vger.kernel.org,
-        =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
 Subject: Re: [PATCH] tracing: Have all levels of checks prevent recursion
-Message-ID: <20211015161702.GF174703@worktop.programming.kicks-ass.net>
+Message-ID: <20211015133504.6c0a9fcc@gandalf.local.home>
+In-Reply-To: <20211015161702.GF174703@worktop.programming.kicks-ass.net>
 References: <20211015110035.14813389@gandalf.local.home>
+        <20211015161702.GF174703@worktop.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211015110035.14813389@gandalf.local.home>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Oct 15, 2021 at 11:00:35AM -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+On Fri, 15 Oct 2021 18:17:02 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> On Fri, Oct 15, 2021 at 11:00:35AM -0400, Steven Rostedt wrote:
+> > From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> > 
+> > While writing an email explaining the "bit = 0" logic for a discussion on  
 > 
-> While writing an email explaining the "bit = 0" logic for a discussion on
+> >  	bit = trace_get_context_bit() + start;  
+> 
+> While there, you were also going to update that function to match/use
+> get_recursion_context(). Because your version is still branch hell.
 
->  	bit = trace_get_context_bit() + start;
+That would probably be a separate patch. This is just a fix to a design
+flaw, changing the context tests would be performance enhancement.
 
-While there, you were also going to update that function to match/use
-get_recursion_context(). Because your version is still branch hell.
+Thanks for the reminder (as it was on my todo list to update that code).
+
+-- Steve
