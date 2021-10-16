@@ -2,80 +2,60 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AF142FFA1
-	for <lists+linux-csky@lfdr.de>; Sat, 16 Oct 2021 03:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881DC4303A8
+	for <lists+linux-csky@lfdr.de>; Sat, 16 Oct 2021 18:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbhJPBXN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 15 Oct 2021 21:23:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38274 "EHLO mail.kernel.org"
+        id S240708AbhJPQZa (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 16 Oct 2021 12:25:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233157AbhJPBXN (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Fri, 15 Oct 2021 21:23:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 69CE96109E;
-        Sat, 16 Oct 2021 01:21:04 +0000 (UTC)
+        id S240694AbhJPQZ3 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 16 Oct 2021 12:25:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 583F2610D1;
+        Sat, 16 Oct 2021 16:23:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634347266;
-        bh=kfmLpi/q+nIQBcUYMuONZzS9ikpiXBqPHhOBUbImCD8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=O8hjmnh64xj9iRd303Qns/Ruxp80ja4H+mw0Gqi56kV0nE/fmS+R4iO1VSnnz1DoX
-         sz3zWSP+xGDAzPRymzSC+dDp8EzMtk4ZTY12TD2lohG2tv+4G5u1xcNe9Ono5Yr6OK
-         oTBkXA+xSMlo+Q+HuCTzIOYLvpzxRYS+1BYn2MCosXCiG9YSuhcR8afQKmy66c/BqK
-         TcqhANte28iM6451XDjEL1NfSCCSdPQI/eLI13+U3KrEMLgKafAkBAEQGIaVq/+n3F
-         NA8Q5D6FSfpnWB7GcP+uitaXaDomxLCr63zakcLS6l0/vgSxE0MnZx51GL5pKzMWJ9
-         3XG7lYgr0ucXg==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-        guoren@kernel.org
-Subject: [GIT PULL] csky fixes for v5.15-rc6
-Date:   Sat, 16 Oct 2021 09:21:01 +0800
-Message-Id: <20211016012101.2862669-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1634401401;
+        bh=yRtHn1w9re0Zp9x/HnI3ySgmCs4w8DDs0ogGgg+lhGg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=O44rlF/X/Re9dNYuBQ/BewazF2+442d0yMq4GmhAMMgVgdqw7p8aXe5+WWhV3nqVJ
+         4Acv5lPaiUQBnKgwFfrCj1rFsC3kW/yDupi6+zjSx1+lYESnKyj/qSYv1MFXkTs/va
+         oHxILBYTHT0KumyrqP868k9rrX8PjAdE8TTKl15BEw2B9R7pnyNnMhvSjmCuWCxCMG
+         mGws7ioOCxhBkyB4AkGHWY2ZAR2bfGOxkrCuGye795Qivu+eXEeZ5fqmkrr8MxkIwH
+         85S/OHozeoknvW+OhIXHaImnPEG52DK1egiB0ZJ8KNib2pr0sPo9eLTVtvg5yzxvCb
+         AvyfzesvK4V8Q==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4CDA860A47;
+        Sat, 16 Oct 2021 16:23:21 +0000 (UTC)
+Subject: Re: [GIT PULL] csky fixes for v5.15-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211016010635.2860644-1-guoren@kernel.org>
+References: <20211016010635.2860644-1-guoren@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211016010635.2860644-1-guoren@kernel.org>
+X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
+X-PR-Tracked-Commit-Id: e21e52ad1e0126e2a5e2013084ac3f47cf1e887a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
+Message-Id: <163440140130.26929.4641296646306632379.pr-tracker-bot@kernel.org>
+Date:   Sat, 16 Oct 2021 16:23:21 +0000
+To:     guoren@kernel.org
+Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Linus:
+The pull request you sent on Sat, 16 Oct 2021 09:06:35 +0800:
 
-The following changes since commit 64570fbc14f8d7cb3fe3995f20e26bc25ce4b2cc:
+> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
 
-  Linux 5.15-rc5 (2021-10-10 17:01:59 -0700)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c13f946bf1ef0eef49748b1824a0bdfb3487fe8c
 
-are available in the Git repository at:
+Thank you!
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.15-rc6
-
-for you to fetch changes up to e21e52ad1e0126e2a5e2013084ac3f47cf1e887a:
-
-  csky: Make HAVE_TCM depend on !COMPILE_TEST (2021-10-16 07:20:12 +0800)
-
-----------------------------------------------------------------
-csky updates for 5.15-rc6
-
-Only 5 fixups:
- - Make HAVE_TCM depend on !COMPILE_TEST
- - bitops: Remove duplicate __clear_bit define
- - Select ARCH_WANT_FRAME_POINTERS only if compiler supports it
- - Fixup regs.sr broken in ptrace
- - don't let sigreturn play with priveleged bits of status register
-
-----------------------------------------------------------------
-Al Viro (1):
-      csky: don't let sigreturn play with priveleged bits of status register
-
-Guenter Roeck (3):
-      csky: Select ARCH_WANT_FRAME_POINTERS only if compiler supports it
-      csky: bitops: Remove duplicate __clear_bit define
-      csky: Make HAVE_TCM depend on !COMPILE_TEST
-
-Guo Ren (1):
-      csky: Fixup regs.sr broken in ptrace
-
- arch/csky/Kconfig              | 3 ++-
- arch/csky/include/asm/bitops.h | 1 -
- arch/csky/kernel/ptrace.c      | 3 ++-
- arch/csky/kernel/signal.c      | 4 ++++
- 4 files changed, 8 insertions(+), 3 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
