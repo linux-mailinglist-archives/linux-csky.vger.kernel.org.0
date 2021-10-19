@@ -2,78 +2,73 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79800433602
-	for <lists+linux-csky@lfdr.de>; Tue, 19 Oct 2021 14:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A95433683
+	for <lists+linux-csky@lfdr.de>; Tue, 19 Oct 2021 15:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbhJSMcn (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 19 Oct 2021 08:32:43 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:25169 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235466AbhJSMcm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 19 Oct 2021 08:32:42 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HYY225Y8Bz1DGn9;
-        Tue, 19 Oct 2021 20:28:42 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Tue, 19 Oct 2021 20:30:28 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.15; Tue, 19 Oct 2021 20:30:27 +0800
-Message-ID: <3c64a5a1-128a-7448-f429-b2d195819ca2@huawei.com>
-Date:   Tue, 19 Oct 2021 20:30:26 +0800
+        id S235761AbhJSNCS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 19 Oct 2021 09:02:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46926 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231616AbhJSNCS (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 19 Oct 2021 09:02:18 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF87360FC2;
+        Tue, 19 Oct 2021 13:00:02 +0000 (UTC)
+Date:   Tue, 19 Oct 2021 09:00:01 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-csky@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, live-patching@vger.kernel.org,
+        =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH] tracing: Have all levels of checks prevent recursion
+Message-ID: <20211019090001.0df8d678@gandalf.local.home>
+In-Reply-To: <YW5ok3CfNoRMfVQ5@alley>
+References: <20211015110035.14813389@gandalf.local.home>
+        <YW1KKCFallDG+E01@alley>
+        <20211018220203.064a42ed@gandalf.local.home>
+        <YW5ok3CfNoRMfVQ5@alley>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 0/3] Cleanup MAY_HAVE_SPARSE_IRQ
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        <linux-sh@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-csky@vger.kernel.org>
-References: <20210929023522.57732-1-wangkefeng.wang@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20210929023522.57732-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme701-chm.china.huawei.com (10.1.199.97) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Thomas, Could you pickup this cleanup patchset from your tree if 
-possible, thanks.
+On Tue, 19 Oct 2021 08:41:23 +0200
+Petr Mladek <pmladek@suse.com> wrote:
 
-On 2021/9/29 10:35, Kefeng Wang wrote:
-> Most ARCHs support SPARSE_IRQ, the dynamical and statical irq
-> description allocation are alternative.
+> Feel free to postpone this change. I do not want to complicate
+> upstreaming the fix for stable. I am sorry if I already
+> complicated it.
 > 
-> The last user of MAY_HAVE_SPARSE_IRQ is sh/csky, but the sh use
-> SPARSE_IRQ, MAY_HAVE_SPARSE_IRQ could be kill. and for csky, it
-> uses statical allocation by default.
-> 
-> So MAY_HAVE_SPARSE_IRQ seems to be useless, no need to maintain a
-> separate MAY_HAVE_SPARSE_IRQ config, kill it.
-> 
-> Also cleanup the kernel/irq/Kconfig a little.
-> 
-> v2:
-> - drop all the NR_IRQS suggested by Geert
-> - don' use SPARSE_IRQ for csky by default, suggested by Guo.
-> 
-> Kefeng Wang (3):
->    sh: Cleanup about SPARSE_IRQ
->    csky: Kill MAY_HAVE_SPARSE_IRQ
->    genirq: Cleanup Kconfig
-> 
->   arch/csky/Kconfig         |  1 -
->   arch/sh/Kconfig           |  1 -
->   arch/sh/include/asm/irq.h | 11 ---------
->   kernel/irq/Kconfig        | 50 ++++++++++++++++-----------------------
->   4 files changed, 20 insertions(+), 43 deletions(-)
-> 
+
+No problem. It's not that complicated of a merge fix. I'm sure Linus can
+handle it ;-)
+
+-- Steve
