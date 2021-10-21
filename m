@@ -2,112 +2,65 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5279A4352F6
-	for <lists+linux-csky@lfdr.de>; Wed, 20 Oct 2021 20:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E489436155
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Oct 2021 14:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbhJTSuW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 20 Oct 2021 14:50:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35640 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230076AbhJTSuR (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Wed, 20 Oct 2021 14:50:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A10E6103D;
-        Wed, 20 Oct 2021 18:48:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634755683;
-        bh=n8VrOe4I2yKWKENo2xOz+GrW26l+tosuZNQ1rYD5gKE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X8tKojH7Z8fdPyVTk4z+AoVAS3a9h5oYDEVDa7uI3b3vQWDC0RDkopnsSuFW09wMx
-         S5ymoCHlxw+BZDcfi8a/SbXyaru92R/D/4JVacWcGVpk2lCHkMZKGKNpRCcpV4amQE
-         0SC95mBmBf+xrbZsPKYOZ3Tw+i6Awvb4CDoD4fADso7xeFCGtNQbQjFeERWiYt5J4a
-         XviC1MWcQkWkyhnJbBbb7MhB9KdUgixAetlN+ZjGulMI+TYlz6yOX8pi/IJu8QIrAm
-         DPTPSRiUO2vc4Q2/LyUL9rJoQfRdVbdcu/SicgghaP/nLNsd5aIhVOahGYlBk3gw4h
-         jokZEwKpwMQ/g==
-Received: by mail-lf1-f42.google.com with SMTP id g36so328184lfv.3;
-        Wed, 20 Oct 2021 11:48:02 -0700 (PDT)
-X-Gm-Message-State: AOAM532bXNhmVLh6cfAOUxsJB+NDo+eiCLht4tPeKR4iEnlNWXGLeu4P
-        /I69BmJlS2QuRZe9tLV1khZkLcBv1KlsB4zS7g==
-X-Google-Smtp-Source: ABdhPJyDkQcU37hcsbyKe6namKZuEksRA+CPb1y/N+dx0XKOp77yba3905ZumF5lcfjyaXaZElnjUUGJ+2NqhJwXc9g=
-X-Received: by 2002:aa7:cd0a:: with SMTP id b10mr942298edw.164.1634755670808;
- Wed, 20 Oct 2021 11:47:50 -0700 (PDT)
+        id S231793AbhJUMV0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 21 Oct 2021 08:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231773AbhJUMVN (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 21 Oct 2021 08:21:13 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37EC061755
+        for <linux-csky@vger.kernel.org>; Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id p142so707129iod.0
+        for <linux-csky@vger.kernel.org>; Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
+        b=ffKmYx2fMIYl+OvJQQopnpiCeJRTG9P9KFv8M/82NWd2iRdr6FH2GSUfX4dihVwp/4
+         j3BBt8gtfGRwriH7QaI70cXqaYxp9ZB8IdW+AAJ3XWxbhn/W/4z89PrBZ3/2rnhl+5p4
+         slIUeI/d0se+fbKVCqySusiscs7YTggdFIx/lIQo0jD9OBm3/E6HIs73TdR5+EDc4Ahn
+         Mx3oX/4Jht8hJFRtk5Rk/ZtBUnWHcvUlGjzuHFD2c3qgVHCXo5sQXMFhDt//I4s8bxor
+         0lHgZbVQWxyw1uqR2LKA3z5mNeOQjztcOBRK2nMHBotT/Ptq5yh5oJc65RUVpYj9vAKX
+         E+1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
+        b=fyfLahS/1pxPz8jqz8c3cdSr0Man6HR1S5JEQc9gPD48Hg0A+DM9JCDpnKYgfNDcW+
+         rVfvNXcdaaDVYUG/u2e4Af/ZyKlD2hWlX8lSxQ+Lc1PEBCRxCc7EIO0u0I/VlKRCEGuk
+         oQOsxzXBQQm3UYLWqgqo3M4UIGkPSCZtWcOeHeF6pJO0bZB9dBPxafy1/1DG4h0zPt1m
+         8uVgQjeEnUaBenLvbanGuuGKSOxxaAxrHm+Q8f7wRL1rEKFiKxhsskE4cTsbtiGgQ+mh
+         8sp6dCerVcfQIbvRLmvZdszUCfYsGzs9MMpPc3TBhBWuvS72VuJLznP+A37HlBP8R9/Y
+         PgqA==
+X-Gm-Message-State: AOAM530twgZbB4Vglqu7VwM+EJS1PbZqt11JWNIqJpXZipk1HfqyJoLM
+        bUVb1d3M0wkjw534CGPWyGSLWJ2c115r8pF3arI=
+X-Google-Smtp-Source: ABdhPJy/O5GAp34/8OGCgwxgN16t4zAtUhD1QqHkZqC4kznm6N81zl7Wcf3jBmF+fUfqmk/Z+gQhgoaiTdlocMxWQvk=
+X-Received: by 2002:a05:6602:2e81:: with SMTP id m1mr3773434iow.23.1634818737372;
+ Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211006164332.1981454-1-robh@kernel.org>
-In-Reply-To: <20211006164332.1981454-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 20 Oct 2021 13:47:39 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLg1=T52MqhsGgmAcRueC_nJdivGg4h+M2Bd8W3fyHCmg@mail.gmail.com>
-Message-ID: <CAL_JsqLg1=T52MqhsGgmAcRueC_nJdivGg4h+M2Bd8W3fyHCmg@mail.gmail.com>
-Subject: Re: [PATCH 00/12] DT: CPU h/w id parsing clean-ups and cacheinfo id support
-To:     Russell King <linux@armlinux.org.uk>,
-        James Morse <james.morse@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, X86 ML <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        Openrisc <openrisc@lists.librecores.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        SH-Linux <linux-sh@vger.kernel.org>, devicetree@vger.kernel.org
+Received: by 2002:a05:6638:1924:0:0:0:0 with HTTP; Thu, 21 Oct 2021 05:18:57
+ -0700 (PDT)
+Reply-To: ooisangkuang63@gmail.com
+From:   Mr Ooi Sang Kuang <mrsshirleyperezfosgate7@gmail.com>
+Date:   Thu, 21 Oct 2021 05:18:57 -0700
+Message-ID: <CA+ynneC82om4XGpeSLLyaZ9uiZCuHkofPAtHcga0--5BW77aFA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Oct 6, 2021 at 11:43 AM Rob Herring <robh@kernel.org> wrote:
->
-> The first 10 patches add a new function, of_get_cpu_hwid(), which parses
-> CPU DT node 'reg' property, and then use it to replace all the open
-> coded versions of parsing CPU node 'reg' properties.
->
-> The last 2 patches add support for populating the cacheinfo 'id' on DT
-> platforms. The minimum associated CPU hwid is used for the id. The id is
-> optional, but necessary for resctrl which is being adapted for Arm MPAM.
->
-> Tested on arm64. Compile tested on arm, x86 and powerpc.
->
-> Rob
->
-> Rob Herring (12):
->   of: Add of_get_cpu_hwid() to read hardware ID from CPU nodes
->   ARM: Use of_get_cpu_hwid()
->   ARM: broadcom: Use of_get_cpu_hwid()
->   arm64: Use of_get_cpu_hwid()
->   csky: Use of_get_cpu_hwid()
->   openrisc: Use of_get_cpu_hwid()
->   powerpc: Use of_get_cpu_hwid()
->   riscv: Use of_get_cpu_hwid()
->   sh: Use of_get_cpu_hwid()
->   x86: dt: Use of_get_cpu_hwid()
->   cacheinfo: Allow for >32-bit cache 'id'
->   cacheinfo: Set cache 'id' based on DT data
+-- 
+Hello,
 
-I've fixed up the openrisc error and applied 1-10 to the DT tree.
+I want to discuss an important project issue with you.
+Please, let me know if this email is valid. Reply me at ooisangkuang63@gmail.com
 
-The cacheinfo part is going to need some more work. I've found I will
-need the cache affinity (of possible cpus) as well, so I plan to also
-store the affinity instead of looping thru caches and cpus again.
-
-Rob
+Thank you,
+Mr Ooi Sang Kuang
