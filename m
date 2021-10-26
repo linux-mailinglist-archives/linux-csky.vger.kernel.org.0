@@ -2,115 +2,100 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F056643974E
-	for <lists+linux-csky@lfdr.de>; Mon, 25 Oct 2021 15:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF2143AA17
+	for <lists+linux-csky@lfdr.de>; Tue, 26 Oct 2021 04:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbhJYNQx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 25 Oct 2021 09:16:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36800 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231960AbhJYNQx (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 25 Oct 2021 09:16:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 51E0F6103B;
-        Mon, 25 Oct 2021 13:14:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635167671;
-        bh=GavwiAlakBac6bzghfPLRz5VcvYh7Vc9Z0asSU+b89s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EtKYCYDDNGtbiXq6EnTrDqPg/TA65jXyZo/P6q37ayo7S9EH7QDVpKe1Qdv0LV/ql
-         cZBYI++b/QEq88ggDtRuC6r4qib0LlkRI3ooNzq50iF2X6dVUc9wKo/A0JNbTL7+ll
-         0naECz41hi6SUUPLmUl86T2wZANFCYnn13sOTfycrNd6odnDNSn0rexYU1Z6J4xuGz
-         rCEBCUzy0rViCtXu7L3RWokUFc5rTeMWW/KVtwxH11oi2xIJ21mlDN7QB8Y/blqVMQ
-         VOleFpkIUhiTZOVMT8Klni7RK2tgvqrCNl5/ykLbCG8mpRPYR5Py+mHujzRh82GEZ5
-         r+BSS7Re+PTHg==
-Received: by mail-ua1-f50.google.com with SMTP id f24so2842253uav.12;
-        Mon, 25 Oct 2021 06:14:31 -0700 (PDT)
-X-Gm-Message-State: AOAM530mK7q35WjrAUSc+qn/6Z2yRNCcaO/DTccVrXoQsvD88mncF+jD
-        FC+HhWOGHnQwbkHxoB4nlZePi8Tk3WX4y+5icuU=
-X-Google-Smtp-Source: ABdhPJyWzs4e0eyzid4oKwu8tHCn+QBDVzHmrAVyqE/4xHGSYCccdYV2M3eNoH0rTILxKQI0JdUrCpKqi3UWGb5lF8Q=
-X-Received: by 2002:a05:6102:6c1:: with SMTP id m1mr15014547vsg.28.1635167670442;
- Mon, 25 Oct 2021 06:14:30 -0700 (PDT)
+        id S232963AbhJZCNf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 25 Oct 2021 22:13:35 -0400
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:42134 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230216AbhJZCNe (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 25 Oct 2021 22:13:34 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yun.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0UtjMs7q_1635214264;
+Received: from testdeMacBook-Pro.local(mailfrom:yun.wang@linux.alibaba.com fp:SMTPD_---0UtjMs7q_1635214264)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 26 Oct 2021 10:11:06 +0800
+Subject: Re: [PATCH v4 0/2] fix & prevent the missing preemption disabling
+From:   =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
+To:     Guo Ren <guoren@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        live-patching@vger.kernel.org
+References: <32a36348-69ee-6464-390c-3a8d6e9d2b53@linux.alibaba.com>
+Message-ID: <71c21f78-9c44-fdb2-f8e2-d8544b3421bd@linux.alibaba.com>
+Date:   Tue, 26 Oct 2021 10:09:12 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211025091219.3665576-1-guoren@kernel.org> <87czntbdgk.wl-maz@kernel.org>
-In-Reply-To: <87czntbdgk.wl-maz@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 25 Oct 2021 21:14:19 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRvFGoyy44i3oRiAYkGnfts4hc-aB74RLHgsz8+AJxb=w@mail.gmail.com>
-Message-ID: <CAJF2gTRvFGoyy44i3oRiAYkGnfts4hc-aB74RLHgsz8+AJxb=w@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/irq-csky-mpintc: Fixup mask/unmask un-implementation
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Marc Zyngier <marc.zyngier@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <32a36348-69ee-6464-390c-3a8d6e9d2b53@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 6:34 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Mon, 25 Oct 2021 10:12:19 +0100,
-> guoren@kernel.org wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > The mask/unmask must be implemented, and enable/disable supplement
-> > them if the HW requires something different at startup time. When
-> > irq source is disabled by mask, mpintc could complete irq normally.
-> >
-> > So just replace the with mask/unmask function.
-> >
-> > Tested-by: Guo Ren <guoren@linux.alibaba.com>
->
-> This only makes sense if tested by a third party. It is assumed that
-> the author of a patch has tested it.
-Thx for pointing it out.
+Just a ping, to see if there are any more comments :-P
 
->
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Cc: Marc Zyngier <marc.zyngier@arm.com>
->
-> This hasn't been my email address for over two years now. I'm sure my
-> ex manager is happy to hear from you, but I doubt he'll bother replying.
-I'll fix up your email in the next patch, thx for still reviewing.
+Regards,
+Michael Wang
 
->
-> > ---
-> >  drivers/irqchip/irq-csky-mpintc.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/irqchip/irq-csky-mpintc.c b/drivers/irqchip/irq-csky-mpintc.c
-> > index a1534edef7fa..f169600dbde6 100644
-> > --- a/drivers/irqchip/irq-csky-mpintc.c
-> > +++ b/drivers/irqchip/irq-csky-mpintc.c
-> > @@ -164,8 +164,8 @@ static int csky_irq_set_affinity(struct irq_data *d,
-> >  static struct irq_chip csky_irq_chip = {
-> >       .name           = "C-SKY SMP Intc",
-> >       .irq_eoi        = csky_mpintc_eoi,
-> > -     .irq_enable     = csky_mpintc_enable,
-> > -     .irq_disable    = csky_mpintc_disable,
-> > +     .irq_unmask     = csky_mpintc_enable,
-> > +     .irq_mask       = csky_mpintc_disable,
-> >       .irq_set_type   = csky_mpintc_set_type,
-> >  #ifdef CONFIG_SMP
-> >       .irq_set_affinity = csky_irq_set_affinity,
->
-> Please rename the functions to match the fields they are assigned to.
-okay
-
->
-> Thanks,
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
-
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+On 2021/10/18 上午11:38, 王贇 wrote:
+> The testing show that perf_ftrace_function_call() are using smp_processor_id()
+> with preemption enabled, all the checking on CPU could be wrong after preemption.
+> 
+> As Peter point out, the section between ftrace_test_recursion_trylock/unlock()
+> pair require the preemption to be disabled as 'Documentation/trace/ftrace-uses.rst'
+> explained, but currently the work is done outside of the helpers.
+> 
+> And since the internal using of trace_test_and_set_recursion()
+> and trace_clear_recursion() also require preemption to be disabled, we
+> can just merge the logical together.
+> 
+> Patch 1/2 will make sure preemption disabled when recursion lock succeed,
+> patch 2/2 will do smp_processor_id() checking after trylock() to address the
+> issue.
+> 
+> v1: https://lore.kernel.org/all/8c7de46d-9869-aa5e-2bb9-5dbc2eda395e@linux.alibaba.com/
+> v2: https://lore.kernel.org/all/b1d7fe43-ce84-0ed7-32f7-ea1d12d0b716@linux.alibaba.com/
+> v3: https://lore.kernel.org/all/609b565a-ed6e-a1da-f025-166691b5d994@linux.alibaba.com/
+> 
+> Michael Wang (2):
+>   ftrace: disable preemption when recursion locked
+>   ftrace: do CPU checking after preemption disabled
+> 
+>  arch/csky/kernel/probes/ftrace.c     |  2 --
+>  arch/parisc/kernel/ftrace.c          |  2 --
+>  arch/powerpc/kernel/kprobes-ftrace.c |  2 --
+>  arch/riscv/kernel/probes/ftrace.c    |  2 --
+>  arch/x86/kernel/kprobes/ftrace.c     |  2 --
+>  include/linux/trace_recursion.h      | 20 +++++++++++++++++++-
+>  kernel/livepatch/patch.c             | 13 +++++++------
+>  kernel/trace/ftrace.c                | 15 +++++----------
+>  kernel/trace/trace_event_perf.c      |  6 +++---
+>  kernel/trace/trace_functions.c       |  5 -----
+>  10 files changed, 34 insertions(+), 35 deletions(-)
+> 
