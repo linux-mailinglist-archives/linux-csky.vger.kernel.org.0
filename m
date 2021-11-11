@@ -2,172 +2,121 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C268744C231
-	for <lists+linux-csky@lfdr.de>; Wed, 10 Nov 2021 14:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF9A44CE6A
+	for <lists+linux-csky@lfdr.de>; Thu, 11 Nov 2021 01:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbhKJNlA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 10 Nov 2021 08:41:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
+        id S232005AbhKKAmq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 10 Nov 2021 19:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbhKJNk7 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 10 Nov 2021 08:40:59 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FE8C061766;
-        Wed, 10 Nov 2021 05:38:11 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id u11so6136538lfs.1;
-        Wed, 10 Nov 2021 05:38:11 -0800 (PST)
+        with ESMTP id S230430AbhKKAmp (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 10 Nov 2021 19:42:45 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AB2C061767
+        for <linux-csky@vger.kernel.org>; Wed, 10 Nov 2021 16:39:57 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id m26so4113639pff.3
+        for <linux-csky@vger.kernel.org>; Wed, 10 Nov 2021 16:39:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WtBceGsuNkvJWXKObFPMz3/faWDyi74JI/F+pRXLbvs=;
-        b=lD15/VjqUInHM3dZidzqbDMtU49DALHBS4Ay1C40nUi5lxcF7BMQ5EnHXXzG4e6Wu9
-         KEtaN/+P0k1Njtg3ToWP1/KM8wIXtXfb2GMI1jVOw30JDescBKoGZyWGQkHaeFFMF1Cx
-         557WfM+CudsCe0rfY4tn9Qu/fZ6FXK7hdk9Wu9dTaZ71QukQt6Mf26SjkHrJIeq+MupJ
-         /vckqogxswS5UmhYqlk9vNHYa1S8ChRuc7OrOB+B+82hPJEZwrpCBIceX5S6KM+5NMWF
-         FSm1MYMPHMKiWtHmf2u4gxwpqn+oAaxX8rT7fWDE5HDvTnS5+IytbAjE77fEnTdMp1QG
-         4sBQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GCvgNnriUarmCbicpFHHYqZw6hipmqUHqLUNYcuQ5mQ=;
+        b=C/MSXc16d+vnyvPXnpHvWobOFVkGiZtvk8Fqn9KlAR5wdGaXHNSYYEqouCychGdG8p
+         5qAR+o3QR3qaB0TDQ3yAC+dSCwOdKvfiEZ3Kln4q4atLvJqPKPRHW1o5zq6Ns5xwkOtC
+         ik1lkhQwf39tyN70E9VZseTQvLWw0Txmbjd6Pu8ATSLAClCUTw6YIKKav5QdSu46fQ/5
+         +e5c/wEbKgc1jOnG5VvHUJ9ey6iGYkWAk7F4ceZqKKEK8rilWv0ZFkZJXl5cjnWfQIx8
+         55tsEZ8ESYtzoMLt6c2A3hOaXpTct4C6eIipQoqRcDMTUY4c5FxHvAnMIbgpRMgbfXry
+         LjOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WtBceGsuNkvJWXKObFPMz3/faWDyi74JI/F+pRXLbvs=;
-        b=dR7RIwju1mPuGWy/xF/xjTUNZDjxCj7/xLYHZ0G4XEgsLYxEjxWiODFMVLchb39Avf
-         3PT2MHTzkGrGi0VkpWGh8JBrkkVqXmjWqSKSVyvWcCMiXSGvYEt0sIVmubHV/fSpSCDn
-         XcnTjHclx1GUlEfvJUz81b0scOwyGZUoEB3BOBud7SA5LMvReiMMPqRSgtZYYzfs5+kC
-         B/tgHbJGdHTstc4S9x+4aCkUlxKwkQQCkgvgyY2KwKqnk4wtJwi1y1sx1dz+OWbAvIIl
-         kU6+G5olyje+XVnVW0fELBGXM78/eYCOT44u7snurcXBDph8CIks7m7VABfrstWQQ0cZ
-         znzA==
-X-Gm-Message-State: AOAM530ZdC16NX6+rQ2X0060vkY8vZzZ1rZjM3h6fLK8seXOLgbpewIz
-        S/8sUX6ZWf7JKvuXIGQm32YE88HSLQg=
-X-Google-Smtp-Source: ABdhPJxBHb2JNLIS70NEJi27Oqj8IHGODoK0u1oyS1uV5awJ6mpkyMTiHwL65DF0nZiuWJMJYZ6aSw==
-X-Received: by 2002:a05:6512:c02:: with SMTP id z2mr14599668lfu.445.1636551490068;
-        Wed, 10 Nov 2021 05:38:10 -0800 (PST)
-Received: from [192.168.2.145] (79-139-177-117.dynamic.spd-mgts.ru. [79.139.177.117])
-        by smtp.googlemail.com with ESMTPSA id z25sm60391lja.99.2021.11.10.05.38.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Nov 2021 05:38:09 -0800 (PST)
-Subject: Re: [PATCH v2 27/45] mfd: ntxec: Use devm_register_power_handler()
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GCvgNnriUarmCbicpFHHYqZw6hipmqUHqLUNYcuQ5mQ=;
+        b=3RNedufUJs/pDgQPcPvjrhbqXvlUciXmpeX7A/vblGdZGED1wJhxOQQUApev+3RyIX
+         RMEz8iTYQyPU6x2VcnqHTJj1CXlQQQXkZmJyNwRz4VadwYKrXfjw6BvOqZOkNWNNloW6
+         1rSM4he60OOZuF/a+vFAlZdJC9Z9zzh6swPG49N9e7vBHB6GtKqYBGSUz1Kv40QL3hMK
+         YYmQX8XL/CKdOwixGCFHI8WMsfeauK1As8YzlTcTnjxWJD0VnXsgkE9wbdTpY/luKCsu
+         FyzJZi3xDITOOGz7JDMlVlVVnV3KrK3GmgIwBraNA3xalnYBtHprh5wK6+eZiH7Z2v9c
+         tXfQ==
+X-Gm-Message-State: AOAM530RViX1Q/HQuFFeHsbQ0sfAPRm6vz85MoYfusebTckkciyL59e6
+        nm+w+Ih55JteMEz/bRvMaIodAw==
+X-Google-Smtp-Source: ABdhPJyzWkgci9VXixrCRz+lgwFJsP+1qd2jH9xIE5pUKSl6Qej6NdegD7xki773sUR8p4Puao3+lQ==
+X-Received: by 2002:a63:6302:: with SMTP id x2mr1983608pgb.5.1636591196936;
+        Wed, 10 Nov 2021 16:39:56 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h194sm750078pfe.156.2021.11.10.16.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 16:39:56 -0800 (PST)
+Date:   Thu, 11 Nov 2021 00:39:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>, Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20211027211715.12671-1-digetx@gmail.com>
- <20211027211715.12671-28-digetx@gmail.com> <YYbqlmOM95q7Hbjo@latitude>
- <be0c74c6-05a9-cad5-c285-6626d05f8860@gmail.com>
- <9a22c22d-94b1-f519-27a2-ae0b8bbf6e99@roeck-us.net>
- <658cf796-e3b1-f816-1e15-9e9e08b8ade0@gmail.com>
- <5a17fee3-4214-c2b9-abc1-ab9d6071591b@roeck-us.net>
- <c0b52994-51f5-806b-b07e-3e70d8217ffc@gmail.com> <YYkIeBSCFka9yrqC@latitude>
- <04103df3-1ef4-b560-a5cb-fa51737d28ad@gmail.com> <YYuia9KFdi+ETT+I@latitude>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <ceefc854-5d15-b73c-0135-c1cbbbb473b7@gmail.com>
-Date:   Wed, 10 Nov 2021 16:38:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Artem Kashkanov <artem.kashkanov@intel.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Marc Zyngier <maz@kernel.org>, Nick Hu <nickhu@andestech.com>,
+        Guo Ren <guoren@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH v3 01/16] perf: Ensure perf_guest_cbs aren't reloaded
+ between !NULL check and deref
+Message-ID: <YYxmWGB6IUwEu4VZ@google.com>
+References: <20210922000533.713300-1-seanjc@google.com>
+ <20210922000533.713300-2-seanjc@google.com>
+ <77e3a76a-016b-8945-a1d5-aae4075e2147@gmail.com>
+ <YYPrst2CUBXLYc9h@google.com>
+ <f86fe9cb-bf4b-1c10-e0da-276fbb3f62ee@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YYuia9KFdi+ETT+I@latitude>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f86fe9cb-bf4b-1c10-e0da-276fbb3f62ee@redhat.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-10.11.2021 13:43, Jonathan Neuschäfer пишет:
-> On Mon, Nov 08, 2021 at 02:36:42PM +0300, Dmitry Osipenko wrote:
->> 08.11.2021 14:22, Jonathan Neuschäfer пишет:
->>> On Sun, Nov 07, 2021 at 08:42:33PM +0300, Dmitry Osipenko wrote:
->>> [...]
->>>> EC drivers tend to use higher priority in general. Jonathan, could you
->>>> please confirm that NTXEC driver is a more preferable restart method
->>>> than the watchdog?
->>>
->>> Yes. The original firmware uses the NTXEC to restart, and it works well,
->>> so I do think it's preferable.
->>
->> Thank you, then I'll update the NTXEC patch like this:
->>
->> https://github.com/grate-driver/linux/commit/22da3d91f1734d9a0ed036220ad4ea28465af988
+On Wed, Nov 10, 2021, Paolo Bonzini wrote:
+> On 11/4/21 15:18, Sean Christopherson wrote:
+> > If I'm interpeting Paolo's suggestion
+> > correctly, he's pointing out that oustanding stores to the function pointers in
+> > @cbs need to complete before assigning a non-NULL pointer to perf_guest_cbs,
+> > otherwise a perf event handler may see a valid pointer with half-baked callbacks.
+> > 
+> > I think smp_store_release() with a comment would be appropriate, assuming my
+> > above interpretation is correct.
+> > 
 > 
-> I tested again, but sys_off_handler_reboot called a bogus pointer
-> (probably reboot_prepare_cb). I think it was left uninitialized in
-> ntxec_probe, which uses devm_kmalloc. I guess we could switch it to
-> devm_kzalloc:
-> 
-> diff --git a/drivers/mfd/ntxec.c b/drivers/mfd/ntxec.c
-> index 1f55dfce14308..30364beb4b1d0 100644
-> --- a/drivers/mfd/ntxec.c
-> +++ b/drivers/mfd/ntxec.c
-> @@ -144,7 +144,7 @@ static int ntxec_probe(struct i2c_client *client)
->  	const struct mfd_cell *subdevs;
->  	size_t n_subdevs;
->  
-> -	ec = devm_kmalloc(&client->dev, sizeof(*ec), GFP_KERNEL);
-> +	ec = devm_kzalloc(&client->dev, sizeof(*ec), GFP_KERNEL);
->  	if (!ec)
->  		return -ENOMEM;
->  
-> 
-> 
-> With that done, it works flawlessly.
+> Yes, exactly.  It should even be rcu_assign_pointer(), matching the
+> synchronize_rcu()
 
-Good catch, thank you! I'll correct this patch and add yours t-b.
+And perf_guest_cbs should be tagged __rcu and accessed accordingly.  Which is
+effectively what this version (poorly) implemented with a homebrewed mix of
+{READ,WRITE}_ONCE, lockdep(), and synchronize_rcu().
 
+> in patch 1 (and the change can be done in patch 1, too).
+
+Ya, the change needs to go into patch 1.
