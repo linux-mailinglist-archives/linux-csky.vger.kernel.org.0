@@ -2,57 +2,58 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7A444CFC8
-	for <lists+linux-csky@lfdr.de>; Thu, 11 Nov 2021 03:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6730244CFCA
+	for <lists+linux-csky@lfdr.de>; Thu, 11 Nov 2021 03:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbhKKCMN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 10 Nov 2021 21:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
+        id S234110AbhKKCMQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 10 Nov 2021 21:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbhKKCLz (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 10 Nov 2021 21:11:55 -0500
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BBDC0432C8
-        for <linux-csky@vger.kernel.org>; Wed, 10 Nov 2021 18:08:05 -0800 (PST)
-Received: by mail-pg1-x549.google.com with SMTP id e4-20020a630f04000000b002cc40fe16afso2453733pgl.23
-        for <linux-csky@vger.kernel.org>; Wed, 10 Nov 2021 18:08:05 -0800 (PST)
+        with ESMTP id S234267AbhKKCL4 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 10 Nov 2021 21:11:56 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E16FC0432CD
+        for <linux-csky@vger.kernel.org>; Wed, 10 Nov 2021 18:08:07 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id g14-20020a17090a578e00b001a79264411cso2021776pji.3
+        for <linux-csky@vger.kernel.org>; Wed, 10 Nov 2021 18:08:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=/YIqAIDcHFuwAQfZoGFGpCQkR+bed1xlNZgqyVQf28E=;
-        b=e7isaWxZT/WwPXJW8Qx7YWkAPbx8+WwYXnyULWOmnQdcxssVcaIQUjV7l9ocfrzj/1
-         z1dBSLWak0xiQCBEw4pQBZlvDqmdEqTRJUP+Z40PCX/NEachrYFN0ukP1ZGzNNDz6hC8
-         ypXPhlkEqsMB53P1s/G0Q8Dg2n01FI0WXWYQbrYIvGu6VNt899fuhgkx/Wx+L0fumdK0
-         DgUKSgQ9NGEeMAWRcQat/qxuE6PEmuWNOgqyoFgMMRQ8e+j8axNSLg3wwL/mVfqWCfju
-         QtZrvT4+EtSeFefALo6da9zs6M611OWSowxrRuYjpqYPmBtDlX0Y/PjaKJe2gSlYH6Gm
-         X8tw==
+        bh=4wLzPjAo6SC+6dg2XS8LE13lS3wGpQbHkLiaUdVh1zk=;
+        b=MuegJeAyDDNZ2tSTgnRGgC7IKnaetIrZypWHgoI7HXfYfypgKJOXeWWLy35dN1C9Kq
+         TYdkeXtBhBOimwcZ3top4kHa71CLV6qdvRNUhm81hZ5K3i6YVl/7AXor+8dNYxvAPJer
+         ZwGoTfRUt1iBgIiACbYvtCaYyKTtXhPXR+X+RVc6NhZKJJXGXYjtiG/SPUOKx15Mns+w
+         h7LMujRE3QFVnTWofLpidFxhxt+qp0BXQN3PgH1ZjZAnDhIuNVlz9u1BvqFo2bLBUTc6
+         Fb2NGscm3LpQizlsfcqGjFJsDCfeEgXwB7noSeS86XmgLfWQWeulkCp9qWhLyPOP5PC4
+         rOAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=/YIqAIDcHFuwAQfZoGFGpCQkR+bed1xlNZgqyVQf28E=;
-        b=PgX+h96FiFQOoakO+GIeA3a/LWtrElGca8ZgwqnwjUVJrYWqCeTKsyOXo6CeC3QyZq
-         hDKvIwEmH3UhSfyfEX/UpUEc3PLJr+FUweGKZieJ4kIHZScxCPdH1NBOcnlK9EdSQjwg
-         Aht/CnNoamlEXngkoO8zR/hOfSSbx9siuha1zxl60kMcu3vgBoKPIkMc6mtF30gagQqy
-         Vd65yO3FOBldkOMYx9nJJghdCV+qXQ9xLgM1d2gbGe+3rfch19faLpxsIrfmgNvv+t5B
-         KXBTw/MgDTzOSI08z9WCmqfSKrmEKeURHB+L887oA1iwNI7Vhz3kU/npMuLaYVxEenik
-         04qA==
-X-Gm-Message-State: AOAM532fj3ljkisuUZ5Rd1Lmc7OcF74G2ZQolKEnjtOOrZpWiold+9lM
-        zeR8T72CfByJCeTtpLItP/9JLMxil38=
-X-Google-Smtp-Source: ABdhPJzNTXRg0manAu6ukUacQ/aIuXahOUAgZ+nsuAEIEEiY7jrc1n1CQ1z/uBehVd+2Ly8STcnpos0K1ss=
+        bh=4wLzPjAo6SC+6dg2XS8LE13lS3wGpQbHkLiaUdVh1zk=;
+        b=i/ya6yZCT7Aeijff3gw9HhxRcCpmos40pbMFZbxyUIaHg9GjMAyPvE/3ILG6Z008WF
+         nqzjIkpnYagRzJgSbvxvSHJR0lSE7W9GhrOIiciU0wA9503a7VAjM/Y5UPnI2/HAhSEZ
+         pURiuq7hNU2OZESktfThW2eDK6Ivu+wzR7g9BM5fPCbHvYpUs+LVD+0X9uNkCRqC1ZF1
+         WbIqHaqxVk7VfAfiVPI7/JGQhhu5elKEtiNsK1/7w0JOZastWVVS9BtmFyjrYxo3ZHWG
+         9sY+bL783NBDEUTeFapHGqIevYUSWhD2/mnqqqp4uWAkfZwf3GzRhT2VoEzpV89S1rt9
+         JIQQ==
+X-Gm-Message-State: AOAM532srZ8CSfAmlpFTfq/t1NL6dEnIT76CfUYd8KmQzkQIr/oDeliU
+        4tuvzt3X6gaTo4tZ1O5dVYo7asvgBbE=
+X-Google-Smtp-Source: ABdhPJzOf3D2n0+h+qFn/cUAHxeQwCrLXPititoZgPJ6cdaqRRoa4xxgHhA3Yjjnbd9PcZR94r6p632KxHo=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:e88a:b0:141:dfde:eed7 with SMTP id
- w10-20020a170902e88a00b00141dfdeeed7mr4246270plg.17.1636596485366; Wed, 10
- Nov 2021 18:08:05 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a62:16c7:0:b0:49f:a6cc:c77d with SMTP id
+ 190-20020a6216c7000000b0049fa6ccc77dmr3410123pfw.23.1636596486947; Wed, 10
+ Nov 2021 18:08:06 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 11 Nov 2021 02:07:36 +0000
+Date:   Thu, 11 Nov 2021 02:07:37 +0000
 In-Reply-To: <20211111020738.2512932-1-seanjc@google.com>
-Message-Id: <20211111020738.2512932-16-seanjc@google.com>
+Message-Id: <20211111020738.2512932-17-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211111020738.2512932-1-seanjc@google.com>
 X-Mailer: git-send-email 2.34.0.rc0.344.g81b53c2807-goog
-Subject: [PATCH v4 15/17] KVM: arm64: Hide kvm_arm_pmu_available behind CONFIG_HW_PERF_EVENTS=y
+Subject: [PATCH v4 16/17] KVM: arm64: Drop perf.c and fold its tiny bits of
+ code into arm.c
 From:   Sean Christopherson <seanjc@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -100,103 +101,98 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Move the definition of kvm_arm_pmu_available to pmu-emul.c and, out of
-"necessity", hide it behind CONFIG_HW_PERF_EVENTS.  Provide a stub for
-the key's wrapper, kvm_arm_support_pmu_v3().  Moving the key's definition
-out of perf.c will allow a future commit to delete perf.c entirely.
+Call KVM's (un)register perf callbacks helpers directly from arm.c and
+delete perf.c
+
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/arm64/kernel/image-vars.h |  2 ++
- arch/arm64/kvm/perf.c          |  2 --
- arch/arm64/kvm/pmu-emul.c      |  2 ++
- include/kvm/arm_pmu.h          | 19 ++++++++++++-------
- 4 files changed, 16 insertions(+), 9 deletions(-)
+ arch/arm64/include/asm/kvm_host.h |  3 ---
+ arch/arm64/kvm/Makefile           |  2 +-
+ arch/arm64/kvm/arm.c              |  5 +++--
+ arch/arm64/kvm/perf.c             | 22 ----------------------
+ 4 files changed, 4 insertions(+), 28 deletions(-)
+ delete mode 100644 arch/arm64/kvm/perf.c
 
-diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
-index c96a9a0043bf..7eaf1f7c4168 100644
---- a/arch/arm64/kernel/image-vars.h
-+++ b/arch/arm64/kernel/image-vars.h
-@@ -102,7 +102,9 @@ KVM_NVHE_ALIAS(__stop___kvm_ex_table);
- KVM_NVHE_ALIAS(kvm_arm_hyp_percpu_base);
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index 72e2afe6e8e3..824040b174ab 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -675,9 +675,6 @@ unsigned long kvm_mmio_read_buf(const void *buf, unsigned int len);
+ int kvm_handle_mmio_return(struct kvm_vcpu *vcpu);
+ int io_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa);
  
- /* PMU available static key */
-+#ifdef CONFIG_HW_PERF_EVENTS
- KVM_NVHE_ALIAS(kvm_arm_pmu_available);
-+#endif
- 
- /* Position-independent library routines */
- KVM_NVHE_ALIAS_HYP(clear_page, __pi_clear_page);
-diff --git a/arch/arm64/kvm/perf.c b/arch/arm64/kvm/perf.c
-index 374c496a3f1d..52cfab253c65 100644
---- a/arch/arm64/kvm/perf.c
-+++ b/arch/arm64/kvm/perf.c
-@@ -11,8 +11,6 @@
- 
- #include <asm/kvm_emulate.h>
- 
--DEFINE_STATIC_KEY_FALSE(kvm_arm_pmu_available);
+-void kvm_perf_init(void);
+-void kvm_perf_teardown(void);
 -
- void kvm_perf_init(void)
- {
- 	kvm_register_perf_callbacks(NULL);
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index a5e4bbf5e68f..3308ceefa129 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -14,6 +14,8 @@
- #include <kvm/arm_pmu.h>
- #include <kvm/arm_vgic.h>
+ /*
+  * Returns true if a Performance Monitoring Interrupt (PMI), a.k.a. perf event,
+  * arrived in guest context.  For arm64, any event that arrives while a vCPU is
+diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
+index 989bb5dad2c8..0bcc378b7961 100644
+--- a/arch/arm64/kvm/Makefile
++++ b/arch/arm64/kvm/Makefile
+@@ -12,7 +12,7 @@ obj-$(CONFIG_KVM) += hyp/
  
-+DEFINE_STATIC_KEY_FALSE(kvm_arm_pmu_available);
+ kvm-y := $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o $(KVM)/eventfd.o \
+ 	 $(KVM)/vfio.o $(KVM)/irqchip.o $(KVM)/binary_stats.o \
+-	 arm.o mmu.o mmio.o psci.o perf.o hypercalls.o pvtime.o \
++	 arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
+ 	 inject_fault.o va_layout.o handle_exit.o \
+ 	 guest.o debug.o reset.o sys_regs.o \
+ 	 vgic-sys-reg-v3.o fpsimd.o pmu.o \
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 93c952375f3b..8d18a64a72f1 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -1776,7 +1776,8 @@ static int init_subsystems(void)
+ 	if (err)
+ 		goto out;
+ 
+-	kvm_perf_init();
++	kvm_register_perf_callbacks(NULL);
 +
- static void kvm_pmu_create_perf_event(struct kvm_vcpu *vcpu, u64 select_idx);
- static void kvm_pmu_update_pmc_chained(struct kvm_vcpu *vcpu, u64 select_idx);
- static void kvm_pmu_stop_counter(struct kvm_vcpu *vcpu, struct kvm_pmc *pmc);
-diff --git a/include/kvm/arm_pmu.h b/include/kvm/arm_pmu.h
-index 90f21898aad8..f9ed4c171d7b 100644
---- a/include/kvm/arm_pmu.h
-+++ b/include/kvm/arm_pmu.h
-@@ -13,13 +13,6 @@
- #define ARMV8_PMU_CYCLE_IDX		(ARMV8_PMU_MAX_COUNTERS - 1)
- #define ARMV8_PMU_MAX_COUNTER_PAIRS	((ARMV8_PMU_MAX_COUNTERS + 1) >> 1)
+ 	kvm_sys_reg_table_init();
  
--DECLARE_STATIC_KEY_FALSE(kvm_arm_pmu_available);
+ out:
+@@ -2164,7 +2165,7 @@ int kvm_arch_init(void *opaque)
+ /* NOP: Compiling as a module not supported */
+ void kvm_arch_exit(void)
+ {
+-	kvm_perf_teardown();
++	kvm_unregister_perf_callbacks();
+ }
+ 
+ static int __init early_kvm_mode_cfg(char *arg)
+diff --git a/arch/arm64/kvm/perf.c b/arch/arm64/kvm/perf.c
+deleted file mode 100644
+index 52cfab253c65..000000000000
+--- a/arch/arm64/kvm/perf.c
++++ /dev/null
+@@ -1,22 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Based on the x86 implementation.
+- *
+- * Copyright (C) 2012 ARM Ltd.
+- * Author: Marc Zyngier <marc.zyngier@arm.com>
+- */
 -
--static __always_inline bool kvm_arm_support_pmu_v3(void)
+-#include <linux/perf_event.h>
+-#include <linux/kvm_host.h>
+-
+-#include <asm/kvm_emulate.h>
+-
+-void kvm_perf_init(void)
 -{
--	return static_branch_likely(&kvm_arm_pmu_available);
+-	kvm_register_perf_callbacks(NULL);
 -}
 -
- #ifdef CONFIG_HW_PERF_EVENTS
- 
- struct kvm_pmc {
-@@ -36,6 +29,13 @@ struct kvm_pmu {
- 	struct irq_work overflow_work;
- };
- 
-+DECLARE_STATIC_KEY_FALSE(kvm_arm_pmu_available);
-+
-+static __always_inline bool kvm_arm_support_pmu_v3(void)
-+{
-+	return static_branch_likely(&kvm_arm_pmu_available);
-+}
-+
- #define kvm_arm_pmu_irq_initialized(v)	((v)->arch.pmu.irq_num >= VGIC_NR_SGIS)
- u64 kvm_pmu_get_counter_value(struct kvm_vcpu *vcpu, u64 select_idx);
- void kvm_pmu_set_counter_value(struct kvm_vcpu *vcpu, u64 select_idx, u64 val);
-@@ -65,6 +65,11 @@ int kvm_arm_pmu_v3_enable(struct kvm_vcpu *vcpu);
- struct kvm_pmu {
- };
- 
-+static inline bool kvm_arm_support_pmu_v3(void)
-+{
-+	return false;
-+}
-+
- #define kvm_arm_pmu_irq_initialized(v)	(false)
- static inline u64 kvm_pmu_get_counter_value(struct kvm_vcpu *vcpu,
- 					    u64 select_idx)
+-void kvm_perf_teardown(void)
+-{
+-	kvm_unregister_perf_callbacks();
+-}
 -- 
 2.34.0.rc0.344.g81b53c2807-goog
 
