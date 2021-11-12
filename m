@@ -2,35 +2,71 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C8C44DD4B
-	for <lists+linux-csky@lfdr.de>; Thu, 11 Nov 2021 22:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 492BE44E2B0
+	for <lists+linux-csky@lfdr.de>; Fri, 12 Nov 2021 08:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbhKKVw2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 11 Nov 2021 16:52:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53644 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231825AbhKKVw2 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 11 Nov 2021 16:52:28 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE6CE6124C;
-        Thu, 11 Nov 2021 21:49:38 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mlHwp-004u6W-9n; Thu, 11 Nov 2021 21:49:31 +0000
-Date:   Thu, 11 Nov 2021 21:49:30 +0000
-Message-ID: <87ilwye51x.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        id S234144AbhKLH6b (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 12 Nov 2021 02:58:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32297 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233717AbhKLH6a (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 12 Nov 2021 02:58:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636703739;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lF7lzRoeZrlEIt3gHEFyVsRoWpbej1ntDFwYNAiQdJI=;
+        b=OoH/RlDgLrBZ4NE0Egiv2jYH8u01kIkq7gOxapj3QCEpGv+UEvV8YL1k8ZDawXVwBCBY9L
+        S/PngiPfgXjne44ijbUWRyM9MJdCI2gzYe1HdEMfP3KVnjv+4tEjyXNuQeDess5Ff4y0/O
+        eBFVMOdsntqB/H6Yt6IMd0RSpBwt2rg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-32-4y0MLnGKOiWxetEawMLkDw-1; Fri, 12 Nov 2021 02:55:38 -0500
+X-MC-Unique: 4y0MLnGKOiWxetEawMLkDw-1
+Received: by mail-ed1-f69.google.com with SMTP id w12-20020a056402268c00b003e2ab5a3370so7607437edd.0
+        for <linux-csky@vger.kernel.org>; Thu, 11 Nov 2021 23:55:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lF7lzRoeZrlEIt3gHEFyVsRoWpbej1ntDFwYNAiQdJI=;
+        b=w4EWWye2x7zkM49tYcr035feAE7SDdpWO1/nAcSXStAwnYviBCYiY6dQZNfQaX4jSc
+         AkHHH2PTYQYbseyGfd2Ouc+PSxSP2e6ApjGDG0cVStxqQvv3r3pkh9yxuHcuKHF13qNY
+         l3UzJoRqOuDGgq4WtY3tNbBeE8In6Bqo2GYXQzY6ZUaaHDl9qvxa/ykOhSIhl74Nin00
+         c4qR5CiB5gz+EfuZEWsYGqOOsQSXdft24h4NYAilHIYqkfZcucbvGvDPt0N18WWfmWdU
+         Nll6BobuIxNoJH+K4andNzIOhnsulE0UX1i1Jw+mqMO8u3PSYr3uHNdEEaOTlxjhy5L2
+         urbg==
+X-Gm-Message-State: AOAM5328awEJhheVlbPfyvi4a99tswkUFsiZxxeDJJ/LaYvM8N9uBUj/
+        zx9bTb0vAn6Uc7GVzyQL0QffjjiMAQWT0E7vZhPXRzU+zc+T9pwiVIven+vZyp+KRDiSuHpfsLk
+        RfA0f4uCJjFCEhurEk0M73w==
+X-Received: by 2002:a17:907:6e10:: with SMTP id sd16mr17768020ejc.158.1636703737507;
+        Thu, 11 Nov 2021 23:55:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzVTSyaI9bwf+cK3HRTYkkEGrfXsl4Cvt+Fkmz/7JDyaorMKEA4Mec75P9Nt6V8a8edl3Ld8g==
+X-Received: by 2002:a17:907:6e10:: with SMTP id sd16mr17767982ejc.158.1636703737318;
+        Thu, 11 Nov 2021 23:55:37 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.gmail.com with ESMTPSA id n1sm2700678edf.45.2021.11.11.23.55.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Nov 2021 23:55:36 -0800 (PST)
+Message-ID: <016d5b91-6910-2aca-0db1-a65079449454@redhat.com>
+Date:   Fri, 12 Nov 2021 08:55:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v4 01/17] perf: Protect perf_guest_cbs with RCU
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Will Deacon <will@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Russell King <linux@armlinux.org.uk>,
+        Marc Zyngier <maz@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Guo Ren <guoren@kernel.org>, Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
@@ -41,7 +77,6 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Juergen Gross <jgross@suse.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -64,37 +99,31 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Like Xu <like.xu.linux@gmail.com>,
         Like Xu <like.xu@linux.intel.com>,
         Zhu Lingshan <lingshan.zhu@intel.com>
-Subject: Re: [PATCH v4 16/17] KVM: arm64: Drop perf.c and fold its tiny bits of code into arm.c
-In-Reply-To: <20211111020738.2512932-17-seanjc@google.com>
 References: <20211111020738.2512932-1-seanjc@google.com>
-        <20211111020738.2512932-17-seanjc@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: seanjc@google.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, will@kernel.org, mark.rutland@arm.com, linux@armlinux.org.uk, catalin.marinas@arm.com, guoren@kernel.org, nickhu@andestech.com, green.hu@gmail.com, deanbo422@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, pbonzini@redhat.com, boris.ostrovsky@oracle.com, jgross@suse.com, alexander.shishkin@linux.intel.com, jolsa@redhat.com, namhyung@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, hpa@zytor.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, sstabellini@kernel.org, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, artem.k
- ashkanov@intel.com, like.xu.linux@gmail.com, like.xu@linux.intel.com, lingshan.zhu@intel.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <20211111020738.2512932-2-seanjc@google.com>
+ <d784dc27-72d0-d64f-e1f4-a2b9a5f86dd4@redhat.com>
+ <YYz03fcDRV9NZnyA@hirez.programming.kicks-ass.net>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YYz03fcDRV9NZnyA@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, 11 Nov 2021 02:07:37 +0000,
-Sean Christopherson <seanjc@google.com> wrote:
-> 
-> Call KVM's (un)register perf callbacks helpers directly from arm.c and
-> delete perf.c
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On 11/11/21 11:47, Peter Zijlstra wrote:
+>> This technically could be RCU_INIT_POINTER but it's not worth a respin.
+>> There are dozens of other occurrences, and if somebody wanted they
+>> could use Coccinelle to fix all of them.
+> I've been pushing the other way, trying to get rid of RCU_INIT_POINTER()
+> since rcu_assign_pointer(, NULL) actualy DTRT per __builtin_constant_p()
+> etc.
 
-Reviewed-by: Marc Zyngier <maz@kernel.org>
+Oh, that's pretty cool to know, thanks!
 
-	M.
+Paolo
 
--- 
-Without deviation from the norm, progress is not possible.
+> There's a very few sites where we use RCU_INIT_POINTER() with a !NULL
+> argument, and those are 'special'.
+> 
+
