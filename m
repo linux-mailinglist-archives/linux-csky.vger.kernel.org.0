@@ -2,64 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D373459A1A
-	for <lists+linux-csky@lfdr.de>; Tue, 23 Nov 2021 03:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E51C459CE0
+	for <lists+linux-csky@lfdr.de>; Tue, 23 Nov 2021 08:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbhKWCbK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 22 Nov 2021 21:31:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229678AbhKWCbK (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 22 Nov 2021 21:31:10 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BC9560FD7;
-        Tue, 23 Nov 2021 02:28:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637634483;
-        bh=tyfrpeux84ftug2ONg9ZfP/BwMlpGSVGl+i7DUhZPDY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LGNH61duIdHVHoGEPhi1amdYNfTiDEZRyI0RPdAVTt3G4tfnRtL9HAj0U/rFfmWwK
-         J8MjSsym4aSO1Ha4PvyCMHedm/suRmTTP1H0ocKNSRrmDbhiaHIre8WER2BPYs+52Z
-         asJloFmSmqcScYctnbjKoAKZS7hPo0E1AFx8iF7mlEZnzh+QiOCnSr+E8DEEhmz2Pr
-         68Ceu8x4kJXq+up1H0xSmS7qfqg9kl2PYJtMheuldLnDTrVe5z8c1qfunZMLZRI+zH
-         TMq6KPQnLFbQypvwGMZLAubC+9ZiluWKAmqM8jt0q0UWiQjRjDMUbRzfa3pbPlLus5
-         sga5A6ymc+02Q==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] mailmap: Update email address for Guo Ren
-Date:   Tue, 23 Nov 2021 10:27:41 +0800
-Message-Id: <20211123022741.545541-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S233737AbhKWHmL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 23 Nov 2021 02:42:11 -0500
+Received: from mx08-00227901.pphosted.com ([91.207.212.184]:37342 "EHLO
+        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234151AbhKWHmI (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Tue, 23 Nov 2021 02:42:08 -0500
+Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
+        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixd018132;
+        Fri, 19 Nov 2021 10:27:11 +0100
+Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
+        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 19 Nov 2021 10:27:11 +0100
+Received: from zbw2k16ex02.bardusch.net (172.25.1.2) by
+ ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
+ Fri, 19 Nov 2021 10:27:10 +0100
+Received: from User (172.25.1.131) by zbw2k16ex02.bardusch.net (172.25.1.2)
+ with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
+ Nov 2021 10:26:59 +0100
+Reply-To: <josechoondak@gmail.com>
+From:   Joseph Choondak <info@ndd.co.mz>
+Subject: I hope this email finds you well.
+Date:   Fri, 19 Nov 2021 01:27:13 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <2c858747-1993-42c1-86cf-0a16986254d6@zbw2k16ex02.bardusch.net>
+To:     Undisclosed recipients:;
+X-Proofpoint-GUID: H1-C8yVFIlo9TfbBCSa6JwWkSpDbpByg
+X-Proofpoint-ORIG-GUID: H1-C8yVFIlo9TfbBCSa6JwWkSpDbpByg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+May I please ask with considerable urgency for your kind assistance with the following matter.
+I'm a financial person, I think  I have something huge you might be interested in.
 
-The ren_guo@c-sky.com would be deprecated and use guoren@kernel.org
-as the main email address.
+Looking forward to hearing from you.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- .mailmap | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/.mailmap b/.mailmap
-index 14314e3c5d5e..c709878864ad 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -123,6 +123,8 @@ Greg Kroah-Hartman <gregkh@suse.de>
- Greg Kroah-Hartman <greg@kroah.com>
- Greg Kurz <groug@kaod.org> <gkurz@linux.vnet.ibm.com>
- Gregory CLEMENT <gregory.clement@bootlin.com> <gregory.clement@free-electrons.com>
-+Guo Ren <guoren@kernel.org> <guoren@linux.alibaba.com>
-+Guo Ren <guoren@kernel.org> <ren_guo@c-sky.com>
- Gustavo Padovan <gustavo@las.ic.unicamp.br>
- Gustavo Padovan <padovan@profusion.mobi>
- Hanjun Guo <guohanjun@huawei.com> <hanjun.guo@linaro.org>
--- 
-2.25.1
-
+Respectfully!!
+Joseph Choondak
+Account Executive.
