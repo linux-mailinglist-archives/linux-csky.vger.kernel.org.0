@@ -2,230 +2,187 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68177460ECA
-	for <lists+linux-csky@lfdr.de>; Mon, 29 Nov 2021 07:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99888461582
+	for <lists+linux-csky@lfdr.de>; Mon, 29 Nov 2021 13:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347438AbhK2GoB (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 29 Nov 2021 01:44:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S238049AbhK2MzM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 29 Nov 2021 07:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbhK2GmA (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 29 Nov 2021 01:42:00 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43BEC061748;
-        Sun, 28 Nov 2021 22:38:43 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id gu12so13619689qvb.6;
-        Sun, 28 Nov 2021 22:38:43 -0800 (PST)
+        with ESMTP id S230329AbhK2MxL (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 29 Nov 2021 07:53:11 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F352C08EC90;
+        Mon, 29 Nov 2021 03:34:53 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id l7so33801169lja.2;
+        Mon, 29 Nov 2021 03:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GW7wD7qKvROu8z9xZL5o2Gh9JvMEXrXNdc/d8bAaPNs=;
-        b=Ximtyy9D6hF34jeHkx2abhxO2fEDksv5f5qJu4CbvoNWokti3yxmfDL3L7TYPRNI1N
-         nLBExnAtE1kHxfW3UuSIcTZjpfdkrYaWw77PtYlgHprrRWmhg8onSirLlPaay6tbmdGV
-         QOolCDulR6Tk/EKA2Gv8Xlb2VKcWxKtuMIpV9m8bP/Y2OIkRrwh1D8Uy/bj62ViSMN2l
-         ZvGgVYwmHud/XyWXGXVdXp5Qsb6Tf/NpieRKvdWwCGOCaqCRU7xxjxP8pUys/Y0my6pK
-         DI87mJm/+MqXPnLUnP7Gv+O+UoGKFiXftZWbYzOV5qGvrEcopuUsleS20idOc1qycgZd
-         CJ3A==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=euaa0MK3qpl38vu/xm/JZntaVOCHcXyS5pdHcr9Cv9Y=;
+        b=j7IepB0c7QsF+gZGn8sLWlXDCQr83Yhq9Uwq9fJmgvQdhWWCer0J3Db/gwAG0Blu3V
+         KLIiDLWANtPW2sX+O/m2jQqBDLC+4NfkDAxYnlnBfxi7qlePYrZZysw0Kj4NFPMagEe7
+         5Z58UnljUl1PUrtNNqQtNaR8rjEOAOjAptz9aZ81TzHnOGVzQL+Ka518l0o45nrM05c1
+         wTSb3kazkFWdVLhzdtamDwO56fb5XsgOF41m+pkkrOCbpYLS/NmBUtznRV2wcvObV+eX
+         /QUCocD7Th3AP/6bIoc90HuBDrH/5Le5nNAAFps88ziv0187Td+CIqcDZxoQmDkSEFJt
+         ILjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GW7wD7qKvROu8z9xZL5o2Gh9JvMEXrXNdc/d8bAaPNs=;
-        b=ZJNzQ26Pb9b5MJ1h3uUNqYGv1DaF8OI97Y1jXO35e62sIp4N/U+id1FQbIb1zKi+8n
-         QKlv6MnvQlACW6tq4DYgO2P2XGDXXmwikomWVIzzVHN6aghoX+BwKX6cWG8+e6akI3l+
-         Ozvclk1Yedo0wVR/WvvQj7PXMQlTOQm48qqzsUfXt5rc+eWaY15RPknM97CG9Xb6fv07
-         YF5wLyZ6Xm8X5bZ67A2PbR6MN2gsFdGO1DL/GCbYIbfYDGWSERBVVgnvVotH/0QVkt6D
-         DR+Y3vwLW4oPazxAcrRIf0acgfZDdryEtnu6UP2qQ1X+szodvu6Rippkk530utTMvaSg
-         9fKw==
-X-Gm-Message-State: AOAM533YI1rNKv+SqHSIcx46h56bqj2sV4uMFtHOzX73HR9Rm2iuz7yU
-        9217RHcBLVci45zm4BX7KW8=
-X-Google-Smtp-Source: ABdhPJwSywxmnS7RgaW8ur/GbWm8YSeTFfi4rMgLh/NdfnxtrZBeDnmatO6ciZp/cAThb6LO+btZbw==
-X-Received: by 2002:a05:6214:984:: with SMTP id dt4mr30031399qvb.120.1638167922796;
-        Sun, 28 Nov 2021 22:38:42 -0800 (PST)
-Received: from localhost ([66.216.211.25])
-        by smtp.gmail.com with ESMTPSA id h19sm8495514qth.63.2021.11.28.22.38.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 22:38:42 -0800 (PST)
-Date:   Sun, 28 Nov 2021 22:38:39 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     mirq-test@rere.qmqm.pl
-Cc:     linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        David Laight <David.Laight@aculab.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
-        Mark Gross <markgross@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Roy Pledge <Roy.Pledge@nxp.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=euaa0MK3qpl38vu/xm/JZntaVOCHcXyS5pdHcr9Cv9Y=;
+        b=qeOnECNZ4xDsNz9FGkD6hyREQAwCMdetMa3EdzJZT5yyLOVxebwSvtA7x2pQVX0Vsj
+         miCTdtAOi2AW1ZySIUw8Ww+PHtwrET8A4I/mXVVqXQzHPwuWTZyockQBCwYu0MwfxhVr
+         Kw1oo1g57GcFYK9WsY4TXiw+spH2N5VcBPoqL+T5U8PQSPWD7AbBhS67MeOsmNPlI7oD
+         86egp/QBXMjix5587l5mC7JSZ/lYNuhe4TqmXnCTaGuBdu5e/pgm73yH9DfiXpPIZxTh
+         UJfQMQ2e5c893ix6oxcwr88jadGf/kPc4V1zA2H90RbZiC4N6sKnMefMtBY7ibF7zqzu
+         uF/w==
+X-Gm-Message-State: AOAM531PNlu4JHVWirBgteja+2xvrU5frJmbG/9PbyL4LaO5iNXbI9+N
+        HhqaQNHPYM1bhP4yT8wAf3ATaqPvCOY=
+X-Google-Smtp-Source: ABdhPJzVpycz41Q2saZagDnrHTPX3H5Cn8S9UMBEs5Q4UAjlx4ArmiP2PAHXWXd2FxMxn0TZfV9KEQ==
+X-Received: by 2002:a2e:814b:: with SMTP id t11mr47973901ljg.171.1638185691187;
+        Mon, 29 Nov 2021 03:34:51 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id n2sm131579ljq.30.2021.11.29.03.34.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 03:34:50 -0800 (PST)
+Subject: Re: [PATCH v4 05/25] reboot: Warn if restart handler has duplicated
+ priority
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 0/9] lib/bitmap: optimize bitmap_weight() usage
-Message-ID: <20211129063839.GA338729@lapt>
-References: <20211128035704.270739-1-yury.norov@gmail.com>
- <YaPEfZ0t9UFGwpml@qmqm.qmqm.pl>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20211126180101.27818-1-digetx@gmail.com>
+ <20211126180101.27818-6-digetx@gmail.com> <YaLNOJTM+lVq+YNS@qmqm.qmqm.pl>
+ <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
+ <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <091321ea-4919-0579-88a8-23d05871575d@gmail.com>
+Date:   Mon, 29 Nov 2021 14:34:40 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaPEfZ0t9UFGwpml@qmqm.qmqm.pl>
+In-Reply-To: <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 07:03:41PM +0100, mirq-test@rere.qmqm.pl wrote:
-> On Sat, Nov 27, 2021 at 07:56:55PM -0800, Yury Norov wrote:
-> > In many cases people use bitmap_weight()-based functions like this:
-> > 
-> > 	if (num_present_cpus() > 1)
-> > 		do_something();
-> > 
-> > This may take considerable amount of time on many-cpus machines because
-> > num_present_cpus() will traverse every word of underlying cpumask
-> > unconditionally.
-> > 
-> > We can significantly improve on it for many real cases if stop traversing
-> > the mask as soon as we count present cpus to any number greater than 1:
-> > 
-> > 	if (num_present_cpus_gt(1))
-> > 		do_something();
-> > 
-> > To implement this idea, the series adds bitmap_weight_{eq,gt,le}
-> > functions together with corresponding wrappers in cpumask and nodemask.
+29.11.2021 03:26, Michał Mirosław пишет:
+> On Mon, Nov 29, 2021 at 12:06:19AM +0300, Dmitry Osipenko wrote:
+>> 28.11.2021 03:28, Michał Mirosław пишет:
+>>> On Fri, Nov 26, 2021 at 09:00:41PM +0300, Dmitry Osipenko wrote:
+>>>> Add sanity check which ensures that there are no two restart handlers
+>>>> registered with the same priority. Normally it's a direct sign of a
+>>>> problem if two handlers use the same priority.
+>>>
+>>> The patch doesn't ensure the property that there are no duplicated-priority
+>>> entries on the chain.
+>>
+>> It's not the exact point of this patch.
+>>
+>>> I'd rather see a atomic_notifier_chain_register_unique() that returns
+>>> -EBUSY or something istead of adding an entry with duplicate priority.
+>>> That way it would need only one list traversal unless you want to
+>>> register the duplicate anyway (then you would call the older
+>>> atomic_notifier_chain_register() after reporting the error).
+>>
+>> The point of this patch is to warn developers about the problem that
+>> needs to be fixed. We already have such troubling drivers in mainline.
+>>
+>> It's not critical to register different handlers with a duplicated
+>> priorities, but such cases really need to be corrected. We shouldn't
+>> break users' machines during transition to the new API, meanwhile
+>> developers should take action of fixing theirs drivers.
+>>
+>>> (Or you could return > 0 when a duplicate is registered in
+>>> atomic_notifier_chain_register() if the callers are prepared
+>>> for that. I don't really like this way, though.)
+>>
+>> I had a similar thought at some point before and decided that I'm not in
+>> favor of this approach. It's nicer to have a dedicated function that
+>> verifies the uniqueness, IMO.
 > 
-> Having slept on it I have more structured thoughts:
+> I don't like the part that it traverses the list second time to check
+> the uniqueness. But actually you could avoid that if
+> notifier_chain_register() would always add equal-priority entries in
+> reverse order:
 > 
-> First, I like substituting bitmap_empty/full where possible - I think
-> the change stands on its own, so could be split and sent as is.
-
-Ok, I can do it.
-
-> I don't like the proposed API very much. One problem is that it hides
-> the comparison operator and makes call sites less readable:
+>  static int notifier_chain_register(struct notifier_block **nl,
+>  		struct notifier_block *n)
+>  {
+>  	while ((*nl) != NULL) {
+>  		if (unlikely((*nl) == n)) {
+>  			WARN(1, "double register detected");
+>  			return 0;
+>  		}
+> -		if (n->priority > (*nl)->priority)
+> +		if (n->priority >= (*nl)->priority)
+>  			break;
+>  		nl = &((*nl)->next);
+>  	}
+>  	n->next = *nl;
+>  	rcu_assign_pointer(*nl, n);
+>  	return 0;
+>  }
 > 
-> 	bitmap_weight(...) > N
+> Then the check for uniqueness after adding would be:
 > 
-> becomes:
-> 
-> 	bitmap_weight_gt(..., N)
-> 
-> and:
-> 	bitmap_weight(...) <= N
-> 
-> becomes:
-> 
-> 	bitmap_weight_lt(..., N+1)
-> or:
-> 	!bitmap_weight_gt(..., N)
-> 
-> I'd rather see something resembling memcmp() API that's known enough
-> to be easier to grasp. For above examples:
-> 
-> 	bitmap_weight_cmp(..., N) > 0
-> 	bitmap_weight_cmp(..., N) <= 0
-> 	...
+>  WARN(nb->next && nb->priority == nb->next->priority);
 
-bitmap_weight_cmp() cannot be efficient. Consider this example:
-
-bitmap_weight_lt(1000 0000 0000 0000, 1) == false
-                 ^
-                 stop here
-
-bitmap_weight_cmp(1000 0000 0000 0000, 1) == 0
-                                 ^
-                                 stop here
-
-I agree that '_gt' is less verbose than '>', but the advantage of 
-'_gt' over '>' is proportional to length of bitmap, and it means
-that this API should exist.
-
-> This would also make the implementation easier in not having to
-> copy and paste the code three times. Could also use a simple
-> optimization reducing code size:
-
-In the next version I'll reduce code duplication like this:
-
-bool bitmap_eq(..., N);
-bool bitmap_ge(..., N);
-
-#define bitmap_weight_gt(..., N)  bitmap_weight_ge(..., N + 1)
-#define bitmap_weight_lt(..., N) !bitmap_weight_ge(..., N)
-#define bitmap_weight_le(..., N) !bitmap_weight_gt(..., N)
-
-Thanks,
-Yury
+We can't just change the registration order because invocation order of
+the call chain depends on the registration order and some of current
+users may rely on that order. I'm pretty sure that changing the order
+will have unfortunate consequences.
