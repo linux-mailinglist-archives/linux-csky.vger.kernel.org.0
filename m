@@ -2,147 +2,230 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E50E460BBF
-	for <lists+linux-csky@lfdr.de>; Mon, 29 Nov 2021 01:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68177460ECA
+	for <lists+linux-csky@lfdr.de>; Mon, 29 Nov 2021 07:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbhK2Al6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 28 Nov 2021 19:41:58 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:39946 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235045AbhK2Aj6 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Sun, 28 Nov 2021 19:39:58 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4J2RHF5R6Gz9Y;
-        Mon, 29 Nov 2021 01:36:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1638146198; bh=DI1VWBOrDzR1kSFvGVwF5e/uC6F95umcWDF0D1gW0co=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H73sBxsM7L9z8xEfnp2Ak7MzBK8+vuHhYSpX9ZmIw96z66YhhL0jbzAc1kAW4E8/k
-         E+n0myrDaFBdTPW3DCJBAB1QxLCznookgF41GB3ur/8AtJ172fB625fAJLQBCfF2Il
-         1tVB3rwB3wCft3kEONBcl+9mGZ0YFJna/va55m2Id6G5OQJMzxWyiW8mEoVG9uWh4D
-         9FU7cd4y+9BUv1/bcd+v0FTSSINIJ8msC5Z+cow25KP+uSrFkzTmZSbuYJNYmoN8pj
-         wIHmD3sAFqkn2Up4Tyhb9Q0kZcFFYL4JTYDk03Wdeze2AnxwyR74tes3GEAEUnF7BY
-         Uq7OHC/U12/7A==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.3 at mail
-Date:   Mon, 29 Nov 2021 01:36:24 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
+        id S1347438AbhK2GoB (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 29 Nov 2021 01:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233836AbhK2GmA (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 29 Nov 2021 01:42:00 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43BEC061748;
+        Sun, 28 Nov 2021 22:38:43 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id gu12so13619689qvb.6;
+        Sun, 28 Nov 2021 22:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GW7wD7qKvROu8z9xZL5o2Gh9JvMEXrXNdc/d8bAaPNs=;
+        b=Ximtyy9D6hF34jeHkx2abhxO2fEDksv5f5qJu4CbvoNWokti3yxmfDL3L7TYPRNI1N
+         nLBExnAtE1kHxfW3UuSIcTZjpfdkrYaWw77PtYlgHprrRWmhg8onSirLlPaay6tbmdGV
+         QOolCDulR6Tk/EKA2Gv8Xlb2VKcWxKtuMIpV9m8bP/Y2OIkRrwh1D8Uy/bj62ViSMN2l
+         ZvGgVYwmHud/XyWXGXVdXp5Qsb6Tf/NpieRKvdWwCGOCaqCRU7xxjxP8pUys/Y0my6pK
+         DI87mJm/+MqXPnLUnP7Gv+O+UoGKFiXftZWbYzOV5qGvrEcopuUsleS20idOc1qycgZd
+         CJ3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GW7wD7qKvROu8z9xZL5o2Gh9JvMEXrXNdc/d8bAaPNs=;
+        b=ZJNzQ26Pb9b5MJ1h3uUNqYGv1DaF8OI97Y1jXO35e62sIp4N/U+id1FQbIb1zKi+8n
+         QKlv6MnvQlACW6tq4DYgO2P2XGDXXmwikomWVIzzVHN6aghoX+BwKX6cWG8+e6akI3l+
+         Ozvclk1Yedo0wVR/WvvQj7PXMQlTOQm48qqzsUfXt5rc+eWaY15RPknM97CG9Xb6fv07
+         YF5wLyZ6Xm8X5bZ67A2PbR6MN2gsFdGO1DL/GCbYIbfYDGWSERBVVgnvVotH/0QVkt6D
+         DR+Y3vwLW4oPazxAcrRIf0acgfZDdryEtnu6UP2qQ1X+szodvu6Rippkk530utTMvaSg
+         9fKw==
+X-Gm-Message-State: AOAM533YI1rNKv+SqHSIcx46h56bqj2sV4uMFtHOzX73HR9Rm2iuz7yU
+        9217RHcBLVci45zm4BX7KW8=
+X-Google-Smtp-Source: ABdhPJwSywxmnS7RgaW8ur/GbWm8YSeTFfi4rMgLh/NdfnxtrZBeDnmatO6ciZp/cAThb6LO+btZbw==
+X-Received: by 2002:a05:6214:984:: with SMTP id dt4mr30031399qvb.120.1638167922796;
+        Sun, 28 Nov 2021 22:38:42 -0800 (PST)
+Received: from localhost ([66.216.211.25])
+        by smtp.gmail.com with ESMTPSA id h19sm8495514qth.63.2021.11.28.22.38.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Nov 2021 22:38:42 -0800 (PST)
+Date:   Sun, 28 Nov 2021 22:38:39 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     mirq-test@rere.qmqm.pl
+Cc:     linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v4 08/25] kernel: Add combined power-off+restart handler
- call chain API
-Message-ID: <YaQgiLw03lPyvuhr@qmqm.qmqm.pl>
-References: <20211126180101.27818-1-digetx@gmail.com>
- <20211126180101.27818-9-digetx@gmail.com>
- <YaLQqks8cB0vWp6Q@qmqm.qmqm.pl>
- <9213569e-0f40-0df1-4710-8dab564e12d6@gmail.com>
- <YaPx0kY7poGpwCL9@qmqm.qmqm.pl>
- <1fa2d9d5-f5f6-77f5-adf6-827921acce49@gmail.com>
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Roy Pledge <Roy.Pledge@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 0/9] lib/bitmap: optimize bitmap_weight() usage
+Message-ID: <20211129063839.GA338729@lapt>
+References: <20211128035704.270739-1-yury.norov@gmail.com>
+ <YaPEfZ0t9UFGwpml@qmqm.qmqm.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1fa2d9d5-f5f6-77f5-adf6-827921acce49@gmail.com>
+In-Reply-To: <YaPEfZ0t9UFGwpml@qmqm.qmqm.pl>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:53:51AM +0300, Dmitry Osipenko wrote:
-> 29.11.2021 00:17, Michał Mirosław пишет:
-> >> I'm having trouble with parsing this comment. Could you please try to
-> >> rephrase it? I don't see how you could check whether power-off handler
-> >> is available if you'll mix all handlers together.
-> > If notify_call_chain() would be fixed to return NOTIFY_OK if any call
-> > returned NOTIFY_OK, then this would be a clear way to gather the
-> > answer if any of the handlers will attempt the final action (reboot or
-> > power off).
-> Could you please show a code snippet that implements your suggestion?
+On Sun, Nov 28, 2021 at 07:03:41PM +0100, mirq-test@rere.qmqm.pl wrote:
+> On Sat, Nov 27, 2021 at 07:56:55PM -0800, Yury Norov wrote:
+> > In many cases people use bitmap_weight()-based functions like this:
+> > 
+> > 	if (num_present_cpus() > 1)
+> > 		do_something();
+> > 
+> > This may take considerable amount of time on many-cpus machines because
+> > num_present_cpus() will traverse every word of underlying cpumask
+> > unconditionally.
+> > 
+> > We can significantly improve on it for many real cases if stop traversing
+> > the mask as soon as we count present cpus to any number greater than 1:
+> > 
+> > 	if (num_present_cpus_gt(1))
+> > 		do_something();
+> > 
+> > To implement this idea, the series adds bitmap_weight_{eq,gt,le}
+> > functions together with corresponding wrappers in cpumask and nodemask.
+> 
+> Having slept on it I have more structured thoughts:
+> 
+> First, I like substituting bitmap_empty/full where possible - I think
+> the change stands on its own, so could be split and sent as is.
 
-A rough idea is this:
+Ok, I can do it.
 
- static int notifier_call_chain(struct notifier_block **nl,
- 			       unsigned long val, void *v,
- 			       int nr_to_call, int *nr_calls)
- {
--	int ret = NOTIFY_DONE;
-+	int ret, result = NOTIFY_DONE;
- 	struct notifier_block *nb, *next_nb;
- 
- 	nb = rcu_dereference_raw(*nl);
- 
- 	while (nb && nr_to_call) {
-...
- 		ret = nb->notifier_call(nb, val, v);
-+
-+		/* Assuming NOTIFY_STOP-carrying return is always greater than non-stopping one. */
-+		if (result < ret)
-+			result = ret;
-... 
- 	}
--	return ret;
-+	return result;
- }
+> I don't like the proposed API very much. One problem is that it hides
+> the comparison operator and makes call sites less readable:
+> 
+> 	bitmap_weight(...) > N
+> 
+> becomes:
+> 
+> 	bitmap_weight_gt(..., N)
+> 
+> and:
+> 	bitmap_weight(...) <= N
+> 
+> becomes:
+> 
+> 	bitmap_weight_lt(..., N+1)
+> or:
+> 	!bitmap_weight_gt(..., N)
+> 
+> I'd rather see something resembling memcmp() API that's known enough
+> to be easier to grasp. For above examples:
+> 
+> 	bitmap_weight_cmp(..., N) > 0
+> 	bitmap_weight_cmp(..., N) <= 0
+> 	...
 
-Then:
+bitmap_weight_cmp() cannot be efficient. Consider this example:
 
-bool prepare_reboot()
-{
-	int ret = xx_notifier_call_chain(&shutdown_notifier, PREPARE_REBOOT, ...);
-	return ret == NOTIFY_OK;
-}
+bitmap_weight_lt(1000 0000 0000 0000, 1) == false
+                 ^
+                 stop here
 
-And the return value would signify whether the reboot will be attempted
-when calling the chain for the REBOOT action. (Analogously for powering off.)
+bitmap_weight_cmp(1000 0000 0000 0000, 1) == 0
+                                 ^
+                                 stop here
 
-Best Regards
-Michał Mirosław
+I agree that '_gt' is less verbose than '>', but the advantage of 
+'_gt' over '>' is proportional to length of bitmap, and it means
+that this API should exist.
+
+> This would also make the implementation easier in not having to
+> copy and paste the code three times. Could also use a simple
+> optimization reducing code size:
+
+In the next version I'll reduce code duplication like this:
+
+bool bitmap_eq(..., N);
+bool bitmap_ge(..., N);
+
+#define bitmap_weight_gt(..., N)  bitmap_weight_ge(..., N + 1)
+#define bitmap_weight_lt(..., N) !bitmap_weight_ge(..., N)
+#define bitmap_weight_le(..., N) !bitmap_weight_gt(..., N)
+
+Thanks,
+Yury
