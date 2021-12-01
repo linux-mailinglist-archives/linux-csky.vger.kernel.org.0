@@ -2,77 +2,109 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF3A464CEB
-	for <lists+linux-csky@lfdr.de>; Wed,  1 Dec 2021 12:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0441D464DE9
+	for <lists+linux-csky@lfdr.de>; Wed,  1 Dec 2021 13:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349057AbhLALhs (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 1 Dec 2021 06:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349006AbhLALhi (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 1 Dec 2021 06:37:38 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD78C0613FE
-        for <linux-csky@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id b11so21255002qvm.7
-        for <linux-csky@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
-         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
-         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
-         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
-         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
-         Af5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=Gw3RzjjrvMHVk6P1UHLop5kBu2dsx2day3phh2PlN82sRPSrucntvq+khcU6dVtLto
-         hDWYQp/M0Gs0NlyCUOVqRgV6Lw0mDxEZtjhgCGco3jIjSdkpsCeohCotdHptV3zi1T4Q
-         f4K43Cq6IF6TkfgATvBmYp1M20e1P8aOnSxv4wwb4t6KN25AldVInRC8CgjO77Q1yxhk
-         NVq9E2W14HvZUR7EKDSwCd5tRDUBILUhZ3dOebQ0SkcD5eyLUtsaPYENCYoa3gMuQ0EH
-         siIryWD7DWiTqraygJ3F8M0fHCEFwSQeQ6rm4RgSeYwRu/bd3PRcRZG0Z6D5HYn1Hgo0
-         lybQ==
-X-Gm-Message-State: AOAM531s0VQ6zenZ/PFqYra4bPW1DXEdXwnnYjjpoAcxxecd1fm36CpT
-        PTHPaMwxmHPO494vrEfXW8jbabY3Hcua7PZgRb7WGK1W0zk=
-X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
-X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
- Wed, 01 Dec 2021 03:33:59 -0800 (PST)
+        id S1349324AbhLAMhV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 1 Dec 2021 07:37:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:35896 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243419AbhLAMhV (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Wed, 1 Dec 2021 07:37:21 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E9971477;
+        Wed,  1 Dec 2021 04:34:00 -0800 (PST)
+Received: from e127744.cambridge.arm.com (e127744.cambridge.arm.com [10.1.32.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EB1BC3F694;
+        Wed,  1 Dec 2021 04:33:56 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v1 0/4] Support register names from all architectures
+Date:   Wed,  1 Dec 2021 12:33:28 +0000
+Message-Id: <20211201123334.679131-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: unitednationawardwinner@gmail.com
-Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
-From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
-Date:   Wed, 1 Dec 2021 03:33:58 -0800
-X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
-Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
-Subject: Your long awaited part payment of $2.5.000.00Usd
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Attention: Beneficiary, Your long awaited part payment of
-$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
-Dollars) is ready for immediate release to you, and it was
-electronically credited into an ATM Visa Card for easy delivery.
+The following changeset applies some corrections to the way system
+registers are processed and presented when reading perf.data files using
+the various perf tools.
 
-Your new Payment Reference No.- 6363836,
-Pin Code No: 1787
-Your Certificate of Merit Payment No: 05872,
+The commit message from [4/4] shows how register names aren't correctly
+presented when performing x-arch analysis of perf.data files (i.e.
+recording in one arch, then reading the file from a different arch).
 
-Your Names: |
-Address: |
+Please let me know if there are any concerns with this approach, or if
+any improvements can be made for subsequent re-rolls of the changeset.
 
-Person to Contact:MR KELLY HALL the Director of the International
-Audit unit ATM Payment Center,
+  - [PATCH 1/4] Fixes a potential out-of-bounds access when reading the
+    values of the registers in the perf.data file.
+  - [PATCH 2/4] Modifies one of the callbacks in "struct scripting_ops"
+    so that the python version can obtain the correct register names.
+  - [PATCH 3/4] Adds header files with the register indices and names
+    from all architectures, which are used by the next patch.
+  - [PATCH 4/4] Refactors the function "perf_reg_name" so that it can
+    support registers from all architectures, not just the local one.
 
-Email: uba-bf@e-ubabf.com
-TELEPHONE: +226 64865611 You can whatsApp the bank
+Thanks,
+German
 
-Regards.
-Mrs ORGIL BAATAR
+German Gomez (4):
+  perf tools: Prevent out-of-bounds access to registers
+  perf script: Add "struct machine" parameter to process_event callback
+  perf tools: Crete header files with register names
+  perf tools: Support register names from all architectures
+
+ tools/perf/arch/arm/include/perf_regs.h       |  42 --------
+ tools/perf/arch/arm64/include/perf_regs.h     |  76 -------------
+ tools/perf/arch/csky/include/perf_regs.h      |  82 --------------
+ tools/perf/arch/mips/include/perf_regs.h      |  69 ------------
+ tools/perf/arch/powerpc/include/perf_regs.h   |  66 ------------
+ tools/perf/arch/riscv/include/perf_regs.h     |  74 -------------
+ tools/perf/arch/s390/include/perf_regs.h      |  78 --------------
+ tools/perf/arch/x86/include/perf_regs.h       |  82 --------------
+ tools/perf/builtin-script.c                   |  26 ++---
+ tools/perf/util/event.h                       |   5 +-
+ tools/perf/util/perf_regs.c                   |   3 +
+ tools/perf/util/perf_regs.h                   |  33 +++++-
+ tools/perf/util/perf_regs_arm.h               |  57 ++++++++++
+ tools/perf/util/perf_regs_arm64.h             |  83 ++++++++++++++
+ tools/perf/util/perf_regs_csky.h              | 101 ++++++++++++++++++
+ tools/perf/util/perf_regs_mips.h              |  76 +++++++++++++
+ tools/perf/util/perf_regs_powerpc.h           |  74 +++++++++++++
+ tools/perf/util/perf_regs_riscv.h             |  81 ++++++++++++++
+ tools/perf/util/perf_regs_s390.h              |  85 +++++++++++++++
+ tools/perf/util/perf_regs_x86.h               |  87 +++++++++++++++
+ .../util/scripting-engines/trace-event-perl.c |   3 +-
+ .../scripting-engines/trace-event-python.c    |  33 +++---
+ tools/perf/util/session.c                     |  25 ++---
+ tools/perf/util/trace-event-scripting.c       |   3 +-
+ tools/perf/util/trace-event.h                 |   3 +-
+ 25 files changed, 733 insertions(+), 614 deletions(-)
+ create mode 100644 tools/perf/util/perf_regs_arm.h
+ create mode 100644 tools/perf/util/perf_regs_arm64.h
+ create mode 100644 tools/perf/util/perf_regs_csky.h
+ create mode 100644 tools/perf/util/perf_regs_mips.h
+ create mode 100644 tools/perf/util/perf_regs_powerpc.h
+ create mode 100644 tools/perf/util/perf_regs_riscv.h
+ create mode 100644 tools/perf/util/perf_regs_s390.h
+ create mode 100644 tools/perf/util/perf_regs_x86.h
+
+-- 
+2.25.1
+
