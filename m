@@ -2,245 +2,319 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C57465AE5
-	for <lists+linux-csky@lfdr.de>; Thu,  2 Dec 2021 01:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA70B46678A
+	for <lists+linux-csky@lfdr.de>; Thu,  2 Dec 2021 17:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354568AbhLBAfQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 1 Dec 2021 19:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354555AbhLBAfF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 1 Dec 2021 19:35:05 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CCCC061748;
-        Wed,  1 Dec 2021 16:31:43 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id g9so21510077qvd.2;
-        Wed, 01 Dec 2021 16:31:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UYmHlVbMSQbQAn62a50WlYWlw5WYikEw/HKO8MU8o20=;
-        b=d9ufFBZIjBeCnfJhxkhOJHR4U6gA3sYY5/+OartHrmtyqhNuwpEH+tfc93YA7tEDao
-         yOKDodcNFRle3eMMLCg2FH/Tcgr7cW593yntXLl1utZLUJtVShRNQEOc9NvEo4hEL1rm
-         L2l6bxTExKPSRmbnMRKqIcZhoOpd63W1ZKagDrFCRbYIcYvSgN+CxBxrwTxGRSsHeVKf
-         UXZK5TS9EbCKBOwmJzZ51FgzKmkah4fU/bnP1hNtNTskTK6qjluwzPEk7uWUTAkKCdZ1
-         XxzA5TtEBQPg9PU9R4bStLW9Ne4zdJoIM+RpRwYI7AmQcqEYlTEIoOnEsCuvtTzXmNFj
-         00eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UYmHlVbMSQbQAn62a50WlYWlw5WYikEw/HKO8MU8o20=;
-        b=DqgKolkPKqrXWQ9HL31Gh9PdPZs17c/UeEKZhGq60VRHXQ6uTNba6E/gNEUxut08dv
-         BHOQn9E98Ihcvm1zXUgxhpbpnnEjF0jlav6odkYf/Joq6Rr7OvVz5ikG1n3dScMllSfV
-         bbib4a7agBzI+XqmGmgPWRjrmrEbqzKgWOQs9W9OXoh95Jeb73VIC5Ybs0Cf8BEJN7zO
-         dw6xVat2T54fpTuZzynPwMSsduLVyroCpi+LqLusdQDuUXsk3/Lfup4/2g+Aik850tNm
-         vsC1vU3KSAOFl9M0aptStnfAVXSUAL9aj52YcX/gpW68+Od52EgD/S5I7nmCouZhGygC
-         KWlA==
-X-Gm-Message-State: AOAM531xs/j1H7toXiM+CsSCkZxtlJtD5205OnDQr9ckExVG1T5rtFcu
-        djcGDJZSzKqo5WWxMOuislJkR1zSj3cXaQ==
-X-Google-Smtp-Source: ABdhPJwpuPpSi7n83vlL+jLX5fyPRTIJyAHbiKfUe+xvjm76YV/xzPPNg/iMW1GhI6PSi3iKc0YBEA==
-X-Received: by 2002:a05:6214:ccc:: with SMTP id 12mr9930154qvx.8.1638405102640;
-        Wed, 01 Dec 2021 16:31:42 -0800 (PST)
-Received: from localhost ([66.216.211.25])
-        by smtp.gmail.com with ESMTPSA id l1sm690890qkp.125.2021.12.01.16.31.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 16:31:42 -0800 (PST)
-Date:   Wed, 1 Dec 2021 16:31:40 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-alpha@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrew Lunn <andrew@lunn.ch>, Andi Kleen <ak@linux.intel.com>,
-        Tejun Heo <tj@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Anup Patel <anup.patel@wdc.com>, linux-ia64@vger.kernel.org,
-        Andy Shevchenko <andy@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mel Gorman <mgorman@suse.de>, Christoph Hellwig <hch@lst.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Laight <David.Laight@aculab.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Christoph Lameter <cl@linux.com>, linux-crypto@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>, linux-mm@kvack.org,
-        Guo Ren <guoren@kernel.org>,
-        linux-snps-arc@lists.infradead.org,
-        Geetha sowjanya <gakula@marvell.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dennis Zhou <dennis@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Roy Pledge <Roy.Pledge@nxp.com>,
-        Saeed Mahameed <saeedm@nvidia.com>, Jens Axboe <axboe@fb.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jiri Olsa <jolsa@redhat.com>, Vineet Gupta <vgupta@kernel.org>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        kvm@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        linux-csky@vger.kernel.org, Marcin Wojtas <mw@semihalf.com>,
-        linux-mips@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        id S242463AbhLBQHk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 2 Dec 2021 11:07:40 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51584 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242221AbhLBQHk (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 2 Dec 2021 11:07:40 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2FHMK4009200;
+        Thu, 2 Dec 2021 16:03:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=8a9oXbGzR78DoslxbXE4jxGAjt67YTQ0reW4bF4Hevs=;
+ b=Qj5hcRxi5axETJ9TcrTOc9/W00LyNOtel0+c9rNdi1P0PkcwSAkdF31rz3ZG4O01TmJ9
+ +WA0sNhfL+l2GayVHeQ9dT0HAQv6bTCjXnzYiKbXdVTCY7mNoZ2Jp845QjYLMTIrX7zQ
+ MtJCIBJOfUmSF8zVWJ1q6ClUFPRdK0gIgVtMnp3MR5ty0Bi416Lt9XIR5yYhFuaXe6CR
+ sC8IIl+m3T+PPaTSfc2coYyys7VyMGddwSS84oqEpmNSASYOULomW0/ZFnBtODys2zNy
+ bt4y4m9kaJXk1UebKq9GI41X++pAb7u3XcTqumehmfYt+im0la0/giEpV0mG/DSZx9QL IQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cq0nfh44r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 16:03:45 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2FJdA0016004;
+        Thu, 2 Dec 2021 16:03:44 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cq0nfh440-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 16:03:44 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2G3SQZ002918;
+        Thu, 2 Dec 2021 16:03:42 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3ckcaabrw4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 16:03:42 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2G3dlQ24903936
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Dec 2021 16:03:39 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9ED2652059;
+        Thu,  2 Dec 2021 16:03:39 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.211.114.96])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 7E2CB52067;
+        Thu,  2 Dec 2021 16:03:32 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH v1 2/4] perf script: Add "struct machine" parameter to
+ process_event callback
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <20211201123334.679131-3-german.gomez@arm.com>
+Date:   Thu, 2 Dec 2021 21:33:27 +0530
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-perf-users@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-s390@vger.kernel.org, Mark Gross <markgross@kernel.org>,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 0/9] lib/bitmap: optimize bitmap_weight() usage
-Message-ID: <20211202003140.GA430494@lapt>
-References: <20211128035704.270739-1-yury.norov@gmail.com>
- <YaPEfZ0t9UFGwpml@qmqm.qmqm.pl>
- <20211129063839.GA338729@lapt>
- <3CD9ECD8-901E-497B-9AE1-0DDB02346892@rere.qmqm.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3CD9ECD8-901E-497B-9AE1-0DDB02346892@rere.qmqm.pl>
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D6A3A8F3-9946-44FE-A70F-42977C6F38A1@linux.vnet.ibm.com>
+References: <20211201123334.679131-1-german.gomez@arm.com>
+ <20211201123334.679131-3-german.gomez@arm.com>
+To:     German Gomez <german.gomez@arm.com>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3CMRHBoEOFgCLvdPBjbwdGqw0tdvwfdq
+X-Proofpoint-GUID: 5I37IjOv4eevDAaMX3wVdZbi9xQEN6p_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-02_10,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 malwarescore=0 clxscore=1011 priorityscore=1501
+ impostorscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112020106
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 04:34:07PM +0000, Michał Mirosław wrote:
-> Dnia 29 listopada 2021 06:38:39 UTC, Yury Norov <yury.norov@gmail.com> napisał/a:
-> >On Sun, Nov 28, 2021 at 07:03:41PM +0100, mirq-test@rere.qmqm.pl wrote:
-> >> On Sat, Nov 27, 2021 at 07:56:55PM -0800, Yury Norov wrote:
-> >> > In many cases people use bitmap_weight()-based functions like this:
-> >> > 
-> >> > 	if (num_present_cpus() > 1)
-> >> > 		do_something();
-> >> > 
-> >> > This may take considerable amount of time on many-cpus machines because
-> >> > num_present_cpus() will traverse every word of underlying cpumask
-> >> > unconditionally.
-> >> > 
-> >> > We can significantly improve on it for many real cases if stop traversing
-> >> > the mask as soon as we count present cpus to any number greater than 1:
-> >> > 
-> >> > 	if (num_present_cpus_gt(1))
-> >> > 		do_something();
-> >> > 
-> >> > To implement this idea, the series adds bitmap_weight_{eq,gt,le}
-> >> > functions together with corresponding wrappers in cpumask and nodemask.
-> >> 
-> >> Having slept on it I have more structured thoughts:
-> >> 
-> >> First, I like substituting bitmap_empty/full where possible - I think
-> >> the change stands on its own, so could be split and sent as is.
-> >
-> >Ok, I can do it.
-> >
-> >> I don't like the proposed API very much. One problem is that it hides
-> >> the comparison operator and makes call sites less readable:
-> >> 
-> >> 	bitmap_weight(...) > N
-> >> 
-> >> becomes:
-> >> 
-> >> 	bitmap_weight_gt(..., N)
-> >> 
-> >> and:
-> >> 	bitmap_weight(...) <= N
-> >> 
-> >> becomes:
-> >> 
-> >> 	bitmap_weight_lt(..., N+1)
-> >> or:
-> >> 	!bitmap_weight_gt(..., N)
-> >> 
-> >> I'd rather see something resembling memcmp() API that's known enough
-> >> to be easier to grasp. For above examples:
-> >> 
-> >> 	bitmap_weight_cmp(..., N) > 0
-> >> 	bitmap_weight_cmp(..., N) <= 0
-> >> 	...
-> >
-> >bitmap_weight_cmp() cannot be efficient. Consider this example:
-> >
-> >bitmap_weight_lt(1000 0000 0000 0000, 1) == false
-> >                 ^
-> >                 stop here
-> >
-> >bitmap_weight_cmp(1000 0000 0000 0000, 1) == 0
-> >                                 ^
-> >                                 stop here
-> >
-> >I agree that '_gt' is less verbose than '>', but the advantage of 
-> >'_gt' over '>' is proportional to length of bitmap, and it means
-> >that this API should exist.
-> 
-> Thank you for the example. Indeed, for less-than to be efficient here you would need to replace
->  bitmap_weight_cmp(..., N) < 0
-> with
->  bitmap_weight_cmp(..., N-1) <= 0
 
-Indeed, thanks for pointing to it.
- 
-> It would still be more readable, I think.
 
-To be honest, I'm not sure that
-        bitmap_weight_cmp(..., N-1) <= 0
-would be an obvious replacement for the original
-        bitmap_weight(...) < N
-comparing to 
-        bitmap_weight_lt(..., N)
+> On 01-Dec-2021, at 6:03 PM, German Gomez <german.gomez@arm.com> wrote:
+>=20
+> Include a "struct machine*" parameter to the process_event callback in
+> the scripting layer. This will allow access to the perf_env from =
+within
+> this callback.
+>=20
+> Followup patches will build on top of this to report the correct name =
+of
+> the registers in a perf.data file, consistently with the architecture
+> the file was recorded in.
+>=20
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> ---
+> tools/perf/builtin-script.c                   |  2 +-
+> .../util/scripting-engines/trace-event-perl.c |  3 ++-
+> .../scripting-engines/trace-event-python.c    | 23 +++++++++++--------
+> tools/perf/util/trace-event-scripting.c       |  3 ++-
+> tools/perf/util/trace-event.h                 |  3 ++-
+> 5 files changed, 21 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index 9434367af..711132f0b 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -2256,7 +2256,7 @@ static int process_sample_event(struct perf_tool =
+*tool,
+> 				thread__resolve(al.thread, &addr_al, =
+sample);
+> 			addr_al_ptr =3D &addr_al;
+> 		}
+> -		scripting_ops->process_event(event, sample, evsel, &al, =
+addr_al_ptr);
+> +		scripting_ops->process_event(event, sample, evsel, &al, =
+addr_al_ptr, machine);
 
-I think the best thing I can do is to add bitmap_weight_cmp() as
-you suggested, and turn lt and others to be wrappers on it. This
-will let people choose a better function in each case.
+Hi,
 
-I also think that for v2 it would be better to drop the conversion
-for short bitmaps, except for switching to bitmap_empty(), because
-in that case readability wins over performance; if no objections. 
+Looks like the patch is using =E2=80=9Cmachine=E2=80=9D to allow access =
+to perf_env__arch and there by to get the =E2=80=9Carch=E2=80=9D value.
+But can we use from evsel, like  "perf_env__arch(evsel__env(evsel))=E2=80=9D=
+ to get arch value instead of including new parameter for =E2=80=9Cstruct =
+machine=E2=80=9D ?
 
-Thanks,
-Yury
+Thanks
+Athira=20
+> 	} else {
+> 		process_event(scr, sample, evsel, &al, &addr_al, =
+machine);
+> 	}
+> diff --git a/tools/perf/util/scripting-engines/trace-event-perl.c =
+b/tools/perf/util/scripting-engines/trace-event-perl.c
+> index 32a721b3e..6017c4660 100644
+> --- a/tools/perf/util/scripting-engines/trace-event-perl.c
+> +++ b/tools/perf/util/scripting-engines/trace-event-perl.c
+> @@ -454,7 +454,8 @@ static void perl_process_event(union perf_event =
+*event,
+> 			       struct perf_sample *sample,
+> 			       struct evsel *evsel,
+> 			       struct addr_location *al,
+> -			       struct addr_location *addr_al)
+> +			       struct addr_location *addr_al,
+> +			       struct machine *machine __maybe_unused)
+> {
+> 	scripting_context__update(scripting_context, event, sample, =
+evsel, al, addr_al);
+> 	perl_process_tracepoint(sample, evsel, al);
+> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c =
+b/tools/perf/util/scripting-engines/trace-event-python.c
+> index c0c010350..e164f8d00 100644
+> --- a/tools/perf/util/scripting-engines/trace-event-python.c
+> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
+> @@ -708,7 +708,8 @@ static void regs_map(struct regs_dump *regs, =
+uint64_t mask, char *bf, int size)
+>=20
+> static void set_regs_in_dict(PyObject *dict,
+> 			     struct perf_sample *sample,
+> -			     struct evsel *evsel)
+> +			     struct evsel *evsel,
+> +			     struct machine *machine __maybe_unused)
+> {
+> 	struct perf_event_attr *attr =3D &evsel->core.attr;
+>=20
+> @@ -776,6 +777,7 @@ static PyObject *get_perf_sample_dict(struct =
+perf_sample *sample,
+> 					 struct evsel *evsel,
+> 					 struct addr_location *al,
+> 					 struct addr_location *addr_al,
+> +					 struct machine *machine,
+> 					 PyObject *callchain)
+> {
+> 	PyObject *dict, *dict_sample, *brstack, *brstacksym;
+> @@ -849,7 +851,7 @@ static PyObject *get_perf_sample_dict(struct =
+perf_sample *sample,
+> 			PyLong_FromUnsignedLongLong(sample->cyc_cnt));
+> 	}
+>=20
+> -	set_regs_in_dict(dict, sample, evsel);
+> +	set_regs_in_dict(dict, sample, evsel, machine);
+>=20
+> 	return dict;
+> }
+> @@ -857,7 +859,8 @@ static PyObject *get_perf_sample_dict(struct =
+perf_sample *sample,
+> static void python_process_tracepoint(struct perf_sample *sample,
+> 				      struct evsel *evsel,
+> 				      struct addr_location *al,
+> -				      struct addr_location *addr_al)
+> +				      struct addr_location *addr_al,
+> +				      struct machine *machine)
+> {
+> 	struct tep_event *event =3D evsel->tp_format;
+> 	PyObject *handler, *context, *t, *obj =3D NULL, *callchain;
+> @@ -964,7 +967,7 @@ static void python_process_tracepoint(struct =
+perf_sample *sample,
+> 		PyTuple_SetItem(t, n++, dict);
+>=20
+> 	if (get_argument_count(handler) =3D=3D (int) n + 1) {
+> -		all_entries_dict =3D get_perf_sample_dict(sample, evsel, =
+al, addr_al,
+> +		all_entries_dict =3D get_perf_sample_dict(sample, evsel, =
+al, addr_al, machine,
+> 			callchain);
+> 		PyTuple_SetItem(t, n++,	all_entries_dict);
+> 	} else {
+> @@ -1366,7 +1369,8 @@ static int python_process_call_return(struct =
+call_return *cr, u64 *parent_db_id,
+> static void python_process_general_event(struct perf_sample *sample,
+> 					 struct evsel *evsel,
+> 					 struct addr_location *al,
+> -					 struct addr_location *addr_al)
+> +					 struct addr_location *addr_al,
+> +					 struct machine *machine)
+> {
+> 	PyObject *handler, *t, *dict, *callchain;
+> 	static char handler_name[64];
+> @@ -1388,7 +1392,7 @@ static void python_process_general_event(struct =
+perf_sample *sample,
+>=20
+> 	/* ip unwinding */
+> 	callchain =3D python_process_callchain(sample, evsel, al);
+> -	dict =3D get_perf_sample_dict(sample, evsel, al, addr_al, =
+callchain);
+> +	dict =3D get_perf_sample_dict(sample, evsel, al, addr_al, =
+machine, callchain);
+>=20
+> 	PyTuple_SetItem(t, n++, dict);
+> 	if (_PyTuple_Resize(&t, n) =3D=3D -1)
+> @@ -1403,7 +1407,8 @@ static void python_process_event(union =
+perf_event *event,
+> 				 struct perf_sample *sample,
+> 				 struct evsel *evsel,
+> 				 struct addr_location *al,
+> -				 struct addr_location *addr_al)
+> +				 struct addr_location *addr_al,
+> +				 struct machine *machine)
+> {
+> 	struct tables *tables =3D &tables_global;
+>=20
+> @@ -1411,14 +1416,14 @@ static void python_process_event(union =
+perf_event *event,
+>=20
+> 	switch (evsel->core.attr.type) {
+> 	case PERF_TYPE_TRACEPOINT:
+> -		python_process_tracepoint(sample, evsel, al, addr_al);
+> +		python_process_tracepoint(sample, evsel, al, addr_al, =
+machine);
+> 		break;
+> 	/* Reserve for future process_hw/sw/raw APIs */
+> 	default:
+> 		if (tables->db_export_mode)
+> 			db_export__sample(&tables->dbe, event, sample, =
+evsel, al, addr_al);
+> 		else
+> -			python_process_general_event(sample, evsel, al, =
+addr_al);
+> +			python_process_general_event(sample, evsel, al, =
+addr_al, machine);
+> 	}
+> }
+>=20
+> diff --git a/tools/perf/util/trace-event-scripting.c =
+b/tools/perf/util/trace-event-scripting.c
+> index 7172ca052..089a2c905 100644
+> --- a/tools/perf/util/trace-event-scripting.c
+> +++ b/tools/perf/util/trace-event-scripting.c
+> @@ -51,7 +51,8 @@ static void process_event_unsupported(union =
+perf_event *event __maybe_unused,
+> 				      struct perf_sample *sample =
+__maybe_unused,
+> 				      struct evsel *evsel =
+__maybe_unused,
+> 				      struct addr_location *al =
+__maybe_unused,
+> -				      struct addr_location *addr_al =
+__maybe_unused)
+> +				      struct addr_location *addr_al =
+__maybe_unused,
+> +				      struct machine *machine =
+__maybe_unused)
+> {
+> }
+>=20
+> diff --git a/tools/perf/util/trace-event.h =
+b/tools/perf/util/trace-event.h
+> index 640981105..6f5b1a6d5 100644
+> --- a/tools/perf/util/trace-event.h
+> +++ b/tools/perf/util/trace-event.h
+> @@ -81,7 +81,8 @@ struct scripting_ops {
+> 			       struct perf_sample *sample,
+> 			       struct evsel *evsel,
+> 			       struct addr_location *al,
+> -			       struct addr_location *addr_al);
+> +			       struct addr_location *addr_al,
+> +			       struct machine *machine);
+> 	void (*process_switch)(union perf_event *event,
+> 			       struct perf_sample *sample,
+> 			       struct machine *machine);
+> --=20
+> 2.25.1
+>=20
+>=20
+
