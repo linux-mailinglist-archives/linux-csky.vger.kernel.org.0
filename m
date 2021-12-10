@@ -2,81 +2,102 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D7B46DDA7
-	for <lists+linux-csky@lfdr.de>; Wed,  8 Dec 2021 22:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0798546FD8C
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Dec 2021 10:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237331AbhLHViq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 8 Dec 2021 16:38:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40859 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234396AbhLHVip (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 8 Dec 2021 16:38:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638999312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CeXKyb655iDPT4A+Z5xrV0y1RP5TDI3g9ay8C+HT3HE=;
-        b=eIVd5avwxD1Bdftyf4pMjmDfJoPE4lzUMU+1sJLmyCrkrSrC++lEyKCRa5cj91zguzMpQO
-        ENXZV845cDnyIBl72dd0s2ZMeT+TLbXID+BIs3Qy5G78/e6a2DgVt0Jnc5hE51ciNtIHM3
-        2wk9ev1oIYevtraqRmpU1YjRpkOAi1o=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-136-kZsSNPzVNzCxY9Wxsbkn5Q-1; Wed, 08 Dec 2021 16:35:11 -0500
-X-MC-Unique: kZsSNPzVNzCxY9Wxsbkn5Q-1
-Received: by mail-wm1-f69.google.com with SMTP id 145-20020a1c0197000000b0032efc3eb9bcso3720132wmb.0
-        for <linux-csky@vger.kernel.org>; Wed, 08 Dec 2021 13:35:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CeXKyb655iDPT4A+Z5xrV0y1RP5TDI3g9ay8C+HT3HE=;
-        b=iq/xLa+y3MnWkv7lg/eZCka8AbBbdN9bq4X9JHxw7vD8CMdqSGe6GL8Ya3G8V7Zr5V
-         xFtomaxsF9scwMSbb0gJRM8AOS9FR8tGqrdD1dHoUzDtBT9iW/4mt+xlHhCfdx2afAKT
-         CErm7N2zSFE4dscujIY2DO1yKOD44g8If/fMnzid9dmvtQYf0WF5mmLp714sXO2fFq+T
-         w/JntQ5P3kTFatO5kyuya4cjf+YbXvQRWERDr8swFsC8Uf80v3267ixFiCdQ2h6gplNm
-         g3//Xjd4xI6LZfBJvqJxpgegaqyf3U1er9COPxIjH6KUPtfW0U8Bb8LuzwLeQuqfR3f0
-         Y7Lg==
-X-Gm-Message-State: AOAM531BZd1/RUH2moe6D48X3mcRlcIcLtQ+l0J7bBErJBl3Qtn07+Cl
-        iB3a+lQ2rEC0+GIjo4P72AJ2eEXl9nIycJZTJga2PA5Vb7DDLFmquYIGA4vCzmKibTJVcs/4wW7
-        /SIzPPfQgvFlO9MgtYInTwQ==
-X-Received: by 2002:adf:e391:: with SMTP id e17mr1405782wrm.613.1638999310065;
-        Wed, 08 Dec 2021 13:35:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx56PDcQ9x4W4KPUCMLY+uuyJihSBiRNIwzduX5rQ30E/1Tn92gPDE60lBy2g7CxuCj7cySQA==
-X-Received: by 2002:adf:e391:: with SMTP id e17mr1405757wrm.613.1638999309893;
-        Wed, 08 Dec 2021 13:35:09 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id b6sm7152187wmq.45.2021.12.08.13.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Dec 2021 13:35:09 -0800 (PST)
-Date:   Wed, 8 Dec 2021 22:35:07 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
+        id S239107AbhLJJVv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 10 Dec 2021 04:21:51 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7556 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233028AbhLJJVu (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>);
+        Fri, 10 Dec 2021 04:21:50 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BA6wbUV040152;
+        Fri, 10 Dec 2021 09:18:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=sCUp2gunpgsst+Ptkr0udx0VT2ivxJ/IAL0EVGqMlw8=;
+ b=P9ACkXV32i6ejvxsr8YthLLr35rCLRZ75dW5EmHut9PztuV0NMkX/sepfJFLtYltAoxq
+ 9vFUq/RPXSa1zC13NpNyFBcpQCiaDhu6bGP9k7UgVrntzrRe4QSZxu5NTgKoOE/7LobR
+ 0PkJoAPocNMgx+5ZBu12yP9slPjkwG5fV9FmYqbzuLkyFG1cyoBzGYlYLZhIGL6hB72H
+ /WMLyBD9rX8ej2Q5GV91WVVoU+wP75svY3xW0nCK0mwzUMTzWkIb12BG2qQV0wmzIlle
+ CzPyJaRSUJQ4Gqkl5/jKEGN2Nhx6YIF1RDYI2qwSVVSBgI/9kPqee5TRB+r3K7mcz4v9 pQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv23njkee-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 09:18:02 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BA7RgrO021771;
+        Fri, 10 Dec 2021 09:18:02 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cv23njkdd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 09:18:02 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BA9EC7j030790;
+        Fri, 10 Dec 2021 09:17:59 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3cqyyasbdy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 10 Dec 2021 09:17:59 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BA9Hu8s32571702
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 10 Dec 2021 09:17:56 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E41A9A405F;
+        Fri, 10 Dec 2021 09:17:55 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B24F7A4062;
+        Fri, 10 Dec 2021 09:17:50 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.86.88])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 10 Dec 2021 09:17:50 +0000 (GMT)
+Subject: Re: [PATCH v1 1/4] perf tools: Prevent out-of-bounds access to
+ registers
+To:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org
+Cc:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Leo Yan <leo.yan@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 1/4] perf tools: Prevent out-of-bounds access to
- registers
-Message-ID: <YbElC/fEgduFMAuo@krava>
 References: <20211201123334.679131-1-german.gomez@arm.com>
  <20211201123334.679131-2-german.gomez@arm.com>
+From:   kajoljain <kjain@linux.ibm.com>
+Message-ID: <6705021e-5b02-3323-7dbc-4b774f22a435@linux.ibm.com>
+Date:   Fri, 10 Dec 2021 14:47:49 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20211201123334.679131-2-german.gomez@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3VwXn0xGApwvvGnybtVArkK_c3fXbUfh
+X-Proofpoint-GUID: S8D0NhTU3ovY96fl9qCknqis3HFEGLgh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-10_03,2021-12-08_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ mlxscore=0 priorityscore=1501 phishscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 clxscore=1011 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112100049
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 12:33:29PM +0000, German Gomez wrote:
+
+
+On 12/1/21 6:03 PM, German Gomez wrote:
 > The size of the cache of register values is arch-dependant
 > (PERF_REGS_MAX). This has the potential of causing an out-of-bounds
 > access in the function "perf_reg_value" if the local architecture
@@ -87,13 +108,15 @@ On Wed, Dec 01, 2021 at 12:33:29PM +0000, German Gomez wrote:
 > 64 already, fix the size to 64 and add a range-check to the function
 > "perf_reg_value" to prevent out-of-bounds access.
 > 
+
+Patch looks good to me.
+
+Reviewed-by: Kajol Jain<kjain@linux.ibm.com>
+
+Thanks,
+Kajol Jain
+
 > Signed-off-by: German Gomez <german.gomez@arm.com>
-
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-
-thanks,
-jirka
-
 > ---
 >  tools/perf/util/event.h     | 5 ++++-
 >  tools/perf/util/perf_regs.c | 3 +++
@@ -135,7 +158,4 @@ jirka
 >  	if (regs->cache_mask & (1ULL << id))
 >  		goto out;
 >  
-> -- 
-> 2.25.1
 > 
-
