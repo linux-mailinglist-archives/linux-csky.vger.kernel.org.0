@@ -2,68 +2,65 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 110D34717CD
-	for <lists+linux-csky@lfdr.de>; Sun, 12 Dec 2021 03:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A82471C7B
+	for <lists+linux-csky@lfdr.de>; Sun, 12 Dec 2021 20:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbhLLCSF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 11 Dec 2021 21:18:05 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:45112 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbhLLCSF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 11 Dec 2021 21:18:05 -0500
+        id S230187AbhLLTQw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 12 Dec 2021 14:16:52 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40040 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229749AbhLLTQv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 12 Dec 2021 14:16:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EF08CCE0B01;
-        Sun, 12 Dec 2021 02:18:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12138C004DD;
-        Sun, 12 Dec 2021 02:17:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F02AB80D63;
+        Sun, 12 Dec 2021 19:16:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FC0CC341C6;
+        Sun, 12 Dec 2021 19:16:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639275480;
-        bh=iJL/6mEne38AzSXVcb8m6/VlwgWeUH9E66rradqeky8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ADivHlcaEKPtZ4Aawh/RUI1NxLo9PVFjqAMSeZ0FRZ8IMv5EZ9X9+bwuDKsTNGNUt
-         lM5aPk86acgFXpnzFPdBd5FUelnLrqtkhm9gJMoqDF84/cuIcm1WqYBHvfKY3dGlKK
-         2LIWxKNpnUT1t2Gv53p5X1fjG8e1LqCbVs86ek6v8ztqmbcu8ewPn7xMEjRBgQ6Q7p
-         HFx/hb7qD6Z2+DfZzHpnkk+L+cettler6BU7ewrxd8JK2LFjMFouat0ITbAqCsPlM/
-         z1urAwW3bJmEajrK6s4ljo4rjLR13mR9gYEt2/8Fa3jMWvv/+RYKIgCvAABBmdF12z
-         9s2I3negR563Q==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-        guoren@kernel.org
-Subject: [GIT PULL] csky fixes for v5.16-rc5
-Date:   Sun, 12 Dec 2021 10:17:53 +0800
-Message-Id: <20211212021753.3541366-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1639336609;
+        bh=pSpyqRIm1XRtinaEeUqdyGDkr973ddqeF3xvtsAXzMw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=IE+aL40Zh9SCXHX/Nk5p4snpaY+/yKur69A1yq2hP3xvHUwRcb0oQUHJDwdc7xqCW
+         9GsghFoF8o1mmrxCwQeJQVjlhPlCA6vBae4MfsXRvTEY44XrncrO0sQSzSz+NB6yxZ
+         3YTWCQm1x70v/3Aq8EQqa3JZgcV0JHF4RO8UuEQc07UNNPCWCHGVcapNmtujfaZrX7
+         u7aBGbCdn6oOrwGsonZQC/rmlkmGYwceqr2mnG5Vk+0d/sSnaIWcOMERPnnERqSi+3
+         4BN/Le1BgZb17S4czRKO/nh63Dme3ty7FqFjt2peKFObBujujp82is6qhfYPWwoOS9
+         oqQWEHk3RvkxQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E91AB60A4D;
+        Sun, 12 Dec 2021 19:16:48 +0000 (UTC)
+Subject: Re: [GIT PULL] csky fixes for v5.16-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211212021753.3541366-1-guoren@kernel.org>
+References: <20211212021753.3541366-1-guoren@kernel.org>
+X-PR-Tracked-List-Id: <linux-csky.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211212021753.3541366-1-guoren@kernel.org>
+X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.16-rc5
+X-PR-Tracked-Commit-Id: a0793fdad9a11a32bc6d21317c93c83f4aa82ebc
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0f3d41e82d78bf521dfee4d6db1d247628dcf399
+Message-Id: <163933660889.938.9065494604784665966.pr-tracker-bot@kernel.org>
+Date:   Sun, 12 Dec 2021 19:16:48 +0000
+To:     guoren@kernel.org
+Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, guoren@kernel.org
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
+The pull request you sent on Sun, 12 Dec 2021 10:17:53 +0800:
 
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
+> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.16-rc5
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0f3d41e82d78bf521dfee4d6db1d247628dcf399
 
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.16-rc5
+Thank you!
 
-for you to fetch changes up to a0793fdad9a11a32bc6d21317c93c83f4aa82ebc:
-
-  csky: fix typo of fpu config macro (2021-12-08 14:15:54 +0800)
-
-----------------------------------------------------------------
-csky updates for 5.16-rc5
-
-Only 1 fixup for csky:
- - fpu config macro
-
-----------------------------------------------------------------
-Kelly Devilliv (1):
-      csky: fix typo of fpu config macro
-
- arch/csky/kernel/traps.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
