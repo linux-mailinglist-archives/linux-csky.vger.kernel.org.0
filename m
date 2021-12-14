@@ -2,134 +2,200 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF5147436F
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Dec 2021 14:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4C5474C2A
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Dec 2021 20:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbhLNN0q (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Dec 2021 08:26:46 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:54466 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbhLNN0q (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Dec 2021 08:26:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC891614E3;
-        Tue, 14 Dec 2021 13:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B597C34605;
-        Tue, 14 Dec 2021 13:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639488405;
-        bh=8QGHE0fK7CigJKJp2gJvyAASZ/DUh8M98aUo7jPSPek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MQ7TfGCIQvFo2S76vgmZ19p4rzVNsg8h8E+r4DskC4zB+jd5btsFxzB4FT8sUOeyr
-         0dieCHKB6zHkbNsUI7hBaBCT0n2GFgb0lZGA5nlev0mWNU4Md5Fl5ySNX+kUd+7dzN
-         Rn4Hd0EI6QVdsdCE2coqcVtk2eUocaL9bdQ8/Y7/A9IKVwgHx9SElOLxn3SbdcdoEy
-         o3BpZxvdkfX0OgnEAx5Pj/w74md3eY7wja9DzF+wSADT8G+ra4+Ajw6pCGisucBaee
-         24vZiNuqbkl5Ohvfa60OviNTpnn1rQxnKkNUTv5lMNYmgxmlqZn28YB/D8GsUW2LTX
-         xJkE4mGAVPv2w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 91DEF405D8; Tue, 14 Dec 2021 10:26:40 -0300 (-03)
-Date:   Tue, 14 Dec 2021 10:26:40 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     German Gomez <german.gomez@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 0/3] Support register names of all architectures
-Message-ID: <YbibkI8NE81Qo5q6@kernel.org>
-References: <20211207180653.1147374-1-german.gomez@arm.com>
- <EAC4AC1D-A305-42E2-B22F-8B64B0968841@linux.vnet.ibm.com>
+        id S237468AbhLNTnW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Dec 2021 14:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232335AbhLNTnV (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Dec 2021 14:43:21 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BF7C061574;
+        Tue, 14 Dec 2021 11:43:21 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id z6so18701459pfe.7;
+        Tue, 14 Dec 2021 11:43:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LCilH12wWw0seUa3hiJyDy0VxFX2Q3bA7Y0HXIYHhF8=;
+        b=mgUrMQhC4/CUdwucboxOLaDGWbb/3r/d8db3O9NgfZYUYEd6Zjz2nbba51SL7zLe8Y
+         HoPx+IQ/X0fM2kJmgKk06iLEcvvTYlX2h8Als5lC5pEfulogO+sUqemRF4n6m2Eekf4w
+         CtPoyJGaZ6slsRjff5y3xVucnMlyQBZjuB7TsLW/QfR5HbmU2eCSX+iDyn3uJA04puJa
+         dF//PJEuj31ulpS82MggltzR4G2RUQnzjtNrp/7HOGpfHVW7cNQpoT3ypqVvpPJEUhsf
+         QvGgSrM2kq5yWe5ythTOhC41utztrjpAcYlGjjw1vz9wzYdQhMtOLwSCYyXNwoJoZq7H
+         sX/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LCilH12wWw0seUa3hiJyDy0VxFX2Q3bA7Y0HXIYHhF8=;
+        b=ISs8iGmjulzRcyw/4adfQiamM2bLA3tYj4Sg2mBjKQfJej36Y8qqgtux5H2PY1v+h5
+         /LTKC/x9hDeUysiJ1hI9CwdEF9uJoPfLHiQnAriD/yRXKjjBixvEEd5fqtHuoDXraxPd
+         leDnrLOZgN75PBWfam6fVjHqDTYwkYybl8zAcm/Kj/nO02nDNMNJ/kyzsr2v1BibIjMI
+         SUTALArnDPKadExaDnJrTf6SRRU9n2LE5rwq4E9+Fh9Tm84OtQnCOvU5fzgD6q2eCqQq
+         So/LzfxiodAcCTt1rhEOdFkVDE3gscDycnEwAIWqb/fh5vC3EM7ECm0PhWbeTkrcsu2i
+         BoLg==
+X-Gm-Message-State: AOAM532CzldWSv+XJh+tm5YtzmT/yF/Nl3fs/q48+iMrYW7JfW/ImKjY
+        KgRufOPIjMuu4TWK67tTW+TOOaTRRHn+VNa/Nu0=
+X-Google-Smtp-Source: ABdhPJx1omsyXEH84uuE4kzYpPBu5v24anF9kQ0616INOFdPlqou2FDes2afxUGAuG2JNukP2+Sny94qEgWXdVVJ7J8=
+X-Received: by 2002:a63:3f4e:: with SMTP id m75mr4955451pga.587.1639511000707;
+ Tue, 14 Dec 2021 11:43:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <EAC4AC1D-A305-42E2-B22F-8B64B0968841@linux.vnet.ibm.com>
-X-Url:  http://acmel.wordpress.com
+References: <20211128035704.270739-1-yury.norov@gmail.com> <20211128035704.270739-3-yury.norov@gmail.com>
+ <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl>
+In-Reply-To: <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Tue, 14 Dec 2021 11:43:09 -0800
+Message-ID: <CAAH8bW9-dbENFUrwPUQ-uJVVX_s=PWb2zpAJ8BqkV3vJE696mA@mail.gmail.com>
+Subject: Re: [PATCH 2/9] lib/bitmap: implement bitmap_{empty,full} with bitmap_weight_eq()
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Roy Pledge <Roy.Pledge@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Em Tue, Dec 14, 2021 at 02:20:26PM +0530, Athira Rajeev escreveu:
-> 
-> 
-> > On 07-Dec-2021, at 11:36 PM, German Gomez <german.gomez@arm.com> wrote:
-> > 
-> > The following changeset applies some corrections to the way system
-> > registers are processed and presented when reading perf.data files using
-> > the various perf tools.
-> > 
-> > The commit message from [3/3] shows how register names aren't correctly
-> > presented when performing x-arch analysis of perf.data files (recording
-> > in one arch, then reading the file from a different arch).
-> > 
-> >  - [PATCH 1/3] Fixes a potential out-of-bounds access when reading the
-> >    values of the registers in the perf.data file.
-> >  - [PATCH 2/3] Fixes an issue of ARM and ARM64 registers having the
-> >    same enum name.
-> >  - [PATCH 3/3] Refactors the function "perf_reg_name" declared in the
-> >   "tools/perf/util/perf_regs.h" header, in order to support every arch.
-> > 
-> > Thanks,
-> > German
-> 
-> Looks good to me. Tested this patchset in powerpc by capturing regs in powerpc and doing
-> perf report to read the data from x86.
-> 
-> Reviewed-and-Tested-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+On Sun, Nov 28, 2021 at 10:10 AM Micha=C5=82 Miros=C5=82aw
+<mirq-linux@rere.qmqm.pl> wrote:
+>
+> On Sat, Nov 27, 2021 at 07:56:57PM -0800, Yury Norov wrote:
+> > Now as we have bitmap_weight_eq(), switch bitmap_full() and
+> > bitmap_empty() to using it.
+> >
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  include/linux/bitmap.h | 26 ++++++++++----------------
+> >  1 file changed, 10 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+> > index 996041f771c8..2d951e4dc814 100644
+> > --- a/include/linux/bitmap.h
+> > +++ b/include/linux/bitmap.h
+> > @@ -386,22 +386,6 @@ static inline int bitmap_subset(const unsigned lon=
+g *src1,
+> >               return __bitmap_subset(src1, src2, nbits);
+> >  }
+> >
+> > -static inline bool bitmap_empty(const unsigned long *src, unsigned nbi=
+ts)
+> > -{
+> > -     if (small_const_nbits(nbits))
+> > -             return ! (*src & BITMAP_LAST_WORD_MASK(nbits));
+> > -
+> > -     return find_first_bit(src, nbits) =3D=3D nbits;
+> > -}
+>
+> Since this is supposed to be an optimization, I would go all the way and
+> replace this with the trivial implementation instead:
+>
+> bool bitmap_empty(long *bits, size_t nbits)
+> {
+>         for (; nbits >=3D BITS_PER_LONG; ++bits, nbits -=3D BITS_PER_LONG=
+)
+>                 if (*bits)
+>                         return false;
+>
+>         if (nbits && *bits & BITMAP_LAST_WORD_MASK(nbits))
+>                 return false;
+>
+>         return true;
+> }
 
-Thanks, added to the commit log message.
+This is what current implementations basically do, based on find_first_bit(=
+).
 
-- Arnaldo
+I think that for long bitmaps the most time consuming operation is moving
+data to L1, and for short bitmaps the difference between approaches is
+barely measurable.
 
-> > --
-> > Changes since v1
-> > 
-> >  - Added "Reported-by" tags.
-> >  - Removed [PATCH 2/4] because it's not needed (suggested by Athira
-> >    Rajeev).
-> >  - Removed [PATCH 3/4] which created additional header files with the
-> >    register names of every arch.
-> >  - Introduced [PATCH 2/3] to deal with ARM and ARM64 registers having the
-> >    same enum name across "/tools/perf/".
-> >  - Reworked the refactor of "perf_reg_name" function (now implemented in
-> >    perf_regs.c, rather than in the header file) in [PATCH 3/3].
-> > 
-> > German Gomez (3):
-> >  perf tools: Prevent out-of-bounds access to registers
-> >  perf tools: Rename perf_event_arm_regs for ARM64 registers
-> >  perf tools: Support register names from all archs
-> > 
-> > tools/perf/arch/arm/include/perf_regs.h       |  42 --
-> > tools/perf/arch/arm64/include/perf_regs.h     |  78 +-
-> > tools/perf/arch/csky/include/perf_regs.h      |  82 ---
-> > tools/perf/arch/mips/include/perf_regs.h      |  69 --
-> > tools/perf/arch/powerpc/include/perf_regs.h   |  66 --
-> > tools/perf/arch/riscv/include/perf_regs.h     |  74 --
-> > tools/perf/arch/s390/include/perf_regs.h      |  78 --
-> > tools/perf/arch/x86/include/perf_regs.h       |  82 ---
-> > tools/perf/builtin-script.c                   |  18 +-
-> > tools/perf/util/event.h                       |   5 +-
-> > tools/perf/util/libunwind/arm64.c             |   2 +
-> > tools/perf/util/perf_regs.c                   | 671 +++++++++++++++++-
-> > tools/perf/util/perf_regs.h                   |  10 +-
-> > .../scripting-engines/trace-event-python.c    |  10 +-
-> > tools/perf/util/session.c                     |  25 +-
-> > 15 files changed, 709 insertions(+), 603 deletions(-)
-> > 
-> > -- 
-> > 2.25.1
-> > 
-
--- 
-
-- Arnaldo
+But hweght_long on each iteration can't be more effective than the current
+version. So, I'll drop this patch for v2 and keep things unchanged.
