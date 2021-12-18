@@ -2,61 +2,56 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D2B475F9B
-	for <lists+linux-csky@lfdr.de>; Wed, 15 Dec 2021 18:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8632479CD4
+	for <lists+linux-csky@lfdr.de>; Sat, 18 Dec 2021 22:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbhLORpo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 15 Dec 2021 12:45:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S234286AbhLRVUT (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 18 Dec 2021 16:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235513AbhLORpn (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 15 Dec 2021 12:45:43 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA136C061574;
-        Wed, 15 Dec 2021 09:45:42 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so21092777pja.1;
-        Wed, 15 Dec 2021 09:45:42 -0800 (PST)
+        with ESMTP id S230480AbhLRVUS (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 18 Dec 2021 16:20:18 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F184C061574;
+        Sat, 18 Dec 2021 13:20:18 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id r26so9354373oiw.5;
+        Sat, 18 Dec 2021 13:20:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RLdWdHoT6O3wLXgWsRx2m2m62hSjV0BcJXlTjn5JUFY=;
-        b=fVGVY8wqrxR8Y9FDXFtr4SE6iyR8BVVbZ5vgJ4y8dkqTnryOyAM1f7oIOnezuj4A6J
-         xZUPr4yWMlNLYsHQ1fallxSJg8aU00+SwAnq0ijeJb6rpCasKd3VYye0HMu7Rz4Fmzli
-         VTY7ooY+g0kHA+TAUoyyLgzX0mSn9ha1KmFllLdg51BzQBC+Mgmo9+XdPBjphX6Y4e34
-         aHA3UHFWRC7Btex9u1tZiEFoYFee/G/WGm4rYd3nNUPqV0MpixQGc6Vx0PruHv6wejmQ
-         Ow0n2j4fyu9ba9vCZKTh9cTJvx1bERx0Yn7rh5DuRA2QxMZuAeUzJXU06wIQ9Mevfcss
-         WI7w==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JzsjdMdsnVfTtF2jA28Re9um5Pc1jpset8TjSm+sCCQ=;
+        b=JJsYWCM4ZBrFr/QGYcVtz1O5XpwXMR8kjk5zvlx1xd9d3Bnfs+RyARM+UF2BFzbQzh
+         Gtz0Jhiop3r+qa0tUyPUPAMdU6Jzy350IR0tNVuhpUl5a46wJZSSCfrlTroVV0iEzWQm
+         jnatXUCyMxUjx4zPd6MbwV+jlb+bcIyfWFewnkHP1g6bfMLkxOoJnBeNiY1ltSGyKLUW
+         NJO78tJlSMx+Op9iY217snQDmDuDZZGnfHCB/c9C+zObP29p/bUuiIWC4jVIoflp+GZQ
+         +vsH2Ey++3hW+p7C5pzF3cKCahFFKGna42dCmd+BpNpZItDrp0SdGfIa8OEsJ5ce8y7A
+         EIWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RLdWdHoT6O3wLXgWsRx2m2m62hSjV0BcJXlTjn5JUFY=;
-        b=sXa4PcQUXBKlR2VROcfOlrvxsOIi4XVb+mljr5YNYnVds/2Me+M5DI44i8rGe9Rcnk
-         UY8yugizTuUUUgzZfMVuh3URcNtM660AB1Gkd67ZcxQTgY24kDF9abv/x9fBJqAeEReX
-         7Zhgo7ET0YVC0GzDKs17CDVjYYvF160fhZSSG+SILcsHJRVm1vPoqWcO6rSfwCUaY+lV
-         PlbbsWM06gUdehVGBC4896CjSbgZKstoR0VClDQoo6UyaLnWd9E9cshdwORHG/jN/RdJ
-         xaV+ctip9qT+NOtVFAFVnv0azE6qDGv3C/xyePJvckwSI/ZKrDcygb4xLSWyNvJ6P6b4
-         7aPQ==
-X-Gm-Message-State: AOAM531bZh5ia5V0qOR9CYeeK4bH6cqyS2+9ClJCKIRMj41tZ4/JaYmR
-        GzI4SXUAq703SpgzI+2TkhJHRYocxravu9zYHsQ=
-X-Google-Smtp-Source: ABdhPJxIcVzS1V95pBlMUcYP2k7Lrcyzl/rBNhnf3pbvrkTovj6aQvXpyQPCUffP2FcbLTl6T7AIgJQIhLFRrE2qAuQ=
-X-Received: by 2002:a17:90a:4a06:: with SMTP id e6mr968675pjh.228.1639590342342;
- Wed, 15 Dec 2021 09:45:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20211128035704.270739-1-yury.norov@gmail.com> <20211128035704.270739-3-yury.norov@gmail.com>
- <YaPGDOvBzhiRFcOP@qmqm.qmqm.pl> <CAAH8bW9-dbENFUrwPUQ-uJVVX_s=PWb2zpAJ8BqkV3vJE696mA@mail.gmail.com>
- <0ccb827de1164b2989d652bfb6f1bbab@AcuMS.aculab.com>
-In-Reply-To: <0ccb827de1164b2989d652bfb6f1bbab@AcuMS.aculab.com>
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JzsjdMdsnVfTtF2jA28Re9um5Pc1jpset8TjSm+sCCQ=;
+        b=xgY6/Txzwb3iK+Jl2xwcNDPv2AKxxdcywww5yieirupvunu8ZI3FAYMw+1qI9A1TkZ
+         u3+0InpVcCX+xAx2Sopr2kLP1LpeuCenZNMGkh7MV1RF6JYzCRhAVxwp4RpEh62za8sW
+         Yl5tQ0S1m59XX+yvGrzyUo2R8iEAT6a/O3AwPZzc9PNg3aG+D8DVUaJ4S5EYZh+B//yx
+         ZryAXsNt49RlmFfwqYhiqFkf+rT5JYuy2AfavIvyvz6syPup41ggeZoQJZa7y4Ieg9nR
+         oDXJO3c+3uuLKzXHw5RLP4zR+NA5fKFW5vjogYFEAZotdpX6lSvwbALb1dDU2nXz8VxF
+         b04A==
+X-Gm-Message-State: AOAM532JVjUdHz3Fx8TMLVX+Yuo3KVTKXfZ7DdRO9ClLLOPlt+c0y3XO
+        lASmYyEcs+H9uLfn4LDVmHY3rL7O+I1t/Q==
+X-Google-Smtp-Source: ABdhPJx5aJcpDQGi8bZmEiNIZHDj12WYIMCd+iCUv3wO5n9NxzqY0XYaFcTOfyycv/QCCz3me1Quxg==
+X-Received: by 2002:a05:6808:a8f:: with SMTP id q15mr12338850oij.65.1639862417151;
+        Sat, 18 Dec 2021 13:20:17 -0800 (PST)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id g26sm2402061ots.25.2021.12.18.13.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 13:20:16 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
-Date:   Wed, 15 Dec 2021 09:45:30 -0800
-Message-ID: <CAAH8bW-u5AsFTXUOJPRkF-6dk1LcL7PE0Tm+dUc9Ctb6JMy=tg@mail.gmail.com>
-Subject: Re: [PATCH 2/9] lib/bitmap: implement bitmap_{empty,full} with bitmap_weight_eq()
-To:     David Laight <David.Laight@aculab.com>
-Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+To:     linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -77,10 +72,11 @@ Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Daniel Vetter <daniel@ffwll.ch>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@ACULAB.COM>,
         Dennis Zhou <dennis@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geetha sowjanya <gakula@marvell.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geetha sowjanya <gakula@marvell.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guo Ren <guoren@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -90,9 +86,9 @@ Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Jakub Kicinski <kuba@kernel.org>,
         Jason Wessel <jason.wessel@windriver.com>,
         Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>,
         Jonathan Cameron <jic23@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
         Kees Cook <keescook@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -110,7 +106,6 @@ Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Petr Mladek <pmladek@suse.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Roy Pledge <Roy.Pledge@nxp.com>,
         Russell King <linux@armlinux.org.uk>,
         Saeed Mahameed <saeedm@nvidia.com>,
         Sagi Grimberg <sagi@grimberg.me>,
@@ -132,46 +127,159 @@ Cc:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Vivien Didelot <vivien.didelot@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
         Will Deacon <will@kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 00/17] lib/bitmap: optimize bitmap_weight() usage
+Date:   Sat, 18 Dec 2021 13:19:56 -0800
+Message-Id: <20211218212014.1315894-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 12:41 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Yury Norov
-> > Sent: 14 December 2021 19:43
-> ...
-> >
-> > I think that for long bitmaps the most time consuming operation is moving
-> > data to L1, and for short bitmaps the difference between approaches is
-> > barely measurable.
-> >
-> > But hweght_long on each iteration can't be more effective than the current
-> > version. So, I'll drop this patch for v2 and keep things unchanged.
->
-> Actually do bitmap_full/empty() calls make any sense at all?
-> The result is stale since bitmaps are designed to do locked operations.
-> If you have a lock covering the bitmap then you should be using
-> something that uses non-locked accesses.
-> Rightly or wrongly that isn't the bitmap api.
+In many cases people use bitmap_weight()-based functions to compare
+the result against a number of expression:
 
-Are you talking about __{set,clear}_bit()?
-include/asm-generic/bitops/non-atomic.h
+	if (cpumask_weight(...) > 1)
+		do_something();
+
+This may take considerable amount of time on many-cpus machines because
+cpumask_weight(...) will traverse every word of underlying cpumask
+unconditionally.
+
+We can significantly improve on it for many real cases if stop traversing
+the mask as soon as we count cpus to any number greater than 1:
+
+	if (cpumask_weight_gt(..., 1))
+		do_something();
+
+To implement this idea, the series adds bitmap_weight_cmp() function
+and bitmap_weight_{eq,gt,ge,lt,le} macros on top of it; corresponding
+wrappers in cpumask and nodemask.
+
+There are 3 cpumasks, for which weight is counted frequently: possible,
+present and active. They all are read-mostly, and to optimize counting
+number of set bits for them, this series adds atomic counters, similarly
+to online cpumask.
+
+v1: https://lkml.org/lkml/2021/11/27/339
+v2:
+  - add bitmap_weight_cmp();
+  - fix bitmap_weight_le semantics and provide full set of {eq,gt,ge,lt,le}
+    as wrappers around bitmap_weight_cmp();
+  - don't touch small bitmaps (less than 32 bits) - optimization works
+    only for large bitmaps;
+  - move bitmap_weight() == 0 -> bitmap_empty() conversion to a separate
+    patch, ditto cpumask_weight() and nodes_weight;
+  - add counters for possible, present and active cpus;
+  - drop bitmap_empty() where possible;
+  - various fixes around bit counting that spotted my eyes.
+
+Yury Norov (17):
+  all: don't use bitmap_weight() where possible
+  drivers: rename num_*_cpus variables
+  fix open-coded for_each_set_bit()
+  all: replace bitmap_weight with bitmap_empty where appropriate
+  all: replace cpumask_weight with cpumask_empty where appropriate
+  all: replace nodes_weight with nodes_empty where appropriate
+  lib/bitmap: add bitmap_weight_{cmp,eq,gt,ge,lt,le} functions
+  all: replace bitmap_weight with bitmap_weight_{eq,gt,ge,lt,le} where
+    appropriate
+  lib/cpumask: add cpumask_weight_{eq,gt,ge,lt,le}
+  lib/nodemask: add nodemask_weight_{eq,gt,ge,lt,le}
+  lib/nodemask: add num_node_state_eq()
+  kernel/cpu.c: fix init_cpu_online
+  kernel/cpu: add num_possible_cpus counter
+  kernel/cpu: add num_present_cpu counter
+  kernel/cpu: add num_active_cpu counter
+  tools/bitmap: sync bitmap_weight
+  MAINTAINERS: add cpumask and nodemask files to BITMAP_API
+
+ MAINTAINERS                                   |   4 +
+ arch/alpha/kernel/process.c                   |   2 +-
+ arch/ia64/kernel/setup.c                      |   2 +-
+ arch/ia64/mm/tlb.c                            |   2 +-
+ arch/mips/cavium-octeon/octeon-irq.c          |   4 +-
+ arch/mips/kernel/crash.c                      |   2 +-
+ arch/nds32/kernel/perf_event_cpu.c            |   2 +-
+ arch/powerpc/kernel/smp.c                     |   2 +-
+ arch/powerpc/kernel/watchdog.c                |   2 +-
+ arch/powerpc/xmon/xmon.c                      |   4 +-
+ arch/s390/kernel/perf_cpum_cf.c               |   2 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c        |  16 +--
+ arch/x86/kernel/smpboot.c                     |   4 +-
+ arch/x86/kvm/hyperv.c                         |   8 +-
+ arch/x86/mm/amdtopology.c                     |   2 +-
+ arch/x86/mm/mmio-mod.c                        |   2 +-
+ arch/x86/mm/numa_emulation.c                  |   4 +-
+ arch/x86/platform/uv/uv_nmi.c                 |   2 +-
+ drivers/acpi/numa/srat.c                      |   2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c             |   2 +-
+ drivers/cpufreq/scmi-cpufreq.c                |   2 +-
+ drivers/firmware/psci/psci_checker.c          |   2 +-
+ drivers/gpu/drm/i915/i915_pmu.c               |   2 +-
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c      |   2 +-
+ drivers/hv/channel_mgmt.c                     |   4 +-
+ drivers/iio/dummy/iio_simple_dummy_buffer.c   |   4 +-
+ drivers/iio/industrialio-trigger.c            |   2 +-
+ drivers/infiniband/hw/hfi1/affinity.c         |  13 +-
+ drivers/infiniband/hw/qib/qib_file_ops.c      |   2 +-
+ drivers/infiniband/hw/qib/qib_iba7322.c       |   2 +-
+ drivers/irqchip/irq-bcm6345-l1.c              |   2 +-
+ drivers/leds/trigger/ledtrig-cpu.c            |   6 +-
+ drivers/memstick/core/ms_block.c              |   4 +-
+ drivers/net/dsa/b53/b53_common.c              |   6 +-
+ drivers/net/ethernet/broadcom/bcmsysport.c    |   6 +-
+ .../net/ethernet/intel/ice/ice_virtchnl_pf.c  |   4 +-
+ .../net/ethernet/intel/ixgbe/ixgbe_sriov.c    |   2 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |   2 +-
+ .../marvell/octeontx2/nic/otx2_flows.c        |   8 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |   2 +-
+ drivers/net/ethernet/mellanox/mlx4/cmd.c      |  33 ++---
+ drivers/net/ethernet/mellanox/mlx4/eq.c       |   4 +-
+ drivers/net/ethernet/mellanox/mlx4/fw.c       |   4 +-
+ drivers/net/ethernet/mellanox/mlx4/main.c     |   2 +-
+ drivers/net/ethernet/qlogic/qed/qed_rdma.c    |   4 +-
+ drivers/net/ethernet/qlogic/qed/qed_roce.c    |   2 +-
+ drivers/perf/arm-cci.c                        |   2 +-
+ drivers/perf/arm_pmu.c                        |   4 +-
+ drivers/perf/hisilicon/hisi_uncore_pmu.c      |   2 +-
+ drivers/perf/thunderx2_pmu.c                  |   4 +-
+ drivers/perf/xgene_pmu.c                      |   2 +-
+ drivers/scsi/lpfc/lpfc_init.c                 |   2 +-
+ drivers/scsi/storvsc_drv.c                    |   6 +-
+ drivers/soc/fsl/qbman/qman_test_stash.c       |   2 +-
+ drivers/staging/media/tegra-video/vi.c        |   2 +-
+ drivers/thermal/intel/intel_powerclamp.c      |   9 +-
+ include/linux/bitmap.h                        |  80 +++++++++++
+ include/linux/cpumask.h                       | 131 +++++++++++++-----
+ include/linux/nodemask.h                      |  40 ++++++
+ kernel/cpu.c                                  |  54 ++++++++
+ kernel/irq/affinity.c                         |   2 +-
+ kernel/padata.c                               |   2 +-
+ kernel/rcu/tree_nocb.h                        |   4 +-
+ kernel/rcu/tree_plugin.h                      |   2 +-
+ kernel/sched/core.c                           |  10 +-
+ kernel/sched/topology.c                       |   4 +-
+ kernel/time/clockevents.c                     |   2 +-
+ kernel/time/clocksource.c                     |   2 +-
+ lib/bitmap.c                                  |  21 +++
+ mm/mempolicy.c                                |   2 +-
+ mm/page_alloc.c                               |   2 +-
+ mm/vmstat.c                                   |   4 +-
+ tools/include/linux/bitmap.h                  |  44 ++++++
+ tools/lib/bitmap.c                            |  20 +++
+ tools/perf/builtin-c2c.c                      |   4 +-
+ tools/perf/util/pmu.c                         |   2 +-
+ 76 files changed, 480 insertions(+), 183 deletions(-)
+
+-- 
+2.30.2
+
