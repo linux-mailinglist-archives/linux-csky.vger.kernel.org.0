@@ -2,59 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F51479E25
-	for <lists+linux-csky@lfdr.de>; Sun, 19 Dec 2021 00:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3360B47B159
+	for <lists+linux-csky@lfdr.de>; Mon, 20 Dec 2021 17:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbhLRX2k (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 18 Dec 2021 18:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbhLRX2j (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 18 Dec 2021 18:28:39 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B204BC061574;
-        Sat, 18 Dec 2021 15:28:39 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id d11so5761429pgl.1;
-        Sat, 18 Dec 2021 15:28:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pIYxkiGisug+VVJYFtmCG20TylNRXB8zO8kw91s3wyc=;
-        b=TIuyQXz6oo8PN+yMbImlC2c2rmmoCdLu5CdlQlReccXapNNMDZyLSkZvnzlgZ9AIdV
-         6+qzntuQo5gBX86FaZFlCIaH4FCNC7RUVw367F08QPEjoiFWXa2CV6SAzISHS5RZPpY/
-         QbkHqa0fdrihFEuRX0X/GeMy6P75DvnBsKWfABXcb5D5/2zTgkKaV4VEiJSuyy+zBwcd
-         zNIVzererH+Fx7ZEOWvTBpmd3THvXh1KHtzsLHvjMiIPuGFGIqMdZbyjf9H7vLYP6+7J
-         cQ/P2vAafsI3DEFtzgX9UWRj1ZmCeXy01hG6ih9PN1N9Tz70SEQsg8aJQpCrrbXl1cqP
-         QppQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pIYxkiGisug+VVJYFtmCG20TylNRXB8zO8kw91s3wyc=;
-        b=55CrRinAexYQVLLCAVeuG8I9J21GY3IqcaFC2wR8Ap2MiD9sYKYzust2I4EPxGXnlS
-         Pe0dCuc92IRHO1MDoXneWrcsOs3n++GqV+AbWUpP/Vou5TnzYWC1vO6s+RSD0/fctkrP
-         PInFYv0lzakRglwYu8kqv8ie8FPD29R5DblmhYAINOWuiKTZW7+80IQ9deoTuWfCqWnT
-         HqmOjOvMV9tFtMFrpfSWt3ekPZ74xg1blyPjdcw0tv2jvgo63uA3Es616/CIhgUtYerz
-         hBTc4KAVndNYIcaoApCeR6jtlsw4/OwO6twxIBYK2tBHgdyBIgrVer5Lcw5EuOJh5eFk
-         4Vow==
-X-Gm-Message-State: AOAM531ln7opi6qLxgmfcxBohJ4InyB6hBVL0qNWaopTWH3Rac2lqjtR
-        Pm1Msu47bv19vvsytkJ3BktocnLs6bznKqaEF9A=
-X-Google-Smtp-Source: ABdhPJxWDXMTWC77oOKCjFiIpES/JejUzoFwUACXrmSW9T47MOn3N7k2dUXoB6NpZZlsfwgvBd+k97C3LkDR7q0l13Y=
-X-Received: by 2002:a63:2a0d:: with SMTP id q13mr8815341pgq.513.1639870119035;
- Sat, 18 Dec 2021 15:28:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20211218212014.1315894-1-yury.norov@gmail.com>
- <20211218212014.1315894-2-yury.norov@gmail.com> <Yb5dmqlYd3owtH29@qmqm.qmqm.pl>
-In-Reply-To: <Yb5dmqlYd3owtH29@qmqm.qmqm.pl>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Sat, 18 Dec 2021 15:28:29 -0800
-Message-ID: <CAAH8bW9uWW+t5TvkMt_e-sKp71hiLpXhXeuGuSZPK-3kds-GgQ@mail.gmail.com>
-Subject: Re: [PATCH 01/17] all: don't use bitmap_weight() where possible
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+        id S233271AbhLTQlH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 20 Dec 2021 11:41:07 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60774 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233061AbhLTQlG (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 20 Dec 2021 11:41:06 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A788761219;
+        Mon, 20 Dec 2021 16:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EC6C36AE2;
+        Mon, 20 Dec 2021 16:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640018465;
+        bh=TuP185pT5gdSlNtfNfQ+Kye5lOB+euhTli9+HNxshOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=enGWQQJij7Gn5KXQIvc6DgLGhW8TsmstPvfbBL0Frpv76daIROB5Wk6RyCml6X1M0
+         INr/wU0RVuAcWcOkPbgbi5U7MaR0NTk6+o3rhiyEe0vywSW27g/jS59FjbvlDzhRr3
+         ovNt3nB3npaxHStYKaqE8ptag4HrP8L17DKCvcbQ=
+Date:   Mon, 20 Dec 2021 17:41:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yury Norov <yury.norov@gmail.com>
 Cc:     linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -80,7 +57,6 @@ Cc:     linux-kernel@vger.kernel.org,
         Emil Renner Berthing <kernel@esmil.dk>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Geetha sowjanya <gakula@marvell.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guo Ren <guoren@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
         Heiko Carstens <hca@linux.ibm.com>,
@@ -137,52 +113,52 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 08/17] all: replace bitmap_weight with
+ bitmap_weight_{eq,gt,ge,lt,le} where appropriate
+Message-ID: <YcCyHvr1f+Z8M9M1@kroah.com>
+References: <20211218212014.1315894-1-yury.norov@gmail.com>
+ <20211218212014.1315894-9-yury.norov@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218212014.1315894-9-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 2:16 PM Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.=
-qmqm.pl> wrote:
->
-> On Sat, Dec 18, 2021 at 01:19:57PM -0800, Yury Norov wrote:
-> > Don't call bitmap_weight() if the following code can get by
-> > without it.
-> >
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  drivers/net/dsa/b53/b53_common.c           | 6 +-----
-> >  drivers/net/ethernet/broadcom/bcmsysport.c | 6 +-----
-> >  drivers/thermal/intel/intel_powerclamp.c   | 9 +++------
-> >  3 files changed, 5 insertions(+), 16 deletions(-)
-> [...]
->
-> Looks good,
+On Sat, Dec 18, 2021 at 01:20:04PM -0800, Yury Norov wrote:
+> Kernel code calls bitmap_weight() to compare the weight of bitmap with
+> a given number. We can do it more efficiently with bitmap_weight_{eq, ...}
+> because conditional bitmap_weight may stop traversing the bitmap earlier,
+> as soon as condition is met.
+> 
+> This patch replaces bitmap_weight with conditional versions where possible,
+> except for small bitmaps which size is not configurable and  known at
+> constant time. In that case conditional version of bitmap_weight would not
+> benefit due to small_const_nbits() optimization; but readability may
+> suffer.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c                 |  2 +-
+>  drivers/iio/dummy/iio_simple_dummy_buffer.c            |  4 ++--
+>  drivers/iio/industrialio-trigger.c                     |  2 +-
+>  drivers/memstick/core/ms_block.c                       |  4 ++--
+>  drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c         |  2 +-
+>  .../net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c  |  2 +-
+>  .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c    |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/cmd.c               | 10 +++-------
+>  drivers/net/ethernet/mellanox/mlx4/eq.c                |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/fw.c                |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/main.c              |  2 +-
+>  drivers/perf/thunderx2_pmu.c                           |  4 ++--
+>  drivers/staging/media/tegra-video/vi.c                 |  2 +-
+>  13 files changed, 21 insertions(+), 25 deletions(-)
 
-Does it mean Acked-by, Reviewed-by, or something else?
+"all" is not how to submit changes to the kernel.  Please break them up
+into subsystem-specific patches, and send them after your core changes
+are accepted.
 
-> but I think this needs to be split per subsystem.
+good luck!
 
-What you ask breaks rules:
-
-Documentation/process/submitting-patches.rst:
-
-Separate each **logical change** into a separate patch.
-
-For example, if your changes include both bug fixes and performance
-enhancements for a single driver, separate those changes into two
-or more patches.  If your changes include an API update, and a new
-driver which uses that new API, separate those into two patches.
-
-On the other hand, if you make a single change to numerous files,
-group those changes into a single patch.  Thus a single logical change
-is contained within a single patch.
-
-This is not a dead rule, refer for example the 96d4f267e40f9 ("Remove
-'type' argument from access_ok() functioin.")
-
-Or this: https://lkml.org/lkml/2021/6/14/1736
-
-Thanks,
-Yury
+greg k-h
