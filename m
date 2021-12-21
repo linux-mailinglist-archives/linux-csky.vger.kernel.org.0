@@ -2,33 +2,33 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 053DC47C4C2
-	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 18:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D495947C4CD
+	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 18:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236636AbhLURNF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Dec 2021 12:13:05 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:58255 "EHLO
+        id S240244AbhLURPz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 21 Dec 2021 12:15:55 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:53663 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236622AbhLURNE (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 12:13:04 -0500
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+        with ESMTP id S240260AbhLURPz (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 12:15:55 -0500
+Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
  mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M4s8v-1n0XuK0OqF-001yOu; Tue, 21 Dec 2021 18:13:03 +0100
-Received: by mail-wr1-f48.google.com with SMTP id c4so28305783wrd.9;
-        Tue, 21 Dec 2021 09:13:03 -0800 (PST)
-X-Gm-Message-State: AOAM531nzMFYvFhmCst1DwC1uT5SXYSZwDc1FAHXjyyMxt4CpVntTUIG
-        NPcMvZYqmg6/VkfWkIE0LwB7C5g5AbMeis/BaRA=
-X-Google-Smtp-Source: ABdhPJxbIqjyU8TaVGGex6NdChPO7fkenTBnB/BLD4Lq+OCkYunXjff2m0E1G3pTqKAWxFdhJPGy7XhHYU7jc7xKAk4=
-X-Received: by 2002:a5d:6989:: with SMTP id g9mr3336935wru.12.1640106782679;
- Tue, 21 Dec 2021 09:13:02 -0800 (PST)
+ id 1MYNW8-1mutBL3wZe-00VReI; Tue, 21 Dec 2021 18:15:53 +0100
+Received: by mail-wm1-f52.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso2193512wmc.4;
+        Tue, 21 Dec 2021 09:15:53 -0800 (PST)
+X-Gm-Message-State: AOAM531AhZ21DRpQBrx6icWuwRQVLJx311u33QTCipm+WR4NE0Sp3bvR
+        ELh9RrpUDdyDDFM70I/i0Ngurj50+aHAEYHgMMY=
+X-Google-Smtp-Source: ABdhPJzffr6WnaoEGTyhmBnXPy5ZleWzwlOCZ8nvVWpeF4NBAn+XXQBe16uur6o+emymJ0RcuqEtqPLnaIQ+7GdGM4I=
+X-Received: by 2002:a7b:c007:: with SMTP id c7mr3663200wmb.82.1640106953460;
+ Tue, 21 Dec 2021 09:15:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-4-guoren@kernel.org>
-In-Reply-To: <20211221163532.2636028-4-guoren@kernel.org>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
+In-Reply-To: <20211221163532.2636028-6-guoren@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 21 Dec 2021 18:12:46 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com>
-Message-ID: <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com>
-Subject: Re: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
+Date:   Tue, 21 Dec 2021 18:15:37 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
+Message-ID: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
+Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup.patel@wdc.com>,
@@ -40,24 +40,24 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:pBb1Ng8Nh1/iOIIQOjPW9XCHZ5jotfOcKb3GWhsoe9aEOLu57l3
- /RXqhzC/5kSDWRxp2UAPEi9IbSgr78VnWQSu+XzqkTjFNq9q/HbzFfeDTGs4GNv45mf0W+7
- JeLgdiZRSBrF3u+Bx1K3mdmUPA37DsKBYtH652GgVAenKGiHVGjGrXrUTrhdTpsDegW4vGe
- fIPen64j2hxIMC3z1q3OQ==
+X-Provags-ID: V03:K1:3IiEAytFo4q9rLeQEn1nPw/RZCpu7nmJdoClGuoMlKGgmnhyQFJ
+ 4WFooQQEPKZoBMpAaM//nVZ0iPhps7Zt9EYptofn2y0ll9d6bJ86jN3XMgEaDD1eXIvro+n
+ F/yCOl0djN2l5GcwLKKx6VQG6s1+pIeQtIY0FdGbVnW16tPHK0uB0iQHt54tRG3w5nVNIfV
+ iGDeuG5erI2w36gpucV4w==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0nrr0CbcCTs=:6FDjpdEmuR1HpWIePD19sa
- 0jI2NJKmcjQx3/kvY7z6u9FVqKJsgN2Yue9WcpWNPr/d+1eS0sh2XOAt6wjqkgk1ErtqsfrrX
- 6t7mjAKr+F+OjU41cPZKFXxaipV5280+dDtroyjNYYfw235EztUx98wBUYyi0/jXJdGy+sjwo
- v4mreNQkwwGK3U/hTh85SdVQzYYc1VhncSJbszVsX6x0F5P0FIBMjJtOzHXC9Y0eg/T+xsAHA
- XbH3Ju5MLAJjQfa7YlzmqvFJjMXSOsZGna4s25hOu9DE30PpmMvLTUxFL6Kig8Q+oFVkbRF3W
- gKBnzF+P2Wv5CvS5At/wxsGtQZrK0yomhvFAnC5TWmdszl0UR7h/g9Uif4Jj6H+CmxEyJNjfM
- ziy1GNFQgWKZ5JuvHnPSkHx1/TbrfU3ToRjvG/zjSReCe8M06jXd1GvSkYCKCq24VYuukNG4o
- gQH2L3K//xVwwqQBYKx1TM1YqBDYfc+eDxlIbUIc8w9v+sZnA99W8+n0Hzs6pGSB8WEVQqqbh
- +vVnfHkniCX1+agZMsgiurvgtzWRi/49fWtT0L58+QCNt8aWcetrRuAyCnP9GtxBiuxQ0Spvq
- MOhG93uLibwVRvUcbMKNKi4Z9n6y1AOY2yG4CS2BxrI7EUY28bI98Ee/3PVQJuzoBSx7u7BPY
- HdwCHsjQ4wcm37KDPB9sLXovJ5IFo7keA5jtPkRAEA1vqlLLzPGc3AEvdAMTK96RiQGlNQvjy
- za9wgLy6t2NLcY8BCULNaP6kY2shhUMvw5NKJQurDJIZTnfpMLKfFPbw0xUcQM18g3E2mwVFV
- CmS/TvRa3AA2jE+plOT/ylqIgfW4VL5TmM5z+R6ly4CZgg5qwQ=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ujcJA7FV+9w=:s/8zzZ61oUoEKXwNiH+7Nv
+ eq9Zf6rw7EXiO6BZ0NFXbgDZoln3Tlhnh5cOU2vO7t8Z2BJqBHo/VYMVrRVrh1MIKoSP9wsoN
+ xV7hvHb4HBATUG7UoMMTBqki7hWVIDYpA00fHk8Ai0T2wp2xEz5b4Jc3zhSJv9QSpizknsgti
+ oBlWHhKbcj4fsSsQSOg6zsJyQd6UB7u62jCicrXhHYF1iWggihoyYNnHeLWbOqPop3isPrrAv
+ R8O1w6nHCnL5Qr2UU31MpV9B+LHRgbcWhy/U0b3AG6vtpguGAPI5z7N0N3+BjO7HAiblJyugP
+ VqSvRf1fb97/qO4ctDdwjn7+HrBRIU6RUs0lFangW8xoOVCdonDgYfMVO1G93ULdtVPpErZHw
+ //67HDZGQmvLO4TIbWJTmH6ix0qF6B0M5yfrpfQNBG/o+1WINGXUR12OR/qBB9NjpF6dza3G/
+ xkr78AOfQKIQpa5tWxSfumVSAPswsztbR9+pRhEDeUp700xY+JGDQUnzWGdBNDfIf/5uS8r0P
+ PmJtubdo7Av3+yD39vHtpISh7u0EuuPc679pDluS+e1N6mGtR1MzPKMIdJjXt47k9tv33fnl3
+ eeNivbVgUdlgVoLi+SXWenFhvg3nQpCmS1Vto737wR8NJXIydH6+sroGFQJCrH8xqmzQZISjw
+ b8AabD72xQhBSbAATuM3h7jb08PFW7AUEynDOqjfM9UEmMH6xE9MjdZ+0Cu7/A9FMw4RbSAlB
+ qwZ5Yse0IFEBw7LNqwkqCoC/HQXcv3UoDWwzr0Uj9xEbsa9Gimuw3Xqp9OQlBvDQvXoOG9Ptw
+ reXDePfwAAAWZp7HWIkh3gTRao7hM9ZHB9J5JoqwXETO7AIGZM=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -66,37 +66,36 @@ On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
 >
 > From: Guo Ren <guoren@linux.alibaba.com>
 >
-> Implement asm/compat.h for struct compat_xxx, RLIM_INFINITY,
-> OFF_T_MAX, is_compat_task, compat_user_regset, regset convert.
+> Implement compat_syscall_table.c with compat_sys_call_table & fixup
+> system call such as truncate64,pread64,fallocate which need two
+> regs to indicate 64bit-arg (copied from arm64).
 >
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > ---
->  arch/riscv/include/asm/compat.h      | 259 +++++++++++++++++++++++++++
+>  arch/riscv/include/asm/syscall.h         |  3 +
+>  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
 
-Since both the native and compat side use the generic interface, I think this
-should all be part of asm-generic/compat.h, in case other architectures want to
-share this in the future. Maybe see if any other architectures use the
-same definition
-for some of the structures and then remove the duplicates.
+Same here, I think most of these should go next to the actual syscalls, with the
+duplicates removed from other platforms,
 
-> +struct compat_stat {
-> +       compat_ulong_t  st_dev;
-> +       compat_ulong_t  st_ino;
-> +       compat_uint_t   st_mode;
-> +       compat_uint_t   st_nlink;
+> +#define __SYSCALL_COMPAT
+> +#undef __LP64__
 
-You should not need a compat_stat, because native rv32 does not have a
-stat() syscall.
+What is the #undef for?
 
-> +static inline int is_compat_task(void)
+> +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
+> +       unsigned long, prot, unsigned long, flags,
+> +       unsigned long, fd, unsigned long, offset)
 > +{
-> +       return test_thread_flag(TIF_32BIT);
-> +}
+> +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
+> +               if (unlikely(!(prot & PROT_READ)))
+> +                       return -EINVAL;
 > +
-> +struct compat_user_regs_struct {
-> +       compat_ulong_t pc;
-> +       compat_ulong_t ra;
+> +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
+> +}
 
-These clearly need to stay in arch/riscv
+This is one that we may have to deal with separately, introducing
+sys_mmap_pgoff() was a mistake in my opinion, and we should just have
+added a sys_mmap2() for all architectures that don't explicitly override it.
 
-        Arnd
+       Arnd
