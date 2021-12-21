@@ -2,31 +2,41 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3360B47B159
-	for <lists+linux-csky@lfdr.de>; Mon, 20 Dec 2021 17:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1268247C07E
+	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 14:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbhLTQlH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 20 Dec 2021 11:41:07 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60774 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbhLTQlG (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 20 Dec 2021 11:41:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A788761219;
-        Mon, 20 Dec 2021 16:41:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EC6C36AE2;
-        Mon, 20 Dec 2021 16:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640018465;
-        bh=TuP185pT5gdSlNtfNfQ+Kye5lOB+euhTli9+HNxshOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=enGWQQJij7Gn5KXQIvc6DgLGhW8TsmstPvfbBL0Frpv76daIROB5Wk6RyCml6X1M0
-         INr/wU0RVuAcWcOkPbgbi5U7MaR0NTk6+o3rhiyEe0vywSW27g/jS59FjbvlDzhRr3
-         ovNt3nB3npaxHStYKaqE8ptag4HrP8L17DKCvcbQ=
-Date:   Mon, 20 Dec 2021 17:41:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S234047AbhLUNOL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 21 Dec 2021 08:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229732AbhLUNOK (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 08:14:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FCDC061574;
+        Tue, 21 Dec 2021 05:14:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Tyz8PzJg8/A5UQdYT2N7TKnumB0ofZk85H9pQ9LnVsA=; b=AjuA8BQjL7+/rDNZMwZx4pp5q2
+        PysFMI/fv4hFwTTDw4XxEArzWe0ZK5GBiEyp+hDW9HM9+h6/ZQCy4eC6WJX6fq6WowEskId61gItI
+        vRtt7Qm+xnjKQJyFhny8sHZIOa5QhN28flhxt6JyTHAaWzsk++I2u5VmR6FcyYtUF142KdOdzW/ij
+        rsIR+fX912pBnHUo+yxjOsM57rBSDe4DP5Z3xHSWbFiPRhCn7BprBdEc7nvH86sVcXn+TO5h5ewz0
+        QHNZiJS0siLYVEYPdmAnApk4NZVOc9gsKI++PEcz/gWfc9htRxnDddmeKc6liKB4Ie5fC4TDa2Wy7
+        5PkwJRrg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzexF-002UMD-PZ; Tue, 21 Dec 2021 13:13:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA37C300347;
+        Tue, 21 Dec 2021 14:13:17 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8DCA2206E66FD; Tue, 21 Dec 2021 14:13:17 +0100 (CET)
+Date:   Tue, 21 Dec 2021 14:13:17 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Yury Norov <yury.norov@gmail.com>
 Cc:     linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
@@ -57,6 +67,7 @@ Cc:     linux-kernel@vger.kernel.org,
         Emil Renner Berthing <kernel@esmil.dk>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Geetha sowjanya <gakula@marvell.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guo Ren <guoren@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>,
         Heiko Carstens <hca@linux.ibm.com>,
@@ -81,7 +92,6 @@ Cc:     linux-kernel@vger.kernel.org,
         Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Petr Mladek <pmladek@suse.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
@@ -113,52 +123,27 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 08/17] all: replace bitmap_weight with
- bitmap_weight_{eq,gt,ge,lt,le} where appropriate
-Message-ID: <YcCyHvr1f+Z8M9M1@kroah.com>
+Subject: Re: [PATCH 15/17] kernel/cpu: add num_active_cpu counter
+Message-ID: <YcHS7c7zWVrLhIfV@hirez.programming.kicks-ass.net>
 References: <20211218212014.1315894-1-yury.norov@gmail.com>
- <20211218212014.1315894-9-yury.norov@gmail.com>
+ <20211218212014.1315894-16-yury.norov@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211218212014.1315894-9-yury.norov@gmail.com>
+In-Reply-To: <20211218212014.1315894-16-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 01:20:04PM -0800, Yury Norov wrote:
-> Kernel code calls bitmap_weight() to compare the weight of bitmap with
-> a given number. We can do it more efficiently with bitmap_weight_{eq, ...}
-> because conditional bitmap_weight may stop traversing the bitmap earlier,
-> as soon as condition is met.
-> 
-> This patch replaces bitmap_weight with conditional versions where possible,
-> except for small bitmaps which size is not configurable and  known at
-> constant time. In that case conditional version of bitmap_weight would not
-> benefit due to small_const_nbits() optimization; but readability may
-> suffer.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c                 |  2 +-
->  drivers/iio/dummy/iio_simple_dummy_buffer.c            |  4 ++--
->  drivers/iio/industrialio-trigger.c                     |  2 +-
->  drivers/memstick/core/ms_block.c                       |  4 ++--
->  drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c         |  2 +-
->  .../net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c  |  2 +-
->  .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c    |  4 ++--
->  drivers/net/ethernet/mellanox/mlx4/cmd.c               | 10 +++-------
->  drivers/net/ethernet/mellanox/mlx4/eq.c                |  4 ++--
->  drivers/net/ethernet/mellanox/mlx4/fw.c                |  4 ++--
->  drivers/net/ethernet/mellanox/mlx4/main.c              |  2 +-
->  drivers/perf/thunderx2_pmu.c                           |  4 ++--
->  drivers/staging/media/tegra-video/vi.c                 |  2 +-
->  13 files changed, 21 insertions(+), 25 deletions(-)
+On Sat, Dec 18, 2021 at 01:20:11PM -0800, Yury Norov wrote:
+> Similarly to the online cpus, the cpu_active_mask is actively used
+> in the kernel. This patch adds a counter for active cpus, so that
+> users that call num_active_cpus() would know the result immediately,
+> instead of calling the bitmap_weight for the mask.
 
-"all" is not how to submit changes to the kernel.  Please break them up
-into subsystem-specific patches, and send them after your core changes
-are accepted.
+Who cares about num_active_cpus() ?
 
-good luck!
+> +EXPORT_SYMBOL(set_cpu_active);
 
-greg k-h
+NAK, this should *never*ever* be used from a module.
+
