@@ -2,238 +2,94 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C83C047C3ED
-	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 17:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBEE47C4B4
+	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 18:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbhLUQgr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Dec 2021 11:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239959AbhLUQgo (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 11:36:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7E1C061747;
-        Tue, 21 Dec 2021 08:36:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7FBCB817BB;
-        Tue, 21 Dec 2021 16:36:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466E5C36AEA;
-        Tue, 21 Dec 2021 16:36:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640104601;
-        bh=Raa20oTo55bW6fRnesFHj7YQjLtEnX8esLtzywI76A4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=twN39g170uyrsJj31r1hpC5+M6PPY8IcmqdvVkc8SoPSfZTBEXteJdbJ27bBEl7Kt
-         ++4Lbva4Wpgqy6J8NKPBYpJqlxjaZLPaN0F4ZNz1tzxOH6G+y7Cq3Jhr1wIUJrd7qI
-         tLPOzYMnXbux8ZXrT/5+FxqIgL1AjuE6a0gk/6Dq8H1mM3u0yvTFd1MoV2U4JTUyfH
-         jT5CR0lR43+5hSrhqiuozecY4WQsEvv9jjzTvQTn98U6GK5XeQtOfbYOzZfnefVtP9
-         reicZKmyhx7GAZb87b8nIi8jP9tL1RKHjRuCJngFNyOS9kNN6n+h55rWQzafemUgZa
-         OqWE3XUOQYbvQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup.patel@wdc.com, gregkh@linuxfoundation.org,
-        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
-        wangjunqiang@iscas.ac.cn, lazyparser@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 13/13] riscv: compat: ptrace: Add compat_arch_ptrace implement
-Date:   Wed, 22 Dec 2021 00:35:32 +0800
-Message-Id: <20211221163532.2636028-14-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211221163532.2636028-1-guoren@kernel.org>
-References: <20211221163532.2636028-1-guoren@kernel.org>
+        id S233250AbhLURJD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 21 Dec 2021 12:09:03 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:56623 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230361AbhLURJD (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 12:09:03 -0500
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N9MlI-1mNU532i1M-015LUp; Tue, 21 Dec 2021 18:09:01 +0100
+Received: by mail-wm1-f50.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2533605wmc.2;
+        Tue, 21 Dec 2021 09:09:01 -0800 (PST)
+X-Gm-Message-State: AOAM530Hwj5g8Jfo9VAzuFhMYheKgBK1Gla3m7Jww+rMb8JjoKGcMwXr
+        AJ8Zjw5P479CLw/sCYhAffEQ+ZONKLXuxDe+v+s=
+X-Google-Smtp-Source: ABdhPJwBjfG8n5UL3gUcPzQHQGqJD8jdtXydpXBiVw9zz8vMTxK4PxCyGzOYKywQHcSPDIX78gSsHjw/vuP33ZnB2VQ=
+X-Received: by 2002:a1c:8013:: with SMTP id b19mr3463956wmd.35.1640106541291;
+ Tue, 21 Dec 2021 09:09:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-2-guoren@kernel.org>
+In-Reply-To: <20211221163532.2636028-2-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 21 Dec 2021 18:08:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
+Message-ID: <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
+Subject: Re: [PATCH 01/13] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, wefu@redhat.com,
+        Drew Fustini <drew@beagleboard.org>, wangjunqiang@iscas.ac.cn,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:lTFpZ6pDtY49FZfxsjv/cLPpAW+MEwn+/ySvxxlZ/8woKiBQs9L
+ YHiLTryYHpjpdbqT0cN7PSsA/BILDtL0sIOaRmiNH9jDJTTKZUFhc/Q7paOsMt4zdyQKtmj
+ pF3kkhg13dVPOI6lLMDYuDsxhZHg6MBWKrSs7hz+9s658rUR4kMAOdOgzHk9OMtc+7ETOR5
+ anCf30yrsL6OzVd8KjMag==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:jkHcHPAbZI8=:mpAlvJgX+UoHr92Qp5XNYB
+ M24/x2JwzmogjmbnnVL5/giWDUkbSRNddd7V86Y2JC8Wq4BT0fN9yfBfHkAKbakl5tXmjv6Gr
+ IG2Ms3fWQ4bNvFTOp0sWumofFCMSxihU2WOM0n89shW381scOC43e1GimWGFpK/XEs6Mm2x/T
+ 5MWTOhI4/lIPissEzjnYus1PE4GLsUfSOeDDuxwgIzKAqf/h4p5sOz/L3kvMdQ/pBq3vM5kFA
+ 8rOAHro2bEr4DnMOaz+UHb3wNU0Fr5xUTz1yptEFQCN8DKIEKKv44Y4KV4PtV7A7bqyf5T48c
+ Hk7d9dAFUJcUYTImCQma4rS1Ut9jjw2+RYTpDp1wbp3ilJncfkrORyaovfQXsBIaklWlV+UqM
+ 91Qeiuao5ZlTu6azAQSxDyoxcxJ5P5azRZ6cwMzzxP55XRg5GwViq4SOvCV5iATkN/AYEmiQd
+ p0Q15sfrTEt353OJN0EMCMcydvEQcE8DUqMZzcJgQamwp3nOxtpxaif/VI+jRnj+859kuV5lA
+ kxvh4Pvn+oDQ8CRVWWUtFaKZEM34c2IdJEOcwIEHkVX99h2yRyRfb7c7H8AyjrcUjRaonOHCF
+ qe4+LfRSEDIAaVu0EnirBcoCgbEdD97Cetn/Xuw/nc8QCFlAPsO1tWh/qjAKALreOamSK32/b
+ M2qxewK+FxRjjknah3S0IkywKdS1qoJZTddZMr+EVS41+D3wOghXuNDN0fgryXFw/Yo/2/5Bl
+ WvDG6AyO3I++d1DE3MqdIHgaXtrtD9zw2gzqqNvMLy0LIgFl0zGyN5JYqHgbhnGrb5gF7aG9y
+ DmSTVsLWXMarEvZ6Nn+jIPX1H56dsBCDnGI96NOZNJNh6aOrBo=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> index 4557a8b6086f..aafe5cfeb27c 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -383,7 +383,7 @@ __SYSCALL(__NR_syslog, sys_syslog)
+>
+>  /* kernel/ptrace.c */
+>  #define __NR_ptrace 117
+> -__SYSCALL(__NR_ptrace, sys_ptrace)
+> +__SC_COMP(__NR_ptrace, sys_ptrace, compat_sys_ptrace)
+>
 
-Now, you can use native gdb on riscv64 for rv32 app debugging.
+Right. We could merge sys_ptrace and compat_sys_ptrace() by adding
+a in_compat_syscall() check, but either way works.
 
-$ uname -a
-Linux buildroot 5.16.0-rc4-00036-gbef6b82fdf23-dirty #53 SMP Mon Dec 20 23:06:53 CST 2021 riscv64 GNU/Linux
-$ cat /proc/cpuinfo
-processor       : 0
-hart            : 0
-isa             : rv64imafdcsuh
-mmu             : sv48
+>  /* kernel/sched/core.c */
+>  #define __NR_sched_setparam 118
+> @@ -779,7 +779,7 @@ __SYSCALL(__NR_rseq, sys_rseq)
+>  #define __NR_kexec_file_load 294
+>  __SYSCALL(__NR_kexec_file_load,     sys_kexec_file_load)
+>  /* 295 through 402 are unassigned to sync up with generic numbers, don't use */
+> -#if __BITS_PER_LONG == 32
+> +#if defined(__SYSCALL_COMPAT) || __BITS_PER_LONG == 32
+>  #define __NR_clock_gettime64 403
+>  __SYSCALL(__NR_clock_gettime64, sys_clock_gettime)
 
-$ file /bin/busybox
-/bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
-$ file /usr/bin/gdb
-/usr/bin/gdb: ELF 32-bit LSB shared object, UCB RISC-V, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
-$ /usr/bin/gdb /bin/busybox
-GNU gdb (GDB) 10.2
-Copyright (C) 2021 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-...
-Reading symbols from /bin/busybox...
-(No debugging symbols found in /bin/busybox)
-(gdb) b main
-Breakpoint 1 at 0x8ddc
-(gdb) r
-Starting program: /bin/busybox
-Failed to read a valid object file image from memory.
+This part looks wrong, you expose clock_gettime64 to user space this way, both
+in asm/unistd.h and in the table.
 
-Breakpoint 1, 0x555a8ddc in main ()
-(gdb) i r
-ra             0x77df0b74       0x77df0b74
-sp             0x7fdd3d10       0x7fdd3d10
-gp             0x5567e800       0x5567e800 <bb_common_bufsiz1+160>
-tp             0x77f64280       0x77f64280
-t0             0x0      0
-t1             0x555a6fac       1431990188
-t2             0x77dd8db4       2011008436
-fp             0x7fdd3e34       0x7fdd3e34
-s1             0x7fdd3e34       2145205812
-a0             0xffffffff       -1
-a1             0x2000   8192
-a2             0x7fdd3e3c       2145205820
-a3             0x0      0
-a4             0x7fdd3d30       2145205552
-a5             0x555a8dc0       1431997888
-a6             0x77f2c170       2012397936
-a7             0x6a7c7a2f       1786542639
-s2             0x0      0
-s3             0x0      0
-s4             0x555a8dc0       1431997888
-s5             0x77f8a3a8       2012783528
-s6             0x7fdd3e3c       2145205820
-s7             0x5567cecc       1432866508
---Type <RET> for more, q to quit, c to continue without paging--
-s8             0x1      1
-s9             0x0      0
-s10            0x55634448       1432568904
-s11            0x0      0
-t3             0x77df0bb8       2011106232
-t4             0x42fc   17148
-t5             0x0      0
-t6             0x40     64
-pc             0x555a8ddc       0x555a8ddc <main+28>
-(gdb) si
-0x555a78f0 in mallopt@plt ()
-(gdb) c
-Continuing.
-BusyBox v1.34.1 (2021-12-19 22:39:48 CST) multi-call binary.
-BusyBox is copyrighted by many authors between 1998-2015.
-Licensed under GPLv2. See source distribution for detailed
-copyright notices.
-
-Usage: busybox [function [arguments]...]
-   or: busybox --list[-full]
-...
-[Inferior 1 (process 107) exited normally]
-(gdb) q
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/riscv/kernel/ptrace.c | 80 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 74 insertions(+), 6 deletions(-)
-
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 55dd50f8a5cc..76042ed861a3 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -114,11 +114,6 @@ static const struct user_regset_view riscv_user_native_view = {
- 	.n = ARRAY_SIZE(riscv_user_regset),
- };
- 
--const struct user_regset_view *task_user_regset_view(struct task_struct *task)
--{
--	return &riscv_user_native_view;
--}
--
- struct pt_regs_offset {
- 	const char *name;
- 	int offset;
-@@ -278,9 +273,82 @@ __visible void do_syscall_trace_exit(struct pt_regs *regs)
- }
- 
- #ifdef CONFIG_COMPAT
-+static int compat_riscv_gpr_get(struct task_struct *target,
-+				const struct user_regset *regset,
-+				struct membuf to)
-+{
-+	struct compat_user_regs_struct cregs;
-+
-+	regs_to_cregs(&cregs, task_pt_regs(target));
-+
-+	return membuf_write(&to, &cregs,
-+			    sizeof(struct compat_user_regs_struct));
-+}
-+
-+static int compat_riscv_gpr_set(struct task_struct *target,
-+				const struct user_regset *regset,
-+				unsigned int pos, unsigned int count,
-+				const void *kbuf, const void __user *ubuf)
-+{
-+	int ret;
-+	struct compat_user_regs_struct cregs;
-+
-+	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &cregs, 0, -1);
-+
-+	cregs_to_regs(&cregs, task_pt_regs(target));
-+
-+	return ret;
-+}
-+
-+static const struct user_regset compat_riscv_user_regset[] = {
-+	[REGSET_X] = {
-+		.core_note_type = NT_PRSTATUS,
-+		.n = ELF_NGREG,
-+		.size = sizeof(compat_elf_greg_t),
-+		.align = sizeof(compat_elf_greg_t),
-+		.regset_get = compat_riscv_gpr_get,
-+		.set = compat_riscv_gpr_set,
-+	},
-+#ifdef CONFIG_FPU
-+	[REGSET_F] = {
-+		.core_note_type = NT_PRFPREG,
-+		.n = ELF_NFPREG,
-+		.size = sizeof(elf_fpreg_t),
-+		.align = sizeof(elf_fpreg_t),
-+		.regset_get = riscv_fpr_get,
-+		.set = riscv_fpr_set,
-+	},
-+#endif
-+};
-+
-+static const struct user_regset_view compat_riscv_user_native_view = {
-+	.name = "riscv",
-+	.e_machine = EM_RISCV,
-+	.regsets = compat_riscv_user_regset,
-+	.n = ARRAY_SIZE(compat_riscv_user_regset),
-+};
-+
- long compat_arch_ptrace(struct task_struct *child, compat_long_t request,
- 			compat_ulong_t caddr, compat_ulong_t cdata)
- {
--	return 0;
-+	long ret = -EIO;
-+
-+	switch (request) {
-+	default:
-+		ret = compat_ptrace_request(child, request, caddr, cdata);
-+		break;
-+	}
-+
-+	return ret;
- }
-+#endif /* CONFIG_COMPAT */
-+
-+const struct user_regset_view *task_user_regset_view(struct task_struct *task)
-+{
-+#ifdef CONFIG_COMPAT
-+	if (test_tsk_thread_flag(task, TIF_32BIT))
-+		return &compat_riscv_user_native_view;
-+	else
- #endif
-+		return &riscv_user_native_view;
-+}
--- 
-2.25.1
-
+         Arnd
