@@ -2,33 +2,33 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D495947C4CD
-	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 18:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5255947C65C
+	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 19:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240244AbhLURPz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Dec 2021 12:15:55 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:53663 "EHLO
+        id S233771AbhLUSVX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 21 Dec 2021 13:21:23 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:46917 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240260AbhLURPz (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 12:15:55 -0500
-Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MYNW8-1mutBL3wZe-00VReI; Tue, 21 Dec 2021 18:15:53 +0100
-Received: by mail-wm1-f52.google.com with SMTP id z4-20020a1c7e04000000b0032fb900951eso2193512wmc.4;
-        Tue, 21 Dec 2021 09:15:53 -0800 (PST)
-X-Gm-Message-State: AOAM531AhZ21DRpQBrx6icWuwRQVLJx311u33QTCipm+WR4NE0Sp3bvR
-        ELh9RrpUDdyDDFM70I/i0Ngurj50+aHAEYHgMMY=
-X-Google-Smtp-Source: ABdhPJzffr6WnaoEGTyhmBnXPy5ZleWzwlOCZ8nvVWpeF4NBAn+XXQBe16uur6o+emymJ0RcuqEtqPLnaIQ+7GdGM4I=
-X-Received: by 2002:a7b:c007:: with SMTP id c7mr3663200wmb.82.1640106953460;
- Tue, 21 Dec 2021 09:15:53 -0800 (PST)
+        with ESMTP id S231459AbhLUSVX (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 13:21:23 -0500
+Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M8hlZ-1n4OSx0VyD-004fwu; Tue, 21 Dec 2021 19:21:22 +0100
+Received: by mail-wm1-f49.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so34129wmc.2;
+        Tue, 21 Dec 2021 10:21:22 -0800 (PST)
+X-Gm-Message-State: AOAM531pl7k46UzFX4Fak24MYBH43CTcK4qdlxuR6Woca1wkJ7/vAeNk
+        i19RfFFYw7+HzluxwQ1mcBfYLYMStSqvBIa3xZU=
+X-Google-Smtp-Source: ABdhPJw3TJbiACgmivSiGV6Ovdpm/sI3dlEmQg3biddqmxGYHcWMbTvf71OOdSqw57SexlZ7eGP2xjVH+Fbbqj6aNz4=
+X-Received: by 2002:a1c:8013:: with SMTP id b19mr3508436wmd.35.1640107277923;
+ Tue, 21 Dec 2021 09:21:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
-In-Reply-To: <20211221163532.2636028-6-guoren@kernel.org>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-9-guoren@kernel.org>
+In-Reply-To: <20211221163532.2636028-9-guoren@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 21 Dec 2021 18:15:37 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
-Message-ID: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
-Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
+Date:   Tue, 21 Dec 2021 18:21:02 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0-ZOwoC_Ft+TiKAXdETcqU5XPS+9DZGkA+bB73SNCCbQ@mail.gmail.com>
+Message-ID: <CAK8P3a0-ZOwoC_Ft+TiKAXdETcqU5XPS+9DZGkA+bB73SNCCbQ@mail.gmail.com>
+Subject: Re: [PATCH 08/13] riscv: compat: Add COMPAT Kbuild skeletal support
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup.patel@wdc.com>,
@@ -40,62 +40,45 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:3IiEAytFo4q9rLeQEn1nPw/RZCpu7nmJdoClGuoMlKGgmnhyQFJ
- 4WFooQQEPKZoBMpAaM//nVZ0iPhps7Zt9EYptofn2y0ll9d6bJ86jN3XMgEaDD1eXIvro+n
- F/yCOl0djN2l5GcwLKKx6VQG6s1+pIeQtIY0FdGbVnW16tPHK0uB0iQHt54tRG3w5nVNIfV
- iGDeuG5erI2w36gpucV4w==
+X-Provags-ID: V03:K1:mETcs4M/PlmEpqYoutCidqdOBUgzTKm+YvUu0EV38NQlLJWzp/u
+ rimjCHJz/EzQBtVj25hQ2Rqt0H8jw6gRzS+dnPLcg4xAnFLBI6c1gf2Y3Fji0PxwFeAoLbN
+ 38hj9MuzEMBfFhCkr0UoEUhJ6QCMTFbDvbqDKT+3nJohpkhtWIA8zgK8Jkn808SNjplia+r
+ biIj510kHdAda2xqh78GQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ujcJA7FV+9w=:s/8zzZ61oUoEKXwNiH+7Nv
- eq9Zf6rw7EXiO6BZ0NFXbgDZoln3Tlhnh5cOU2vO7t8Z2BJqBHo/VYMVrRVrh1MIKoSP9wsoN
- xV7hvHb4HBATUG7UoMMTBqki7hWVIDYpA00fHk8Ai0T2wp2xEz5b4Jc3zhSJv9QSpizknsgti
- oBlWHhKbcj4fsSsQSOg6zsJyQd6UB7u62jCicrXhHYF1iWggihoyYNnHeLWbOqPop3isPrrAv
- R8O1w6nHCnL5Qr2UU31MpV9B+LHRgbcWhy/U0b3AG6vtpguGAPI5z7N0N3+BjO7HAiblJyugP
- VqSvRf1fb97/qO4ctDdwjn7+HrBRIU6RUs0lFangW8xoOVCdonDgYfMVO1G93ULdtVPpErZHw
- //67HDZGQmvLO4TIbWJTmH6ix0qF6B0M5yfrpfQNBG/o+1WINGXUR12OR/qBB9NjpF6dza3G/
- xkr78AOfQKIQpa5tWxSfumVSAPswsztbR9+pRhEDeUp700xY+JGDQUnzWGdBNDfIf/5uS8r0P
- PmJtubdo7Av3+yD39vHtpISh7u0EuuPc679pDluS+e1N6mGtR1MzPKMIdJjXt47k9tv33fnl3
- eeNivbVgUdlgVoLi+SXWenFhvg3nQpCmS1Vto737wR8NJXIydH6+sroGFQJCrH8xqmzQZISjw
- b8AabD72xQhBSbAATuM3h7jb08PFW7AUEynDOqjfM9UEmMH6xE9MjdZ+0Cu7/A9FMw4RbSAlB
- qwZ5Yse0IFEBw7LNqwkqCoC/HQXcv3UoDWwzr0Uj9xEbsa9Gimuw3Xqp9OQlBvDQvXoOG9Ptw
- reXDePfwAAAWZp7HWIkh3gTRao7hM9ZHB9J5JoqwXETO7AIGZM=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PnIjAVFE+c4=:3RJYMaKSkHfVgBpZs1+r0y
+ xCx2rcD3isSBEelaq6TeDHEAtAl0A9cv4PEWKVN03G9XdxuH6RnlJ7NcqBA6CitS1WUxmXbw/
+ ADbv+5ZxEEhsidOONvBtClrL1E8yj6/UfLwW8fTX0LFgI3Ha4iU9mjMCFs6oW9dvDNUxidY/g
+ 1/Yh+FvotHU9C75qKRS7H2j5kaJowR1UYy8qApOoUmtCVtK+JydAdcNvB7EufMQcJIYxcNrUh
+ buGp3jk1JyaJ7dz+Qta99w31bFeJ7lc8UyMYAdgdyxUqwxdAd8X3ut+/rmXsnbfwNeSDuigQo
+ aRYjaENbo+wZHGZYhAPeB6CJvX1QoXyEiToR+ZLN33DaTq5oBGf+Hgm+DXGTio3Q9JUoQRkz6
+ SFtZ5K2d4+Yj7SPUFVQSCKmIV83A/AMhoMg3/L7K+VQSt8fQQTvF/1whn62sa9+LuzvFJVKD1
+ rH6RgxucojCv6eX2AENHa18K9al1J775WFNc1hel7yLTI2/o67vxLUDam2/6K0g9khACDsmZq
+ Lxs5Qp8ktInGaQ+Byjc7vaO6vUkYIeeLnfVWg9rv5RzEOH+VbHz3y3J6HsxWYSPaZ+PKV07Y4
+ zsnqywymPf0BPMy5xAVcxsHdCccix2mzROb61cGvMJhrXgazidjgKuqyRNVcNWnT32K5QDWs8
+ SZTYHvwcBtIfL31ZHzTlnODJinWiIaTQUk2mdtbcN3tsA+89G065rAulX8h0XlBHNbVpEW3FH
+ d2oSpp0ZBpTLEmsF0yPpEHzJ/G5AUPErggK8TSsGOdfpE4dQRnvb1JCK3mEU2iaLcHjG5nWkO
+ twIrq8trq+jmVrY9VXZoM5x9QAHQVr0cZEGYoby51Ed4KASXJo=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Implement compat_syscall_table.c with compat_sys_call_table & fixup
-> system call such as truncate64,pread64,fallocate which need two
-> regs to indicate 64bit-arg (copied from arm64).
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> ---
->  arch/riscv/include/asm/syscall.h         |  3 +
->  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
-
-Same here, I think most of these should go next to the actual syscalls, with the
-duplicates removed from other platforms,
-
-> +#define __SYSCALL_COMPAT
-> +#undef __LP64__
-
-What is the #undef for?
-
-> +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
-> +       unsigned long, prot, unsigned long, flags,
-> +       unsigned long, fd, unsigned long, offset)
-> +{
-> +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
-> +               if (unlikely(!(prot & PROT_READ)))
-> +                       return -EINVAL;
 > +
-> +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
+> +config SYSVIPC_COMPAT
+> +       def_bool y
+> +       depends on COMPAT && SYSVIPC
+
+Can this be moved to init/Kconfig next to SYSVIPC?
+
+> +
+> +COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+> +{
+> +       return 0;
 > +}
 
-This is one that we may have to deal with separately, introducing
-sys_mmap_pgoff() was a mistake in my opinion, and we should just have
-added a sys_mmap2() for all architectures that don't explicitly override it.
+This confused me a bit while reviewing, would it make sense to reorder the
+patches to add the three missing functions first instead of adding the
+dummy and then replacing it?
 
-       Arnd
+
+        Arnd
