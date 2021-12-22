@@ -2,101 +2,121 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E1947C67F
-	for <lists+linux-csky@lfdr.de>; Tue, 21 Dec 2021 19:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0096047D0AA
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 12:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241288AbhLUS1o (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Dec 2021 13:27:44 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:57841 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237034AbhLUS1n (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Dec 2021 13:27:43 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M3lgJ-1mzT0n0c1j-000rN3; Tue, 21 Dec 2021 19:27:42 +0100
-Received: by mail-wr1-f44.google.com with SMTP id v7so21371833wrv.12;
-        Tue, 21 Dec 2021 10:27:42 -0800 (PST)
-X-Gm-Message-State: AOAM530t98g5HXwcRIsBlqBE2l1Ez9+V3qFuQHb+eteU6pDQRNKylJnY
-        4qeaZcCnj1SexybhtNjuRORBWr1uDN74QPACRO8=
-X-Google-Smtp-Source: ABdhPJznn56uiIqEQGonQeMXabHARNb1MKKouJb7pEiJqRUGi0z4LrTZSA40EkADjYddnL79plKTAJq+Gzpiid35E7s=
-X-Received: by 2002:a5d:6d0e:: with SMTP id e14mr3598547wrq.407.1640108340516;
- Tue, 21 Dec 2021 09:39:00 -0800 (PST)
+        id S240218AbhLVLQ0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Dec 2021 06:16:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57228 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233429AbhLVLQZ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 06:16:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFAB7B81BBF;
+        Wed, 22 Dec 2021 11:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4C3C36AF3;
+        Wed, 22 Dec 2021 11:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640171782;
+        bh=9c47US/IBTSpcaTa6A9sohSlsGJgoac4lsSRerkjTaY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rAwOapawARY4124h9997jUAYZGl8ZbZ6EIHFd5ga3NKlP1QtUijfWLS1Sb0BbnbD1
+         skkzKp4Rs1OB7RkijJR2y8I+rPE2bSfmQZ0XYD936tCfGUqWr7jmkjBkeD/KTdtPGo
+         yjNWFqu2wdYZmDF81jgndPbY9JZgH6OsOnDbuAtpXeoo+AU+s1TFjZ+M3q698sknmS
+         KrNBv1vAAfGvWSENhuHjsk+4NRDR1DB9SAXYEqJWY+zxR6U9lW2QRlI0tAJ7QKRFka
+         JabKFDuThabc7+jtrrDLtw/NdUbdPY1DWWL5BCCz6Ltzkg/ANsIl0ENM4TFeX5yKiP
+         hoIMWD5uzs3UQ==
+Received: by mail-vk1-f174.google.com with SMTP id s1so1082751vks.9;
+        Wed, 22 Dec 2021 03:16:22 -0800 (PST)
+X-Gm-Message-State: AOAM5323tCH7VbST4JAXE3MYknY0dezf5//TPjI7hV798NBSDog7qd+e
+        oHb5WaNfCrdRXgQN6qbzO3SUtExeClhGcfMeO0g=
+X-Google-Smtp-Source: ABdhPJxj1PzhyTI98cL1Srb70bXWLzUyQMiVzIdGh0LdKJMqyS7sLEVMCA+fdiZdr9wtUMSXc7/oy/tQPd/D8KKPRhU=
+X-Received: by 2002:a1f:ae91:: with SMTP id x139mr867231vke.2.1640171781375;
+ Wed, 22 Dec 2021 03:16:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org>
-In-Reply-To: <20211221163532.2636028-1-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 21 Dec 2021 18:38:44 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
-Message-ID: <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
-Subject: Re: [PATCH 00/13] riscv: compat: Add COMPAT mode support for rv64
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-2-guoren@kernel.org>
+ <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
+In-Reply-To: <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 22 Dec 2021 19:16:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
+Message-ID: <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
+Subject: Re: [PATCH 01/13] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup.patel@wdc.com>,
         gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, wefu@redhat.com,
-        Drew Fustini <drew@beagleboard.org>, wangjunqiang@iscas.ac.cn,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
         =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UViDA59wo0S+JsDByocl07FN0iybuFgyTypYXB/iY5vHr2mBvR0
- lOl9K7841JZXIUyBWaRiLNOJoqm/RcottcwAsUQi+I+GkWY6ruD2l21RVFOubLsVtPytdjK
- OZRZEnvX5rBTqXAjItaulel/cEKI25LXhxEyiu7VZJyvojKGeXfrvAYwR+3aiRYei2bTZaw
- rPLwnnnsMuKeYOGC3ibpQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lrO5q1wt7OE=:t9Zqj/dmTSDfzdJkyN1luX
- aJsUpvnTN90/4oaaH9vpy7hvsntSuvIO3I623+nypeqh6hfd3U5+vhCcVMCAcrK69fuyrPl0e
- iEHwqBkabn8jIgPOVnRN75xHyCbkUC1kk/sCS4BoheWRefMpyZ37AJmwEBsDAbD/vWUZ8pE0s
- 9sCQnLEl6Db/8AHXUIlk7uVIai7yppkKlpSLeXEccJEpKZ6UV7yEO5EvbTwI7nodGVcFJgZVE
- Hh0bhbOD6i08dhBCHGU2qIwOZQA1Iy8Lg+QkrDSFuH5VXSSO4WjIVcXgizMckIMmY3O1IaNnp
- 3zfIcBywP+rq3k/8mW6MYoXI62SwyOU5UtFeMC1oRKx8Dk6W9kbH876O3DXs2SzqWTN45iDHv
- dpbRh7smgupF/j7jqGh9sELC+WbWPJxmOuZKQ0XNqaHEdGlKt5gEuq92TbOVcj5gJWyteCHR/
- hbA/tnVov3I0JDPgcE8YHfzw4yHrwqRzCjzdKMpzQqZG1K8EdUrrivina3br4k6ZOu/7f/HTl
- IvHuTGz98oPG8OJeB1hXG26spuc3lQnkmMY9/5by0LvUi1dC5ENZTCbof7KecIOi+zqx0eygn
- hK7OJIsAa/WYN+JJempIOYWz/4jcrujcwvQ+9wiGTR2sdmBtsqwfFZMxeAMTRA0edkmvT3/gS
- NNCyfU1KeLZpz2/80J9fuHknjXmUjlpI5t0VcikZpma3C1akIQtHe0V3qZte12iqIifn+bNOd
- DNHkm9GgVFepw1+YKjg35uh8bna4p6uRnny06ubJaAxJ0Qur2capHAW1wC7AYQ05GdZGTDuuL
- MPXv17kCfYVmmhj6kdJnj4BE2oHkWtXd7ZuHo8dKHC0/0x/Oag=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> From: Guo Ren <guoren@linux.alibaba.com>
+> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> > index 4557a8b6086f..aafe5cfeb27c 100644
+> > --- a/include/uapi/asm-generic/unistd.h
+> > +++ b/include/uapi/asm-generic/unistd.h
+> > @@ -383,7 +383,7 @@ __SYSCALL(__NR_syslog, sys_syslog)
+> >
+> >  /* kernel/ptrace.c */
+> >  #define __NR_ptrace 117
+> > -__SYSCALL(__NR_ptrace, sys_ptrace)
+> > +__SC_COMP(__NR_ptrace, sys_ptrace, compat_sys_ptrace)
+> >
 >
-> Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> s390, mips, sparc) have supported COMPAT mode. But they all have
-> history issues and can't use standard linux unistd.h. RISC-V would
-> be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> /unistd.h.
+> Right. We could merge sys_ptrace and compat_sys_ptrace() by adding
+> a in_compat_syscall() check, but either way works.
 >
-> The patchset are based on v5.16-rc6, you can compare rv64-compat32
-> v.s. rv32-whole in qemu with following step:
+> >  /* kernel/sched/core.c */
+> >  #define __NR_sched_setparam 118
+> > @@ -779,7 +779,7 @@ __SYSCALL(__NR_rseq, sys_rseq)
+> >  #define __NR_kexec_file_load 294
+> >  __SYSCALL(__NR_kexec_file_load,     sys_kexec_file_load)
+> >  /* 295 through 402 are unassigned to sync up with generic numbers, don't use */
+> > -#if __BITS_PER_LONG == 32
+> > +#if defined(__SYSCALL_COMPAT) || __BITS_PER_LONG == 32
+> >  #define __NR_clock_gettime64 403
+> >  __SYSCALL(__NR_clock_gettime64, sys_clock_gettime)
+>
+> This part looks wrong, you expose clock_gettime64 to user space this way, both
+> in asm/unistd.h and in the table.
+>
+>          Arnd
 
-Looks good overall, see my individual replies for minor comments I had.
+No, we only define __SYSCALL_COMPAT in compat_syscall_table.c. It
+won't be expose to user space, because there is no __SYSCALL_COMPAT.
 
-I think there is a bigger question to answer though, which is whether this is
-actually a useful feature for rv64. In general, there are two reasons for
-wanting compat mode:
+$ grep __SYSCALL_COMPAT * -r
+arch/riscv/kernel/compat_syscall_table.c:#define __SYSCALL_COMPAT
+                           ^^^^^^^^^^^^^^^^^^^^^^
+include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 32 ||
+defined(__SYSCALL_COMPAT)
+include/uapi/asm-generic/unistd.h:#ifdef __SYSCALL_COMPAT
+include/uapi/asm-generic/unistd.h:#if defined(__SYSCALL_COMPAT) ||
+__BITS_PER_LONG == 32
+include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 64 &&
+!defined(__SYSCALL_COMPAT)
+tools/include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 32 ||
+defined(__SYSCALL_COMPAT)
+tools/include/uapi/asm-generic/unistd.h:#ifdef __SYSCALL_COMPAT
+tools/include/uapi/asm-generic/unistd.h:#if defined(__SYSCALL_COMPAT)
+|| __BITS_PER_LONG == 32
+tools/include/uapi/asm-generic/unistd.h:#if __BITS_PER_LONG == 64 &&
+!defined(__SYSCALL_COMPAT)
 
-a) compatibility with existing binaries and distros
+-- 
+Best Regards
+ Guo Ren
 
-b) reducing the memory footprint of user space in a memory constrained
-environment, either deeply embedded or in a container.
-
-For the other architectures, a) is clearly the main driver, but equally so
-this is not the case on riscv, which does not have any legacy 32-bit
-code. Without that, adding compat mode would mainly introduce a
-second ABI to a lot of environments that at the moment only need to
-support one, and that adds complexity to the implementation and
-the extra attack surface of the second syscall ABI when an exploit
-may be possible only in compat mode.
-
-There is still some benefit in b), but it would need to be weighed
-against the downsides above. Can you explain in more detail what
-use cases you have in mind, and which CPU cores actually support
-this mode?
-
-         Arnd
+ML: https://lore.kernel.org/linux-csky/
