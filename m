@@ -2,51 +2,51 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B4647D179
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 13:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133D147D246
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 13:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244785AbhLVMHK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Dec 2021 07:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S240708AbhLVMno (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Dec 2021 07:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235474AbhLVMHK (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 07:07:10 -0500
+        with ESMTP id S240717AbhLVMni (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 07:43:38 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3321EC061574;
-        Wed, 22 Dec 2021 04:07:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3F8C061761;
+        Wed, 22 Dec 2021 04:43:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4373B81C0F;
-        Wed, 22 Dec 2021 12:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F1BC36AEF;
-        Wed, 22 Dec 2021 12:07:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A567CB81054;
+        Wed, 22 Dec 2021 12:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795F7C36AEA;
+        Wed, 22 Dec 2021 12:43:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640174827;
-        bh=+wqXN0WBIIDqmYLgad4enZJ2Q7SP/1omJsy3ZSi/9sQ=;
+        s=k20201202; t=1640177015;
+        bh=spRwUCGiSSG8n6qeVEE9aN2Iq6VFzAj957YT2tK8Kqs=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FgJBC2cmzC9ZDUPKM6OeTvPlm0kpzUupY5nnoF0GpYUQXfS3Aj0YPjqxHrKtExyhR
-         Kv3JoqgSULLvap/lDwP/Cbt8P6hB6dmJBD0x5I4PFJUUVlfmSksd6FNRRlxQw90wsZ
-         bO9Kf5f/3fraeTe4698bzDeG28PRNet9rdyINQAQFzUN/P5L0XO8wjIXAZB9m8f/Sy
-         DAG9Vxy1fg5xIT8iODXBDoIfFd2MVRlOt3pSUGixzUAu/hpzHKTozKUeTD0Cnp5Jrj
-         ktKcQC4HBaPk3xdXFPBECnw2bQb2Cb0p8Vcdff/7fnt9643HExwc8iW/9ITp9eCMhI
-         64UBiTMWNQidQ==
-Received: by mail-ua1-f47.google.com with SMTP id y23so3713526uay.7;
-        Wed, 22 Dec 2021 04:07:07 -0800 (PST)
-X-Gm-Message-State: AOAM533WBNcj8hLjuREmBRwv6gFH8PhTU/z4/1A2L5tw0pjpCH/lJptH
-        +F2ksDSOy85WuuQ7+654r68NCfBwmNCFmDXgsg0=
-X-Google-Smtp-Source: ABdhPJxGX4KrZs2TnGR1gSjUu92pDva4Xdm8isb3ATByYY/kfaTFVcqSn5kqos02FM+dXr9lRhbSDFcRUucnDxIKpsQ=
-X-Received: by 2002:a67:e244:: with SMTP id w4mr788901vse.51.1640174826756;
- Wed, 22 Dec 2021 04:07:06 -0800 (PST)
+        b=XOAUZhCycs8P/F/IgB41mY0S24xJyBhBueU6B2STDwK6SWiYp9SFmsTMDZUwf0WlS
+         XuGelJ1kDkiPKATKBgPNXcBwUcC0Qi2ZaErDTa1EcLQgSantLXY0oWuTcUXnERnHqG
+         PHwPJE3Gc9PccipxJLHsMflbauYYRzS+hjqeLI3jxpvkAkIYc2d2igdTSXOJYTHrxL
+         p5IIoIGZLKlbmMVRcBfrRy/YmlQTsYG666UvZpVq7zLs9GoEWvtnRVdSvgoERT9zus
+         nnfJvRLhGTzkiPreYUb/purRFnEOQilR8tA4kyBTlksVtapPJgMg637B6GGV6+ZfuX
+         nkamUJNP2aBKA==
+Received: by mail-vk1-f177.google.com with SMTP id s144so1223614vkb.8;
+        Wed, 22 Dec 2021 04:43:35 -0800 (PST)
+X-Gm-Message-State: AOAM531TEvvdpNxHN4xwr3s9qo1h5YUOgtyZFLXNsh1eHexVQPc3TTSS
+        4a3G0TvKDleyotkeqEgEqCu9oe09/R3HHuJGVUY=
+X-Google-Smtp-Source: ABdhPJzC3viZd1a1jd6xOFjIMdxvyj8zxpI+z9Ie7iUhyHVWlvCpwXNy8RLLG5OJvKtf/gKMdK2si6m9Ls6Z9GIn+oY=
+X-Received: by 2002:a1f:a4c5:: with SMTP id n188mr846875vke.35.1640177006825;
+ Wed, 22 Dec 2021 04:43:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-9-guoren@kernel.org>
- <CAK8P3a0-ZOwoC_Ft+TiKAXdETcqU5XPS+9DZGkA+bB73SNCCbQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0-ZOwoC_Ft+TiKAXdETcqU5XPS+9DZGkA+bB73SNCCbQ@mail.gmail.com>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
+ <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Dec 2021 20:06:55 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ=Yo98-S12D9CbVXPJsAKpLu1NhJAVB3yu+J9thz6CUg@mail.gmail.com>
-Message-ID: <CAJF2gTQ=Yo98-S12D9CbVXPJsAKpLu1NhJAVB3yu+J9thz6CUg@mail.gmail.com>
-Subject: Re: [PATCH 08/13] riscv: compat: Add COMPAT Kbuild skeletal support
+Date:   Wed, 22 Dec 2021 20:43:15 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
+Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
+Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup.patel@wdc.com>,
@@ -63,45 +63,67 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:23 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Wed, Dec 22, 2021 at 2:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
 > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > +
-> > +config SYSVIPC_COMPAT
-> > +       def_bool y
-> > +       depends on COMPAT && SYSVIPC
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Implement compat_syscall_table.c with compat_sys_call_table & fixup
+> > system call such as truncate64,pread64,fallocate which need two
+> > regs to indicate 64bit-arg (copied from arm64).
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > ---
+> >  arch/riscv/include/asm/syscall.h         |  3 +
+> >  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
 >
-> Can this be moved to init/Kconfig next to SYSVIPC?
-
-I would try another patchset, to see other architecture guys' advice.
-
-$ grep SYSVIPC_COMPAT arch -r
-arch/x86/Kconfig:config SYSVIPC_COMPAT
-arch/parisc/Kconfig:config SYSVIPC_COMPAT
-arch/powerpc/Kconfig:config SYSVIPC_COMPAT
-arch/arm64/Kconfig:config SYSVIPC_COMPAT
-arch/riscv/Kconfig:config SYSVIPC_COMPAT
-arch/s390/Kconfig:config SYSVIPC_COMPAT
-arch/mips/Kconfig:config SYSVIPC_COMPAT
-arch/mips/Kconfig:      select SYSVIPC_COMPAT if SYSVIPC
-arch/mips/Kconfig:      select SYSVIPC_COMPAT if SYSVIPC
-arch/sparc/Kconfig:config SYSVIPC_COMPAT
+> Same here, I think most of these should go next to the actual syscalls, with the
+> duplicates removed from other platforms,
+Agree, I will try that next version.
 
 >
-> > +
-> > +COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+> > +#define __SYSCALL_COMPAT
+> > +#undef __LP64__
+>
+> What is the #undef for?
+
+See arch/riscv/include/uapi/asm/unistd.h:
+
+#ifdef __LP64__
+#define __ARCH_WANT_NEW_STAT
+#define __ARCH_WANT_SET_GET_RLIMIT
+#endif /* __LP64__ */
+
+
+>
+> > +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
+> > +       unsigned long, prot, unsigned long, flags,
+> > +       unsigned long, fd, unsigned long, offset)
 > > +{
-> > +       return 0;
+> > +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
+> > +               if (unlikely(!(prot & PROT_READ)))
+> > +                       return -EINVAL;
+> > +
+> > +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
 > > +}
 >
-> This confused me a bit while reviewing, would it make sense to reorder the
-> patches to add the three missing functions first instead of adding the
-> dummy and then replacing it?
-Okay, I would try in the next version. Make the compile at last.
+> This is one that we may have to deal with separately, introducing
+> sys_mmap_pgoff() was a mistake in my opinion, and we should just have
+#if __BITS_PER_LONG == 32 || defined(__SYSCALL_COMPAT)
+#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
+#else
+#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _64)
+#endif
+
+#define __NR3264_mmap 222
+__SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
+
+> added a sys_mmap2() for all architectures that don't explicitly override it.
+That should be another patch, right? Let's keep it here.
 
 >
->
->         Arnd
+>        Arnd
 
 
 
