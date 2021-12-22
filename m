@@ -2,53 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 133D147D246
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 13:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F3C47D269
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 13:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240708AbhLVMno (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Dec 2021 07:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240717AbhLVMni (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 07:43:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3F8C061761;
-        Wed, 22 Dec 2021 04:43:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A567CB81054;
-        Wed, 22 Dec 2021 12:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795F7C36AEA;
-        Wed, 22 Dec 2021 12:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640177015;
-        bh=spRwUCGiSSG8n6qeVEE9aN2Iq6VFzAj957YT2tK8Kqs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XOAUZhCycs8P/F/IgB41mY0S24xJyBhBueU6B2STDwK6SWiYp9SFmsTMDZUwf0WlS
-         XuGelJ1kDkiPKATKBgPNXcBwUcC0Qi2ZaErDTa1EcLQgSantLXY0oWuTcUXnERnHqG
-         PHwPJE3Gc9PccipxJLHsMflbauYYRzS+hjqeLI3jxpvkAkIYc2d2igdTSXOJYTHrxL
-         p5IIoIGZLKlbmMVRcBfrRy/YmlQTsYG666UvZpVq7zLs9GoEWvtnRVdSvgoERT9zus
-         nnfJvRLhGTzkiPreYUb/purRFnEOQilR8tA4kyBTlksVtapPJgMg637B6GGV6+ZfuX
-         nkamUJNP2aBKA==
-Received: by mail-vk1-f177.google.com with SMTP id s144so1223614vkb.8;
-        Wed, 22 Dec 2021 04:43:35 -0800 (PST)
-X-Gm-Message-State: AOAM531TEvvdpNxHN4xwr3s9qo1h5YUOgtyZFLXNsh1eHexVQPc3TTSS
-        4a3G0TvKDleyotkeqEgEqCu9oe09/R3HHuJGVUY=
-X-Google-Smtp-Source: ABdhPJzC3viZd1a1jd6xOFjIMdxvyj8zxpI+z9Ie7iUhyHVWlvCpwXNy8RLLG5OJvKtf/gKMdK2si6m9Ls6Z9GIn+oY=
-X-Received: by 2002:a1f:a4c5:: with SMTP id n188mr846875vke.35.1640177006825;
- Wed, 22 Dec 2021 04:43:26 -0800 (PST)
+        id S240961AbhLVMrG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Dec 2021 07:47:06 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:50637 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240938AbhLVMrF (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 07:47:05 -0500
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M3UhQ-1mzSmz4946-000bDP; Wed, 22 Dec 2021 13:47:04 +0100
+Received: by mail-wr1-f50.google.com with SMTP id s1so4736324wrg.1;
+        Wed, 22 Dec 2021 04:47:03 -0800 (PST)
+X-Gm-Message-State: AOAM532PQMcTNLUhPLl4QvD6CI87/wOZU0ZRQWuVOxACl6Airr0NMogB
+        79Ld7KcfVx/dWrDeYPRtvB4A3eIlAOwlpCLEVE0=
+X-Google-Smtp-Source: ABdhPJzGHS+0FSFJawmPN4qrozHG2jZvyHLpVVATumqQCoz0M2O4wCbSVKWRKxMVEP1zq7AFGcfzbsz2Xb2ui4JNRRk=
+X-Received: by 2002:adf:a352:: with SMTP id d18mr2002955wrb.317.1640177223561;
+ Wed, 22 Dec 2021 04:47:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
- <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 22 Dec 2021 20:43:15 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
-Message-ID: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
-Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-4-guoren@kernel.org>
+ <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com> <CAJF2gTSssufQOQTXqzRjY8h_JjAmMs8jC6R+6d09K728=4fOOA@mail.gmail.com>
+In-Reply-To: <CAJF2gTSssufQOQTXqzRjY8h_JjAmMs8jC6R+6d09K728=4fOOA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 22 Dec 2021 13:46:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
+Message-ID: <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
+Subject: Re: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup.patel@wdc.com>,
         gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
@@ -59,76 +42,54 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:okWP2cEJQb5j3qXWuw0s51Vq8YIqRuxL2xCho+ILaiSGTbU5PXV
+ ZBr6OlAX1BAujwV+sxJmx92t7JctDrKiht5sqnXcPIyMSsc34ovAxC2EDu0SccqNFK6govE
+ 1tQMKO+NuqMxO3sW3YcHuzjBntmdoBiMwVn+4KedBR2VgqMTdEQrVgQygR6wXbTGy5yWrIH
+ jDcHFXtnrPNrXkNIzrhfA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WH3rUV9UEek=:w0ylpz7RyCxCJxPfrMy7sv
+ s7GhtHxCO2o7TuA36k4D0pHk2m/29LWQMlyyxQkP9NpSpkE8Y/GmE9HoOfRdu2ll+F8OqtHfa
+ RJff5mC2obPPCferRiSk6/bET9xS1QE6lox1L/9BcXGc16VwYVHyUfD3GURHhDUCfUjW1Koxq
+ 5IJVTlMiN5AHzTj1tUyo9GRWpc2vALkz1Q0G8+Y4ejjcXsjDA0bAH01wSOsmmkspcERyK5CN8
+ 2p1fko2Y2h3GcKSX55wvip1sEWa9+Eaz+YD5lm6KF9c7eU9FNbdlx7o0uPad6XzRVneUPYax0
+ 81bwU8UFn6zs+RCMD+1mSS/6ZXnhnJu8Yt6AQDOEGZULBavvx0UJVzDpWXVw3m29TOkWUC5cr
+ XDrrssnzH7vZXetMxnIGOcQJPdO+kwIJvo2GilJrLhqXck8NieS4Jv/qlFQc1rYMzTKcpZ2a/
+ N/dMZytTHNvtFXebIo3MNTQS2U58qzUpTgokRuuDrd3yd5nb6Sym7P/qyglZW3zPL77yyIRAY
+ SElJzD+1FOm5s1oC68Oiy6eUyS0Brsqd/r4YmtpdDG+Jr8OYL9BaU1ClzVrdDgZJ1NMnpdngh
+ j8MacWuZklwUAy8ouHfZuE7FHeLIRRgW4PBie6lr/j/pupIpW0zAmdUMQ9VNJk8CKCCPtndpm
+ F79GfxI9mAhVSj0rY85B5Y6fvhLS4B+6LJMrMV+DevCO9hu0SVhphm+87fnpB/5ivXP9RsQt5
+ o3Mh+5nuiFdtbQ07GQ7OwojCJ+rT9HBAH0y9KSjoek/P+IK02xri1rJYVyYSRlXWfi0mQDFTg
+ 4Bp2y0OJI1bFrY9VCZMUCyVMyMD84ls4ioHVIYEdjmr4m9WLSM=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
+On Wed, Dec 22, 2021 at 1:03 PM Guo Ren <guoren@kernel.org> wrote:
+> On Wed, Dec 22, 2021 at 1:13 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
 > >
-> > From: Guo Ren <guoren@linux.alibaba.com>
+> > > +struct compat_stat {
+> > > +       compat_ulong_t  st_dev;
+> > > +       compat_ulong_t  st_ino;
+> > > +       compat_uint_t   st_mode;
+> > > +       compat_uint_t   st_nlink;
 > >
-> > Implement compat_syscall_table.c with compat_sys_call_table & fixup
-> > system call such as truncate64,pread64,fallocate which need two
-> > regs to indicate 64bit-arg (copied from arm64).
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > ---
-> >  arch/riscv/include/asm/syscall.h         |  3 +
-> >  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
+> > You should not need a compat_stat, because native rv32 does not have a
+> > stat() syscall.
+> We need it:
 >
-> Same here, I think most of these should go next to the actual syscalls, with the
-> duplicates removed from other platforms,
-Agree, I will try that next version.
+> $ make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu-
+> EXTRA_CFLAGS+=-g O=../build-riscv/ Image -j > /dev/null
+> /home/guoren/source/kernel/riscv-linux/fs/stat.c: In function 'cp_compat_stat':
+> /home/guoren/source/kernel/riscv-linux/fs/stat.c:645:21: error:
+> storage size of 'tmp' isn't known
+>   645 |  struct compat_stat tmp;
 
->
-> > +#define __SYSCALL_COMPAT
-> > +#undef __LP64__
->
-> What is the #undef for?
+I think that's just a bug in fs/stat.c. Every other architecture so
+far needed it,
+just not riscv, so we should add an appropriate #ifdef here. I would replace
+#ifdef CONFIG_COMPAT around these with __ARCH_WANT_COMPAT_STAT
+and then change all other compat architectures to define that depending
+on the configuration.
 
-See arch/riscv/include/uapi/asm/unistd.h:
-
-#ifdef __LP64__
-#define __ARCH_WANT_NEW_STAT
-#define __ARCH_WANT_SET_GET_RLIMIT
-#endif /* __LP64__ */
-
-
->
-> > +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
-> > +       unsigned long, prot, unsigned long, flags,
-> > +       unsigned long, fd, unsigned long, offset)
-> > +{
-> > +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
-> > +               if (unlikely(!(prot & PROT_READ)))
-> > +                       return -EINVAL;
-> > +
-> > +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
-> > +}
->
-> This is one that we may have to deal with separately, introducing
-> sys_mmap_pgoff() was a mistake in my opinion, and we should just have
-#if __BITS_PER_LONG == 32 || defined(__SYSCALL_COMPAT)
-#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
-#else
-#define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _64)
-#endif
-
-#define __NR3264_mmap 222
-__SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
-
-> added a sys_mmap2() for all architectures that don't explicitly override it.
-That should be another patch, right? Let's keep it here.
-
->
->        Arnd
-
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+        Arnd
