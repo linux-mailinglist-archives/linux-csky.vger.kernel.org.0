@@ -2,36 +2,53 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C637D47D0EE
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 12:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4798247D114
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 12:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240216AbhLVLZL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Dec 2021 06:25:11 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:55025 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbhLVLZK (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 06:25:10 -0500
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MCsLu-1n8pRl0Si8-008oI0; Wed, 22 Dec 2021 12:25:09 +0100
-Received: by mail-wr1-f41.google.com with SMTP id d9so4324969wrb.0;
-        Wed, 22 Dec 2021 03:25:09 -0800 (PST)
-X-Gm-Message-State: AOAM533TFrFWtQgYmBB9y2qJ6LtTAuZ3NGeQpurHRnfoPpynpFxTfx13
-        PXadfhYgEFiEmGaf1ZX0OaHBBMwVS5r8USK1l+I=
-X-Google-Smtp-Source: ABdhPJyzTQEUJiZGgYouqu/F3g2sBUQ8LPZJZWS9OtjFPbJzgfkwT3GGQ8ezpmjyngodUiRN0dk6hAlvyjeBwblBf7Y=
-X-Received: by 2002:a5d:6989:: with SMTP id g9mr1784540wru.12.1640172308745;
- Wed, 22 Dec 2021 03:25:08 -0800 (PST)
+        id S244701AbhLVLe2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Dec 2021 06:34:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244700AbhLVLe2 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 06:34:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E296FC061574;
+        Wed, 22 Dec 2021 03:34:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EA2FB81B9C;
+        Wed, 22 Dec 2021 11:34:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA0FC36AF2;
+        Wed, 22 Dec 2021 11:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640172865;
+        bh=Fi3+odhuzWqyoIOsS4HSOvfce+S3ltBSyG1ZwqaAFn4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=foAIuKLE8FYEQkEdzpCYiOLK6T3NsAXvweIXkdoDP0AQlA60YQUvNdKHX73qrQ3+r
+         3XligsoacZsbDkGcOGekamcCtPfav66NAXrDCoULGRo82yGsLOHSJYAxjWCLn2SPXA
+         OtakQV2IKdorX1Ylu9I8F+GL8ghaCuG628jLZnkh7Ha61yr8t+djNhMQfvp7LUlTQ5
+         YwIbePOX9xbXYfhteuHkueGTVY9h0lIwXnA17yNfiUl4As4v1pCY5ttgTt+wgYHXwR
+         PaYEYquR3xiuYBaDsuXzYCy8zl1INANPsJ1kJMgaUzu13UzLIie9QccZJyb6hPm6EO
+         cN/OhiqistNUQ==
+Received: by mail-vk1-f170.google.com with SMTP id g65so1125605vkf.4;
+        Wed, 22 Dec 2021 03:34:25 -0800 (PST)
+X-Gm-Message-State: AOAM531QTVf+BggOjgPwsZ592gf2XhCNbTK0YJ54EfN5a6gybclWsVY5
+        u1NJKtk45rIsZgqLN9O7sQxXOin/78ZxUTCy1xc=
+X-Google-Smtp-Source: ABdhPJxWEYRFXCwuHnukSTxHmYrUUDGyLCBZ+l40ti0zYBeaZ5biPhi2e3rHjJN/vnHepBjKUq7jC8D3B0E33xwBH1o=
+X-Received: by 2002:a05:6122:a17:: with SMTP id 23mr853099vkn.8.1640172864086;
+ Wed, 22 Dec 2021 03:34:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-2-guoren@kernel.org>
- <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com> <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
-In-Reply-To: <CAJF2gTQciNaXk+_am=kS2uSwg6oGM4aJqiw_O5KN-DrHetf8nA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 22 Dec 2021 12:24:52 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a38C500PhRP3BysRap-ajhU3NJ-KWJQnoGaCH7aV+xoJQ@mail.gmail.com>
-Message-ID: <CAK8P3a38C500PhRP3BysRap-ajhU3NJ-KWJQnoGaCH7aV+xoJQ@mail.gmail.com>
-Subject: Re: [PATCH 01/13] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
+ <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
+In-Reply-To: <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 22 Dec 2021 19:34:13 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
+Message-ID: <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
+Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup.patel@wdc.com>,
         gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
@@ -42,46 +59,43 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:ISlB8l29QTzUd4Gia0neDsfvLh8WJQNxxBbYFzLnQR1lhqoWIgb
- ARfv2qh9eGwjbGpUucJ+jMYhQGpH6l3jw6h2/ixV2/rFSQ6FSbEy9sR/MWxZRrbNgzZQD89
- CVqzfzuDtlZoZlJgodViGR+s/8Tnqnruvq4LWSYMuWRry8yzcXfqcPQfv4cDYa77AKy5qF4
- RzE77m7QH9FK2uPHqLIyw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nx14faxvDBw=:rabZgZ4lWB4WGJpry3rslz
- gGBXJ/yowr6r587Ksn0oZ3W19cU/e+FMf8kuCUefmCLJhPmDfc11Gk576+D+9NZgP9l6SJfcl
- JqddrumDmj+/dQyN9OBA11M2eLVH1NRl6iYmvVXkXl95EDIxn5w/PSyRpyBfhq0upqVh8u9Nh
- QqB0Y+1fqmjJCQ0Lpk780WIfm7Gz2mVISAxz/Bqn5lNfkTqfxLxsgPnja/cWNh4anxtjlJ6Wj
- u/kQfFN6KjAX/aMAUa1e1jADdtMQpSybapjm8vWi9piYYNKlYjl3yNxyaK+AECMEL/aA4eVI1
- zWls/Mx8uCUfgmPFQq86ZBTtB9GtvfrsDgIJ27NFENeUdBYiCM7a0XndYimIa4z9otNvYbfNa
- 6zsEKl1Yejcv0FyONC9l2eWsWr/jyTECcH5RofvYdNeEJ4WAiJCMJPopq7CkGNidatU0uLFq1
- CCj/k+GMEWzFjfZlzb/tJdsS/RoIqH1WGVKZI8T5zb0PdSc+NCRAgdq+CJ0BzK2DNGsmk1DKN
- 0kKWFJ5oArra5vPtV1D8t6uxRJs6G8+FLvV17BPux3TJI5Czi6GxIufgbsKFIx/1Bs65TI0S7
- QXvZ0JFlNHEdTgijs17Uz3t9aUOVA7p+A6tmeDayz2r+DIWo4L8FlHLMgIDOaBZ4c/t5XKMLo
- AxcjpBQ+0TVptQqGORu+UBKIdhskT6GCBm0a4m52rC/KSOVcMIEo1vU+G5X/8T+DQp6iGr1uM
- Ql4PaZbeGa43O4772mZYldZjU1uazLqhhkc6pc57XCVy++HGmpERNzmFuoONSPMi74sk2FssK
- 0ciErfPo/ZjnrzXf9mYiCAMCV5Kuhr+rCNr9GE8oCnKCKv6QL8=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 12:16 PM Guo Ren <guoren@kernel.org> wrote:
-> On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > >  /* 295 through 402 are unassigned to sync up with generic numbers, don't use */
-> > > -#if __BITS_PER_LONG == 32
-> > > +#if defined(__SYSCALL_COMPAT) || __BITS_PER_LONG == 32
-> > >  #define __NR_clock_gettime64 403
-> > >  __SYSCALL(__NR_clock_gettime64, sys_clock_gettime)
+On Wed, Dec 22, 2021 at 1:09 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
 > >
-> > This part looks wrong, you expose clock_gettime64 to user space this way, both
-> > in asm/unistd.h and in the table.
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Let's follow the origin patch's spirit.
+> >
+> > The only difference between rv32_defconfig and defconfig is that
+> > rv32_defconfig has  CONFIG_ARCH_RV32I=y.
+> >
+> > This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
 > >
 >
-> No, we only define __SYSCALL_COMPAT in compat_syscall_table.c. It
-> won't be expose to user space, because there is no __SYSCALL_COMPAT.
+> If the intention is to keep them in sync, maybe use a fragment for 32-bit
+> mode, like powerpc or mips do.
+>
+>       Arnd
 
-Ok, it looks good then. It feels like we should have a macro to wrap this, but
-in reality what we should actually do is to convert the entire file to the
-more modern syscall.tbl format, so let's just stay with your version.
+Some people are familiar with "make rv32_defconfig". There has a
+32-bit.config fragment config in arch/riscv/configs/.
 
-      Arnd
+I've tested with:
+
+make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu-
+EXTRA_CFLAGS+=-g O=../build-rv32/ defconfig 32-bit.config
+
+The above is tested Okay, do you mean we should delete rv32_defconfig?
+I think it's another topic, I just want them the same in "compat"
+patchset.
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
