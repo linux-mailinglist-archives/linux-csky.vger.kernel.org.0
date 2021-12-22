@@ -2,34 +2,34 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADC547D300
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 14:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFA447D306
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 14:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240926AbhLVNVt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Dec 2021 08:21:49 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:32949 "EHLO
+        id S241188AbhLVN3f (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Dec 2021 08:29:35 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:37617 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbhLVNVt (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 08:21:49 -0500
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MQNF3-1mmdY239DV-00MIzo; Wed, 22 Dec 2021 14:21:47 +0100
-Received: by mail-wr1-f48.google.com with SMTP id s1so4877290wra.6;
-        Wed, 22 Dec 2021 05:21:47 -0800 (PST)
-X-Gm-Message-State: AOAM530HSeVgBhXuqCrfEQJPRTMXQmQ8vJK2ixbp/+6zdJB9oGvR2r7z
-        Jps8G5130AWGCLQ9OCVjSq1IkQ3l7sQcqIvObWw=
-X-Google-Smtp-Source: ABdhPJyZJ7IM3FfszIOXVrgOVxvS2jRO3t8J5UTThAJUFt3pUIkSGUxFgQ01Mn2RRPgx8pl2cn6vKm8xDVBrWZjoma4=
-X-Received: by 2002:a5d:484f:: with SMTP id n15mr2096485wrs.219.1640179307179;
- Wed, 22 Dec 2021 05:21:47 -0800 (PST)
+        with ESMTP id S241120AbhLVN3c (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 08:29:32 -0500
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MTRAS-1muYZr1IoG-00Tng4; Wed, 22 Dec 2021 14:29:31 +0100
+Received: by mail-wr1-f53.google.com with SMTP id r17so4967891wrc.3;
+        Wed, 22 Dec 2021 05:29:31 -0800 (PST)
+X-Gm-Message-State: AOAM53018Wn/QovgbxU7od89+8UMdNkllmsQ54zJ+GZTC+YlXsgHiw43
+        8a+pz0HeyZ6+Fj9qxH3KMTDjpPObohrT9dgcCkw=
+X-Google-Smtp-Source: ABdhPJw0nfzYEJHZ07y3vp99CtMxCtIx4hPphKIiW8tqqMsfij+vBR7u+JaOTSFOhAqaTYEbtHQeGItEWv0smRfi5/Y=
+X-Received: by 2002:a5d:484f:: with SMTP id n15mr2115267wrs.219.1640179770964;
+ Wed, 22 Dec 2021 05:29:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
- <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com> <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
-In-Reply-To: <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com>
+References: <20211221163532.2636028-1-guoren@kernel.org> <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
+ <CAJF2gTRAxX0qEcNmw+5N=3jZcJw9YF75oRjT7Y5FUMUkHoSz4Q@mail.gmail.com>
+In-Reply-To: <CAJF2gTRAxX0qEcNmw+5N=3jZcJw9YF75oRjT7Y5FUMUkHoSz4Q@mail.gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 22 Dec 2021 14:21:30 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a17A3MU_atWNEretDcr5sLRc7540tM4vfc=H4M8qVCDEg@mail.gmail.com>
-Message-ID: <CAK8P3a17A3MU_atWNEretDcr5sLRc7540tM4vfc=H4M8qVCDEg@mail.gmail.com>
-Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
+Date:   Wed, 22 Dec 2021 14:29:14 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a07-v8WXxD7SHS0j42=bZgqDrOKGmisiuz=DbvYno5-SQ@mail.gmail.com>
+Message-ID: <CAK8P3a07-v8WXxD7SHS0j42=bZgqDrOKGmisiuz=DbvYno5-SQ@mail.gmail.com>
+Subject: Re: [PATCH 00/13] riscv: compat: Add COMPAT mode support for rv64
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup.patel@wdc.com>,
@@ -42,110 +42,51 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:KcHzApjnyl97SUX/IjHk9uJ+lCkoxRQHHtJigChsCQANQqFlxY3
- 5/MMq6g2VTuF/I46pfNd6RnlNIFQ+denbw/0tR0ryLFOGp5Ea0aZF1+XJeRgN1AhKAXivcf
- pnSS/Mc433rsAd/P95Vg19ab/yop6szHgm5aCi3HAEXOmC6z9QT2FhVC7e/2irYf+a7KSZI
- UJctetkKtFpihzC/+0Ruw==
+X-Provags-ID: V03:K1:Z4AZ0RtUE/bW5imsAOpvq/znjHBp2Dprai2fhoHMCumQ4tCePKb
+ XCxNHIcswbH73Up2QxjMWJ5Q2mLLfD1gtx+TiEQaiOuRNhDmLajSP6ese1p/Iy4YS0nha+M
+ FKAfHkez+grRQ6no0IQ7ERAUD4Tur/pLT4erhfTYjGFOtJeiLxGMnWb/DMRjGyeUKA6Gz/T
+ p6k6sxy+m6E5uRKd7E+ng==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lQE0d/nP5bg=:uC4/+XsTo0ujXShH6CntwY
- b5QttaZHPJ5/u7tpRrCEWXV6Cp+X+iy45lfaVg2E/9ImfO2D2JpzC90iimta9rU0tNpOFkW1s
- XXHIbb2try1m3FkZBA1rDlEWJjUAJN+RAMXGwTz3/bU5DJf0dsSz2YuuHoEw72t3i7HsKtGey
- 1ynBOlhBJd+IJQID2fhhERr5gkUEWsNYbG+oV/Kz6o1BwwQkt2/uv1hTmUStVPjAlHtzQ33ew
- wJSQnYrBseZ14gUZUcEvy/p9pg3Y8QnzQx3Pk/0LJg3v1qAJERik50PpremZePUgrirlFoThm
- JzIIcjdXugSw+Om6BQgWvHG1rFE+4ahwQnY/nDCrwysHPFYAVI7SPDHFxScWEVGVU+0MxVLag
- plc3FYkty/G4AXe68Pj8/dDIMaS3MQmTln64STW9xx/zFGwT+GgAdVkNSXHYBOg2GlhmwVDXL
- 2KOq8UKXU+mNEoLWB+CyEah4petwEyinjhcUfvcIGeMsGnXPrS+jboBBS2Co295V8xu/YMflL
- ecazrxtiplC/RRukl12dJqKpr9h25ypt/vF/Wg3mrflVSbMHRnC4FGIIVflaW2H+SwbIJ45uA
- CwEYPr0NAENYCPpE7TZv1R0WfH15oXOg8ZIDNeQ0UuvekMFDhJ42ek9ekZ+ue3k1Cc8y9ltP5
- TRKOqUs5qT682x5SNAeuQJ1g5fTumz0m9AiVqkhKIH27P6WYrYiwx6iH7w55Q+XOZnb6TMncZ
- To+Q7UY/CjkT2XVNqzJLxQoLBNbGO8iYNlO/Zf2th4FSrioltsaezapbUu+jD2qSRj6lSbnsx
- Jnq765M4NzgDmypQt/zvMFwBCtV74FdlM13rPzJeHlFHWBX2v8=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qSBnKV9xKxI=:4b9T8BQoEwjMl1WUbcMFag
+ +zWzuCcJ57Ya4mZJvKp2snYuxqaH9JQPT4eu7wVs0ppxPIkuiJBak7du11iIEgRBIt8qQV/F/
+ gz9tynN6CR124x9La2yE5sVfAfxZQ98lx2FRMaoNVZaGUNXXL1OSDBlWLKduf/2zi34grkxQI
+ xzWfPGeI4wP0DdFu1GrYWIGuLzgnMEuPXztoLhpXq/eF2fpSGIoVV752BmXeg2I7ToYTUUXAr
+ E7KFHCPaCQAoPkWD24DqXZ6XdMZ6jNPAEZLeVayVmIuTxygqGY9PMv7VJGlYto+/JDHYEZril
+ TZEjwr3bMI/f6yzcKvMy/eiymBCUcUnf8Qdo55b5ke5NV6G1Wc9YMgCbpM5OpPZdG/WrSbTQa
+ G14jAu+j69STFkCaxt/YM8DZyVCyZwb3zDYwJGXHrWckWIR5mnznSRIt+VUbl29DXDqK1g45E
+ XTf+u+XD1iqGqaHz2Cwkjgbt49/iAAe25YgSGqRnw808QxN9P3ko/9vv66txzJTPoRX1lWHif
+ aEvJA7IauY/XOQcjWTo0v6SVBDQvLEPWuU1BTO9lJNgyz4riKIhkkt15ud9+PiqaofaPU+70N
+ LJQibAB8SEgEqg/Dtrur3zkOPJLOuI2Jo3PY2hb3m024q6lU4+zkaIlj1q9I+2B0jljPfVK+M
+ 8jADBQEGZQZpSOIhsUJgMrB9Dzvo/5BlIc/J5a8A2npxRVl3ok88ctzZcLyJSPCI7lyo2n6VH
+ m37dEfoEvcYWU0vuP3xk83MtAf6sNdseBbw5KWWXAoW6rydObK6itPM1JFF87Xj9pGjPCPTI2
+ TKMNgOT3Dsg7xMZBIypBfW9Tfil7vx36lBqzFWsDLQwxa3xJMg=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 1:43 PM Guo Ren <guoren@kernel.org> wrote:
->
-> On Wed, Dec 22, 2021 at 2:15 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
+On Wed, Dec 22, 2021 at 1:59 PM Guo Ren <guoren@kernel.org> wrote:
+> On Wed, Dec 22, 2021 at 2:10 AM Arnd Bergmann <arnd@arndb.de> wrote:
 > > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > >
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Implement compat_syscall_table.c with compat_sys_call_table & fixup
-> > > system call such as truncate64,pread64,fallocate which need two
-> > > regs to indicate 64bit-arg (copied from arm64).
-> > >
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > ---
-> > >  arch/riscv/include/asm/syscall.h         |  3 +
-> > >  arch/riscv/kernel/compat_syscall_table.c | 84 ++++++++++++++++++++++++
-> >
-> > Same here, I think most of these should go next to the actual syscalls, with the
-> > duplicates removed from other platforms,
-> Agree, I will try that next version.
 >
-> >
-> > > +#define __SYSCALL_COMPAT
-> > > +#undef __LP64__
-> >
-> > What is the #undef for?
+> > There is still some benefit in b), but it would need to be weighed
+> > against the downsides above. Can you explain in more detail what
+> > use cases you have in mind, and which CPU cores actually support
+> > this mode?
+> The most reason is about b), see our customer's product:
+> https://www.cnx-software.com/2021/10/25/allwinner-d1s-f133-risc-v-processor-64mb-ddr2/
 >
-> See arch/riscv/include/uapi/asm/unistd.h:
+> So I think all our next generation rv64 cores should support
+> compat-mode. Compare to releasing rv32-full core, rv64 compat-mode is
+> very cheap for our CPU design.
 >
-> #ifdef __LP64__
-> #define __ARCH_WANT_NEW_STAT
-> #define __ARCH_WANT_SET_GET_RLIMIT
-> #endif /* __LP64__ */
-
-Ok, in this case I would recommend changing that #ifdef to
-check for __SYSCALL_COMPAT instead, as removing the
-__LP64__ define may cause other unintended changes.
-
-
-> > > +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len,
-> > > +       unsigned long, prot, unsigned long, flags,
-> > > +       unsigned long, fd, unsigned long, offset)
-> > > +{
-> > > +       if ((prot & PROT_WRITE) && (prot & PROT_EXEC))
-> > > +               if (unlikely(!(prot & PROT_READ)))
-> > > +                       return -EINVAL;
-> > > +
-> > > +       return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset);
-> > > +}
-> >
-> > This is one that we may have to deal with separately, introducing
-> > sys_mmap_pgoff() was a mistake in my opinion, and we should just have
+> You would get the answer when our new generation CPU is announced and it's soon.
 >
-> #if __BITS_PER_LONG == 32 || defined(__SYSCALL_COMPAT)
-> #define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _32)
-> #else
-> #define __SC_3264(_nr, _32, _64) __SYSCALL(_nr, _64)
-> #endif
->
-> #define __NR3264_mmap 222
-> __SC_3264(__NR3264_mmap, sys_mmap2, sys_mmap)
->
-> > added a sys_mmap2() for all architectures that don't explicitly override it.
-> That should be another patch, right? Let's keep it here.
+> Currently, only qemu supports rv64 compact mode, that is my colleague
+> (LIU Zhi Wei) contributed.
 
-Right, I think the patch would be a nice cleanup, but it appears that
-riscv is among the few architectures that have defined their own
-nonstandard mmap2() syscall after all, despite using the standard
-name for the entry point. Not sure how this slipped past my original
-review, but it certainly can't be changed now.
+Right, that does make a lot of sense. I'm not sure we'll see a lot more of 64MB
+DDR2 SiP implementations when a 128MB or even 256MB DDR3 configuration
+has almost the same cost, but for any of those sizes I can see why you'd want to
+run 32-bit user space, as well as 64-bit kernels.
 
-It also means that you need to change your implementation of
-compat_sys_mmap2() to match the version from
-arch/riscv/kernel/sys_riscv.c, rather than the version that
-everyone else has. Maybe leave it there and change the
-#ifdef to build mmap2 for both native rv32 and compat
-mode.
-
-FWIW, this is what a conversion from mmap_pgoff() to mmap2()
-would look like, I think this is an overall win, but it's entirely
-unrelated to your series now: https://pastebin.com/QtF55dn4
-(I'm sure I got some details wrong, at least it needs some
-#ifdef checks).
-
-       Arnd
+         Arnd
