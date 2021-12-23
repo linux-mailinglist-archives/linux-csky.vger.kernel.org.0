@@ -2,38 +2,56 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 532A847D3AC
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Dec 2021 15:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B4E47DDA2
+	for <lists+linux-csky@lfdr.de>; Thu, 23 Dec 2021 03:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241065AbhLVOat (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Dec 2021 09:30:49 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:38927 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237162AbhLVOat (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 09:30:49 -0500
-Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MSss2-1mu1qz3wAo-00UHbl for <linux-csky@vger.kernel.org>; Wed, 22 Dec 2021
- 15:30:47 +0100
-Received: by mail-wr1-f53.google.com with SMTP id r17so5333264wrc.3
-        for <linux-csky@vger.kernel.org>; Wed, 22 Dec 2021 06:30:47 -0800 (PST)
-X-Gm-Message-State: AOAM531yzCo6vtCXML11wMfdrHTibyIP3TaGnKiiMAvUZ357pWc6AAEu
-        Q5qbLYxLaRc5EVW4lN9gcbGvM4/kAEaP0O7xsz8=
-X-Google-Smtp-Source: ABdhPJzZqUV3m/4gBi9PAOChOgb2RpOg4jQAP0/DgyHh+MJob01VsDYVK0s1Stco5K8zA3yLynfQmmGKPYOk7XFmlEE=
-X-Received: by 2002:adf:a352:: with SMTP id d18mr2189656wrb.317.1640181632663;
- Wed, 22 Dec 2021 06:00:32 -0800 (PST)
+        id S242242AbhLWCMv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Dec 2021 21:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229788AbhLWCMv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 21:12:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC515C061574;
+        Wed, 22 Dec 2021 18:12:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1887561C2C;
+        Thu, 23 Dec 2021 02:12:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758F0C36AF2;
+        Thu, 23 Dec 2021 02:12:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640225569;
+        bh=CDmqTRF2LGRmxpzLtcjy4Vzvp8M7nfS3Pyz+9roYHtU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=roGTWb1in5sqhq0reNrozfr5WBrjXPwekIdfHy6Cxb3A2Bo/PXLfahluePDrv5bpe
+         GWF08i8o5GeDS7uL0X2/F/Dm/cESZZkL9wIXx4sKWHjc5AUiDRUtHOmbACKhOH6HUg
+         eBApsrwXggQBzFxhaspprA273ELiejffZiBEpWvIWAv8mGnDWkytEP1DhIb7GiWaKD
+         VC65lgzNe0yOCtz8B96bLYGaZxWS27cioWEQMebP1DtApSi0Nj4dpguPZS561bsAZi
+         c70syXDVgYME0fqEXn7IMMh63RrRPLI51Q+mhcqbznC6sX8JxsGTQcEhinva/n3oaw
+         g+7oM3+0bJPQQ==
+Received: by mail-ua1-f47.google.com with SMTP id p37so7306280uae.8;
+        Wed, 22 Dec 2021 18:12:49 -0800 (PST)
+X-Gm-Message-State: AOAM530uBc3FIHUULAY56LAJvcasq368v81fxvBY5C9WGQahv3GEJ4vj
+        iDCTkifUdNiCEq5p71gW0PmD/kaAq64g7T3fA98=
+X-Google-Smtp-Source: ABdhPJxTedV2XFghjTyRC5imf+6XJLTz0d7aL0KW95ASmjx0K+4ZXtdiAtvy82fd5Cp6FWJ53e/V4Vw7XdzFTXrg9DU=
+X-Received: by 2002:a05:6102:a83:: with SMTP id n3mr138109vsg.2.1640225568308;
+ Wed, 22 Dec 2021 18:12:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-6-guoren@kernel.org>
- <CAK8P3a2XOVYB1Fm5TBdjtKx9DXoG93Zrw7TiquYL_Zy916dLwQ@mail.gmail.com>
- <CAJF2gTR2fAU=+0fvW_VCqaZfDkSTAxQ=cKE9iAYOoGORb3m+4g@mail.gmail.com> <CAK8P3a17A3MU_atWNEretDcr5sLRc7540tM4vfc=H4M8qVCDEg@mail.gmail.com>
-In-Reply-To: <CAK8P3a17A3MU_atWNEretDcr5sLRc7540tM4vfc=H4M8qVCDEg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 22 Dec 2021 15:00:16 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2b0zun=b84d=LhrjrwLDiKh5_KgyZbBAjTz+40NZri=A@mail.gmail.com>
-Message-ID: <CAK8P3a2b0zun=b84d=LhrjrwLDiKh5_KgyZbBAjTz+40NZri=A@mail.gmail.com>
-Subject: Re: [PATCH 05/13] riscv: compat: syscall: Add compat_sys_call_table implementation
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
+ <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
+ <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
+ <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com>
+ <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com> <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
+In-Reply-To: <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 23 Dec 2021 10:12:37 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR4TXXWQ5Ubnz6HdoOmV=EkL9AsEH07RzmVypyeK353vw@mail.gmail.com>
+Message-ID: <CAJF2gTR4TXXWQ5Ubnz6HdoOmV=EkL9AsEH07RzmVypyeK353vw@mail.gmail.com>
+Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup.patel@wdc.com>,
         gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
@@ -44,44 +62,35 @@ Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:x8HlQhBmXGg8u5ndM9FI/7klqTWnCzAgbJqZlUzrQ605PZCYbTE
- K2ZGX3BNeBDs7tDHFhZVhPArmisYZbabwrs7osDpwGspM5k0pzPjDmS5v4zZrvDQm6GqSLt
- Tc3AajtYM98VbmwG35zjOeq/Gq73uu0Go6+mSMaSFiR6P6Lhes7v3imyudC7CcCp++pavG9
- MQKvK4MN5fuSmzPt1UVMA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:XWPkxrzLb38=:7UWbGX1kUrTmMbDGXDLPah
- 7pPMnkOFNQGjuuFPzNec5NsurKNSZBycjj8L9oL+AZZYAmhllPUb0vEQ7z8nCOn4yz2/IGYzf
- 0ca9+X366wGFJtqHwx4vGqQ2IvDTEpPseLeVlHgw/cn9QYrivqb4aEv90T+THW3XZ96/7jcsP
- jqwPwDTkysp1XRWl0mWDHphGESeFO98oIXzCE9XzT8mhKvO9uA5CXzrtPY0A+dJNjPpOPw9vj
- kzzNozmfqtGABdfAHXskEZW4o8RXxb3GX7K8wnpzj4ZbjuixptcjojXnPxHN/2j+RM9RdKUPE
- +Ztbh9GeTXW9yisO452aA8wLKJez5NN5gLyDFsFdPlq03PStOzpCgGPGbG9n832SS/KA7+yxz
- OZZudCI09j1CoWNf/ACCGksTDtVzUcDPhzCj4OpLtoyo1/e1IiOhSdVWooLwCT1yW8Vbo3mud
- 18Iy4bZTMXpWaaeS53tV9rtNcwPsLCB2LRKi2JGffj4pwnbXd7L2FBIHkVFjlfLej7brw+g//
- t8ZsQHgu4pp6vzRCrQjLUbwSl2jySxuLr5ePigPDAWZzUc887967lbIsqiQvYU3uDqJImOOy7
- eRgWO+EtlU/pen5e0D2kdpGSaf+gxvNLfAxveZxeoumA++K9aiCyGEXh9hjtk6aT0vMhUp2X6
- 3yh4ysgU7P2eYst9RBtqh7UhbYOZRe8nVWA7mcHCpgiJc5798Nrgt1a/I5LKhTpeFfWLeXK4e
- ERf0MsNSAC8iITyq7iMVN2DFowSgKKRgRtwXRogU6niE26VvJB0oWEa8v2Oi5xDykPDcNixDw
- qugNMuVr7V2ixq79rc5IaICqwQ+9JxUVsfJWH/052TpPq+YLTA=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 2:21 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Wed, Dec 22, 2021 at 1:43 PM Guo Ren <guoren@kernel.org> wrote:
+On Wed, Dec 22, 2021 at 9:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Right, I think the patch would be a nice cleanup, but it appears that
-> riscv is among the few architectures that have defined their own
-> nonstandard mmap2() syscall after all, despite using the standard
-> name for the entry point. Not sure how this slipped past my original
-> review, but it certainly can't be changed now.
+> On Wed, Dec 22, 2021 at 2:06 PM Guo Ren <guoren@kernel.org> wrote:
+> > On Wed, Dec 22, 2021 at 8:51 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Wed, Dec 22, 2021 at 12:34 PM Guo Ren <guoren@kernel.org> wrote:
+> > > Given that there are no specific rv32 SoC implementations supported
+> > > by the kernel today (other than SOC_VIRT), the number of users
+> > > would be close to zero anyway.
+> > I really agree with you, but we still need the rv32 user mode
+> > ecosystem for memory footprint.
+>
+> Sure, I just meant there are few users that would have to relearn typing
+> "make defconfig 32-bit.config" instead of "make rv32_defconfig" even
+> without the added Makefile target.
+Emm... I got you.
 
-No, I misread, the calling conventions are fine after all, it's
-just written in a rather odd way.
+Next version, I would send delete rv32_defconfig patch. If Palmer
+object, I would change to make rv32_defconfig target. ;)
 
-> Maybe leave it there and change the #ifdef to build mmap2 for both
-> native rv32 and compat mode.
+>
+>          Arnd
 
-This bit still applies though, I don't think you need to add another
-helper, just use the one that is already there.
 
-        Arnd
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
