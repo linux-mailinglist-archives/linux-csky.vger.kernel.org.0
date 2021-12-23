@@ -2,95 +2,52 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B4E47DDA2
-	for <lists+linux-csky@lfdr.de>; Thu, 23 Dec 2021 03:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9475D47E016
+	for <lists+linux-csky@lfdr.de>; Thu, 23 Dec 2021 08:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242242AbhLWCMv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 22 Dec 2021 21:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbhLWCMv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Dec 2021 21:12:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC515C061574;
-        Wed, 22 Dec 2021 18:12:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1887561C2C;
-        Thu, 23 Dec 2021 02:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758F0C36AF2;
-        Thu, 23 Dec 2021 02:12:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640225569;
-        bh=CDmqTRF2LGRmxpzLtcjy4Vzvp8M7nfS3Pyz+9roYHtU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=roGTWb1in5sqhq0reNrozfr5WBrjXPwekIdfHy6Cxb3A2Bo/PXLfahluePDrv5bpe
-         GWF08i8o5GeDS7uL0X2/F/Dm/cESZZkL9wIXx4sKWHjc5AUiDRUtHOmbACKhOH6HUg
-         eBApsrwXggQBzFxhaspprA273ELiejffZiBEpWvIWAv8mGnDWkytEP1DhIb7GiWaKD
-         VC65lgzNe0yOCtz8B96bLYGaZxWS27cioWEQMebP1DtApSi0Nj4dpguPZS561bsAZi
-         c70syXDVgYME0fqEXn7IMMh63RrRPLI51Q+mhcqbznC6sX8JxsGTQcEhinva/n3oaw
-         g+7oM3+0bJPQQ==
-Received: by mail-ua1-f47.google.com with SMTP id p37so7306280uae.8;
-        Wed, 22 Dec 2021 18:12:49 -0800 (PST)
-X-Gm-Message-State: AOAM530uBc3FIHUULAY56LAJvcasq368v81fxvBY5C9WGQahv3GEJ4vj
-        iDCTkifUdNiCEq5p71gW0PmD/kaAq64g7T3fA98=
-X-Google-Smtp-Source: ABdhPJxTedV2XFghjTyRC5imf+6XJLTz0d7aL0KW95ASmjx0K+4ZXtdiAtvy82fd5Cp6FWJ53e/V4Vw7XdzFTXrg9DU=
-X-Received: by 2002:a05:6102:a83:: with SMTP id n3mr138109vsg.2.1640225568308;
- Wed, 22 Dec 2021 18:12:48 -0800 (PST)
+        id S242682AbhLWH5S (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 23 Dec 2021 02:57:18 -0500
+Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59206 "EHLO
+        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242745AbhLWH5S (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 23 Dec 2021 02:57:18 -0500
+X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:57:18 EST
+Received: by mail.betterbiz.pl (Postfix, from userid 1001)
+        id 5DDDC82A91; Thu, 23 Dec 2021 02:45:43 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
+        t=1640245644; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=HMiRhxIhYyzv/owiMFQI1qFnxBpT3rHOIcmbhPTiL9mfS7E7aEFjY0yo0dRisQwqO
+         wiOUMZqkn1cxOrRtvE3KjRdfJjW5bGWuhaXkMyv5sfnQiuAwEBNUq2m15JpabCkhO1
+         WWt8ajvUn+SNC8YY4aBR41Gr1iA5qTiyNKuhopJTzKofRCHC2q83RQHql7+RisHLIc
+         gsXjx9wwY5z3hzze0hh/Se7EI56upkNrGdo4jz7UsFsVGEK06wmds5LDdld9QmHaTF
+         PmXO+uBIcB0mJ9/YxkTpm8X/2GydWZt08mZGqlJU2C7Qry33lT40E3dZhoNwXPu650
+         +wJZDyIfm/NyA==
+Received: by mail.betterbiz.pl for <linux-csky@vger.kernel.org>; Thu, 23 Dec 2021 07:45:38 GMT
+Message-ID: <20211223024500-0.1.f.z8g.0.car9eg94ax@betterbiz.pl>
+Date:   Thu, 23 Dec 2021 07:45:38 GMT
+From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.betterbiz.pl
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-3-guoren@kernel.org>
- <CAK8P3a3dS=Ne0Pd2qZc8vB2whM7AUcJ1BNbhtf6EEboWAPpSug@mail.gmail.com>
- <CAJF2gTTN1HZeycK-WOFH0EjmjtBB4T=9de6Qrjs=uhAsLoOFaQ@mail.gmail.com>
- <CAK8P3a3m2Mz4Tvu+3cdji6iq_wvFZsYoyKvnaNKTEjE+ivex6A@mail.gmail.com>
- <CAJF2gTQEp0hEousuEyp5cPCa5Remb_8HMZ-BXZ393_z7hbne7g@mail.gmail.com> <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
-In-Reply-To: <CAK8P3a165oWeGOgsM=U3F54e4HFvhJxr2sG0qoGLOe_WK8qAtw@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 23 Dec 2021 10:12:37 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR4TXXWQ5Ubnz6HdoOmV=EkL9AsEH07RzmVypyeK353vw@mail.gmail.com>
-Message-ID: <CAJF2gTR4TXXWQ5Ubnz6HdoOmV=EkL9AsEH07RzmVypyeK353vw@mail.gmail.com>
-Subject: Re: [PATCH 02/13] riscv: Fixup difference with defconfig
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 9:52 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Dec 22, 2021 at 2:06 PM Guo Ren <guoren@kernel.org> wrote:
-> > On Wed, Dec 22, 2021 at 8:51 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Wed, Dec 22, 2021 at 12:34 PM Guo Ren <guoren@kernel.org> wrote:
-> > > Given that there are no specific rv32 SoC implementations supported
-> > > by the kernel today (other than SOC_VIRT), the number of users
-> > > would be close to zero anyway.
-> > I really agree with you, but we still need the rv32 user mode
-> > ecosystem for memory footprint.
->
-> Sure, I just meant there are few users that would have to relearn typing
-> "make defconfig 32-bit.config" instead of "make rv32_defconfig" even
-> without the added Makefile target.
-Emm... I got you.
+Dzie=C5=84 dobry,
 
-Next version, I would send delete rv32_defconfig patch. If Palmer
-object, I would change to make rv32_defconfig target. ;)
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
->
->          Arnd
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Pozdrawiam,
+Jakub Daroch
