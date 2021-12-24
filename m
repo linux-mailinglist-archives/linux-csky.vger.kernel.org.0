@@ -2,52 +2,65 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9475D47E016
-	for <lists+linux-csky@lfdr.de>; Thu, 23 Dec 2021 08:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1903A47EC45
+	for <lists+linux-csky@lfdr.de>; Fri, 24 Dec 2021 07:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242682AbhLWH5S (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 23 Dec 2021 02:57:18 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59206 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242745AbhLWH5S (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 23 Dec 2021 02:57:18 -0500
-X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Dec 2021 02:57:18 EST
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id 5DDDC82A91; Thu, 23 Dec 2021 02:45:43 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1640245644; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
-        h=Date:From:To:Subject:From;
-        b=HMiRhxIhYyzv/owiMFQI1qFnxBpT3rHOIcmbhPTiL9mfS7E7aEFjY0yo0dRisQwqO
-         wiOUMZqkn1cxOrRtvE3KjRdfJjW5bGWuhaXkMyv5sfnQiuAwEBNUq2m15JpabCkhO1
-         WWt8ajvUn+SNC8YY4aBR41Gr1iA5qTiyNKuhopJTzKofRCHC2q83RQHql7+RisHLIc
-         gsXjx9wwY5z3hzze0hh/Se7EI56upkNrGdo4jz7UsFsVGEK06wmds5LDdld9QmHaTF
-         PmXO+uBIcB0mJ9/YxkTpm8X/2GydWZt08mZGqlJU2C7Qry33lT40E3dZhoNwXPu650
-         +wJZDyIfm/NyA==
-Received: by mail.betterbiz.pl for <linux-csky@vger.kernel.org>; Thu, 23 Dec 2021 07:45:38 GMT
-Message-ID: <20211223024500-0.1.f.z8g.0.car9eg94ax@betterbiz.pl>
-Date:   Thu, 23 Dec 2021 07:45:38 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+        id S1351566AbhLXGwi (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 24 Dec 2021 01:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351547AbhLXGwh (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 24 Dec 2021 01:52:37 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23CEC061401;
+        Thu, 23 Dec 2021 22:52:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eO89Wys+cPjA0jK7XMPHuQKXJ2fNBHQ+5ydS0TjbuwU=; b=PBsxweIBvGcDuaDIdeRI0lPpPw
+        6hsHcafd6eAhL/qGcOQg3rtzheHjmoclD7Y9TiIPMyVshTSaAgxgC2s1D6Gdqzo43pYHr2xieAP45
+        XOK1/ezcUc23+BfQP1OvGhUKlznI2bfXiar0BCT0GoDa2n1zw+qIHdvRMPLixru25pCdT1GUBYV5p
+        pZ6WgUcfvPloSttmffNkio6AuKktSb54lsybW5LcaAQMWQh+TBXA2oOpOjawq33bj23XSbGBcdREg
+        vrpQo49qie/eQeSIE2v2vcWovgTRKZcfjPPq4oDQUfvJllgj5oC1vsv8sxaaYoxR/9n97YcD0WT9U
+        x64Wsjtg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0eR7-00DoaW-T6; Fri, 24 Dec 2021 06:52:17 +0000
+Date:   Thu, 23 Dec 2021 22:52:17 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, wefu@redhat.com,
+        Drew Fustini <drew@beagleboard.org>, wangjunqiang@iscas.ac.cn,
+        Wei Wu =?utf-8?B?KOWQtOS8nyk=?= <lazyparser@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH 01/13] syscalls: compat: Fix the missing part for
+ __SYSCALL_COMPAT
+Message-ID: <YcVuIdv65utyCK18@infradead.org>
+References: <20211221163532.2636028-1-guoren@kernel.org>
+ <20211221163532.2636028-2-guoren@kernel.org>
+ <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a1fC8aro3kHLvGMVDdvVYjaQdxJeGur9ac=11+6=r0Xyg@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Tue, Dec 21, 2021 at 06:08:45PM +0100, Arnd Bergmann wrote:
+> > -__SYSCALL(__NR_ptrace, sys_ptrace)
+> > +__SC_COMP(__NR_ptrace, sys_ptrace, compat_sys_ptrace)
+> >
+> 
+> Right. We could merge sys_ptrace and compat_sys_ptrace() by adding
+> a in_compat_syscall() check, but either way works.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
-
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
-
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
-
-
-Pozdrawiam,
-Jakub Daroch
+I think merging them would be very useful, including merging
+compat_arch_ptrace into arch_ptrace.  But we can leave that for
+later.
