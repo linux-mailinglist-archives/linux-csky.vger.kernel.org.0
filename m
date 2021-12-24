@@ -2,69 +2,79 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 556C647EC4A
-	for <lists+linux-csky@lfdr.de>; Fri, 24 Dec 2021 07:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291F047EDC5
+	for <lists+linux-csky@lfdr.de>; Fri, 24 Dec 2021 10:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351547AbhLXGym (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 24 Dec 2021 01:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245692AbhLXGyl (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 24 Dec 2021 01:54:41 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E533C061401;
-        Thu, 23 Dec 2021 22:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JtRr75bNYqycAEprguVijwvjoY3EweCPEp884i8dsfI=; b=mtfGEJZbI6p3QtIT0f5dQ11cC/
-        zj7ItLwL8HKTNNgVEr9LJBqYCEO24evgXuuis7NmkQ7qfo+fKEZqKItWBYDgrEh6wxPExhK547zq9
-        dCTwqqif+1jPBi1gXTxbULwDANwQZN/cfI/KjW1dSY1JaTC9XQoBIWvt5yCHRwKeyZNGQh+KReLa4
-        t/tay14oYR6dK/6uxGmnPEY8uoXD4wr9jbERoV7f1K2E5O/kV+3kbgGYMk3wmTRmuJFFuPeli7M0H
-        jshsJVovgoNco9lPV0h4hxic3JrVoxw8jYP/Jf0zVHEOUE7oSMwsu/0B6wLBHPPVduAVIx/eRhYAr
-        nLrcQsTg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1n0eTJ-00DorD-QV; Fri, 24 Dec 2021 06:54:33 +0000
-Date:   Thu, 23 Dec 2021 22:54:33 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        id S1352242AbhLXJ2h (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 24 Dec 2021 04:28:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:41560 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352232AbhLXJ2f (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 24 Dec 2021 04:28:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77867B81A58;
+        Fri, 24 Dec 2021 09:28:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2BFC36AEE;
+        Fri, 24 Dec 2021 09:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640338113;
+        bh=PLFbhEnthe2tnia9t8u1jYkAlCDJSzqn6fyBcMDKv1o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uKNEKY8/qLIxOIc3KS1/XZqJFJHYDGPb+1dwhzC/WlxSPz+hVEzHiJXip08NifPH1
+         DGRFjrG/UuYim/Mxw9pF+qsY1TUkZrBU8WZERUoReUAUNUDYWQTAGXmVmNAfnqncl3
+         txAYYvPvhzhz/Yucu+RAyqr1IQq0eF6hmHKmk+gse9szo7yvKzaJgSfxqlSEAo6Ijk
+         axzK0OdGQHJOHzqOw/QyCRDYjWz2AM8XVu/7JfUPgrpIIX6gv2rysWj45SaQ86olLB
+         +JHhZPwLgUDDRYrxFRAY2G6s9FEMQ8S4acNM0llT2g9xFsN2tSTo8epGbvTDamA7l2
+         Il829e4Y0gajA==
+Received: by mail-vk1-f179.google.com with SMTP id x17so3815064vkx.3;
+        Fri, 24 Dec 2021 01:28:33 -0800 (PST)
+X-Gm-Message-State: AOAM532eFJ2kC3M3xNMRBzpAxFXph/U4dS6CVnfPuLx7uDCQeRjdG7x/
+        yIEWV1YPf3TOzc/HV4nddrMJF3O7l4Zc6SHlDQc=
+X-Google-Smtp-Source: ABdhPJwW7NSOoagEdqoBmUtuhDfgJjtWgSXSdapmfy6cK8l0WMX3tLWmnQIXstx9eCAaF/D3NeIIDS+4RysDGs/44Ns=
+X-Received: by 2002:a1f:a4c5:: with SMTP id n188mr1850928vke.35.1640338112154;
+ Fri, 24 Dec 2021 01:28:32 -0800 (PST)
+MIME-Version: 1.0
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-4-guoren@kernel.org>
+ <YcVuYEt2LQArK5iL@infradead.org>
+In-Reply-To: <YcVuYEt2LQArK5iL@infradead.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 24 Dec 2021 17:28:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR=RQ_zhkUYXHyCkG26m6HasdwrsaXsUU-k8snO2rhh-Q@mail.gmail.com>
+Message-ID: <CAJF2gTR=RQ_zhkUYXHyCkG26m6HasdwrsaXsUU-k8snO2rhh-Q@mail.gmail.com>
+Subject: Re: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
         Drew Fustini <drew@beagleboard.org>,
         Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Wei Wu =?utf-8?B?KOWQtOS8nyk=?= <lazyparser@gmail.com>,
+        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH 08/13] riscv: compat: Add COMPAT Kbuild skeletal support
-Message-ID: <YcVuqfsiObz4XirW@infradead.org>
-References: <20211221163532.2636028-1-guoren@kernel.org>
- <20211221163532.2636028-9-guoren@kernel.org>
- <CAK8P3a0-ZOwoC_Ft+TiKAXdETcqU5XPS+9DZGkA+bB73SNCCbQ@mail.gmail.com>
- <CAJF2gTQ=Yo98-S12D9CbVXPJsAKpLu1NhJAVB3yu+J9thz6CUg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQ=Yo98-S12D9CbVXPJsAKpLu1NhJAVB3yu+J9thz6CUg@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 08:06:55PM +0800, Guo Ren wrote:
-> On Wed, Dec 22, 2021 at 2:23 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Fri, Dec 24, 2021 at 2:53 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Wed, Dec 22, 2021 at 12:35:22AM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > > +
-> > > +config SYSVIPC_COMPAT
-> > > +       def_bool y
-> > > +       depends on COMPAT && SYSVIPC
-> >
-> > Can this be moved to init/Kconfig next to SYSVIPC?
-> 
-> I would try another patchset, to see other architecture guys' advice.
+> > Implement asm/compat.h for struct compat_xxx, RLIM_INFINITY,
+> > OFF_T_MAX, is_compat_task, compat_user_regset, regset convert.
+>
+> Much of this really has no busines being duplicated over all the
+> architectures.  I have an old series to consolidate a fair amount
+> of compat.h cruft, I'll see if I can resurrect that.
+Sounds good. I hope you could do that after my patchset merges. Thx.
 
-The existing per-arch definitions are pretty much historic cruft.
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
