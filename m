@@ -2,53 +2,51 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 142F347F6C2
-	for <lists+linux-csky@lfdr.de>; Sun, 26 Dec 2021 13:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7467947F76C
+	for <lists+linux-csky@lfdr.de>; Sun, 26 Dec 2021 16:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233238AbhLZMih (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 26 Dec 2021 07:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbhLZMig (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 26 Dec 2021 07:38:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEECEC06173E;
-        Sun, 26 Dec 2021 04:38:36 -0800 (PST)
+        id S232280AbhLZPdt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 26 Dec 2021 10:33:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60340 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232210AbhLZPdt (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 26 Dec 2021 10:33:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3BCD60DFA;
-        Sun, 26 Dec 2021 12:38:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5B6C36AF3;
-        Sun, 26 Dec 2021 12:38:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E685460E2D;
+        Sun, 26 Dec 2021 15:33:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBDCC36AEB;
+        Sun, 26 Dec 2021 15:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640522315;
-        bh=o76Bq5CH6JQYJurwTN9je+XT2iTobUiIxe/Uui+wias=;
+        s=k20201202; t=1640532828;
+        bh=qXjCXDpcPsPTyQ6ukQoQTfDzaUiRrYwz51aMcieYhNs=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=axouHMvAD+06n+Ys1vxkhakSE66du65vKMVR9JaqpQcEGtR+OtBv8OFA4MTuU7Yi5
-         Z065lUIWSARqElBcbA7PMKAlRBflNQxflLMrT+KpHTd/rWhpM/jVuFbDATRkmK0D2j
-         MJOiavy8zhz+GWNngL1ayVtN4w7GhXufo5I4d4UkxDD6Ek9bUPuPFOB9r2KWhWWQLV
-         FWN6eaCconXiFMOjFWoIQyEDTB2wm64+EOR5ehYKGmx/pOorBuA6ombIqUwPWYKAr0
-         utR+MhT0cHa6W9+hv60KMrSyosxXOaD4s369R1pFbF3K2hdAWB+jeTNxAHJUkLhd+9
-         5+kmD9Silgvjg==
-Received: by mail-ua1-f51.google.com with SMTP id v12so10714033uar.7;
-        Sun, 26 Dec 2021 04:38:35 -0800 (PST)
-X-Gm-Message-State: AOAM533ug4vz6AtRErDgeysyQkMWeC5PhsVgsL/M5mfkO5LbxVDT1HLh
-        waIemCDlfO3oaGZ9Rg7axBRxdREIUP9HS/eTyN8=
-X-Google-Smtp-Source: ABdhPJxYXL57S/1WWUdbZ3QalfrT+pnzWcLsk0PLFsmPywHotfGGswokAC8FpojTD1DtObuaVVBfBUXqawlVoiBv9qY=
-X-Received: by 2002:a67:f94b:: with SMTP id u11mr3298864vsq.51.1640522314246;
- Sun, 26 Dec 2021 04:38:34 -0800 (PST)
+        b=ZD5yjJFSDFtV7GuuoWbWXv7pNHjN0oL/6U0n9XbGilI1ftdEsbLQwhXaq+KT2Ov33
+         s/thjAD/g2s++3W7TXHJD5zVXxLFZJdU62TrUnGu624ct/YMRvo+Er/aN/oLulbUYK
+         Nxj7R1/+G0hyCTl4Ls7J2s1B3/+q4kAqNl89ovKcoC6DQ7vVBDLxduKygzqGemVT38
+         mP2717ahX/Jz+ui4KUWWibX8DekCghLY/xT3LCPBO5CaEYJRJeIlwyU2+rwmZ6YQdT
+         ecTh8X20GL/jXtLOQyo7KIKwFVr80x9A19wsNB5wjbZGD9vePsCCcTOu4L+v1hOTdI
+         c4Qk1bylrAM1w==
+Received: by mail-ua1-f45.google.com with SMTP id r15so23209973uao.3;
+        Sun, 26 Dec 2021 07:33:48 -0800 (PST)
+X-Gm-Message-State: AOAM531VDvh2hrVaxSFp+6Wnd70iKTDAXnmovyyIHgFPJT5sIPUGbrrY
+        tICTs0X0Q02DoSmljdRaEQVuEV2R3sUgBKHiavY=
+X-Google-Smtp-Source: ABdhPJwyuGNHWPvWYsjivYwMgG2HNt6BpGFerAtNGcDQ5CFKT21wG/23KX6tdhStjNSAJxjyUtFcKM8wYL9/Nj6YrCc=
+X-Received: by 2002:ab0:1e4a:: with SMTP id n10mr2054361uak.66.1640532827315;
+ Sun, 26 Dec 2021 07:33:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20211221163532.2636028-1-guoren@kernel.org> <CAK8P3a37+0=CCE7283VQ4QZ1tZqcU+A2POUGXtvdM46ZMHx-gw@mail.gmail.com>
- <CAJF2gTRAxX0qEcNmw+5N=3jZcJw9YF75oRjT7Y5FUMUkHoSz4Q@mail.gmail.com> <20211226162223.795f9417@xhacker>
-In-Reply-To: <20211226162223.795f9417@xhacker>
+References: <20211221163532.2636028-1-guoren@kernel.org> <20211221163532.2636028-4-guoren@kernel.org>
+ <CAK8P3a3navO2Z2F5zxisby5EBNDo8rwQ6hxSuyniFgFxrQ5qXQ@mail.gmail.com>
+ <CAJF2gTSssufQOQTXqzRjY8h_JjAmMs8jC6R+6d09K728=4fOOA@mail.gmail.com> <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
+In-Reply-To: <CAK8P3a19n3pa+hRfC-ToTPhH2hvgYY=mXo_u6ZWkbbSSY5_JAA@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 26 Dec 2021 20:38:23 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRHND1F_-5+Euzy-UdRRdg2oAXDY4dt8_5p9JxsHDSe6Q@mail.gmail.com>
-Message-ID: <CAJF2gTRHND1F_-5+Euzy-UdRRdg2oAXDY4dt8_5p9JxsHDSe6Q@mail.gmail.com>
-Subject: Re: [PATCH 00/13] riscv: compat: Add COMPAT mode support for rv64
-To:     Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+Date:   Sun, 26 Dec 2021 23:33:36 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTcafkH5zDYbw=6UhXaHT+SdGskt-+6E==6f08nFj33Gw@mail.gmail.com>
+Message-ID: <CAJF2gTTcafkH5zDYbw=6UhXaHT+SdGskt-+6E==6f08nFj33Gw@mail.gmail.com>
+Subject: Re: [PATCH 03/13] riscv: compat: Add basic compat date type implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup.patel@wdc.com>,
         gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
@@ -63,77 +61,41 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Dec 26, 2021 at 4:36 PM Jisheng Zhang <jszhang3@mail.ustc.edu.cn> wrote:
+On Wed, Dec 22, 2021 at 8:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Wed, 22 Dec 2021 20:59:30 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > On Wed, Dec 22, 2021 at 2:10 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
+> On Wed, Dec 22, 2021 at 1:03 PM Guo Ren <guoren@kernel.org> wrote:
+> > On Wed, Dec 22, 2021 at 1:13 AM Arnd Bergmann <arnd@arndb.de> wrote:
 > > > On Tue, Dec 21, 2021 at 5:35 PM <guoren@kernel.org> wrote:
-> > > >
-> > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > >
-> > > > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> > > > s390, mips, sparc) have supported COMPAT mode. But they all have
-> > > > history issues and can't use standard linux unistd.h. RISC-V would
-> > > > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> > > > /unistd.h.
-> > > >
-> > > > The patchset are based on v5.16-rc6, you can compare rv64-compat32
-> > > > v.s. rv32-whole in qemu with following step:
 > > >
-> > > Looks good overall, see my individual replies for minor comments I had.
-> > Thx for the review :)
+> > > > +struct compat_stat {
+> > > > +       compat_ulong_t  st_dev;
+> > > > +       compat_ulong_t  st_ino;
+> > > > +       compat_uint_t   st_mode;
+> > > > +       compat_uint_t   st_nlink;
+> > >
+> > > You should not need a compat_stat, because native rv32 does not have a
+> > > stat() syscall.
+> > We need it:
 > >
-> > >
-> > > I think there is a bigger question to answer though, which is whether this is
-> > > actually a useful feature for rv64. In general, there are two reasons for
-> > > wanting compat mode:
-> > >
-> > > a) compatibility with existing binaries and distros
-> > >
-> > > b) reducing the memory footprint of user space in a memory constrained
-> > > environment, either deeply embedded or in a container.
-> > >
-> > > For the other architectures, a) is clearly the main driver, but equally so
-> > > this is not the case on riscv, which does not have any legacy 32-bit
-> > > code. Without that, adding compat mode would mainly introduce a
-> > > second ABI to a lot of environments that at the moment only need to
-> > > support one, and that adds complexity to the implementation and
-> > > the extra attack surface of the second syscall ABI when an exploit
-> > > may be possible only in compat mode.
-> > >
-> > > There is still some benefit in b), but it would need to be weighed
-> > > against the downsides above. Can you explain in more detail what
-> > > use cases you have in mind, and which CPU cores actually support
-> > > this mode?
-> > The most reason is about b), see our customer's product:
-> > https://www.cnx-software.com/2021/10/25/allwinner-d1s-f133-risc-v-processor-64mb-ddr2/
-> >
-> > So I think all our next generation rv64 cores should support
-> > compat-mode. Compare to releasing rv32-full core, rv64 compat-mode is
-> > very cheap for our CPU design.
-> >
-> > You would get the answer when our new generation CPU is announced and it's soon.
-> >
+> > $ make ARCH=riscv CROSS_COMPILE=riscv64-unknown-linux-gnu-
+> > EXTRA_CFLAGS+=-g O=../build-riscv/ Image -j > /dev/null
+> > /home/guoren/source/kernel/riscv-linux/fs/stat.c: In function 'cp_compat_stat':
+> > /home/guoren/source/kernel/riscv-linux/fs/stat.c:645:21: error:
+> > storage size of 'tmp' isn't known
+> >   645 |  struct compat_stat tmp;
 >
-> What about adding RV64 ILP32 support instead? This don't need HW side
-> modifications so can benefit all RV64.
-ILP32 is another topic in C Language Data Type Models and it couldn't
-replace the standard rv32 ecosystem.
-COMPAT is a common framework in Linux (7 arches have been supported),
-so let rv64 support COMPAT mode is considerable.
-
-Customers would choose ILP32 / RV32-compat by themself and that
-depends on which one has a better ecosystem.
+> I think that's just a bug in fs/stat.c. Every other architecture so
+> far needed it,
+> just not riscv, so we should add an appropriate #ifdef here. I would replace
+> #ifdef CONFIG_COMPAT around these with __ARCH_WANT_COMPAT_STAT
+> and then change all other compat architectures to define that depending
+> on the configuration.
+Agree, but I would keep compat_stat in the next version. You could add
+__ARCH_WANT_COMPAT_STAT next.
 
 >
-> Thanks
->
-> > Currently, only qemu supports rv64 compact mode, that is my colleague
-> > (LIU Zhi Wei) contributed.
->
+>         Arnd
+
 
 
 -- 
