@@ -2,18 +2,37 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1712B480493
-	for <lists+linux-csky@lfdr.de>; Mon, 27 Dec 2021 21:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D015480507
+	for <lists+linux-csky@lfdr.de>; Mon, 27 Dec 2021 23:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbhL0Ug2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 27 Dec 2021 15:36:28 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:45005 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232965AbhL0Ug1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 27 Dec 2021 15:36:27 -0500
-Received: (qmail 1062827 invoked by uid 1000); 27 Dec 2021 15:36:25 -0500
-Date:   Mon, 27 Dec 2021 15:36:25 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
+        id S231683AbhL0WEr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 27 Dec 2021 17:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbhL0WEr (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 27 Dec 2021 17:04:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D117C06173E;
+        Mon, 27 Dec 2021 14:04:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61D21B80D8E;
+        Mon, 27 Dec 2021 22:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF63FC36AEA;
+        Mon, 27 Dec 2021 22:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640642684;
+        bh=WJL+K0hI3nwJke136i/0N4gSC4MX2UG4T24o5kI2ZCo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=LPLcrpwmwEpR6GXtmPDQxAS5U0HsQLi/CB9P+gregE+DcfQwu7ErElWcKXTZbMdU6
+         XsCtsWEk0WBE+mdjM1tKbunFxcFQikU/+TA0D89rcFi86Y85WxzRdoIY86PRvjVdtG
+         diIwKaiI3YvY4kYq43BX3PuQVbuHlqLoF3LUbX+n+6aL1J9DGg4HhKBvQx2P0XfAy7
+         WusCUz7/Y5id3h1FfcJgYrgH5um91lNX8uL0nwr0Tpepdou9dSJJIXZ6GCtfCdLfBD
+         LIlhhqwlkP3AiKo8eLFOy/k3gO8zizcoVOTtD8CF1BbmHHWy/myCg1kQ1We1WzE6Nq
+         9m7bdLO4V7+kA==
+Date:   Mon, 27 Dec 2021 16:04:42 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
 To:     Niklas Schnelle <schnelle@linux.ibm.com>
 Cc:     Arnd Bergmann <arnd@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -24,106 +43,88 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC 31/32] usb: handle HAS_IOPORT dependencies
-Message-ID: <YcojyRhALdm40gfk@rowland.harvard.edu>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-32-schnelle@linux.ibm.com>
+        linux-csky@vger.kernel.org
+Subject: Re: [RFC 27/32] PCI/sysfs: make I/O resource depend on HAS_IOPORT
+Message-ID: <20211227220442.GA1544995@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211227164317.4146918-32-schnelle@linux.ibm.com>
+In-Reply-To: <20211227164317.4146918-28-schnelle@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:43:16PM +0100, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to guard sections of code calling them
-> as alternative access methods with CONFIG_HAS_IOPORT checks. Similarly
-> drivers requiring these functions need to depend on HAS_IOPORT.
+Make the subject match historical convention (capitalize "Make").
 
-A few things in here can be improved.
+On Mon, Dec 27, 2021 at 05:43:12PM +0100, Niklas Schnelle wrote:
+> Exporting I/O resources only makes sense if legacy I/O spaces are
+> supported so conditionally add them only if HAS_IOPORT is set.
 
-> 
+IIUC, the effect of this is that the "resource%d" file for an I/O BAR
+still appears in /sys, but reads or writes will fail with ENXIO.
+Worth mentioning that in the commit log, since one could interpret the
+above as meaning that the "resource%d" file exists only if HAS_IOPORT
+is set.  I think I will *exist* but not be very useful.
+
+I also wonder what this looks like in the sysfs "resource" file and
+via lspci.  I suppose it's useful if lspci shows the fact that the BAR
+exists and is an I/O BAR, even if the arch doesn't set HAS_IOPORT.
+
 > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
 > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
->  drivers/usb/core/hcd-pci.c    |   3 +-
->  drivers/usb/host/Kconfig      |   4 +-
->  drivers/usb/host/pci-quirks.c | 127 ++++++++++++++++++----------------
->  drivers/usb/host/pci-quirks.h |  33 ++++++---
->  drivers/usb/host/uhci-hcd.c   |   2 +-
->  drivers/usb/host/uhci-hcd.h   |  77 ++++++++++++++-------
->  6 files changed, 148 insertions(+), 98 deletions(-)
-
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index ef08d68b9714..bba320194027 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-
-> +#ifdef CONFIG_USB_PCI_AMD
-> +#if IS_ENABLED(CONFIG_USB_UHCI_HCD) && defined(CONFIG_HAS_IOPORT)
-
-In the original, the following code will be compiled even if
-CONFIG_USB_UHCI_HCD is not enabled.  You shouldn't change that.
-
->  /*
->   * Make sure the controller is completely inactive, unable to
->   * generate interrupts or do DMA.
-
-> @@ -1273,7 +1277,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
->  			 "Can't enable PCI device, BIOS handoff failed.\n");
->  		return;
->  	}
-> -	if (pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
-> +	if (IS_ENABLED(CONFIG_USB_UHCI_HCD) &&
-> +	    pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
->  		quirk_usb_handoff_uhci(pdev);
-
-Same idea here.
-
->  	else if (pdev->class == PCI_CLASS_SERIAL_USB_OHCI)
->  		quirk_usb_handoff_ohci(pdev);
-> diff --git a/drivers/usb/host/pci-quirks.h b/drivers/usb/host/pci-quirks.h
-> index e729de21fad7..42eb18be37af 100644
-> --- a/drivers/usb/host/pci-quirks.h
-> +++ b/drivers/usb/host/pci-quirks.h
-> @@ -2,33 +2,50 @@
->  #ifndef __LINUX_USB_PCI_QUIRKS_H
->  #define __LINUX_USB_PCI_QUIRKS_H
+>  drivers/pci/pci-sysfs.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index cfe2f85af09e..a59a85593972 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -1099,6 +1099,7 @@ static int pci_mmap_resource_wc(struct file *filp, struct kobject *kobj,
+>  	return pci_mmap_resource(kobj, attr, vma, 1);
+>  }
 >  
-> -#ifdef CONFIG_USB_PCI
->  void uhci_reset_hc(struct pci_dev *pdev, unsigned long base);
->  int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base);
-> -int usb_hcd_amd_remote_wakeup_quirk(struct pci_dev *pdev);
-> +
-> +struct pci_dev;
-
-This can't be right; struct pci_dev is referred to three lines earlier.
-You could move this up, but it may not be needed at all.
-
-> diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-> index 8ae5ccd26753..8e30116b6fd2 100644
-> --- a/drivers/usb/host/uhci-hcd.h
-> +++ b/drivers/usb/host/uhci-hcd.h
-> @@ -586,12 +586,14 @@ static inline int uhci_aspeed_reg(unsigned int reg)
->  
->  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
->  {
 > +#ifdef CONFIG_HAS_IOPORT
->  	if (uhci_has_pci_registers(uhci))
->  		return inl(uhci->io_addr + reg);
-> -	else if (uhci_is_aspeed(uhci))
+>  static ssize_t pci_resource_io(struct file *filp, struct kobject *kobj,
+>  			       struct bin_attribute *attr, char *buf,
+>  			       loff_t off, size_t count, bool write)
+> @@ -1157,6 +1158,21 @@ static ssize_t pci_write_resource_io(struct file *filp, struct kobject *kobj,
+>  
+>  	return pci_resource_io(filp, kobj, attr, buf, off, count, true);
+>  }
+> +#else
+> +static ssize_t pci_read_resource_io(struct file *filp, struct kobject *kobj,
+> +				    struct bin_attribute *attr, char *buf,
+> +				    loff_t off, size_t count)
+> +{
+> +	return -ENXIO;
+> +}
+
+I assume the sysfs infrastructure prevents or fails reads/write if
+res_attr->read and res_attr->write are not set at all, so maybe we
+wouldn't need the stubs if we did something like this?
+
+    if (pci_resource_flags(pdev, num) & IORESOURCE_IO) {
+  #ifdef CONFIG_HAS_IOPORT
+      res_attr->read = pci_read_resource_io;
+      res_attr->write = pci_write_resource_io;
+      ...
+  #endif
+    } else {
+
+> +static ssize_t pci_write_resource_io(struct file *filp, struct kobject *kobj,
+> +				     struct bin_attribute *attr, char *buf,
+> +				     loff_t off, size_t count)
+> +{
+> +	return -ENXIO;
+> +}
 > +#endif
-
-Instead of making all these changes (here and in the hunks below), you
-can simply modify the definition of uhci_has_pci_registers() so that it
-always gives 0 when CONFIG_HAS_IOPORT is N.
-
-Alan Stern
+>  
+>  /**
+>   * pci_remove_resource_files - cleanup resource files
+> -- 
+> 2.32.0
+> 
