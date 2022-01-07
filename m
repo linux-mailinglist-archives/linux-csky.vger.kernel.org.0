@@ -2,41 +2,62 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFE5486974
-	for <lists+linux-csky@lfdr.de>; Thu,  6 Jan 2022 19:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0AF487371
+	for <lists+linux-csky@lfdr.de>; Fri,  7 Jan 2022 08:22:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242480AbiAFSOP (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 6 Jan 2022 13:14:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57816 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241192AbiAFSOM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 6 Jan 2022 13:14:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4870561D17;
-        Thu,  6 Jan 2022 18:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A780C36AEB;
-        Thu,  6 Jan 2022 18:14:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641492850;
-        bh=pk9c3vFsS24A9H9YRNmuoLU04tTgveyiSfxz/RguLrg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tWL9ah320xPJ7ZLvQrLFkjIeV1LTlPrJ2qSY/t0fKFbU+5MxnpWBBUesVfIjO0xOO
-         l+Yvi8TANgRjNK2vReZYRlLqehfzP4qE2oNJarfvWixIS0OfQkuKWpI6rrQEfWGn25
-         oroVHI/IQA8JEpMkHqxWMkHxAKg+IVXn/Zqji7RoVtpWyymeRt5WcM4qay0A7EFOWe
-         jnI4JpbaAmAttF9a/Yhl/wWUUgx6A1s8zF9Wpc8ft5Y9hFSMLv91rRujQQ/od6scnA
-         LsHiF+8iYMGoQ6RcvIn/+ZU8WqHN0Y3LnsXMJdYHRbXi/+K/WGfnGi+pM9zExj10bs
-         +smYL/+iBYHZg==
-Date:   Thu, 6 Jan 2022 12:14:09 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S234288AbiAGHW3 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 7 Jan 2022 02:22:29 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27468 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231975AbiAGHW3 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 7 Jan 2022 02:22:29 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20756Xbs011438;
+        Fri, 7 Jan 2022 07:21:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=vEkORE+Epga5s7ASjVd+4jgI0LEIOYrUZHM9uSEuFS4=;
+ b=AtY/muleo+xSFpG6X+/Qts7oPrSBNHVz6kRu78nlQUj/NKgkvchx1PfVctrHZYpzqA3r
+ LsneJD6mu3wXvlwkU0QRE1Cx6xg7cYU/38OYxEMzW6SEA3j8fm9BMT3ZymXeN9SyU+w2
+ G5oq+aQ6FPktL0MaHhd0eqpU/n/EqwVHZeduLLzjLuo3nnZI8kwkSCWrjxH92IutQtyg
+ jLoM9/AlHZnso8Pn2fxpikdkGOdL1SFHU1mYEx7GsvkKI0n8mganA9PNzO63QjRAiSs/
+ CJh3SXJjnHlpkmdph1jK2bVyyCr0MdvX13x2lV3G9vdc4rHpqz91HMI9XF64AxnRFuAs +g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4y7u30f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 07:21:47 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2076qs9i009364;
+        Fri, 7 Jan 2022 07:21:47 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3de4y7u2yx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 07:21:46 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2077CAqg018540;
+        Fri, 7 Jan 2022 07:21:45 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3de5gfupb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Jan 2022 07:21:44 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2077LgvQ39125256
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Jan 2022 07:21:42 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7CF7A4C05A;
+        Fri,  7 Jan 2022 07:21:42 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9B09C4C04E;
+        Fri,  7 Jan 2022 07:21:41 +0000 (GMT)
+Received: from sig-9-145-3-155.uk.ibm.com (unknown [9.145.3.155])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  7 Jan 2022 07:21:41 +0000 (GMT)
+Message-ID: <64d4b0d66379affd59c5a24ddb71a8f208330362.camel@linux.ibm.com>
+Subject: Re: [RFC 00/32] Kconfig: Introduce HAS_IOPORT and LEGACY_PCI options
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     John Garry <john.garry@huawei.com>,
         Arnd Bergmann <arnd@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Nick Hu <nickhu@andestech.com>,
@@ -44,85 +65,66 @@ Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
         Vincent Chen <deanbo422@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-Message-ID: <20220106181409.GA297735@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org
+Date:   Fri, 07 Jan 2022 08:21:41 +0100
+In-Reply-To: <00c5a9e2-1876-e8d1-68f3-2be6d3bd38cb@huawei.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+         <00c5a9e2-1876-e8d1-68f3-2be6d3bd38cb@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cynwMk4apZ0bHAkiwK6hO9RNLLeiN4I_
+X-Proofpoint-ORIG-GUID: jonzyFcjLIyJ-g8t0bSxk_jRV-DRUS3W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-07_01,2022-01-06_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 impostorscore=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 mlxlogscore=936 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201070051
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:41:00PM +0000, John Garry wrote:
-> On 05/01/2022 19:47, Bjorn Helgaas wrote:
-
-> > IMO inb() should
-> > be present but do something innocuous like return ~0, as it would if
-> > I/O port space is supported but there's no device at that address.
-> > 
-> > [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
-> > 
+On Thu, 2022-01-06 at 17:45 +0000, John Garry wrote:
+> Hi Niklas,
 > 
-> That driver would prob not be used on systems which does not support PIO,
-> and so could have a HAS_IOPORT dependency. But it is not strictly necessary.
+> On 27/12/2021 16:42, Niklas Schnelle wrote:
+> > I performed the following testing:
+> > 
+> > - On s390 this series on top of v5.16-rc7 builds with allyesconfig i.e. the
+> >    HAS_IOPORT=n case.
+> 
+> Are you sure that allyesconfig gives HAS_IOPORT=n? Indeed I see no 
+> mechanism is always disallow HAS_IOPORT for s390 (which I think we would 
+> want).
+> 
+> > It also builds with defconfig and the resulting kernel
+> >    appears fully functional including tests with PCI devices.
+> 
+> Thanks,
+> Johnw
+> 
 
-I don't want the path of "this driver isn't needed because the device
-is unlikely to be used on this arch."
+I checked again by adding
 
-Maybe it's not _always_ possible, but if the device can be plugged
-into the platform, I think we should be able to build the driver for
-it.
+config HAS_IOPORT
+       def_bool n
 
-If the device requires I/O port space and the platform doesn't support
-it, the PCI core or the driver should detect that and give a useful
-diagnostic.
+in arch/s390/Kconfig and that doesn't seem to make a difference,
+allyesconfig builds all the same. Also checked for CONFIG_HAS_IOPORT in
+my .config and that isn't listed with or without the above addition.
 
-Bjorn
+I think this is because without a help text there is no "config
+question" and thus nothing that allyesconfig would set to yes. I do
+agree though that it's better to be explicit and add the above to those
+Kconfigs that don't support HAS_IOPORT.
+Thanks,
+Niklas
+
