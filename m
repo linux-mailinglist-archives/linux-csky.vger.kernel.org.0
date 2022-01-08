@@ -2,134 +2,191 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A158487B2C
-	for <lists+linux-csky@lfdr.de>; Fri,  7 Jan 2022 18:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 607254886ED
+	for <lists+linux-csky@lfdr.de>; Sun,  9 Jan 2022 00:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348508AbiAGRQq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 7 Jan 2022 12:16:46 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4373 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348501AbiAGRQp (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 7 Jan 2022 12:16:45 -0500
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVqWg6H9Pz67ZhV;
-        Sat,  8 Jan 2022 01:11:43 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 18:16:40 +0100
-Received: from [10.47.89.210] (10.47.89.210) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 7 Jan
- 2022 17:16:37 +0000
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
+        id S230515AbiAHXff (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 8 Jan 2022 18:35:35 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:6635 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230502AbiAHXfe (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Sat, 8 Jan 2022 18:35:34 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JWbzn6Bf4z9c;
+        Sun,  9 Jan 2022 00:35:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1641684931; bh=PlUOfTOJmz/Ue3/EDBlVUxJ2DxqecfDU18/1xQbQtoA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FscL30pAUhiOa20r1Aci5nnOyAPPM7+JoY4I/TdvClRTh0U4D6S+wg1hl5DP6lTxY
+         uXsR1x49ZX58OBDSXL5QGeKh44OE5Qx3HX+fhAHnzzl6d2Bb3RMolFLW/CZs7ANyT9
+         2B2bqDVSaDvrnFLV9W4laov2KVjSpYZyXNNSx0uhvIf6/Ty/Jc6im2Ya6WtOK+mKnU
+         8tBa912YBdNEWU6kN5XGlGndW+KwbfYMSoJHIv4OJWOXoW7NdW+vFlXd5iG2C0Sl5t
+         yLjrrdYJpGeB9xfuugFJFXVZkd4+VRh97hWFY+LEwPEsT5kUEeN00fOMl2F0IbFH2g
+         x9nJQfgC6GmfA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+Date:   Sun, 9 Jan 2022 00:35:15 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "Teddy Wang" <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
-        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
-        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20220106181409.GA297735@bhelgaas>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <b0e772ed-4c21-3d5a-d890-aba05c41904c@huawei.com>
-Date:   Fri, 7 Jan 2022 17:16:23 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v5 04/21] kernel: Add combined power-off+restart handler
+ call chain API
+Message-ID: <Ydofs2CIfA+r5KAz@qmqm.qmqm.pl>
+References: <20211212210309.9851-1-digetx@gmail.com>
+ <20211212210309.9851-5-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220106181409.GA297735@bhelgaas>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.89.210]
-X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211212210309.9851-5-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 06/01/2022 18:14, Bjorn Helgaas wrote:
->> That driver would prob not be used on systems which does not support PIO,
->> and so could have a HAS_IOPORT dependency. But it is not strictly necessary.
-> I don't want the path of "this driver isn't needed because the device
-> is unlikely to be used on this arch."
+On Mon, Dec 13, 2021 at 12:02:52AM +0300, Dmitry Osipenko wrote:
+[...]
+> +/**
+> + * struct power_off_data - Power-off callback argument
+> + *
+> + * @cb_data: Callback data.
+> + */
+> +struct power_off_data {
+> +	void *cb_data;
+> +};
+> +
+> +/**
+> + * struct power_off_prep_data - Power-off preparation callback argument
+> + *
+> + * @cb_data: Callback data.
+> + */
+> +struct power_off_prep_data {
+> +	void *cb_data;
+> +};
 
-Sure, that was just a one off example. As I mentioned before, I think 
-that Arnd already did most of the ifdeffery work, but it was not 
-included in this series.
+Why two exactly same structures? Why only a single pointer instead? If
+it just to enable type-checking callbacks, then thouse could be opaque
+or zero-sized structs that would be embedded or casted away in
+respective callbacks.
 
-> 
-> Maybe it's not_always_  possible, but if the device can be plugged
-> into the platform, I think we should be able to build the driver for
-> it.
-> 
-> If the device requires I/O port space and the platform doesn't support
-> it, the PCI core or the driver should detect that and give a useful
-> diagnostic.
-> 
+> +
+> +/**
+> + * struct restart_data - Restart callback argument
+> + *
+> + * @cb_data: Callback data.
+> + * @cmd: Restart command string.
+> + * @stop_chain: Further lower priority callbacks won't be executed if set to
+> + *		true. Can be changed within callback. Default is false.
+> + * @mode: Reboot mode ID.
+> + */
+> +struct restart_data {
+> +	void *cb_data;
+> +	const char *cmd;
+> +	bool stop_chain;
+> +	enum reboot_mode mode;
+> +};
+> +
+> +/**
+> + * struct reboot_prep_data - Reboot and shutdown preparation callback argument
+> + *
+> + * @cb_data: Callback data.
+> + * @cmd: Restart command string.
+> + * @stop_chain: Further lower priority callbacks won't be executed if set to
+> + *		true. Can be changed within callback. Default is false.
 
-I'm not sure what the driver can say apart from -ENODEV. Or IO port 
-management in resource.c could warn for requesting IO port region when 
-it's unsupported.
+Why would we want to stop power-off or erboot chain? If the callback
+succeded, then further calls won't be made. If it doesn't succeed, but
+possibly breaks the system somehow, it shouldn't return. Then the only
+case left would be to just try the next method of shutting down.
 
-Anyway, this same conversion was had with Linus before I got involved. 
-If you think it is worth discussing again then I suppose the authors 
-here need to gain consensus.
+> + * @mode: Preparation mode ID.
+> + */
+> +struct reboot_prep_data {
+> +	void *cb_data;
+> +	const char *cmd;
+> +	bool stop_chain;
+> +	enum reboot_prepare_mode mode;
+> +};
+> +
+> +struct sys_off_handler_private_data {
+> +	struct notifier_block power_off_nb;
+> +	struct notifier_block restart_nb;
+> +	struct notifier_block reboot_nb;
 
-Thanks,
-John
+What's the difference between restart and reboot?
+
+> +	void (*platform_power_off_cb)(void);
+> +	void (*simple_power_off_cb)(void *data);
+> +	void *simple_power_off_cb_data;
+> +	bool registered;
+> +};
+
+BTW, I couldn't find a right description of my idea of unifying the
+chains before, so let me sketch it now.
+
+The idea is to have a single system-off chain in which the callback
+gets a mode ({QUERY_*, PREP_*, DO_*} for each of {*_REBOOT, *_POWEROFF, ...?).
+The QUERY_* calls would be made in can_kernel_reboot/poweroff(): all
+would be called, and if at least one returned true, then the shutdown
+mode would continue. All of PREP_* would be called then. After that
+all DO_* would be tried until one doesn't return (succeeded or broke
+the system hard). Classic for(;;); could be a final fallback for the
+case where arch/machine (lowest priority) call would return instead
+of halting the system in machine-dependent way. The QUERY and PREP
+stages could be combined, but I haven't thought about it enough to
+see what conditions would need to be imposed on the callbacks in
+that case (maybe it's not worth the trouble, since it isn't a fast
+path anyway?). The goal here is to have less (duplicated) code in
+kernel, but otherwise it seems equivalent to your API proposal.
+
+Best Regards
+Micha³ Miros³aw
