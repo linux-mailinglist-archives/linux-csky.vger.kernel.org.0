@@ -2,53 +2,142 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91864497B1D
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Jan 2022 10:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDD4498017
+	for <lists+linux-csky@lfdr.de>; Mon, 24 Jan 2022 13:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242604AbiAXJLX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Jan 2022 04:11:23 -0500
-Received: from mail.portyid.pl ([192.36.61.58]:51222 "EHLO mail.portyid.pl"
+        id S242804AbiAXM61 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 24 Jan 2022 07:58:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:33114 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242436AbiAXJLU (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 24 Jan 2022 04:11:20 -0500
-Received: by mail.portyid.pl (Postfix, from userid 1001)
-        id 8AAD2413D8; Mon, 24 Jan 2022 10:11:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=portyid.pl; s=mail;
-        t=1643015474; bh=+PMi7irkA4XlRgpdW2HqpqcJeZNxKGysf407T0katTE=;
-        h=Date:From:To:Subject:From;
-        b=rX4A+hxICHTkDlQ5nh1Uc1FZLJ3/rqzrkuwva3xa/5gBfNj7t+WzoY6ZAeu8Ta4tW
-         YMm/npHACOrIUwj9IOP7rjuimxzwok5eINQVABVMqT5IidRG8C84oLxkfnxpJb9dhZ
-         5tx2XPNKt03e03Y5l7gnxtR1cF8YhLJ7US1uqRHIoW2ftAU5gH9Pf+0NZazTxyGgNT
-         29TuAGEpr+BNb1rsqlJemiVGMyWs3pYnUZfBUSrSvhGl/S6TxPI4OWZYamoxnfJxfO
-         mrOlnL2BC1dv9mn67FE0iQj4Rf9/6QUroUTHAL7eXy2T1At1Vd+RD8Mydw4gJ8FZaa
-         1ipCQ/EvfSPTQ==
-Received: by mail.portyid.pl for <linux-csky@vger.kernel.org>; Mon, 24 Jan 2022 09:11:00 GMT
-Message-ID: <20220124084500-0.1.1b.5faq.0.n13odsk140@portyid.pl>
-Date:   Mon, 24 Jan 2022 09:11:00 GMT
-From:   =?UTF-8?Q? "Pawe=C5=82_Jasi=C5=84ski" ?= 
-        <pawel.jasinski@portyid.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Fotowoltaika - nowe warunki
-X-Mailer: mail.portyid.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S242786AbiAXM60 (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:58:26 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 356BE101E;
+        Mon, 24 Jan 2022 04:58:26 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.43.190])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1AB653F774;
+        Mon, 24 Jan 2022 04:58:22 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
+        akpm@linux-foundation.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-csky@vger.kernel.org
+Subject: [RFC V1 19/31] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 24 Jan 2022 18:26:56 +0530
+Message-Id: <1643029028-12710-20-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This defines and exports a platform specific custom vm_get_page_prot() via
+subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+macros can be dropped which are no longer needed.
 
-jeszcze w pierwszej po=C5=82owie 2022 roku wzrosn=C4=85 ceny za wykup ene=
-rgii dla posiadaczy fotowoltaiki.=20
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-csky@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ arch/csky/Kconfig               |  1 +
+ arch/csky/include/asm/pgtable.h | 18 ---------------
+ arch/csky/mm/init.c             | 41 +++++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 18 deletions(-)
 
-Aby unikn=C4=85=C4=87 umowy na nowych zasadach trzeba zdecydowa=C4=87 si=C4=
-=99 na instalacj=C4=99 paneli PV do ko=C5=84ca marca.=20
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 132f43f12dd8..209dac5686dd 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -6,6 +6,7 @@ config CSKY
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
++	select ARCH_HAS_VM_GET_PAGE_PROT
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
+diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+index 151607ed5158..2c6b1cfb1cce 100644
+--- a/arch/csky/include/asm/pgtable.h
++++ b/arch/csky/include/asm/pgtable.h
+@@ -76,24 +76,6 @@
+ #define MAX_SWAPFILES_CHECK() \
+ 		BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
+ 
+-#define __P000	PAGE_NONE
+-#define __P001	PAGE_READ
+-#define __P010	PAGE_READ
+-#define __P011	PAGE_READ
+-#define __P100	PAGE_READ
+-#define __P101	PAGE_READ
+-#define __P110	PAGE_READ
+-#define __P111	PAGE_READ
+-
+-#define __S000	PAGE_NONE
+-#define __S001	PAGE_READ
+-#define __S010	PAGE_WRITE
+-#define __S011	PAGE_WRITE
+-#define __S100	PAGE_READ
+-#define __S101	PAGE_READ
+-#define __S110	PAGE_WRITE
+-#define __S111	PAGE_WRITE
+-
+ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+ #define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
+ 
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index bf2004aa811a..55952d8f8abc 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -197,3 +197,44 @@ void __init fixaddr_init(void)
+ 	vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
+ 	fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
+ }
++
++pgprot_t vm_get_page_prot(unsigned long vm_flags)
++{
++	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
++	case VM_NONE:
++		return PAGE_NONE;
++	case VM_READ:
++		return PAGE_READ;
++	case VM_WRITE:
++		return PAGE_READ;
++	case VM_READ | VM_WRITE:
++		return PAGE_READ;
++	case VM_EXEC:
++		return PAGE_READ;
++	case VM_EXEC | VM_READ:
++		return PAGE_READ;
++	case VM_EXEC | VM_WRITE:
++		return PAGE_READ;
++	case VM_EXEC | VM_READ | VM_WRITE:
++		return PAGE_READ;
++	case VM_SHARED:
++		return PAGE_NONE;
++	case VM_SHARED | VM_READ:
++		return PAGE_READ;
++	case VM_SHARED | VM_WRITE:
++		return PAGE_WRITE;
++	case VM_SHARED | VM_READ | VM_WRITE:
++		return PAGE_WRITE;
++	case VM_SHARED | VM_EXEC:
++		return PAGE_READ;
++	case VM_SHARED | VM_EXEC | VM_READ:
++		return PAGE_READ;
++	case VM_SHARED | VM_EXEC | VM_WRITE:
++		return PAGE_WRITE;
++	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
++		return PAGE_WRITE;
++	default:
++		BUILD_BUG();
++	}
++}
++EXPORT_SYMBOL(vm_get_page_prot);
+-- 
+2.25.1
 
-Jako firma specjalizuj=C4=85ca si=C4=99 w monta=C5=BCu i serwisie fotowol=
-taiki ch=C4=99tnie podejmiemy si=C4=99 realizacji ca=C5=82ego projektu. S=
-=C4=85 Pa=C5=84stwo zainteresowani?
-
-
-Pozdrawiam
-Pawe=C5=82 Jasi=C5=84ski
