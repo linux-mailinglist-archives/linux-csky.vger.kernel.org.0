@@ -2,144 +2,56 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DE049801B
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Jan 2022 13:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E18E498FC0
+	for <lists+linux-csky@lfdr.de>; Mon, 24 Jan 2022 20:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242812AbiAXM6d (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Jan 2022 07:58:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:33130 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242744AbiAXM6b (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:58:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED5C7101E;
-        Mon, 24 Jan 2022 04:58:30 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.43.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DA7D63F774;
-        Mon, 24 Jan 2022 04:58:26 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
-        akpm@linux-foundation.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Chris Zankel <chris@zankel.net>, Guo Ren <guoren@kernel.org>,
-        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org
-Subject: [RFC V1 20/31] extensa/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 24 Jan 2022 18:26:57 +0530
-Message-Id: <1643029028-12710-21-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
-References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+        id S1346428AbiAXTy0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-csky@lfdr.de>); Mon, 24 Jan 2022 14:54:26 -0500
+Received: from [103.153.79.64] ([103.153.79.64]:61871 "EHLO [103.153.79.64]"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1346748AbiAXTsY (ORCPT <rfc822;linux-csky@vger.kernel.org>);
+        Mon, 24 Jan 2022 14:48:24 -0500
+Reply-To: Nasser Rashid <nasserrashid.uae@gmail.com>
+From:   Nasser Rashid <anice.fronteracapitalgroup@gmail.com>
+To:     linux-csky@vger.kernel.org
+Subject: EXPO 2020 BUSINESS PROPOSAL
+Date:   24 Jan 2022 11:48:27 -0800
+Message-ID: <20220124114827.D90C7DF423966650@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This defines and exports a platform specific custom vm_get_page_prot() via
-subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-macros can be dropped which are no longer needed.
+Greetings!
 
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-csky@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/xtensa/Kconfig               |  1 +
- arch/xtensa/include/asm/pgtable.h | 18 --------------
- arch/xtensa/mm/init.c             | 41 +++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 18 deletions(-)
+I'm Nasser Rashid, a business financial specialist and investment 
+expert. consultant experienced in financial funding services. I 
+have a
 
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 8ac599aa6d99..1608f7517546 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -9,6 +9,7 @@ config XTENSA
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
- 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
- 	select ARCH_HAS_STRNLEN_USER
-+	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
-index bd5aeb795567..ed6e93097142 100644
---- a/arch/xtensa/include/asm/pgtable.h
-+++ b/arch/xtensa/include/asm/pgtable.h
-@@ -200,24 +200,6 @@
-  * What follows is the closest we can get by reasonable means..
-  * See linux/mm/mmap.c for protection_map[] array that uses these definitions.
-  */
--#define __P000	PAGE_NONE		/* private --- */
--#define __P001	PAGE_READONLY		/* private --r */
--#define __P010	PAGE_COPY		/* private -w- */
--#define __P011	PAGE_COPY		/* private -wr */
--#define __P100	PAGE_READONLY_EXEC	/* private x-- */
--#define __P101	PAGE_READONLY_EXEC	/* private x-r */
--#define __P110	PAGE_COPY_EXEC		/* private xw- */
--#define __P111	PAGE_COPY_EXEC		/* private xwr */
--
--#define __S000	PAGE_NONE		/* shared  --- */
--#define __S001	PAGE_READONLY		/* shared  --r */
--#define __S010	PAGE_SHARED		/* shared  -w- */
--#define __S011	PAGE_SHARED		/* shared  -wr */
--#define __S100	PAGE_READONLY_EXEC	/* shared  x-- */
--#define __S101	PAGE_READONLY_EXEC	/* shared  x-r */
--#define __S110	PAGE_SHARED_EXEC	/* shared  xw- */
--#define __S111	PAGE_SHARED_EXEC	/* shared  xwr */
--
- #ifndef __ASSEMBLY__
- 
- #define pte_ERROR(e) \
-diff --git a/arch/xtensa/mm/init.c b/arch/xtensa/mm/init.c
-index 6a32b2cf2718..b2cc016dec92 100644
---- a/arch/xtensa/mm/init.c
-+++ b/arch/xtensa/mm/init.c
-@@ -216,3 +216,44 @@ static int __init parse_memmap_opt(char *str)
- 	return 0;
- }
- early_param("memmap", parse_memmap_opt);
-+
-+pgprot_t vm_get_page_prot(unsigned long vm_flags)
-+{
-+	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-+	case VM_NONE:
-+		return PAGE_NONE;
-+	case VM_READ:
-+		return PAGE_READONLY;
-+	case VM_WRITE:
-+		return PAGE_COPY;
-+	case VM_READ | VM_WRITE:
-+		return PAGE_COPY;
-+	case VM_EXEC:
-+		return PAGE_READONLY_EXEC;
-+	case VM_EXEC | VM_READ:
-+		return PAGE_READONLY_EXEC;
-+	case VM_EXEC | VM_WRITE:
-+		return PAGE_COPY_EXEC;
-+	case VM_EXEC | VM_READ | VM_WRITE:
-+		return PAGE_COPY_EXEC;
-+	case VM_SHARED:
-+		return PAGE_NONE;
-+	case VM_SHARED | VM_READ:
-+		return PAGE_READONLY;
-+	case VM_SHARED | VM_WRITE:
-+		return PAGE_SHARED;
-+	case VM_SHARED | VM_READ | VM_WRITE:
-+		return PAGE_SHARED;
-+	case VM_SHARED | VM_EXEC:
-+		return PAGE_READONLY_EXEC;
-+	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_READONLY_EXEC;
-+	case VM_SHARED | VM_EXEC | VM_WRITE:
-+		return PAGE_SHARED_EXEC;
-+	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-+		return PAGE_SHARED_EXEC;
-+	default:
-+		BUILD_BUG();
-+	}
-+}
-+EXPORT_SYMBOL(vm_get_page_prot);
--- 
-2.25.1
+I have a serious business investment opportunity to discuss with 
+you. Century Financial Dubai is the home of discerning investors.
+We
 
+We offer independent financial advice and assist our clients in 
+making sound investment decisions from a variety of investment 
+options.
+
+Opportunities are available.
+
+Our company is structured to provide personalized services to As 
+a result, capital security and adequate funding are ensured.
+
+returns on investment. Our investors are ready to provide funding 
+for your business expansion, such as debt and equity.
+
+financing. If you require funding, we would be able to partner 
+with you. We look forward to your response.
+
+Thank you and stay safe,
+
+Nasser Rashid, CFA,
+
+Century Financial
