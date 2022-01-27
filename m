@@ -2,223 +2,119 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C0349EA99
-	for <lists+linux-csky@lfdr.de>; Thu, 27 Jan 2022 19:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149CA49EAF4
+	for <lists+linux-csky@lfdr.de>; Thu, 27 Jan 2022 20:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbiA0Sup (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 27 Jan 2022 13:50:45 -0500
-Received: from mout.gmx.net ([212.227.15.15]:47043 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232813AbiA0Sup (ORCPT <rfc822;linux-csky@vger.kernel.org>);
-        Thu, 27 Jan 2022 13:50:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643309437;
-        bh=HeSwGIPUNuT3lbv+3W5Z+dz0XPpDJxu40TMVk5bJrP4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=MyRgrj7CPhp2n567jOw8qGoooissKiUyd0543+RWkZkKhiOAQupZAk7b6a6hnr2rj
-         ULBLtVsb8MwcDHJ9rpSTQNH+uIFpxXospuLN208I/h7OoDJqwWc1XL//7c0aEcDkcg
-         CXqij814ds3/2lqieqzSWnGyyIsc/1StWXzSqq9U=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from ls3530 ([92.116.136.125]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MV67o-1mnDEg3v2U-00SB70; Thu, 27
- Jan 2022 19:50:37 +0100
-Date:   Thu, 27 Jan 2022 19:49:26 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Andrew Morton <akpm@linux-foundation.org>,
+        id S245496AbiA0TTx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 27 Jan 2022 14:19:53 -0500
+Received: from outbound5h.eu.mailhop.org ([18.156.94.234]:51204 "EHLO
+        outbound5h.eu.mailhop.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234766AbiA0TTx (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 27 Jan 2022 14:19:53 -0500
+X-Greylist: delayed 963 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 Jan 2022 14:19:52 EST
+ARC-Seal: i=1; a=rsa-sha256; t=1643310228; cv=none;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        b=Ye4a/YOw5mc7PMx4VhwPdnbqnRInsEyWyWjHIJT7R2tYU2oJWxoEdrZkOb2ASnM7vXRlfZE/YBaQx
+         QVgHmgiMTjH8jN31IksfUDxDDW4RFqyYOenya1wQUzVyfckoY/+nOJvpzFkktnQxoVryFDGp7PuqkK
+         63QudzS7NNYKQ9T48JWJeLEp8uwcsMtQHisqqg+U/NV6EoMat/rDfYGQNXHTM+7JIE2MWE3UuWuN4z
+         VYT24B0SCnfl9q1fJ/Dp+n5spn1J/2XZCHLWLf0DKr6M2/mkEfkkOzQ2E4w4a8k52L9ORcWE01hz5J
+         p7Cf9/Wd0RCWN32NAL+stsXE/YbxTbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=arc-outbound20181012;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:dkim-signature:dkim-signature:from;
+        bh=ZPOoAh9ilR0mDf2sGLTWKIgj5O+vg7Y8DEFiCpa40cI=;
+        b=PynOkqGLTt/cBF4XyvaikcntXYxmLkK6g/FkDi80kEVYY5ZoKmZLy1YS7adUA9quoDrFCY/KCXHu5
+         fzVkBh7/pNjT5/SVfdN9Polz6W3aSEJGZIkioH+XNmHGEaizTTFD96qS10cqOhhgozXJb6qnxQkM4i
+         ZkONICbPvOYdU30d4duUGOtAxUm3SxrCj+ldIVi+GEb+PFvUpFFVJ5qXXZtTfkT0JUAlcXhMzAivnF
+         ZZ6bmQ+Bxdu5RfroZ9LraCeTbVvwiWiDif2ILAuhg7zIJRd3EJV6DV2vTpZ3+ZtJvNS0iDpaqIoe1H
+         1ER1VewTpvUf3+U/AcVx8UKUeOIq0ew==
+ARC-Authentication-Results: i=1; outbound2.eu.mailhop.org;
+        spf=pass smtp.mailfrom=stackframe.org smtp.remote-ip=91.207.61.48;
+        dmarc=none header.from=stackframe.org;
+        arc=none header.oldest-pass=0;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=stackframe.org; s=duo-1634547266507-560c42ae;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=ZPOoAh9ilR0mDf2sGLTWKIgj5O+vg7Y8DEFiCpa40cI=;
+        b=sf+CSgcB2S8FS7i8w5gOYZ399ZV3KikJV/JWhAzf1mfhipkqdEd9YVATpBOUWJlgyOlqDdefwjBau
+         6p061PYZzMeceDBH7PGmgIFf7IdfFK/xogyYHD7mPRzlTOBDTK/WwG89eKHAx39qEHZlKDo4zVopq2
+         IYIxpTu/lRY4U8Do=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=outbound.mailhop.org; s=dkim-high;
+        h=content-type:mime-version:message-id:in-reply-to:date:references:subject:cc:
+         to:from:from;
+        bh=ZPOoAh9ilR0mDf2sGLTWKIgj5O+vg7Y8DEFiCpa40cI=;
+        b=NtFjJ/cqVCyljlDqPGqg5Z6BbPDsUamusZVkWPLeLkZ37IHSlMVQvIEBHpR+uVk7sgKAEOtZ1WwiZ
+         NNhUnZWwlD7AmZEN1nsQ/cJNK7z1SM80CVkIqVC1rUwS0uzDvinDJw+WFkJZRd3EF+x7BekNSDKuCg
+         TsB5fKWI/Tldw+i7R/Z0j2CrudhSNFKeyXOly0c2ZJ/bfgX3l4i3RlUa8AhO5klovyNmNQL3lFNTWf
+         SNI6DMIGxbDnAdznOlM57NwMtTTiBZ5rn3gSg8w3Dm9MlxHex2llQcvJey51DavIDxpFW81JAGprgr
+         bO41FwzxvdCE/Qdk9hks6X7Gp0NAl8g==
+X-Originating-IP: 91.207.61.48
+X-MHO-RoutePath: dG9ta2lzdG5lcm51
+X-MHO-User: d7a1b121-7fa3-11ec-a079-973b52397bcb
+X-Report-Abuse-To: https://support.duocircle.com/support/solutions/articles/5000540958-duocircle-standard-smtp-abuse-information
+X-Mail-Handler: DuoCircle Outbound SMTP
+Received: from mail.duncanthrax.net (propper.duncanthrax.net [91.207.61.48])
+        by outbound2.eu.mailhop.org (Halon) with ESMTPSA
+        id d7a1b121-7fa3-11ec-a079-973b52397bcb;
+        Thu, 27 Jan 2022 19:03:42 +0000 (UTC)
+Received: from hsi-kbw-109-193-149-228.hsi7.kabel-badenwuerttemberg.de ([109.193.149.228] helo=x1.stackframe.org.stackframe.org)
+        by mail.duncanthrax.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <svens@stackframe.org>)
+        id 1nDA3Y-00767l-Pz; Thu, 27 Jan 2022 21:03:40 +0200
+From:   Sven Schnelle <svens@stackframe.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-csky@vger.kernel.org, linux-mm@kvack.org,
         Linux Kernel <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@kernel.org>
-Cc:     linux-parisc@vger.kernel.org
-Subject: [PATCH v2] usercopy/csky: Do not fail on memory from former init
- sections
-Message-ID: <YfLpNkmlvoR8iPcq@ls3530>
+        Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Subject: Re: [PATCH v2] usercopy/csky: Do not fail on memory from former
+ init sections
+References: <YfLpNkmlvoR8iPcq@ls3530>
+Date:   Thu, 27 Jan 2022 20:03:38 +0100
+In-Reply-To: <YfLpNkmlvoR8iPcq@ls3530> (Helge Deller's message of "Thu, 27 Jan
+        2022 19:49:26 +0100")
+Message-ID: <87k0el57cl.fsf@x1.stackframe.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:3CgDMPMCj2d7NrYEKDDE7lNJrzXYGNaSdzsN9/Sgon5u0chNi24
- tOfhFRMqqsn9TEb9nvqn+YrfotQ/CCRNIm0eYeq9dnKprYB6sJ5togG7VcnzEFNB5bytUru
- B9RG2kxoX77+DBMEJuESsC8iWKgRAcDKeGG9Oi0AFTxOyFdRp6KEqj5x5VVKeDpFGnHe93Y
- tlHcKvFjXATNJ4lcO+8FQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VnZ5MjFxWDo=:yTzcADo3/rHVx+vsg6Hx/G
- GJKL5TeZeu8C3GwDuRZTzR6WmfQzTYb8V0oguzxYxwddKuZDnp592AQpaRPexPwag8Yjctzmi
- nqWGNf6iFdtohHyinQGyokcqUgXCZBdda0TaW4yCprzqAZNhW3odI4w0BvCA6Qp6pkJSCpNWe
- RayB39ihg0K3Cvcrc/awEMiy3JKUwuMn5G7Zt0EGmS/G8J3ADuHdza4564hHn4F9e0/fpFZDC
- 3t1onS/FyUcXgV6K6KxwH/PITWId3QHnOfOCDAmARRcsReyhNLy27Tg/a5VzXcvklTIBwJzb4
- 4kFpDOJzVJB/pKjaG/xUNnh2QuzYaczzOX0i3K3Ir0x3iHDxfJfB7ypdjtYu0IkNhNUgNiWbH
- M6x42eEiLgZ/IwWIJjMo1HTKEJQqPVCRQ3Y3VogDcKsLx6NqyWrzH2TFbIGManovRXaPjnu0b
- K2USPPsdrbjlU7osLYrG04UboY8W2NG8X5p+EDXnB32Gw0LHMa7Qs8iv86HZ/lqfsoJtcHqe/
- Uf0NBpyRa0u1QbQg8VdXQMHJXamAqVdnnCMr4LkEioy1XNsNHXKgouaslkin/OseRYSwj/fu+
- GGUdAyWn5/38XSaEe86BzJ0XKiVVURRntMlKkT738w1QUjT0pcvwmisxElNfOQFQ+OkrI/ihq
- WfA9/5UdOnQhl+mpwEeq3SqxgiP6Mx92v+78ApZ4bivY+dIEtm9tusKT3RZR9nQ1T1hM8yywq
- KDka4iBHPGVsu1dNHLbiqrpkWRnudaR512b/S7gRIXqp3uarF20ftbqAmLz6lswDZRe0a8yaX
- cmSudiRnbHXoVb1K3WLkX7aTsdcPF2MaZdScNnb9Y/0P6C86BUd4BxlLRach4Lx40QhlRXsV0
- jRYgtyWP1imC6GsRPqZdPIVDo+eHdkulJ41SwCjK9DTezOvD9mLmwYSdbciTuAwJLx6ByO19W
- RQOXgpgbvo/UN9faKD7uBu71J5uOzZ0AHWPDM4w/NxB6PjW1QCLz9J7jtouy8WoWsiCXsaa29
- r/TkcXSHovr9WHVWQ23FNA89+kLuZv00/hMgN6WEyPa/UWW5LZwqMJI3jXuXSEl3/vYrIrG2L
- fhWDEkMdk7mUA0=
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-While working on the parisc port I suddenly noticed that with
-HARDENED_USERCOPY=3Dy the usercopy checks randomly reported errors which e=
-ven
-prevented the kernel to boot into userspace.
+Helge Deller <deller@gmx.de> writes:
 
-Specifically the function check_kernel_text_object() reported those errors=
-, as
-it thought the kernel variable I was using belongs to the kernel text area=
-, and
-as such was invalid to be used.
+> While working on the parisc port I suddenly noticed that with
+> HARDENED_USERCOPY=y the usercopy checks randomly reported errors which even
+> prevented the kernel to boot into userspace.
+>
+> Specifically the function check_kernel_text_object() reported those errors, as
+> it thought the kernel variable I was using belongs to the kernel text area, and
+> as such was invalid to be used.
+> [..]
+> diff --git a/mm/usercopy.c b/mm/usercopy.c
+> index b3de3c4eefba..37a35c6051bc 100644
+> --- a/mm/usercopy.c
+> +++ b/mm/usercopy.c
+> @@ -113,6 +113,15 @@ static bool overlaps(const unsigned long ptr, unsigned long n,
+>  	return true;
+>  }
+>
+> +static bool inside_init_area(const unsigned long ptr, unsigned long n,
+> +		char *start, char *end)
+> +{
+> +	unsigned long initlow = (unsigned long) start;
+> +	unsigned long inithigh = (unsigned long) end;
+> +
+> +	return (ptr >= initlow && (ptr + n) < inithigh);
+> +}
 
-Looking at the code you'll see that check_kernel_text_object() checks
-if the given pointer is inside the _stext to _etext memory area:
+Gerald added something similar with 7a5da02de8d6 ("locking/lockdep:
+check for freed initmem in static_obj()"), so i wonder whether that
+could be used?
 
-/* Is this address range in the kernel text area? */
-static inline void check_kernel_text_object(const unsigned long ptr, unsig=
-ned long n, bool to_user)
-{
-        unsigned long textlow =3D (unsigned long)_stext;
-        unsigned long texthigh =3D (unsigned long)_etext;
-
-        if (overlaps(ptr, n, textlow, texthigh))
-                usercopy_abort("kernel text", NULL, to_user, ptr - textlow=
-, n);
-}
-
-When I faced the issues on parisc, the parisc kernel memory layout in
-vmlinux.lds.S file was the following (it isn't any longer because of commi=
-t
-98400ad75e95):
-
-        _stext =3D .;
-        __init_begin =3D .;
-        HEAD_TEXT_SECTION
-        INIT_DATA_SECTION(PAGE_SIZE)
-        __init_end =3D .;
-
-        _text =3D .;              /* Text and read-only data */
-        .text ALIGN(PAGE_SIZE) : {
-                TEXT_TEXT
-                LOCK_TEXT
-	...
-	_etext =3D .;
-
-As can be seen, the INIT sections are inside the _stext ... _etext section=
-,
-and this is important: On parisc the init sections can be quite big when
-HUGE_PAGES are enabled and as such triggers the problem more frequently.
-
-Now, after bootup all architectures call free_initmem() which frees up the=
- INIT
-section, so the former INIT memory area can be used by the kernel for kmal=
-loc()
-or similiar allocations.
-
-Now, when starting to execute userspace the parisc kernel allocated memory=
- to
-interact with userspace, and sometimes - by accident - some of that memory=
- was
-allocated from the former INIT section.
-
-By using copy_to_user() and copy_from_user() the hardened usercopy checks =
-were
-executed and they then triggered the failure in the check_kernel_text_obje=
-ct()
-function in case such memory from the INIT section was used. The problem i=
-s,
-that check_kernel_text_object() currently ignores that the INIT section (w=
-hich
-is now OK to be used) *might* be inside the _stext ...  _etext area.
-
-On parisc I fixed this issue by moving the _stext symbol behind the INIT s=
-ection.
-
-I checked the vmlinux.lds.S files of the other architectures and I do beli=
-eve that
-the sky architecture is still suffering from this problem (maybe unnoticed=
- yet,
-because it may happen very seldom/randomly and depending on the size of th=
-e INIT
-sections).
-
-The current csky vmlinux.lds.S file looks like this:
-
-        _stext =3D .;
-        __init_begin =3D .;
-        INIT_TEXT_SECTION(PAGE_SIZE)
-        INIT_DATA_SECTION(PAGE_SIZE)
-        __init_end =3D .;
-        .text : AT(ADDR(.text) - LOAD_OFFSET) {
-...
-        } =3D 0
-        _etext =3D .;
-
-So, for csky I think the _stext symbol needs to be moved after the __init_=
-end
-symbol to prevent the userchecks to trigger.
-
-The other (and in my opinion better) solution is to generally enhance the
-usercopy check in check_kernel_text_object() like it's proposed in the pat=
-ch
-below.
-
-Helge
-
-=2D-----------------
-
-The memory area between the _stext and the _etext symbols may include the =
-init
-sections. Currently this is true for the csky architecture only.
-If the init sections are freed after bootup, the kernel may reuse this mem=
-ory.
-
-In one test the usercopy checks if a given kernel address is inside the .t=
-ext
-section (from _stext to _etext), and it then wrongly fails if the memory i=
-s
-from the former init sections.
-
-Fix this potential failure by first checking against the init sections bef=
-ore
-checking against the _stext/_etext section.
-
-Signed-off-by: Helge Deller <deller@gmx.de>
-
-diff --git a/mm/usercopy.c b/mm/usercopy.c
-index b3de3c4eefba..37a35c6051bc 100644
-=2D-- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -113,6 +113,15 @@ static bool overlaps(const unsigned long ptr, unsigne=
-d long n,
- 	return true;
- }
-
-+static bool inside_init_area(const unsigned long ptr, unsigned long n,
-+		char *start, char *end)
-+{
-+	unsigned long initlow =3D (unsigned long) start;
-+	unsigned long inithigh =3D (unsigned long) end;
-+
-+	return (ptr >=3D initlow && (ptr + n) < inithigh);
-+}
-+
- /* Is this address range in the kernel text area? */
- static inline void check_kernel_text_object(const unsigned long ptr,
- 					    unsigned long n, bool to_user)
-@@ -121,6 +130,12 @@ static inline void check_kernel_text_object(const uns=
-igned long ptr,
- 	unsigned long texthigh =3D (unsigned long)_etext;
- 	unsigned long textlow_linear, texthigh_linear;
-
-+	/* Ok if inside the former init sections */
-+	if (inside_init_area(ptr, n, __init_begin, __init_end))
-+		return;
-+	if (inside_init_area(ptr, n, _sinittext, _einittext))
-+		return;
-+
- 	if (overlaps(ptr, n, textlow, texthigh))
- 		usercopy_abort("kernel text", NULL, to_user, ptr - textlow, n);
-
+Regards
+Sven
