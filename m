@@ -2,80 +2,100 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D494A2F3B
-	for <lists+linux-csky@lfdr.de>; Sat, 29 Jan 2022 13:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BFD4A320A
+	for <lists+linux-csky@lfdr.de>; Sat, 29 Jan 2022 22:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbiA2MUr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 29 Jan 2022 07:20:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48558 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346889AbiA2MTi (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 29 Jan 2022 07:19:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0017B8234E;
-        Sat, 29 Jan 2022 12:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA85DC36AE3;
-        Sat, 29 Jan 2022 12:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643458775;
-        bh=J65VF607Au+lXQP+8mKXArK6fDS/9hBK5qV8mWwi4fM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hNexS/zfRcpJQb9tKy9uq83XaLRwvXw8cgOzwvW9WGM8zvfpjFXUMmOHV7wpYFjBp
-         R4zZeyMkYScimS69R0rmPSDQiLeoyC4tNXnoZopSCmrKnJ8CXAdNqsBzb1ez7gi6HN
-         0Tyxrhtp5Mi9AKTv9oQEZpKazjfoFIi00SyeBHUBliq5cJENB09Lf+Pi7mLjn7YNBT
-         aPsDFmioeyhcJlUMm3AZSlSK9ucd2doig8+iZU2Wyg6rU0gRs5rtmxtw+5HhoIUawl
-         66/hvRTiAyCZ/rB8cQbfhby7/PO6/fXx4w8NqSqdB00+lX+6mDb6AecdxvXlTOakZB
-         Pa6OVe+KOUrow==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org,
-        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
-        wangjunqiang@iscas.ac.cn, hch@lst.de, hch@infradead.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 17/17] KVM: compat: riscv: Prevent KVM_COMPAT from being selected
-Date:   Sat, 29 Jan 2022 20:17:28 +0800
-Message-Id: <20220129121728.1079364-18-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220129121728.1079364-1-guoren@kernel.org>
-References: <20220129121728.1079364-1-guoren@kernel.org>
+        id S237923AbiA2VkX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 29 Jan 2022 16:40:23 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:33407 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233129AbiA2VkW (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 29 Jan 2022 16:40:22 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MKKIZ-1mxmHb13Pz-00Lj0v; Sat, 29 Jan 2022 22:40:20 +0100
+Received: by mail-ot1-f43.google.com with SMTP id i16-20020a056830011000b005a3cc8d20fbso2826089otp.9;
+        Sat, 29 Jan 2022 13:40:19 -0800 (PST)
+X-Gm-Message-State: AOAM532uGFEAQ/r3avHpRSTjCMnoMLcVBHqAJhysaZqycCFO1YHD+rc3
+        KGSt8BekMqCCxzBPyaaoCftp52ERQFwSEyLRg7A=
+X-Google-Smtp-Source: ABdhPJxSc4cWbyXoSGQiQtpLi4PNMIRU496vg4S4jN8fyO8Z/BY7E62yNehuKgdWMqyCyzVpdMc329RL2rEKIxjEMaU=
+X-Received: by 2002:a9d:73da:: with SMTP id m26mr8391513otk.72.1643492418274;
+ Sat, 29 Jan 2022 13:40:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-4-guoren@kernel.org>
+In-Reply-To: <20220129121728.1079364-4-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 29 Jan 2022 22:40:02 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0jK4quTT6txPakQuuAjyoMXRq1eM35pCFLo0PQNq+p2Q@mail.gmail.com>
+Message-ID: <CAK8P3a0jK4quTT6txPakQuuAjyoMXRq1eM35pCFLo0PQNq+p2Q@mail.gmail.com>
+Subject: Re: [PATCH V4 03/17] asm-generic: compat: Cleanup duplicate definitions
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:lnMfdgYEnSzWgrBdIox1QiTtJ/mhHPon38ownGxPYpb8Uida3VU
+ tfyy4FXB2xzzPbBOtGmv5a4pBMEEwyX8O9L1f+kulgNvew7caxFsmKjzWFd+zLH4Fejx5l+
+ xassjjrOzMYYfFKqcaxlqyWAWmJ/hygLwuzTj6az5ltiiR6k1hxnFeXy1bEFXbs8GorGkjJ
+ zEl1/GLHKvkmvf/pVWmjw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+xAXmlQqFQ0=:q+/YVKL9cK4h9X74Ey2YvJ
+ upHTbUlCwlp/hRQIU2bY3zQKgizxwntrROt8rL9SDmbxXt1t9xeiH9gl01IN5lHGQE4F509VY
+ PE5BcwOJWst8MWCYFiskFW5fHUP4hpqK1iiLACC8GL/xk+2vq8XvtkypvcwAFSPAhFPCOv5fk
+ WEFtf46LfdL1BtGJhTXpo6WAMgzu7+RQiKzGL2fpCWRQHeR/q0pVdgjxZATz0mklQA2ry0rxX
+ WlWL2KNZv85yJciTzU3lZ1+olVgzVJ6bW811KHgBuaoNefuqX9MOEZSCaHFnBX/l5gMPdrPll
+ 51wRPTqB8QRBvnqGZTfMdAHma8C3jx366/Llc5HJpqFmgSMXiAAVDu0zv9bUvRfau/eEbGRIW
+ AQYaxk5TgqDdohW4PzPqf4V+OA0jZnTZLhxdCi4CXgwUvqZtqAA/Gk7E+0sIte3LK+65xMZzL
+ 4hhAefxkz6QTglhcmXDFCozB4OpQqvtX/spngdIDdseRL0Z8Q0j/idC0e1mYPJt/NN9Hs9D/U
+ rbReiEIS5pjpCKzzxRoYx7K4b2sP/PXrfr3Iphm6JMwqfvyK5D+DgyFbZieQKdXelPOWdZJIr
+ mO1N72L4x2usAHDO3SKhIOq4HzITZIIT1IJFjosHJ1qI6o3/oPvGqMZeCZyN95DuM2YnUirFa
+ icB0qacmeX6rA85wW4PTuMQHLsGu69h0doRRlK2XxRu7ZFzzQ/Kww9dT6ZHYkh036G0NhjKTr
+ L5JFGyW2RyI8yUnOUh3949XJgOa2HNLfuhUC0YyHnI4HF7fNwJ7dTTebGHwbnZQmq08LP8udI
+ KFcvUfXzKU8E0W7uhYGAcWv+bpd1bPXOZ68FA3AaB80qORmrTU=
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Sat, Jan 29, 2022 at 1:17 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> There are 7 64bit architectures that support Linux COMPAT mode to
+> run 32bit applications. A lot of definitions are duplicate:
+>  - COMPAT_USER_HZ
+>  - COMPAT_RLIM_INFINITY
+>  - COMPAT_OFF_T_MAX
+>  - __compat_uid_t, __compat_uid_t
+>  - compat_dev_t
+>  - compat_ipc_pid_t
+>  - struct compat_flock
+>  - struct compat_flock64
+>  - struct compat_statfs
+>  - struct compat_ipc64_perm, compat_semid64_ds,
+>           compat_msqid64_ds, compat_shmid64_ds
+>
+> Cleanup duplicate definitions and merge them into asm-generic.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
 
-Current riscv doesn't support the 32bit KVM API. Let's make it
-clear by not selecting KVM_COMPAT.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
----
- virt/kvm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-index f4834c20e4a6..a8c5c9f06b3c 100644
---- a/virt/kvm/Kconfig
-+++ b/virt/kvm/Kconfig
-@@ -53,7 +53,7 @@ config KVM_GENERIC_DIRTYLOG_READ_PROTECT
- 
- config KVM_COMPAT
-        def_bool y
--       depends on KVM && COMPAT && !(S390 || ARM64)
-+       depends on KVM && COMPAT && !(S390 || ARM64 || RISCV)
- 
- config HAVE_KVM_IRQ_BYPASS
-        bool
--- 
-2.25.1
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
