@@ -2,142 +2,200 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771ED4B5B2D
-	for <lists+linux-csky@lfdr.de>; Mon, 14 Feb 2022 21:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82314B5B95
+	for <lists+linux-csky@lfdr.de>; Mon, 14 Feb 2022 22:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiBNUpJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 14 Feb 2022 15:45:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33590 "EHLO
+        id S230006AbiBNUxq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 14 Feb 2022 15:53:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiBNUpE (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Feb 2022 15:45:04 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C05242FA2
-        for <linux-csky@vger.kernel.org>; Mon, 14 Feb 2022 12:42:52 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id u6so33002394lfc.3
-        for <linux-csky@vger.kernel.org>; Mon, 14 Feb 2022 12:42:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
-        b=ZcumWtnhggjMFDUHhywZOsPSWocj5WFiFD4wxX4meGi3Jv+FEek8bAx8wm544tPFuD
-         FZMy/4sQc4BwvneObDdXEv1mNtlI8GPACMt1JW8whp1hkRcRU1/uCicaO7g7UXSaSO+q
-         JQ0jz81cHBjFl3QlKdIkLJ7hR07DlS4kmaNNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
-        b=Lxxl+X+x7gS5sDvy/7L87LbxFUFtoUDhKbl4bA4qFzZZRhGLL6g3SKLSoMuAiMNsEH
-         3QIQieLmtSX8RBhkkLVK9mWNTRIQG2GiusYFLoMzsZDShYQ8/AyK9kGhgi86sUH+GNqg
-         EB1/3NjnKVd39N4MVyQe4HbOOXnBptMgisuZ/RwKdKq9c/IGurcn1e3tuJZtoEdnY5vg
-         +2fgzpxU3ISxzIfFTS9FuVddY1cZax3eka4FFF37EjX1bsNnYJaVg1MRUPynb03N8rUB
-         pW0WfbWe1VD/KpD+KNQoCw4q1UqtBylGj09AJhPQto9utExKmKkQcB0IN9MvzDjOFicp
-         aaVg==
-X-Gm-Message-State: AOAM531S0cZRhsWCIEhR25ojb3g0oAgFdrrWzqFzMj3VUj4SwRGUwA+f
-        UPMYNqJYpwqQSBp8+Z0IZ/b5TZFp4L/snO3Lg2Q=
-X-Google-Smtp-Source: ABdhPJz/GSe94XAXmkV0qwzN7Pd8/+WjYRU03iqnks7YmjmzrSzXeP527tS9VzLyEsVFJkmbUgqI6w==
-X-Received: by 2002:a17:906:58c6:: with SMTP id e6mr318121ejs.733.1644869259424;
-        Mon, 14 Feb 2022 12:07:39 -0800 (PST)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id b7sm15630520edv.58.2022.02.14.12.07.39
-        for <linux-csky@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 12:07:39 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id lw4so8949511ejb.12
-        for <linux-csky@vger.kernel.org>; Mon, 14 Feb 2022 12:07:39 -0800 (PST)
-X-Received: by 2002:a2e:a231:: with SMTP id i17mr205093ljm.443.1644868881602;
- Mon, 14 Feb 2022 12:01:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-5-arnd@kernel.org>
- <YgqLFYqIqkIsNC92@infradead.org> <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-In-Reply-To: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Feb 2022 12:01:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
-Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
-Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Helge Deller <deller@gmx.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
+        with ESMTP id S230025AbiBNUxb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Feb 2022 15:53:31 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93BFADF97;
+        Mon, 14 Feb 2022 12:53:10 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id D8D9792009C; Mon, 14 Feb 2022 21:16:50 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id D2C4C92009B;
+        Mon, 14 Feb 2022 20:16:50 +0000 (GMT)
+Date:   Mon, 14 Feb 2022 20:16:50 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Heiko Carstens <hca@linux.ibm.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jeff Dike <jdike@addtoit.com>,
         Richard Weinberger <richard@nod.at>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] parport_pc: Also enable driver for PCI systems
+Message-ID: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,HDRS_LCASE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> As Al pointed out, they turned out to be necessary on sparc64, but the only
-> definitions are on sparc64 and x86, so it's possible that they serve a similar
-> purpose here, in which case changing the limit from TASK_SIZE to
-> TASK_SIZE_MAX is probably wrong as well.
+Nowadays PC-style parallel ports come in the form of PCI and PCIe option 
+cards and there are some combined parallel/serial option cards as well 
+that we handle in the parport subsystem.  There is nothing in particular 
+that would prevent them from being used in any system equipped with PCI 
+or PCIe connectivity, except that we do not permit the PARPORT_PC config 
+option to be selected for platforms for which ARCH_MIGHT_HAVE_PC_PARPORT 
+has not been set for.
 
-x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
-get_user() assembler implementation does the same.
+The only PCI platforms that actually can't make use of PC-style parallel 
+port hardware are those newer PCIe systems that have no support for I/O 
+cycles in the host bridge, required by such parallel ports.  Notably, 
+this includes the s390 arch, which has port I/O accessors that cause 
+compilation warnings (promoted to errors with `-Werror'), and there are 
+other cases such as the POWER9 PHB4 device, though this one has variable 
+port I/O accessors that depend on the particular system.  Also it is not 
+clear whether the serial port side of devices enabled by PARPORT_SERIAL 
+uses port I/O or MMIO.  Finally Super I/O solutions are always either 
+ISA or platform devices.
 
-I think any __range_not_ok() users that use TASK_SIZE are entirely
-historical, and should be just fixed.
+Make the PARPORT_PC option selectable also for PCI systems then, except 
+for the s390 arch, however limit the availability of PARPORT_PC_SUPERIO 
+to platforms that enable ARCH_MIGHT_HAVE_PC_PARPORT.  Update platforms 
+accordingly for the required <asm/parport.h> header.
 
-                 Linus
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+---
+Hi,
 
-(*) And by "always" I mean "as far back as I bothered to go". In the
-2.6.12 git import, we had
+ I have verified this lightly by booting a kernel with PARPORT_PC and 
+PARPORT_SERIAL enabled on a RISC-V HiFive Unmatched system.  While I do 
+have a PCIe parallel port option available that I could use with my RISC-V 
+machine (based on the OxSemi OXPCIe952 chip) it is currently plugged in 
+the wrong system, and both machines are in my remote lab I have currently 
+no visit scheduled to in the near future.  For the record the device 
+reports as:
 
-    #define USER_DS          MAKE_MM_SEG(PAGE_OFFSET)
+PCI parallel port detected: 1415:c118, I/O at 0x1000(0x1008), IRQ 18
+parport1: PC-style at 0x1000 (0x1008), irq 18, using FIFO [PCSPP,TRISTATE,COMPAT,EPP,ECP]
 
-so the user access limit was actually not really TASK_SIZE_MAX at all,
-but the beginning of the kernel mapping, which on x86-64 is much much
-higher.
+in the other system.  I'll see if I can verify it with the Unmatched at 
+the next opportunity, though it seems like an overkill to me given that a 
+PC-style parallel port is a generic PCIe device.  The OXPCIe952 implements 
+a multifunction device, so it doesn't rely on PARPORT_SERIAL.
+
+ NB platforms to be updated for <asm/parport.h> generation were chosen by 
+the presence of the HAVE_PCI or FORCE_PCI option from ones that do not 
+already have or generate that header, except for s390, now excluded.  Let 
+me know if I got anything wrong here.
+
+  Maciej
+
+Changes from v1:
+
+- Exclude s390 systems, update the change description accordingly.
+---
+ arch/arm64/include/asm/Kbuild  |    1 +
+ arch/csky/include/asm/Kbuild   |    1 +
+ arch/riscv/include/asm/Kbuild  |    1 +
+ arch/um/include/asm/Kbuild     |    1 +
+ arch/xtensa/include/asm/Kbuild |    1 +
+ drivers/parport/Kconfig        |    4 ++--
+ 6 files changed, 7 insertions(+), 2 deletions(-)
+
+linux-parport-pc-pci.diff
+Index: linux-macro/arch/arm64/include/asm/Kbuild
+===================================================================
+--- linux-macro.orig/arch/arm64/include/asm/Kbuild
++++ linux-macro/arch/arm64/include/asm/Kbuild
+@@ -3,6 +3,7 @@ generic-y += early_ioremap.h
+ generic-y += mcs_spinlock.h
+ generic-y += qrwlock.h
+ generic-y += qspinlock.h
++generic-y += parport.h
+ generic-y += user.h
+ 
+ generated-y += cpucaps.h
+Index: linux-macro/arch/csky/include/asm/Kbuild
+===================================================================
+--- linux-macro.orig/arch/csky/include/asm/Kbuild
++++ linux-macro/arch/csky/include/asm/Kbuild
+@@ -4,5 +4,6 @@ generic-y += extable.h
+ generic-y += gpio.h
+ generic-y += kvm_para.h
+ generic-y += qrwlock.h
++generic-y += parport.h
+ generic-y += user.h
+ generic-y += vmlinux.lds.h
+Index: linux-macro/arch/riscv/include/asm/Kbuild
+===================================================================
+--- linux-macro.orig/arch/riscv/include/asm/Kbuild
++++ linux-macro/arch/riscv/include/asm/Kbuild
+@@ -2,5 +2,6 @@
+ generic-y += early_ioremap.h
+ generic-y += flat.h
+ generic-y += kvm_para.h
++generic-y += parport.h
+ generic-y += user.h
+ generic-y += vmlinux.lds.h
+Index: linux-macro/arch/um/include/asm/Kbuild
+===================================================================
+--- linux-macro.orig/arch/um/include/asm/Kbuild
++++ linux-macro/arch/um/include/asm/Kbuild
+@@ -17,6 +17,7 @@ generic-y += mcs_spinlock.h
+ generic-y += mmiowb.h
+ generic-y += module.lds.h
+ generic-y += param.h
++generic-y += parport.h
+ generic-y += percpu.h
+ generic-y += preempt.h
+ generic-y += softirq_stack.h
+Index: linux-macro/arch/xtensa/include/asm/Kbuild
+===================================================================
+--- linux-macro.orig/arch/xtensa/include/asm/Kbuild
++++ linux-macro/arch/xtensa/include/asm/Kbuild
+@@ -4,6 +4,7 @@ generic-y += extable.h
+ generic-y += kvm_para.h
+ generic-y += mcs_spinlock.h
+ generic-y += param.h
++generic-y += parport.h
+ generic-y += qrwlock.h
+ generic-y += qspinlock.h
+ generic-y += user.h
+Index: linux-macro/drivers/parport/Kconfig
+===================================================================
+--- linux-macro.orig/drivers/parport/Kconfig
++++ linux-macro/drivers/parport/Kconfig
+@@ -42,7 +42,7 @@ if PARPORT
+ 
+ config PARPORT_PC
+ 	tristate "PC-style hardware"
+-	depends on ARCH_MIGHT_HAVE_PC_PARPORT
++	depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390)
+ 	help
+ 	  You should say Y here if you have a PC-style parallel port. All
+ 	  IBM PC compatible computers and some Alphas have PC-style
+@@ -77,7 +77,7 @@ config PARPORT_PC_FIFO
+ 
+ config PARPORT_PC_SUPERIO
+ 	bool "SuperIO chipset support"
+-	depends on PARPORT_PC && !PARISC
++	depends on ARCH_MIGHT_HAVE_PC_PARPORT && PARPORT_PC && !PARISC
+ 	help
+ 	  Saying Y here enables some probes for Super-IO chipsets in order to
+ 	  find out things like base addresses, IRQ lines and DMA channels.  It
