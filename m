@@ -2,55 +2,58 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A14F4B614C
-	for <lists+linux-csky@lfdr.de>; Tue, 15 Feb 2022 04:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B224B6209
+	for <lists+linux-csky@lfdr.de>; Tue, 15 Feb 2022 05:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbiBODD6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 14 Feb 2022 22:03:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59590 "EHLO
+        id S230466AbiBOEYl (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 14 Feb 2022 23:24:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiBODD5 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Feb 2022 22:03:57 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0512EBD88B;
-        Mon, 14 Feb 2022 19:03:49 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJo7z-001r4A-EX; Tue, 15 Feb 2022 03:03:43 +0000
-Date:   Tue, 15 Feb 2022 03:03:43 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        will@kernel.org, guoren@kernel.org, bcain@codeaurora.org,
-        geert@linux-m68k.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        nickhu@andestech.com, green.hu@gmail.com, dinguyen@kernel.org,
-        shorne@gmail.com, deller@gmx.de, mpe@ellerman.id.au,
-        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        hca@linux.ibm.com, dalias@libc.org, davem@davemloft.net,
-        richard@nod.at, x86@kernel.org, jcmvbkbc@gmail.com,
-        ebiederm@xmission.com, akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 14/14] uaccess: drop set_fs leftovers
-Message-ID: <YgsYD2nW9GjWJtn5@zeniv-ca.linux.org.uk>
-References: <20220214163452.1568807-1-arnd@kernel.org>
- <20220214163452.1568807-15-arnd@kernel.org>
+        with ESMTP id S229484AbiBOEYl (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 14 Feb 2022 23:24:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D25A88B8;
+        Mon, 14 Feb 2022 20:24:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CCD61227;
+        Tue, 15 Feb 2022 04:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F899C340EC;
+        Tue, 15 Feb 2022 04:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644899071;
+        bh=1GtgnRvuFA3j5DLrWfRmac2d+JF5/ykPvuln8f4qXg8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KH6NTdmd9+oocrKP6r/Hgc6lI+Cguq4EXWec7vhW4AZX83Xsl8en5bCImwLhf3uT9
+         FusC7nBEozxw9rT1ewN2v/saJ7bkfN0psUM9vRK/4bLRrbSFXO9PHX8DBoN6u0ieX4
+         RjC9EYpysJ97+l+t10EfLxiUbNMIEGLHfqQ248yqgk2P5pPKpk9UmgqMMWq0AEplw2
+         sEiVJ8nv2it4YnZhvc6+7ivTeG5z7wGCQstCILGCedP+jy3TXUsqq4fp4pLSmaK4hm
+         4ydWeT2YEJgSq0lKi+clJKctfrYTP2C4A56NF3JSY3C0tseGDI3VPwVLlYylHJE/1X
+         0nAmJqep/LheA==
+Received: by mail-vs1-f51.google.com with SMTP id g20so9090439vsb.9;
+        Mon, 14 Feb 2022 20:24:31 -0800 (PST)
+X-Gm-Message-State: AOAM5320D89GnvGiW1817TNEFhERndODFzr7G+Vce2z00KMZRxrMcUBp
+        Rkcdvwpmjq4KhpPcZ1ZASJBha5U4URaOXQ9fWcc=
+X-Google-Smtp-Source: ABdhPJzrYCExwBPj9lvIUEPXbkNhN3Rq3Cfgb2cKYfXljgYVrtwWmUdCX3U0U4NGGhf98fgtkqgw+fyHPL/IuQqtnrI=
+X-Received: by 2002:a67:c802:: with SMTP id u2mr806278vsk.59.1644899070100;
+ Mon, 14 Feb 2022 20:24:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214163452.1568807-15-arnd@kernel.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org> <20220214120250.10256-1-wonder_rock@126.com>
+In-Reply-To: <20220214120250.10256-1-wonder_rock@126.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 15 Feb 2022 12:24:19 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS8+8LME3oNgVyB4schf=Q8XictRXVCtpVTfoPL8D2NFA@mail.gmail.com>
+Message-ID: <CAJF2gTS8+8LME3oNgVyB4schf=Q8XictRXVCtpVTfoPL8D2NFA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] csky: Fix versioncheck warnings
+To:     wonder_rock@126.com
+Cc:     Randy Dunlap <rdunlap@infradead.org>, Jens Axboe <axboe@kernel.dk>,
+        linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,25 +61,66 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 05:34:52PM +0100, Arnd Bergmann wrote:
-> diff --git a/arch/parisc/include/asm/futex.h b/arch/parisc/include/asm/futex.h
-> index b5835325d44b..2f4a1b1ef387 100644
-> --- a/arch/parisc/include/asm/futex.h
-> +++ b/arch/parisc/include/asm/futex.h
-> @@ -99,7 +99,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
->  	/* futex.c wants to do a cmpxchg_inatomic on kernel NULL, which is
->  	 * our gateway page, and causes no end of trouble...
->  	 */
-> -	if (uaccess_kernel() && !uaddr)
-> +	if (!uaddr)
->  		return -EFAULT;
+On Mon, Feb 14, 2022 at 8:35 PM <wonder_rock@126.com> wrote:
+>
+> From: Deyan Wang <wonder_rock@126.com>
+>
+> arch/csky/include/asm/io.h: 8 linux/version.h not needed.
+> arch/csky/kernel/process.c: 5 linux/version.h not needed.
+> arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
+Could you put the command in the comment log? thx
 
-	Huh?  uaccess_kernel() is removed since it becomes always false now,
-so this looks odd.
+>
+> Signed-off-by: Deyan Wang <wonder_rock@126.com>
+> ---
+>  arch/csky/include/asm/io.h | 1 -
+>  arch/csky/kernel/process.c | 1 -
+>  arch/csky/mm/dma-mapping.c | 1 -
+>  3 files changed, 3 deletions(-)
+>
+> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+> index f82654053dc0..ed53f0b47388 100644
+> --- a/arch/csky/include/asm/io.h
+> +++ b/arch/csky/include/asm/io.h
+> @@ -5,7 +5,6 @@
+>
+>  #include <linux/pgtable.h>
+>  #include <linux/types.h>
+> -#include <linux/version.h>
+>
+>  /*
+>   * I/O memory access primitives. Reads are ordered relative to any
+> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
+> index 3d0ca22cd0e2..5de04707aa07 100644
+> --- a/arch/csky/kernel/process.c
+> +++ b/arch/csky/kernel/process.c
+> @@ -2,7 +2,6 @@
+>  // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
+>
+>  #include <linux/module.h>
+> -#include <linux/version.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/sched/debug.h>
+> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> index c3a775a7e8f9..82447029feb4 100644
+> --- a/arch/csky/mm/dma-mapping.c
+> +++ b/arch/csky/mm/dma-mapping.c
+> @@ -9,7 +9,6 @@
+>  #include <linux/mm.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/types.h>
+> -#include <linux/version.h>
+>  #include <asm/cache.h>
+>
+>  static inline void cache_op(phys_addr_t paddr, size_t size,
+> --
+> 2.25.1
+>
 
-	AFAICS, the comment above that check refers to futex_detect_cmpxchg()
--> cmpxchg_futex_value_locked() -> futex_atomic_cmpxchg_inatomic() call chain.
-Which had been gone since commit 3297481d688a (futex: Remove futex_cmpxchg
-detection).  The comment *and* the check should've been killed off back
-then.
-	Let's make sure to get both now...
+
+--
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
