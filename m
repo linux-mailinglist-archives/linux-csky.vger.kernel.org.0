@@ -2,105 +2,67 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0144B8A42
-	for <lists+linux-csky@lfdr.de>; Wed, 16 Feb 2022 14:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7CF4B8C69
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Feb 2022 16:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiBPNf7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-csky@lfdr.de>); Wed, 16 Feb 2022 08:35:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55740 "EHLO
+        id S234108AbiBPP3G (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 16 Feb 2022 10:29:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiBPNfp (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 16 Feb 2022 08:35:45 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5109B2ABD0C
-        for <linux-csky@vger.kernel.org>; Wed, 16 Feb 2022 05:35:30 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-5-x7kvjQ_dNbmfJSCohruuVA-1; Wed, 16 Feb 2022 13:35:28 +0000
-X-MC-Unique: x7kvjQ_dNbmfJSCohruuVA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 16 Feb 2022 13:35:25 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 16 Feb 2022 13:35:25 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-CC:     "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "will@kernel.org" <will@kernel.org>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "bcain@codeaurora.org" <bcain@codeaurora.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "nickhu@andestech.com" <nickhu@andestech.com>,
-        "green.hu@gmail.com" <green.hu@gmail.com>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "shorne@gmail.com" <shorne@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "dalias@libc.org" <dalias@libc.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "richard@nod.at" <richard@nod.at>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>
-Subject: RE: [PATCH v2 02/18] uaccess: fix nios2 and microblaze get_user_8()
-Thread-Topic: [PATCH v2 02/18] uaccess: fix nios2 and microblaze get_user_8()
-Thread-Index: AQHYIzdfY+IsqXyFuUGlEUsFmAHn6KyWK9Eg
-Date:   Wed, 16 Feb 2022 13:35:25 +0000
-Message-ID: <4a7e026b07c94668a18cb4857ad6b7a5@AcuMS.aculab.com>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-3-arnd@kernel.org>
-In-Reply-To: <20220216131332.1489939-3-arnd@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S234004AbiBPP3D (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 16 Feb 2022 10:29:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8608219DE8D;
+        Wed, 16 Feb 2022 07:28:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R6kAipwXMO7TbFMaTolYaEj+jLUzE9dE71Ig4CplYiA=; b=oQJrr7uONSRmx7FuSCPg0hA4l1
+        BLJjdDhri53590/Hgz93mObhi3Vli+4mMqaw+Wp9OcR0wION2EbJObpe0w/BhcrYAxWLQRkFCv7aD
+        wFPU1/O5o8+pqHh0yTnQLngrwIstx+xabfOQagn1pDzITFYaTHQIzk3iVfMHAs/lkSFdnOwagDJ+e
+        RlID2cWv2Q8umUbV77NATcj/iPuZTTeXMLLG0ezi/TKsMogcaN42f7dh6LxotlxE65NUFQ+7UQasw
+        lpJwOmLF4aWjj39H82Qs63j9WbJnmYIdwirt2a1yFFYJni5XaGXDMzUzvrL5oU75n2GpzObz6cGeE
+        83FJyeBA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKMEG-007Uuo-K5; Wed, 16 Feb 2022 15:28:28 +0000
+Date:   Wed, 16 Feb 2022 07:28:28 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] parport_pc: Also enable driver for PCI systems
+Message-ID: <Yg0YHHk7NVWjedgn@infradead.org>
+References: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
+ <YgtQkjRe7fbXI/lS@infradead.org>
+ <alpine.DEB.2.21.2202150901170.34636@angie.orcam.me.uk>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2202150901170.34636@angie.orcam.me.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,43 +70,22 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Arnd Bergmann
-> Sent: 16 February 2022 13:13
+On Tue, Feb 15, 2022 at 09:11:45AM +0000, Maciej W. Rozycki wrote:
+> On Mon, 14 Feb 2022, Christoph Hellwig wrote:
 > 
-> These two architectures implement 8-byte get_user() through
-> a memcpy() into a four-byte variable, which won't fit.
+> > > ===================================================================
+> > > --- linux-macro.orig/arch/arm64/include/asm/Kbuild
+> > > +++ linux-macro/arch/arm64/include/asm/Kbuild
+> > > @@ -3,6 +3,7 @@ generic-y += early_ioremap.h
+> > >  generic-y += mcs_spinlock.h
+> > >  generic-y += qrwlock.h
+> > >  generic-y += qspinlock.h
+> > > +generic-y += parport.h
+> > 
+> > Instead of adding generic-y just ad a mandatory-y in
+> > include/asm-generic/Kbuild.
 > 
-> Use a temporary 64-bit variable instead here, and use a double
-> cast the way that risc-v and openrisc do to avoid compile-time
-> warnings.
-> 
-...
->  	case 4:								\
-> -		__get_user_asm("lw", (ptr), __gu_val, __gu_err);	\
-> +		__get_user_asm("lw", (ptr), x, __gu_err);		\
->  		break;							\
-> -	case 8:								\
-> -		__gu_err = __copy_from_user(&__gu_val, ptr, 8);		\
-> -		if (__gu_err)						\
-> -			__gu_err = -EFAULT;				\
-> +	case 8: {							\
-> +		__u64 __x = 0;						\
-> +		__gu_err = raw_copy_from_user(&__x, ptr, 8) ?		\
-> +							-EFAULT : 0;	\
-> +		(x) = (typeof(x))(typeof((x) - (x)))__x;		\
->  		break;							\
+>  I'm inconvinced.  Not all archs want it, 5 don't.
 
-Wouldn't it be better to just fetch two 32bit values:
-Something like (for LE - nios2 is definitely LE:
-		__u32 val_lo, val_hi;
-		__get_user_asm("lw", (ptr), val_lo, __gu_err);
-		__get_user_asm("lw", (ptr) + 4, val_hi, __gu_err);
-		x = val_lo | val_hi << 32;
-		break;
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Which is exactly what mandatory-y is for.  Provide the asm-generic
+version by default, but let architectures override it.
