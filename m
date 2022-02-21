@@ -2,153 +2,142 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18E74BBF03
-	for <lists+linux-csky@lfdr.de>; Fri, 18 Feb 2022 19:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E654BD639
+	for <lists+linux-csky@lfdr.de>; Mon, 21 Feb 2022 07:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238951AbiBRSHi (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 18 Feb 2022 13:07:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41804 "EHLO
+        id S1345391AbiBUGls (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 21 Feb 2022 01:41:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238941AbiBRSHh (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 18 Feb 2022 13:07:37 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544521D685F
-        for <linux-csky@vger.kernel.org>; Fri, 18 Feb 2022 10:07:20 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id m17so16759331edc.13
-        for <linux-csky@vger.kernel.org>; Fri, 18 Feb 2022 10:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3DIqXxPmp6dtbTijOx2KTFQ/AdtfYUTWecKVh7q3dDI=;
-        b=5c/qRto3YK3Y6/Rhnnpp4RzKmf8QhiKseObhkqXIpnLfhpnv2ua8Z7YCExbmjSYUCG
-         SbBSycxSpm4FRe5zOaxst92xyRDLRie0B4d4p8x0W6snNr+dG6MghxLfcakTWMQA17Pf
-         gOp7JS9gIpdJumtDaMv9IluyX8dB5LI5eLR/YC2U+D7T5N3aQr9NOYHAOP982E02xanw
-         SC1uTLhbyKEp3+LiMa1bFSquyveVGLxTCPf/eSvmTiEZzxEI+wIe4AMdv5VgRD2GYf6G
-         kO3gnVVxKK1wWuKxjcQ5nhLyDgmj/c1nxTJoqfRQTmuVCBNlEZ4IpVOo74LURbiOVsEg
-         CBWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3DIqXxPmp6dtbTijOx2KTFQ/AdtfYUTWecKVh7q3dDI=;
-        b=KmvDwShr0IxQ0o4uHzew7XgXE0pN9qxmDOLp8CT3PJtXE5UwpPVfkZR09u6AL71e8h
-         C1MOvhe5dJfIwVemMSVWL4WWzyNDnWsJcEDr6NTsHnYa1aiLJ54Bp+2sGS4ILrlKkrRn
-         /zFVJGnw2tbJIlQHXWGb+ORAfIfwnH4sTNu1P67ikHpHAEiSRvvVN1XxkJ7bzJM+SK1m
-         lRh5AKGJ6+PFLCzIlLpq3eSoBO6O0GMUdnvLRkqvHYobzW7CIALb3WR8homSDGj7ZRvG
-         Gnc11KgVZrj3JWsfo+3BxU8wloPyFxEGXyf/jZ/KSv3mddc7gKBueFhGCWVp2l+q2YvS
-         dqgg==
-X-Gm-Message-State: AOAM533ZkukkPIzuuq5HvfUMhxQag2SefuX//Rpps59J5Mr49SIdCCXU
-        5l+NAx72jmrpZH6INZyhJxWpQS5xq5eIa6Pd8H23mg==
-X-Google-Smtp-Source: ABdhPJzKi9/dAquBFvy+ZlpESpcVBT1I3X4XtLJClo2SaEqFpqb8kdqwnL9Fphl8e/qcsjqeDfp/tX4JIrAspWajnck=
-X-Received: by 2002:a05:6402:430f:b0:410:a082:c6da with SMTP id
- m15-20020a056402430f00b00410a082c6damr9386454edc.438.1645207638871; Fri, 18
- Feb 2022 10:07:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-14-arnd@kernel.org>
- <CALCETrVOvYPN4_6hS8wpm2v9bGZupZ5x4=vZAseG57OUgvLGfw@mail.gmail.com> <93a1ee797e9d4f789dff85a3c0f0c232@AcuMS.aculab.com>
-In-Reply-To: <93a1ee797e9d4f789dff85a3c0f0c232@AcuMS.aculab.com>
-From:   Andy Lutomirski <luto@amacapital.net>
-Date:   Fri, 18 Feb 2022 10:07:07 -0800
-Message-ID: <CALCETrWTB65vJXsQTPd_o7BRoSU=uqD0pFzKS+r4YgDuiCCqaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] uaccess: generalize access_ok()
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "will@kernel.org" <will@kernel.org>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "bcain@codeaurora.org" <bcain@codeaurora.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "nickhu@andestech.com" <nickhu@andestech.com>,
-        "green.hu@gmail.com" <green.hu@gmail.com>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "shorne@gmail.com" <shorne@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "dalias@libc.org" <dalias@libc.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "richard@nod.at" <richard@nod.at>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S1345390AbiBUGkv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 21 Feb 2022 01:40:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 056F430F44;
+        Sun, 20 Feb 2022 22:39:51 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB28B1509;
+        Sun, 20 Feb 2022 22:39:50 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.49.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 091653F70D;
+        Sun, 20 Feb 2022 22:39:47 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-csky@vger.kernel.org
+Subject: [PATCH V2 19/30] csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 21 Feb 2022 12:08:28 +0530
+Message-Id: <1645425519-9034-20-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
+References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 1:30 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Andy Lutomirski
-> > Sent: 17 February 2022 19:15
-> ...
-> > This isn't actually optimal.  On x86, TASK_SIZE_MAX is a bizarre
-> > constant that has a very specific value to work around a bug^Wdesign
-> > error^Wfeature of Intel CPUs.  TASK_SIZE_MAX is the maximum address at
-> > which userspace is permitted to allocate memory, but there is a huge
-> > gap between user and kernel addresses, and any value in the gap would
-> > be adequate for the comparison.  If we wanted to optimize this, simply
-> > checking the high bit (which x86 can do without any immediate
-> > constants at all) would be sufficient and, for an access known to fit
-> > in 32 bits, one could get even fancier and completely ignore the size
-> > of the access.  (For accesses not known to fit in 32 bits, I suspect
-> > some creativity could still come up with a construction that's
-> > substantially faster than the one in your patch.)
-> >
-> > So there's plenty of room for optimization here.
-> >
-> > (This is not in any respect a NAK -- it's just an observation that
-> > this could be even better.)
->
-> For 64bit arch that use the top bit to separate user/kernel
-> you can test '(addr | size) >> 62)'.
-> The compiler optimises out constant sizes.
->
-> This has all been mentioned a lot of times.
-> You do get different fault types.
->
-> OTOH an explicit check for constant size (less than something big)
-> can use the cheaper test of the sign bit.
-> Big constant sizes could be compile time errors.
+This defines and exports a platform specific custom vm_get_page_prot() via
+subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+macros can be dropped which are no longer needed.
 
-The different fault type issue may well be a real problem.  Right now
-the core x86 fault code reserves the right to grouch if we get #GP
-instead of #PF.  We could change that.
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-csky@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ arch/csky/Kconfig               |  1 +
+ arch/csky/include/asm/pgtable.h | 18 ------------------
+ arch/csky/mm/init.c             | 32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 33 insertions(+), 18 deletions(-)
+
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 132f43f12dd8..209dac5686dd 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -6,6 +6,7 @@ config CSKY
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
++	select ARCH_HAS_VM_GET_PAGE_PROT
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
+diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
+index 151607ed5158..2c6b1cfb1cce 100644
+--- a/arch/csky/include/asm/pgtable.h
++++ b/arch/csky/include/asm/pgtable.h
+@@ -76,24 +76,6 @@
+ #define MAX_SWAPFILES_CHECK() \
+ 		BUILD_BUG_ON(MAX_SWAPFILES_SHIFT != 5)
+ 
+-#define __P000	PAGE_NONE
+-#define __P001	PAGE_READ
+-#define __P010	PAGE_READ
+-#define __P011	PAGE_READ
+-#define __P100	PAGE_READ
+-#define __P101	PAGE_READ
+-#define __P110	PAGE_READ
+-#define __P111	PAGE_READ
+-
+-#define __S000	PAGE_NONE
+-#define __S001	PAGE_READ
+-#define __S010	PAGE_WRITE
+-#define __S011	PAGE_WRITE
+-#define __S100	PAGE_READ
+-#define __S101	PAGE_READ
+-#define __S110	PAGE_WRITE
+-#define __S111	PAGE_WRITE
+-
+ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
+ #define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
+ 
+diff --git a/arch/csky/mm/init.c b/arch/csky/mm/init.c
+index bf2004aa811a..f9babbed17d4 100644
+--- a/arch/csky/mm/init.c
++++ b/arch/csky/mm/init.c
+@@ -197,3 +197,35 @@ void __init fixaddr_init(void)
+ 	vaddr = __fix_to_virt(__end_of_fixed_addresses - 1) & PMD_MASK;
+ 	fixrange_init(vaddr, vaddr + PMD_SIZE, swapper_pg_dir);
+ }
++
++pgprot_t vm_get_page_prot(unsigned long vm_flags)
++{
++	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
++	case VM_NONE:
++		return PAGE_NONE;
++	case VM_READ:
++	case VM_WRITE:
++	case VM_WRITE | VM_READ:
++	case VM_EXEC:
++	case VM_EXEC | VM_READ:
++	case VM_EXEC | VM_WRITE:
++	case VM_EXEC | VM_WRITE | VM_READ:
++		return PAGE_READ;
++	case VM_SHARED:
++		return PAGE_NONE;
++	case VM_SHARED | VM_READ:
++		return PAGE_READ;
++	case VM_SHARED | VM_WRITE:
++	case VM_SHARED | VM_WRITE | VM_READ:
++		return PAGE_WRITE;
++	case VM_SHARED | VM_EXEC:
++	case VM_SHARED | VM_EXEC | VM_READ:
++		return PAGE_READ;
++	case VM_SHARED | VM_EXEC | VM_WRITE:
++	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
++		return PAGE_WRITE;
++	default:
++		BUILD_BUG();
++	}
++}
++EXPORT_SYMBOL(vm_get_page_prot);
+-- 
+2.25.1
+
