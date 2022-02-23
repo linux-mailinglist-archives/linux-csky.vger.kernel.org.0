@@ -2,360 +2,409 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585BE4C0F87
-	for <lists+linux-csky@lfdr.de>; Wed, 23 Feb 2022 10:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702294C0FA4
+	for <lists+linux-csky@lfdr.de>; Wed, 23 Feb 2022 10:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238548AbiBWJt5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 23 Feb 2022 04:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S239434AbiBWJzq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 23 Feb 2022 04:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiBWJt5 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Feb 2022 04:49:57 -0500
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B038585973
-        for <linux-csky@vger.kernel.org>; Wed, 23 Feb 2022 01:49:28 -0800 (PST)
-X-QQ-mid: bizesmtp81t1645609725tgacnsug
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 23 Feb 2022 17:48:38 +0800 (CST)
-X-QQ-SSF: 01400000002000B0F000B00C0000000
-X-QQ-FEAT: Ut0pB98mtT/Q74JFXA2I0gDDRkD1CRAorAGPSvE5lod+8gsyxhEWXh+uNX4C9
-        ORgYrqohjTAp+dCE3NBe96O/4h/raydPtsVJ06qEtYk5drgYr+1FaKnL/syIydFfTKmslpA
-        qWdVTZwnFhHBTEUddFxAGPDdGHzfANgV6i+5C4Snr9BFYM5ZM+nW+5OvcqZ5cSF13zNYCuP
-        TQLrLsZM6XGBUqBU7gFGAUkka28pV4OotIIFd2D8zSm8bkwlDKbj0iFx1tWXuC7YOcqxhDb
-        hglTKU6WL9pdf2AnzjlQEASRd4m2g3h8PM59uj30z+65+JWpDXH8u0MM5Vgp7aJdcKGIZWc
-        b8n427Je/MXL2Cu5Fbyl+2nEsSguQ==
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
-Cc:     guoren@kernel.org, nickhu@andestech.com, green.hu@gmail.com,
-        deanbo422@gmail.com, ebiggers@kernel.org, tytso@mit.edu,
-        wad@chromium.org, john.johansen@canonical.com, jmorris@namei.org,
-        serge@hallyn.com, linux-csky@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] fs/proc: Optimize arrays defined by struct ctl_path
-Date:   Wed, 23 Feb 2022 17:48:37 +0800
-Message-Id: <20220223094837.20337-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        with ESMTP id S234327AbiBWJzp (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 23 Feb 2022 04:55:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264AD89323;
+        Wed, 23 Feb 2022 01:55:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A93E261716;
+        Wed, 23 Feb 2022 09:55:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F1EC340F7;
+        Wed, 23 Feb 2022 09:55:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645610117;
+        bh=44NmsF00BHRCCX+io8dKsCu88FeTZVWw0HoNNpaMYm0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=U47O+P9c3OP9gJaLa5ARz/RngFoRoKc+2sBmBVK0Bz8Lb+gCZs9JhFyW8ZD4KpLnE
+         aCJdnezylbQGviDGvsgyXgDqu7ro8N45c7LUUuupHzAwutQ7rmtJufNMhmXtotdJZz
+         xXvQN3VEO2MvpU8Xesiv+C1nE579b15f2L+Ra3qQDi/sSRGOlC1X/mykoPPrpLW4Ma
+         Bw2xU4m/fmHh6fCqaRd8WRgcUojG2FrKve4oygABxEzdkJb80xGLsuG8Rchlz3AFbV
+         LULQv+EYcmb8HjIlFo0iaaQRZcKuEa4QTAtPtW819lCzzi88+iju2KQ1qtcLyiN6dP
+         SaaDpSOoMVR2A==
+Received: by mail-vs1-f49.google.com with SMTP id y26so2511726vsq.8;
+        Wed, 23 Feb 2022 01:55:16 -0800 (PST)
+X-Gm-Message-State: AOAM532wWv/hNmgOwK2p7u8xQDD/6GOpbQEM16XEsuO1WCN4e6QXYx3q
+        Ks64l3X3IY1vQlweQ9NJnrbSJfRWTPmjpIy1wk0=
+X-Google-Smtp-Source: ABdhPJxAjLNt3QP3aKg3EP5BlfDhWFYqgUu+Z9DM853k9CcDkGXVN88Tiyqmsbe6FD//q7/KxE3NRDeVWpCwFPCF418=
+X-Received: by 2002:a67:b846:0:b0:31b:9365:b799 with SMTP id
+ o6-20020a67b846000000b0031b9365b799mr10892862vsh.51.1645610115864; Wed, 23
+ Feb 2022 01:55:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,
-        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220201150545.1512822-17-guoren@kernel.org> <mhng-2ad760ea-cfeb-4243-b703-8909bb102cf8@palmer-ri-x1c9>
+In-Reply-To: <mhng-2ad760ea-cfeb-4243-b703-8909bb102cf8@palmer-ri-x1c9>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 23 Feb 2022 17:55:04 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQGMfXUSMqQNAq-_RecEcqTegXnAT+gk-G=Ljo6EKU_yw@mail.gmail.com>
+Message-ID: <CAJF2gTQGMfXUSMqQNAq-_RecEcqTegXnAT+gk-G=Ljo6EKU_yw@mail.gmail.com>
+Subject: Re: [PATCH V5 16/21] riscv: compat: vdso: Add rv32 VDSO base code implementation
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Previously, arrays defined by struct ctl_path is terminated
-with an empty one. For example, when we actually only register
-one ctl_path, we've gone from 8 bytes to 16 bytes.
+On Wed, Feb 23, 2022 at 9:42 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Tue, 01 Feb 2022 07:05:40 PST (-0800), guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > There is no vgettimeofday supported in rv32 that makes simple to
+> > generate rv32 vdso code which only needs riscv64 compiler. Other
+> > architectures need change compiler or -m (machine parameter) to
+> > support vdso32 compiling. If rv32 support vgettimeofday (which
+> > cause C compile) in future, we would add CROSS_COMPILE to support
+> > that makes more requirement on compiler enviornment.
+>
+> IMO this is the wrong way to go, as there's some subtle differences
+> between elf32 and elf64 (the .gnu.hash layout, for example).  I'm kind
+> of surprised userspace tolerates this sort of thing at all, but given
+> how easy it is to target rv32 from all toolchains (we don't need
+> libraries here, so just -march should do it) I don't think it's worth
+> chasing around the likely long-tail issues that will arise.
+I would keep the patch in next version. When "multi-arch toolchain" or
+"rv32 HAVE_GENERIC_VDSO" isready in the future, let's switch to the
+rv32 compiler.
 
-So, I use ARRAY_SIZE() as a boundary condition to optimize it.
+>
+> > linux-rv64/arch/riscv/kernel/compat_vdso/compat_vdso.so.dbg:
+> > file format elf64-littleriscv
+> >
+> > Disassembly of section .text:
+> >
+> > 0000000000000800 <__vdso_rt_sigreturn>:
+> >  800:   08b00893                li      a7,139
+> >  804:   00000073                ecall
+> >  808:   0000                    unimp
+> >         ...
+> >
+> > 000000000000080c <__vdso_getcpu>:
+> >  80c:   0a800893                li      a7,168
+> >  810:   00000073                ecall
+> >  814:   8082                    ret
+> >         ...
+> >
+> > 0000000000000818 <__vdso_flush_icache>:
+> >  818:   10300893                li      a7,259
+> >  81c:   00000073                ecall
+> >  820:   8082                    ret
+> >
+> > linux-rv32/arch/riscv/kernel/vdso/vdso.so.dbg:
+> > file format elf32-littleriscv
+> >
+> > Disassembly of section .text:
+> >
+> > 00000800 <__vdso_rt_sigreturn>:
+> >  800:   08b00893                li      a7,139
+> >  804:   00000073                ecall
+> >  808:   0000                    unimp
+> >         ...
+> >
+> > 0000080c <__vdso_getcpu>:
+> >  80c:   0a800893                li      a7,168
+> >  810:   00000073                ecall
+> >  814:   8082                    ret
+> >         ...
+> >
+> > 00000818 <__vdso_flush_icache>:
+> >  818:   10300893                li      a7,259
+> >  81c:   00000073                ecall
+> >  820:   8082                    ret
+> >
+> > Finally, reuse all *.S from vdso in compat_vdso that makes
+> > implementation clear and readable.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > ---
+> >  arch/riscv/Makefile                           |  5 ++
+> >  arch/riscv/include/asm/vdso.h                 |  9 +++
+> >  arch/riscv/kernel/Makefile                    |  1 +
+> >  arch/riscv/kernel/compat_vdso/.gitignore      |  2 +
+> >  arch/riscv/kernel/compat_vdso/Makefile        | 68 +++++++++++++++++++
+> >  arch/riscv/kernel/compat_vdso/compat_vdso.S   |  8 +++
+> >  .../kernel/compat_vdso/compat_vdso.lds.S      |  3 +
+> >  arch/riscv/kernel/compat_vdso/flush_icache.S  |  3 +
+> >  .../compat_vdso/gen_compat_vdso_offsets.sh    |  5 ++
+> >  arch/riscv/kernel/compat_vdso/getcpu.S        |  3 +
+> >  arch/riscv/kernel/compat_vdso/note.S          |  3 +
+> >  arch/riscv/kernel/compat_vdso/rt_sigreturn.S  |  3 +
+> >  arch/riscv/kernel/vdso/vdso.S                 |  6 +-
+> >  13 files changed, 118 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/.gitignore
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/Makefile
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.S
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/flush_icache.S
+> >  create mode 100755 arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/getcpu.S
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/note.S
+> >  create mode 100644 arch/riscv/kernel/compat_vdso/rt_sigreturn.S
+> >
+> > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> > index a02e588c4947..f73d50552e09 100644
+> > --- a/arch/riscv/Makefile
+> > +++ b/arch/riscv/Makefile
+> > @@ -106,12 +106,17 @@ libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+> >  PHONY += vdso_install
+> >  vdso_install:
+> >       $(Q)$(MAKE) $(build)=arch/riscv/kernel/vdso $@
+> > +     $(if $(CONFIG_COMPAT),$(Q)$(MAKE) \
+> > +             $(build)=arch/riscv/kernel/compat_vdso $@)
+> >
+> >  ifeq ($(KBUILD_EXTMOD),)
+> >  ifeq ($(CONFIG_MMU),y)
+> >  prepare: vdso_prepare
+> >  vdso_prepare: prepare0
+> >       $(Q)$(MAKE) $(build)=arch/riscv/kernel/vdso include/generated/vdso-offsets.h
+> > +     $(if $(CONFIG_COMPAT),$(Q)$(MAKE) \
+> > +             $(build)=arch/riscv/kernel/compat_vdso include/generated/compat_vdso-offsets.h)
+> > +
+> >  endif
+> >  endif
+> >
+> > diff --git a/arch/riscv/include/asm/vdso.h b/arch/riscv/include/asm/vdso.h
+> > index bc6f75f3a199..af981426fe0f 100644
+> > --- a/arch/riscv/include/asm/vdso.h
+> > +++ b/arch/riscv/include/asm/vdso.h
+> > @@ -21,6 +21,15 @@
+> >
+> >  #define VDSO_SYMBOL(base, name)                                                      \
+> >       (void __user *)((unsigned long)(base) + __vdso_##name##_offset)
+> > +
+> > +#ifdef CONFIG_COMPAT
+> > +#include <generated/compat_vdso-offsets.h>
+> > +
+> > +#define COMPAT_VDSO_SYMBOL(base, name)                                               \
+> > +     (void __user *)((unsigned long)(base) + compat__vdso_##name##_offset)
+> > +
+> > +#endif /* CONFIG_COMPAT */
+> > +
+> >  #endif /* !__ASSEMBLY__ */
+> >
+> >  #endif /* CONFIG_MMU */
+> > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> > index 954dc7043ad2..88e79f481c21 100644
+> > --- a/arch/riscv/kernel/Makefile
+> > +++ b/arch/riscv/kernel/Makefile
+> > @@ -67,3 +67,4 @@ obj-$(CONFIG_JUMP_LABEL)    += jump_label.o
+> >
+> >  obj-$(CONFIG_EFI)            += efi.o
+> >  obj-$(CONFIG_COMPAT)         += compat_syscall_table.o
+> > +obj-$(CONFIG_COMPAT)         += compat_vdso/
+> > diff --git a/arch/riscv/kernel/compat_vdso/.gitignore b/arch/riscv/kernel/compat_vdso/.gitignore
+> > new file mode 100644
+> > index 000000000000..19d83d846c1e
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/.gitignore
+> > @@ -0,0 +1,2 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +compat_vdso.lds
+> > diff --git a/arch/riscv/kernel/compat_vdso/Makefile b/arch/riscv/kernel/compat_vdso/Makefile
+> > new file mode 100644
+> > index 000000000000..7bbbbf94307f
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/Makefile
+> > @@ -0,0 +1,68 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+> > +# the inclusion of generic Makefile.
+> > +ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
+> > +include $(srctree)/lib/vdso/Makefile
+> > +# Symbols present in the compat_vdso
+> > +compat_vdso-syms  = rt_sigreturn
+> > +compat_vdso-syms += getcpu
+> > +compat_vdso-syms += flush_icache
+> > +
+> > +# Files to link into the compat_vdso
+> > +obj-compat_vdso = $(patsubst %, %.o, $(compat_vdso-syms)) note.o
+> > +
+> > +ccflags-y := -fno-stack-protector
+> > +
+> > +# Build rules
+> > +targets := $(obj-compat_vdso) compat_vdso.so compat_vdso.so.dbg compat_vdso.lds
+> > +obj-compat_vdso := $(addprefix $(obj)/, $(obj-compat_vdso))
+> > +
+> > +obj-y += compat_vdso.o
+> > +CPPFLAGS_compat_vdso.lds += -P -C -U$(ARCH)
+> > +
+> > +# Disable profiling and instrumentation for VDSO code
+> > +GCOV_PROFILE := n
+> > +KCOV_INSTRUMENT := n
+> > +KASAN_SANITIZE := n
+> > +UBSAN_SANITIZE := n
+> > +
+> > +# Force dependency
+> > +$(obj)/compat_vdso.o: $(obj)/compat_vdso.so
+> > +
+> > +# link rule for the .so file, .lds has to be first
+> > +$(obj)/compat_vdso.so.dbg: $(obj)/compat_vdso.lds $(obj-compat_vdso) FORCE
+> > +     $(call if_changed,compat_vdsold)
+> > +LDFLAGS_compat_vdso.so.dbg = -shared -S -soname=linux-compat_vdso.so.1 \
+> > +     --build-id=sha1 --hash-style=both --eh-frame-hdr
+> > +
+> > +# strip rule for the .so file
+> > +$(obj)/%.so: OBJCOPYFLAGS := -S
+> > +$(obj)/%.so: $(obj)/%.so.dbg FORCE
+> > +     $(call if_changed,objcopy)
+> > +
+> > +# Generate VDSO offsets using helper script
+> > +gen-compat_vdsosym := $(srctree)/$(src)/gen_compat_vdso_offsets.sh
+> > +quiet_cmd_compat_vdsosym = VDSOSYM $@
+> > +     cmd_compat_vdsosym = $(NM) $< | $(gen-compat_vdsosym) | LC_ALL=C sort > $@
+> > +
+> > +include/generated/compat_vdso-offsets.h: $(obj)/compat_vdso.so.dbg FORCE
+> > +     $(call if_changed,compat_vdsosym)
+> > +
+> > +# actual build commands
+> > +# The DSO images are built using a special linker script
+> > +# Make sure only to export the intended __compat_vdso_xxx symbol offsets.
+> > +quiet_cmd_compat_vdsold = VDSOLD  $@
+> > +      cmd_compat_vdsold = $(LD) $(ld_flags) -T $(filter-out FORCE,$^) -o $@.tmp && \
+> > +                   $(OBJCOPY) $(patsubst %, -G __compat_vdso_%, $(compat_vdso-syms)) $@.tmp $@ && \
+> > +                   rm $@.tmp
+> > +
+> > +# install commands for the unstripped file
+> > +quiet_cmd_compat_vdso_install = INSTALL $@
+> > +      cmd_compat_vdso_install = cp $(obj)/$@.dbg $(MODLIB)/compat_vdso/$@
+> > +
+> > +compat_vdso.so: $(obj)/compat_vdso.so.dbg
+> > +     @mkdir -p $(MODLIB)/compat_vdso
+> > +     $(call cmd,compat_vdso_install)
+> > +
+> > +compat_vdso_install: compat_vdso.so
+> > diff --git a/arch/riscv/kernel/compat_vdso/compat_vdso.S b/arch/riscv/kernel/compat_vdso/compat_vdso.S
+> > new file mode 100644
+> > index 000000000000..fea4a8b0c45d
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/compat_vdso.S
+> > @@ -0,0 +1,8 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#define      vdso_start      compat_vdso_start
+> > +#define      vdso_end        compat_vdso_end
+> > +
+> > +#define      __VDSO_PATH     "arch/riscv/kernel/compat_vdso/compat_vdso.so"
+> > +
+> > +#include <../vdso/vdso.S>
+> > diff --git a/arch/riscv/kernel/compat_vdso/compat_vdso.lds.S b/arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
+> > new file mode 100644
+> > index 000000000000..02a9ec5dc7f6
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
+> > @@ -0,0 +1,3 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#include <../vdso/vdso.lds.S>
+> > diff --git a/arch/riscv/kernel/compat_vdso/flush_icache.S b/arch/riscv/kernel/compat_vdso/flush_icache.S
+> > new file mode 100644
+> > index 000000000000..88e21a84a974
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/flush_icache.S
+> > @@ -0,0 +1,3 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#include <../vdso/flush_icache.S>
+> > diff --git a/arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh b/arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
+> > new file mode 100755
+> > index 000000000000..8ac070c783b3
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
+> > @@ -0,0 +1,5 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +LC_ALL=C
+> > +sed -n -e 's/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define compat\2_offset\t0x\1/p'
+> > diff --git a/arch/riscv/kernel/compat_vdso/getcpu.S b/arch/riscv/kernel/compat_vdso/getcpu.S
+> > new file mode 100644
+> > index 000000000000..946449a15a94
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/getcpu.S
+> > @@ -0,0 +1,3 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#include <../vdso/getcpu.S>
+> > diff --git a/arch/riscv/kernel/compat_vdso/note.S b/arch/riscv/kernel/compat_vdso/note.S
+> > new file mode 100644
+> > index 000000000000..67c50898b8e5
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/note.S
+> > @@ -0,0 +1,3 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#include <../vdso/note.S>
+> > diff --git a/arch/riscv/kernel/compat_vdso/rt_sigreturn.S b/arch/riscv/kernel/compat_vdso/rt_sigreturn.S
+> > new file mode 100644
+> > index 000000000000..f4c98f18c053
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/compat_vdso/rt_sigreturn.S
+> > @@ -0,0 +1,3 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +#include <../vdso/rt_sigreturn.S>
+> > diff --git a/arch/riscv/kernel/vdso/vdso.S b/arch/riscv/kernel/vdso/vdso.S
+> > index df222245be05..83f1c899e8d8 100644
+> > --- a/arch/riscv/kernel/vdso/vdso.S
+> > +++ b/arch/riscv/kernel/vdso/vdso.S
+> > @@ -7,12 +7,16 @@
+> >  #include <linux/linkage.h>
+> >  #include <asm/page.h>
+> >
+> > +#ifndef __VDSO_PATH
+> > +#define __VDSO_PATH "arch/riscv/kernel/vdso/vdso.so"
+> > +#endif
+> > +
+> >       __PAGE_ALIGNED_DATA
+> >
+> >       .globl vdso_start, vdso_end
+> >       .balign PAGE_SIZE
+> >  vdso_start:
+> > -     .incbin "arch/riscv/kernel/vdso/vdso.so"
+> > +     .incbin __VDSO_PATH
+> >       .balign PAGE_SIZE
+> >  vdso_end:
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- arch/csky/abiv1/alignment.c |  8 ++++----
- arch/nds32/mm/alignment.c   |  8 ++++----
- fs/proc/proc_sysctl.c       | 12 +++++++-----
- fs/verity/signature.c       |  7 ++++---
- include/linux/sysctl.h      |  6 +++---
- kernel/pid_namespace.c      |  5 +++--
- kernel/seccomp.c            |  7 ++++---
- security/apparmor/lsm.c     |  7 ++++---
- security/loadpin/loadpin.c  |  7 ++++---
- security/yama/yama_lsm.c    |  6 +++---
- 10 files changed, 40 insertions(+), 33 deletions(-)
 
-diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
-index 2df115d0e210..f2fe6a4d2388 100644
---- a/arch/csky/abiv1/alignment.c
-+++ b/arch/csky/abiv1/alignment.c
-@@ -340,14 +340,14 @@ static struct ctl_table sysctl_table[2] = {
- 	{}
- };
- 
--static struct ctl_path sysctl_path[2] = {
--	{.procname = "csky"},
--	{}
-+static struct ctl_path sysctl_path[1] = {
-+	{.procname = "csky"}
- };
-+#define SYSCTL_PATH_SIZE ARRAY_SIZE(sysctl_path)
- 
- static int __init csky_alignment_init(void)
- {
--	register_sysctl_paths(sysctl_path, sysctl_table);
-+	register_sysctl_paths(sysctl_path, sysctl_table, SYSCTL_PATH_SIZE);
- 	return 0;
- }
- 
-diff --git a/arch/nds32/mm/alignment.c b/arch/nds32/mm/alignment.c
-index 1eb7ded6992b..ee073f6b5822 100644
---- a/arch/nds32/mm/alignment.c
-+++ b/arch/nds32/mm/alignment.c
-@@ -560,17 +560,17 @@ static struct ctl_table nds32_sysctl_table[2] = {
- 	{}
- };
- 
--static struct ctl_path nds32_path[2] = {
--	{.procname = "nds32"},
--	{}
-+static struct ctl_path nds32_path[1] = {
-+	{.procname = "nds32"}
- };
-+#define NDS32_PATH_SIZE ARRAY_SIZE(nds32_path)
- 
- /*
-  * Initialize nds32 alignment-correction interface
-  */
- static int __init nds32_sysctl_init(void)
- {
--	register_sysctl_paths(nds32_path, nds32_sysctl_table);
-+	register_sysctl_paths(nds32_path, nds32_sysctl_table, NDS32_PATH_SIZE);
- 	return 0;
- }
- 
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 7d9cfc730bd4..d6f6d9d5d3f8 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -1552,20 +1552,21 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
-  */
- struct ctl_table_header *__register_sysctl_paths(
- 	struct ctl_table_set *set,
--	const struct ctl_path *path, struct ctl_table *table)
-+	const struct ctl_path *path, struct ctl_table *table, int table_size)
- {
- 	struct ctl_table *ctl_table_arg = table;
- 	int nr_subheaders = count_subheaders(table);
- 	struct ctl_table_header *header = NULL, **subheaders, **subheader;
- 	const struct ctl_path *component;
- 	char *new_path, *pos;
-+	int i;
- 
- 	pos = new_path = kmalloc(PATH_MAX, GFP_KERNEL);
- 	if (!new_path)
- 		return NULL;
- 
- 	pos[0] = '\0';
--	for (component = path; component->procname; component++) {
-+	for (component = path, i = 0; component->procname && i < table_size; component++, i++) {
- 		pos = append_path(new_path, pos, component->procname);
- 		if (!pos)
- 			goto out;
-@@ -1622,10 +1623,11 @@ struct ctl_table_header *__register_sysctl_paths(
-  * See __register_sysctl_paths for more details.
-  */
- struct ctl_table_header *register_sysctl_paths(const struct ctl_path *path,
--						struct ctl_table *table)
-+						struct ctl_table *table,
-+						int table_size)
- {
- 	return __register_sysctl_paths(&sysctl_table_root.default_set,
--					path, table);
-+					path, table, table_size);
- }
- EXPORT_SYMBOL(register_sysctl_paths);
- 
-@@ -1642,7 +1644,7 @@ struct ctl_table_header *register_sysctl_table(struct ctl_table *table)
- {
- 	static const struct ctl_path null_path[] = { {} };
- 
--	return register_sysctl_paths(null_path, table);
-+	return register_sysctl_paths(null_path, table, ARRAY_SIZE(null_path));
- }
- EXPORT_SYMBOL(register_sysctl_table);
- 
-diff --git a/fs/verity/signature.c b/fs/verity/signature.c
-index 143a530a8008..e04be57da6ab 100644
---- a/fs/verity/signature.c
-+++ b/fs/verity/signature.c
-@@ -92,9 +92,9 @@ static struct ctl_table_header *fsverity_sysctl_header;
- 
- static const struct ctl_path fsverity_sysctl_path[] = {
- 	{ .procname = "fs", },
--	{ .procname = "verity", },
--	{ }
-+	{ .procname = "verity", }
- };
-+#define FSVERITY_SYSCTL_PATH_SIZE ARRAY_SIZE(fsverity_sysctl_path)
- 
- static struct ctl_table fsverity_sysctl_table[] = {
- 	{
-@@ -112,7 +112,8 @@ static struct ctl_table fsverity_sysctl_table[] = {
- static int __init fsverity_sysctl_init(void)
- {
- 	fsverity_sysctl_header = register_sysctl_paths(fsverity_sysctl_path,
--						       fsverity_sysctl_table);
-+						       fsverity_sysctl_table,
-+						       FSVERITY_SYSCTL_PATH_SIZE);
- 	if (!fsverity_sysctl_header) {
- 		pr_err("sysctl registration failed!\n");
- 		return -ENOMEM;
-diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
-index 6353d6db69b2..781874ed9179 100644
---- a/include/linux/sysctl.h
-+++ b/include/linux/sysctl.h
-@@ -220,11 +220,11 @@ struct ctl_table_header *__register_sysctl_table(
- 	const char *path, struct ctl_table *table);
- struct ctl_table_header *__register_sysctl_paths(
- 	struct ctl_table_set *set,
--	const struct ctl_path *path, struct ctl_table *table);
-+	const struct ctl_path *path, struct ctl_table *table, int table_size);
- struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table);
- struct ctl_table_header *register_sysctl_table(struct ctl_table * table);
- struct ctl_table_header *register_sysctl_paths(const struct ctl_path *path,
--						struct ctl_table *table);
-+						struct ctl_table *table, int table_size);
- 
- void unregister_sysctl_table(struct ctl_table_header * table);
- 
-@@ -271,7 +271,7 @@ static inline struct ctl_table_header *register_sysctl_mount_point(const char *p
- }
- 
- static inline struct ctl_table_header *register_sysctl_paths(
--			const struct ctl_path *path, struct ctl_table *table)
-+			const struct ctl_path *path, struct ctl_table *table, int table_size)
- {
- 	return NULL;
- }
-diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
-index a46a3723bc66..18a1a3bb37a0 100644
---- a/kernel/pid_namespace.c
-+++ b/kernel/pid_namespace.c
-@@ -294,7 +294,8 @@ static struct ctl_table pid_ns_ctl_table[] = {
- 	},
- 	{ }
- };
--static struct ctl_path kern_path[] = { { .procname = "kernel", }, { } };
-+static struct ctl_path kern_path[] = { { .procname = "kernel", } };
-+#define KERN_PATH_SIZE ARRAY_SIZE(kern_path)
- #endif	/* CONFIG_CHECKPOINT_RESTORE */
- 
- int reboot_pid_ns(struct pid_namespace *pid_ns, int cmd)
-@@ -453,7 +454,7 @@ static __init int pid_namespaces_init(void)
- 	pid_ns_cachep = KMEM_CACHE(pid_namespace, SLAB_PANIC | SLAB_ACCOUNT);
- 
- #ifdef CONFIG_CHECKPOINT_RESTORE
--	register_sysctl_paths(kern_path, pid_ns_ctl_table);
-+	register_sysctl_paths(kern_path, pid_ns_ctl_table, KERN_PATH_SIZE);
- #endif
- 	return 0;
- }
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index db10e73d06e0..d4759cdb0335 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -2333,9 +2333,9 @@ static int seccomp_actions_logged_handler(struct ctl_table *ro_table, int write,
- 
- static struct ctl_path seccomp_sysctl_path[] = {
- 	{ .procname = "kernel", },
--	{ .procname = "seccomp", },
--	{ }
-+	{ .procname = "seccomp", }
- };
-+#define SECCOMP_SYSCTL_PATH_SIZE ARRAY_SIZE(seccomp_sysctl_path)
- 
- static struct ctl_table seccomp_sysctl_table[] = {
- 	{
-@@ -2357,7 +2357,8 @@ static int __init seccomp_sysctl_init(void)
- {
- 	struct ctl_table_header *hdr;
- 
--	hdr = register_sysctl_paths(seccomp_sysctl_path, seccomp_sysctl_table);
-+	hdr = register_sysctl_paths(seccomp_sysctl_path, seccomp_sysctl_table,
-+				    SECCOMP_SYSCTL_PATH_SIZE);
- 	if (!hdr)
- 		pr_warn("sysctl registration failed\n");
- 	else
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 4f0eecb67dde..09a0461db6b1 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1729,9 +1729,9 @@ static int apparmor_dointvec(struct ctl_table *table, int write,
- }
- 
- static struct ctl_path apparmor_sysctl_path[] = {
--	{ .procname = "kernel", },
--	{ }
-+	{ .procname = "kernel", }
- };
-+#define APPARMOR_SYSCTL_PATH_SIZE ARRAY_SIZE(apparmor_sysctl_path)
- 
- static struct ctl_table apparmor_sysctl_table[] = {
- 	{
-@@ -1747,7 +1747,8 @@ static struct ctl_table apparmor_sysctl_table[] = {
- static int __init apparmor_init_sysctl(void)
- {
- 	return register_sysctl_paths(apparmor_sysctl_path,
--				     apparmor_sysctl_table) ? 0 : -ENOMEM;
-+				     apparmor_sysctl_table,
-+				     APPARMOR_SYSCTL_PATH_SIZE) ? 0 : -ENOMEM;
- }
- #else
- static inline int apparmor_init_sysctl(void)
-diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
-index b12f7d986b1e..45e0b8952a1d 100644
---- a/security/loadpin/loadpin.c
-+++ b/security/loadpin/loadpin.c
-@@ -48,9 +48,9 @@ static DEFINE_SPINLOCK(pinned_root_spinlock);
- 
- static struct ctl_path loadpin_sysctl_path[] = {
- 	{ .procname = "kernel", },
--	{ .procname = "loadpin", },
--	{ }
-+	{ .procname = "loadpin", }
- };
-+#define LOADPIN_SYSCTL_PATH_SIZE ARRAY_SIZE(loadpin_sysctl_path)
- 
- static struct ctl_table loadpin_sysctl_table[] = {
- 	{
-@@ -91,7 +91,8 @@ static void check_pinning_enforcement(struct super_block *mnt_sb)
- 
- 	if (!ro) {
- 		if (!register_sysctl_paths(loadpin_sysctl_path,
--					   loadpin_sysctl_table))
-+					   loadpin_sysctl_table,
-+					   LOADPIN_SYSCTL_PATH_SIZE))
- 			pr_notice("sysctl registration failed!\n");
- 		else
- 			pr_info("enforcement can be disabled.\n");
-diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
-index 06e226166aab..c4472d17b46d 100644
---- a/security/yama/yama_lsm.c
-+++ b/security/yama/yama_lsm.c
-@@ -449,9 +449,9 @@ static int max_scope = YAMA_SCOPE_NO_ATTACH;
- 
- static struct ctl_path yama_sysctl_path[] = {
- 	{ .procname = "kernel", },
--	{ .procname = "yama", },
--	{ }
-+	{ .procname = "yama", }
- };
-+#define YAMA_SYSCTL_PATH_SIZE ARRAY_SIZE(yama_sysctl_path)
- 
- static struct ctl_table yama_sysctl_table[] = {
- 	{
-@@ -467,7 +467,7 @@ static struct ctl_table yama_sysctl_table[] = {
- };
- static void __init yama_init_sysctl(void)
- {
--	if (!register_sysctl_paths(yama_sysctl_path, yama_sysctl_table))
-+	if (!register_sysctl_paths(yama_sysctl_path, yama_sysctl_table, YAMA_SYSCTL_PATH_SIZE))
- 		panic("Yama: sysctl registration failed.\n");
- }
- #else
+
 -- 
-2.20.1
+Best Regards
+ Guo Ren
 
-
-Å/
+ML: https://lore.kernel.org/linux-csky/
