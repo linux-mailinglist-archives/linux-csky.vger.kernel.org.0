@@ -2,111 +2,277 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E044CA365
-	for <lists+linux-csky@lfdr.de>; Wed,  2 Mar 2022 12:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BDA4CA5FD
+	for <lists+linux-csky@lfdr.de>; Wed,  2 Mar 2022 14:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbiCBLUv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 2 Mar 2022 06:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S229617AbiCBN3O (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 2 Mar 2022 08:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241529AbiCBLUm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 2 Mar 2022 06:20:42 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E146645F;
-        Wed,  2 Mar 2022 03:19:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=I1/BTw8u15H3AVnQDepPulkDIkTQG/EDO8JslQ2y518=; b=yzUOmQTC9SehCgZYgd4h+Ey12C
-        IF3SwMxqhKSw9mftTnudCgM/6vhgVjqN1K54lqRScHZdWomhMSw8gc4Q17z82/t4ePZPTadPDNBW0
-        RAYoi7RTG5lEPYnuj/W83EiMnjCPrblb+04/X34ls5AXk4/1qSt0tzJPYiQCOWZ8wtXGi6o/0W54C
-        JYouMTieLlNBty6aTd82+iHFYVBl998jCqSMezXTJKHViIkOZV4L90kAOBr7Bjp+j1Cc20Fo3g2xF
-        ZHXM5LboaCYqutYgpLpdk+j1UVvj2hjc2fYOc6snFpF3IOhlr7vydYbVzzsl941esiWGhbWsi5Amp
-        qfJLh3Qg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57592)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nPN0v-0002K5-5r; Wed, 02 Mar 2022 11:19:25 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nPN0s-00085f-7p; Wed, 02 Mar 2022 11:19:22 +0000
-Date:   Wed, 2 Mar 2022 11:19:22 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Message-ID: <Yh9SuiayqcDdIB3B@shell.armlinux.org.uk>
-References: <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
- <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
- <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
- <Yh1pYAOiskEQes3p@shell.armlinux.org.uk>
- <dc3c95a4-de06-9889-ce1e-f660fc9fbb95@csgroup.eu>
- <c3b60de0-38cd-160a-aa15-831349e07e23@arm.com>
- <52866c88-59f9-2d1c-6f5a-5afcaf23f2bb@csgroup.eu>
- <9caa90f5-c10d-75dd-b403-1388b7a3d296@arm.com>
- <CAMuHMdU11kaOzanhHZRH+mLTJzaz-i=PnKdK7NF9V-qx6kp8wg@mail.gmail.com>
- <b1eca2cd-36e6-3a9a-9fe7-70fc0caed7a9@arm.com>
+        with ESMTP id S237407AbiCBN3N (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 2 Mar 2022 08:29:13 -0500
+X-Greylist: delayed 507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Mar 2022 05:28:26 PST
+Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF6930F74;
+        Wed,  2 Mar 2022 05:28:26 -0800 (PST)
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
+        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id DC07B202B1;
+        Wed,  2 Mar 2022 13:19:58 +0000 (UTC)
+Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [217.182.66.162])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id 233DC206D5;
+        Wed,  2 Mar 2022 13:19:55 +0000 (UTC)
+Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id E44BB3EDEC;
+        Wed,  2 Mar 2022 14:19:52 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by filter2.mymailcheap.com (Postfix) with ESMTP id C0C002A7F2;
+        Wed,  2 Mar 2022 13:19:52 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
+Received: from filter2.mymailcheap.com ([127.0.0.1])
+        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id c2EAhZFMfF6P; Wed,  2 Mar 2022 13:19:51 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter2.mymailcheap.com (Postfix) with ESMTPS;
+        Wed,  2 Mar 2022 13:19:51 +0000 (UTC)
+Received: from edelgard.icenowy.info (unknown [59.41.161.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 7A374405B8;
+        Wed,  2 Mar 2022 13:19:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1646227190; bh=uzuQhPYukEVDmR2T7XfgnVMsGzP7uCq9kYtRfCYK73Q=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LOD+Fb/gOaASgF++PlmHiielHuGbCtQw1g4Dqxxhi7hO68es+wD1LaPtUrB5j+3S4
+         eISTyc+joHHq2mTvZLPaxlFWirq/dY63o0UTiHIG3e/t6Uu6Nkz7tZA5wd+P/XORQr
+         J81yAxPAptCz1T1GmyexXXogRgKfODxbva7rSZNk=
+Message-ID: <8e799cadb1104714f998fe74e40b3cb052c9c1ed.camel@aosc.io>
+Subject: Re: [PATCH v2] parport_pc: Also enable driver for PCI systems
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 02 Mar 2022 21:19:37 +0800
+In-Reply-To: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1eca2cd-36e6-3a9a-9fe7-70fc0caed7a9@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:36:52PM +0530, Anshuman Khandual wrote:
-> On 3/2/22 3:35 PM, Geert Uytterhoeven wrote:
-> > I doubt the switch() variant would give better code on any platform.
-> > 
-> > What about using tables everywhere, using designated initializers
-> > to improve readability?
+在 2022-02-14星期一的 20:16 +0000，Maciej W. Rozycki写道：
+> Nowadays PC-style parallel ports come in the form of PCI and PCIe
+> option 
+> cards and there are some combined parallel/serial option cards as
+> well 
+> that we handle in the parport subsystem.  There is nothing in
+> particular 
+> that would prevent them from being used in any system equipped with
+> PCI 
+> or PCIe connectivity, except that we do not permit the PARPORT_PC
+> config 
+> option to be selected for platforms for which
+> ARCH_MIGHT_HAVE_PC_PARPORT 
+> has not been set for.
 > 
-> Designated initializers ? Could you please be more specific. A table look
-> up on arm platform would be something like this and arm_protection_map[]
-> needs to be updated with user_pgprot like before.
+> The only PCI platforms that actually can't make use of PC-style
+> parallel 
+> port hardware are those newer PCIe systems that have no support for
+> I/O 
+> cycles in the host bridge, required by such parallel ports.  Notably,
+> this includes the s390 arch, which has port I/O accessors that cause 
+> compilation warnings (promoted to errors with `-Werror'), and there
+> are 
+> other cases such as the POWER9 PHB4 device, though this one has
+> variable 
+> port I/O accessors that depend on the particular system.  Also it is
+> not 
+> clear whether the serial port side of devices enabled by
+> PARPORT_SERIAL 
+> uses port I/O or MMIO.  Finally Super I/O solutions are always either
+> ISA or platform devices.
 
-There is *absolutely* nothing wrong with that. Updating it once during
-boot is way more efficient than having to compute the value each time
-vm_get_page_prot() gets called.
+Just spot this patch in linux-riscv mailing list, I think there's a
+pending patchset that tries to add a HAS_IOPORT Kconfig option, which
+can be used in this situation.
 
-Thanks.
+> 
+> Make the PARPORT_PC option selectable also for PCI systems then,
+> except 
+> for the s390 arch, however limit the availability of
+> PARPORT_PC_SUPERIO 
+> to platforms that enable ARCH_MIGHT_HAVE_PC_PARPORT.  Update
+> platforms 
+> accordingly for the required <asm/parport.h> header.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> ---
+> Hi,
+> 
+>  I have verified this lightly by booting a kernel with PARPORT_PC and
+> PARPORT_SERIAL enabled on a RISC-V HiFive Unmatched system.  While I
+> do 
+> have a PCIe parallel port option available that I could use with my
+> RISC-V 
+> machine (based on the OxSemi OXPCIe952 chip) it is currently plugged
+> in 
+> the wrong system, and both machines are in my remote lab I have
+> currently 
+> no visit scheduled to in the near future.  For the record the device 
+> reports as:
+> 
+> PCI parallel port detected: 1415:c118, I/O at 0x1000(0x1008), IRQ 18
+> parport1: PC-style at 0x1000 (0x1008), irq 18, using FIFO
+> [PCSPP,TRISTATE,COMPAT,EPP,ECP]
+> 
+> in the other system.  I'll see if I can verify it with the Unmatched
+> at 
+> the next opportunity, though it seems like an overkill to me given
+> that a 
+> PC-style parallel port is a generic PCIe device.  The OXPCIe952
+> implements 
+> a multifunction device, so it doesn't rely on PARPORT_SERIAL.
+> 
+>  NB platforms to be updated for <asm/parport.h> generation were
+> chosen by 
+> the presence of the HAVE_PCI or FORCE_PCI option from ones that do
+> not 
+> already have or generate that header, except for s390, now excluded. 
+> Let 
+> me know if I got anything wrong here.
+> 
+>   Maciej
+> 
+> Changes from v1:
+> 
+> - Exclude s390 systems, update the change description accordingly.
+> ---
+>  arch/arm64/include/asm/Kbuild  |    1 +
+>  arch/csky/include/asm/Kbuild   |    1 +
+>  arch/riscv/include/asm/Kbuild  |    1 +
+>  arch/um/include/asm/Kbuild     |    1 +
+>  arch/xtensa/include/asm/Kbuild |    1 +
+>  drivers/parport/Kconfig        |    4 ++--
+>  6 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> linux-parport-pc-pci.diff
+> Index: linux-macro/arch/arm64/include/asm/Kbuild
+> ===================================================================
+> --- linux-macro.orig/arch/arm64/include/asm/Kbuild
+> +++ linux-macro/arch/arm64/include/asm/Kbuild
+> @@ -3,6 +3,7 @@ generic-y += early_ioremap.h
+>  generic-y += mcs_spinlock.h
+>  generic-y += qrwlock.h
+>  generic-y += qspinlock.h
+> +generic-y += parport.h
+>  generic-y += user.h
+>  
+>  generated-y += cpucaps.h
+> Index: linux-macro/arch/csky/include/asm/Kbuild
+> ===================================================================
+> --- linux-macro.orig/arch/csky/include/asm/Kbuild
+> +++ linux-macro/arch/csky/include/asm/Kbuild
+> @@ -4,5 +4,6 @@ generic-y += extable.h
+>  generic-y += gpio.h
+>  generic-y += kvm_para.h
+>  generic-y += qrwlock.h
+> +generic-y += parport.h
+>  generic-y += user.h
+>  generic-y += vmlinux.lds.h
+> Index: linux-macro/arch/riscv/include/asm/Kbuild
+> ===================================================================
+> --- linux-macro.orig/arch/riscv/include/asm/Kbuild
+> +++ linux-macro/arch/riscv/include/asm/Kbuild
+> @@ -2,5 +2,6 @@
+>  generic-y += early_ioremap.h
+>  generic-y += flat.h
+>  generic-y += kvm_para.h
+> +generic-y += parport.h
+>  generic-y += user.h
+>  generic-y += vmlinux.lds.h
+> Index: linux-macro/arch/um/include/asm/Kbuild
+> ===================================================================
+> --- linux-macro.orig/arch/um/include/asm/Kbuild
+> +++ linux-macro/arch/um/include/asm/Kbuild
+> @@ -17,6 +17,7 @@ generic-y += mcs_spinlock.h
+>  generic-y += mmiowb.h
+>  generic-y += module.lds.h
+>  generic-y += param.h
+> +generic-y += parport.h
+>  generic-y += percpu.h
+>  generic-y += preempt.h
+>  generic-y += softirq_stack.h
+> Index: linux-macro/arch/xtensa/include/asm/Kbuild
+> ===================================================================
+> --- linux-macro.orig/arch/xtensa/include/asm/Kbuild
+> +++ linux-macro/arch/xtensa/include/asm/Kbuild
+> @@ -4,6 +4,7 @@ generic-y += extable.h
+>  generic-y += kvm_para.h
+>  generic-y += mcs_spinlock.h
+>  generic-y += param.h
+> +generic-y += parport.h
+>  generic-y += qrwlock.h
+>  generic-y += qspinlock.h
+>  generic-y += user.h
+> Index: linux-macro/drivers/parport/Kconfig
+> ===================================================================
+> --- linux-macro.orig/drivers/parport/Kconfig
+> +++ linux-macro/drivers/parport/Kconfig
+> @@ -42,7 +42,7 @@ if PARPORT
+>  
+>  config PARPORT_PC
+>         tristate "PC-style hardware"
+> -       depends on ARCH_MIGHT_HAVE_PC_PARPORT
+> +       depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390)
+>         help
+>           You should say Y here if you have a PC-style parallel port.
+> All
+>           IBM PC compatible computers and some Alphas have PC-style
+> @@ -77,7 +77,7 @@ config PARPORT_PC_FIFO
+>  
+>  config PARPORT_PC_SUPERIO
+>         bool "SuperIO chipset support"
+> -       depends on PARPORT_PC && !PARISC
+> +       depends on ARCH_MIGHT_HAVE_PC_PARPORT && PARPORT_PC &&
+> !PARISC
+>         help
+>           Saying Y here enables some probes for Super-IO chipsets in
+> order to
+>           find out things like base addresses, IRQ lines and DMA
+> channels.  It
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
