@@ -2,54 +2,57 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793434C9736
-	for <lists+linux-csky@lfdr.de>; Tue,  1 Mar 2022 21:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422DB4C9BE8
+	for <lists+linux-csky@lfdr.de>; Wed,  2 Mar 2022 04:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235999AbiCAUol (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 1 Mar 2022 15:44:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S229517AbiCBDQp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 1 Mar 2022 22:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237672AbiCAUok (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 1 Mar 2022 15:44:40 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ACEC522D7;
-        Tue,  1 Mar 2022 12:43:59 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 8EF2392009D; Tue,  1 Mar 2022 21:43:58 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 88C9F92009B;
-        Tue,  1 Mar 2022 20:43:58 +0000 (GMT)
-Date:   Tue, 1 Mar 2022 20:43:58 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-kernel@vger.kernel.org
-Subject: [PING][PATCH v2] parport_pc: Also enable driver for PCI systems
-In-Reply-To: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2203011751030.11354@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S239280AbiCBDQp (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 1 Mar 2022 22:16:45 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A72F7B0A47;
+        Tue,  1 Mar 2022 19:16:02 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C1C9113E;
+        Tue,  1 Mar 2022 19:16:02 -0800 (PST)
+Received: from [10.163.49.202] (unknown [10.163.49.202])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 091233F73D;
+        Tue,  1 Mar 2022 19:15:54 -0800 (PST)
+Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-parisc@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
+ <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+ <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
+ <Yh1pYAOiskEQes3p@shell.armlinux.org.uk>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <2f995e2a-c00f-bc9c-6ac6-c783a21b007e@arm.com>
+Date:   Wed, 2 Mar 2022 08:45:52 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <Yh1pYAOiskEQes3p@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,18 +60,65 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, 14 Feb 2022, Maciej W. Rozycki wrote:
 
-> Nowadays PC-style parallel ports come in the form of PCI and PCIe option 
-> cards and there are some combined parallel/serial option cards as well 
-> that we handle in the parport subsystem.  There is nothing in particular 
-> that would prevent them from being used in any system equipped with PCI 
-> or PCIe connectivity, except that we do not permit the PARPORT_PC config 
-> option to be selected for platforms for which ARCH_MIGHT_HAVE_PC_PARPORT 
-> has not been set for.
 
- Ping for:
+On 3/1/22 6:01 AM, Russell King (Oracle) wrote:
+> On Tue, Mar 01, 2022 at 05:30:41AM +0530, Anshuman Khandual wrote:
+>> On 2/28/22 4:27 PM, Russell King (Oracle) wrote:
+>>> On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
+>>>> This defines and exports a platform specific custom vm_get_page_prot() via
+>>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+>>>> macros can be dropped which are no longer needed.
+>>> What I would really like to know is why having to run _code_ to work out
+>>> what the page protections need to be is better than looking it up in a
+>>> table.
+>>>
+>>> Not only is this more expensive in terms of CPU cycles, it also brings
+>>> additional code size with it.
+>>>
+>>> I'm struggling to see what the benefit is.
+>> Currently vm_get_page_prot() is also being _run_ to fetch required page
+>> protection values. Although that is being run in the core MM and from a
+>> platform perspective __SXXX, __PXXX are just being exported for a table.
+>> Looking it up in a table (and applying more constructs there after) is
+>> not much different than a clean switch case statement in terms of CPU
+>> usage. So this is not more expensive in terms of CPU cycles.
+> I disagree.
+> 
+> However, let's base this disagreement on some evidence. Here is the
+> present 32-bit ARM implementation:
+> 
+> 00000048 <vm_get_page_prot>:
+>       48:       e200000f        and     r0, r0, #15
+>       4c:       e3003000        movw    r3, #0
+>                         4c: R_ARM_MOVW_ABS_NC   .LANCHOR1
+>       50:       e3403000        movt    r3, #0
+>                         50: R_ARM_MOVT_ABS      .LANCHOR1
+>       54:       e7930100        ldr     r0, [r3, r0, lsl #2]
+>       58:       e12fff1e        bx      lr
+> 
+> That is five instructions long.
+> 
+> Please show that your new implementation is not more expensive on
+> 32-bit ARM. Please do so by building a 32-bit kernel, and providing
+> the disassembly.
+> 
+> I think you will find way more than five instructions in your version -
+> the compiler will have to issue code to decode the protection bits,
+> probably using a table of branches or absolute PC values, or possibly
+> the worst case of using multiple comparisons and branches. It then has
+> to load constants that may be moved using movw on ARMv7, but on
+> older architectures would have to be created from multiple instructions
+> or loaded from the literal pool. Then there'll be instructions to load
+> the address of "user_pgprot", retrieve its value, and bitwise or that.
+> 
+> Therefore, I fail to see how your approach of getting rid of the table
+> is somehow "better" than what we currently have in terms of the effect
+> on the resulting code.
+> 
+> If you don't like the __P and __S stuff and two arch_* hooks, you could
+> move the table into arch code along with vm_get_page_prot() without the
+> additional unnecessary hooks, while keeping all the benefits of the
+> table lookup.
 
-<https://lore.kernel.org/lkml/alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk/>
-
-  Maciej
+Okay, will change the arm's vm_get_page_prot() implementation as suggested.
