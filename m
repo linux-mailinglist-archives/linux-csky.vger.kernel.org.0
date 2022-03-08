@@ -2,45 +2,43 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D954D128A
-	for <lists+linux-csky@lfdr.de>; Tue,  8 Mar 2022 09:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB4E4D12AD
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Mar 2022 09:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbiCHIpO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 8 Mar 2022 03:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S1345126AbiCHIty (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 8 Mar 2022 03:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345066AbiCHIpN (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 8 Mar 2022 03:45:13 -0500
-X-Greylist: delayed 581 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Mar 2022 00:44:16 PST
-Received: from mail.twelvesign.pl (mail.twelvesign.pl [89.221.214.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE2E3F8BB
-        for <linux-csky@vger.kernel.org>; Tue,  8 Mar 2022 00:44:15 -0800 (PST)
-Received: by mail.twelvesign.pl (Postfix, from userid 1002)
-        id B464D35819; Tue,  8 Mar 2022 09:34:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=twelvesign.pl;
-        s=mail; t=1646728473;
-        bh=rqcEvVJQSOmVvt10Vd77A7h4EQ3zL1XaGAodpexDxk8=;
+        with ESMTP id S1345120AbiCHItx (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 8 Mar 2022 03:49:53 -0500
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FD237A33
+        for <linux-csky@vger.kernel.org>; Tue,  8 Mar 2022 00:48:56 -0800 (PST)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id E2A2D44424; Tue,  8 Mar 2022 09:46:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1646729226; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
         h=Date:From:To:Subject:From;
-        b=QRqo1/THWHy/e1oXMzbpeyNWeAreXAVuTY/LAUFJgaBvBFPzUE9YgYXVqZm//emOC
-         DX6Wp3pu52fzJOG2HG/Eo8Th/a8IbmUnlXPOd1UvsrBHz2AbgT0J51HJUwc2uIS/R4
-         1xlur+hS5qz28HaLai99zE2YNKWTcDs1BpRtS1ajQhu4a/GbDeKW2Kn0tueeqrtv3w
-         lpZr3bR25sb0xlhIVi0GU4xsI3tFlFAiNNWx44XJBqTAvTmG68EW+tTR0wdBPKgwqw
-         iB3nimR7HK61pchsBi7pX7MFRuZKen2+UFEvCoe0GrEW0K5RST6ntiXrCJ7yTzAPoN
-         YeDilGpwX3TEw==
-Received: by mail.twelvesign.pl for <linux-csky@vger.kernel.org>; Tue,  8 Mar 2022 08:34:27 GMT
-Message-ID: <20220308083000-0.1.w.1vcb.0.lc4050892n@twelvesign.pl>
-Date:   Tue,  8 Mar 2022 08:34:27 GMT
-From:   "Damian Kraska" <damian.kraska@twelvesign.pl>
+        b=fz+IEP+UISPAbYMa0a/Gse6AehlRy++uCWvN91ZXna6UIGYD1LTBsacfi47V/K1Td
+         54u5T7bY71RTWOY0x47WVL/3iwRoep9XIZXXhhFHRWHypiQO5y965EkCuBOXPDrRcw
+         Retpsi/Qg2hLvZFuOHu+nvMSG6y87vCpr9b5tF6kOESW8NqTZVrlt67FEv0qUwWpk2
+         7iS0Bu4bxRmCTxrQxjMzZwp80D0mPAwcI0hxE9xHfKjSIzWF81FurzBXeoyZ8wJKF1
+         ZbDme14jDl/tCjDCAe5IQgrJvm17WTKZ/aIighH2JYZuY0b5lugkVdM5FIQk/CGl7w
+         qwL9rBuABQsQQ==
+Received: by mail.olerise.pl for <linux-csky@vger.kernel.org>; Tue,  8 Mar 2022 08:45:41 GMT
+Message-ID: <20220308084500-0.1.26.mtgb.0.3t9irfahg7@olerise.pl>
+Date:   Tue,  8 Mar 2022 08:45:41 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
 To:     <linux-csky@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.twelvesign.pl
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,15 +47,16 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 Dzie=C5=84 dobry,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
 
-Pozdrawiam,
-Damian Kraska
+Pozdrawiam
+Miko=C5=82aj Rudzik
