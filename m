@@ -2,55 +2,41 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FC44DB816
-	for <lists+linux-csky@lfdr.de>; Wed, 16 Mar 2022 19:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D83FF4DBD7E
+	for <lists+linux-csky@lfdr.de>; Thu, 17 Mar 2022 04:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357755AbiCPSrC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 16 Mar 2022 14:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
+        id S231408AbiCQDX6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 16 Mar 2022 23:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239276AbiCPSrB (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 16 Mar 2022 14:47:01 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 183073C4B1;
-        Wed, 16 Mar 2022 11:45:47 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id AFA5D92009C; Wed, 16 Mar 2022 19:45:45 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id AC40D92009B;
-        Wed, 16 Mar 2022 18:45:45 +0000 (GMT)
-Date:   Wed, 16 Mar 2022 18:45:45 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] parport_pc: Also enable driver for PCI systems
-In-Reply-To: <CADVatmP4sPwyqi6vKPm3QOFD=47w1LwXtsUynhecY4wMYGhXmw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2203161837130.24248@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2202141955550.34636@angie.orcam.me.uk> <CADVatmP4sPwyqi6vKPm3QOFD=47w1LwXtsUynhecY4wMYGhXmw@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S229787AbiCQDXy (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 16 Mar 2022 23:23:54 -0400
+X-Greylist: delayed 69 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Mar 2022 20:22:38 PDT
+Received: from mail.meizu.com (unknown [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E3D2980C
+        for <linux-csky@vger.kernel.org>; Wed, 16 Mar 2022 20:22:37 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 17 Mar
+ 2022 11:21:28 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 17 Mar
+ 2022 11:21:26 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <tglx@linutronix.de>, <maz@kernel.org>, <guoren@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>
+Subject: [PATCH] irqchip: Return true/false (not 1/0) from bool functions
+Date:   Thu, 17 Mar 2022 11:21:24 +0800
+Message-ID: <1647487284-30088-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,33 +44,32 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, 2 Mar 2022, Sudip Mukherjee wrote:
+Return boolean values ("true" or "false") instead of 1 or 0 from bool
+functions.
 
-> > Make the PARPORT_PC option selectable also for PCI systems then, except
-> > for the s390 arch, however limit the availability of PARPORT_PC_SUPERIO
-> > to platforms that enable ARCH_MIGHT_HAVE_PC_PARPORT.  Update platforms
-> > accordingly for the required <asm/parport.h> header.
-> >
-> > Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> 
-> Acked-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-> 
-> Usually parport patches goes via Greg's tree. Adding Greg.
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ drivers/irqchip/irq-csky-apb-intc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Thank you.  I have since been able to move my parport card to my RISC-V 
-machine, and the result is as follows:
+diff --git a/drivers/irqchip/irq-csky-apb-intc.c b/drivers/irqchip/irq-csky-apb-intc.c
+index d36f536..42d8a24 100644
+--- a/drivers/irqchip/irq-csky-apb-intc.c
++++ b/drivers/irqchip/irq-csky-apb-intc.c
+@@ -136,11 +136,11 @@ static inline bool handle_irq_perbit(struct pt_regs *regs, u32 hwirq,
+ 				     u32 irq_base)
+ {
+ 	if (hwirq == 0)
+-		return 0;
++		return false;
+ 
+ 	generic_handle_domain_irq(root_domain, irq_base + __fls(hwirq));
+ 
+-	return 1;
++	return true;
+ }
+ 
+ /* gx6605s 64 irqs interrupt controller */
+-- 
+2.7.4
 
-parport_pc 0000:07:00.0: enabling device (0000 -> 0001)
-PCI parallel port detected: 1415:c118, I/O at 0x8(0x4), IRQ 38
-parport0: PC-style at 0x8 (0x4), irq 38, using FIFO [PCSPP,TRISTATE,COMPAT,EPP,ECP]
-lp0: using parport0 (interrupt-driven).
-
-with the patch from:
-
-<https://lore.kernel.org/lkml/alpine.DEB.2.21.2202260044180.25061@angie.orcam.me.uk/>
-
-also applied so as to prevent I/O port 0 from being assigned by PCI code 
-that wouldn't actually work (so allocation for the two BARs is at 0x4 and 
-0x8 instead).
-
-  Maciej
