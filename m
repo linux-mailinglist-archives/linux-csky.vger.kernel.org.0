@@ -2,74 +2,61 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83FF4DBD7E
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Mar 2022 04:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F174DC1B0
+	for <lists+linux-csky@lfdr.de>; Thu, 17 Mar 2022 09:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbiCQDX6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 16 Mar 2022 23:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        id S231439AbiCQIpq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 17 Mar 2022 04:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiCQDXy (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 16 Mar 2022 23:23:54 -0400
-X-Greylist: delayed 69 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Mar 2022 20:22:38 PDT
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E3D2980C
-        for <linux-csky@vger.kernel.org>; Wed, 16 Mar 2022 20:22:37 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Thu, 17 Mar
- 2022 11:21:28 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Thu, 17 Mar
- 2022 11:21:26 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <tglx@linutronix.de>, <maz@kernel.org>, <guoren@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-csky@vger.kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH] irqchip: Return true/false (not 1/0) from bool functions
-Date:   Thu, 17 Mar 2022 11:21:24 +0800
-Message-ID: <1647487284-30088-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S231437AbiCQIpp (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 17 Mar 2022 04:45:45 -0400
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC791C233B
+        for <linux-csky@vger.kernel.org>; Thu, 17 Mar 2022 01:44:29 -0700 (PDT)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id 1E08B45F16; Thu, 17 Mar 2022 09:41:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1647506602; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
+        h=Date:From:To:Subject:From;
+        b=Nei3XbUOhOIfEIiLlWJwED1S6/50VpqjYI/1UPb3VMjVhpXZt4rkWzT00iYqqW9OB
+         BgH5HAinZo1zZlmIKACXjQ1A3LAuyE/6bmaKkdiQ4m6vVxBkKF8wt8jIjw4DFzZScj
+         R+yGHRGWRTkiA0Lg+URqyZLVjSPLI9xv/2sm9snYPqNpXLZlfE+YzHlsd7z8LcdtG/
+         nI904mz1FvMBwxt9PhzCFc2Dotkz1ZJXparyXFUuP0FPnxvQzLgqmjEbCruXh0ojhI
+         H2D8khv0+oFAh6OjV6xqWVumNv1sf6GufRt/FFUa+cQp/OPmwoKVG/41JnFZlnzF8F
+         +3mglYHG4voig==
+Received: by mail.olerise.pl for <linux-csky@vger.kernel.org>; Thu, 17 Mar 2022 08:40:21 GMT
+Message-ID: <20220317084500-0.1.2d.rus4.0.j9ffie1aag@olerise.pl>
+Date:   Thu, 17 Mar 2022 08:40:21 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Return boolean values ("true" or "false") instead of 1 or 0 from bool
-functions.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- drivers/irqchip/irq-csky-apb-intc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-diff --git a/drivers/irqchip/irq-csky-apb-intc.c b/drivers/irqchip/irq-csky-apb-intc.c
-index d36f536..42d8a24 100644
---- a/drivers/irqchip/irq-csky-apb-intc.c
-+++ b/drivers/irqchip/irq-csky-apb-intc.c
-@@ -136,11 +136,11 @@ static inline bool handle_irq_perbit(struct pt_regs *regs, u32 hwirq,
- 				     u32 irq_base)
- {
- 	if (hwirq == 0)
--		return 0;
-+		return false;
- 
- 	generic_handle_domain_irq(root_domain, irq_base + __fls(hwirq));
- 
--	return 1;
-+	return true;
- }
- 
- /* gx6605s 64 irqs interrupt controller */
--- 
-2.7.4
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+
+
+Pozdrawiam
+Miko=C5=82aj Rudzik
