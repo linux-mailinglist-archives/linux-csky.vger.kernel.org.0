@@ -2,56 +2,64 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AA14DCA37
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Mar 2022 16:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847194DCAB7
+	for <lists+linux-csky@lfdr.de>; Thu, 17 Mar 2022 17:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbiCQPmQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 17 Mar 2022 11:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
+        id S232164AbiCQQEj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 17 Mar 2022 12:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbiCQPmP (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 17 Mar 2022 11:42:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036D720D8AE;
-        Thu, 17 Mar 2022 08:40:59 -0700 (PDT)
+        with ESMTP id S236300AbiCQQEi (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 17 Mar 2022 12:04:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C217DAB5;
+        Thu, 17 Mar 2022 09:03:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1773B81E9E;
-        Thu, 17 Mar 2022 15:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A52FC340E9;
-        Thu, 17 Mar 2022 15:40:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C66BCB80122;
+        Thu, 17 Mar 2022 16:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89C3AC340F7;
+        Thu, 17 Mar 2022 16:03:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647531656;
-        bh=rWIaBvO//2xmfb9yyG1aQcd+fBgMES6AnK2ION38dqk=;
+        s=k20201202; t=1647532998;
+        bh=NGiQFPVnfDqZ1ROyWh9ETbUs7TxBnFHdgwPh/4n9jkA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KHdnYZs01KcJfISh18HVHnO0j2edeKjkvZ5wizRgMjNYu3c7EMLD+ztQEd3xkIgni
-         W/SxXICteDSysFO1jih5fglDQQdHcg+Q7HrDJL31KYbJM599PuRGw3qKxoApsgmDJO
-         9y8ESbY7l2ZGV8wo217JBAnmgK7jxr/evIxOdZJrwJ66qXSWOMfEpoRzDyN44/Fv9e
-         i8jTZ3gBJbemDYvdzYhcWXv5Uqu7sDCuvBdL24fYSy9R4bjfIDbM/X+elTG8eTaHAN
-         ifW1nHAvaZUnsbCWxtV5rq6m5bizgLYsDLpKRJa9q5LXqPLtj+xMwDlKGuBhlaVJO3
-         09ZjOO7E6fTNw==
-Received: by mail-ua1-f42.google.com with SMTP id t40so1869246uad.2;
-        Thu, 17 Mar 2022 08:40:56 -0700 (PDT)
-X-Gm-Message-State: AOAM5303f5aLwwoxU/gDfLSdDxnf1cQY93X94Msr5bq4b9ayGCxoW6TZ
-        5+vfFtQD+Rrk6EbFB8H7Kmjy4NM5c78VIr44B0o=
-X-Google-Smtp-Source: ABdhPJxEJnImsdSQdAc5KBTf26/XRjA9fUefxAiwA2dm9CHBpIffqMejSrTmnKCZHpU2asmR+3vRKeBjS0Ee95ACLCo=
-X-Received: by 2002:ab0:2883:0:b0:350:e1c0:72b7 with SMTP id
- s3-20020ab02883000000b00350e1c072b7mr1865809uap.83.1647531655238; Thu, 17 Mar
- 2022 08:40:55 -0700 (PDT)
+        b=rh3zXpgLbT6SxqOATKmV9Yg1s5i3qEYz1c57woGTPEB9HVQOvoNJg27Eh+Vpr5bnB
+         9l5P2ZTbDZaUyjAkAuW69dtO6pyULM2UcfPOa/ltFPnPz77RHcuBH0PVA5FQJ12/RC
+         Vk505u32UA7dKFDT0dy2VxMqKGqWACf/31xxW4OqezMnTHpxYCMn1KQiwkY/kCWZjl
+         tez2KzHX0g5xYLn7LOcGj9kCZD3N5v3/Q8DWhareckpREHZplQyMPK0Lacqa+cRkYa
+         +F+S5yDxaEib1+Rm48oukLIWleLtwPzHRjq6T+UmUWe4bisqNoOKNa4rHPwNTuLNGA
+         61hyjnnLNxwhA==
+Received: by mail-ua1-f49.google.com with SMTP id i26so2231972uap.6;
+        Thu, 17 Mar 2022 09:03:18 -0700 (PDT)
+X-Gm-Message-State: AOAM531bLQ9j5G+gp/Lo/PFiis0JHUWfBPW46CD/bKg5JwkV1cVcXPng
+        SjWhnrtPMTOZbCm2i6hJ3lON1f5MEG/g1xzQyf8=
+X-Google-Smtp-Source: ABdhPJx56mP1yBItNhpbrH5BO1aKkva0leBOvED1GBx+mkRa6thFGwJA/RpUKcskkXEWf9nO8JBbTl9WVNeKe2iBtLA=
+X-Received: by 2002:ab0:3785:0:b0:350:c22e:9908 with SMTP id
+ d5-20020ab03785000000b00350c22e9908mr1907268uav.114.1647532997252; Thu, 17
+ Mar 2022 09:03:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <1647487284-30088-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1647487284-30088-1-git-send-email-baihaowen@meizu.com>
+References: <20220313012221.1755483-1-guoren@kernel.org> <YjH2e4bfTl+0/+yc@arm.com>
+In-Reply-To: <YjH2e4bfTl+0/+yc@arm.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 17 Mar 2022 23:40:44 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRXH=oDpfogaT6WgwOmvECRb4BiGr0DQULf5JkbS7YYMA@mail.gmail.com>
-Message-ID: <CAJF2gTRXH=oDpfogaT6WgwOmvECRb4BiGr0DQULf5JkbS7YYMA@mail.gmail.com>
-Subject: Re: [PATCH] irqchip: Return true/false (not 1/0) from bool functions
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+Date:   Fri, 18 Mar 2022 00:03:06 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQmix3hc5-EntHZ_cTpp6XeCmDfOD4vHCd8Y+svUjPgGA@mail.gmail.com>
+Message-ID: <CAJF2gTQmix3hc5-EntHZ_cTpp6XeCmDfOD4vHCd8Y+svUjPgGA@mail.gmail.com>
+Subject: Re: [PATCH V2] arch: patch_text: Fixup last cpu should be master
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -63,41 +71,54 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-It's my coding conventions' problem, thx for pointing out.
+On Wed, Mar 16, 2022 at 10:38 PM Catalin Marinas
+<catalin.marinas@arm.com> wrote:
+>
+> On Sun, Mar 13, 2022 at 09:22:21AM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > These patch_text implementations are using stop_machine_cpuslocked
+> > infrastructure with atomic cpu_count. The original idea: When the
+> > master CPU patch_text, the others should wait for it.
+>
+> I couldn't find the original intent in the commit logs (at least not in
+> the arm64 logs). Maybe the intention was for the CPUs to wait for the
+> text patching to complete rather than the master CPU to wait for the
+> others to enter the cpu_relax() loop before patching.
+>
+> I think your patch makes sense anyway, the master CPU would wait for all
+> the others to enter the cpu_relax() loop before patching and releasing
+> them with another increment. You probably wouldn't see any issues in
+> practice unless you insert probes in the multi_stop_cpu() function (or
+> we could mark this function as __kprobes and get rid of the extra loops
+> entirely).
+That could depend on micro-arch, trigger other harts' IPI is not
+guaranteed by hw.
 
-Acked-by: Guo Ren <guoren@kernel.org>
+>
+> > --- a/arch/arm64/kernel/patching.c
+> > +++ b/arch/arm64/kernel/patching.c
+> > @@ -117,8 +117,8 @@ static int __kprobes aarch64_insn_patch_text_cb(void *arg)
+> >       int i, ret = 0;
+> >       struct aarch64_insn_patch *pp = arg;
+> >
+> > -     /* The first CPU becomes master */
+> > -     if (atomic_inc_return(&pp->cpu_count) == 1) {
+> > +     /* The last CPU becomes master */
+> > +     if (atomic_inc_return(&pp->cpu_count) == num_online_cpus()) {
+> >               for (i = 0; ret == 0 && i < pp->insn_cnt; i++)
+> >                       ret = aarch64_insn_patch_text_nosync(pp->text_addrs[i],
+> >                                                            pp->new_insns[i]);
+>
+> For arm64:
+>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Thx
 
-On Thu, Mar 17, 2022 at 11:21 AM Haowen Bai <baihaowen@meizu.com> wrote:
 >
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/irqchip/irq-csky-apb-intc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/irqchip/irq-csky-apb-intc.c b/drivers/irqchip/irq-csky-apb-intc.c
-> index d36f536..42d8a24 100644
-> --- a/drivers/irqchip/irq-csky-apb-intc.c
-> +++ b/drivers/irqchip/irq-csky-apb-intc.c
-> @@ -136,11 +136,11 @@ static inline bool handle_irq_perbit(struct pt_regs *regs, u32 hwirq,
->                                      u32 irq_base)
->  {
->         if (hwirq == 0)
-> -               return 0;
-> +               return false;
->
->         generic_handle_domain_irq(root_domain, irq_base + __fls(hwirq));
->
-> -       return 1;
-> +       return true;
->  }
->
->  /* gx6605s 64 irqs interrupt controller */
 > --
-> 2.7.4
->
+> Catalin
+
 
 
 -- 
