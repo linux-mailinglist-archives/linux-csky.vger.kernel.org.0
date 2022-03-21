@@ -2,65 +2,68 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A1A4E1E4D
-	for <lists+linux-csky@lfdr.de>; Mon, 21 Mar 2022 00:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6B84E1E67
+	for <lists+linux-csky@lfdr.de>; Mon, 21 Mar 2022 01:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245551AbiCTXuq (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 20 Mar 2022 19:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S1343864AbiCUAXp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 20 Mar 2022 20:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbiCTXuq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 20 Mar 2022 19:50:46 -0400
+        with ESMTP id S234559AbiCUAXp (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 20 Mar 2022 20:23:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5101B51E71;
-        Sun, 20 Mar 2022 16:49:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BFBD95C3;
+        Sun, 20 Mar 2022 17:22:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D41466125C;
-        Sun, 20 Mar 2022 23:49:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A396C340F7;
-        Sun, 20 Mar 2022 23:49:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F39166126A;
+        Mon, 21 Mar 2022 00:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2A6C36AE2;
+        Mon, 21 Mar 2022 00:22:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647820161;
-        bh=LdVIHoHItcWladjunHHE0TqmokWx34dd4pkenmbLtic=;
+        s=k20201202; t=1647822140;
+        bh=sl757+nQ+uoFAxIuw/aW760I9HoJj/9PyrFKOdrvNPc=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cGZp03PLkkg7WjyUJH075nQZRGuldahnVs/gF8U1zra6NQ1upmIkD0CeLx54VWJO5
-         E5iniwFtkXnkPI6pbQd5kcW/3oBSVkKeHQjCdHm42WqPloHOHMk4+d9J94VyVyMc4L
-         va8xny3AZNWvP4ankJO04Ba6mx/3K7dKqVJLkkpxLHVCfm+FzvTGMBCWJs0hiiGlhu
-         985selWu5XMI3lruSNxroriY9octOOZWCP5ZlqeLJq6icpoCZ41wHvptN9tRlUvlF2
-         43KiXulyMx28u0AniBrVYk81FnZg6gDbu239OlxtbVb7OH4FkGvJ8dTNBlLnBfepO3
-         oAyZv9majtYmg==
-Received: by mail-vs1-f42.google.com with SMTP id i186so9656358vsc.9;
-        Sun, 20 Mar 2022 16:49:21 -0700 (PDT)
-X-Gm-Message-State: AOAM5329DNLFG/BWfb68DWVxtp+ik5Rwg0xrzWQCjHFV0cxomR4ysaLo
-        tSPHVCsoS436lFHMUwFA8CjTqS2zYtnQ/JUjXlA=
-X-Google-Smtp-Source: ABdhPJwzZ7sQ8nqc3/evn0mCeSVPLU9IvQI1EMLbzj7obkq7PpVtp3nW3lxsuUT4URfmvdsv+ieEuyG9qH76lKdBsy0=
-X-Received: by 2002:a05:6102:38c6:b0:31b:b386:e467 with SMTP id
- k6-20020a05610238c600b0031bb386e467mr6809705vst.8.1647820160139; Sun, 20 Mar
- 2022 16:49:20 -0700 (PDT)
+        b=FaiuqVxuSXdpGRvEpDxoM+RJxM/OiPTeOBHcmxMy4hOU34jzlt7y8hxP1G9mgEEME
+         YSYT3z/urqe2Jix0G2SD5g2K8I7xvs5FfETynak3yu1xUVdnnydZ7NhSjGmZEPHOZi
+         yn83ZWnN+anRqZEXdP7wNRAW5/RQUJx+++8CxsUhvAtPms7Xtrwe0fJZ3fXJQvbH9R
+         UDgziGUYpQlnF2Crqt+yGJ5TAU+smY5s8nVPEorCmdBuD00ycNVS7ye4ugauhVzBrS
+         ANHE8JNJsO3F1cVJ+4BqUTMXb90mjqNHqwPgSdg7IY7YT8t3GGikF6Qs7TY3xMQ8IT
+         4jbU8GeAkYJuw==
+Received: by mail-vk1-f179.google.com with SMTP id x125so1427666vkb.7;
+        Sun, 20 Mar 2022 17:22:20 -0700 (PDT)
+X-Gm-Message-State: AOAM533zl//8y7x2w5FAypLqVSlBZUxpWo94NPMPnXwddfx5dQzI8+iq
+        QFwIzP8pszQ07Jx/EqnaTdMjzGWTWwQvenNn9Z4=
+X-Google-Smtp-Source: ABdhPJwJRuOhAiysCoOvQHwSmmYd801IxVPP+erWrfdv5T2vb3ztD/y1NOJnWVmPMPDyYpcC1/3ppbBpVDzb6NrH1hM=
+X-Received: by 2002:a1f:2d6:0:b0:33e:9b64:e07e with SMTP id
+ 205-20020a1f02d6000000b0033e9b64e07emr5719806vkc.28.1647822139345; Sun, 20
+ Mar 2022 17:22:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220313012221.1755483-1-guoren@kernel.org> <mhng-b034f45a-521b-4c80-a314-4ddf1a1dc534@palmer-mbp2014>
-In-Reply-To: <mhng-b034f45a-521b-4c80-a314-4ddf1a1dc534@palmer-mbp2014>
+References: <20220316070317.1864279-1-guoren@kernel.org> <20220316070317.1864279-11-guoren@kernel.org>
+In-Reply-To: <20220316070317.1864279-11-guoren@kernel.org>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 21 Mar 2022 07:49:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR6Pd3nVKt9e=rdMynBV0-EOmy5ZbndduEJiQLLe6vdpA@mail.gmail.com>
-Message-ID: <CAJF2gTR6Pd3nVKt9e=rdMynBV0-EOmy5ZbndduEJiQLLe6vdpA@mail.gmail.com>
-Subject: Re: [PATCH V2] arch: patch_text: Fixup last cpu should be master
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+Date:   Mon, 21 Mar 2022 08:22:08 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSqbS3cUNcxKGoMT2zE3ws+gH6a0EssVEutpypR5YoHCA@mail.gmail.com>
+Message-ID: <CAJF2gTSqbS3cUNcxKGoMT2zE3ws+gH6a0EssVEutpypR5YoHCA@mail.gmail.com>
+Subject: Re: [PATCH V8 10/20] riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
         linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,113 +74,86 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 2:05 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Sat, 12 Mar 2022 17:22:21 PST (-0800), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > These patch_text implementations are using stop_machine_cpuslocked
-> > infrastructure with atomic cpu_count. The original idea: When the
-> > master CPU patch_text, the others should wait for it. But current
-> > implementation is using the first CPU as master, which couldn't
-> > guarantee the remaining CPUs are waiting. This patch changes the
-> > last CPU as the master to solve the potential risk.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Peter Zijlstra <peterz@infradead.org
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Chris Zankel <chris@zankel.net>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> >
-> > ---
-> > Changes in V2:
-> >  - Fixup last cpu should be num_online_cpus() by Max Filippov
-> >  - Fixup typos found by Max Filippov
-> > ---
-> >  arch/arm64/kernel/patching.c      | 4 ++--
-> >  arch/csky/kernel/probes/kprobes.c | 2 +-
-> >  arch/riscv/kernel/patch.c         | 2 +-
-> >  arch/xtensa/kernel/jump_label.c   | 2 +-
-> >  4 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/arch/arm64/kernel/patching.c b/arch/arm64/kernel/patching.c
-> > index 771f543464e0..33e0fabc0b79 100644
-> > --- a/arch/arm64/kernel/patching.c
-> > +++ b/arch/arm64/kernel/patching.c
-> > @@ -117,8 +117,8 @@ static int __kprobes aarch64_insn_patch_text_cb(void *arg)
-> >       int i, ret = 0;
-> >       struct aarch64_insn_patch *pp = arg;
-> >
-> > -     /* The first CPU becomes master */
-> > -     if (atomic_inc_return(&pp->cpu_count) == 1) {
-> > +     /* The last CPU becomes master */
-> > +     if (atomic_inc_return(&pp->cpu_count) == num_online_cpus()) {
-> >               for (i = 0; ret == 0 && i < pp->insn_cnt; i++)
-> >                       ret = aarch64_insn_patch_text_nosync(pp->text_addrs[i],
-> >                                                            pp->new_insns[i]);
-> > diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
-> > index 42920f25e73c..34ba684d5962 100644
-> > --- a/arch/csky/kernel/probes/kprobes.c
-> > +++ b/arch/csky/kernel/probes/kprobes.c
-> > @@ -30,7 +30,7 @@ static int __kprobes patch_text_cb(void *priv)
-> >       struct csky_insn_patch *param = priv;
-> >       unsigned int addr = (unsigned int)param->addr;
-> >
-> > -     if (atomic_inc_return(&param->cpu_count) == 1) {
-> > +     if (atomic_inc_return(&param->cpu_count) == num_online_cpus()) {
-> >               *(u16 *) addr = cpu_to_le16(param->opcode);
-> >               dcache_wb_range(addr, addr + 2);
-> >               atomic_inc(&param->cpu_count);
-> > diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> > index 0b552873a577..765004b60513 100644
-> > --- a/arch/riscv/kernel/patch.c
-> > +++ b/arch/riscv/kernel/patch.c
-> > @@ -104,7 +104,7 @@ static int patch_text_cb(void *data)
-> >       struct patch_insn *patch = data;
-> >       int ret = 0;
-> >
-> > -     if (atomic_inc_return(&patch->cpu_count) == 1) {
-> > +     if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
-> >               ret =
-> >                   patch_text_nosync(patch->addr, &patch->insn,
-> >                                           GET_INSN_LENGTH(patch->insn));
->
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
->
-> It's better if these sorts of things get split up: there's really no
-> dependency between these diffs and having them together just makes for a
-> merge/test headache for everyone.
-I'm Okay with split patches, @Arnd Bergmann what's your opinion?
-We've got all arch vendors' agreements (arm64, csky, riscv, xtensa).
+For this patch, we need to add below to fixup the rv32 call rv64 elf
+segment fault.
 
->
-> I'm OK taking this through the RISC-V tree if other folks ack it, but
-> for now I'm going to assume it's going to go in via somewhere else.
-Arnd has given some comments on unnecessary #error, maybe I need to update V2.
+diff --git a/arch/riscv/include/asm/processor.h
+b/arch/riscv/include/asm/processor.h
+index 0749924d9e55..21c8072dce17 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -19,7 +19,11 @@
+ #define TASK_UNMAPPED_BASE     PAGE_ALIGN(TASK_SIZE / 3)
 
+ #define STACK_TOP              TASK_SIZE
+-#define STACK_TOP_MAX          STACK_TOP
++#ifdef CONFIG_64BIT
++#define STACK_TOP_MAX          TASK_SIZE_64
++#else
++#define STACK_TOP_MAX          TASK_SIZE
++#endif
+ #define STACK_ALIGN            16
+
+ #ifndef __ASSEMBLY__
+
+On Wed, Mar 16, 2022 at 3:04 PM <guoren@kernel.org> wrote:
 >
-> > diff --git a/arch/xtensa/kernel/jump_label.c b/arch/xtensa/kernel/jump_label.c
-> > index 61cf6497a646..b67efcd7e32c 100644
-> > --- a/arch/xtensa/kernel/jump_label.c
-> > +++ b/arch/xtensa/kernel/jump_label.c
-> > @@ -40,7 +40,7 @@ static int patch_text_stop_machine(void *data)
-> >  {
-> >       struct patch *patch = data;
-> >
-> > -     if (atomic_inc_return(&patch->cpu_count) == 1) {
-> > +     if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
-> >               local_patch_text(patch->addr, patch->data, patch->sz);
-> >               atomic_inc(&patch->cpu_count);
-> >       } else {
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Make TASK_SIZE from const to dynamic detect TIF_32BIT flag
+> function. Refer to arm64 to implement DEFAULT_MAP_WINDOW_64 for
+> efi-stub.
+>
+> Limit 32-bit compatible process in 0-2GB virtual address range
+> (which is enough for real scenarios), because it could avoid
+> address sign extend problem when 32-bit enter 64-bit and ease
+> software design.
+>
+> The standard 32-bit TASK_SIZE is 0x9dc00000:FIXADDR_START, and
+> compared to a compatible 32-bit, it increases 476MB for the
+> application's virtual address.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  arch/riscv/include/asm/pgtable.h | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pg=
+table.h
+> index e3549e50de95..afdc9ece2ba4 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -705,8 +705,17 @@ static inline pmd_t pmdp_establish(struct vm_area_st=
+ruct *vma,
+>   * 63=E2=80=9348 all equal to bit 47, or else a page-fault exception wil=
+l occur."
+>   */
+>  #ifdef CONFIG_64BIT
+> -#define TASK_SIZE      (PGDIR_SIZE * PTRS_PER_PGD / 2)
+> -#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
+> +#define TASK_SIZE_64   (PGDIR_SIZE * PTRS_PER_PGD / 2)
+> +#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
+> +
+> +#ifdef CONFIG_COMPAT
+> +#define TASK_SIZE_32   (_AC(0x80000000, UL) - PAGE_SIZE)
+> +#define TASK_SIZE      (test_thread_flag(TIF_32BIT) ? \
+> +                        TASK_SIZE_32 : TASK_SIZE_64)
+> +#else
+> +#define TASK_SIZE      TASK_SIZE_64
+> +#endif
+> +
+>  #else
+>  #define TASK_SIZE      FIXADDR_START
+>  #define TASK_SIZE_MIN  TASK_SIZE
+> --
+> 2.25.1
+>
 
 
-
--- 
+--
 Best Regards
  Guo Ren
 
