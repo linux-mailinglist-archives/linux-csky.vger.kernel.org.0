@@ -2,128 +2,153 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1664E421E
-	for <lists+linux-csky@lfdr.de>; Tue, 22 Mar 2022 15:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4DB4E4363
+	for <lists+linux-csky@lfdr.de>; Tue, 22 Mar 2022 16:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238049AbiCVOoS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 22 Mar 2022 10:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S236187AbiCVP4M (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 22 Mar 2022 11:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238156AbiCVOoH (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Mar 2022 10:44:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F178189337;
-        Tue, 22 Mar 2022 07:42:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S236126AbiCVP4L (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 22 Mar 2022 11:56:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 993B839D
+        for <linux-csky@vger.kernel.org>; Tue, 22 Mar 2022 08:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647964482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bhnT3KW2N7nGUFmNkySnEopkUtzZ8brHDUQP8GeFjGo=;
+        b=JozSWqpSB8UWD3b4CTOx3Nv8OJ1qnUnyDmwamSMZGPwg9XfM/1FOoSwvfbyqArV2C9pmVD
+        8AN0sEQ7QZLpDXU+LYvSopIcU8/3AQaotVL8i4IZAl39NfC79LbvSL6zRVACqC5T2OZq/l
+        uJNB7qcGXERyB1bjlTavOvpRWtHM+98=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-j0LrWmyDNnym6QHTL5OVNg-1; Tue, 22 Mar 2022 11:54:39 -0400
+X-MC-Unique: j0LrWmyDNnym6QHTL5OVNg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B403B81D07;
-        Tue, 22 Mar 2022 14:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29A4C36AE2;
-        Tue, 22 Mar 2022 14:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647960143;
-        bh=qyoPYJlSA6NEig6jnwlt/QYfSWiYQ9maXb6WEkmPDVA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OfR6sAJka8wfUUiM43qGreLVN5SPIpmmMPa66UNRB2ZiKpNvdeF61xiBk2WKBEIR2
-         hLgcIe9UOXgyQsz7Aywb54SIphKL7HXbUMYmXNflLuU4IteYo2TDiRQT4nzR0KyFGp
-         8W+rr+gxr/Qr3D4fk4bqZ+zkcCwtdK0iRxo9IHlMw4MeRSpRafyDMMAzy5brqIRvpO
-         +3M6wL/0MLp9ikO/2uFX7sA6UIj8lavazZHBe0dJI3uTlVLv5YxnITVnLb/XK6WDKt
-         QsksuB3qJ9qf9OTr4iigCk8pYmZRsfjYl7xPamOLY9kiRhUZjLz3nmF4PYb9rSY1pM
-         QPEp+dv60eKkQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-Date:   Tue, 22 Mar 2022 22:40:03 +0800
-Message-Id: <20220322144003.2357128-21-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220322144003.2357128-1-guoren@kernel.org>
-References: <20220322144003.2357128-1-guoren@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F6EE29ABA2E;
+        Tue, 22 Mar 2022 15:54:38 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 99C5A4229D0;
+        Tue, 22 Mar 2022 15:54:37 +0000 (UTC)
+Message-ID: <54d6221d-0c4f-9329-042d-4f74c4ea288f@redhat.com>
+Date:   Tue, 22 Mar 2022 11:54:37 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [OpenRISC] [PATCH V2 1/5] asm-generic: ticket-lock: New generic
+ ticket-based spinlock
+Content-Language: en-US
+To:     Stafford Horne <shorne@gmail.com>, guoren@kernel.org
+Cc:     palmer@dabbelt.com, arnd@arndb.de, boqun.feng@gmail.com,
+        peterz@infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-riscv@lists.infradead.org
+References: <20220319035457.2214979-1-guoren@kernel.org>
+ <20220319035457.2214979-2-guoren@kernel.org> <Yjk+LGwhc50zvsk2@antec>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yjk+LGwhc50zvsk2@antec>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On 3/21/22 23:10, Stafford Horne wrote:
+> Hello,
+>
+> There is a problem with this patch on Big Endian machines, see below.
+>
+> On Sat, Mar 19, 2022 at 11:54:53AM +0800, guoren@kernel.org wrote:
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> This is a simple, fair spinlock.  Specifically it doesn't have all the
+>> subtle memory model dependencies that qspinlock has, which makes it more
+>> suitable for simple systems as it is more likely to be correct.
+>>
+>> [Palmer: commit text]
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> --
+>>
+>> I have specifically not included Peter's SOB on this, as he sent his
+>> original patch
+>> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
+>> without one.
+>> ---
+>>   include/asm-generic/spinlock.h          | 11 +++-
+>>   include/asm-generic/spinlock_types.h    | 15 +++++
+>>   include/asm-generic/ticket-lock-types.h | 11 ++++
+>>   include/asm-generic/ticket-lock.h       | 86 +++++++++++++++++++++++++
+>>   4 files changed, 120 insertions(+), 3 deletions(-)
+>>   create mode 100644 include/asm-generic/spinlock_types.h
+>>   create mode 100644 include/asm-generic/ticket-lock-types.h
+>>   create mode 100644 include/asm-generic/ticket-lock.h
+>>
+>> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+>> new file mode 100644
+>> index 000000000000..59373de3e32a
+>> --- /dev/null
+>> +++ b/include/asm-generic/ticket-lock.h
+> ...
+>
+>> +static __always_inline void ticket_unlock(arch_spinlock_t *lock)
+>> +{
+>> +	u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
+> As mentioned, this patch series breaks SMP on OpenRISC.  I traced it to this
+> line.  The above `__is_defined(__BIG_ENDIAN)`  does not return 1 as expected
+> even on BIG_ENDIAN machines.  This works:
+>
+>
+> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+> index 59373de3e32a..52b5dc9ffdba 100644
+> --- a/include/asm-generic/ticket-lock.h
+> +++ b/include/asm-generic/ticket-lock.h
+> @@ -26,6 +26,7 @@
+>   #define __ASM_GENERIC_TICKET_LOCK_H
+>   
+>   #include <linux/atomic.h>
+> +#include <linux/kconfig.h>
+>   #include <asm-generic/ticket-lock-types.h>
+>   
+>   static __always_inline void ticket_lock(arch_spinlock_t *lock)
+> @@ -51,7 +52,7 @@ static __always_inline bool ticket_trylock(arch_spinlock_t *lock)
+>   
+>   static __always_inline void ticket_unlock(arch_spinlock_t *lock)
+>   {
+> -       u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
+> +       u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
+>          u32 val = atomic_read(lock);
+>   
+>          smp_store_release(ptr, (u16)val + 1);
+>
+>
+>> +	u32 val = atomic_read(lock);
+>> +
+>> +	smp_store_release(ptr, (u16)val + 1);
+>> +}
+>> +
 
-Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
-64bit S-mode) support.
- - Setup kconfig & dummy functions for compiling.
- - Implement compat_start_thread by the way.
+__BIG_ENDIAN is defined in <linux/kconfig.h>. I believe that if you 
+include <linux/kconfig.h>, the second hunk is not really needed and vice 
+versa.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
----
- arch/riscv/Kconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..6f11df8c189f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -73,6 +73,7 @@ config RISCV
- 	select HAVE_ARCH_KGDB if !XIP_KERNEL
- 	select HAVE_ARCH_KGDB_QXFER_PKT
- 	select HAVE_ARCH_MMAP_RND_BITS if MMU
-+	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
-@@ -123,12 +124,18 @@ config ARCH_MMAP_RND_BITS_MIN
- 	default 18 if 64BIT
- 	default 8
- 
-+config ARCH_MMAP_RND_COMPAT_BITS_MIN
-+	default 8
-+
- # max bits determined by the following formula:
- #  VA_BITS - PAGE_SHIFT - 3
- config ARCH_MMAP_RND_BITS_MAX
- 	default 24 if 64BIT # SV39 based
- 	default 17
- 
-+config ARCH_MMAP_RND_COMPAT_BITS_MAX
-+	default 17
-+
- # set if we run in machine mode, cleared if we run in supervisor mode
- config RISCV_M_MODE
- 	bool
-@@ -406,6 +413,18 @@ config CRASH_DUMP
- 
- 	  For more details see Documentation/admin-guide/kdump/kdump.rst
- 
-+config COMPAT
-+	bool "Kernel support for 32-bit U-mode"
-+	default 64BIT
-+	depends on 64BIT && MMU
-+	help
-+	  This option enables support for a 32-bit U-mode running under a 64-bit
-+	  kernel at S-mode. riscv32-specific components such as system calls,
-+	  the user helper functions (vdso), signal rt_frame functions and the
-+	  ptrace interface are handled appropriately by the kernel.
-+
-+	  If you want to execute 32-bit userspace applications, say Y.
-+
- endmenu
- 
- menu "Boot options"
--- 
-2.25.1
+Cheers,
+Longman
 
