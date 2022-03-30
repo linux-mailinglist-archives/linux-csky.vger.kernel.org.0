@@ -2,84 +2,113 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583024EB5C6
-	for <lists+linux-csky@lfdr.de>; Wed, 30 Mar 2022 00:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B804ECC01
+	for <lists+linux-csky@lfdr.de>; Wed, 30 Mar 2022 20:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236587AbiC2WUz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 29 Mar 2022 18:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
+        id S1349954AbiC3S0f (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 30 Mar 2022 14:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiC2WUy (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 29 Mar 2022 18:20:54 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075D1522E9
-        for <linux-csky@vger.kernel.org>; Tue, 29 Mar 2022 15:19:11 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id q20so11194364wmq.1
-        for <linux-csky@vger.kernel.org>; Tue, 29 Mar 2022 15:19:10 -0700 (PDT)
+        with ESMTP id S1350512AbiC3S0M (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 30 Mar 2022 14:26:12 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED3649256
+        for <linux-csky@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i11so21277926plr.1
+        for <linux-csky@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:mime-version:content-transfer-encoding
-         :content-description:subject:to:from:date:reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=jpwuI1yldKV1VcBLTuMgiGibAn1GNBEhWkHYPzE4kjoiNskcwLddxdK0RGx9CVNG1x
-         egRfQEOIACa/2sf35QjwufxH09wd/0eqNjBlp28/rS+rikrgsVuUzpPaxTyiSXj6fKsa
-         dqaQzDCIFUJd4lEN6qXjd5vpyg/gCG0/gDFgorlTDfvLK4WXqU1XkMU97Ya2uuUv51nb
-         StRJu0CqSlS2MoF7Nwt+hmIvjUqjCXCyB3dX+pX8MMbaXLHfgGZPE521XUOzt+3J6460
-         yNcMlwjqb+1jmqt1ybd2TKaJz9mj4FBvE5QSXtNFIy+X5PbXbrTVnkLQ4K35ymN7ffi2
-         ny6g==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
+         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
+         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
+         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
+         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
+         ou5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:content-description:subject:to:from:date
-         :reply-to;
-        bh=+v//v9bV1cKxYYqp6E5HrJfuFydY/JXcjMGnmfr7lM0=;
-        b=kfMifiI5/NgnNytDNw4nNrJtDAa6xkglzAJHJcTjPA+46u5b1NQ7gCLxIiayHllwhA
-         Fq2AORuSfmeBHI3qY3I4J5B74LC4BxDBXBjlUzo+ZiFadJ9B86sCTUeZB8Yp6ypy0y9D
-         9XtUwaGnrUCAfAZN5dbiSVvx8UhTuynTb8GM8H0TUaNjK0lhpJF4olfD9vi6kyTGFE+E
-         2UB9w6juUe/T61/MxS31JKaVsDCC3Is85a/sMN1Dr7O24yaoBpmCjr0zcWhDibjZYOku
-         iwoHQWySBwc874wJ3GezvXnY/vrTm8Qf5F635ldAp99ItRx+mhdvhD4XIi2l75z+q7cM
-         J0WA==
-X-Gm-Message-State: AOAM530kTejJSA9Hty3641xCrQU7+y8Emgp8aiNqbVGjBAHSNynI5eCx
-        L/VrTrRIDW+mqOPaHgZoNn4=
-X-Google-Smtp-Source: ABdhPJw9Jp/UkPhh9Siui1Y5tTtJ8irThMonnYbB260MsuLEv1cG3+BxGfP7P61t57A5plvvzsfrgA==
-X-Received: by 2002:a05:600c:a4a:b0:389:e8fd:54b4 with SMTP id c10-20020a05600c0a4a00b00389e8fd54b4mr1533107wmq.168.1648592349662;
-        Tue, 29 Mar 2022 15:19:09 -0700 (PDT)
-Received: from [172.20.10.4] ([102.91.4.172])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c4ed100b0038ca32d0f26sm3545064wmq.17.2022.03.29.15.19.04
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Tue, 29 Mar 2022 15:19:08 -0700 (PDT)
-Message-ID: <624385dc.1c69fb81.545b4.ec42@mx.google.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=x+XKm1K3jVf+2wxFKvYg2mDRenBs7ZS97xW5JzjwqfTyFOWlEvquLQVrejVDB+NBBY
+         U1KFRMcXr4C0xV7RIkZp7A2YmEkdZzvhIOght537I4R0NsfGMUCU6Gyzx5Fr2AxDTyAc
+         Ig39c2AmC8MUNf69UZMJZYo3y++XmfqirxGf84W+c182eBCOkZK7Xlw05l6fAEINCfrs
+         MKtlL9AyHXViS4zHN37aSl/Xc6yR/FusdXu5a2KA09JcEUUCaDdG+TPigXp+rJaCms6D
+         3NguSItVD5PXr82S81k0lNgLAS4OL4kzCBCmONTfNfQJ4GzB2fumYef4VBhhf8VZdkua
+         E84A==
+X-Gm-Message-State: AOAM533rHcFhGpbbRfYuRRXWQi/aSCOSOvAqqnU7NoArv2kh0kA6QmLK
+        X4jDJaQd5cBBvvUQCNi8X0mq+gasLDRdLKLdzw==
+X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
+X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
+ ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
+ Mar 2022 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Gefeliciteerd, er is geld aan je gedoneerd
-To:     Recipients <adeboyejofolashade55@gmail.com>
-From:   adeboyejofolashade55@gmail.com
-Date:   Tue, 29 Mar 2022 23:19:00 +0100
-Reply-To: mike.weirsky.foundation003@gmail.com
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3 autolearn=no
+Reply-To: isabellasayouba0@gmail.com
+Sender: 040stherchurch@gmail.com
+Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
+ 11:23:37 -0700 (PDT)
+From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
+Date:   Wed, 30 Mar 2022 18:23:37 +0000
+X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
+Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
+Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Beste begunstigde,
-
- Je hebt een liefdadigheidsdonatie van ($ 10.000.000,00) van Mr. Mike Weirs=
-ky, een winnaar van een powerball-jackpotloterij van $ 273 miljoen.  Ik don=
-eer aan 5 willekeurige personen als je deze e-mail ontvangt, dan is je e-ma=
-il geselecteerd na een spin-ball. Ik heb vrijwillig besloten om het bedrag =
-van $ 10 miljoen USD aan jou te doneren als een van de geselecteerde 5, om =
-mijn winst te verifi=EBren
- =
-
-  Vriendelijk antwoord op: mike.weirsky.foundation003@gmail.com
- Voor uw claim.
+44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
+kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
+jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
+kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
+leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
+quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
+seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
+ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
+grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
+tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
+gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
+5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
+44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
+44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
+DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
+44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
+44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
+44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
+5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
+geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
+qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
+gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
+sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
+gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
+uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
+gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
+gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
+vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
+puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
+6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
+44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
+44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
+44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
+6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
+56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
+44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
+iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
+guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
+vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
+uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
+jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
+puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
+gonjgIINCg==
