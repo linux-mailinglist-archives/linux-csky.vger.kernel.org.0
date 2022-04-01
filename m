@@ -2,35 +2,35 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9944EF53A
-	for <lists+linux-csky@lfdr.de>; Fri,  1 Apr 2022 17:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DF54EF591
+	for <lists+linux-csky@lfdr.de>; Fri,  1 Apr 2022 17:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355096AbiDAPMw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 1 Apr 2022 11:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S1355465AbiDAPPE (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 1 Apr 2022 11:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350569AbiDAOrm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 1 Apr 2022 10:47:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE982856A4;
-        Fri,  1 Apr 2022 07:38:03 -0700 (PDT)
+        with ESMTP id S1352586AbiDAOvA (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 1 Apr 2022 10:51:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26E62B4482;
+        Fri,  1 Apr 2022 07:42:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F131B82519;
-        Fri,  1 Apr 2022 14:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04F03C2BBE4;
-        Fri,  1 Apr 2022 14:37:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3A36612AC;
+        Fri,  1 Apr 2022 14:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88701C2BBE4;
+        Fri,  1 Apr 2022 14:41:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823853;
-        bh=q8YSV0KJMrMQvGXSF/R+p/9Qsw994QlDUKjq0tKclzM=;
+        s=k20201202; t=1648824118;
+        bh=qgFdeG3Vq5khwU4VSpWjW9nkT+Svh4lCeUnEgtUgcHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IyVg0rJ3dyB/sXk3hkbGqrqThQeGps5f/2BSnzk/ddcEWvOZXSCdbfHiK9jam6nyG
-         mngCJ7XEIMpOa8aK/l3Q7XfkiirUsDLnIRleO7sj/qwQmqH9nWUse6tugLgLfiadV6
-         D1C4T7XllxZqaUaiUT4Zw7ZyNoBAxWrX48A2Qpq7ZOehg+0fbZAwsszL6JTIJbL2b1
-         X8dzINFAyFy2FynccSvzAmKI8cFoEVU/bR66QtRJOqZ9yAwRNzROxRoePa5lmitl02
-         fUfG/pFRKuP/6OThvmaPRn7T8jT9vUM2VKCdq/NK7TvEhGcsQIoUVrRPYNCw5PJnT6
-         JoJLLoJKjLDkw==
+        b=mP2UzSpyrjdwvzQdnq/tlOew6sFirJuosoV7w94VP7R4LB5ho1/l+PE1NSkWBU0Ln
+         ZjLfOQ/D/8LZTUjs/ISCo3hKOcbbUy4mpiaVPVTRGqLkXvn3a/ygmv+tJxRb+hjBh1
+         zEJi0OXPZfXBAks/yQKXTeNM9BSTFRzIQEoN6GbtNKDMkpitfncb+7K58qZ7FWwVmQ
+         VlSJy6Q3PBs/pu3wDGvpEfK7mpL0dFlblXHWxusJruWawcX3G2pc7+Hm925gkS69LG
+         nP5jWty8EsyGhJ/YRdmwWGkoQOj34cCPwcKiulDwlbA049nPjFm0D95Ce/u3T4wwZb
+         yZJrRPGk9XoRg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Feng Tang <feng.tang@intel.com>, kernel test robot <lkp@intel.com>,
@@ -38,16 +38,16 @@ Cc:     Feng Tang <feng.tang@intel.com>, kernel test robot <lkp@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, nathan@kernel.org,
-        peterz@infradead.org, masahiroy@kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        penguin-kernel@I-love.SAKURA.ne.jp, isabbasso@riseup.net,
-        dan.j.williams@intel.com, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 107/109] lib/Kconfig.debug: add ARCH dependency for FUNCTION_ALIGN option
-Date:   Fri,  1 Apr 2022 10:32:54 -0400
-Message-Id: <20220401143256.1950537-107-sashal@kernel.org>
+        peterz@infradead.org, ndesaulniers@google.com,
+        keescook@chromium.org, penguin-kernel@I-love.SAKURA.ne.jp,
+        isabbasso@riseup.net, dan.j.williams@intel.com,
+        linux-csky@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 96/98] lib/Kconfig.debug: add ARCH dependency for FUNCTION_ALIGN option
+Date:   Fri,  1 Apr 2022 10:37:40 -0400
+Message-Id: <20220401143742.1952163-96-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401143256.1950537-1-sashal@kernel.org>
-References: <20220401143256.1950537-1-sashal@kernel.org>
+In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
+References: <20220401143742.1952163-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -93,10 +93,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 5e14e32056ad..166e67b98506 100644
+index 2a9b6dcdac4f..55e89b237b6f 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -416,7 +416,8 @@ config SECTION_MISMATCH_WARN_ONLY
+@@ -414,7 +414,8 @@ config SECTION_MISMATCH_WARN_ONLY
  	  If unsure, say Y.
  
  config DEBUG_FORCE_FUNCTION_ALIGN_64B
