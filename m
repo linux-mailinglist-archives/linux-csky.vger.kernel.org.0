@@ -2,62 +2,49 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626264F51E5
-	for <lists+linux-csky@lfdr.de>; Wed,  6 Apr 2022 04:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217724F6360
+	for <lists+linux-csky@lfdr.de>; Wed,  6 Apr 2022 17:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352510AbiDFCZa (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 5 Apr 2022 22:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S235682AbiDFPcK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 6 Apr 2022 11:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1451550AbiDEPxd (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 5 Apr 2022 11:53:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817A41C887B;
-        Tue,  5 Apr 2022 07:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649170033; x=1680706033;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+EigZUipNnJWpGEwCtYr5Ojb2vx0Lhl3QjD+kLrto9c=;
-  b=lEBG1EioOZ1fNEBfWXG3HbRc9Cg+QzDRKbWqGnv8F3d1HHxyXBVtoG7y
-   cggXcuUjy1tN14QpeaSfdYpohoyWAPVebglbvTjzxVxthvWAofq4f5Kkq
-   UPLT5wBjc/QgJdT9HoDfPlUygN2PrBEiets53WmdC20H48XJcBzFlsOwZ
-   U/9ssNdtEcLJfTJZeLsRvrQjpfm22UdD8hKFbLNlNImpOG1w+JFWXE7QJ
-   /ourM7oXfHOgW0v4CIKuN3J3c5cfyBQLUyCzzQk6WYFwEuT8g7rLoFGCl
-   2TF33cWNh5BaxZAyl6rM4P9K08j5mIfFojgYBELpb0mLPkEfo0YLhtcxG
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="258349806"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="258349806"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 07:47:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="587952170"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 07:47:10 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbkSc-0003RQ-3s;
-        Tue, 05 Apr 2022 14:47:10 +0000
-Date:   Tue, 5 Apr 2022 22:46:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     kbuild-all@lists.01.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] csky: optimize memcpy_{from,to}io() and memset_io()
-Message-ID: <202204052238.Fz736aX3-lkp@intel.com>
-References: <20220404144427.2793051-1-guoren@kernel.org>
+        with ESMTP id S235729AbiDFPb1 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Apr 2022 11:31:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F6E58E576;
+        Wed,  6 Apr 2022 05:43:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F29561AE9;
+        Wed,  6 Apr 2022 12:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A26C385A1;
+        Wed,  6 Apr 2022 12:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649248967;
+        bh=n0Gx6rXzEJ5x8PHVVo2FUk8hi6eJH5i6TOhLchywSr4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WnPF/XBAaH6laxmBiLvDB7e5XpQFJgKigQMRBC2pzkXW1l44ggbHQEWeojJC5Q9Sa
+         nKXLfAFkWzki81esvq+ld0VdJ3j00lcFElQYUYoN1uZ5LPIC1d5PL8Kw8RmoSgSETx
+         E+h4VtAoUGiyCtC3968pxNT3SVB/9jgm+PQKiDJ3JPZdhTiobcJrx86fvW0iN/lGce
+         kDk7KtcA31cH6ENmNd4mWIqIdnjrOcaBO2ZK8546uC41eYzZ3mOrBrfPPbPJyLG/ru
+         XAAzruNaRCHiEqBAy7HHHQTIrXNGrHzgp2ks9mlj/t/pDWdr1OXc/9hIMJINv/XXkH
+         /C3yAUVOE2yGA==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, mark.rutland@arm.com, peterz@infradead.org
+Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>
+Subject: [PATCH] csky: cmpxchg: Optimize with acquire & release
+Date:   Wed,  6 Apr 2022 20:40:56 +0800
+Message-Id: <20220406124056.684117-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404144427.2793051-1-guoren@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,106 +52,255 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I love your patch! Yet something to improve:
+Optimize arch_xchg|cmpxchg|cmpxchg_local with  ASM acquire|release
+instructions instead of previous C based.
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on linus/master linux/master v5.18-rc1 next-20220405]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+ arch/csky/include/asm/barrier.h |   8 +-
+ arch/csky/include/asm/cmpxchg.h | 173 ++++++++++++++++++++++++++++++--
+ 2 files changed, 172 insertions(+), 9 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/csky-optimize-memcpy_-from-to-io-and-memset_io/20220404-224954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: csky-randconfig-r022-20220405 (https://download.01.org/0day-ci/archive/20220405/202204052238.Fz736aX3-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2e50048555b298851590ec8272100b595b8801f9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review guoren-kernel-org/csky-optimize-memcpy_-from-to-io-and-memset_io/20220404-224954
-        git checkout 2e50048555b298851590ec8272100b595b8801f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   csky-linux-ld: drivers/bus/mhi/core/init.o: in function `mhi_prepare_for_power_up':
->> init.c:(.text+0xa50): undefined reference to `__memset_io'
->> csky-linux-ld: init.c:(.text+0xaa8): undefined reference to `__memset_io'
-   csky-linux-ld: drivers/pci/pci-sysfs.o: in function `pci_read_rom':
->> pci-sysfs.c:(.text+0x2b8): undefined reference to `__memcpy_fromio'
->> csky-linux-ld: pci-sysfs.c:(.text+0x2f4): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_read':
-   dpaa2-console.c:(.text+0xbc): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: dpaa2-console.c:(.text+0xee): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: dpaa2-console.c:(.text+0x16c): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/misc/hpilo.o: in function `ilo_ccb_close':
->> hpilo.c:(.text+0x204): undefined reference to `__memset_io'
-   csky-linux-ld: drivers/misc/hpilo.o: in function `ilo_poll':
-   hpilo.c:(.text+0x31c): undefined reference to `__memset_io'
-   csky-linux-ld: drivers/misc/hpilo.o: in function `ilo_open':
->> hpilo.c:(.text+0xc3c): undefined reference to `__memcpy_toio'
->> csky-linux-ld: hpilo.c:(.text+0xd1c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/scsi/smartpqi/smartpqi_init.o: in function `pqi_process_firmware_features':
->> smartpqi_init.c:(.text+0x3a92): undefined reference to `__memcpy_toio'
->> csky-linux-ld: smartpqi_init.c:(.text+0x3b30): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/scsi/smartpqi/smartpqi_init.o: in function `pqi_process_config_table':
->> smartpqi_init.c:(.text+0x3bda): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/scsi/smartpqi/smartpqi_init.o: in function `pqi_configure_events.constprop.0':
-   smartpqi_init.c:(.text+0x3d68): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `mv_inbound_write':
->> hptiop.c:(.text+0x90e): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `hptiop_post_req_mv':
-   hptiop.c:(.text+0x9b4): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `hptiop_request_callback_itl':
->> hptiop.c:(.text+0xa58): undefined reference to `__memcpy_fromio'
->> csky-linux-ld: hptiop.c:(.text+0xa88): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `iop_intr_mv':
-   hptiop.c:(.text+0xd48): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `iop_intr_itl':
-   hptiop.c:(.text+0xe10): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `iop_get_config_itl':
-   hptiop.c:(.text+0x123a): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `iop_set_config_itl':
-   hptiop.c:(.text+0x1278): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/scsi/hptiop.o: in function `dma_alloc_coherent.constprop.0':
-   hptiop.c:(.text+0x12ec): undefined reference to `__memcpy_fromio'
->> csky-linux-ld: hptiop.c:(.text+0x12f0): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/net/wan/pc300too.o: in function `sca_rx_done':
->> pc300too.c:(.text+0xbfa): undefined reference to `__memcpy_fromio'
->> csky-linux-ld: pc300too.c:(.text+0xc64): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/net/wan/pc300too.o: in function `sca_xmit':
->> pc300too.c:(.text+0xd40): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/net/wan/pc300too.o: in function `sca_poll':
-   pc300too.c:(.text+0xf30): undefined reference to `__memcpy_toio'
-   csky-linux-ld: fs/pstore/ram_core.o: in function `persistent_ram_update':
->> ram_core.c:(.text+0x164): undefined reference to `__memcpy_toio'
->> csky-linux-ld: ram_core.c:(.text+0x18c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: fs/pstore/ram_core.o: in function `persistent_ram_save_old':
->> ram_core.c:(.text+0x4f2): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: ram_core.c:(.text+0x500): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: fs/pstore/ram_core.o: in function `persistent_ram_write_user':
-   ram_core.c:(.text+0x5e0): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/scsi/sym53c8xx_2/sym_hipd.o: in function `sym_start_up':
-   sym_hipd.c:(.text+0x3e3e): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sym_hipd.c:(.text+0x3e60): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sym_hipd.c:(.text+0x3fc8): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/remoteproc/remoteproc_coredump.o: in function `rproc_copy_segment':
-   remoteproc_coredump.c:(.text+0xb8): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: remoteproc_coredump.c:(.text+0xd4): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/remoteproc/remoteproc_elf_loader.o: in function `rproc_elf_load_segments':
-   remoteproc_elf_loader.c:(.text+0x328): undefined reference to `__memcpy_toio'
-   csky-linux-ld: remoteproc_elf_loader.c:(.text+0x34c): undefined reference to `__memset_io'
-   csky-linux-ld: remoteproc_elf_loader.c:(.text+0x378): undefined reference to `__memcpy_toio'
-   csky-linux-ld: remoteproc_elf_loader.c:(.text+0x37c): undefined reference to `__memset_io'
-
+diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
+index f4045dd53e17..a075f17d02dd 100644
+--- a/arch/csky/include/asm/barrier.h
++++ b/arch/csky/include/asm/barrier.h
+@@ -37,6 +37,9 @@
+  * bar.brar
+  * bar.bwaw
+  */
++#define ACQUIRE_FENCE		".long 0x8427c000\n"
++#define RELEASE_FENCE		".long 0x842ec000\n"
++
+ #define __bar_brw()	asm volatile (".long 0x842cc000\n":::"memory")
+ #define __bar_br()	asm volatile (".long 0x8424c000\n":::"memory")
+ #define __bar_bw()	asm volatile (".long 0x8428c000\n":::"memory")
+@@ -44,10 +47,10 @@
+ #define __bar_ar()	asm volatile (".long 0x8421c000\n":::"memory")
+ #define __bar_aw()	asm volatile (".long 0x8422c000\n":::"memory")
+ #define __bar_brwarw()	asm volatile (".long 0x842fc000\n":::"memory")
+-#define __bar_brarw()	asm volatile (".long 0x8427c000\n":::"memory")
++#define __bar_brarw()	asm volatile (ACQUIRE_FENCE:::"memory")
+ #define __bar_bwarw()	asm volatile (".long 0x842bc000\n":::"memory")
+ #define __bar_brwar()	asm volatile (".long 0x842dc000\n":::"memory")
+-#define __bar_brwaw()	asm volatile (".long 0x842ec000\n":::"memory")
++#define __bar_brwaw()	asm volatile (RELEASE_FENCE:::"memory")
+ #define __bar_brar()	asm volatile (".long 0x8425c000\n":::"memory")
+ #define __bar_brar()	asm volatile (".long 0x8425c000\n":::"memory")
+ #define __bar_bwaw()	asm volatile (".long 0x842ac000\n":::"memory")
+@@ -56,7 +59,6 @@
+ #define __smp_rmb()	__bar_brar()
+ #define __smp_wmb()	__bar_bwaw()
+ 
+-#define ACQUIRE_FENCE		".long 0x8427c000\n"
+ #define __smp_acquire_fence()	__bar_brarw()
+ #define __smp_release_fence()	__bar_brwaw()
+ 
+diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
+index d1bef11f8dc9..7baf9a706b5b 100644
+--- a/arch/csky/include/asm/cmpxchg.h
++++ b/arch/csky/include/asm/cmpxchg.h
+@@ -30,10 +30,88 @@ extern void __bad_xchg(void);
+ 	}							\
+ 	__ret;							\
+ })
+-
+ #define arch_xchg_relaxed(ptr, x) \
+ 		(__xchg_relaxed((x), (ptr), sizeof(*(ptr))))
+ 
++#define __xchg_acquire(new, ptr, size)				\
++({								\
++	__typeof__(ptr) __ptr = (ptr);				\
++	__typeof__(new) __new = (new);				\
++	__typeof__(*(ptr)) __ret;				\
++	unsigned long tmp;					\
++	switch (size) {						\
++	case 4:							\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		ACQUIRE_FENCE					\
++		"	mov		%1, %2   \n"		\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++			: "=&r" (__ret), "=&r" (tmp)		\
++			: "r" (__new), "r"(__ptr)		\
++			:);					\
++		break;						\
++	default:						\
++		__bad_xchg();					\
++	}							\
++	__ret;							\
++})
++#define arch_xchg_acquire(ptr, x) \
++		(__xchg_acquire((x), (ptr), sizeof(*(ptr))))
++
++#define __xchg_release(new, ptr, size)				\
++({								\
++	__typeof__(ptr) __ptr = (ptr);				\
++	__typeof__(new) __new = (new);				\
++	__typeof__(*(ptr)) __ret;				\
++	unsigned long tmp;					\
++	switch (size) {						\
++	case 4:							\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		"	mov		%1, %2   \n"		\
++		RELEASE_FENCE					\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++			: "=&r" (__ret), "=&r" (tmp)		\
++			: "r" (__new), "r"(__ptr)		\
++			:);					\
++		break;						\
++	default:						\
++		__bad_xchg();					\
++	}							\
++	__ret;							\
++})
++#define arch_xchg_release(ptr, x) \
++		(__xchg_release((x), (ptr), sizeof(*(ptr))))
++
++#define __xchg(new, ptr, size)					\
++({								\
++	__typeof__(ptr) __ptr = (ptr);				\
++	__typeof__(new) __new = (new);				\
++	__typeof__(*(ptr)) __ret;				\
++	unsigned long tmp;					\
++	switch (size) {						\
++	case 4:							\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		ACQUIRE_FENCE					\
++		"	mov		%1, %2   \n"		\
++		RELEASE_FENCE					\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++			: "=&r" (__ret), "=&r" (tmp)		\
++			: "r" (__new), "r"(__ptr)		\
++			:);					\
++		break;						\
++	default:						\
++		__bad_xchg();					\
++	}							\
++	__ret;							\
++})
++#define arch_xchg(ptr, x) \
++		(__xchg((x), (ptr), sizeof(*(ptr))))
++
+ #define __cmpxchg_relaxed(ptr, old, new, size)			\
+ ({								\
+ 	__typeof__(ptr) __ptr = (ptr);				\
+@@ -60,19 +138,102 @@ extern void __bad_xchg(void);
+ 	}							\
+ 	__ret;							\
+ })
+-
+ #define arch_cmpxchg_relaxed(ptr, o, n) \
+ 	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+ 
+-#define arch_cmpxchg(ptr, o, n) 				\
++#define __cmpxchg_acquire(ptr, old, new, size)			\
++({								\
++	__typeof__(ptr) __ptr = (ptr);				\
++	__typeof__(new) __new = (new);				\
++	__typeof__(new) __tmp;					\
++	__typeof__(old) __old = (old);				\
++	__typeof__(*(ptr)) __ret;				\
++	switch (size) {						\
++	case 4:							\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		ACQUIRE_FENCE					\
++		"	cmpne		%0, %4   \n"		\
++		"	bt		2f       \n"		\
++		"	mov		%1, %2   \n"		\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++		"2:				 \n"		\
++			: "=&r" (__ret), "=&r" (__tmp)		\
++			: "r" (__new), "r"(__ptr), "r"(__old)	\
++			:);					\
++		break;						\
++	default:						\
++		__bad_xchg();					\
++	}							\
++	__ret;							\
++})
++#define arch_cmpxchg_acquire(ptr, o, n) \
++	(__cmpxchg_acquire((ptr), (o), (n), sizeof(*(ptr))))
++
++#define __cmpxchg_release(ptr, old, new, size)			\
+ ({								\
++	__typeof__(ptr) __ptr = (ptr);				\
++	__typeof__(new) __new = (new);				\
++	__typeof__(new) __tmp;					\
++	__typeof__(old) __old = (old);				\
+ 	__typeof__(*(ptr)) __ret;				\
+-	__smp_release_fence();					\
+-	__ret = arch_cmpxchg_relaxed(ptr, o, n);		\
+-	__smp_acquire_fence();					\
++	switch (size) {						\
++	case 4:							\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		"	cmpne		%0, %4   \n"		\
++		"	bt		2f       \n"		\
++		"	mov		%1, %2   \n"		\
++		RELEASE_FENCE					\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++		"2:				 \n"		\
++			: "=&r" (__ret), "=&r" (__tmp)		\
++			: "r" (__new), "r"(__ptr), "r"(__old)	\
++			:);					\
++		break;						\
++	default:						\
++		__bad_xchg();					\
++	}							\
+ 	__ret;							\
+ })
++#define arch_cmpxchg_release(ptr, o, n) \
++	(__cmpxchg_release((ptr), (o), (n), sizeof(*(ptr))))
+ 
++#define __cmpxchg(ptr, old, new, size)				\
++({								\
++	__typeof__(ptr) __ptr = (ptr);				\
++	__typeof__(new) __new = (new);				\
++	__typeof__(new) __tmp;					\
++	__typeof__(old) __old = (old);				\
++	__typeof__(*(ptr)) __ret;				\
++	switch (size) {						\
++	case 4:							\
++		asm volatile (					\
++		"1:	ldex.w		%0, (%3) \n"		\
++		ACQUIRE_FENCE					\
++		"	cmpne		%0, %4   \n"		\
++		"	bt		2f       \n"		\
++		"	mov		%1, %2   \n"		\
++		RELEASE_FENCE					\
++		"	stex.w		%1, (%3) \n"		\
++		"	bez		%1, 1b   \n"		\
++		"2:				 \n"		\
++			: "=&r" (__ret), "=&r" (__tmp)		\
++			: "r" (__new), "r"(__ptr), "r"(__old)	\
++			:);					\
++		break;						\
++	default:						\
++		__bad_xchg();					\
++	}							\
++	__ret;							\
++})
++#define arch_cmpxchg(ptr, o, n) \
++	(__cmpxchg((ptr), (o), (n), sizeof(*(ptr))))
++
++#define arch_cmpxchg_local(ptr, o, n)				\
++	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+ #else
+ #include <asm-generic/cmpxchg.h>
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
