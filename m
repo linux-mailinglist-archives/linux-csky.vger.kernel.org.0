@@ -2,259 +2,149 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BF14FCEE5
-	for <lists+linux-csky@lfdr.de>; Tue, 12 Apr 2022 07:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44B14FD8E6
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Apr 2022 12:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346560AbiDLFXn (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 12 Apr 2022 01:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S1344988AbiDLJvC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 12 Apr 2022 05:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344061AbiDLFXm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 12 Apr 2022 01:23:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A106C21E2D;
-        Mon, 11 Apr 2022 22:21:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E669B8170E;
-        Tue, 12 Apr 2022 05:21:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D328C385A8;
-        Tue, 12 Apr 2022 05:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649740883;
-        bh=Hk0JupZmK+77hh8DcViQmBEiAoyyeTBt5VKHZR/+NK0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oQKnwwDckO97+u/W2uqap49q2MLWlFTfM/9IGt2IYYfN7v3tyw0p/j0FoDul6tVU1
-         yNq9V2gVwCjYaD2qsTr0+ER0OZ7KfUeipAQV74lMEnsy/FNSl5BfIX4+zWx1mr3+5O
-         co7lCmRTJUUK9/wiIxA7WJVILvhGYfIymaT/REuzN76yO7kpy1zFe4cQz3LRVVnkdG
-         n/yQePdp8zuSBZ72dXtLINl37KPkpciFtBcE6qNgBpcGv94mQaHp05OcvmbZkhrcfE
-         nmfV/xpzQJVHTM8+B/k6OEmr3SMpYQLYg0/yE1IV4NCtT27oCx/UDcwZBXXJumDz7h
-         Xascn0LVWh51A==
-Received: by mail-ua1-f52.google.com with SMTP id i26so7862514uap.6;
-        Mon, 11 Apr 2022 22:21:22 -0700 (PDT)
-X-Gm-Message-State: AOAM533ATBAx1w4N4Z3M18qiSy3f1MbmEs2CbSWOa9M3ni1Uka+Zepfh
-        oDkO5bbhB/wZoFpGrV1+BtX5AY5U+WMf5+mr0l0=
-X-Google-Smtp-Source: ABdhPJxYdjWWLlNY1l74RL1kKccV0tyPKJ7/b6vMQm1sKOIlwB2yiNIALpaFXGAE5NSilAPXH/lnKbG7yOflsesJbHE=
-X-Received: by 2002:ab0:375b:0:b0:355:c2b3:f6c with SMTP id
- i27-20020ab0375b000000b00355c2b30f6cmr865007uat.84.1649740882036; Mon, 11 Apr
- 2022 22:21:22 -0700 (PDT)
+        with ESMTP id S1355164AbiDLH1M (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 12 Apr 2022 03:27:12 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A0A48310;
+        Tue, 12 Apr 2022 00:07:07 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id q129so18154845oif.4;
+        Tue, 12 Apr 2022 00:07:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G5mglcYZA42FcZWexfT//Na3N8U+QShWNDx9HhSMVxo=;
+        b=kKJ3nUEWMsvrLSEjjffpnmiZNTAKv4on5YariZdK09oUTFOOJbZgu5tA8vQBAtZ18r
+         E6+Qe32az2p2EwxkK9oA6ePWtoGjE9TH4px3ydOd0WeV+0op0Bd5IGPncnasrC2wKODI
+         XAVk01tIA0D4Nf6u79H0lCf8YKJLt4ka3SqsukAN5aBC6LlNhYZYF8EQNWa2+HxY1EV8
+         cyQmoiJUPBvSfAp1f93p+HrJEHl3CPPt/YpcmaEwE8NROh4cxi7nTZYnY2NdvgO4eQBW
+         EwBgsDhtUy0/k+Oqkn6ck6Nes7LsIXLcms7SD81Cl41lekQ+RqseMzrcZRKQi3GL7BLY
+         UBNA==
+X-Gm-Message-State: AOAM532Gum91u170rACXcmlIBzrzy9KmXNpCRz3aU0vGcRwzZEMgiOSG
+        z2ER9oFvaFzXpGSJ43yLVTvkqZpwxi9zAxu9
+X-Google-Smtp-Source: ABdhPJyY2799smUiwIFdgvJoeCM6WpcXcNi2SOOE90czIXyqPS95bARZpvHXARvzQOeftsWIVQC/BQ==
+X-Received: by 2002:a05:6808:bc2:b0:2ec:e1c2:bd3f with SMTP id o2-20020a0568080bc200b002ece1c2bd3fmr1212821oik.161.1649747226236;
+        Tue, 12 Apr 2022 00:07:06 -0700 (PDT)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm12272220oiv.21.2022.04.12.00.07.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 00:07:05 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso12828738otd.6;
+        Tue, 12 Apr 2022 00:07:05 -0700 (PDT)
+X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
+ c70-20020a25c049000000b006346751e8d2mr25945732ybf.6.1649747214062; Tue, 12
+ Apr 2022 00:06:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220411145146.920314-1-guoren@kernel.org> <20220411145146.920314-3-guoren@kernel.org>
-In-Reply-To: <20220411145146.920314-3-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 12 Apr 2022 13:21:10 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSJi3a7CEUzTwofP3dwFiD1+LssM6xy-uFDqOczGByd+A@mail.gmail.com>
-Message-ID: <CAJF2gTSJi3a7CEUzTwofP3dwFiD1+LssM6xy-uFDqOczGByd+A@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] csky: atomic: Add custom atomic.h implementation
-To:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 12 Apr 2022 09:06:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
+Message-ID: <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
+Subject: Re: [PATCH v7 00/20] Introduce power-off+restart call chain API
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+        linux-csky@vger.kernel.org,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 10:52 PM <guoren@kernel.org> wrote:
+Hi Dmitry,
+
+On Tue, Apr 12, 2022 at 1:38 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+> Problem
+> -------
 >
-> From: Guo Ren <guoren@linux.alibaba.com>
+> SoC devices require power-off call chaining functionality from kernel.
+> We have a widely used restart chaining provided by restart notifier API,
+> but nothing for power-off.
+
+> Changelog:
 >
-> The generic atomic.h used cmpxchg to implement the atomic
-> operations, it will cause daul loop to reduce the forward
-> guarantee. The patch implement csky custom atomic operations with
-> ldex/stex instructions for the best performance.
+> v7: - Rebased on a recent linux-next. Dropped the recently removed
+>       NDS32 architecture. Only SH and x86 arches left un-acked.
 >
-> Important reference comment by Rutland:
-> 8e86f0b409a4 ("arm64: atomics: fix use of acquire + release for
-> full barrier semantics")
->
-> Link: https://lore.kernel.org/linux-riscv/CAJF2gTSAxpAi=LbAdu7jntZRUa=-dJwL0VfmDfBV5MHB=rcZ-w@mail.gmail.com/T/#m27a0f1342995deae49ce1d0e1f2683f8a181d6c3
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> ---
-> Changes in V2:
->  - Fixup use of acquire + release for barrier semantics by Rutland.
-> ---
->  arch/csky/include/asm/atomic.h | 130 +++++++++++++++++++++++++++++++++
->  1 file changed, 130 insertions(+)
->  create mode 100644 arch/csky/include/asm/atomic.h
->
-> diff --git a/arch/csky/include/asm/atomic.h b/arch/csky/include/asm/atomic.h
-> new file mode 100644
-> index 000000000000..2e1a22f55ea1
-> --- /dev/null
-> +++ b/arch/csky/include/asm/atomic.h
-> @@ -0,0 +1,130 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef __ASM_CSKY_ATOMIC_H
-> +#define __ASM_CSKY_ATOMIC_H
-> +
-> +#ifdef CONFIG_SMP
-> +# include <asm-generic/atomic64.h>
-> +
-> +#include <asm/cmpxchg.h>
-> +#include <asm/barrier.h>
-> +
-> +#define __atomic_acquire_fence()       __smp_acquire_fence()
-> +
-> +#define __atomic_release_fence()       __smp_release_fence()
-> +
-> +static __always_inline int arch_atomic_read(const atomic_t *v)
-> +{
-> +       return READ_ONCE(v->counter);
-> +}
-> +static __always_inline void arch_atomic_set(atomic_t *v, int i)
-> +{
-> +       WRITE_ONCE(v->counter, i);
-> +}
-> +
-> +#define ATOMIC_OP(op, asm_op, I)                                       \
-> +static __always_inline                                                 \
-> +void arch_atomic_##op(int i, atomic_t *v)                              \
-> +{                                                                      \
-> +       unsigned long tmp;                                              \
-> +       __asm__ __volatile__ (                                          \
-> +       "1:     ldex.w          %0, (%2)        \n"                     \
-> +       "       " #op "         %0, %1          \n"                     \
-> +       "       stex.w          %0, (%2)        \n"                     \
-> +       "       bez             %0, 1b          \n"                     \
-> +       : "=&r" (tmp)                                                   \
-> +       : "r" (I), "r" (&v->counter)                                    \
-> +       : "memory");                                                    \
-> +}
-> +
-> +ATOMIC_OP(add, add,  i)
-> +ATOMIC_OP(sub, add, -i)
-> +ATOMIC_OP(and, and,  i)
-> +ATOMIC_OP( or,  or,  i)
-> +ATOMIC_OP(xor, xor,  i)
-Sorry, it should be fixed up by:
+>     - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
+>       to the MIPS and memory/emif patches respectively.
 
-#define ATOMIC_OP(op)                                                   \
-static __always_inline                                                  \
-void arch_atomic_##op(int i, atomic_t *v)                               \
-{                                                                       \
-        unsigned long tmp;                                              \
-        __asm__ __volatile__ (                                          \
-        "1:     ldex.w          %0, (%2)        \n"                     \
-        "       " #op "         %0, %1          \n"                     \
-        "       stex.w          %0, (%2)        \n"                     \
-        "       bez             %0, 1b          \n"                     \
-        : "=&r" (tmp)                                                   \
-        : "r" (i), "r" (&v->counter)                                    \
-        : "memory");                                                    \
-}
+Looks like you forgot to add the actual acks?
 
-ATOMIC_OP(add)
-ATOMIC_OP(sub)
-ATOMIC_OP(and)
-ATOMIC_OP( or)
-ATOMIC_OP(xor)
+Gr{oetje,eeting}s,
 
+                        Geert
 
-> +
-> +#undef ATOMIC_OP
-> +
-> +#define ATOMIC_FETCH_OP(op, asm_op, I)                                 \
-> +static __always_inline                                                 \
-> +int arch_atomic_fetch_##op##_relaxed(int i, atomic_t *v)               \
-> +{                                                                      \
-> +       register int ret, tmp;                                          \
-> +       __asm__ __volatile__ (                                          \
-> +       "1:     ldex.w          %0, (%3) \n"                            \
-> +       "       mov             %1, %0   \n"                            \
-> +       "       " #op "         %0, %2   \n"                            \
-> +       "       stex.w          %0, (%3) \n"                            \
-> +       "       bez             %0, 1b   \n"                            \
-> +               : "=&r" (tmp), "=&r" (ret)                              \
-> +               : "r" (I), "r"(&v->counter)                             \
-> +               : "memory");                                            \
-> +       return ret;                                                     \
-> +}
-> +
-> +#define ATOMIC_OP_RETURN(op, asm_op, c_op, I)                          \
-> +static __always_inline                                                 \
-> +int arch_atomic_##op##_return_relaxed(int i, atomic_t *v)              \
-> +{                                                                      \
-> +        return arch_atomic_fetch_##op##_relaxed(i, v) c_op I;          \
-> +}
-> +
-> +#define ATOMIC_OPS(op, asm_op, c_op, I)                                        \
-> +        ATOMIC_FETCH_OP( op, asm_op,       I)                          \
-> +        ATOMIC_OP_RETURN(op, asm_op, c_op, I)
-> +
-> +ATOMIC_OPS(add, add, +,  i)
-> +ATOMIC_OPS(sub, add, +, -i)
-> +
-> +#define arch_atomic_fetch_add_relaxed  arch_atomic_fetch_add_relaxed
-> +#define arch_atomic_fetch_sub_relaxed  arch_atomic_fetch_sub_relaxed
-> +
-> +#define arch_atomic_add_return_relaxed arch_atomic_add_return_relaxed
-> +#define arch_atomic_sub_return_relaxed arch_atomic_sub_return_relaxed
-> +
-> +#undef ATOMIC_OPS
-> +#undef ATOMIC_OP_RETURN
-> +
-> +#define ATOMIC_OPS(op, asm_op, I)                                      \
-> +        ATOMIC_FETCH_OP(op, asm_op, I)
-> +
-> +ATOMIC_OPS(and, and, i)
-> +ATOMIC_OPS( or,  or, i)
-> +ATOMIC_OPS(xor, xor, i)
-> +
-> +#define arch_atomic_fetch_and_relaxed  arch_atomic_fetch_and_relaxed
-> +#define arch_atomic_fetch_or_relaxed   arch_atomic_fetch_or_relaxed
-> +#define arch_atomic_fetch_xor_relaxed  arch_atomic_fetch_xor_relaxed
-> +
-> +#undef ATOMIC_OPS
-> +
-> +#undef ATOMIC_FETCH_OP
-> +
-> +#define ATOMIC_OP()                                                    \
-> +static __always_inline                                                 \
-> +int arch_atomic_xchg_relaxed(atomic_t *v, int n)                       \
-> +{                                                                      \
-> +       return __xchg_relaxed(n, &(v->counter), 4);                     \
-> +}                                                                      \
-> +static __always_inline                                                 \
-> +int arch_atomic_cmpxchg_relaxed(atomic_t *v, int o, int n)             \
-> +{                                                                      \
-> +       return __cmpxchg_relaxed(&(v->counter), o, n, 4);               \
-> +}
-> +
-> +#define ATOMIC_OPS()                                                   \
-> +       ATOMIC_OP()
-> +
-> +ATOMIC_OPS()
-> +
-> +#define arch_atomic_xchg_relaxed       arch_atomic_xchg_relaxed
-> +#define arch_atomic_cmpxchg_relaxed    arch_atomic_cmpxchg_relaxed
-> +
-> +#undef ATOMIC_OPS
-> +#undef ATOMIC_OP
-> +
-> +#else
-> +# include <asm-generic/atomic.h>
-> +#endif
-> +
-> +#endif /* __ASM_CSKY_ATOMIC_H */
-> --
-> 2.25.1
->
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
