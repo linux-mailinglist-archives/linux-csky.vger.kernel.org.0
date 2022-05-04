@@ -2,80 +2,73 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC21551877D
-	for <lists+linux-csky@lfdr.de>; Tue,  3 May 2022 16:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680A8519EAF
+	for <lists+linux-csky@lfdr.de>; Wed,  4 May 2022 13:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237555AbiECPAD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-csky@lfdr.de>); Tue, 3 May 2022 11:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S1343641AbiEDMBc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 4 May 2022 08:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbiECPAD (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 May 2022 11:00:03 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 07:56:30 PDT
-Received: from mail.megasoftsol.com (mail.megasoftsol.com [43.231.250.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C169D396BB
-        for <linux-csky@vger.kernel.org>; Tue,  3 May 2022 07:56:30 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id 039C690E9BB
-        for <linux-csky@vger.kernel.org>; Tue,  3 May 2022 20:16:28 +0530 (IST)
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id bige7XRSGA3F for <linux-csky@vger.kernel.org>;
-        Tue,  3 May 2022 20:16:27 +0530 (IST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.megasoftsol.com (Postfix) with ESMTP id 8116E90E9CB
-        for <linux-csky@vger.kernel.org>; Tue,  3 May 2022 20:16:27 +0530 (IST)
-X-Virus-Scanned: amavisd-new at megasoftsol.com
-Received: from mail.megasoftsol.com ([127.0.0.1])
-        by localhost (mail.megasoftsol.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9nng71znJrx6 for <linux-csky@vger.kernel.org>;
-        Tue,  3 May 2022 20:16:27 +0530 (IST)
-Received: from asda.co.uk (unknown [20.97.211.134])
-        (Authenticated sender: admin)
-        by mail.megasoftsol.com (Postfix) with ESMTPSA id ACDD090E9C3
-        for <linux-csky@vger.kernel.org>; Tue,  3 May 2022 20:16:26 +0530 (IST)
-Reply-To: sales@asdaa.uk
-From:   ASDA Stores Limited <Hanes.Thomas23877@asda.co.uk>
-To:     linux-csky@vger.kernel.org
-Subject: 2nd Quater puchase request
-Date:   03 May 2022 14:48:54 +0000
-Message-ID: <20220503092157.C6DDBFDB4ECE9B44@asda.co.uk>
+        with ESMTP id S231410AbiEDMBb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 4 May 2022 08:01:31 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD46183AF;
+        Wed,  4 May 2022 04:57:54 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nmDdM-0001N1-BL; Wed, 04 May 2022 13:57:32 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org
+Cc:     guoren@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        Will Deacon <will@kernel.org>, longman@redhat.com,
+        boqun.feng@gmail.com, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        sudipm.mukherjee@gmail.com, macro@orcam.me.uk, jszhang@kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v4 1/7] asm-generic: ticket-lock: New generic ticket-based spinlock
+Date:   Wed, 04 May 2022 13:57:31 +0200
+Message-ID: <2180881.iZASKD2KPV@diego>
+In-Reply-To: <20220430153626.30660-2-palmer@rivosinc.com>
+References: <20220430153626.30660-1-palmer@rivosinc.com> <20220430153626.30660-2-palmer@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,
-        RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dear linux-csky
+Am Samstag, 30. April 2022, 17:36:20 CEST schrieb Palmer Dabbelt:
+> From: Peter Zijlstra <peterz@infradead.org>
+> 
+> This is a simple, fair spinlock.  Specifically it doesn't have all the
+> subtle memory model dependencies that qspinlock has, which makes it more
+> suitable for simple systems as it is more likely to be correct.  It is
+> implemented entirely in terms of standard atomics and thus works fine
+> without any arch-specific code.
+> 
+> This replaces the existing asm-generic/spinlock.h, which just errored
+> out on SMP systems.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-We are interested in having some of your hot selling product in 
-our stores and outlets spread all over United Kingdom, Northern 
-Island and Africa. ASDA Stores Limited is one of the highest-
-ranking Wholesale & Retail outlets in the United Kingdom. 
-  
-We shall furnish our detailed company profile in our next 
-correspondent. However, it would be appreciated if you can send 
-us your catalog through email to learn more about your company's 
-products and wholesale quote. It is hopeful that we can start a 
-viable long-lasting business relationship (partnership) with you.  
-  
-  
-Your prompt response would be delightfully appreciated. 
-  
-Best Wishes 
-  
-  
-Hanes S. Thomas 
-Procurement Office. 
-ASDA Stores Limited 
-Tel:  + 44 - 7451271650 
-WhatsApp: + 44 – 7441440360 
-Website: www.asda.co.uk
+on riscv64+riscv32 qemu, beaglev and d1-nezha
+
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+
+
