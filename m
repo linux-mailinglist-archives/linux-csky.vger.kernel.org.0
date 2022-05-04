@@ -2,66 +2,100 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6015519ED4
-	for <lists+linux-csky@lfdr.de>; Wed,  4 May 2022 14:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6875751B3F9
+	for <lists+linux-csky@lfdr.de>; Thu,  5 May 2022 02:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349265AbiEDMHL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 4 May 2022 08:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S232482AbiEEAF4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 4 May 2022 20:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348729AbiEDMHL (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 4 May 2022 08:07:11 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDEB20BD7;
-        Wed,  4 May 2022 05:03:34 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nmDj3-0001RU-3Y; Wed, 04 May 2022 14:03:25 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org
-Cc:     guoren@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        Will Deacon <will@kernel.org>, longman@redhat.com,
-        boqun.feng@gmail.com, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, macro@orcam.me.uk, jszhang@kernel.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v4 6/7] RISC-V: Move to queued RW locks
-Date:   Wed, 04 May 2022 14:03:23 +0200
-Message-ID: <3100713.5fSG56mABF@diego>
-In-Reply-To: <20220430153626.30660-7-palmer@rivosinc.com>
-References: <20220430153626.30660-1-palmer@rivosinc.com> <20220430153626.30660-7-palmer@rivosinc.com>
+        with ESMTP id S1345764AbiEDX5i (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 4 May 2022 19:57:38 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC174EF66
+        for <linux-csky@vger.kernel.org>; Wed,  4 May 2022 16:54:00 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id z15-20020a9d65cf000000b00605f064482cso1947499oth.6
+        for <linux-csky@vger.kernel.org>; Wed, 04 May 2022 16:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
+        b=Dn1MT8x7p4Rbn+pctwVkt7IgIdUxT0LRLjox/JaF9ttsZ2N8sUUglHFRxQa3sl75aK
+         h1U1JpCoOjPff8rV+LL0edQuBh+YvYlTbZ4zx127Qa80qMcS49J0d2nS2s7mVVadwp/M
+         vGp6wV8qQhR9tMRiQjyWHIJslgvG4HigF7p24aLxixJ1l99K68kLikab9Y0HgtSpkDYW
+         0+riuhXlj9dAnGs04evyYz4sFXKtm0FlJKiBI2Dtbo7ebvKr6E7XJkxgxzCXhReMwL1D
+         yv9OUeo9KjH+/RIlVXefhsYivAQRdlwo604eWoXrrvRFVxcSgXwgPis+UtVhyLpBWx3z
+         WyWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
+        b=I11l2mF2XUqOHGJPsb73oUMG3ezgIgkQGnDw4AGGjh33uCuaHtbLiDoLrmGanfXjyY
+         5+eOCGiTyETUN1Vtk3HxBtmxGkjWHfhdozaAyBl0M/8HvSp1vZ517iRA2aF+aTWJcg5H
+         JzrR0poLu0cJCuAVXF688kL+4PwT0qyj5CdmS5i76cJr7+dzm1ah5y7Z9QYf0AQQzPwn
+         oGB0YlgLUD1f+/OGCWhQPzHQCLFbwc2F+LNpbVWTzW6773TK+1rAzqV7w9qx0QnuP+Qy
+         EcBMUh/2oui7n3r+ZG/KkLXKBpRjL7Hm8ywdbdfw1KV/acK0G4mpzYhwO9Q/Z9WHRfqy
+         PByw==
+X-Gm-Message-State: AOAM531kqcmTtmWj7tmDi8sqKBGqfuAXsO0cSWtkXGd/NwrZQqOyOhnk
+        7clsLqJ/g8D1Nq/00VW0DdbYU9PgLvbOUOmLHNE=
+X-Google-Smtp-Source: ABdhPJyXbFHNtxfp8+qt+M9kuv/iG7XfFeFFPd7I4/fmpdxuycMtmf6dIJw5ghtZAT2CwgvAVE/kUl0HxsirxLIU8v0=
+X-Received: by 2002:a9d:6b16:0:b0:605:e0eb:d3d6 with SMTP id
+ g22-20020a9d6b16000000b00605e0ebd3d6mr8263208otp.213.1651708440302; Wed, 04
+ May 2022 16:54:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Received: by 2002:a05:6802:1a9:0:0:0:0 with HTTP; Wed, 4 May 2022 16:53:59
+ -0700 (PDT)
+Reply-To: ortegainvestmmentforrealinvest@gmail.com
+From:   Info <joybhector64@gmail.com>
+Date:   Thu, 5 May 2022 05:23:59 +0530
+Message-ID: <CAP7KLYgH9LcKHS-KgR0zObHAgC6Fr3D+dOJSbDKurTc_12+iFw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:342 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [joybhector64[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [joybhector64[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Am Samstag, 30. April 2022, 17:36:25 CEST schrieb Palmer Dabbelt:
-> From: Palmer Dabbelt <palmer@rivosinc.com>
-> 
-> Now that we have fair spinlocks we can use the generic queued rwlocks,
-> so we might as well do so.
-> 
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+-- 
+I am an investor. I came from the USA and I have many investments all
+over the world.
 
-on riscv64+riscv32 qemu, beaglev and d1-nezha
-
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-
+I want you to partner with me to invest in your country I am into many
+investment such as real Estate or buying of properties i can also
+invest money in any of existing business with equity royalty or by %
+percentage so on,
+Warm regards
