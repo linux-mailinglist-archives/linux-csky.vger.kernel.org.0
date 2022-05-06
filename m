@@ -2,110 +2,146 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB3151DA99
-	for <lists+linux-csky@lfdr.de>; Fri,  6 May 2022 16:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4526751DB08
+	for <lists+linux-csky@lfdr.de>; Fri,  6 May 2022 16:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343536AbiEFOi0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 6 May 2022 10:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        id S1442423AbiEFOvA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 6 May 2022 10:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389106AbiEFOiZ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 6 May 2022 10:38:25 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A9B6929E
-        for <linux-csky@vger.kernel.org>; Fri,  6 May 2022 07:34:41 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id v11so6418859pff.6
-        for <linux-csky@vger.kernel.org>; Fri, 06 May 2022 07:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7u3OwSkyFfQPtUMBSXJ+m0o3AIK+1qwz0/mjtmfCQB0=;
-        b=FdeTUfLPDw9k8X6pTEaLv52yUet9VfSQ7bi4HQ1t2xxaDysAJZFgQ7VRrYNlmPjTaj
-         2tZL8ukYEo7mNc766P4NQqVT9VU4xcQVvoq18pPjJEP+0zEMAny+6Y6R1wOkE1tgO1wN
-         uO8kog1rHC8+u41oS0ocTQzuT0i21hJ3Uz5f+CifLuIMIngaK02mJcE8pu1U5afhbLJI
-         DQvD2wdX+c/IHeRxzEhPxhM8zCujiWsHkyNF2bZlVm+qDJtsTHgLYuDntTJYuurXEomy
-         6N6H/Q1iuEHCKEfOxPpaFPLiJqifIcesYahJuQ4SUdI1fRp5qzJFzMshG8VThV3XD+0t
-         zf6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=7u3OwSkyFfQPtUMBSXJ+m0o3AIK+1qwz0/mjtmfCQB0=;
-        b=N6LjKTRHBXO0Y23Qj0J7XGjZtICojF1gu9fdmDupGx+e/P2yZWka3WnAtBw7kjOktT
-         kCd1+VX/7FxyoAU+uJ/f3hfoyi2Z6eag1/MsnV9pwt3FeNES41PdH399wIldKfPHQnTD
-         jPsLjm29Uw0FVC1ZQsnMHnY+FblbD68wqULImUhSmN68k5hJ/6KPM0+QM16OEJCcrsTl
-         ygfd/sWW9VrlA0YKDOAVTsTwrcRZ4gk8xCbkxQpWPnGfjFS6XM+0dRCrKF+mVy+UKX3P
-         8CZltarQ1QM77DBIZpsPDnwHGSUEsS4j44gGJFtnxIV42pCl2/e3NJ/VhvlaP969MToL
-         Q7+g==
-X-Gm-Message-State: AOAM531w/4GKNKeFqbUbSt2GL7K67JScv8ihr001ff+T5+h8Jp6Dp2EH
-        KW4O12+AzFhqytoBrqMSU34a5Q==
-X-Google-Smtp-Source: ABdhPJxRyjLgEf03HBpUE/mZuN6gq4KYh/avgT4q6TfXPSIwYir1NJqPKE0fyCteJUZc4c2jSgcLGw==
-X-Received: by 2002:a63:d00b:0:b0:3c1:6c87:2135 with SMTP id z11-20020a63d00b000000b003c16c872135mr2936313pgf.93.1651847681336;
-        Fri, 06 May 2022 07:34:41 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id a21-20020a170902ee9500b0015e8d4eb241sm1820885pld.139.2022.05.06.07.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 07:34:41 -0700 (PDT)
-Date:   Fri, 06 May 2022 07:34:41 -0700 (PDT)
-X-Google-Original-Date: Fri, 06 May 2022 07:34:18 PDT (-0700)
-Subject:     Re: [PATCH v4 0/7] Generic Ticket Spinlocks
-In-Reply-To: <CAK8P3a1VjunJE5zAm96pkQX7EvVDcN6VGT8usedeO709KQnB_g@mail.gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>, guoren@kernel.org,
-        peterz@infradead.org, mingo@redhat.com,
-        Will Deacon <will@kernel.org>, longman@redhat.com,
-        boqun.feng@gmail.com, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        with ESMTP id S237385AbiEFOuy (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 6 May 2022 10:50:54 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21496AA5C;
+        Fri,  6 May 2022 07:47:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id C32391F468F5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651848427;
+        bh=utol468ApKu3UfEFy7x8r+aU8cRRwOmqk4bK/1Di3gM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jBE3ytwUGToW06KmZyXbQlLMQh11EfcrZ6bdwLxbmA9KbTMiYuuNn3kvbqh632rH2
+         Jgx0CZHq1E9lNHGEsuRz21D8kAvAh8rFaR8jds1ArktyMwvqKLxX4GAkX19BTWUmPP
+         b1quvNeRnJpwzsGfRULjPmqW94UBaLvY+SdyGZ2o/bAt8UYAzh00sKV0zWBnlAl37N
+         VELNP3WacCdMrm2dk8Vabl3yhZXLesCAV/s6oeDX+kpR+1yBykPgcYSQODD7Vr7gKd
+         V7A6zoiXfzrqEzkhyai26Ys6RbYpjgl9Ni5GI2/IasHsLcZOIHlsySI8JROUyGnbmg
+         dahigOUrcy3KA==
+Message-ID: <f8075f97-4cc7-b802-97af-c0ef5a969624@collabora.com>
+Date:   Fri, 6 May 2022 17:46:57 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v7 04/20] kernel: Add combined power-off+restart handler
+ call chain API
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, macro@orcam.me.uk, jszhang@kernel.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Message-ID: <mhng-2750a5d4-cb79-4142-a8c6-e7e0c80f8e85@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+ <20220411233832.391817-5-dmitry.osipenko@collabora.com>
+ <CAJZ5v0gnTSoeNP+QXwrZ45FQY4howVkJMuCjM=j+_-2BngJdQg@mail.gmail.com>
+ <990621e7-9f8a-8b4a-02ec-fd6c1e1f48ff@collabora.com>
+ <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, 05 May 2022 04:09:46 PDT (-0700), Arnd Bergmann wrote:
-> On Sat, Apr 30, 2022 at 5:36 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+On 4/20/22 21:47, Rafael J. Wysocki wrote:
+>>>> +/**
+>>>> + *     devm_register_prioritized_power_off_handler - Register prioritized power-off callback
+>>>> + *     @dev: Device that registers callback
+>>>> + *     @priority: Callback's priority
+>>>> + *     @callback: Callback function
+>>>> + *     @cb_data: Callback's argument
+>>>> + *
+>>>> + *     Registers resource-managed power-off callback with a given priority.
+>>>> + *     It will be called as last step of the power-off sequence. Callbacks
+>>>> + *     chaining is disabled, i.e. further lower priority callbacks won't
+>>>> + *     be executed if this @callback will fail to execute.
+>>>> + *
+>>>> + *     Returns zero on success, or error code on failure.
+>>> What's the case in which this should be used instead of registering a
+>>> full sys_off handler?
+>> There are a lot of drivers that just want to register power-off handler
+>> with a non-default priority and don't need to stop the chain or do
+>> anything else special. This is a convinient helper for them.
 >>
->> Comments on the v3 looked pretty straight-forward, essentially just that
->> RCsc issue I'd missed from the v2 and some cleanups.  A part of the
->> discussion some additional possible cleanups came up related to the
->> qrwlock headers, but I hadn't looked at those yet and I had already
->> handled everything else.  This went on the back burner, but given that
->> LoongArch appears to want to use it for their new port I think it's best
->> to just run with this and defer the other cleanups until later.
+>> Please note that the callback here takes only the cb_data for the
+>> argument, while sys_off uses "struct power_off_data".
 >>
->> I've placed the whole patch set at palmer/tspinlock-v4, and also tagged
->> the asm-generic bits as generic-ticket-spinlocks-v4.  Ideally I'd like
->> to take that, along with the RISC-V patches, into my tree as there's
->> some RISC-V specific testing before things land in linux-next.  This
->> passes all my testing, but I'll hold off until merging things anywhere
->> else to make sure everyone has time to look.  There's no rush on my end
->> for this one, but I don't want to block LoongArch so I'll try to stay a
->> bit more on top of this one.
->
-> I took another look as well and everything seems fine. I had expected
-> that I would merge it into the asm-generic tree first and did not bother
-> sending a separate Reviewed-by tag, but I agree that it's best if you
-> create the branch.
->
-> Can you add 'Reviewed-by: Arnd Bergmann <arnd@arndb.de>'
-> to each patch and send me a pull request for a v5 tag so we can
-> merge that into both the riscv and the asm-generic trees?
+>> Similar for the reset of the convinient helpers.
+> So if there is a way to do this, why would anyone prefer to use the
+> full sys_off handler at all?
 
-Yep.  There were some other minor comments, I'll clean those up as well 
-and send something soon.
+There are couple occurrences around kernel where there is no device
+available for the devm_ functions, like this for example [1].
+
+[1]
+https://gitlab.collabora.com/dmitry.osipenko/linux-kernel-rd/-/commit/184dfd3983e774d3cf9050dc5b4ec23a662a9551
+
+-- 
+Best regards,
+Dmitry
