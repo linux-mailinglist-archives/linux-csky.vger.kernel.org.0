@@ -2,33 +2,46 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFEB9520967
-	for <lists+linux-csky@lfdr.de>; Tue, 10 May 2022 01:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAC25223B8
+	for <lists+linux-csky@lfdr.de>; Tue, 10 May 2022 20:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbiEIXnV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 9 May 2022 19:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S1348604AbiEJSUM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-csky@lfdr.de>); Tue, 10 May 2022 14:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiEIXlU (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 9 May 2022 19:41:20 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E6A262658;
-        Mon,  9 May 2022 16:34:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 3F0BE1F44239
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652139289;
-        bh=pGHmFEEjaXj2663JV2ZbLu8gGj/vTytf7TAeEENRqwc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j6TdMpmPOCtsPovulFCfAQHz4uF7UDkPzJj/3CmgFYBImRy8M4O8YGcz4W706uWok
-         oiILXGafhBbX7n+gHJn6RXTuMBUQC8tJ+EhQAGsuO/iXIERVRLzkR/44dQES7yRA6/
-         FtuuqnjfOGSov1+k3mURGR/0OqutTfvEFLoWalI2/ND2VETgVusAQFBX2DfNOA/g7I
-         j0l9XZgvP22CfJfFfA6ZxZIqFh1T34qNRlUcm5bkUIByJGzf9sEM5G0d3YHcPWZak3
-         l8eX2DCnZSObZ31khwPUziOiMTJxqBOzynYhlqeRkrRRR5tLIOpk/iZhwBgqc0RGs9
-         Toz7YL4ixFXdA==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+        with ESMTP id S1348854AbiEJST0 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 10 May 2022 14:19:26 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190252A975A;
+        Tue, 10 May 2022 11:14:24 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id m128so32191961ybm.5;
+        Tue, 10 May 2022 11:14:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qpqXrLDWUEHd+BUtmgMjhwAa3QcGPruT6uNMBEv9rjU=;
+        b=sE0t+MrA2XaCL45MizPmFfYKh+U7rCzOjLv98vxpalwZsq4dz5KZYWa5EvT7z4Dj/J
+         72cDF6NlgQd5iWSoHTtTXxceYUf04R6uRHcOV8jsHXPlhwwbDMcx1IMyPtxOrsKhDggi
+         wuvB1W8gNO5ex306dapgVyE0ASFzoomTxg7L9zcB+drqohTFQe1hR9PsfiRaJ27pJr9l
+         H9JvOI63+Ooq4kqdLZBUXUvsOeixRzwIj1hEV+GcQckk7SAXqz9jSivd5ellFLiPqFs8
+         5bJ2n96C8IUu5Z4Fpv4clNCpiCIoJ0o2C6AAumEzIviiNN9HcMufo4dJXUAXqyc/StxF
+         2E1g==
+X-Gm-Message-State: AOAM531+oHyPotUKmUfvdnQsDixTSyf4gFm2u1Db2FoFEqVUEzAdkJOx
+        yFppIfJjpin5xoQr9N1U5JMJQ0EWlcJyxNaNJzA=
+X-Google-Smtp-Source: ABdhPJy/3C7Xf5XL6o3yFhMZ917Dv3JWEaRfPbmjw9NKhK3//cChodJMWe9FmxWaGm5UEgRYGP1Nqk2NauJUMOpu3kk=
+X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
+ e140-20020a25e792000000b006457ddbb5ebmr19781278ybh.482.1652206451725; Tue, 10
+ May 2022 11:14:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com> <20220509233235.995021-2-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220509233235.995021-2-dmitry.osipenko@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 May 2022 20:14:00 +0200
+Message-ID: <CAJZ5v0gApRhc9+jZLxgNXC2B2tmz450=8+mFZUjTFF1iU7C-gw@mail.gmail.com>
+Subject: Re: [PATCH v8 01/27] notifier: Add atomic_notifier_call_chain_is_empty()
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -42,7 +55,7 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
         Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -54,7 +67,8 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Rich Felker <dalias@libc.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Juergen Gross <jgross@suse.com>,
@@ -71,91 +85,81 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v8 27/27] kernel/reboot: Add devm_register_restart_handler()
-Date:   Tue, 10 May 2022 02:32:35 +0300
-Message-Id: <20220509233235.995021-28-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Add devm_register_restart_handler() helper that registers sys-off
-handler using restart mode and with a default priority. Most drivers
-will want to register restart handler with a default priority, so this
-helper will reduce the boilerplate code and make code easier to read and
-follow.
+On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> Add atomic_notifier_call_chain_is_empty() that returns true if given
+> atomic call chain is empty.
 
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- include/linux/reboot.h |  4 ++++
- kernel/reboot.c        | 22 ++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+It would be good to mention a use case for it.
 
-diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-index 7c6e1f308f7c..e5d9ef886179 100644
---- a/include/linux/reboot.h
-+++ b/include/linux/reboot.h
-@@ -145,6 +145,10 @@ int devm_register_power_off_handler(struct device *dev,
- 				    int (*callback)(struct sys_off_data *data),
- 				    void *cb_data);
- 
-+int devm_register_restart_handler(struct device *dev,
-+				  int (*callback)(struct sys_off_data *data),
-+				  void *cb_data);
-+
- int register_platform_power_off(void (*power_off)(void));
- void unregister_platform_power_off(void (*power_off)(void));
- 
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index b790025154ac..2e78bd754a75 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -484,6 +484,28 @@ int devm_register_power_off_handler(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_register_power_off_handler);
- 
-+/**
-+ *	devm_register_restart_handler - Register restart handler
-+ *	@dev: Device that registers callback
-+ *	@callback: Callback function
-+ *	@cb_data: Callback's argument
-+ *
-+ *	Registers resource-managed sys-off handler with a default priority
-+ *	and using restart mode.
-+ *
-+ *	Returns zero on success, or error code on failure.
-+ */
-+int devm_register_restart_handler(struct device *dev,
-+				  int (*callback)(struct sys_off_data *data),
-+				  void *cb_data)
-+{
-+	return devm_register_sys_off_handler(dev,
-+					     SYS_OFF_MODE_RESTART,
-+					     SYS_OFF_PRIO_DEFAULT,
-+					     callback, cb_data);
-+}
-+EXPORT_SYMBOL_GPL(devm_register_restart_handler);
-+
- static struct sys_off_handler *platform_power_off_handler;
- 
- static int platform_power_off_notify(struct sys_off_data *data)
--- 
-2.35.1
-
+> Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  include/linux/notifier.h |  2 ++
+>  kernel/notifier.c        | 13 +++++++++++++
+>  2 files changed, 15 insertions(+)
+>
+> diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+> index 87069b8459af..95e2440037de 100644
+> --- a/include/linux/notifier.h
+> +++ b/include/linux/notifier.h
+> @@ -173,6 +173,8 @@ extern int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh
+>  extern int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
+>                 unsigned long val_up, unsigned long val_down, void *v);
+>
+> +extern bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh);
+> +
+>  #define NOTIFY_DONE            0x0000          /* Don't care */
+>  #define NOTIFY_OK              0x0001          /* Suits me */
+>  #define NOTIFY_STOP_MASK       0x8000          /* Don't call further */
+> diff --git a/kernel/notifier.c b/kernel/notifier.c
+> index ba005ebf4730..aaf5b56452a6 100644
+> --- a/kernel/notifier.c
+> +++ b/kernel/notifier.c
+> @@ -204,6 +204,19 @@ int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
+>  EXPORT_SYMBOL_GPL(atomic_notifier_call_chain);
+>  NOKPROBE_SYMBOL(atomic_notifier_call_chain);
+>
+> +/**
+> + *     atomicnotifier_call_chain_is_empty - Check whether notifier chain is empty
+> + *     @nh: Pointer to head of the blocking notifier chain
+> + *
+> + *     Checks whether notifier chain is empty.
+> + *
+> + *     Returns true is notifier chain is empty, false otherwise.
+> + */
+> +bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh)
+> +{
+> +       return !rcu_access_pointer(nh->head);
+> +}
+> +
+>  /*
+>   *     Blocking notifier chain routines.  All access to the chain is
+>   *     synchronized by an rwsem.
+> --
+> 2.35.1
+>
