@@ -2,42 +2,42 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F7F5243E2
-	for <lists+linux-csky@lfdr.de>; Thu, 12 May 2022 06:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF665243D5
+	for <lists+linux-csky@lfdr.de>; Thu, 12 May 2022 06:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbiELEJI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 12 May 2022 00:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S243115AbiELEIE (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 12 May 2022 00:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiELEJH (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 12 May 2022 00:09:07 -0400
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EF71D0432
-        for <linux-csky@vger.kernel.org>; Wed, 11 May 2022 21:09:05 -0700 (PDT)
-Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-09.nifty.com with ESMTP id 24C41hqV029858
+        with ESMTP id S230419AbiELEHt (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 12 May 2022 00:07:49 -0400
+Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7501C1944
+        for <linux-csky@vger.kernel.org>; Wed, 11 May 2022 21:07:47 -0700 (PDT)
+Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-06.nifty.com with ESMTP id 24C41hKj028681
         for <linux-csky@vger.kernel.org>; Thu, 12 May 2022 13:01:43 +0900
 Received: from grover.jp (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-07.nifty.com with ESMTP id 24C41CNP015198;
-        Thu, 12 May 2022 13:01:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24C41CNP015198
+        by conuserg-07.nifty.com with ESMTP id 24C41CNQ015198;
+        Thu, 12 May 2022 13:01:14 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 24C41CNQ015198
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1652328073;
-        bh=onFv+YAOxIPYNs8nK9urU409UP2PBRJMAjENXFOL5Vk=;
+        s=dec2015msa; t=1652328074;
+        bh=Ms2/QTWIxTLGhPZsXAuaiJFN0GAXthYkkx5TMKK6Voc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eg03YOigSKL+FkCX7H+IUzTgy39mWtqGcAJHY9n411eCCEDc4gA7Sy0edNb2f/zt8
-         Pp/I7NVhbKw1fBUw8m6FK1j1z9Lja7xHfMfXnS88e1vRmAAcm94Xbh4TbfD688aUWH
-         ad6SvDP9sMQgY9VDXFQzK8tBZuAARcUVsEn/FzbCZioIsE97iwOkWQZAAhzyGJ94tw
-         UOE5p5uTx9bPcYhGG9BqUbzEkZ0JIER7SS4b/Fst11j2a5BkioQ2Q8qdvUaKA91PvN
-         bxz2atiZ1r5LwreohfTE8mhwj+uOm8OB0iU0U3FXyTjo/Q841PecMkkS+YVm1+4KGl
-         UDDA5c8/3RUFA==
+        b=oZoA5n151D9jvsoc/xgTzrSXON47+7LQAYH129DO8WT58un5cOFdBOi4EDl8iQXaB
+         ix9k3wgaS2qmfB8z3Ye2qDJs9IF1Rzy1/MqAdtBqhunPhVlHRv7BQDG2fxLbCTWTa4
+         ZBfDvYhHm8F+tvI5cTsIXSl0FE4RKNQEmxPqhF07ebjV6bZc7hAkTp0UI8dWy2ONIF
+         ezABc7d4Pqjj/7uHT5guHWMF4SfpY1uG/oEanpVGOK7Zn2k/+XGF2PzSX51xUsAusX
+         RO91PIVj9/iV+5fSWSPt4oxRIYE3j6/Sf9ouPYtVkm6DUld4v+p58R+SMkmVWfz4AO
+         ODTuX069/kysw==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 3/4] csky: introduce CONFIG_CSKY_ABI_V1/2
-Date:   Thu, 12 May 2022 12:59:02 +0900
-Message-Id: <20220512035903.2779287-3-masahiroy@kernel.org>
+Subject: [PATCH 4/4] cskly: move $(core-y) into arch/csky/Kbuild
+Date:   Thu, 12 May 2022 12:59:03 +0900
+Message-Id: <20220512035903.2779287-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220512035903.2779287-1-masahiroy@kernel.org>
 References: <20220512035903.2779287-1-masahiroy@kernel.org>
@@ -52,106 +52,43 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This is useful to clean up Makefile.
+Use the standard obj-y form to specify the sub-directories under
+arch/csky/. No functional change intended.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- arch/csky/Kconfig  | 11 +++++++++++
- arch/csky/Makefile | 14 ++++++++------
- 2 files changed, 19 insertions(+), 6 deletions(-)
+ arch/csky/Kbuild   | 4 ++++
+ arch/csky/Makefile | 4 ----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 75ef86605d69..da756ecf0f85 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -161,6 +161,12 @@ config ARCH_MMAP_RND_BITS_MIN
- config ARCH_MMAP_RND_BITS_MAX
- 	default 17
+diff --git a/arch/csky/Kbuild b/arch/csky/Kbuild
+index 4e39f7abdeb6..3015be1afd59 100644
+--- a/arch/csky/Kbuild
++++ b/arch/csky/Kbuild
+@@ -1,4 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
-+config CSKY_ABI_V1
-+	bool
++obj-y += kernel/ mm/
++obj-$(CONFIG_CPU_ABI_V1) += abiv1/
++obj-$(CONFIG_CPU_ABI_V2) += abiv2/
 +
-+config CSKY_ABI_V2
-+	bool
-+
- menu "Processor type and features"
- 
- choice
-@@ -172,15 +178,18 @@ config CPU_CK610
- 	select CPU_NEED_TLBSYNC
- 	select CPU_NEED_SOFTALIGN
- 	select CPU_NO_USER_BKPT
-+	select CSKY_ABI_V1
- 
- config CPU_CK810
- 	bool "CSKY CPU ck810"
- 	select CPU_HAS_HILO
- 	select CPU_NEED_TLBSYNC
-+	select CSKY_ABI_V2
- 
- config CPU_CK807
- 	bool "CSKY CPU ck807"
- 	select CPU_HAS_HILO
-+	select CSKY_ABI_V2
- 
- config CPU_CK860
- 	bool "CSKY CPU ck860"
-@@ -188,6 +197,8 @@ config CPU_CK860
- 	select CPU_HAS_CACHEV2
- 	select CPU_HAS_LDSTEX
- 	select CPU_HAS_FPUV2
-+	select CSKY_ABI_V2
-+
- endchoice
- 
- choice
+ # for cleaning
+ subdir- += boot
 diff --git a/arch/csky/Makefile b/arch/csky/Makefile
-index 4d72aca4069b..2b30525f39e1 100644
+index 2b30525f39e1..51150abd2831 100644
 --- a/arch/csky/Makefile
 +++ b/arch/csky/Makefile
-@@ -16,34 +16,36 @@ endif
+@@ -63,10 +63,6 @@ KBUILD_AFLAGS += $(KBUILD_CFLAGS)
  
- ifdef CONFIG_CPU_CK610
- CPUTYPE	= ck610
--CSKYABI	= abiv1
- endif
+ head-y := arch/csky/kernel/head.o
  
- ifdef CONFIG_CPU_CK810
- CPUTYPE = ck810
--CSKYABI	= abiv2
- endif
- 
- ifdef CONFIG_CPU_CK807
- CPUTYPE = ck807
--CSKYABI	= abiv2
- endif
- 
- ifdef CONFIG_CPU_CK860
- CPUTYPE = ck860
-+endif
-+
-+ifdef CONFIG_CSKY_ABI_V1
-+CSKYABI	= abiv1
-+endif
-+
-+ifdef CONFIG_CSKY_ABI_V2
- CSKYABI	= abiv2
- endif
- 
--ifneq ($(CSKYABI),)
- MCPU_STR = $(CPUTYPE)$(FPUEXT)$(VDSPEXT)$(TEEEXT)
- KBUILD_CFLAGS += -mcpu=$(CPUTYPE) -Wa,-mcpu=$(MCPU_STR)
- KBUILD_CFLAGS += -DCSKYCPU_DEF_NAME=\"$(MCPU_STR)\"
- KBUILD_CFLAGS += -msoft-float -mdiv
- KBUILD_CFLAGS += -fno-tree-vectorize
--endif
- 
- KBUILD_CFLAGS += -pipe
--ifeq ($(CSKYABI),abiv2)
-+ifdef CONFIG_CSKY_ABI_V2
- KBUILD_CFLAGS += -mno-stack-size
- endif
+-core-y += arch/csky/kernel/
+-core-y += arch/csky/mm/
+-core-y += arch/csky/$(CSKYABI)/
+-
+ libs-y += arch/csky/lib/ \
+ 	$(shell $(CC) $(KBUILD_CFLAGS) $(KCFLAGS) -print-libgcc-file-name)
  
 -- 
 2.32.0
