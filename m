@@ -2,135 +2,111 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076E152D0EC
-	for <lists+linux-csky@lfdr.de>; Thu, 19 May 2022 12:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58645530629
+	for <lists+linux-csky@lfdr.de>; Sun, 22 May 2022 23:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237050AbiESK5l (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 19 May 2022 06:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S232412AbiEVV2y (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 22 May 2022 17:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236134AbiESK5k (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 19 May 2022 06:57:40 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE10AF31D;
-        Thu, 19 May 2022 03:57:39 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id A064E1F41C26
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652957857;
-        bh=n5xuyUTKwTtfK1E3KUXlguxQHbXpNAqOc2gndpqI8jA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JodT7xtJhuDdpRliWmuR69V68cdLgMXYC8d7buT+z/skOa4D3K2ioz+upZrBg2HUI
-         fFJ9Rn8C3zYLSF4itEkiZf4lAf9mhOFGsXHiH+NvNHs2flmyQC/4D/NcGC8PSQsOSO
-         GcqoxRa4TTV0C4aYYrl2y+kEE4aiAR0BuXE3s+rTbSRmruSUiKG/62QN94HtkxPd8h
-         5hZsoL+SJmGw8nEPAF5+YZtOZrPZ6NRg8hcTQlgW4L/qyI+I5dRn80ayHZZC1Hf8GO
-         mkG9ultCG+PShiWcqnTz48Dvqc3PWYvBoJFQUeF+LqJAZWbjIhdXyvsG+uqjGWPers
-         YX5xODM5B4tmA==
-Message-ID: <43133a4d-8bad-93ba-c376-21d30d039b15@collabora.com>
-Date:   Thu, 19 May 2022 13:57:31 +0300
+        with ESMTP id S231723AbiEVV2x (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 22 May 2022 17:28:53 -0400
+X-Greylist: delayed 5980 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 May 2022 14:28:52 PDT
+Received: from out6.nocdirect.com (out6.nocdirect.com [69.73.171.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE51D14D2A
+        for <linux-csky@vger.kernel.org>; Sun, 22 May 2022 14:28:52 -0700 (PDT)
+Received: from binky.nswebhost.com ([69.73.168.248])
+        by spamexperts03.nocdirect.com with esmtpsa (TLSv1.2:AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <support@iesottawa.ca>)
+        id 1nsrZS-0000WC-15
+        for linux-csky@vger.kernel.org; Sun, 22 May 2022 15:49:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iesottawa.ca; s=default; h=Sender:Content-Type:MIME-Version:Message-ID:
+        Reply-To:From:Date:Subject:To:Cc:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=tsytaq9P6jbx84sZaeZ2ujyYY054YqWU2QI73VCcE8s=; b=loo0kcxRrDh+/o0av6KdpO5/jw
+        OFimYhkINuCZ9mPefznX5eyyP95MJrD2a9WIcXjZPnRfMXoLn8BKgm22n5cBMtTkBZQG75hHS+zBL
+        MRmZY7S1BTymXiItUWU96GbSN1OK6r61vbySc09wk5jSklmpHobibgCgihsao4U7BNSIlK5N3L1BY
+        eqWHrCD8H0Ld++PhU86JfL0X76xyiAojZHZUMucxQj2gw0vqLvpx5kRV8oYu/KskQKAnOdqSo7MZw
+        H1aHMvNYPaP5Fu2jeqiHGlNwE3ldGOr24lFGb3DdI+uRuVBUEkUVv/5oclJQQN2cKp4VXWRVZrmBF
+        HrwrS6uA==;
+Received: from ottawa by binky.nswebhost.com with local (Exim 4.93)
+        (envelope-from <support@iesottawa.ca>)
+        id 1nsrYR-00078i-9b
+        for linux-csky@vger.kernel.org; Sun, 22 May 2022 15:47:55 -0400
+To:     linux-csky@vger.kernel.org
+Subject: Re: Looking forward to hearing from you
+X-PHP-Script: iesottawa.ca/modules/mod_simplefileuploadv1.3/elements/bcqkhulk.php for 36.37.185.70
+Date:   Sun, 22 May 2022 19:47:55 +0000
+From:   "Mrs. Mamand Mashamsul" <support@iesottawa.ca>
+Reply-To: mrsmamands@gmail.com
+Message-ID: <db5f030c194eb79e108ad9b2ad82e0bf@iesottawa.ca>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v8 00/27] Introduce power-off+restart call chain API
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
- <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Sender:  <ottawa@binky.nswebhost.com>
+X-Originating-IP: 69.73.168.248
+X-SpamExperts-Domain: nocdirect.com
+X-SpamExperts-Username: binky
+Authentication-Results: nocdirect.com; auth=pass (login) smtp.auth=binky@nocdirect.com
+X-SpamExperts-Outgoing-Class: unsure
+X-SpamExperts-Outgoing-Evidence: Combined (0.83)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9NxnHXhFI9aLFhf4G9YVDvPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5yM3nC2BmNhhpBVcZGGz+WGt8C9mOBdONdnsxgsk1D2pw/C
+ h5SE4jAyhe1COeASyU9r2Irva2gpw5SYpBQlyhQ44ld5rdi2ZxohSIq+dqifZuwfXg3lLHvg5NA5
+ Q4UKfXmxp/mE01KBSG8B+VR6ttEpv1+cB8x6sK/GtN6tmZVqFHuTaKzWYJN7hB19IACPtQaT73qE
+ /bPEQRw1+/YAfTC609mB3MdpSV3sWIdO2eYbSvVLiitsLbvAhupvUnzDINDjcMbskMcaRQWUu9pQ
+ An0SxmD/2Y9vQ6c+CWRhbvYX8/rD2tNFnxZmcBDP9GZo454L8e9V2yadybeHOMTl0mz22loBPGfx
+ bYV/C90G1lGhhe/6sDrXXpSG4IEX5iNEcVtdjx85xQq9VD42UbTRudBo31/E3ahF5MMcDI7KdpjQ
+ KTDdLlR8TbTgFjQZY9NlDQvzzkUyZY2wKDSP6xtXq/WhbbgVl4iunqFoEGZzSy+km6VHO6XhXqN3
+ g0DWG4Tioc84Kpmg5+UpQ2PZprb+nvdWlgS6K9aAlnrXFI3hveFdl/03PID3XZmJFyZSBdUjoTdd
+ vjenWNHvA5jfEJ3hHCEZy0YUM3M/jBZQ3A6fK0F4/VE0fVDhXnP6kGReswqtZAHzg1zcjVdIhfBo
+ dOedlBBe92PNDpgLsd6Ddd/s7VM53kslpjM9zsleUEOBBiT9j3nwJ3XTYPX8/FYF1qeGoVdUbmMR
+ muBOVM7E1dn+Ka3qTsZafphrURCyEltbCBpib+lmMRr+w2X69ygMahiTQMBdz643WjsO7W/dj5iS
+ OOwnyDheMPxghFsjIwINNqkbXC/I4+m/hj19mxilNKakCSQALvVEu1zJCMgvv3qd3SrMXiQCHNoV
+ ZSIr6skNpUbpwLtbs5foXiuJWiv1/Vo4VRuN629ZC8+7qMn7BbctwahGsbM/Lgg1DmF6Ill58fwl
+ wFp/x303qPlmX5UbR5AEwmer
+X-Report-Abuse-To: spam@spamexperts01.nocdirect.com
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        HK_NAME_MR_MRS,PHP_SCRIPT,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
+        *       low trust
+        *      [69.73.171.5 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5004]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.5 PHP_SCRIPT Sent by PHP script
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 5/18/22 17:46, Rafael J. Wysocki wrote:
-> On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
-...
->> Introduce new API that provides call chains support for all restart and
->> power-off modes. The new API is designed with simplicity and extensibility
->> in mind.
-...
-> The v8 looks much better than the previous versions to me.
-> 
-> I actually don't really have any comments on it except for the minor
-> remark regarding patch [1/27] sent separately.
-> 
-> Please just send an update of that one patch and I will queue up the
-> series for 5.19.
-> 
-> However, I'm going to send a pull request with it in the second half
-> of the merge window, after the majority of the other changes in the
-> subsystems touched by it have been integrated.
+Greatings Dear
 
-Thanks, Rafael. I sent out the updated [1/27] patch to you.
+I am Mrs. Mamand Mashamsul, from Kabul, Capital of Afghanistan. With due respect, I want to know if foreigners can buy and own properties in your beautiful country, I desire to relocate my investment capital abroad where it will generate more returns. 
+ 
+I will appreciate your response. Please let me know your ideas and knowledge regarding my research. In Any viable investment idea you suggest to me will be also be considered. 
+ 
+Looking forward to hearing from you.
 
-For the reference, the updated patch can be found here as well:
-
-https://lore.kernel.org/all/20220519105015.1195955-1-dmitry.osipenko@collabora.com/T/#u
-
--- 
 Best regards,
-Dmitry
+Mrs. Mamand Mashamsul
+
