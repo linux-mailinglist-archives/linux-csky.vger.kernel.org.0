@@ -2,73 +2,108 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67CE532FC8
-	for <lists+linux-csky@lfdr.de>; Tue, 24 May 2022 19:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5BE533249
+	for <lists+linux-csky@lfdr.de>; Tue, 24 May 2022 22:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiEXRqy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 24 May 2022 13:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S241468AbiEXUQy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 24 May 2022 16:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiEXRqx (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 24 May 2022 13:46:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84803E5CD;
-        Tue, 24 May 2022 10:46:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 548D86153F;
-        Tue, 24 May 2022 17:46:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B04E1C3411A;
-        Tue, 24 May 2022 17:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653414410;
-        bh=VFSFcaWnXkTONaZudhJ/D1XM8MP6tTrtdlB6KRbXuTI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uym8rpR4E7gO1cx09ieBozk1kFi1hT7iWnaXZACBbLgDLgp76OX8W89CcL9dEJG/k
-         /sMoqZXCg5hH5YFie/morYb9svNt95HWsaBokyE9c7BlklzSkV0/7I4UfSsFCnA3GB
-         ZcEpBHgwFlEc2Yau7JqXqPFKnNIqS9kxM4NzoBa5Tb9Elva7jINB7JPiaV++YpL5Dw
-         iDYDtgCcKxiFKXQZOIzGZyQt1nl/xtzMxeD+vsqE5Jheb/UHN7Q9VJHKA31M1loCxQ
-         4mMzp8vIAyId4BDt8tFS8oLjlcmWt7R1oGzQS5ftNkavGmvh/yIcVBKzh2790LJ1qJ
-         YBq6qwL6fjPng==
-Received: by mail-vs1-f51.google.com with SMTP id j7so6933447vsp.12;
-        Tue, 24 May 2022 10:46:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532jiAqrusLPPi2MhH9+zPzvdfimqpq+llaaG9PyLN3gH6bTOkUd
-        9PQ3Pr5ZCS+BO+5B8ob/nmz/u/s/WmHTrpTMy7c=
-X-Google-Smtp-Source: ABdhPJyKkjFolxnfdO9PCIWI8q5rCIqLEUdSJ81qW+0E0j887VJrevxqlepirleburYwnfejm1FO92XudOVHwSujXXg=
-X-Received: by 2002:a67:c89c:0:b0:335:d83b:df76 with SMTP id
- v28-20020a67c89c000000b00335d83bdf76mr10323694vsk.51.1653414409588; Tue, 24
- May 2022 10:46:49 -0700 (PDT)
+        with ESMTP id S231410AbiEXUQx (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 24 May 2022 16:16:53 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFDB2317B;
+        Tue, 24 May 2022 13:16:51 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id F2E871F447A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653423409;
+        bh=zYjjoQPSRD28QTzcQmCkF+0zDUTSRxsuI5oi8F0+rRQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fWA1AifiGfpu5zAody+hWBW74K5h5PJY4o9syShHoFUvcDbGztdgO0rxpFXKrmy2Y
+         v+m0QvVaF2TMOM3FrIQn4vCIIUWVeH9erQlS971HHUB5axW0nhIjNhf2t83dRltpj5
+         F+MJuBOytIM400P1utntTu0dMtY0yhe0QZvOmzJR1Di7UCyoNz6N/1CjkNfHCg26JH
+         3c5z3Ze+AYN7fowyq3Sq6g1iqMrOvzo1fQihDQtpwVaXvHM7BJiRY1axu6Kqy3ixZu
+         ZneM8hZeXSfA/wa0YX+aUD23BvnxfaiuWymTABWNglyXpsDZsuQOqKpz07ThIMgq+Y
+         y0ERqGVUsfdJQ==
+Message-ID: <72eceb0c-8654-6c63-f1c4-c9374f99dfb3@collabora.com>
+Date:   Tue, 24 May 2022 23:16:41 +0300
 MIME-Version: 1.0
-References: <20220322144003.2357128-1-guoren@kernel.org> <20220322144003.2357128-21-guoren@kernel.org>
- <20220523054550.GA1511899@roeck-us.net> <CAJF2gTQ5RS8wGfSDPoB4JLtPBoM=ainuz_EJ9Tweq0mqPM=ALA@mail.gmail.com>
-In-Reply-To: <CAJF2gTQ5RS8wGfSDPoB4JLtPBoM=ainuz_EJ9Tweq0mqPM=ALA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 25 May 2022 01:46:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSa=roJOiKFiL8nSQ12E-emz-xrXs=RNAc4zSFaPuRAzw@mail.gmail.com>
-Message-ID: <CAJF2gTSa=roJOiKFiL8nSQ12E-emz-xrXs=RNAc4zSFaPuRAzw@mail.gmail.com>
-Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 07/27] kernel/reboot: Add kernel_can_power_off()
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
         linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+ <20220509233235.995021-8-dmitry.osipenko@collabora.com>
+ <CAMuHMdVGjeFe=Z_1Kr9ZaNZ7HUVH1usvubEB31WUQf0fg8E1kA@mail.gmail.com>
+ <c4914e14-1882-55a1-bcbd-a905852b45a3@collabora.com>
+ <CAMuHMdWBWWVeegvLQQzT8CRL5z38AhXigaNjzw8p0NwQ1B4DPQ@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAMuHMdWBWWVeegvLQQzT8CRL5z38AhXigaNjzw8p0NwQ1B4DPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,114 +111,73 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, May 25, 2022 at 1:42 AM Guo Ren <guoren@kernel.org> wrote:
->
-> On Mon, May 23, 2022 at 1:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Tue, Mar 22, 2022 at 10:40:03PM +0800, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
-> > > 64bit S-mode) support.
-> > >  - Setup kconfig & dummy functions for compiling.
-> > >  - Implement compat_start_thread by the way.
-> > >
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> > > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> >
-> > With this patch in linux-next, all my riscv64 emulations crash.
-> >
-> > [   11.600082] Run /sbin/init as init process
-> > [   11.628561] init[1]: unhandled signal 11 code 0x1 at 0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
-> > [   11.629398] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
-> > [   11.629462] Hardware name: riscv-virtio,qemu (DT)
-> > [   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp : 00ffffffc58199f0
-> > [   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 : ffffffffffffffff
-> > [   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 : 00ffffff8ade0cc0
-> > [   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 : 00ffffffc5819a00
-> > [   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 : 00ffffffc5819b00
-> > [   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 : 0000000000000000
-> > [   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 : 00ffffff8ade0728
-> > [   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 : 00ffffffc5819e40
-> > [   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10: 0000000000000000
-> > [   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 : 0000000000000001
-> > [   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
-> > [   11.629699] status: 0000000000004020 badaddr: 0000000000000000 cause: 000000000000000d
-> > [   11.633421] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> > [   11.633664] CPU: 0 PID: 1 Comm: init Not tainted 5.18.0-rc7-next-20220520 #1
-> > [   11.633784] Hardware name: riscv-virtio,qemu (DT)
-> > [   11.633881] Call Trace:
-> > [   11.633960] [<ffffffff80005e72>] dump_backtrace+0x1c/0x24
-> > [   11.634162] [<ffffffff809aa9ec>] show_stack+0x2c/0x38
-> > [   11.634274] [<ffffffff809b8482>] dump_stack_lvl+0x60/0x8e
-> > [   11.634386] [<ffffffff809b84c4>] dump_stack+0x14/0x1c
-> > [   11.634491] [<ffffffff809aaca0>] panic+0x116/0x2e2
-> > [   11.634596] [<ffffffff80015540>] do_exit+0x7ce/0x7d4
-> > [   11.634707] [<ffffffff80015666>] do_group_exit+0x24/0x7c
-> > [   11.634817] [<ffffffff80022294>] get_signal+0x7ee/0x830
-> > [   11.634924] [<ffffffff800051c0>] do_notify_resume+0x6c/0x41c
-> > [   11.635037] [<ffffffff80003ad4>] ret_from_exception+0x0/0x10
-> The problem is come from "__dls3's vdso decode part in musl's
-> ldso/dynlink.c". The ehdr->e_phnum & ehdr->e_phentsize are wrong.
->
-> I think the root cause is from musl's implementation with the wrong
-> elf parser. I would fix that soon.
-Not elf parser, it's "aux vector just past environ[]". I think I could
-solve this, but anyone who could help dig in is welcome.
+On 5/24/22 18:03, Geert Uytterhoeven wrote:
+> Hi Dmitry,
+> 
+> On Tue, May 24, 2022 at 3:41 PM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>> On 5/24/22 16:14, Geert Uytterhoeven wrote:
+>>> On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+>>> <dmitry.osipenko@collabora.com> wrote:
+>>>> Add kernel_can_power_off() helper that replaces open-coded checks of
+>>>> the global pm_power_off variable. This is a necessary step towards
+>>>> supporting chained power-off handlers.
+>>>>
+>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>
+>>> Thanks for your patch, which is now commit 0e2110d2e910e44c
+>>> ("kernel/reboot: Add kernel_can_power_off()") in pm/linux-next.
+>>>
+>>> This causes the "poweroff" command (Debian nfsroot) to no longer
+>>> cleanly halt the system on arm32 systems, but fail with a panic
+>>> instead:
+>>>
+>>> -reboot: System halted
+>>> +reboot: Power down
+>>> +Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
+>>> +CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted
+>>> 5.18.0-rc7-shmobile-00007-g0e2110d2e910 #1274
+>>> +Hardware name: Generic R-Car Gen2 (Flattened Device Tree)
+>>> + unwind_backtrace from show_stack+0x10/0x14
+>>> + show_stack from dump_stack_lvl+0x40/0x4c
+>>> + dump_stack_lvl from panic+0xf4/0x330
+>>> + panic from do_exit+0x1c8/0x8e4
+>>> + do_exit from __do_sys_reboot+0x174/0x1fc
+>>> + __do_sys_reboot from ret_fast_syscall+0x0/0x54
+>>> +Exception stack(0xf0815fa8 to 0xf0815ff0)
+>>> +5fa0:                   004e6954 00000000 fee1dead 28121969 4321fedc f0d94600
+>>> +5fc0: 004e6954 00000000 00000000 00000058 befa0c78 00000000 befa0c10 004e56f8
+>>> +5fe0: 00000058 befa0b6c b6ec8d45 b6e4a746
+>>> +---[ end Kernel panic - not syncing: Attempted to kill init!
+>>> exitcode=0x00000000 ]---
+>>>
+>>> On arm64, "poweroff" causes a clean "reboot: Power down" before/after.
+>>>
+>>> On both arm32 and arm64, the same handlers are registered:
+>>>   - SYS_OFF_MODE_POWER_OFF_PREPARE: legacy_pm_power_off_prepare
+>>>   - SYS_OFF_MODE_POWER_OFF: legacy_pm_power_off
+>>>
+>>> On both arm32 and arm64, legacy_pm_power_off_prepare() is called.
+>>> On both arm32 and arm64, legacy_pm_power_off() does not seem to
+>>> be called.
+>>>
+>>> On arm32, both pm_power_off_prepare and pm_power_off are NULL.
+>>> On arm64, pm_power_off_prepare is NULL, and
+>>> pm_power_off is psci_sys_poweroff.
+>>>
+>>> Do you have a clue?
+>>> Thanks!
+>>
+>> Thank you, Geert! I see the problem, the kernel_can_power_off() checks whether power-off handler is registered, but it's always registered because legacy_pm_power_off is registered unconditionally. So it causes trouble for platforms that don't have power-off handler installed at all. All platforms that I tested have a power-off handler, so now wonder that I didn't notice this before.
+>>
+>> This change should fix the problem, please give it a try:
+> 
+> Thank you, that fixes the problem for me!
+> 
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
->
-> If you CONFIG_COMPAT=n, the bug would be bypassed.
->
-> >
-> > Guenter
-> >
-> > ---
-> > # bad: [18ecd30af1a8402c162cca1bd58771c0e5be7815] Add linux-next specific files for 20220520
-> > # good: [42226c989789d8da4af1de0c31070c96726d990c] Linux 5.18-rc7
-> > git bisect start 'HEAD' 'v5.18-rc7'
-> > # bad: [f9b63740b666dd9887eb0282d21b5f65bb0cadd0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-> > git bisect bad f9b63740b666dd9887eb0282d21b5f65bb0cadd0
-> > # bad: [7db97132097c5973ff77466d0ee681650af653de] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-> > git bisect bad 7db97132097c5973ff77466d0ee681650af653de
-> > # good: [2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb] soc: document merges
-> > git bisect good 2b7d17d4b7c1ff40f58b0d32be40fc0bb6c582fb
-> > # good: [69c9668f853fdd409bb8abbb37d615785510b29a] Merge branch 'clk-next' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
-> > git bisect good 69c9668f853fdd409bb8abbb37d615785510b29a
-> > # bad: [1577f290aa0d4c5b29c03c46ef52e4952a21bfbb] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git
-> > git bisect bad 1577f290aa0d4c5b29c03c46ef52e4952a21bfbb
-> > # good: [34f0971f8ca73d7e5502b4cf299788a9402120f7] powerpc/powernv/flash: Check OPAL flash calls exist before using
-> > git bisect good 34f0971f8ca73d7e5502b4cf299788a9402120f7
-> > # good: [0349d7dfc70a26b3facd8ca97de34980d4b60954] Merge branch 'mips-next' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
-> > git bisect good 0349d7dfc70a26b3facd8ca97de34980d4b60954
-> > # bad: [20bfb54d3b121699674c17a854c5ebc7a8f97d81] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-> > git bisect bad 20bfb54d3b121699674c17a854c5ebc7a8f97d81
-> > # bad: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
-> > git bisect bad 9be8459298eadb39b9fe9974b890239e9c123107
-> > # good: [01abdfeac81b5f56062d0a78f2cdc805db937a75] riscv: compat: Support TASK_SIZE for compat mode
-> > git bisect good 01abdfeac81b5f56062d0a78f2cdc805db937a75
-> > # good: [f4b395e6f1a588ed6c9a30474e58cf6b27b65783] riscv: compat: Add hw capability check for elf
-> > git bisect good f4b395e6f1a588ed6c9a30474e58cf6b27b65783
-> > # good: [3092eb45637573c5e435fbf5eaf9516316e5f9c6] riscv: compat: vdso: Add setup additional pages implementation
-> > git bisect good 3092eb45637573c5e435fbf5eaf9516316e5f9c6
-> > # good: [4608c159594fb40a5101357d4f614fdde9ce1fdb] riscv: compat: ptrace: Add compat_arch_ptrace implement
-> > git bisect good 4608c159594fb40a5101357d4f614fdde9ce1fdb
-> > # first bad commit: [9be8459298eadb39b9fe9974b890239e9c123107] riscv: compat: Add COMPAT Kbuild skeletal support
->
->
->
-> --
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
-
-
+Great! I'll send the proper patch soon.
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Best regards,
+Dmitry
