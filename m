@@ -2,107 +2,127 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B8D534413
-	for <lists+linux-csky@lfdr.de>; Wed, 25 May 2022 21:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B887534459
+	for <lists+linux-csky@lfdr.de>; Wed, 25 May 2022 21:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245458AbiEYTQR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 25 May 2022 15:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S1344416AbiEYTiC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-csky@lfdr.de>); Wed, 25 May 2022 15:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344600AbiEYTPE (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 25 May 2022 15:15:04 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021B2C6E6D
-        for <linux-csky@vger.kernel.org>; Wed, 25 May 2022 12:13:37 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id i25so5380174vkr.8
-        for <linux-csky@vger.kernel.org>; Wed, 25 May 2022 12:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=V3ilouT9genmWgVMdUNI5P/LrIsW5jIirCBfI8vk+4c=;
-        b=d3ClJ/u2CoIHw5+4kQ9KZ+xrXgd2DmJWYzKGUyj8RDWsQ+ns1HEHuKJDGfZ8s3pLk+
-         WP4pny22UPXFPj73wvRy+CKnPhXlKkXClAcVTvlLqnSzH6N+6TJI8KUCZJz5jVixW7Tj
-         FqWfZqgwwg0VYhhEHSMGbQceeQjgs0a2lGw1G9XyZ0Fp10lBdxZwuAEao1XPnqNfO9hO
-         NdYOGp91u4l7I5MTcpCEJMIVkNTq56YEP3yk36uP0Ny/GVNcWTHwAzFlgId/YqnTKqNE
-         hCUnWbeC931wKgxIUxe67nRixuHa4S1k6wU2YPvEMzsDFP3EqlCbXCPt08+UckBmDUmE
-         6ZpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=V3ilouT9genmWgVMdUNI5P/LrIsW5jIirCBfI8vk+4c=;
-        b=F094gMBYrgPY7L0xYk3pPyzDiJAyjf+F/ZlwP6aPvagiOrUeXAdnWlpeIRy7fFCEHs
-         0sFT9npgBt05YTTaTSjHcC1gZJJTkmnJLGbKHEMtCsSO7DqC+wHbgd7T5UknR8ZZkwUo
-         XW3Y3jhsfExAGx4oRSDsVkahwuCe/Hsd4iX0pLoSvVKYXJAOOxBDJ8bwtUGrK8nptREQ
-         ilNuPlXcCPvjDHMDHJFIoVzc+1n5eMbZ/GiYti4uTs16wVGssu56klQTt6v7Y8EugzG+
-         0lcHsJGqMexk/Bmr5QKlgC6ZKtRFMbIvOH1MGlZ8NzZvJpR7nr6I6cXsC2LxxMo52vIh
-         3+ZQ==
-X-Gm-Message-State: AOAM533ITGr8cNalDkhEijKcRdN8LE6ORTKPmEtl/dXZfW4BdopCfC3n
-        N2VKlk8iMSAHOZxYpmGEKoP/XdxdoAo5BMN7i/I=
-X-Google-Smtp-Source: ABdhPJyv0nYVXluxAdv23CeEFPbn1AwxAcSuUYAxZA5vu2FglbV7tZ1FTPHmIjSTA6EsBPWfKKe7hGnnQ86yX1OOgiU=
-X-Received: by 2002:a1f:988e:0:b0:357:6a07:3ef8 with SMTP id
- a136-20020a1f988e000000b003576a073ef8mr9082621vke.29.1653506016133; Wed, 25
- May 2022 12:13:36 -0700 (PDT)
+        with ESMTP id S1344355AbiEYTiA (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 25 May 2022 15:38:00 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A89A66C84;
+        Wed, 25 May 2022 12:37:47 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1ntwp4-0007pS-Ng; Wed, 25 May 2022 21:37:34 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
+Date:   Wed, 25 May 2022 21:37:33 +0200
+Message-ID: <1766627.8hzESeGDPO@diego>
+In-Reply-To: <CAJF2gTTkpHLZf-+VXZE_gCn=5ZJ5FS3jOxKLVoMyL4i=baPd7Q@mail.gmail.com>
+References: <20220322144003.2357128-1-guoren@kernel.org> <3418219.V25eIC5XRa@diego> <CAJF2gTTkpHLZf-+VXZE_gCn=5ZJ5FS3jOxKLVoMyL4i=baPd7Q@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a59:d484:0:b0:2bc:cae4:6d22 with HTTP; Wed, 25 May 2022
- 12:13:35 -0700 (PDT)
-From:   Rolf Benra <olfbenra@gmail.com>
-Date:   Wed, 25 May 2022 21:13:35 +0200
-Message-ID: <CA+z==VthtWgu_g2TFzVizk-M8Xas8f3ttAb+kg9vB4WDkUmPZA@mail.gmail.com>
-Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
-To:     contact@firstdiamondbk.com
-Cc:     info@firstdiamondbk.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Guten Tag,
+Am Mittwoch, 25. Mai 2022, 18:08:22 CEST schrieb Guo Ren:
+> Thx Heiko & Guenter,
+> 
+> On Wed, May 25, 2022 at 7:10 PM Heiko Stübner <heiko@sntech.de> wrote:
+> >
+> > Am Mittwoch, 25. Mai 2022, 12:57:30 CEST schrieb Heiko Stübner:
+> > > Am Mittwoch, 25. Mai 2022, 00:06:46 CEST schrieb Guenter Roeck:
+> > > > On Wed, May 25, 2022 at 01:46:38AM +0800, Guo Ren wrote:
+> > > > [ ... ]
+> > > >
+> > > > > > The problem is come from "__dls3's vdso decode part in musl's
+> > > > > > ldso/dynlink.c". The ehdr->e_phnum & ehdr->e_phentsize are wrong.
+> > > > > >
+> > > > > > I think the root cause is from musl's implementation with the wrong
+> > > > > > elf parser. I would fix that soon.
+> > > > > Not elf parser, it's "aux vector just past environ[]". I think I could
+> > > > > solve this, but anyone who could help dig in is welcome.
+> > > > >
+> > > >
+> > > > I am not sure I understand what you are saying here. Point is that my
+> > > > root file system, generated with musl a year or so ago, crashes with
+> > > > your patch set applied. That is a regression, even if there is a bug
+> > > > in musl.
+> Thx for the report, it's a valuable regression for riscv-compat.
+> 
+> > >
+> > > Also as I said in the other part of the thread, the rootfs seems innocent,
+> > > as my completely-standard Debian riscv64 rootfs is also affected.
+> > >
+> > > The merged version seems to be v12 [0] - not sure how we this discussion
+> > > ended up in v9, but I just tested this revision in two variants:
+> > >
+> > > - v5.17 + this v9 -> works nicely
+> >
+> > I take that back ... now going back to that build I somehow also run into
+> > that issue here ... will investigate more.
+> Yeah, it's my fault. I've fixed up it, please have a try:
+> 
+> https://lore.kernel.org/linux-riscv/20220525160404.2930984-1-guoren@kernel.org/T/#u
 
-Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+very cool that you found the issue.
+I've tested your patch and it seems to fix the issue for me.
 
-haben ?
-
-Ich habe versucht, Sie per E-Mail zu erreichen.
-
-Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
-
-Danke
-
-Rolf Benra
-
-olfbenra@gmail.com
+Thanks for figuring out the cause
+Heiko
 
 
+> > > - v5.18-rc6 + this v9 (rebased onto it) -> breaks the boot
+> > >   The only rebase-conflict was with the introduction of restartable
+> > >   sequences and removal of the tracehook include, but turning CONFIG_RSEQ
+> > >   off doesn't seem to affect the breakage.
+> > >
+> > > So it looks like something changed between 5.17 and 5.18 that causes the issue.
+> > >
+> > >
+> > > Heiko
+> > >
+> > >
+> > > [0] https://lore.kernel.org/all/20220405071314.3225832-1-guoren@kernel.org/
+> > >
+> >
+> >
+> >
+> >
+> 
+> 
+> 
 
 
 
 
-
-----------------------------------
-
-
-
-
-Good Afternoon,
-
-I was just wondering if you got my Previous E-mail
-have ?
-
-I tried to reach you by E-mail.
-
-Please come back to me quickly, it is very Important.
-
-Thanks
-
-Rolf Benra
-
-olfbenra@gmail.com
