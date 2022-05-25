@@ -1,42 +1,54 @@
 Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADA4533B56
-	for <lists+linux-csky@lfdr.de>; Wed, 25 May 2022 13:11:15 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 894DA533CDB
+	for <lists+linux-csky@lfdr.de>; Wed, 25 May 2022 14:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiEYLLM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 25 May 2022 07:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S230385AbiEYMo0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 25 May 2022 08:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241080AbiEYLLK (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 25 May 2022 07:11:10 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3CA8CCC5;
-        Wed, 25 May 2022 04:11:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TTSfncRF4bwVxkeR+S4pHa2NuE5vU7NkHqU52imXoeo=; b=AZ7NLjulpP1WzqY4jAw9CJ6mzn
-        eNxn6mITLdAkzreesFIusYyJANkaOvbZVslHzJxDDqo/jW9prJ6mSOYajnNAsWgSTZTPCGe4Y+H+t
-        Q7b5K2i3OxODvn+feDcYZuuvagMcqlznlm2xJ6e8wPUzB4c/WkijGr50Z8D32ZlBmwWuMwGQbue1E
-        mrsCyjPGVmj7xf/0/rnV0zIseeyVAHCeyTCYTi0ZFmZwkk1CWC0IMPFglArv51u64lwHpRP8/QuNm
-        TypGtB34O3uGaPoduTA8k7e4jOZswva+y2onGqiOIb4Z5GAtPEnJDGpyLSzDy3ZlKvUO8MvNVaZm2
-        4u9mbK6A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ntouK-001b5l-Bp; Wed, 25 May 2022 11:10:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59CA2300222;
-        Wed, 25 May 2022 13:10:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 374CD207688E7; Wed, 25 May 2022 13:10:17 +0200 (CEST)
-Date:   Wed, 25 May 2022 13:10:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
+        with ESMTP id S238882AbiEYMoX (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 25 May 2022 08:44:23 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75378FD64
+        for <linux-csky@vger.kernel.org>; Wed, 25 May 2022 05:44:20 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id c1so17153951qkf.13
+        for <linux-csky@vger.kernel.org>; Wed, 25 May 2022 05:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w0F6iR9EKs/zIprBUHWYk0xdfCPICb6b6FOC3ooI/Qg=;
+        b=LMEKNyEIRYPV5QWJlwplZCx+Yze+80z3MALcLFPz5jKdddgbR28N/X6bo9Jvgd00MP
+         WWkcUcb1+z91voFM8WjtduJpm5pvevvusNqH0PzjaxsPqwHpEmvLG6H17fO8d+8uqQ/c
+         xW/rbo+trH8MjL1X/foXOCmesnHHx99Tmug43Nb91EXZFTR7KAdlglnJRYtL1NUTbXz5
+         2CGVavB8u5eJ5bdNx8JVu0TNi6KB2NiCnWSVtKfIEdRU3i4wp/Kah2nDHcLAJXmplYfJ
+         xzofRGg4rofGSre9mJv/qm1XS4Pms5gIR+r4L8hjS8Owdd3qkT56i/sicOD/din7w+oO
+         VJFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w0F6iR9EKs/zIprBUHWYk0xdfCPICb6b6FOC3ooI/Qg=;
+        b=sPdK1R5xqyco48tuBQymxwL2tYniJdKRIktBCr7WlAKmYhYkvbBg6fsvbqDKpoduki
+         borhEfc0R3xZKpP8c2cmeTT+jED8pCd4wJ0fCuuGXH/SK1wwQzLr1FsWG/LzJfbiiSQa
+         U6/66X2gGl2kbip0YXku1fOVTH9Q+hnWbK/i9ft+Z3Dm3KT99FTnK4XJhcXWlA+2AdCb
+         CLgB6SYnBVr9peyTaAP3k+0TArlGUJ+ur/ssdiRHqjK/dCtHkv9sN9eHQmYpfp31SeTm
+         DOQ4PNCAuJimQBdVPup7P78kwSoOQMi+8Zi6uwZDdzRHQfG9afmVW7CM+7EyD7/HHw2o
+         n57A==
+X-Gm-Message-State: AOAM5320z2CkY2aMDvXOgVoLQ2whiuRsGnGpBVsJUX8Gf0+lsxlFnejv
+        VhysWAsSX/J02yiLRkEpLhc9pQ==
+X-Google-Smtp-Source: ABdhPJx/POKWSCbmzd2neCxXDwISwEb1wGzjcuEavupLeI/smDQTCNVGAU9PwpCoNv+A6qxiW2wj4Q==
+X-Received: by 2002:a05:620a:4047:b0:6a0:5dae:ad67 with SMTP id i7-20020a05620a404700b006a05daead67mr19946570qko.530.1653482659851;
+        Wed, 25 May 2022 05:44:19 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::1:741f])
+        by smtp.gmail.com with ESMTPSA id g25-20020ac870d9000000b002f9433ed963sm1207797qtp.64.2022.05.25.05.44.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 05:44:19 -0700 (PDT)
+Date:   Wed, 25 May 2022 08:44:18 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
 To:     Peter Xu <peterx@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Richard Henderson <rth@twiddle.net>,
@@ -59,6 +71,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Heiko Carstens <hca@linux.ibm.com>,
         Chris Zankel <chris@zankel.net>,
+        Peter Zijlstra <peterz@infradead.org>,
         Alistair Popple <apopple@nvidia.com>,
         linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -79,7 +92,6 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Helge Deller <deller@gmx.de>, Vineet Gupta <vgupta@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         linux-um@lists.infradead.org, linux-alpha@vger.kernel.org,
@@ -99,15 +111,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         "David S . Miller" <davem@davemloft.net>
 Subject: Re: [PATCH v3] mm: Avoid unnecessary page fault retires on shared
  memory types
-Message-ID: <Yo4OmaNW5YUrGE0S@hirez.programming.kicks-ass.net>
+Message-ID: <Yo4kojxZfjNiZI7/@cmpxchg.org>
 References: <20220524234531.1949-1-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220524234531.1949-1-peterx@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,4 +178,4 @@ On Tue, May 24, 2022 at 07:45:31PM -0400, Peter Xu wrote:
 > 
 > Signed-off-by: Peter Xu <peterx@redhat.com>
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
