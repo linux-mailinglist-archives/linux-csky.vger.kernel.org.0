@@ -2,58 +2,58 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769895385B2
-	for <lists+linux-csky@lfdr.de>; Mon, 30 May 2022 18:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195AD5385C8
+	for <lists+linux-csky@lfdr.de>; Mon, 30 May 2022 18:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239703AbiE3P7p (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 30 May 2022 11:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S242673AbiE3QC3 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 30 May 2022 12:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240957AbiE3P7g (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 30 May 2022 11:59:36 -0400
+        with ESMTP id S242301AbiE3QCO (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 30 May 2022 12:02:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7135C33894
-        for <linux-csky@vger.kernel.org>; Mon, 30 May 2022 08:53:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1C4CB64
+        for <linux-csky@vger.kernel.org>; Mon, 30 May 2022 09:01:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653925982;
+        s=mimecast20190719; t=1653926460;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bDYue/Afd3VGZHzU7tYF7qy5xBeBUpqe85rLuoAiRcE=;
-        b=AkXHNJKvAQRHb5OqI+OhXnw4AlFTHU7SQ25I25r8DrkTB9nwXx2U3S7uy3yWEhfxPKMgZ0
-        MCHoCCU4ElbTk7DKNd2mXmRpWE6tOdwsDRWpn7scMraYzymGuve2EYFM1vMWpJYkKpJQS0
-        OjtcJUf23O2R/uhMV8v3cei4In0oe2Y=
+        bh=9ZWphZRcK3afyDhn+H8+iYAM34Y/wtF11YrAt0KXpqo=;
+        b=OAlzTeE5V8IDemnaydPys11/ZrVI/qBW1DOX6CPplb5qXISrVW1Skgh7NUzAUpdX2Yqw/p
+        pHKMJG+8Mdx/ufIWFXE5y5I8riDML3OEKL/xpQCxyErsRfUKjW22PRJZPOar4KJ4zfDQ61
+        nAJEfPCcXlXGS1LH0+N1yZAXk2j7fts=
 Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
  [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-rHMqKuLoNvmODNjkT5hcPg-1; Mon, 30 May 2022 11:53:01 -0400
-X-MC-Unique: rHMqKuLoNvmODNjkT5hcPg-1
-Received: by mail-il1-f197.google.com with SMTP id m9-20020a056e021c2900b002d13627892eso8554296ilh.20
-        for <linux-csky@vger.kernel.org>; Mon, 30 May 2022 08:53:01 -0700 (PDT)
+ us-mta-52-ymfSAFB5M3yy9CpZddMkbQ-1; Mon, 30 May 2022 12:00:59 -0400
+X-MC-Unique: ymfSAFB5M3yy9CpZddMkbQ-1
+Received: by mail-il1-f197.google.com with SMTP id m9-20020a056e021c2900b002d13627892eso8563585ilh.20
+        for <linux-csky@vger.kernel.org>; Mon, 30 May 2022 09:00:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=bDYue/Afd3VGZHzU7tYF7qy5xBeBUpqe85rLuoAiRcE=;
-        b=0CTP6iv0J4QeiUOZdw7ooYTuicGE1e1+BrPHuNi8h0XsEjwyemzhx4SGlKXSBMJhWO
-         3VO2SEQ7XFk15eWHOkvDwLefqBdEdM51+dVwqOSGFK7pKOP/09Va+JyvbOPQyNwDaeff
-         MNI/1I0LrefN+c/4CIrw10AYTK1C8A1lAyrX8s8f9wHlEYQvMgRZsK+X9r40zWG4HBtH
-         cZ9fuSyqkg00+Tm+gMbxuQnAEGBWdKYwGoeFTQL+zrSDArRWYWTf2TXNVeVXu3BXzD9m
-         L1y6Eys5KF6E9HGaRlcK8xO6bnOCvDJkbR4N0aQ2tWXcZizOJqvhHltqJgOA/SA3Ls+Q
-         +2OQ==
-X-Gm-Message-State: AOAM533j97ddh0quNiTurMC84Ug0oGf4EAmLiNoYA8LU9Bek29BBjqST
-        9dOoxrVPGLvsOjCIH3wPfNfaXHsZ70qOc8cEzPHilZysRZf1obbTuBEkZAlqsRY3+P/Pyntexd8
-        kowvl0kBoavVchRgU6MB4Sw==
-X-Received: by 2002:a5d:9cc8:0:b0:663:2899:4b8 with SMTP id w8-20020a5d9cc8000000b00663289904b8mr16857382iow.192.1653925980595;
-        Mon, 30 May 2022 08:53:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKQIoyyqGc41UCjMUnObS0GZ5Lh8IPSVLY8KDGIOa5YRMfMwdzANPXLWIG/1E7oUnwvcvO1w==
-X-Received: by 2002:a5d:9cc8:0:b0:663:2899:4b8 with SMTP id w8-20020a5d9cc8000000b00663289904b8mr16857337iow.192.1653925980357;
-        Mon, 30 May 2022 08:53:00 -0700 (PDT)
+        bh=9ZWphZRcK3afyDhn+H8+iYAM34Y/wtF11YrAt0KXpqo=;
+        b=i+FQ6upALCtjIVmxT1IHdNST5q05hqwfOyu+ioCn5aKls6NTK26MoX0p4F8ZzBBDsx
+         ZnKVFN6KF45geP2zQs3FWmS3SAGQ1sCfLGH0A/KygG71jeHA58uDDrhLD4p37GDpYpxD
+         FX8so/X487YhhbMpU5L1ek4glqpRKE27/UwpbMpK75l+5NqE+321Lsv4L5aEVeIofRJR
+         50ys0Pdvgyzik/DNkIqxj3W3aACf9IiK+cKpA08rJ/m2L4A+4yiLj+135PToSH7A4QHt
+         ZQWZS4cRpDvD2T4EsNZRGhwL/y2c0mKR5UCvpZPRclxjiiXckKeBAaLbhC+J7jv5Tn87
+         J2Xw==
+X-Gm-Message-State: AOAM531nYgXkB9OpqohMqCFk3Vzbj1xR19vS+vHeh2uTb+yKUuy44Srs
+        aTgdTUZPiJq/2SsTEhk8NajqarTGhHIrYbELBfEsbcaqaXxFRIkTUjU8WKNGdfsRQQX4FOWFYW/
+        HeaMGl/+YHIln/j9RH9mmkw==
+X-Received: by 2002:a05:6e02:1648:b0:2cd:fe43:39db with SMTP id v8-20020a056e02164800b002cdfe4339dbmr30191769ilu.172.1653926458643;
+        Mon, 30 May 2022 09:00:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz0UxFyFLwjW1ZOMQsp2rrmtoQtqcFmY+n0cdYYM503zYLjoFDoHLhs+0Zam5Eh/FIDylo0ew==
+X-Received: by 2002:a05:6e02:1648:b0:2cd:fe43:39db with SMTP id v8-20020a056e02164800b002cdfe4339dbmr30191721ilu.172.1653926458383;
+        Mon, 30 May 2022 09:00:58 -0700 (PDT)
 Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id 66-20020a021d45000000b0032e75bfe344sm2781109jaj.171.2022.05.30.08.52.55
+        by smtp.gmail.com with ESMTPSA id b16-20020a926710000000b002cde6e352e5sm3863762ilc.47.2022.05.30.09.00.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 08:52:59 -0700 (PDT)
-Date:   Mon, 30 May 2022 11:52:54 -0400
+        Mon, 30 May 2022 09:00:57 -0700 (PDT)
+Date:   Mon, 30 May 2022 12:00:52 -0400
 From:   Peter Xu <peterx@redhat.com>
 To:     Christian Borntraeger <borntraeger@linux.ibm.com>
 Cc:     Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
@@ -116,14 +116,15 @@ Cc:     Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
         Ingo Molnar <mingo@kernel.org>
 Subject: Re: [PATCH v4] mm: Avoid unnecessary page fault retires on shared
  memory types
-Message-ID: <YpToVpjXmdFqGOpY@xz-m1.local>
+Message-ID: <YpTqNKMTt8PoA41n@xz-m1.local>
 References: <20220527193936.30678-1-peterx@redhat.com>
  <YpPYkzbrQmy4FjrI@osiris>
  <33fd4731-9765-d78b-bdc3-f8243c98e81f@linux.ibm.com>
+ <YpToVpjXmdFqGOpY@xz-m1.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <33fd4731-9765-d78b-bdc3-f8243c98e81f@linux.ibm.com>
+In-Reply-To: <YpToVpjXmdFqGOpY@xz-m1.local>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -134,40 +135,42 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, May 30, 2022 at 11:35:10AM +0200, Christian Borntraeger wrote:
-> 
-> 
-> Am 29.05.22 um 22:33 schrieb Heiko Carstens:
-> [...]
+On Mon, May 30, 2022 at 11:52:54AM -0400, Peter Xu wrote:
+> On Mon, May 30, 2022 at 11:35:10AM +0200, Christian Borntraeger wrote:
 > > 
-> > Guess the patch below on top of your patch is what we want.
-> > Just for clarification: if gmap is not NULL then the process is a kvm
-> > process. So, depending on the workload, this optimization makes sense.
 > > 
-> > diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-> > index 4608cc962ecf..e1d40ca341b7 100644
-> > --- a/arch/s390/mm/fault.c
-> > +++ b/arch/s390/mm/fault.c
-> > @@ -436,12 +436,11 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
-> >   	/* The fault is fully completed (including releasing mmap lock) */
-> >   	if (fault & VM_FAULT_COMPLETED) {
-> > -		/*
-> > -		 * Gmap will need the mmap lock again, so retake it.  TODO:
-> > -		 * only conditionally take the lock when CONFIG_PGSTE set.
-> > -		 */
-> > -		mmap_read_lock(mm);
-> > -		goto out_gmap;
-> > +		if (gmap) {
-> > +			mmap_read_lock(mm);
-> > +			goto out_gmap;
-> > +		}
-> > +		goto out;
-> 
-> Yes, that makes sense. With that
-> 
-> Acked-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > Am 29.05.22 um 22:33 schrieb Heiko Carstens:
+> > [...]
+> > > 
+> > > Guess the patch below on top of your patch is what we want.
+> > > Just for clarification: if gmap is not NULL then the process is a kvm
+> > > process. So, depending on the workload, this optimization makes sense.
+> > > 
+> > > diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
+> > > index 4608cc962ecf..e1d40ca341b7 100644
+> > > --- a/arch/s390/mm/fault.c
+> > > +++ b/arch/s390/mm/fault.c
+> > > @@ -436,12 +436,11 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
+> > >   	/* The fault is fully completed (including releasing mmap lock) */
+> > >   	if (fault & VM_FAULT_COMPLETED) {
+> > > -		/*
+> > > -		 * Gmap will need the mmap lock again, so retake it.  TODO:
+> > > -		 * only conditionally take the lock when CONFIG_PGSTE set.
+> > > -		 */
+> > > -		mmap_read_lock(mm);
+> > > -		goto out_gmap;
+> > > +		if (gmap) {
+> > > +			mmap_read_lock(mm);
+> > > +			goto out_gmap;
+> > > +		}
+> > > +		goto out;
 
-Looks sane, thanks Heiko, Christian.  I'll cook another one.
+Hmm, right after I replied I found "goto out" could be problematic, since
+all s390 callers of do_exception() will assume it an error condition (side
+note: "goto out_gmap" contains one step to clear "fault" to 0).  I'll
+replace this with "return 0" instead if it looks good to both of you.
+
+I'll wait for a confirmation before reposting.  Thanks,
 
 -- 
 Peter Xu
