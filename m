@@ -2,67 +2,109 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4FA53F81A
-	for <lists+linux-csky@lfdr.de>; Tue,  7 Jun 2022 10:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52DB5418F5
+	for <lists+linux-csky@lfdr.de>; Tue,  7 Jun 2022 23:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbiFGIX5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 7 Jun 2022 04:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S1376266AbiFGVSX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 7 Jun 2022 17:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbiFGIX5 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 7 Jun 2022 04:23:57 -0400
-X-Greylist: delayed 904 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 01:23:56 PDT
-Received: from mail.forindustry.pl (mail.forindustry.pl [37.187.225.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538D110FF4
-        for <linux-csky@vger.kernel.org>; Tue,  7 Jun 2022 01:23:56 -0700 (PDT)
-Received: by mail.forindustry.pl (Postfix, from userid 1002)
-        id 09DC2A3827; Tue,  7 Jun 2022 08:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=forindustry.pl;
-        s=mail; t=1654589163;
-        bh=Vw5jk5D1DE7WK/GNf/MxRQNyAyPYcC0rMJLibxKTj58=;
-        h=Date:From:To:Subject:From;
-        b=g8pPwaMR4CutRUmIwvQPZsqWOHjEnDZzQTZUP1Qkqv6Z41G/gYGmGAugkuKOwblgM
-         eqY2VTH7M9ICQp/XPtHG+dMQKXV0nXaIx5lT4j3xiJETQGjT0DRls1Un5jsHX3uIG2
-         3ssD0LwKpBkXGTC8noXhEaxYxzidjDvuO6F/qmM+t/L36i0m1Jzm6N2mRsZil7DJlr
-         zJMStxpRSol8JRJNe7HC+D9CGeF5lMPapcGXC1FJi1lWCRGATfamQLLigO2az9Neqk
-         lQSDsB70G0ZtMTPb8FN46dtI7XjN2M6yI2afs+m4af7EwG5F7QNk5tWZhMoeP6UvNY
-         v7RWwRKdH6sxg==
-Received: by mail.forindustry.pl for <linux-csky@vger.kernel.org>; Tue,  7 Jun 2022 08:05:52 GMT
-Message-ID: <20220607064500-0.1.3o.octo.0.ij7dumc6pl@forindustry.pl>
-Date:   Tue,  7 Jun 2022 08:05:52 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@forindustry.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.forindustry.pl
+        with ESMTP id S1380760AbiFGVQ4 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 7 Jun 2022 17:16:56 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF2D66697
+        for <linux-csky@vger.kernel.org>; Tue,  7 Jun 2022 11:57:16 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id s13so20242689ljd.4
+        for <linux-csky@vger.kernel.org>; Tue, 07 Jun 2022 11:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lxgwqXrTE5CS81OOTZfgrmr4rRv5j2bUa4aaRbpCvDQ=;
+        b=UIn4bvZhXW7AF2rT52jP/vHIPjI8XyKoA3dn2Q+Bi0s2HH11YyOvGVEVe86JVSoGKI
+         BaaWsQh6OrE4aTrQmY6fkIGKtAYybadmY8CgsBkfKkdrn9/E2Hw2YgipoxbbIFvguJ8i
+         wugGZSlCqni+gcqC9Yso1tIQl10wVmmIOsHm0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lxgwqXrTE5CS81OOTZfgrmr4rRv5j2bUa4aaRbpCvDQ=;
+        b=T77gOzY+9wDW2D+DJDNSKVE3CckywPSHdogQa8SB8HEmTNwtnmUeWc0wOGxBHUqBPh
+         daPjqVjCcaklUsp2/9deZOO/K7n4//SHRRp4ydkU3sHkQ8CVB3yAJ3Zuympkkv/1EloM
+         NddiIcv2K9MhMdy0J37afYIXG/fadO9aZQcRL/IHcDn1L4zwLF5NWGD7Dk0VJm3klncm
+         JuAGOPtAeDcIz1nG6CWAvYvfedbPz8pwPPTkFp9+FBSLW+jpb7B4Cp1n8FfdEBGo73sa
+         ASXIx9/i5iJoi6skCkPa1T4o8CHUqNBldTX8j1QeDN0lN96nRG6lD873EyPFmJKVgYOQ
+         g26w==
+X-Gm-Message-State: AOAM5332sqyjNS9oa7S8IbOqZbm0UWlRIIq9BBz9HTa4pIUv3557/flP
+        xi2e/E1DbfDJqYSA5ddkZZ33e9Tq2hE7rC/vzDg=
+X-Google-Smtp-Source: ABdhPJyZQ6uHFsQVMlyWpq6mfTWMtuZIUb7k2l3+Lc4CIB4KjO9tnIwikokM0YMpjwpkcUFWkaFYHA==
+X-Received: by 2002:a2e:a7c8:0:b0:255:a000:cbc9 with SMTP id x8-20020a2ea7c8000000b00255a000cbc9mr5697809ljp.28.1654628234998;
+        Tue, 07 Jun 2022 11:57:14 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id du8-20020a056512298800b0047255d21104sm1279162lfb.51.2022.06.07.11.57.14
+        for <linux-csky@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 11:57:14 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id be31so29747241lfb.10
+        for <linux-csky@vger.kernel.org>; Tue, 07 Jun 2022 11:57:14 -0700 (PDT)
+X-Received: by 2002:a05:6000:1b0f:b0:210:313a:ef2a with SMTP id
+ f15-20020a0560001b0f00b00210313aef2amr28815309wrz.281.1654627813569; Tue, 07
+ Jun 2022 11:50:13 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220605162537.1604762-1-yury.norov@gmail.com>
+ <CAHk-=whqgEA=OOPQs7JF=xps3VxjJ5uUnfXgzTv4gqTDhraZFA@mail.gmail.com>
+ <CAHk-=wib4F=71sXhamdPzLEZ9S4Lw4Dv3N2jLxv6-i8fHfMeDQ@mail.gmail.com>
+ <CAHk-=wicWxvuaL7GCj+1uEvpvpntdcB=AHot_h3j4wpenwyZ2Q@mail.gmail.com> <CABBYNZJfqAU-o7f9HhLCgTmL46WfwNQbM5NsCACsVVDLACMLYw@mail.gmail.com>
+In-Reply-To: <CABBYNZJfqAU-o7f9HhLCgTmL46WfwNQbM5NsCACsVVDLACMLYw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 7 Jun 2022 11:49:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whcV=BE6bkyd50eZZnggaczKdpU_PevFRWw_hjJS72UPw@mail.gmail.com>
+Message-ID: <CAHk-=whcV=BE6bkyd50eZZnggaczKdpU_PevFRWw_hjJS72UPw@mail.gmail.com>
+Subject: Re: [PATCH] net/bluetooth: fix erroneous use of bitmap_from_u64()
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Guo Ren <guoren@kernel.org>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Mon, Jun 6, 2022 at 11:00 PM Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> wrote:
+>
+> Right, thanks for fixing it. About some of the changes perhaps we
+> should use BIT when declaring values in enum hci_conn_flags?
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99.
+That sounds sane, although with just two flag values I'm not sure it matters.
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+But I guess it would document the fact that it's a bitmask, not an
+ordinal value, and it looks like that header is already using BIT()
+elsewhere so there are no new header file dependencies..
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
-
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-Pozdrawiam,
-Arkadiusz Soko=C5=82owski
+              Linus
