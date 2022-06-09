@@ -2,50 +2,57 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F259B544D0A
-	for <lists+linux-csky@lfdr.de>; Thu,  9 Jun 2022 15:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21E75458C3
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Jun 2022 01:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343649AbiFINGf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 9 Jun 2022 09:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S238614AbiFIXp0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 9 Jun 2022 19:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236268AbiFINGc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 9 Jun 2022 09:06:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724408215A;
-        Thu,  9 Jun 2022 06:06:30 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EE7B921F31;
-        Thu,  9 Jun 2022 13:06:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654779989; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fQ7/fX+AXX7RSe4KqEkRum0uc4vC19BTUP6nq2wTOec=;
-        b=o28ZaXYpRsbDNeH7DdY3dJH3Fnc3dlxZT8L+x/2aFmo5tE4BAEDzQGW4+i3DDhNGrDHekt
-        G23+f/oOyTepRO03yIh1gixSASehX2C07pg1fm0i3R3KDgn22PhYw8V9jvCq8nE2YIN+/O
-        p3FQSqV1HR0kVCZZzDry3RvUltYRjYI=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CEE382C141;
-        Thu,  9 Jun 2022 13:06:27 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 15:06:00 +0200
-From:   Petr Mladek <pmladek@suse.com>
+        with ESMTP id S232670AbiFIXpY (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 9 Jun 2022 19:45:24 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E963A60ABF;
+        Thu,  9 Jun 2022 16:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654818322; x=1686354322;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/qix89+4Yux2UyS3QMBWmKLCne+VvkXES21cCGFIhLs=;
+  b=EkaTUs0rea+454rYaBsqSroRFg0PamD4jU6O0eq1wv/5itn58fVYLUXz
+   hlWtv1Ogpl7/5XIS618tIb0uG/q2+eGCMXsttxiOJDTm6dvjif29rcsmN
+   nWpOfx8wOz2WQB1f6Ul8b7EGNqASBsmk3lVSAAbjuyEvvEhAIHeX8zQmg
+   +ufj+64/oRf3ev5vJZH5Yejs7zEtNES51/2LxU4etWbj7BVv+kw0q1QiP
+   unGfwpuQghUcTK8rXLxr286tVxF9gYfN+irF5pYrEItvr0xmkc2yTnQok
+   EbNfwxaIzp9UCsQ8gskKbD4HfjRVXi6KKS6myyqzqnJkOJaWOKufoYQaK
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278263539"
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="278263539"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 16:45:19 -0700
+X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
+   d="scan'208";a="610480359"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 16:45:19 -0700
+Date:   Thu, 9 Jun 2022 16:49:21 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
-        linus.walleij@linaro.org, shawnguo@kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
         agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
         svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
@@ -64,16 +71,16 @@ Cc:     ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
         sudeep.holla@arm.com, agross@kernel.org,
         bjorn.andersson@linaro.org, anup@brainfault.org,
         thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        rostedt@goodmis.org, pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jpoimboe@kernel.org,
         linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
@@ -89,64 +96,110 @@ Cc:     ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
         linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
-Message-ID: <YqHwOFg/WlMqe8/Z@alley>
+        rcu@vger.kernel.org, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
+Message-ID: <20220609164921.5e61711d@jacob-builder>
+In-Reply-To: <20220608144516.172460444@infradead.org>
 References: <20220608142723.103523089@infradead.org>
- <20220608144517.444659212@infradead.org>
- <YqG6URbihTNCk9YR@alley>
- <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
+        <20220608144516.172460444@infradead.org>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu 2022-06-09 12:02:04, Peter Zijlstra wrote:
-> On Thu, Jun 09, 2022 at 11:16:46AM +0200, Petr Mladek wrote:
-> > On Wed 2022-06-08 16:27:47, Peter Zijlstra wrote:
-> > > The problem, per commit fc98c3c8c9dc ("printk: use rcuidle console
-> > > tracepoint"), was printk usage from the cpuidle path where RCU was
-> > > already disabled.
-> > > 
-> > Does this "prevent" calling printk() a safe way in code with
-> > RCU disabled?
-> 
-> On x86_64, yes. Other architectures, less so.
-> 
-> Specifically, the objtool noinstr validation pass will warn at build
-> time (DEBUG_ENTRY=y) if any noinstr/cpuidle code does a call to
-> non-vetted code like printk().
-> 
-> At the same time; there's a few hacks that allow WARN to work, but
-> mostly if you hit WARN in entry/noinstr you get to keep the pieces in
-> any case.
-> 
-> On other architecture we'll need to rely on runtime coverage with
-> PROVE_RCU. That is, if a splat like in the above mentioned commit
-> happens again, we'll need to fix it by adjusting the callchain, not by
-> mucking about with RCU state.
+Hi Peter,
 
-Makes sense. Feel free to use for this patch:
+On Wed, 08 Jun 2022 16:27:27 +0200, Peter Zijlstra <peterz@infradead.org>
+wrote:
 
-Acked-by: Petr Mladek <pmladek@suse.com>
-
-> > Therefore if this patch allows to remove some tricky tracing
-> > code then it might be worth it. But if trace_console_rcuidle()
-> > variant is still going to be available then I would keep using it.
+> Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
+> Xeons") wrecked intel_idle in two ways:
 > 
-> My ultimate goal is to delete trace_.*_rcuidle() and RCU_NONIDLE()
-> entirely. We're close, but not quite there yet.
+>  - must not have tracing in idle functions
+>  - must return with IRQs disabled
+> 
+> Additionally, it added a branch for no good reason.
+> 
+> Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  drivers/idle/intel_idle.c |   48
+> +++++++++++++++++++++++++++++++++++----------- 1 file changed, 37
+> insertions(+), 11 deletions(-)
+> 
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -129,21 +137,37 @@ static unsigned int mwait_substates __in
+>   *
+>   * Must be called under local_irq_disable().
+>   */
+nit: this comment is no long true, right?
 
-I keep my fingers crossed.
+> +
+> -static __cpuidle int intel_idle(struct cpuidle_device *dev,
+> -				struct cpuidle_driver *drv, int index)
+> +static __always_inline int __intel_idle(struct cpuidle_device *dev,
+> +					struct cpuidle_driver *drv, int
+> index) {
+>  	struct cpuidle_state *state = &drv->states[index];
+>  	unsigned long eax = flg2MWAIT(state->flags);
+>  	unsigned long ecx = 1; /* break on interrupt flag */
+>  
+> -	if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
+> -		local_irq_enable();
+> -
+>  	mwait_idle_with_hints(eax, ecx);
+>  
+>  	return index;
+>  }
+>  
+> +static __cpuidle int intel_idle(struct cpuidle_device *dev,
+> +				struct cpuidle_driver *drv, int index)
+> +{
+> +	return __intel_idle(dev, drv, index);
+> +}
+> +
+> +static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+> +				    struct cpuidle_driver *drv, int
+> index) +{
+> +	int ret;
+> +
+> +	raw_local_irq_enable();
+> +	ret = __intel_idle(dev, drv, index);
+> +	raw_local_irq_disable();
+> +
+> +	return ret;
+> +}
+> +
+>  /**
+>   * intel_idle_s2idle - Ask the processor to enter the given idle state.
+>   * @dev: cpuidle device of the target CPU.
+> @@ -1801,6 +1824,9 @@ static void __init intel_idle_init_cstat
+>  		/* Structure copy. */
+>  		drv->states[drv->state_count] =
+> cpuidle_state_table[cstate]; 
+> +		if (cpuidle_state_table[cstate].flags &
+> CPUIDLE_FLAG_IRQ_ENABLE)
+> +			drv->states[drv->state_count].enter =
+> intel_idle_irq; +
+>  		if ((disabled_states_mask & BIT(drv->state_count)) ||
+>  		    ((icpu->use_acpi || force_use_acpi) &&
+>  		     intel_idle_off_by_default(mwait_hint) &&
+> 
+> 
 
-Best Regards,
-Petr
+
+Thanks,
+
+Jacob
