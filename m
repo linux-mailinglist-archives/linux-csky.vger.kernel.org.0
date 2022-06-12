@@ -2,149 +2,121 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E98C54715D
-	for <lists+linux-csky@lfdr.de>; Sat, 11 Jun 2022 04:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B1B5479EB
+	for <lists+linux-csky@lfdr.de>; Sun, 12 Jun 2022 13:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349012AbiFKCd0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 10 Jun 2022 22:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S232995AbiFLLcd (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 12 Jun 2022 07:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347413AbiFKCdX (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 10 Jun 2022 22:33:23 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA8B59317
-        for <linux-csky@vger.kernel.org>; Fri, 10 Jun 2022 19:33:17 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x62so989160ede.10
-        for <linux-csky@vger.kernel.org>; Fri, 10 Jun 2022 19:33:17 -0700 (PDT)
+        with ESMTP id S233234AbiFLLcb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 12 Jun 2022 07:32:31 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B13A29CA9
+        for <linux-csky@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id v25so3946511eda.6
+        for <linux-csky@vger.kernel.org>; Sun, 12 Jun 2022 04:32:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rgKkPquDB/3ylB22sdoq44O3nuMRqOGPmfYPJEM3DpI=;
-        b=JsXVqmPM/FghNi+FuyecZKJimRfQRZRaZMN7LbU4AElduixKN8TVkmhpZTWnrsGkbZ
-         5LwE/p8/n+cIXvQ1YTcLTi0yyURcD/DMLBUnB+eqSpwlWIAygkMHM4b3P17Zp5erCg7D
-         knTgcyr8j5ARmG7z3CGlckVUGoumxDAZyb+n8=
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
+        b=HutqJca9cz10+fhpLBqF5pkCfmNuVpB/QmLPLH2RoeSpp+88FPj9DCRLsYlrV60IRI
+         yfGt8kTQJ3+U5hD05c9eQjOTUDndc3kFmmCKtoZcJTw6iEXGeaPRZUwBIb2hL10aHe3A
+         7EbObtS3e/RUerZDq6P0if6rMoEsasBL0IeuLIxwTHpNu3CceyHT/j7BTvAXuGh/jXn3
+         mZ2PnrRRlC0NrnYO4yqGRbm/BexgsBU/ybIJL5KQreT4XiaErEnB2fMcohiz3+qsoqp8
+         Xl5GKvTeAgRog3ZkHFVKaziM00o+HwG/FDCDlODVc32UellWfe2pLGmko+Rt8jRhNdyv
+         b+pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rgKkPquDB/3ylB22sdoq44O3nuMRqOGPmfYPJEM3DpI=;
-        b=51CFfTZXs5SlNIx45yIhm1odUYUziDQrZoLZVHC478GOEr+a5+WK4ey7VgtajaM1kn
-         MYLPm5nCF67hNa/PK8nlM7Tg5JNrQrioVMAEWKXGQCoBOJSaaYwvDc1xEcAzkJlpUUpj
-         UVc+4b/KXOmPB2o31pTpBJCUf0RTrMT1YIjCfBkHsjwrFdQELDII61TTh4ExWbQ4HYrq
-         4Wkk7fLtXZnA7Ezz18VOs6U9HRe6NKpuI3/Cglmk97Sts8/AnDj2NYRi+ErOhBHmmLli
-         byqfZANS7qAoi6qjaJrEhdKesV6ODqB7TsR/AGF4gtj+HJ4BPaWI9g+670m0fwedIVfJ
-         58gg==
-X-Gm-Message-State: AOAM531/XDQep7egBiORuJZUAhbZOfqiTUM3CwxohuGdwZoY3i5dWbhj
-        WAS6VrPFnUW3xvR9h24tL2JrGxmqjHqUwZGq3Tmqhg==
-X-Google-Smtp-Source: ABdhPJzFbgEeXrjhdaEFlL5CPKYiFgrRM2XGTpISMDDKOxh3YJg+nd70yb1Qcu1fnLsZwhWAweXqTRUn04uTYMjQVNU=
-X-Received: by 2002:aa7:c604:0:b0:42d:cffb:f4dc with SMTP id
- h4-20020aa7c604000000b0042dcffbf4dcmr55022482edq.270.1654914796079; Fri, 10
- Jun 2022 19:33:16 -0700 (PDT)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=9FfohXFhB1sP403VxH1swwcmiEO4r97TnueS6gdgla0=;
+        b=OQ/7O2ZzD9vfr/2pAngQ6NNIvpWzyUy79rKM/IB167BhzPj2wDVLX4R4PA0u6wA5O6
+         reiMs3XemRV7kQCwVcwBB1didnVkwQpLZx/lGN117y63w48ldIz3geOFyuwX7tgdg+U7
+         CQIwP9dw8CQe2hR9vyY+PudOQP5UJxPgfr2QCBptK24vskPH8/hfAQSR1DSRlBDGT85T
+         nqWqfnWQLqcFEBGw+Tj+mgrAhjNAlHPNgJLGlWzTVQqv1Mk0uH2poyQSGMF7ZWe7zY6v
+         D6ZpU1IKfr6gwteS7NR8k2D5rQ0LnbU8Ap+eXBXVo34J3aQL5ahWgcTklAsYbX8hfves
+         Fk4w==
+X-Gm-Message-State: AOAM533CWAxyLwAX0lIsoDwVxb2ygr9mz5H5pQhwEj2KaUubwi/EGABj
+        6/UcNm3tT2QL3JIWH9gqzPVDUdjIOxlCgLClZr8=
+X-Google-Smtp-Source: ABdhPJwdx/ts4yT81TfY9H4jSVwEQwJ2e/fPBdkfFmfsPIbmOM0FEcnF1voZtHMiIfkmIVV3xB+6Fmj8j1iYk6t89oo=
+X-Received: by 2002:a05:6402:d05:b0:425:b5c8:faeb with SMTP id
+ eb5-20020a0564020d0500b00425b5c8faebmr60549161edb.273.1655033547542; Sun, 12
+ Jun 2022 04:32:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220608142723.103523089@infradead.org> <20220608144517.444659212@infradead.org>
- <YqG6URbihTNCk9YR@alley> <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
- <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com> <YqHvXFdIJfvUDI6e@alley>
-In-Reply-To: <YqHvXFdIJfvUDI6e@alley>
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-Date:   Sat, 11 Jun 2022 11:33:05 +0900
-Message-ID: <CA+_sPaq1ez7jah0bibAdeA__Yp92K_VA7E-NZ9knoUmOW9itJg@mail.gmail.com>
-Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
-        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
+Sender: mariajohn0331@gmail.com
+Received: by 2002:a54:3a4a:0:0:0:0:0 with HTTP; Sun, 12 Jun 2022 04:32:26
+ -0700 (PDT)
+From:   MARIA ROLAND <mariaroland74@gmail.com>
+Date:   Sun, 12 Jun 2022 04:32:26 -0700
+X-Google-Sender-Auth: Co32K8Guj2mgf2O-dHQRzwqxqMY
+Message-ID: <CAEmdD2WEq8iFu03odoUHJOLqaAfOodUu9x8Et1FumwjSBv0eHw@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:535 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6398]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mariajohn0331[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mariaroland74[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 10:02 PM Petr Mladek <pmladek@suse.com> wrote:
->
-> On Thu 2022-06-09 20:30:58, Sergey Senozhatsky wrote:
-> > My emails are getting rejected... Let me try web-interface
->
-> Bad day for mail sending. I have problems as well ;-)
+Greetings,
 
-For me the problem is still there and apparently it's an "too many
-recipients" error.
+I sent this mail praying it will find you in a good condition, since I
+myself am in a very critical health condition in which I sleep every
+night  without knowing if I may be alive to see the next day. I am
+Mrs. Maria Roland, a widow suffering from a long time illness. I have
+some funds I  inherited from my late husband, the sum of
+($11,000,000.00) my Doctor told me recently that I have serious
+sickness which is a cancer problem. What disturbs me most is my stroke
+sickness. Having known my condition, I decided to donate this fund to
+a good person that will utilize it the way I am going to instruct
+herein. I need a very honest God.
 
-> > I'm somewhat curious whether we can actually remove that trace event.
->
-> Good question.
->
-> Well, I think that it might be useful. It allows to see trace and
-> printk messages together.
+fearing a person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained. I do not want a situation where this money will be used in
+an ungodly manner. That's why I' making this decision. I'm not afraid
+of death so I know where I'm going. I accept this decision because I
+do not have any child who will inherit this money after I die. Please
+I want your sincere and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. I am waiting for your reply,
 
-Fair enough. Seems that back in 2011 people were pretty happy with it
-https://lore.kernel.org/all/1322161388.5366.54.camel@jlt3.sipsolutions.net/T/#m7bf6416f469119372191f22a6ecf653c5f7331d2
+May God Bless you,
 
-but... reportedly, one of the folks who Ack-ed it (*cough cough*
-PeterZ) has never used it.
-
-> It was ugly when it was in the console code. The new location
-> in vprintk_store() allows to have it even "correctly" sorted
-> (timestamp) against other tracing messages.
-
-That's true.
+Mrs. Maria Roland,
