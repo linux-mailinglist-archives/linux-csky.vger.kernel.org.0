@@ -2,107 +2,61 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4C9552EB8
-	for <lists+linux-csky@lfdr.de>; Tue, 21 Jun 2022 11:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03E05543E9
+	for <lists+linux-csky@lfdr.de>; Wed, 22 Jun 2022 10:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349266AbiFUJjt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 21 Jun 2022 05:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S1353919AbiFVH4T (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 22 Jun 2022 03:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349239AbiFUJjr (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 21 Jun 2022 05:39:47 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C013327B02
-        for <linux-csky@vger.kernel.org>; Tue, 21 Jun 2022 02:39:45 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ef5380669cso124692457b3.9
-        for <linux-csky@vger.kernel.org>; Tue, 21 Jun 2022 02:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=NKhg6kSkfnglJlsPDVUWhCY3Iibudx7OhZC5CePFgeNekYJKNrcmU8wB8gkktmjPqY
-         f0o4DET3nwW7oGb1WQAmWVCm6yLISrVrQXMY/9qoCppMNLX7K/jA/JZ+JMs1mNT38j+N
-         qSlM2vTiSOIkQo5cZ6oY4dkMVda7fWn0vzKRT295Q67AStI8u0BTanvw38uSxo4IMvFm
-         mtbeFJOQugEk6bmbrSLJZHxNWvSEoU0AT9TQz59V3jAGDZbWiI6U0Fx8UlroTYMr9wGQ
-         +xC78kHT5AZK7k/f6wmWhdDj3ThC5Cy20ctCKCcYvb/idPExEpgvQXB/UX/ziCu3vO07
-         Q2/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/0bRExIb6Mv4sy5raFRmeQINC+UUx7zEZcUUOWWOPJg=;
-        b=pz7f089lgPm8ncTpoKwKKsxvfYKc85jzrWslDnb3zxnEdK3/Csh1tnL1BYaa8dI7iP
-         d7jSGYK8LSRyu7khj16YhS6fnkzd0lcz5ZhxaxunqY6DJArSsjDuqUXVIMHKJd5igJl8
-         q0ANma/xTjncbJE+sLOMEyf/Y5HzET+AkNdhdeLg90Q+3nsv4K5IEU575azx9U/A7WAQ
-         5U774DIbb9UPakUDREhUrtM/eaQ8ur5Z7Cw7eVrBoEph5EkB3Py92iipywqc6f7vUxFy
-         7t6WtRHbtd4cH5Y+wiZXdPpHmBg2dGi2QTuAPKy3UrAafXK1/f79csSMYntMi1jkLFsz
-         5YiA==
-X-Gm-Message-State: AJIora+xDr4qy+40spAgzVlDU1Htv3jWAC1vweOXgxyBUzadx28Vbjse
-        6WTB5YVtF4QTemalqVWWhN9sV8weGMpsbht72DU=
-X-Google-Smtp-Source: AGRyM1sTF/SvvxCyraPE52znD36ZX02jNmxmam87lP8bWzXT3yTfChS1a9JgJI9LjBXh9tpS4qLO5E/t+5efudcEruY=
-X-Received: by 2002:a0d:d7c7:0:b0:317:bfe8:4f2 with SMTP id
- z190-20020a0dd7c7000000b00317bfe804f2mr12417910ywd.276.1655804384555; Tue, 21
- Jun 2022 02:39:44 -0700 (PDT)
+        with ESMTP id S1353757AbiFVH4S (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 22 Jun 2022 03:56:18 -0400
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC57377C7
+        for <linux-csky@vger.kernel.org>; Wed, 22 Jun 2022 00:56:17 -0700 (PDT)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id D9CAA27CAE; Wed, 22 Jun 2022 09:50:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1655884419; bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
+        h=Date:From:To:Subject:From;
+        b=e3jZC33HmWrA/eBqtBJQH9tgZEGuGwvDFmVQwuFJE1bjj1fRpPXx0uEp4AL7h1wOA
+         O0VMFagP1Bshpwjh5oQvcAov8Nmj2ep/REFf1H+9UdjVOqp7HVf2UrldGEYw3mEhZn
+         wl/UD0lpv8ynGR7AAfv6YWqd/HwntqE0i6r0l11MczKGOMT1UCPjG+zbccH/kBEXTS
+         2Kz1WkA96JlAyW7L7ujaF6QFFSHfnpYi0QqFdNrWqYf3R38uhFgK7W42XhDdzeHT/C
+         Bkm88Hw4IFf/b3jl4g5kftKAXgBiYK4gpmiadptexi+dbid8yUKDS4Y+XCAg8st118
+         6Xdje2AoZOBkw==
+Received: by mail.olerise.pl for <linux-csky@vger.kernel.org>; Wed, 22 Jun 2022 07:50:21 GMT
+Message-ID: <20220622084500-0.1.j.bbaa.0.iajamxs419@olerise.pl>
+Date:   Wed, 22 Jun 2022 07:50:21 GMT
+From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
+        <przemyslaw.wroblewski@olerise.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-Received: by 2002:a05:7010:e10a:b0:2d9:e631:94d0 with HTTP; Tue, 21 Jun 2022
- 02:39:44 -0700 (PDT)
-Reply-To: dimitryedik@gmail.com
-From:   Dimitry Edik <lsbthdwrds@gmail.com>
-Date:   Tue, 21 Jun 2022 02:39:44 -0700
-Message-ID: <CAGrL05aBO8rbFuij24J-APa+Luis69gEjhj35iv_GZfkHCVYDQ@mail.gmail.com>
-Subject: Dear Partner,
-To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1132 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [lsbthdwrds[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello Dear,
+Dzie=C5=84 dobry,
 
-My Name is Dimitry Edik from Russia A special assistance to my Russia
-boss who deals in oil import and export He was killed by the Ukraine
-soldiers at the border side. He supplied
-oil to the Philippines company and he was paid over 90 per cent of the
-transaction and the remaining $18.6 Million dollars have been paid into a
-Taiwan bank in the Philippines..i want a partner that will assist me
-with the claims. Is a (DEAL ) 40% for you and 60% for me
-I have all information for the claims.
-Kindly read and reply to me back is 100 per cent risk-free
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Yours Sincerely
-Dimitry Edik
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Przemys=C5=82aw Wr=C3=B3blewski
