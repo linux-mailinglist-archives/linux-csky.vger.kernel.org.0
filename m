@@ -2,112 +2,88 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781E0565FC1
-	for <lists+linux-csky@lfdr.de>; Tue,  5 Jul 2022 01:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4A456620A
+	for <lists+linux-csky@lfdr.de>; Tue,  5 Jul 2022 05:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiGDXsC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 4 Jul 2022 19:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S234587AbiGEDxb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 4 Jul 2022 23:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGDXsC (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 4 Jul 2022 19:48:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58842B1FE;
-        Mon,  4 Jul 2022 16:48:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8C38617A1;
-        Mon,  4 Jul 2022 23:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3336DC3411E;
-        Mon,  4 Jul 2022 23:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656978480;
-        bh=czJkJvkoEWZl+FwWFr/1n65f9w7bYYQrRhp+rXLnpVU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dX1fnVGXpq5bNbC0vIi9SaFHXukiCZDlOrthEH385SVVJq/3lIcYa8FitHjC67W++
-         jM8tKKVPbz1Lx1ziHzA7fDfheaKntsqclogbQ4bX4V5jHsHym+ilE7Vj0RBA4ftwTk
-         8k/QHMxy9NNhOGEwhlJctYmewQVMtIDRop0zqy4Q+js1eKV4PwYuvOc+Ll9EOigPBK
-         VgvK/cyBmzMrBXrgLG0ikviKzC8ahBlclCP/SB71W2URrY5GIeIY4YAulvwbNSHkfF
-         DMVCVsd7i2Wf3NU/HGpOkeGQbmOW8YYpXmSoDIXZfVXbCEhV2n8dKNy+BrPTbxSlzA
-         cjWcmwoYul8Xg==
-Received: by mail-vs1-f50.google.com with SMTP id a184so1298871vsa.1;
-        Mon, 04 Jul 2022 16:48:00 -0700 (PDT)
-X-Gm-Message-State: AJIora8P6JbwiDij75Oy86uV55sm/a3nKUbcLM7hin2epkKAdl3p7JR3
-        i9KstgvMebF1ZczmgaO0PDlYbUSmmkE7n+VneLc=
-X-Google-Smtp-Source: AGRyM1vC+q0evW03lAEHy0LgBjOjCwHACiPzqq7mXPQk2Qfejb9rG028Xg72JWEg0wNXW/JN6HR5+5fHLHDeqja6f1Q=
-X-Received: by 2002:a05:6102:366f:b0:356:352f:9de2 with SMTP id
- bg15-20020a056102366f00b00356352f9de2mr18387731vsb.2.1656978479097; Mon, 04
- Jul 2022 16:47:59 -0700 (PDT)
+        with ESMTP id S234630AbiGEDxa (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 4 Jul 2022 23:53:30 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Jul 2022 20:53:29 PDT
+Received: from halon1.sd.se (halon1.sd.se [91.217.186.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22718631A
+        for <linux-csky@vger.kernel.org>; Mon,  4 Jul 2022 20:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sd.se; s=20200218;
+        h=message-id:reply-to:date:from:to:subject:content-description:
+         content-transfer-encoding:mime-version:content-type:received:received:
+         x-virus-scanned:received:received:received:received:from;
+        bh=Fs8aTUP98+pt97V/m4HkFhdQV6VCQAF9oT1XmgezGj8=;
+        b=Db8+hEVSnBPhJ8t1AaPzbFA0CXVZKWkia5CuZSZvJlvkhOYqy0Ob09Bojr2yNUzEcb2ZF/6qLPyq0
+         MXWBdxhwJguhw2RhCaStz0Bnx6m+uwFrB1nMnK7DGpaFpEXgCy1DFcAOqmUtCEZxv1iwn0IDHoS1og
+         BdZ0Ol4yJ3E7Z+roP53DAqUw5Bc2x1wnazpHqgPVikOVaNsbMVSBV4AtOIy90qvO48QmjSPP9OwaiB
+         M8COfeF3JYVjhEuUcnNpeYyA0fq+DLcAH/h8k/zn9rxs5o5F8C/8ULBGXTvOzJH/9CwrZRl6Q1Myqy
+         2xPef1uU/eB+/FjTloqUpKojRHkhyaA==
+Received: from zimbra-mta.sdnet.se (zimbra-mta.sdnet.se [10.2.0.7])
+        by halon1.sd.se (Halon) with ESMTP
+        id ddc8216d-fc15-11ec-9a13-00505680d0d7;
+        Tue, 05 Jul 2022 05:52:18 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra-mta.sdnet.se (Postfix) with ESMTP id D0BC34343229;
+        Tue,  5 Jul 2022 03:41:17 +0200 (CEST)
+Received: from zimbra-mta.sdnet.se ([127.0.0.1])
+        by localhost (zimbra-mta.sdnet.se [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id B8-dDu9VjpLB; Tue,  5 Jul 2022 03:41:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra-mta.sdnet.se (Postfix) with ESMTP id 4533D4301E39;
+        Tue,  5 Jul 2022 03:41:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zimbra-mta.sdnet.se
+Received: from zimbra-mta.sdnet.se ([127.0.0.1])
+        by localhost (zimbra-mta.sdnet.se [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id IrQSVXcDBQzy; Tue,  5 Jul 2022 03:41:07 +0200 (CEST)
+Received: from [172.20.10.5] (unknown [102.89.39.119])
+        (Authenticated sender: jan.appelqvist.palmqvist@sd.se)
+        by zimbra-mta.sdnet.se (Postfix) with ESMTPSA id 03CEE4313CA6;
+        Tue,  5 Jul 2022 03:40:43 +0200 (CEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <07685c3184d2d9e3ee3b83e8f608e3a178cfabe3.1656961592.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <07685c3184d2d9e3ee3b83e8f608e3a178cfabe3.1656961592.git.christophe.jaillet@wanadoo.fr>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 5 Jul 2022 07:47:47 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTjywpxzRBFwM79JugqRWP1ABdDUbA3PLqy9k9RAd9ujA@mail.gmail.com>
-Message-ID: <CAJF2gTTjywpxzRBFwM79JugqRWP1ABdDUbA3PLqy9k9RAd9ujA@mail.gmail.com>
-Subject: Re: [PATCH] csky: Use the bitmap API to allocate bitmaps
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org, linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: My Service -
+To:     Recipients <infono@sd.se>
+From:   "Mr. Charles W. Jackson Jr." <infono@sd.se>
+Date:   Tue, 05 Jul 2022 09:36:13 +0800
+Reply-To: tupperwareman@sisna.com
+Message-Id: <20220705014044.03CEE4313CA6@zimbra-mta.sdnet.se>
+X-Spam-Status: No, score=4.2 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
+        BAYES_99,BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        HK_NAME_MR_MRS,LOTS_OF_MONEY,MILLION_USD,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx and looks good to me.
+Hello,
 
-On Tue, Jul 5, 2022 at 3:08 AM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
->
-> It is less verbose and it improves the semantic.
->
-> While at it, turn a bitmap_clear() into an equivalent bitmap_zero(). It is
-> also less verbose.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  arch/csky/mm/asid.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/csky/mm/asid.c b/arch/csky/mm/asid.c
-> index b2e914745c1d..7fb6c417bbac 100644
-> --- a/arch/csky/mm/asid.c
-> +++ b/arch/csky/mm/asid.c
-> @@ -27,7 +27,7 @@ static void flush_context(struct asid_info *info)
->         u64 asid;
->
->         /* Update the list of reserved ASIDs and the ASID bitmap. */
-> -       bitmap_clear(info->map, 0, NUM_CTXT_ASIDS(info));
-> +       bitmap_zero(info->map, NUM_CTXT_ASIDS(info));
->
->         for_each_possible_cpu(i) {
->                 asid = atomic64_xchg_relaxed(&active_asid(info, i), 0);
-> @@ -178,8 +178,7 @@ int asid_allocator_init(struct asid_info *info,
->          */
->         WARN_ON(NUM_CTXT_ASIDS(info) - 1 <= num_possible_cpus());
->         atomic64_set(&info->generation, ASID_FIRST_VERSION(info));
-> -       info->map = kcalloc(BITS_TO_LONGS(NUM_CTXT_ASIDS(info)),
-> -                           sizeof(*info->map), GFP_KERNEL);
-> +       info->map = bitmap_zalloc(NUM_CTXT_ASIDS(info), GFP_KERNEL);
->         if (!info->map)
->                 return -ENOMEM;
->
-> --
-> 2.34.1
->
+I am Mr. Charles W. Jackson Jr., the mega winner of $344.6 Million in Mega =
+Millions Jackpot, I am donating to 5 random individuals if you get this ema=
+il then your email was selected after a spin ball. I have spread most of my=
+ wealth over a number of charities and organizations. I have voluntarily de=
+cided to donate the sum of $3 Million USD to you as one of the selected 5, =
+to verify my winnings via YouTube page below.
 
+WATCH ME HERE: https://www.youtube.com/watch?v=3D0MUR8QEIMQI
 
--- 
-Best Regards
- Guo Ren
+THIS IS YOUR DONATION CODE: CJJ207162
 
-ML: https://lore.kernel.org/linux-csky/
+Reply with the DONATION CODE to this email: tupperwareman@sisna.com
+
+Hope to make you and your family happy.
+
+Regards,
+Mr. Charles W. Jackson Jr.
