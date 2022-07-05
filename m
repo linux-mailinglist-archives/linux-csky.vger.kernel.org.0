@@ -2,43 +2,56 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F63566399
-	for <lists+linux-csky@lfdr.de>; Tue,  5 Jul 2022 09:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1E0567312
+	for <lists+linux-csky@lfdr.de>; Tue,  5 Jul 2022 17:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbiGEG7L (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 5 Jul 2022 02:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
+        id S232428AbiGEPr7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 5 Jul 2022 11:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiGEG7K (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 5 Jul 2022 02:59:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446C5FD1;
-        Mon,  4 Jul 2022 23:59:10 -0700 (PDT)
+        with ESMTP id S232526AbiGEPr1 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 5 Jul 2022 11:47:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D068E1AF12;
+        Tue,  5 Jul 2022 08:47:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01A46B81619;
-        Tue,  5 Jul 2022 06:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9875FC341C7;
-        Tue,  5 Jul 2022 06:59:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B47361B36;
+        Tue,  5 Jul 2022 15:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2BAC341C7;
+        Tue,  5 Jul 2022 15:47:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657004347;
-        bh=5mc5mkoiYA0RBfy80fWjo0JRbDo6VMAXS1ak+LDdGLg=;
+        s=k20201202; t=1657036044;
+        bh=MAwV2W5idFBX6tA4mFmUeryIPp9vRIvaZ2oUFLz+ILg=;
         h=From:To:Cc:Subject:Date:From;
-        b=RUjyCo6ZEn336ceRZ2nv9raBxENOJ3GEtTd7+Gs+sgNH3Q+GuH0340ks1UBl44Ehn
-         /sanDql/CDY+vOviPCCBXXiCsAn2gNaSginwiJ4ZfoMDSP6roZYj1BwiatyCJimNGz
-         Y/41KuwYu+kDHC7IUvJFSwoVS+iQ1TOvdkWFE2YAhLwHxFSp6O/Ii3tZmoovsuPyQB
-         TOa7vD9tpwzNFc6lZjzleWwr8lcK1LYq3YfIgVvuCOQrSWBrQUq4/j6UfJwArzBztn
-         s7Qt8Uys++YGxZXP6mt5wRqDOko08K22Itg2FqY6D7lIici9mmFxR7/7B+8csGuXDb
-         Fead5tWUC02Ag==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de, deller@gmx.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] csky: Move HEAD_TEXT_SECTION out of __init_begin-end
-Date:   Tue,  5 Jul 2022 02:59:01 -0400
-Message-Id: <20220705065901.1172871-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        b=VsoVBJwGEAVr7lyMU2UWLMiBj8A6/xWMBUP/ndaVU1MRaOkLlkP1nesTGcJb7AaC6
+         vI/AAaL038aGyT/D3Z/YOLMNoCzswsQyjskKn1ZqhlvTqQv0DOrWh0+a7AehLjsLdg
+         YkHCdgBG9k6EcIYAMvNo9G4kuBUl9uc2x3+Y5SO5Y3Tr3Efh4BsLBrivMEwEe8UQEH
+         LUA8aEdRw50wbnpP4ZfBnjJAiD97Ylep61jPYtfkaQCsIbmvDLHXO/EeHvslosxVGj
+         reQJoxTxZFSGWTw/3KGLMQTo0noo1LFG6mnk+W3wclGNxxJq4w5epT2UogqZW+cU8f
+         PgmAYjFGAMM9A==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        loongarch@lists.linux.dev
+Subject: [PATCH v2 00/15] arch: make PxD_ORDER generically available
+Date:   Tue,  5 Jul 2022 18:46:53 +0300
+Message-Id: <20220705154708.181258-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -51,48 +64,80 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Prevent HEAD_TEXT_SECTION back into the buddy system.
+v2 changes:
+* Drop extra blank line in arch/loongarch/kernel/asm-offsets.c (patch 12)
+* Add patch 15 that renames PMD_ORDER to PMD_ENTRY_ORDER in
+  arch/arm/kernel/head.S
+v1: https://lore.kernel.org/all/20220703141203.147893-1-rppt@kernel.org 
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/csky/kernel/vmlinux.lds.S | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+v1 cover letter:
 
-diff --git a/arch/csky/kernel/vmlinux.lds.S b/arch/csky/kernel/vmlinux.lds.S
-index 163a8cd8b9a6..68c980d08482 100644
---- a/arch/csky/kernel/vmlinux.lds.S
-+++ b/arch/csky/kernel/vmlinux.lds.S
-@@ -23,13 +23,8 @@ SECTIONS
- 	. = PAGE_OFFSET + PHYS_OFFSET_OFFSET;
- 
- 	_start = .;
--	__init_begin = .;
- 	HEAD_TEXT_SECTION
--	INIT_TEXT_SECTION(PAGE_SIZE)
--	INIT_DATA_SECTION(PAGE_SIZE)
--	PERCPU_SECTION(L1_CACHE_BYTES)
- 	. = ALIGN(PAGE_SIZE);
--	__init_end = .;
- 
- 	.text : AT(ADDR(.text) - LOAD_OFFSET) {
- 		_text = .;
-@@ -49,7 +44,12 @@ SECTIONS
- 
- 	/* __init_begin __init_end must be page aligned for free_initmem */
- 	. = ALIGN(PAGE_SIZE);
--
-+	__init_begin = .;
-+	INIT_TEXT_SECTION(PAGE_SIZE)
-+	INIT_DATA_SECTION(PAGE_SIZE)
-+	PERCPU_SECTION(L1_CACHE_BYTES)
-+	. = ALIGN(PAGE_SIZE);
-+	__init_end = .;
- 
- 	_sdata = .;
- 	RO_DATA(PAGE_SIZE)
+The question what does PxD_ORDER define raises from time to time and
+there is still a conflict between MIPS and DAX definitions.
+
+Some time ago Matthew Wilcox suggested to use PMD_TABLE_ORDER to define
+the order of page table allocation: 
+
+[1] https://lore.kernel.org/linux-arch/YPCJftSTUBEnq2lI@casper.infradead.org/
+
+The parisc patch made it in, but mips didn't. 
+Now mips defines from asm/include/pgtable.h were copied to loongarch which
+made it worse.
+
+Let's deal with it once and for all and rename PxD_ORDER defines to
+PxD_TABLE_ORDER or just drop them when the only possible order of page
+table is 0.
+
+I think the best way to merge this via mm tree with acks from arch
+maintainers.
+
+Matthew Wilcox (Oracle) (1):
+  mips: Rename PMD_ORDER to PMD_TABLE_ORDER
+
+Mike Rapoport (14):
+  csky: drop definition of PTE_ORDER
+  csky: drop definition of PGD_ORDER
+  mips: Rename PUD_ORDER to PUD_TABLE_ORDER
+  mips: drop definitions of PTE_ORDER
+  mips: Rename PGD_ORDER to PGD_TABLE_ORDER
+  nios2: drop definition of PTE_ORDER
+  nios2: drop definition of PGD_ORDER
+  loongarch: drop definition of PTE_ORDER
+  loongarch: drop definition of PMD_ORDER
+  loongarch: drop definition of PUD_ORDER
+  loongarch: drop definition of PGD_ORDER
+  parisc: Rename PGD_ORDER to PGD_TABLE_ORDER
+  xtensa: drop definition of PGD_ORDER
+  ARM: head.S: rename PMD_ORDER to PMD_ENTRY_ORDER
+
+ arch/arm/kernel/head.S               | 34 ++++++++--------
+ arch/csky/include/asm/pgalloc.h      |  2 +-
+ arch/csky/include/asm/pgtable.h      |  6 +--
+ arch/loongarch/include/asm/pgalloc.h |  6 +--
+ arch/loongarch/include/asm/pgtable.h | 27 +++++-------
+ arch/loongarch/kernel/asm-offsets.c  |  6 ---
+ arch/loongarch/mm/pgtable.c          |  2 +-
+ arch/loongarch/mm/tlbex.S            |  6 +--
+ arch/mips/include/asm/pgalloc.h      |  8 ++--
+ arch/mips/include/asm/pgtable-32.h   | 19 ++++-----
+ arch/mips/include/asm/pgtable-64.h   | 61 +++++++++++++---------------
+ arch/mips/kernel/asm-offsets.c       |  5 ---
+ arch/mips/kvm/mmu.c                  |  2 +-
+ arch/mips/mm/pgtable.c               |  2 +-
+ arch/mips/mm/tlbex.c                 | 14 +++----
+ arch/nios2/include/asm/pgtable.h     |  7 +---
+ arch/nios2/mm/init.c                 |  5 +--
+ arch/nios2/mm/pgtable.c              |  2 +-
+ arch/parisc/include/asm/pgalloc.h    |  6 +--
+ arch/parisc/include/asm/pgtable.h    |  8 ++--
+ arch/xtensa/include/asm/pgalloc.h    |  2 +-
+ arch/xtensa/include/asm/pgtable.h    |  1 -
+ 22 files changed, 101 insertions(+), 130 deletions(-)
+
+
+base-commit: 03c765b0e3b4cb5063276b086c76f7a612856a9a
 -- 
-2.36.1
+2.34.1
 
