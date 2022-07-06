@@ -2,109 +2,104 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41A95673BF
-	for <lists+linux-csky@lfdr.de>; Tue,  5 Jul 2022 18:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEDE567E0E
+	for <lists+linux-csky@lfdr.de>; Wed,  6 Jul 2022 07:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiGEQDG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 5 Jul 2022 12:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S230131AbiGFF6L (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 6 Jul 2022 01:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGEQDF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 5 Jul 2022 12:03:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E721839A;
-        Tue,  5 Jul 2022 09:03:04 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id lw20so22462065ejb.4;
-        Tue, 05 Jul 2022 09:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=XluqUvEc2FFAEeUVR9EHhmnZ4fduhRT7w/m9u0J2BO7tZOwSBo7mn8BaOQgqzoSDjh
-         X0pO9Rj7sIcvIuoe/ROCFriYf+jU1vOTUfqvfCtN125Ylu3zQgqKqEbKSpZrITIomEan
-         BZAau+BMtL5HOpzppw5a+e3jGUrgHgPPfbGc5bsU3OpFMoGuJuoBj847iLPHKCzZpauf
-         jf+2378y/+37186yQm4a00uEwBFAvMwZm17YIt+qATt8ZYGJLJ4pWsc0U3fKbmLSOXLk
-         5+3oyqmZyrGCj6g5F5sm3U2otbom9tA/Hnz9GFjdlZ5PnMVgvCa13m+Igy3HH86a48ZB
-         o7ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=DdvilV/O8btxcG22IQrFkpZXndg76aZS1DxrHUOQz5yLhLas05SQjsyJD6Jedz6F1g
-         OtUnymw0f+e39RpgJsk42xVFN9iS1odhhbo+dH1I3IyYiGm8OjEb0xsNI1iR5ms+xL5o
-         oEDLyfiztSrr528qwANDg0sEkrU8DYPHIP381AYISiFK6Qh/r9DavbueywtbYZ/UzuZe
-         2piydJZMsGBbjjh0c+1FKC/thEYvWbZ8Qc0vZ7SPss9jkgBpySNHMJwJnAuvKSB2VZNb
-         ng/otydBW7kzdegmGYExFzjEh8DeYsq/8XN08wP++1wTpxbhGuKRDk5iyYWH9Z6sPQdU
-         2AYg==
-X-Gm-Message-State: AJIora+R1CULmGpXCTQjGE6KigdiCazBWoouH6s8nHp6Zmk56FlLPWcO
-        5XPpC96AU0aTPXl/FtZJpEjvGCjhLfprb1/Xeak=
-X-Google-Smtp-Source: AGRyM1s2bR2/fTLYxh4UjqmPZv6LUB0HejEOyCZJAkhG5FfXs1uf2EFDs1t2xo1dxtAeQiITYADdpH1zQ6Q1UVRLsF0=
-X-Received: by 2002:a17:907:2d8c:b0:726:2b37:6d44 with SMTP id
- gt12-20020a1709072d8c00b007262b376d44mr34529009ejc.224.1657036982875; Tue, 05
- Jul 2022 09:03:02 -0700 (PDT)
+        with ESMTP id S229617AbiGFF6L (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 6 Jul 2022 01:58:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AE201C927;
+        Tue,  5 Jul 2022 22:58:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBF5A1570;
+        Tue,  5 Jul 2022 22:58:09 -0700 (PDT)
+Received: from [10.163.43.16] (unknown [10.163.43.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C01D3F70D;
+        Tue,  5 Jul 2022 22:58:01 -0700 (PDT)
+Message-ID: <8a6ccbae-7d7c-6e08-cc28-eeb649f86112@arm.com>
+Date:   Wed, 6 Jul 2022 11:27:59 +0530
 MIME-Version: 1.0
-References: <20220705154708.181258-1-rppt@kernel.org> <20220705154708.181258-15-rppt@kernel.org>
-In-Reply-To: <20220705154708.181258-15-rppt@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 5 Jul 2022 09:03:01 -0700
-Message-ID: <CAMo8Bf+5cN4TYNGs=PXsZuunyZX2xQAdk+nGd5wARP8MuZVXuA@mail.gmail.com>
-Subject: Re: [PATCH v2 14/15] xtensa: drop definition of PGD_ORDER
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V6 00/26] mm/mmap: Drop __SXXX/__PXXX macros from across
+ platforms
+Content-Language: en-US
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, openrisc@lists.librecores.org,
+        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220630051630.1718927-1-anshuman.khandual@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220630051630.1718927-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 8:48 AM Mike Rapoport <rppt@kernel.org> wrote:
->
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> This is the order of the page table allocation, not the order of a PGD.
-> Since its always hardwired to 0, simply drop it.
 
-it's
 
->
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/xtensa/include/asm/pgalloc.h | 2 +-
->  arch/xtensa/include/asm/pgtable.h | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/xtensa/include/asm/pgalloc.h b/arch/xtensa/include/asm/pgalloc.h
-> index eeb2de3a89e5..7fc0f9126dd3 100644
-> --- a/arch/xtensa/include/asm/pgalloc.h
-> +++ b/arch/xtensa/include/asm/pgalloc.h
+On 6/30/22 10:46, Anshuman Khandual wrote:
+> __SXXX/__PXXX macros is an unnecessary abstraction layer in creating the
+> generic protection_map[] array which is used for vm_get_page_prot(). This
+> abstraction layer can be avoided, if the platforms just define the array
+> protection_map[] for all possible vm_flags access permission combinations
+> and also export vm_get_page_prot() implementation.
+> 
+> This series drops __SXXX/__PXXX macros from across platforms in the tree.
+> First it build protects generic protection_map[] array with '#ifdef __P000'
+> and moves it inside platforms which enable ARCH_HAS_VM_GET_PAGE_PROT. Later
+> this build protects same array with '#ifdef ARCH_HAS_VM_GET_PAGE_PROT' and
+> moves inside remaining platforms while enabling ARCH_HAS_VM_GET_PAGE_PROT.
+> This adds a new macro DECLARE_VM_GET_PAGE_PROT defining the current generic
+> vm_get_page_prot(), in order for it to be reused on platforms that do not
+> require custom implementation. Finally, ARCH_HAS_VM_GET_PAGE_PROT can just
+> be dropped, as all platforms now define and export vm_get_page_prot(), via
+> looking up a private and static protection_map[] array. protection_map[]
+> data type has been changed as 'static const' on all platforms that do not
+> change it during boot.
+> 
+> This series applies on v5.19-rc4 and has been build tested for multiple
+> platforms. While here it has dropped off all previous tags from folks after
+> the current restructuring. Series common CC list has been expanded to cover
+> all impacted platforms for wider reach.
+> 
+> - Anshuman
+> 
+> Changes in V6:
+> 
+> - Converted protection_map[] array as 'static const' on sparc32 platform
+> - Rebased on v5.19-rc4
+> - Collected tags
 
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+There are two linux-next based build fixes for this series (listed below), when
+vm_get_page_prot() gets redefined with !CONFIG_MMU. Platform vm_get_page_prot()
+is required only with CONFIG_MMU enabled, otherwise there is a generic fallback
+stub in include/linux/mm.h
 
--- 
-Thanks.
--- Max
+https://lore.kernel.org/all/20220705221411.3381797-1-jcmvbkbc@gmail.com/	[xtensa]
+https://lore.kernel.org/all/20220706054002.1936820-1-anshuman.khandual@arm.com/ [sh]
+
+It does not seem CONFIG_MMU can be disabled on other platforms thus exposing a build
+failure. But just to be on the safer side, should all vm_get_page_prot() be wrapped
+around with #ifdef CONFIG_MMU ? In that case will resend the series with above build
+fixes folded back in as well. Please do suggest. Thank you.
+
+- Anshuman
