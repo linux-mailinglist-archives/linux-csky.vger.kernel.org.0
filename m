@@ -2,59 +2,62 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7BB570C1D
-	for <lists+linux-csky@lfdr.de>; Mon, 11 Jul 2022 22:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B018570DA7
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Jul 2022 00:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbiGKUn5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 11 Jul 2022 16:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S230356AbiGKWzV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 11 Jul 2022 18:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiGKUn4 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jul 2022 16:43:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240E9E26;
-        Mon, 11 Jul 2022 13:43:55 -0700 (PDT)
+        with ESMTP id S230435AbiGKWzT (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jul 2022 18:55:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6060277A69;
+        Mon, 11 Jul 2022 15:55:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEAE1B81208;
-        Mon, 11 Jul 2022 20:43:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C5BBC341C0;
-        Mon, 11 Jul 2022 20:43:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE828B81601;
+        Mon, 11 Jul 2022 22:55:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E0F7C34115;
+        Mon, 11 Jul 2022 22:55:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657572232;
-        bh=cp41t+VP5zpzqWweFhXlDmnM1wrue4Oj0YaNSsnkppo=;
+        s=k20201202; t=1657580114;
+        bh=14pnKIJT4xGcd7MxjhIRhm94fsD1jimb9rOIpABahqo=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aRG3qlu8UFv6GCt770R2iC1Nn/k2d2ZZkq8YVXrKOSkRIGx/97W21I2Zdpp2kvQZZ
-         KuyKHJSCwX7fmQ/aRk1bnlNJ8KyGBKAIf6wfLoaj+ZGY/r7YC8F4ZXLbCSIXay8S3U
-         KO1cCVQmcGHIuoeCVWpgDm8SLn2+onrydiOidsSYmIF+WPeB57GMcSRa0c2AOerTEx
-         8wJNGlnRymBpEln9x5KoLhRbmS/nGaKmk+GXs/cnV0NfNmMTv8Jcr5e9ZRfkzStYWA
-         a4l5nSOt+INBze/1hqe2LjRwOeBcCIZslW2jmgjdP8uyldi4q1iH8r9vF36qh/SNmy
-         6vhOBCbduXcxQ==
-Message-ID: <88328a82-7275-608e-46f2-4203df9d9fe6@kernel.org>
-Date:   Mon, 11 Jul 2022 15:43:45 -0500
+        b=j3qpaHz6AIkJFBeD2OgRxoT8189q2v4Ect7vzDMo7mlAYKpjBl1wQdj9e2Q3FU8we
+         01bt32X5/15z3SCQN8lLH1c4XaX1sdOeJyq1LkMjmZt4RC6cLZr/fMX5KI8znDehbA
+         EpIRiPXw89kkJ+71ZugqXyOsjZaLQmg0NzB3DsQpnATtWCAwxLHEu2Ndyc1xNTnPyr
+         yo4bGdzCuVFqqCN4XE45SgU7Ng33B8iW254Om2wUAp1PUejZZcTTYkjE2T5JEVkjbh
+         gLhjoBu+ao52ASgUa2qXUDnWikLQMyg5VryICGW/S46SAjD20gdBZ/TMap8bWVlkSA
+         GUfoY0G/YZxVw==
+Message-ID: <c5a8eeeb-80fa-b542-e7a3-e0052177ca53@kernel.org>
+Date:   Mon, 11 Jul 2022 17:55:09 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH V7 15/26] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Subject: Re: [PATCH v2 07/15] nios2: drop definition of PTE_ORDER
 Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, openrisc@lists.librecores.org,
-        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220711070600.2378316-1-anshuman.khandual@arm.com>
- <20220711070600.2378316-16-anshuman.khandual@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        loongarch@lists.linux.dev
+References: <20220705154708.181258-1-rppt@kernel.org>
+ <20220705154708.181258-8-rppt@kernel.org>
 From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220711070600.2378316-16-anshuman.khandual@arm.com>
+In-Reply-To: <20220705154708.181258-8-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -69,89 +72,46 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 
 
-On 7/11/22 02:05, Anshuman Khandual wrote:
-> This enables ARCH_HAS_VM_GET_PAGE_PROT on the platform and exports standard
-> vm_get_page_prot() implementation via DECLARE_VM_GET_PAGE_PROT, which looks
-> up a private and static protection_map[] array. Subsequently all __SXXX and
-> __PXXX macros can be dropped which are no longer needed.
+On 7/5/22 10:47, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> This is the order of the page table allocation, not the order of a PTE.
+> Since its always hardwired to 0, simply drop it.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 > ---
->   arch/nios2/Kconfig               |  1 +
->   arch/nios2/include/asm/pgtable.h | 16 ----------------
->   arch/nios2/mm/init.c             | 20 ++++++++++++++++++++
->   3 files changed, 21 insertions(+), 16 deletions(-)
+>   arch/nios2/include/asm/pgtable.h | 3 +--
+>   arch/nios2/mm/init.c             | 2 +-
+>   2 files changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-> index 4167f1eb4cd8..e0459dffd218 100644
-> --- a/arch/nios2/Kconfig
-> +++ b/arch/nios2/Kconfig
-> @@ -6,6 +6,7 @@ config NIOS2
->   	select ARCH_HAS_SYNC_DMA_FOR_CPU
->   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->   	select ARCH_HAS_DMA_SET_UNCACHED
-> +	select ARCH_HAS_VM_GET_PAGE_PROT
->   	select ARCH_NO_SWAP
->   	select COMMON_CLK
->   	select TIMER_OF
 > diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index 262d0609268c..470516d4555e 100644
+> index 262d0609268c..eaf8f28baa8b 100644
 > --- a/arch/nios2/include/asm/pgtable.h
 > +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -40,24 +40,8 @@ struct mm_struct;
->    */
+> @@ -69,10 +69,9 @@ struct mm_struct;
+>   #define PAGE_COPY MKP(0, 0, 1)
 >   
->   /* Remove W bit on private pages for COW support */
-> -#define __P000	MKP(0, 0, 0)
-> -#define __P001	MKP(0, 0, 1)
-> -#define __P010	MKP(0, 0, 0)	/* COW */
-> -#define __P011	MKP(0, 0, 1)	/* COW */
-> -#define __P100	MKP(1, 0, 0)
-> -#define __P101	MKP(1, 0, 1)
-> -#define __P110	MKP(1, 0, 0)	/* COW */
-> -#define __P111	MKP(1, 0, 1)	/* COW */
+>   #define PGD_ORDER	0
+> -#define PTE_ORDER	0
 >   
->   /* Shared pages can have exact HW mapping */
-> -#define __S000	MKP(0, 0, 0)
-> -#define __S001	MKP(0, 0, 1)
-> -#define __S010	MKP(0, 1, 0)
-> -#define __S011	MKP(0, 1, 1)
-> -#define __S100	MKP(1, 0, 0)
-> -#define __S101	MKP(1, 0, 1)
-> -#define __S110	MKP(1, 1, 0)
-> -#define __S111	MKP(1, 1, 1)
+>   #define PTRS_PER_PGD	((PAGE_SIZE << PGD_ORDER) / sizeof(pgd_t))
+> -#define PTRS_PER_PTE	((PAGE_SIZE << PTE_ORDER) / sizeof(pte_t))
+> +#define PTRS_PER_PTE	(PAGE_SIZE / sizeof(pte_t))
 >   
->   /* Used all over the kernel */
->   #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
+>   #define USER_PTRS_PER_PGD	\
+>   	(CONFIG_NIOS2_KERNEL_MMU_REGION_BASE / PGDIR_SIZE)
 > diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-> index 613fcaa5988a..ae24687d12ad 100644
+> index 613fcaa5988a..2d6dbf7701f6 100644
 > --- a/arch/nios2/mm/init.c
 > +++ b/arch/nios2/mm/init.c
-> @@ -124,3 +124,23 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->   {
->   	return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->   }
-> +
-> +static const pgprot_t protection_map[16] = {
-> +	[VM_NONE]					= MKP(0, 0, 0),
-> +	[VM_READ]					= MKP(0, 0, 1),
-> +	[VM_WRITE]					= MKP(0, 0, 0),
-> +	[VM_WRITE | VM_READ]				= MKP(0, 0, 1),
-> +	[VM_EXEC]					= MKP(1, 0, 0),
-> +	[VM_EXEC | VM_READ]				= MKP(1, 0, 1),
-> +	[VM_EXEC | VM_WRITE]				= MKP(1, 0, 0),
-> +	[VM_EXEC | VM_WRITE | VM_READ]			= MKP(1, 0, 1),
-> +	[VM_SHARED]					= MKP(0, 0, 0),
-> +	[VM_SHARED | VM_READ]				= MKP(0, 0, 1),
-> +	[VM_SHARED | VM_WRITE]				= MKP(0, 1, 0),
-> +	[VM_SHARED | VM_WRITE | VM_READ]		= MKP(0, 1, 1),
-> +	[VM_SHARED | VM_EXEC]				= MKP(1, 0, 0),
-> +	[VM_SHARED | VM_EXEC | VM_READ]			= MKP(1, 0, 1),
-> +	[VM_SHARED | VM_EXEC | VM_WRITE]		= MKP(1, 1, 0),
-> +	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= MKP(1, 1, 1)
-> +};
-> +DECLARE_VM_GET_PAGE_PROT
+> @@ -80,7 +80,7 @@ void __init mmu_init(void)
+>   
+>   #define __page_aligned(order) __aligned(PAGE_SIZE << (order))
+>   pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned(PGD_ORDER);
+> -pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned(PTE_ORDER);
+> +pte_t invalid_pte_table[PTRS_PER_PTE] __aligned(PAGE_SIZE);
+>   static struct page *kuser_page[1];
+>   
+>   static int alloc_kuser_page(void)
 
 Acked-by: Dinh Nguyen <dinguyen@kernel.org>
