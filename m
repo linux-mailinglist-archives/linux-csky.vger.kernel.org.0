@@ -2,130 +2,258 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083D556CEBB
-	for <lists+linux-csky@lfdr.de>; Sun, 10 Jul 2022 13:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B4856D527
+	for <lists+linux-csky@lfdr.de>; Mon, 11 Jul 2022 09:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiGJLUE (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 10 Jul 2022 07:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S229784AbiGKHGW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 11 Jul 2022 03:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiGJLUD (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 10 Jul 2022 07:20:03 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DB010557;
-        Sun, 10 Jul 2022 04:20:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VIrBUyv_1657451992;
-Received: from 30.39.247.23(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIrBUyv_1657451992)
-          by smtp.aliyun-inc.com;
-          Sun, 10 Jul 2022 19:19:54 +0800
-Message-ID: <7628e9a7-8e2d-dcfb-09e5-27de36da5af7@linux.alibaba.com>
-Date:   Sun, 10 Jul 2022 19:19:56 +0800
+        with ESMTP id S229518AbiGKHGV (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jul 2022 03:06:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08E991836A;
+        Mon, 11 Jul 2022 00:06:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0B5223A;
+        Mon, 11 Jul 2022 00:06:19 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.45.183])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B2CF33F70D;
+        Mon, 11 Jul 2022 00:06:11 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     hch@infradead.org, christophe.leroy@csgroup.eu,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, openrisc@lists.librecores.org,
+        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V7 00/26] mm/mmap: Drop __SXXX/__PXXX macros from across platforms
+Date:   Mon, 11 Jul 2022 12:35:34 +0530
+Message-Id: <20220711070600.2378316-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] Add PUD and kernel PTE level pagetable account
-To:     Dave Hansen <dave.hansen@intel.com>, akpm@linux-foundation.org
-Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
- <d2d58cc2-7e6d-aa2d-3096-a500ce321494@intel.com>
- <ef376131-bf5f-7e5b-ea1b-1e8f64a6d060@linux.alibaba.com>
- <8821beda-4d60-4d01-b5c8-1629a19c7f0d@intel.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <8821beda-4d60-4d01-b5c8-1629a19c7f0d@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+__SXXX/__PXXX macros is an unnecessary abstraction layer in creating the
+generic protection_map[] array which is used for vm_get_page_prot(). This
+abstraction layer can be avoided, if the platforms just define the array
+protection_map[] for all possible vm_flags access permission combinations
+and also export vm_get_page_prot() implementation.
+
+This series drops __SXXX/__PXXX macros from across platforms in the tree.
+First it build protects generic protection_map[] array with '#ifdef __P000'
+and moves it inside platforms which enable ARCH_HAS_VM_GET_PAGE_PROT. Later
+this build protects same array with '#ifdef ARCH_HAS_VM_GET_PAGE_PROT' and
+moves inside remaining platforms while enabling ARCH_HAS_VM_GET_PAGE_PROT.
+This adds a new macro DECLARE_VM_GET_PAGE_PROT defining the current generic
+vm_get_page_prot(), in order for it to be reused on platforms that do not
+require custom implementation. Finally, ARCH_HAS_VM_GET_PAGE_PROT can just
+be dropped, as all platforms now define and export vm_get_page_prot(), via
+looking up a private and static protection_map[] array. protection_map[]
+data type has been changed as 'static const' on all platforms that do not
+change it during boot.
+
+This series applies on v5.19-rc6 and has been build tested for multiple
+platforms. While here it has dropped off all previous tags from folks after
+the current restructuring. Series common CC list has been expanded to cover
+all impacted platforms for wider reach.
+
+- Anshuman
+
+Changes in V7:
+
+- Dropped comments from arch/m68k/include/asm/mcf_pgtable.h per Geert
+- Dropped comments from arch/m68k/include/asm/sun3_pgtable.h per Geert
+- Moved the *_C definitions above into arch/m68k/mm/motorola.c per Geert
+- Folded in following build failure fix patches on linux-next
+
+https://lore.kernel.org/all/20220705221411.3381797-1-jcmvbkbc@gmail.com/
+https://lore.kernel.org/all/20220706054002.1936820-1-anshuman.khandual@arm.com/
+https://lore.kernel.org/all/20220708230646.CA9B7C341C0@smtp.kernel.org/	
+
+- Collected tags from Geert
+- Rebased on v5.19-rc6
+
+Changes in V6:
+
+https://lore.kernel.org/all/20220630051630.1718927-1-anshuman.khandual@arm.com/
+
+- Converted protection_map[] array as 'static const' on sparc32 platform
+- Rebased on v5.19-rc4
+- Collected tags
+
+Changes in V5:
+
+https://lore.kernel.org/all/20220627045833.1590055-1-anshuman.khandual@arm.com/
+
+- Converted most platfomr protection_map[] array as 'static const'
+- Moved DECLARE_VM_GET_PAGE_PROT inside <include/linux/pgtable.h>
+- Moved generic protection_map[] comment near DECLARE_VM_GET_PAGE_PROT
+- Updated some commit messages
+
+Changes in V4:
+
+https://lore.kernel.org/all/20220624044339.1533882-1-anshuman.khandual@arm.com/
+
+- Both protection_map[] and vm_get_page_prot() moves inside all platforms
+- Split patches to create modular changes for individual platforms
+- Add macro DECLARE_VM_GET_PAGE_PROT defining generic vm_get_page_prot()
+- Drop ARCH_HAS_VM_GET_PAGE_PROT
+
+Changes in V3:
+
+https://lore.kernel.org/all/20220616040924.1022607-1-anshuman.khandual@arm.com/
+
+- Fix build issues on powerpc and riscv
+
+Changes in V2:
+
+https://lore.kernel.org/all/20220613053354.553579-1-anshuman.khandual@arm.com/
+
+- Add 'const' identifier to protection_map[] on powerpc
+- Dropped #ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT check from sparc 32
+- Dropped protection_map[] init from sparc 64
+- Dropped all new platform changes subscribing ARCH_HAS_VM_GET_PAGE_PROT
+- Added a second patch which moves generic protection_map[] array into
+  all remaining platforms (!ARCH_HAS_VM_GET_PAGE_PROT)
+
+Changes in V1:
+
+https://lore.kernel.org/all/20220603101411.488970-1-anshuman.khandual@arm.com/
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: sparclinux@vger.kernel.org
+Cc: x86@kernel.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-um@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
 
 
-On 7/7/2022 10:44 PM, Dave Hansen wrote:
-> On 7/7/22 04:32, Baolin Wang wrote:
->> On 7/6/2022 11:48 PM, Dave Hansen wrote:
->>> On 7/6/22 01:59, Baolin Wang wrote:
->>>> Now we will miss to account the PUD level pagetable and kernel PTE level
->>>> pagetable, as well as missing to set the PG_table flags for these
->>>> pagetable
->>>> pages, which will get an inaccurate pagetable accounting, and miss
->>>> PageTable() validation in some cases. So this patch set introduces new
->>>> helpers to help to account PUD and kernel PTE pagetable pages.
->>>
->>> Could you explain the motivation for this series a bit more?  Is there a
->>> real-world problem that this fixes?
->>
->> Not fix real problem. The motivation is that making the pagetable
->> accounting more accurate, which helps us to analyse the consumption of
->> the pagetable pages in some cases, and maybe help to do some empty
->> pagetable reclaiming in future.
-> 
-> This accounting isn't free.  It costs storage (and also parts of
-> cachelines) in each mm and CPU time to maintain it, plus maintainer
-> eyeballs to maintain.  PUD pages are also fundamentally (on x86 at
-> least) 0.0004% of the overhead of PTE and 0.2% of the overhead of PMD
-> pages unless someone is using gigantic hugetlbfs mappings.
+Anshuman Khandual (26):
+  mm/mmap: Build protect protection_map[] with __P000
+  mm/mmap: Define DECLARE_VM_GET_PAGE_PROT
+  powerpc/mm: Move protection_map[] inside the platform
+  sparc/mm: Move protection_map[] inside the platform
+  arm64/mm: Move protection_map[] inside the platform
+  x86/mm: Move protection_map[] inside the platform
+  mm/mmap: Build protect protection_map[] with ARCH_HAS_VM_GET_PAGE_PROT
+  microblaze/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  loongarch/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  openrisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  xtensa/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  hexagon/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  parisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  alpha/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  riscv/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  ia64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  um/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  sh/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
 
-Yes, agree. However I think the performence influence of this patch is 
-small from some testing I did (like mysql, no obvious performance 
-influence). Moreover the pagetable accounting gap is about 1% from below 
-testing data.
+ arch/alpha/include/asm/pgtable.h          | 17 -------
+ arch/alpha/mm/init.c                      | 22 +++++++++
+ arch/arc/include/asm/pgtable-bits-arcv2.h | 18 -------
+ arch/arc/mm/mmap.c                        | 20 ++++++++
+ arch/arm/include/asm/pgtable.h            | 17 -------
+ arch/arm/lib/uaccess_with_memcpy.c        |  2 +-
+ arch/arm/mm/mmu.c                         | 20 ++++++++
+ arch/arm64/Kconfig                        |  1 -
+ arch/arm64/include/asm/pgtable-prot.h     | 18 -------
+ arch/arm64/mm/mmap.c                      | 21 ++++++++
+ arch/csky/include/asm/pgtable.h           | 18 -------
+ arch/csky/mm/init.c                       | 20 ++++++++
+ arch/hexagon/include/asm/pgtable.h        | 27 -----------
+ arch/hexagon/mm/init.c                    | 42 ++++++++++++++++
+ arch/ia64/include/asm/pgtable.h           | 18 -------
+ arch/ia64/mm/init.c                       | 28 ++++++++++-
+ arch/loongarch/include/asm/pgtable-bits.h | 19 --------
+ arch/loongarch/mm/cache.c                 | 46 ++++++++++++++++++
+ arch/m68k/include/asm/mcf_pgtable.h       | 59 -----------------------
+ arch/m68k/include/asm/motorola_pgtable.h  | 29 -----------
+ arch/m68k/include/asm/sun3_pgtable.h      | 23 ---------
+ arch/m68k/mm/mcfmmu.c                     | 55 +++++++++++++++++++++
+ arch/m68k/mm/motorola.c                   | 29 +++++++++++
+ arch/m68k/mm/sun3mmu.c                    | 20 ++++++++
+ arch/microblaze/include/asm/pgtable.h     | 17 -------
+ arch/microblaze/mm/init.c                 | 20 ++++++++
+ arch/mips/include/asm/pgtable.h           | 22 ---------
+ arch/mips/mm/cache.c                      |  3 ++
+ arch/nios2/include/asm/pgtable.h          | 16 ------
+ arch/nios2/mm/init.c                      | 20 ++++++++
+ arch/openrisc/include/asm/pgtable.h       | 18 -------
+ arch/openrisc/mm/init.c                   | 20 ++++++++
+ arch/parisc/include/asm/pgtable.h         | 18 -------
+ arch/parisc/mm/init.c                     | 20 ++++++++
+ arch/powerpc/Kconfig                      |  1 -
+ arch/powerpc/include/asm/pgtable.h        | 20 +-------
+ arch/powerpc/mm/pgtable.c                 | 24 +++++++++
+ arch/riscv/include/asm/pgtable.h          | 20 --------
+ arch/riscv/mm/init.c                      | 20 ++++++++
+ arch/s390/include/asm/pgtable.h           | 17 -------
+ arch/s390/mm/mmap.c                       | 20 ++++++++
+ arch/sh/include/asm/pgtable.h             | 17 -------
+ arch/sh/mm/mmap.c                         | 20 ++++++++
+ arch/sparc/Kconfig                        |  1 -
+ arch/sparc/include/asm/pgtable_32.h       | 19 --------
+ arch/sparc/include/asm/pgtable_64.h       | 19 --------
+ arch/sparc/mm/init_32.c                   | 20 ++++++++
+ arch/sparc/mm/init_64.c                   |  3 ++
+ arch/um/include/asm/pgtable.h             | 17 -------
+ arch/um/kernel/mem.c                      | 20 ++++++++
+ arch/x86/Kconfig                          |  1 -
+ arch/x86/include/asm/mem_encrypt.h        |  2 +
+ arch/x86/include/asm/pgtable_types.h      | 19 --------
+ arch/x86/mm/mem_encrypt_amd.c             |  6 +--
+ arch/x86/mm/pgprot.c                      | 28 +++++++++++
+ arch/x86/um/mem_32.c                      |  2 +-
+ arch/xtensa/include/asm/pgtable.h         | 18 -------
+ arch/xtensa/mm/init.c                     | 22 +++++++++
+ include/linux/mm.h                        |  1 -
+ include/linux/pgtable.h                   | 28 +++++++++++
+ mm/Kconfig                                |  3 --
+ mm/mmap.c                                 | 47 ------------------
+ 62 files changed, 617 insertions(+), 581 deletions(-)
 
-Without this patchset, the pagetable consumption is about 110M with 
-mysql testing.
-              flags      page-count       MB  symbolic-flags 
-          long-symbolic-flags
-0x0000000004000000           28232      110 
-__________________________g__________________      pgtable
+-- 
+2.25.1
 
-With this patchset, and the consumption is about 111M.
-              flags      page-count       MB  symbolic-flags 
-          long-symbolic-flags
-0x0000000004000000           28459      111 
-__________________________g__________________      pgtable
-
-
-> Even with 1G gigantic pages, you would need a quarter of a million
-> (well, 262144 or 512*512) mappings of one 1G page to consume 1G of
-> memory on PUD pages.
-> 
-> That just doesn't seem like something anyone is likely to actually do in
-> practice.  That makes the benefits of the PUD portion of this series
-> rather unclear in the real world.
-> 
-> As for the kernel page tables, I'm not really aware of them causing any
-> problems.  We have a pretty good idea how much space they consume from
-> the DirectMap* entries in meminfo:
-> 
-> 	DirectMap4k:     2262720 kB
-> 	DirectMap2M:    40507392 kB
-> 	DirectMap1G:    24117248 kB
-
-However these statistics are arch-specific information, which only 
-available on x86, s390 and powerpc.
-
-> as well as our page table debugging infrastructure.  I haven't found
-> myself dying for more specific info on them.
-> 
-> So, nothing in this series seems like a *BAD* idea, but I'm not sure in
-> the end it solves more problems than it creates.
-
-Thanks for your input.
