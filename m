@@ -2,67 +2,52 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8C4570DAC
-	for <lists+linux-csky@lfdr.de>; Tue, 12 Jul 2022 00:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAC957105D
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Jul 2022 04:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbiGKWzw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 11 Jul 2022 18:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S230097AbiGLCkI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 11 Jul 2022 22:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiGKWzv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jul 2022 18:55:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F6252A4;
-        Mon, 11 Jul 2022 15:55:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A07E611E0;
-        Mon, 11 Jul 2022 22:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30295C3411C;
-        Mon, 11 Jul 2022 22:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657580149;
-        bh=306Zt8on93XWkgQdga4uepYhOUdbfhX4MuA93F+mjDg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CK6oxDOms/jOi0NV/YznDDefa7DzL+1hTYbuZsX1ubF2D7Dc5bCKUoODI2BCGJX89
-         6NLGGeBf3orU1q8LBrJxMsNrQ0j6cVdbG3FhfCDMN0ZUKz6D4riXo6CB4iwPDRT739
-         WOsA0EPpXuYXczd0Z+7ZxV5U8ulJl+qvCV/9mIm8Od50we4E7mN8kQ/5NHAjIteesc
-         FN/ZwBzoV7cycc328T5X0MdbBOZh++pvIOcHOY+cxZ32ENLjyEp+N/wTvpM+lrH73/
-         OAKQmoBmgIRy7tKoG4wIdPCUTRZq+cWBaLHhQcwgxOs/xFu2GAaqFudOGbWjPVirLB
-         ATxDuYv4YevKQ==
-Message-ID: <bced9f7f-992d-0965-949f-2682d31a6a2e@kernel.org>
-Date:   Mon, 11 Jul 2022 17:55:44 -0500
+        with ESMTP id S230260AbiGLCkF (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 11 Jul 2022 22:40:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 608458CCA2;
+        Mon, 11 Jul 2022 19:40:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5600415DB;
+        Mon, 11 Jul 2022 19:40:04 -0700 (PDT)
+Received: from [10.162.42.8] (unknown [10.162.42.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 840C13F792;
+        Mon, 11 Jul 2022 19:39:56 -0700 (PDT)
+Message-ID: <48ab9e36-48be-916e-2ce7-03ef59d67dae@arm.com>
+Date:   Tue, 12 Jul 2022 08:09:53 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v2 08/15] nios2: drop definition of PGD_ORDER
+Subject: Re: [PATCH V7 00/26] mm/mmap: Drop __SXXX/__PXXX macros from across
+ platforms
 Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        WANG Xuerui <kernel@xen0n.name>, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        loongarch@lists.linux.dev
-References: <20220705154708.181258-1-rppt@kernel.org>
- <20220705154708.181258-9-rppt@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220705154708.181258-9-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, hch@infradead.org, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, openrisc@lists.librecores.org,
+        linux-xtensa@linux-xtensa.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220711070600.2378316-1-anshuman.khandual@arm.com>
+ <20220711131417.9cac57d9b88eea8bbd7d8616@linux-foundation.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220711131417.9cac57d9b88eea8bbd7d8616@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,60 +57,16 @@ X-Mailing-List: linux-csky@vger.kernel.org
 
 
 
-On 7/5/22 10:47, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On 7/12/22 01:44, Andrew Morton wrote:
+> On Mon, 11 Jul 2022 12:35:34 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
 > 
-> This is the order of the page table allocation, not the order of a PGD.
-> Since its always hardwired to 0, simply drop it.
+>> This series drops __SXXX/__PXXX macros from across platforms in the tree.
 > 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->   arch/nios2/include/asm/pgtable.h | 4 +---
->   arch/nios2/mm/init.c             | 3 +--
->   arch/nios2/mm/pgtable.c          | 2 +-
->   3 files changed, 3 insertions(+), 6 deletions(-)
+> I've updated mm-unstable to this version, thanks.  I skipped the added-to-mm
+> emails to avoid wearing out people's inboxes.
 > 
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index eaf8f28baa8b..74af16dafe86 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -68,9 +68,7 @@ struct mm_struct;
->   
->   #define PAGE_COPY MKP(0, 0, 1)
->   
-> -#define PGD_ORDER	0
-> -
-> -#define PTRS_PER_PGD	((PAGE_SIZE << PGD_ORDER) / sizeof(pgd_t))
-> +#define PTRS_PER_PGD	(PAGE_SIZE / sizeof(pgd_t))
->   #define PTRS_PER_PTE	(PAGE_SIZE / sizeof(pte_t))
->   
->   #define USER_PTRS_PER_PGD	\
-> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-> index 2d6dbf7701f6..eab65e8ea69c 100644
-> --- a/arch/nios2/mm/init.c
-> +++ b/arch/nios2/mm/init.c
-> @@ -78,8 +78,7 @@ void __init mmu_init(void)
->   	flush_tlb_all();
->   }
->   
-> -#define __page_aligned(order) __aligned(PAGE_SIZE << (order))
-> -pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned(PGD_ORDER);
-> +pgd_t swapper_pg_dir[PTRS_PER_PGD] __aligned(PAGE_SIZE);
->   pte_t invalid_pte_table[PTRS_PER_PTE] __aligned(PAGE_SIZE);
->   static struct page *kuser_page[1];
->   
-> diff --git a/arch/nios2/mm/pgtable.c b/arch/nios2/mm/pgtable.c
-> index 9b587fd592dd..7c76e8a7447a 100644
-> --- a/arch/nios2/mm/pgtable.c
-> +++ b/arch/nios2/mm/pgtable.c
-> @@ -54,7 +54,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
->   {
->   	pgd_t *ret, *init;
->   
-> -	ret = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_ORDER);
-> +	ret = (pgd_t *) __get_free_page(GFP_KERNEL);
->   	if (ret) {
->   		init = pgd_offset(&init_mm, 0UL);
->   		pgd_init(ret);
+> Reissuing a 26-patch series N times is rather noisy.  Please prefer to send incremental
+> fixes when changes are minor.  It makes it so much easier for reviewers to see what
+> happened.
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Sure, got it, will follow next time.
