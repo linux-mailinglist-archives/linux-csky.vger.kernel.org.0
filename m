@@ -2,43 +2,55 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9F85798D2
-	for <lists+linux-csky@lfdr.de>; Tue, 19 Jul 2022 13:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E568579E3A
+	for <lists+linux-csky@lfdr.de>; Tue, 19 Jul 2022 14:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbiGSLz2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 19 Jul 2022 07:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S242524AbiGSM7I (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 19 Jul 2022 08:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbiGSLz1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 19 Jul 2022 07:55:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6401EDEFF;
-        Tue, 19 Jul 2022 04:55:26 -0700 (PDT)
-Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MVaQW-1o3yjA289c-00RVvt; Tue, 19 Jul 2022 13:55:24 +0200
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-31e47ac84daso37553117b3.0;
-        Tue, 19 Jul 2022 04:55:24 -0700 (PDT)
-X-Gm-Message-State: AJIora+OrN4rF+EBgBjOj6wqrH5zWQhJPI9CvUVrqZ5j6xLFs57EE5Wz
-        q+qCcnQPVJK76f6OobIr+MXYzaHgxonsywgq0Gk=
-X-Google-Smtp-Source: AGRyM1t9u7bj2YKjBFpcu5Ozi36BZwukcrSN9A6siyhURYMRnJ74r74VIYyf4LXb/QiwSX6mJLACHGCDSTzuEa0736k=
-X-Received: by 2002:a81:d93:0:b0:31c:d32d:4d76 with SMTP id
- 141-20020a810d93000000b0031cd32d4d76mr37696610ywn.135.1658231722965; Tue, 19
- Jul 2022 04:55:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220717033453.2896843-1-shorne@gmail.com> <20220717033453.2896843-3-shorne@gmail.com>
- <YtTjeEnKr8f8z4JS@infradead.org> <CAK8P3a1KJe4K5g1z-Faoxc9NhXqjCUWxnvk2HPxsj2wzG_iDbg@mail.gmail.com>
- <CAAfxs740yz1vJmtFHOPTXT6fqi0+37SR_OhoGsONe4mx_21+_g@mail.gmail.com>
- <CAK8P3a1Mo9+-t21rkP8SDnPrmbj3-uuVPtmHbeUerAevxN3TNw@mail.gmail.com> <YtaNvpE7AA/4eV1I@antec>
-In-Reply-To: <YtaNvpE7AA/4eV1I@antec>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 19 Jul 2022 13:55:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2UTND+F83k2uQ+f=o1GWV=oa5coshy8Hy+cKHUGuNzEg@mail.gmail.com>
-Message-ID: <CAK8P3a2UTND+F83k2uQ+f=o1GWV=oa5coshy8Hy+cKHUGuNzEg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] asm-generic: Add new pci.h and use it
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
+        with ESMTP id S242521AbiGSM6d (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 19 Jul 2022 08:58:33 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC525F12B;
+        Tue, 19 Jul 2022 05:23:38 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id b7-20020a17090a12c700b001f20eb82a08so597617pjg.3;
+        Tue, 19 Jul 2022 05:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kIYV5VQPGWT9n+zj1ToFYouxX7n+Y2qnPZPLUj/fcdA=;
+        b=NKy5nlv/FgYWq5UB602U/dYy8pXGBSA/jwkZtdtOKtDZ4vPJ/6EEjuzkkAzArMrwN3
+         FuQlR0H4BF/mtLJNlyQaig3CLYvbQeeAqr2FGyTUh7s77maURmahcOE/pizZU1PMAPrA
+         DA4prFvpVk+1ECNLWdiC8Ge3GseJM+xz8nqjXk4bk4wvfAlQQoVSmGSGdGVIbN4JBQfY
+         Odz7jQVRqsxY9dfuWtS6ADjjOJb/iZq6d7B4oaw9B/tgdW55wluuTmosyHe/YrSBWxes
+         hK5Dj19eLFoffro358zde7A0JTdg2Tk5Zg7ncOqlrsMEbldY48cHS5bO06Rd1EUyEx+5
+         Ldhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kIYV5VQPGWT9n+zj1ToFYouxX7n+Y2qnPZPLUj/fcdA=;
+        b=6CMAPZd/6SgeB6kwYCEZ5XoWXyM5ubDLTr1GLHBnf46fBcAnIcPqnuiuA/2Xg+k5fd
+         yZTQ+F8YOrUOEdJdD7SCEniBZPcFtobiBYNDYuMTRhvbsVs6MCduLkaj04WMrahh611F
+         0IWm9RIZ0CG56DSlZk9T2bDulDl+v6XmrXEfLoQ2nHpFtPBVkxEe46dualjRKP3xfqSj
+         IQwa+KSwpVjD0NSzFKBCMYbzflgHIVyHJVXqFuE0NOg/N9RwsBEQ72+QPGw72lLuhss4
+         dpnzoKkrYF1aKfHIGIK4TVdxpln18beUkQqVt3hw+fvTZHhW14GkfmFaEjywVCefG6AH
+         v2Bw==
+X-Gm-Message-State: AJIora95c0D3Juz3u7nV2xbPcQniVexC3zSDfx9GuaoqJ7ZPlo8oN60E
+        j5BmtbmmvKVFGpv5/cpe8nU=
+X-Google-Smtp-Source: AGRyM1tV/ZXqUclGzygmdbB9fkVeLqpHz5v6xGriFND4vNwQKgaV2SfSn2yac7l86GveLLylCjLTdw==
+X-Received: by 2002:a17:903:18c:b0:16c:51c6:675d with SMTP id z12-20020a170903018c00b0016c51c6675dmr32808811plg.153.1658233418097;
+        Tue, 19 Jul 2022 05:23:38 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id cp16-20020a170902e79000b0016397da033csm11416832plb.62.2022.07.19.05.23.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jul 2022 05:23:37 -0700 (PDT)
+Date:   Tue, 19 Jul 2022 21:23:36 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
@@ -55,27 +67,23 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-um <linux-um@lists.infradead.org>,
         linux-pci <linux-pci@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xVT3a7+XFYjl3aNDopJ4c9/uG1OugMN6LfW+BbJmwYnGwhsqcjo
- Hrrqgnzy+EYQCZ+26WfJrbsgzhnLUqleThuDLqDHpPJIpqNF1IwapLCmwlft0xaCpix0Fip
- VlYxxLv6dcEAuPIsdUrCfjFXSO0/Dhg1qxSbF7CeFR+6s9B3TneKqQYg5ZEXS+FBH7UWiNb
- WhUM+tKmOae14ZpFhNbxQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QDvyLEKRtsA=:CXsQgZABn51WAEkcvnFXnf
- a/zDArhVq1SavX1QdOjfdUXUabVULTLDEqygVHP5nsgE5DlNM+J5kNuSH0OCphBUWxuEHkJGP
- l4noU0WMGPm3TAuIzS7Kgpw3EnJqDqlCxzmkZhva/G3Pyb+UfKDJKTCWcD1KhfDviNz2XICus
- NkNHk+g6YCpSdR7AwvJNG59G1QK2syhBmFazYaW5wB23K1JxUWK9ZffujSK5d/xZwrvz1xBRd
- lvB5gdeW/KXd+uYxqhccWEG+5KlfExOTZ3TQ+hf+zM3R2Hl1Drrm+Eunr1YKS3QAHLJbhXosm
- WGSfBZTKiC1OaRhztAA0CLKhH25Tp4TggfmO0D9AjyyaxrRmyki9VdNAuya9OCQGwnNF/LG1z
- hoOD9t3yJ+6cn5vviiaKwkkuwkBjNJHuQsRqE+TxQhgdfhfuWSVU3hY6JJC5ZWzMKaWtFhahx
- PpAA8fHZ8j1m8K2aAJc7r2vJhtzCK1G/ALdLmvuSjqDu9TwoG3yWJrR8QhwwWWWWoLoOMG6on
- ft41vQ7GJTGzg3jGBI3irlcCmz/S1X7deQ99/TcaZXK8nOBtAshB6MaFbmefIIFDFg/xZTR3R
- 11L/LcPTMUTteqWf6reiOS4wDluNUT/emSFKRmy9cRdUESkGjvfGBgEirukzjFUMoW85Y6EjR
- 3bR85BPvNJTBy7oXFVkjggO6oNimJN8gI9kXvi/cZJSa2mU7H+LjCLIExZZzyNn6t/X/111mn
- 0gkWPOeKM0dIeTAU63p0ekP/0rHsGFDTL08ng6/GLs6ajysOcNUGxkG1qltEUbQfl2j7dLB1O
- tBgM4I9avMgSckMyzYsJJ3+u70WNb8gp7VnGAaoU7lRpRZmChpvWsbd/aBMO6hYHj9tKOP4aS
- BPEaZWQKQW0pLVBTBDwQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Subject: Re: [PATCH v2 2/2] asm-generic: Add new pci.h and use it
+Message-ID: <YtaiSEAnMhVqR4HS@antec>
+References: <20220717033453.2896843-1-shorne@gmail.com>
+ <20220717033453.2896843-3-shorne@gmail.com>
+ <YtTjeEnKr8f8z4JS@infradead.org>
+ <CAK8P3a1KJe4K5g1z-Faoxc9NhXqjCUWxnvk2HPxsj2wzG_iDbg@mail.gmail.com>
+ <CAAfxs740yz1vJmtFHOPTXT6fqi0+37SR_OhoGsONe4mx_21+_g@mail.gmail.com>
+ <CAK8P3a1Mo9+-t21rkP8SDnPrmbj3-uuVPtmHbeUerAevxN3TNw@mail.gmail.com>
+ <YtaNvpE7AA/4eV1I@antec>
+ <CAK8P3a2UTND+F83k2uQ+f=o1GWV=oa5coshy8Hy+cKHUGuNzEg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2UTND+F83k2uQ+f=o1GWV=oa5coshy8Hy+cKHUGuNzEg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,55 +91,51 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Jul 19, 2022 at 12:55 PM Stafford Horne <shorne@gmail.com> wrote:
+On Tue, Jul 19, 2022 at 01:55:03PM +0200, Arnd Bergmann wrote:
+> On Tue, Jul 19, 2022 at 12:55 PM Stafford Horne <shorne@gmail.com> wrote:
+> 
+> > diff --git a/drivers/comedi/drivers/comedi_isadma.c b/drivers/comedi/drivers/comedi_isadma.c
+> > index 700982464c53..508421809128 100644
+> > --- a/drivers/comedi/drivers/comedi_isadma.c
+> > +++ b/drivers/comedi/drivers/comedi_isadma.c
+> > @@ -104,8 +104,10 @@ unsigned int comedi_isadma_poll(struct comedi_isadma *dma)
+> >
+> >         flags = claim_dma_lock();
+> >         clear_dma_ff(desc->chan);
+> > +#ifdef CONFIG_X86_32
+> >         if (!isa_dma_bridge_buggy)
+> >                 disable_dma(desc->chan);
+> > +#endif
+> 
+> There is a logic mistake here: if we are on something other than x86-32,
+> this always needs to call the disable_dma()/enable_dma().
 
-> diff --git a/drivers/comedi/drivers/comedi_isadma.c b/drivers/comedi/drivers/comedi_isadma.c
-> index 700982464c53..508421809128 100644
-> --- a/drivers/comedi/drivers/comedi_isadma.c
-> +++ b/drivers/comedi/drivers/comedi_isadma.c
-> @@ -104,8 +104,10 @@ unsigned int comedi_isadma_poll(struct comedi_isadma *dma)
->
->         flags = claim_dma_lock();
->         clear_dma_ff(desc->chan);
-> +#ifdef CONFIG_X86_32
+Oops, thats right.  Sorry, I should have noticed that.
+
+> Not sure how to best express this in a readable way, something like this
+> would work:
+
+Option 1:
+
+> #ifdef CONFIG_X86_32
 >         if (!isa_dma_bridge_buggy)
->                 disable_dma(desc->chan);
-> +#endif
+> #endif
+>                disable_dma(desc->chan);
+> 
+> 
+> or possibly at the start of this file, a
 
-There is a logic mistake here: if we are on something other than x86-32,
-this always needs to call the disable_dma()/enable_dma().
+Option 2:
 
-Not sure how to best express this in a readable way, something like this
-would work:
+> #ifndef CONFIG_X86_32
+> #define isa_dma_bridge_buggy 0
+> #endif
 
-#ifdef CONFIG_X86_32
-        if (!isa_dma_bridge_buggy)
-#endif
-               disable_dma(desc->chan);
+Option 3:
 
+> Or we could try to keep the generic definition in a global header
+> like linux/isa-dma.h.
 
-or possibly at the start of this file, a
+Perhaps option 3 makes the whole patch the most clean.
 
-#ifndef CONFIG_X86_32
-#define isa_dma_bridge_buggy 0
-#endif
-
-Or we could try to keep the generic definition in a global header
-like linux/isa-dma.h.
-
-> --- a/sound/core/isadma.c
-> +++ b/sound/core/isadma.c
-> @@ -73,8 +73,10 @@ unsigned int snd_dma_pointer(unsigned long dma, unsigned int size)
->
->         flags = claim_dma_lock();
->         clear_dma_ff(dma);
-> +#ifdef CONFIG_X86_32
->         if (!isa_dma_bridge_buggy)
->                 disable_dma(dma);
-> +#endif
->         result = get_dma_residue(dma);
->         /*
-
-Same here.
-
-         Arnd
+-Stafford
