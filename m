@@ -2,45 +2,63 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A039E57E7A9
-	for <lists+linux-csky@lfdr.de>; Fri, 22 Jul 2022 21:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A27A57E8F5
+	for <lists+linux-csky@lfdr.de>; Fri, 22 Jul 2022 23:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbiGVTz0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 22 Jul 2022 15:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S229593AbiGVVjZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 22 Jul 2022 17:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiGVTz0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 22 Jul 2022 15:55:26 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EA021252;
-        Fri, 22 Jul 2022 12:55:22 -0700 (PDT)
-Received: from mail-yw1-f171.google.com ([209.85.128.171]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mg6mM-1nZttn0Psc-00hcEN; Fri, 22 Jul 2022 21:55:21 +0200
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-31e7055a61dso58108187b3.11;
-        Fri, 22 Jul 2022 12:55:20 -0700 (PDT)
-X-Gm-Message-State: AJIora/cAMhWTVJkIEDv24U5sMiKCvz1AxLinDg9sI5wyE15NzJd0ynp
-        DL+cE5i/1KKgQ/7+nKeMHR9l3129FrR2shCCjcs=
-X-Google-Smtp-Source: AGRyM1uXuwQnOqTAc2eAgULJ3gnB6/3HxjqG6YsVYm4rwIeb3o/ICJSu11fKuAtGWX5g0pRwxfQ7v0EfBH0rTQPFdhs=
-X-Received: by 2002:a0d:cec1:0:b0:31e:590c:c6e4 with SMTP id
- q184-20020a0dcec1000000b0031e590cc6e4mr1302476ywd.42.1658519719648; Fri, 22
- Jul 2022 12:55:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
- <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014> <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
-In-Reply-To: <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 22 Jul 2022 21:55:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
-Message-ID: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
+        with ESMTP id S236254AbiGVVjX (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 22 Jul 2022 17:39:23 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A213B8789
+        for <linux-csky@vger.kernel.org>; Fri, 22 Jul 2022 14:39:21 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id z13so8132514wro.13
+        for <linux-csky@vger.kernel.org>; Fri, 22 Jul 2022 14:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=FxcKHw+KeNRqCkk5qROt/9GMubXJxUVMHKA1De+QJz8=;
+        b=P4rzv0+8JfcWUKy1JivKJYMUetypR5ZiNXPA/6TSTJ0YOhLtsMWwVXnQAHjl5ygmW9
+         dSBVgFFBSsuonWbdOk8Ky+8qccZi6wfbk6zGgOEGk0PVttqaVNlAyBadARwj1Y//JgTT
+         wL6bVCh2M0D2piZA9vHUlRbbhnt5btt+pxUjCwafnt83Hj6JsO3UAIXiah1okFR8mkjn
+         XW3LXj5OrIDz9y0dGYXXNmg2sdZwG8rkxjOyqFkSkwPRULwu5FrrylKP4IeJIMyTOz30
+         OH0e6tl4+7ksBnlFP1VAGBJQezXleYMqd17bvJr97uuUoAOxjo7DEfiyq52KAf/qLNWt
+         Shew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=FxcKHw+KeNRqCkk5qROt/9GMubXJxUVMHKA1De+QJz8=;
+        b=i6NAjCsMgeZp0IATuYJa2jec3yJrh9J+SpsJFxGopgUsqVD7lzOqNcgDmtgRFVz8wN
+         MtDe/My78tVzIQat6WeldtEjiBlu2uecZKzeG6agLv2Tw377SlpnoicKLWU8Nntyz2g+
+         hY4t9qRI13lgDUnlZofKgGar64wkpo9ZXc06GT1ic5O5ilTSN7XvXMUqCNHvYSijnEV3
+         b8tTFTeY7/JP8UhHXuikXwEwsh+KJcx4oQQfOxsTlpuJm8vwrOhLX8NWgaMHCgpXURVN
+         6+u2wMhltaNqN6SvIvz8VxKl+PuSHqMVfaAJEbqR7vBUkqi+4RJPwWnHtyND82Rhe0dd
+         6AuQ==
+X-Gm-Message-State: AJIora8nPjyCfRGaY1JYmDjNWGHO1IWatXORGiL4l1ARRTZ9Crhr32dP
+        nqqgEYs9eUG05CDfVlPsg5qIzg==
+X-Google-Smtp-Source: AGRyM1tPVIVZfV6qM8vhMpTbxX0oe2mvWjKidKhJrKbIkCzM/uzQTakUQbNW/CotdHpNthpStjOk6Q==
+X-Received: by 2002:a5d:6285:0:b0:21e:6554:5e31 with SMTP id k5-20020a5d6285000000b0021e65545e31mr1109911wru.21.1658525959500;
+        Fri, 22 Jul 2022 14:39:19 -0700 (PDT)
+Received: from smtpclient.apple (global-5-142.n-2.net.cam.ac.uk. [131.111.5.142])
+        by smtp.gmail.com with ESMTPSA id ay36-20020a05600c1e2400b003a2d6c623f3sm10104785wmb.19.2022.07.22.14.39.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Jul 2022 14:39:18 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
 Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
-To:     Rob Herring <robh@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
+Date:   Fri, 22 Jul 2022 22:39:18 +0100
+Cc:     Rob Herring <robh@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
         "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Stafford Horne <shorne@gmail.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -55,54 +73,63 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         PCI <linux-pci@vger.kernel.org>,
         "open list:GENERIC INCLUDE/ASM HEADER FILES" 
         <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:O3tm97ktOQsIdtuCJXuJ3uCcUUlhuoEFWT3e4rEfl0Fg6Zixcm2
- 7S8otfg3urwov4ASLkqF0fyWwSzET/3VewEfYR0qJTsRdLkJe9KOmhptWAlt4E8VVWsVAKY
- VMDKLzLTDPZfEavzbXmAeHZaJgFpgxlMmZQWF8qkGaxv5sy31BO0q4p0V6pDgzaIP+8yHxw
- jtCUd9MEEok91XBkCvc6A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:36iDOpIY/Hs=:2vXnQwsiyWLk/bjZ/223V9
- SsohMBwjwbwuUNsHbt33nFvPoMV7gNjldqAuP3jrDfIGZPupYhIFn+JVCTGiH2XiYismwygaS
- TlcO/t2LpWvz4pBoF7KSkWqOdjkBmj5+ee3hDV12DqqUnAalwDv7oLiqOMi7T1BfnK/aVaNDp
- GhjU/voDray/WpQbAvbe2eQKkp0C1ZBekdVA8NF3mXT3gF0nDNDft+4rsiGQrSi9Hqgfcyic8
- jUhzy2ejGQ/yGOGXWPHuQH14z9CbMeWqcoEi85A7v8zCQuPK8pYL1hMyqP4M1E76o5RbqZeRU
- okavhF4ho+8ACS0Ls+i0eVO9QJfF3OntboEaGeUtc6P3LmfRDsioJxXVEZxliJsQmkSE4pWoc
- 6UBmHgqwS8wFUiqIslW8LTQixsH2r51+U0rlDeeI2g3DFN8Kv8RdtfysxZlAfdWBTtv7e395t
- lZA6dir31couJtwrzx8aWP+6qzONW45QIAoVqN3byAyEpln0ADJLeDWF0RxTUvPv7wvQftE4r
- PA4M07JmuAeE3OSOxyYDF/8PmH9YMqcQslsM0JYROmAHBftj3RmBo4vdZoCOcGZL+vl/2X/T5
- nqZyPDJ11MC3mlTp8BS5Q/f7eCy8TPb9JY/MfFLE2RK5PsunWF2F9w2wszn5x8ehTnCN7t5Qe
- wMSrRKIR16+4lpCCri88tssHwCkS+XkI6qsE5ji+YBrBXav6LqamoCYpUH7IDoeIs/HTRMl1h
- bwRVw7MKNOWgMLHaMjK+aidULTZI/40GY0UE6A==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <41B9AC54-DCFE-4055-B950-265B3CBDD842@jrtc27.com>
+References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
+ <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014>
+ <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+ <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 6:36 PM Rob Herring <robh@kernel.org> wrote:
-> On Fri, Jul 22, 2022 at 9:27 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> From fu740:
->                        ranges = <0x81000000  0x0 0x60080000  0x0
-> 0x60080000 0x0 0x10000>,      /* I/O */
-...
-> So again, how does one get a 0 address handed out when that's not even
-> a valid region according to DT? Is there some legacy stuff that
-> ignores the bridge windows?
+On 22 Jul 2022, at 20:55, Arnd Bergmann <arnd@arndb.de> wrote:
+>=20
+> On Fri, Jul 22, 2022 at 6:36 PM Rob Herring <robh@kernel.org> wrote:
+>> On Fri, Jul 22, 2022 at 9:27 AM Palmer Dabbelt <palmer@dabbelt.com> =
+wrote:
+>>=20
+>> =46rom fu740:
+>>                       ranges =3D <0x81000000  0x0 0x60080000  0x0
+>> 0x60080000 0x0 0x10000>,      /* I/O */
+> ...
+>> So again, how does one get a 0 address handed out when that's not =
+even
+>> a valid region according to DT? Is there some legacy stuff that
+>> ignores the bridge windows?
+>=20
+> The PCI-side port number 0x60080000 gets turned into Linux I/O =
+resource 0,
+> which I think is what __pci_assign_resource operates on.
+>=20
+> The other question is why the platform would want to configure the
+> PCI bus to have a PCI I/O space window of size 0x10000 at the address
+> it's mapped into, rather than putting it at address zero. Is this a =
+hardware
+> bug, a bootloader bug, or just badly set up in the DT?
+>=20
+> Putting the PCI address of the I/O space window at port 0 is usually
+> better because it works with PCI devices and drivers that assume that
+> port numbers are below 0xfffff, and makes the PCI port number match
+> the Linux port number.
 
-The PCI-side port number 0x60080000 gets turned into Linux I/O resource 0,
-which I think is what __pci_assign_resource operates on.
+Possibly related is the (harmless) warning spew seen during boot on
+FreeBSD. The bridge, and all downstream ones, reset to having I/O
+window 0x0-0xfff and memory/prefetch window 0x0-0xfffff (which FreeBSD
+tries to allocate, fails because that=E2=80=99s outside the valid ranges =
+above,
+so it then just paves over with a sane fresh config). Linux resets the
+controller on probe so this is the initial state when enumerating, and
+perhaps that=E2=80=99s not handled so gracefully as on FreeBSD (which =
+also
+resets in device_attach, the second half of what Linux calls probe)?
 
-The other question is why the platform would want to configure the
-PCI bus to have a PCI I/O space window of size 0x10000 at the address
-it's mapped into, rather than putting it at address zero. Is this a hardware
-bug, a bootloader bug, or just badly set up in the DT?
+Jess
 
-Putting the PCI address of the I/O space window at port 0 is usually
-better because it works with PCI devices and drivers that assume that
-port numbers are below 0xfffff, and makes the PCI port number match
-the Linux port number.
-
-         Arnd
