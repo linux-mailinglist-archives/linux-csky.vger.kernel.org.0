@@ -2,179 +2,151 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5248757E8FE
-	for <lists+linux-csky@lfdr.de>; Fri, 22 Jul 2022 23:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA12857E914
+	for <lists+linux-csky@lfdr.de>; Fri, 22 Jul 2022 23:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiGVVoV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 22 Jul 2022 17:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S231304AbiGVVt4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 22 Jul 2022 17:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbiGVVoU (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 22 Jul 2022 17:44:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31777B5CAF;
-        Fri, 22 Jul 2022 14:44:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50C3DB82A20;
-        Fri, 22 Jul 2022 21:44:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD858C341D2;
-        Fri, 22 Jul 2022 21:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658526255;
-        bh=unLKN3dDJ250Ji3PNaWPqJmxilG4HG7jEUIhS2fQ4kk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D7y/Gc90K2FwJgEKyoPR+l9x8KnoXLYfiHO67CMLUk0nqEQkMSANb7HAvP8GFVR9F
-         2QfWtWQ8ajpn+TcDsfToZrvDvoNwkzMqtr/wEgOX9yujj67UnqeS95dp0mF1hKqVUO
-         yvW56CBwMRcnTWqzRJzeajoZ2wkbNsqGsXG/uX/9zWbb69iq6FsUFB0ue2a5I5nSbZ
-         AnsTXgeLVMmQfeS7lLX0MQlXMnKsIySn1l/ygCazRDzc25rNqbTSmvjSTz1OqCkSeS
-         eqAD9nQK9EYg8k59KuQZeQielHj5XPdgxd/rVaV9T/2f5DRbXGJsAt2SzkIXY4DNbv
-         /mZlTjkh+XeLg==
-Received: by mail-vs1-f45.google.com with SMTP id l190so5505489vsc.0;
-        Fri, 22 Jul 2022 14:44:15 -0700 (PDT)
-X-Gm-Message-State: AJIora/saUYRc63o3sP5JhrEsXfbF51AORj2C4hzGSgzlt/XbeAZJfOk
-        J7CS08fRAi6Jn+dxxBlWgMKMEgXj39kTozJktg==
-X-Google-Smtp-Source: AGRyM1uOA5mKxKNbMfK1iM2rXyIXLWKI6rg7qWhyDKLK8Bz3Y56+URolypOYpf4ujZ+/u80xlma0hrbuDyh+YtgD+So=
-X-Received: by 2002:a67:c088:0:b0:358:bb1:fdf7 with SMTP id
- x8-20020a67c088000000b003580bb1fdf7mr639124vsi.85.1658526254680; Fri, 22 Jul
- 2022 14:44:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
- <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014>
- <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com> <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a2aTS74TG8F+cVHX969hMQHKP3Ai5V0h-m+GeAq6kq5pQ@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 22 Jul 2022 15:44:02 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKZoru2VZLeovPnQWe01ZMdw0krq0tcPx1O6YFUKa-L0g@mail.gmail.com>
-Message-ID: <CAL_JsqKZoru2VZLeovPnQWe01ZMdw0krq0tcPx1O6YFUKa-L0g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        with ESMTP id S229593AbiGVVtz (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 22 Jul 2022 17:49:55 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1887789AA1;
+        Fri, 22 Jul 2022 14:49:54 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id q41-20020a17090a1b2c00b001f2043c727aso5281005pjq.1;
+        Fri, 22 Jul 2022 14:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CKBAlUu6F1f72gxbqJqNkzmdfmg0eW3VcwrodrFMJSE=;
+        b=mLATIobE3QXc7FfUUCgVQLEfCmFrpMZ6GG9uG8a648HLGlUq/fRMW7D9IeWzvGVJak
+         yVwqGlUgGhwGkQuGIeZq62C5/vwA6JL3AX9oU0vn++3z4gJHP48Ig+3zIrTo2t5h0Ly0
+         PWzcgka4r+5QdEtQ1QUV0n/3UhrkHnHGUyhrj36GuUCI8qmalde+zda1FGWQeru79Nhn
+         eB3xFp/s2VffE2PnnHKo5JipBNAXgK+VtSnIUN91e5Tp5M6jQlbx++RmeZRTtvTTNpoU
+         fX8p9z8Rg5PN9epjGWBTUl9dntEPAFkIAQuR+Z4wag60+ixl6nNPg+hn179P7CZqSEuW
+         fpiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CKBAlUu6F1f72gxbqJqNkzmdfmg0eW3VcwrodrFMJSE=;
+        b=xrKljn13VvvQyyjZjqBuIEkZyWcSZ2Nhcgkt70mPHr/rex5mnc0SbmJIbVE7jLCwuw
+         h0TkBwbTVYC0lHOGFwHylrTJTq9ZxTZ8y3n9lPWWL0IS2itIPNdwdDo2JmxD08VfMQza
+         n/f1brw4i10QNif6FBH0bE1LrSLJe4Sb/UdO5nADH0Yw5EeOCdOcU2CLbpCJZwSOxpto
+         zqCNTVvML0o63xYwLrM7QmU1yw55830s7gGIfSn9LIQU2b+M65mgGAQJ3UkxkbzgpIwv
+         yv5GPykbZlY/6ECNNr+nJsMEhAIwvEuLSWK6xxmeX8l7lK85SCkOVPjn5nJIPsWOirkX
+         CiYA==
+X-Gm-Message-State: AJIora8js7pgVY90rEj+eJU9GgjtfsJ+oeqmttjGi2/MrFxvo2SACgXw
+        /KOjT0I5Iyk5MwPWVkWZVn7zU+JJuNlq5Q==
+X-Google-Smtp-Source: AGRyM1s8ULJDRpoScEKM1GXhJVRCOVz9MUfNeZH/hFTgO9hmdkx0aULIZ3TJARZkHfVxC90HfRxKKw==
+X-Received: by 2002:a17:902:b701:b0:16d:12a7:c2fa with SMTP id d1-20020a170902b70100b0016d12a7c2famr1807096pls.67.1658526593300;
+        Fri, 22 Jul 2022 14:49:53 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id r143-20020a632b95000000b0040c9df2b060sm3821257pgr.30.2022.07.22.14.49.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 14:49:52 -0700 (PDT)
+From:   Stafford Horne <shorne@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Stafford Horne <shorne@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+Subject: [PATCH v6 0/4] Cleanups for asm-generic/pci.h
+Date:   Sat, 23 Jul 2022 06:49:40 +0900
+Message-Id: <20220722214944.831438-1-shorne@gmail.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 1:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Jul 22, 2022 at 6:36 PM Rob Herring <robh@kernel.org> wrote:
-> > On Fri, Jul 22, 2022 at 9:27 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> >
-> > From fu740:
-> >                        ranges = <0x81000000  0x0 0x60080000  0x0
-> > 0x60080000 0x0 0x10000>,      /* I/O */
-> ...
-> > So again, how does one get a 0 address handed out when that's not even
-> > a valid region according to DT? Is there some legacy stuff that
-> > ignores the bridge windows?
->
-> The PCI-side port number 0x60080000 gets turned into Linux I/O resource 0,
-> which I think is what __pci_assign_resource operates on.
->
-> The other question is why the platform would want to configure the
-> PCI bus to have a PCI I/O space window of size 0x10000 at the address
-> it's mapped into, rather than putting it at address zero. Is this a hardware
-> bug, a bootloader bug, or just badly set up in the DT?
+When reviewing the OpenRISC PCI support patch Arnd suggested that
+we avoid copying arm64 and riscv asm/pci.h and moving that to be
+the new asm-generic/pci.h.
 
-...putting it at *PCI* address zero, right? Yeah, that looks
-suspicious. The core code seems to not use the PCI address, but
-various drivers do. Maybe they are miscalculating things and still end
-up with 0. If so, we're stuck with that ABI though we could fix it up
-in the ranges parsing code and make driver behavior consistent.
+This patch does that by first removing the old pci.h with the definition of
+pci_get_legacy_ide_irq completely. We replace it with references to
+ATA_PRIMARY_IRQ and ATA_SECONDARY_IRQ macros.
 
-In any case, that seems to be a somewhat common occurrence. A somewhat
-accurate search (ignore the MBUS_ID ones):
+Next, we do further cleanups moving isa_dma_bridge_buggy to be only
+x86_32 specific.  This avoids having to have it in dma.h or pci.h headers.
 
-$ git grep -A4 '\sranges =' -- arch/ | grep '0x81000000' | grep -v -E
-'0x81000000\s[0x]+\s[0x]+\s'
-arch/arm/boot/dts/armada-370.dtsi-
-0x81000000 0x1 0     MBUS_ID(0x04, 0xe0) 0       1 0 /* Port 0.0 IO
-*/
-arch/arm/boot/dts/armada-375.dtsi-
-0x81000000 0x1 0       MBUS_ID(0x04, 0xe0) 0 1 0 /* Port 0 IO  */
-arch/arm/boot/dts/armada-xp-98dx3236.dtsi-
- 0x81000000 0x1 0       MBUS_ID(0x04, 0xe0) 0 1 0 /* Port 0.0 IO  */>;
-arch/arm/boot/dts/bcm47622.dtsi:                ranges = <0 0x81000000
-0x818000>;
-arch/arm/boot/dts/dove.dtsi-                              0x81000000
-0x1 0x0 MBUS_ID(0x04, 0xe0) 0 1 0   /* Port 0.0 I/O */
-arch/arm/boot/dts/kirkwood-6192.dtsi-
-0x81000000 0x1 0     MBUS_ID(0x04, 0xe0) 0       1 0 /* Port 0.0 IO
-*/>;
-arch/arm/boot/dts/kirkwood-6281.dtsi-
-0x81000000 0x1 0     MBUS_ID(0x04, 0xe0) 0       1 0 /* Port 0.0 IO
-*/>;
-arch/arm/boot/dts/kirkwood-98dx4122.dtsi-
- 0x81000000 0x1 0     MBUS_ID(0x04, 0xe0) 0       1 0 /* Port 0.0 IO
-*/>;
-arch/arm/boot/dts/mt7623.dtsi:          ranges = <0x81000000 0
-0x1a160000 0 0x1a160000 0 0x00010000
-arch/arm/boot/dts/qcom-ipq4019.dtsi:                    ranges =
-<0x81000000 0 0x40200000 0x40200000 0 0x00100000>,
-arch/arm/boot/dts/qcom-ipq8064.dtsi:                    ranges =
-<0x81000000 0 0x0fe00000 0x0fe00000 0 0x00100000   /* downstream I/O
-*/
-arch/arm/boot/dts/qcom-ipq8064.dtsi:                    ranges =
-<0x81000000 0 0x31e00000 0x31e00000 0 0x00100000   /* downstream I/O
-*/
-arch/arm/boot/dts/qcom-ipq8064.dtsi:                    ranges =
-<0x81000000 0 0x35e00000 0x35e00000 0 0x00100000   /* downstream I/O
-*/
-arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi:              ranges
-= <0x00 0x00 0x81000000 0x4000>;
-arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts: ranges =
-<0x81000000 0 0xe8000000   0 0xe8000000   0 0x01000000   /* Port 0 IO
-*/
-arch/arm64/boot/dts/mediatek/mt8192.dtsi-
-  <0x81000000 0 0x12800000 0x0 0x12800000 0 0x0800000>;
-arch/arm64/boot/dts/qcom/ipq6018.dtsi:                  ranges =
-<0x81000000 0 0x20200000 0 0x20200000
-arch/arm64/boot/dts/qcom/ipq8074.dtsi:                  ranges =
-<0x81000000 0 0x10200000 0x10200000
-arch/arm64/boot/dts/qcom/ipq8074.dtsi:                  ranges =
-<0x81000000 0 0x20200000 0x20200000
-arch/arm64/boot/dts/rockchip/rk3399.dtsi-
-<0x81000000 0x0 0xfbe00000 0x0 0xfbe00000 0x0 0x100000>;
-arch/arm64/boot/dts/toshiba/tmpv7708.dtsi:                      ranges
-= <0x81000000 0 0x40000000 0 0x40000000 0 0x00010000
-arch/riscv/boot/dts/sifive/fu740-c000.dtsi:                     ranges
-= <0x81000000  0x0 0x60080000  0x0 0x60080000 0x0 0x10000>,      /*
-I/O */
+Next, we create the new pci.h definition.
 
+Since v5:
+ - Remove include of linux/types.h in asm-generic/pci
+ - Add Acked-by from Guo Ren on csky patch
+Since v4:
+ - Move some pci_get_legacy_ide_irq and isa_dma_bridge_buggy cleanups
+   into the correct patches.
+ - Add csky ARCH_GENERIC_PCI_MMAP_RESOURCE definition patch, suggested by Arnd
+Since v3:
+ - We now completely remove pci_get_legacy_ide_irq and use libata.h macros.
+ - Added a new patch to remove isa_dma_bridge_buggy in architectures
+   other than x86_32.
+Since v2:
+ - Remove pci_get_legacy_ide_irq from m68k.
+Since v1:
+ - Remove definition of pci_get_legacy_ide_irq on architectures
+   not using CONFIG_PNP, which eliminated most.
+ - Add ifdef around PCIBIOS_MIN_MEM for consistency.
 
-> Putting the PCI address of the I/O space window at port 0 is usually
-> better because it works with PCI devices and drivers that assume that
-> port numbers are below 0xfffff, and makes the PCI port number match
-> the Linux port number.
+Stafford Horne (4):
+  PCI: Remove pci_get_legacy_ide_irq and asm-generic/pci.h
+  PCI: Move isa_dma_bridge_buggy out of dma.h
+  csky: PCI: Define ARCH_GENERIC_PCI_MMAP_RESOURCE
+  asm-generic: Add new pci.h and use it
 
-I could make the PCI schema check for this, but I guess technically
-any 32-bit PCI I/O address is valid even if 64K is the practical
-limit.
+ arch/alpha/include/asm/dma.h           |  9 ------
+ arch/alpha/include/asm/pci.h           |  6 ----
+ arch/arc/include/asm/dma.h             |  5 ----
+ arch/arm/include/asm/dma.h             |  6 ----
+ arch/arm/include/asm/pci.h             |  5 ----
+ arch/arm64/include/asm/pci.h           | 18 ++----------
+ arch/csky/include/asm/pci.h            | 23 ++-------------
+ arch/ia64/include/asm/dma.h            |  2 --
+ arch/ia64/include/asm/pci.h            |  6 ----
+ arch/m68k/include/asm/dma.h            |  6 ----
+ arch/m68k/include/asm/pci.h            |  2 --
+ arch/microblaze/include/asm/dma.h      |  6 ----
+ arch/mips/include/asm/dma.h            |  8 ------
+ arch/mips/include/asm/pci.h            |  6 ----
+ arch/parisc/include/asm/dma.h          |  6 ----
+ arch/parisc/include/asm/pci.h          |  5 ----
+ arch/powerpc/include/asm/dma.h         |  6 ----
+ arch/powerpc/include/asm/pci.h         |  1 -
+ arch/riscv/include/asm/pci.h           | 31 +++-----------------
+ arch/s390/include/asm/dma.h            |  6 ----
+ arch/s390/include/asm/pci.h            |  1 -
+ arch/sh/include/asm/dma.h              |  6 ----
+ arch/sh/include/asm/pci.h              |  6 ----
+ arch/sparc/include/asm/dma.h           |  8 ------
+ arch/sparc/include/asm/pci.h           |  9 ------
+ arch/um/include/asm/pci.h              | 24 ++--------------
+ arch/x86/include/asm/dma.h             |  8 ------
+ arch/x86/include/asm/pci.h             |  3 --
+ arch/xtensa/include/asm/dma.h          |  7 -----
+ arch/xtensa/include/asm/pci.h          |  3 --
+ drivers/comedi/drivers/comedi_isadma.c |  2 +-
+ drivers/pci/pci.c                      |  2 ++
+ drivers/pci/quirks.c                   |  4 ++-
+ drivers/pnp/resource.c                 |  5 ++--
+ include/asm-generic/pci.h              | 39 +++++++++++++++++---------
+ include/linux/isa-dma.h                | 14 +++++++++
+ sound/core/isadma.c                    |  2 +-
+ 37 files changed, 60 insertions(+), 246 deletions(-)
+ create mode 100644 include/linux/isa-dma.h
 
-Rob
+-- 
+2.36.1
 
-P.S. I really wish I/O space would disappear completely.
