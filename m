@@ -2,153 +2,116 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D25D57F510
-	for <lists+linux-csky@lfdr.de>; Sun, 24 Jul 2022 14:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12E057F82B
+	for <lists+linux-csky@lfdr.de>; Mon, 25 Jul 2022 04:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235708AbiGXM1V (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 24 Jul 2022 08:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42748 "EHLO
+        id S233028AbiGYCJB (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 24 Jul 2022 22:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235778AbiGXM0s (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 24 Jul 2022 08:26:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B842910573;
-        Sun, 24 Jul 2022 05:26:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233097AbiGYCIn (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 24 Jul 2022 22:08:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBCC9F589
+        for <linux-csky@vger.kernel.org>; Sun, 24 Jul 2022 19:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1658714920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3H+nJazZwUTI7bMfI3XTbXbN/qZRH3y006Os5Yq8ong=;
+        b=RgE17w/Ty13gs2KQb6njkqCDzBNatBELBAPEOkqbL/JKGZN87tujEgAIYMoI4fZP47Ugd9
+        PeqTY/aLU5n+VSEm9htZ7pn//L37T/wS22VfpmLiOB54VOB2TlZL0P4gZEZcXEi5jyklR/
+        0i6I5mpI/3FjYMYCpgX9rBBADJSNOF0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-LE49NObQNpihPsAljGi0ow-1; Sun, 24 Jul 2022 22:08:37 -0400
+X-MC-Unique: LE49NObQNpihPsAljGi0ow-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65D31B80D6B;
-        Sun, 24 Jul 2022 12:26:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77F7C385A5;
-        Sun, 24 Jul 2022 12:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658665590;
-        bh=920mmnpEJPScVrA5dKwmyImPh9PCuH+GiFZjlE1o8zI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KOdKpq+E4B/EJi49xbzc27v1TLG7ZtjFILg8aSF7N9+lSnRnEpR7LjSRUSbqeMr5L
-         ZQAzxLJ3xxcSfBXGnpPhlbsaOsZUgB2f5Coi0rleUrDhjTQsHtAntM9kz0YHpGH2/x
-         8SDZPhVIT9NXdYQ+a5aF0lacSIH7mk/oI/Gs0GFgyQoz+d+WmU59fNUftUET9/CTFl
-         07mv1i8TnX854bxdJzBN7waa7YDuL9WjQpSlYSBtjAgMzjl5qvUt7VBbsgSivTjMTs
-         AceE9qPAzul9KUiQIBQbEamCnpi8hpkTsb7O7rriYH9Rwui3zWwu81lDWuthAzyX86
-         qAB+XEfb3ayyA==
-From:   guoren@kernel.org
-To:     palmer@rivosinc.com, heiko@sntech.de, hch@infradead.org,
-        arnd@arndb.de, peterz@infradead.org, will@kernel.org,
-        boqun.feng@gmail.com, longman@redhat.com, mingo@redhat.com,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9BAD01C068CB;
+        Mon, 25 Jul 2022 02:08:36 +0000 (UTC)
+Received: from [10.22.32.58] (unknown [10.22.32.58])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57C3718EAA;
+        Mon, 25 Jul 2022 02:08:35 +0000 (UTC)
+Message-ID: <0ea27d18-6d45-9673-38b7-78d59325f9d5@redhat.com>
+Date:   Sun, 24 Jul 2022 22:08:34 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V8 10/10] csky: Add qspinlock support
+Content-Language: en-US
+To:     guoren@kernel.org, palmer@rivosinc.com, heiko@sntech.de,
+        hch@infradead.org, arnd@arndb.de, peterz@infradead.org,
+        will@kernel.org, boqun.feng@gmail.com, mingo@redhat.com,
         philipp.tomsich@vrull.eu, cmuellner@linux.com,
         linux-kernel@vger.kernel.org, David.Laight@ACULAB.COM
 Cc:     linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
-Subject: [PATCH V8 10/10] csky: Add qspinlock support
-Date:   Sun, 24 Jul 2022 08:25:17 -0400
-Message-Id: <20220724122517.1019187-11-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220724122517.1019187-1-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>
 References: <20220724122517.1019187-1-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20220724122517.1019187-11-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220724122517.1019187-11-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On 7/24/22 08:25, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Enable qspinlock by the requirements mentioned in a8ad07e5240c9
+> ("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+>
+> C-SKY only has "ldex/stex" for all atomic operations. So csky give a
+> strong forward guarantee for "ldex/stex." That means when ldex grabbed
+> the cache line into $L1, it would block other cores from snooping the
+> address with several cycles.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>   arch/csky/Kconfig               | 16 ++++++++++++++++
+>   arch/csky/include/asm/Kbuild    |  2 ++
+>   arch/csky/include/asm/cmpxchg.h | 20 ++++++++++++++++++++
+>   3 files changed, 38 insertions(+)
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index dfdb436b6078..09f7d1f06bca 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -354,6 +354,22 @@ config HAVE_EFFICIENT_UNALIGNED_STRING_OPS
+>   	  Say Y here to enable EFFICIENT_UNALIGNED_STRING_OPS. Some CPU models could
+>   	  deal with unaligned access by hardware.
+>   
+> +choice
+> +	prompt "C-SKY spinlock type"
+> +	default CSKY_TICKET_SPINLOCKS
+> +
+> +config CSKY_TICKET_SPINLOCKS
+> +	bool "Using ticket spinlock"
+> +
+> +config CSKY_QUEUED_SPINLOCKS
+> +	bool "Using queued spinlock"
+> +	depends on SMP
+> +	select ARCH_USE_QUEUED_SPINLOCKS
+> +	help
+> +	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
+> +	  Otherwise, stay at ticket-lock/combo-lock.
 
-Enable qspinlock by the requirements mentioned in a8ad07e5240c9
-("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+"combo-lock"? It is a cut-and-paste error. Right?
 
-C-SKY only has "ldex/stex" for all atomic operations. So csky give a
-strong forward guarantee for "ldex/stex." That means when ldex grabbed
-the cache line into $L1, it would block other cores from snooping the
-address with several cycles.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/csky/Kconfig               | 16 ++++++++++++++++
- arch/csky/include/asm/Kbuild    |  2 ++
- arch/csky/include/asm/cmpxchg.h | 20 ++++++++++++++++++++
- 3 files changed, 38 insertions(+)
-
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index dfdb436b6078..09f7d1f06bca 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -354,6 +354,22 @@ config HAVE_EFFICIENT_UNALIGNED_STRING_OPS
- 	  Say Y here to enable EFFICIENT_UNALIGNED_STRING_OPS. Some CPU models could
- 	  deal with unaligned access by hardware.
- 
-+choice
-+	prompt "C-SKY spinlock type"
-+	default CSKY_TICKET_SPINLOCKS
-+
-+config CSKY_TICKET_SPINLOCKS
-+	bool "Using ticket spinlock"
-+
-+config CSKY_QUEUED_SPINLOCKS
-+	bool "Using queued spinlock"
-+	depends on SMP
-+	select ARCH_USE_QUEUED_SPINLOCKS
-+	help
-+	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
-+	  Otherwise, stay at ticket-lock/combo-lock.
-+endchoice
-+
- endmenu
- 
- source "arch/csky/Kconfig.platforms"
-diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
-index 103207a58f97..b70b14de904f 100644
---- a/arch/csky/include/asm/Kbuild
-+++ b/arch/csky/include/asm/Kbuild
-@@ -3,10 +3,12 @@ generic-y += asm-offsets.h
- generic-y += extable.h
- generic-y += gpio.h
- generic-y += kvm_para.h
-+generic-y += mcs_spinlock.h
- generic-y += spinlock.h
- generic-y += spinlock_types.h
- generic-y += qrwlock.h
- generic-y += qrwlock_types.h
-+generic-y += qspinlock.h
- generic-y += parport.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
-index 5b8faccd65e4..5f693fadb56c 100644
---- a/arch/csky/include/asm/cmpxchg.h
-+++ b/arch/csky/include/asm/cmpxchg.h
-@@ -15,6 +15,26 @@ extern void __bad_xchg(void);
- 	__typeof__(*(ptr)) __ret;				\
- 	unsigned long tmp;					\
- 	switch (size) {						\
-+	case 2: {						\
-+		u32 ret;					\
-+		u32 shif = ((ulong)__ptr & 2) ? 16 : 0;		\
-+		u32 mask = 0xffff << shif;			\
-+		__ptr = (__typeof__(ptr))((ulong)__ptr & ~2);	\
-+		__asm__ __volatile__ (				\
-+			"1:	ldex.w %0, (%4)\n"		\
-+			"	and    %1, %0, %2\n"		\
-+			"	or     %1, %1, %3\n"		\
-+			"	stex.w %1, (%4)\n"		\
-+			"	bez    %1, 1b\n"		\
-+			: "=&r" (ret), "=&r" (tmp)		\
-+			: "r" (~mask),				\
-+			  "r" ((u32)__new << shif),		\
-+			  "r" (__ptr)				\
-+			: "memory");				\
-+		__ret = (__typeof__(*(ptr)))			\
-+			((ret & mask) >> shif);			\
-+		break;						\
-+	}							\
- 	case 4:							\
- 		asm volatile (					\
- 		"1:	ldex.w		%0, (%3) \n"		\
--- 
-2.36.1
+Cheers,
+Longman
 
