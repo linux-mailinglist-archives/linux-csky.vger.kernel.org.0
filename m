@@ -2,65 +2,66 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1BE583374
-	for <lists+linux-csky@lfdr.de>; Wed, 27 Jul 2022 21:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423CF5835E6
+	for <lists+linux-csky@lfdr.de>; Thu, 28 Jul 2022 02:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiG0TWx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 27 Jul 2022 15:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S232599AbiG1AFQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 27 Jul 2022 20:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbiG0TWh (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 27 Jul 2022 15:22:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4371C3;
-        Wed, 27 Jul 2022 12:21:57 -0700 (PDT)
+        with ESMTP id S231588AbiG1AFP (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 27 Jul 2022 20:05:15 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E39D67;
+        Wed, 27 Jul 2022 17:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658949717; x=1690485717;
+  t=1658966713; x=1690502713;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=/Pg8McF+EQPdh2TTj558H2vAsfexiE1Xr/Yo/q96e0U=;
-  b=muB+Q3Vo030CeEeuHWtVxygUV670tD4IAh9TwEIXKNlYqD0eVePrfiDR
-   izJLx1HhxQ6Myu/NuLbqkmKio6J56SK4lok7ulmCSw5rIYeHeyMh92BKz
-   sJrKJtBis1LNlMz6XUA7yUUp79Zjqd/R+6obADkkwSBsZqLlg9G5/aHPk
-   WzF6fsS36O7o8tmAVqakz5Orl1d+XQErkHG6RterpHsw83jamPabsPN2L
-   ZO0N0S/35sOqWxZ3cMlWIile2otLJgpFTWc4aLAEQquDUcGcSHb1/gbO1
-   x8igIp8b79zJyJHdH4/b1IUV33yHT0TpC1SNy6Bbg5fCgF9zMXO02kJ+J
+  bh=WmEjuSFZahSX7NszEhwt1CcdJvJ9iADss3GKQ2aj9io=;
+  b=MYezchXpo7os07R2wSO4/ypdlBL8LB5bIvb0oRbDDpb34remkwy3XYuw
+   lj3oLAUxABQZjqgN+uEs7ZHEICC1g3BWQMIQKqfP9sG2VRZcJQ5Gfiid0
+   CaGlj+YK6eoKuwJKlur2qMZAJNtRurjvbK72n7ywxhh0GF9EPS/ARY2qC
+   dYFkS6+i3L6xsaWTfwwBeBJ0OF1OaVvnWG6OAM15CJN6Nkv9k9TDuODcH
+   W3AoBKYGojDsWwSTetX8gJ2PBIijhVqWVUvGh42TE+9gelndmMMMVu+Ty
+   jkXiqC5R2oNbSsOYoGZfqrEmTtIV1tOuLvbYK/8JRt7CeveJL+vJWqYZ5
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="268708810"
+X-IronPort-AV: E=McAfee;i="6400,9594,10421"; a="314162673"
 X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="268708810"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 12:21:56 -0700
+   d="scan'208";a="314162673"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2022 17:05:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,196,1654585200"; 
-   d="scan'208";a="727040177"
+   d="scan'208";a="668565341"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Jul 2022 12:21:51 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jul 2022 17:05:03 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oGmbP-00093y-0j;
-        Wed, 27 Jul 2022 19:21:51 +0000
-Date:   Thu, 28 Jul 2022 03:20:55 +0800
+        id 1oGr1T-0009GM-04;
+        Thu, 28 Jul 2022 00:05:03 +0000
+Date:   Thu, 28 Jul 2022 08:04:33 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     guoren@kernel.org, palmer@rivosinc.com, heiko@sntech.de,
         hch@infradead.org, arnd@arndb.de, peterz@infradead.org,
         will@kernel.org, boqun.feng@gmail.com, longman@redhat.com,
         mingo@redhat.com, philipp.tomsich@vrull.eu, cmuellner@linux.com,
         linux-kernel@vger.kernel.org, David.Laight@aculab.com
-Cc:     kbuild-all@lists.01.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V8 02/10] asm-generic: ticket-lock: Use the same struct
- definitions with qspinlock
-Message-ID: <202207280322.pBROaNWs-lkp@intel.com>
-References: <20220724122517.1019187-3-guoren@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V8 07/10] riscv: Add qspinlock support
+Message-ID: <202207280822.VHS6qieH-lkp@intel.com>
+References: <20220724122517.1019187-8-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220724122517.1019187-3-guoren@kernel.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220724122517.1019187-8-guoren@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,200 +80,400 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/arch-Add-qspinlock-support-with-combo-style/20220724-202743
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-config: riscv-randconfig-s032-20220726 (https://download.01.org/0day-ci/archive/20220728/202207280322.pBROaNWs-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce:
+config: riscv-randconfig-r026-20220727 (https://download.01.org/0day-ci/archive/20220728/202207280822.VHS6qieH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8dfaecc4c24494337933aff9d9166486ca0949f1)
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/e6277b2b8d76d6b4568e4e6f8270d10e8591c383
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/980c0acb7f432777e3473ab9a5696044e03b3f3d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review guoren-kernel-org/arch-Add-qspinlock-support-with-combo-style/20220724-202743
-        git checkout e6277b2b8d76d6b4568e4e6f8270d10e8591c383
+        git checkout 980c0acb7f432777e3473ab9a5696044e03b3f3d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/wireguard/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/seccomp.c:873:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:873:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:873:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/seccomp.c:1371:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/seccomp.c:1371:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/seccomp.c:1371:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/seccomp.c:1383:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/seccomp.c:1383:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/seccomp.c:1383:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/seccomp.c:1812:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct lockdep_map const *lock @@     got struct lockdep_map [noderef] __rcu * @@
-   kernel/seccomp.c:1812:9: sparse:     expected struct lockdep_map const *lock
-   kernel/seccomp.c:1812:9: sparse:     got struct lockdep_map [noderef] __rcu *
-   kernel/seccomp.c:1898:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/seccomp.c:1898:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/seccomp.c:1898:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/seccomp.c:1916:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/seccomp.c:1916:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/seccomp.c:1916:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/seccomp.c:490:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:490:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:490:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/seccomp.c:587:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:587:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:587:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/seccomp.c:448:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:448:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:448:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/seccomp.c:434:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:434:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:434:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/seccomp.c:448:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:448:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:448:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/seccomp.c:434:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:434:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:434:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/seccomp.c:448:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/seccomp.c:448:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/seccomp.c:448:9: sparse:     got struct qspinlock [noderef] __rcu *
---
-   kernel/fork.c:1307:24: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct file [noderef] __rcu *_x_ @@     got struct file *new_exe_file @@
-   kernel/fork.c:1307:24: sparse:     expected struct file [noderef] __rcu *_x_
-   kernel/fork.c:1307:24: sparse:     got struct file *new_exe_file
-   kernel/fork.c:1307:22: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct file *[assigned] old_exe_file @@     got struct file [noderef] __rcu * @@
-   kernel/fork.c:1307:22: sparse:     expected struct file *[assigned] old_exe_file
-   kernel/fork.c:1307:22: sparse:     got struct file [noderef] __rcu *
-   kernel/fork.c:1638:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct refcount_struct [usertype] *r @@     got struct refcount_struct [noderef] __rcu * @@
-   kernel/fork.c:1638:38: sparse:     expected struct refcount_struct [usertype] *r
-   kernel/fork.c:1638:38: sparse:     got struct refcount_struct [noderef] __rcu *
-   kernel/fork.c:1647:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:1647:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:1647:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:1648:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const * @@     got struct k_sigaction [noderef] __rcu * @@
-   kernel/fork.c:1648:36: sparse:     expected void const *
-   kernel/fork.c:1648:36: sparse:     got struct k_sigaction [noderef] __rcu *
-   kernel/fork.c:1649:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:1649:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:1649:33: sparse:     got struct spinlock [noderef] __rcu *
->> kernel/fork.c:1742:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct qspinlock [usertype] *lock @@     got struct qspinlock [noderef] __rcu * @@
-   kernel/fork.c:1742:9: sparse:     expected struct qspinlock [usertype] *lock
-   kernel/fork.c:1742:9: sparse:     got struct qspinlock [noderef] __rcu *
-   kernel/fork.c:2061:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2061:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2061:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2065:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2065:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2065:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2385:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct [noderef] __rcu *real_parent @@     got struct task_struct * @@
-   kernel/fork.c:2385:32: sparse:     expected struct task_struct [noderef] __rcu *real_parent
-   kernel/fork.c:2385:32: sparse:     got struct task_struct *
-   kernel/fork.c:2394:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2394:27: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2394:27: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2439:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct list_head *head @@     got struct list_head [noderef] __rcu * @@
-   kernel/fork.c:2439:54: sparse:     expected struct list_head *head
-   kernel/fork.c:2439:54: sparse:     got struct list_head [noderef] __rcu *
-   kernel/fork.c:2460:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2460:29: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2460:29: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2481:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2481:29: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2481:29: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2508:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sighand_struct *sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
-   kernel/fork.c:2508:28: sparse:     expected struct sighand_struct *sighand
-   kernel/fork.c:2508:28: sparse:     got struct sighand_struct [noderef] __rcu *sighand
-   kernel/fork.c:2537:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2537:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2537:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2539:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/fork.c:2539:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/fork.c:2539:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/fork.c:2975:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *[assigned] parent @@     got struct task_struct [noderef] __rcu *real_parent @@
-   kernel/fork.c:2975:24: sparse:     expected struct task_struct *[assigned] parent
-   kernel/fork.c:2975:24: sparse:     got struct task_struct [noderef] __rcu *real_parent
-   kernel/fork.c:3056:43: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct refcount_struct const [usertype] *r @@     got struct refcount_struct [noderef] __rcu * @@
-   kernel/fork.c:3056:43: sparse:     expected struct refcount_struct const [usertype] *r
-   kernel/fork.c:3056:43: sparse:     got struct refcount_struct [noderef] __rcu *
-   kernel/fork.c:2106:22: sparse: sparse: dereference of noderef expression
-   kernel/fork.c: note: in included file (through include/linux/ftrace.h, include/linux/perf_event.h, include/linux/trace_events.h, ...):
-   include/linux/ptrace.h:210:45: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct task_struct *new_parent @@     got struct task_struct [noderef] __rcu *parent @@
-   include/linux/ptrace.h:210:45: sparse:     expected struct task_struct *new_parent
-   include/linux/ptrace.h:210:45: sparse:     got struct task_struct [noderef] __rcu *parent
-   include/linux/ptrace.h:210:62: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct cred const *ptracer_cred @@     got struct cred const [noderef] __rcu *ptracer_cred @@
-   include/linux/ptrace.h:210:62: sparse:     expected struct cred const *ptracer_cred
-   include/linux/ptrace.h:210:62: sparse:     got struct cred const [noderef] __rcu *ptracer_cred
-   kernel/fork.c:2437:59: sparse: sparse: dereference of noderef expression
-   kernel/fork.c:2438:59: sparse: sparse: dereference of noderef expression
+All warnings (new ones prefixed by >>):
 
-vim +873 kernel/seccomp.c
+   In file included from drivers/net/wireguard/queueing.c:6:
+   In file included from drivers/net/wireguard/queueing.h:9:
+   In file included from drivers/net/wireguard/peer.h:9:
+   In file included from drivers/net/wireguard/device.h:9:
+   In file included from drivers/net/wireguard/noise.h:8:
+   In file included from drivers/net/wireguard/messages.h:10:
+   In file included from include/crypto/chacha20poly1305.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/net/wireguard/queueing.c:6:
+   In file included from drivers/net/wireguard/queueing.h:9:
+   In file included from drivers/net/wireguard/peer.h:9:
+   In file included from drivers/net/wireguard/device.h:9:
+   In file included from drivers/net/wireguard/noise.h:8:
+   In file included from drivers/net/wireguard/messages.h:10:
+   In file included from include/crypto/chacha20poly1305.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/net/wireguard/queueing.c:6:
+   In file included from drivers/net/wireguard/queueing.h:9:
+   In file included from drivers/net/wireguard/peer.h:9:
+   In file included from drivers/net/wireguard/device.h:9:
+   In file included from drivers/net/wireguard/noise.h:8:
+   In file included from drivers/net/wireguard/messages.h:10:
+   In file included from include/crypto/chacha20poly1305.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1107:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'typeof (_x_)' (aka 'struct sk_buff *') [-Wpointer-to-int-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^~~~~~~~~~~~~~~~~~
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'typeof (_x_)' (aka 'struct sk_buff *') [-Wpointer-to-int-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^~~~~~~~~~~~~~~~~~
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'typeof (_x_)' (aka 'struct sk_buff *') [-Wpointer-to-int-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^~~~~~~~~~~~~~~~~~
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'typeof (_x_)' (aka 'struct sk_buff *') [-Wpointer-to-int-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^~~~~~~~~~~~~~~~~~
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^
+   note: (skipping 7 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'typeof (_x_)' (aka 'struct sk_buff *') [-Wpointer-to-int-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^~~~~~~~~~~~~~~~~~
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                               ^~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+                                ^~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:352:22: note: expanded from macro 'compiletime_assert'
+           _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+           ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:340:23: note: expanded from macro '_compiletime_assert'
+           __compiletime_assert(condition, msg, prefix, suffix)
+           ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:9: note: expanded from macro '__compiletime_assert'
+                   if (!(condition))                                       \
+                         ^~~~~~~~~
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'typeof (_x_)' (aka 'struct sk_buff *') [-Wpointer-to-int-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^~~~~~~~~~~~~~~~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/wireguard/queueing.c:49:21: note: expanded from macro 'NEXT'
+   #define NEXT(skb) ((skb)->prev)
+                       ^~~
+   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
+           __WRITE_ONCE(x, val);                                           \
+                        ^
+   include/asm-generic/rwonce.h:55:20: note: expanded from macro '__WRITE_ONCE'
+           *(volatile typeof(x) *)&(x) = (val);                            \
+                             ^
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/wireguard/queueing.c:49:21: note: expanded from macro 'NEXT'
+   #define NEXT(skb) ((skb)->prev)
+                       ^
+   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
+           __WRITE_ONCE(x, val);                                           \
+           ~~~~~~~~~~~~~^~~~~~~
+   include/asm-generic/rwonce.h:55:20: note: expanded from macro '__WRITE_ONCE'
+           *(volatile typeof(x) *)&(x) = (val);                            \
+                             ^
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'typeof (_x_)' (aka 'struct sk_buff *') [-Wpointer-to-int-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^~~~~~~~~~~~~~~~~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/wireguard/queueing.c:49:21: note: expanded from macro 'NEXT'
+   #define NEXT(skb) ((skb)->prev)
+                       ^~~
+   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
+           __WRITE_ONCE(x, val);                                           \
+                        ^
+   include/asm-generic/rwonce.h:55:27: note: expanded from macro '__WRITE_ONCE'
+           *(volatile typeof(x) *)&(x) = (val);                            \
+                                    ^
+>> drivers/net/wireguard/queueing.c:68:18: warning: cast to 'typeof (*((__ai_ptr)))' (aka 'struct sk_buff *') from smaller integer type 'unsigned int' [-Wint-to-pointer-cast]
+           WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+           ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/atomic/atomic-instrumented.h:1901:2: note: expanded from macro 'xchg_release'
+           arch_xchg_release(__ai_ptr, __VA_ARGS__); \
+           ^
+   include/linux/atomic/atomic-arch-fallback.h:24:2: note: expanded from macro 'arch_xchg_release'
+           __atomic_op_release(arch_xchg, __VA_ARGS__)
+           ^
+   include/linux/atomic.h:68:2: note: expanded from macro '__atomic_op_release'
+           op##_relaxed(args);                                             \
+           ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   drivers/net/wireguard/queueing.c:49:21: note: expanded from macro 'NEXT'
+   #define NEXT(skb) ((skb)->prev)
+                       ^
+   include/asm-generic/rwonce.h:61:15: note: expanded from macro 'WRITE_ONCE'
+           __WRITE_ONCE(x, val);                                           \
+           ~~~~~~~~~~~~~^~~~~~~
+   include/asm-generic/rwonce.h:55:27: note: expanded from macro '__WRITE_ONCE'
+           *(volatile typeof(x) *)&(x) = (val);                            \
+                                    ^
+   21 warnings generated.
 
-8e01b51a31a1e08 YiFei Zhu      2020-10-11  854  
-c8bee430dc52cfc Kees Cook      2014-06-27  855  /**
-c8bee430dc52cfc Kees Cook      2014-06-27  856   * seccomp_attach_filter: validate and attach filter
-c8bee430dc52cfc Kees Cook      2014-06-27  857   * @flags:  flags to change filter behavior
-c8bee430dc52cfc Kees Cook      2014-06-27  858   * @filter: seccomp filter to add to the current process
-c8bee430dc52cfc Kees Cook      2014-06-27  859   *
-dbd952127d11bb4 Kees Cook      2014-06-27  860   * Caller must be holding current->sighand->siglock lock.
-dbd952127d11bb4 Kees Cook      2014-06-27  861   *
-7a0df7fbc14505e Tycho Andersen 2019-03-06  862   * Returns 0 on success, -ve on error, or
-7a0df7fbc14505e Tycho Andersen 2019-03-06  863   *   - in TSYNC mode: the pid of a thread which was either not in the correct
-7a0df7fbc14505e Tycho Andersen 2019-03-06  864   *     seccomp mode or did not have an ancestral seccomp filter
-7a0df7fbc14505e Tycho Andersen 2019-03-06  865   *   - in NEW_LISTENER mode: the fd of the new listener
-c8bee430dc52cfc Kees Cook      2014-06-27  866   */
-c8bee430dc52cfc Kees Cook      2014-06-27  867  static long seccomp_attach_filter(unsigned int flags,
-c8bee430dc52cfc Kees Cook      2014-06-27  868  				  struct seccomp_filter *filter)
-c8bee430dc52cfc Kees Cook      2014-06-27  869  {
-c8bee430dc52cfc Kees Cook      2014-06-27  870  	unsigned long total_insns;
-c8bee430dc52cfc Kees Cook      2014-06-27  871  	struct seccomp_filter *walker;
-c8bee430dc52cfc Kees Cook      2014-06-27  872  
-69f6a34bdeea4fe Guenter Roeck  2014-08-10 @873  	assert_spin_locked(&current->sighand->siglock);
-dbd952127d11bb4 Kees Cook      2014-06-27  874  
-c8bee430dc52cfc Kees Cook      2014-06-27  875  	/* Validate resulting filter length. */
-c8bee430dc52cfc Kees Cook      2014-06-27  876  	total_insns = filter->prog->len;
-c8bee430dc52cfc Kees Cook      2014-06-27  877  	for (walker = current->seccomp.filter; walker; walker = walker->prev)
-c8bee430dc52cfc Kees Cook      2014-06-27  878  		total_insns += walker->prog->len + 4;  /* 4 instr penalty */
-c8bee430dc52cfc Kees Cook      2014-06-27  879  	if (total_insns > MAX_INSNS_PER_PATH)
-c8bee430dc52cfc Kees Cook      2014-06-27  880  		return -ENOMEM;
-c8bee430dc52cfc Kees Cook      2014-06-27  881  
-c2e1f2e30daa551 Kees Cook      2014-06-05  882  	/* If thread sync has been requested, check that it is possible. */
-c2e1f2e30daa551 Kees Cook      2014-06-05  883  	if (flags & SECCOMP_FILTER_FLAG_TSYNC) {
-c2e1f2e30daa551 Kees Cook      2014-06-05  884  		int ret;
-c2e1f2e30daa551 Kees Cook      2014-06-05  885  
-c2e1f2e30daa551 Kees Cook      2014-06-05  886  		ret = seccomp_can_sync_threads();
-51891498f2da78e Tycho Andersen 2020-03-04  887  		if (ret) {
-51891498f2da78e Tycho Andersen 2020-03-04  888  			if (flags & SECCOMP_FILTER_FLAG_TSYNC_ESRCH)
-51891498f2da78e Tycho Andersen 2020-03-04  889  				return -ESRCH;
-51891498f2da78e Tycho Andersen 2020-03-04  890  			else
-c2e1f2e30daa551 Kees Cook      2014-06-05  891  				return ret;
-c2e1f2e30daa551 Kees Cook      2014-06-05  892  		}
-51891498f2da78e Tycho Andersen 2020-03-04  893  	}
-c2e1f2e30daa551 Kees Cook      2014-06-05  894  
-e66a39977985b1e Tyler Hicks    2017-08-11  895  	/* Set log flag, if present. */
-e66a39977985b1e Tyler Hicks    2017-08-11  896  	if (flags & SECCOMP_FILTER_FLAG_LOG)
-e66a39977985b1e Tyler Hicks    2017-08-11  897  		filter->log = true;
-e66a39977985b1e Tyler Hicks    2017-08-11  898  
-c2aa2dfef243efe Sargun Dhillon 2022-05-03  899  	/* Set wait killable flag, if present. */
-c2aa2dfef243efe Sargun Dhillon 2022-05-03  900  	if (flags & SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV)
-c2aa2dfef243efe Sargun Dhillon 2022-05-03  901  		filter->wait_killable_recv = true;
-c2aa2dfef243efe Sargun Dhillon 2022-05-03  902  
-c8bee430dc52cfc Kees Cook      2014-06-27  903  	/*
-c8bee430dc52cfc Kees Cook      2014-06-27  904  	 * If there is an existing filter, make it the prev and don't drop its
-c8bee430dc52cfc Kees Cook      2014-06-27  905  	 * task reference.
-c8bee430dc52cfc Kees Cook      2014-06-27  906  	 */
-c8bee430dc52cfc Kees Cook      2014-06-27  907  	filter->prev = current->seccomp.filter;
-8e01b51a31a1e08 YiFei Zhu      2020-10-11  908  	seccomp_cache_prepare(filter);
-c8bee430dc52cfc Kees Cook      2014-06-27  909  	current->seccomp.filter = filter;
-c818c03b661cd76 Kees Cook      2020-05-13  910  	atomic_inc(&current->seccomp.filter_count);
-c8bee430dc52cfc Kees Cook      2014-06-27  911  
-c2e1f2e30daa551 Kees Cook      2014-06-05  912  	/* Now that the new filter is in place, synchronize to all threads. */
-c2e1f2e30daa551 Kees Cook      2014-06-05  913  	if (flags & SECCOMP_FILTER_FLAG_TSYNC)
-00a02d0c502a06d Kees Cook      2018-05-03  914  		seccomp_sync_threads(flags);
-c2e1f2e30daa551 Kees Cook      2014-06-05  915  
-c8bee430dc52cfc Kees Cook      2014-06-27  916  	return 0;
-e2cfabdfd075648 Will Drewry    2012-04-12  917  }
-e2cfabdfd075648 Will Drewry    2012-04-12  918  
+
+vim +68 drivers/net/wireguard/queueing.c
+
+8b5553ace83cced7 Jason A. Donenfeld 2021-02-22  64  
+8b5553ace83cced7 Jason A. Donenfeld 2021-02-22  65  static void __wg_prev_queue_enqueue(struct prev_queue *queue, struct sk_buff *skb)
+8b5553ace83cced7 Jason A. Donenfeld 2021-02-22  66  {
+8b5553ace83cced7 Jason A. Donenfeld 2021-02-22  67  	WRITE_ONCE(NEXT(skb), NULL);
+8b5553ace83cced7 Jason A. Donenfeld 2021-02-22 @68  	WRITE_ONCE(NEXT(xchg_release(&queue->head, skb)), skb);
+8b5553ace83cced7 Jason A. Donenfeld 2021-02-22  69  }
+8b5553ace83cced7 Jason A. Donenfeld 2021-02-22  70  
 
 -- 
 0-DAY CI Kernel Test Service
