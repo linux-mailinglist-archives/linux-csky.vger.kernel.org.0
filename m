@@ -2,110 +2,173 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3A9585E48
-	for <lists+linux-csky@lfdr.de>; Sun, 31 Jul 2022 11:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B3F585E52
+	for <lists+linux-csky@lfdr.de>; Sun, 31 Jul 2022 11:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbiGaJZr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 31 Jul 2022 05:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S233735AbiGaJr7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 31 Jul 2022 05:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiGaJZq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 31 Jul 2022 05:25:46 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC454B873;
-        Sun, 31 Jul 2022 02:25:45 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id k15so2108032pfh.1;
-        Sun, 31 Jul 2022 02:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fgm3Q++1bshM2vl04u7TMk9GX8r0/GgZjPpDoVpdNEw=;
-        b=nOYN6MEV8djhhHocvXe+hviriAisVPDKDjgJEmXQnC7GE3aIWE9Ofw/xhg2liiM82U
-         +KwO7/qekJpFxGJTcIQs6Ctl4GJ9n7x29rIcz+B4lWnbhR8/e/3AaZFRo8KHc1eoRael
-         X69jxEngBuKi3ivSukSnVKMM/JaZVdbWvwTwPK3t/I9QelyFY1ZC3lUHBLd4EA29jYwp
-         Db7keNveNxVLU8fBjzU7u0+K4F6xtZ+/Q8cAztfuOCffqEbLLomDQ45aApYY0HBpbPk2
-         SYHx7082vuAwMVHkTaOO5s83Pk9GFsL75hDgnJ/h/ctiqjRX+ZmWGCl9ZTaTKar4Kp6G
-         7KOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fgm3Q++1bshM2vl04u7TMk9GX8r0/GgZjPpDoVpdNEw=;
-        b=hdlrO4RmmUpZIPGFJUjH1Ha1ifA3gvyA3nVoaUIGISoI3tLQe6B2TCCJkS3j4Q6lj9
-         rH1Yf/jZiLoxFA3lnyVov8u+QmL9xVKF2jUhpXgiOcN1Ki/NmdhdqUK0z+GSzfQSKqlF
-         eDOly/4dovD/St4GBXM5ViH15jJtmAv6PZ/lYDn7E3IHri762h31kbFRIJomHqQI48Im
-         o2PM/mtNTXj7aAvoyu1zeQqMRVmAkYyURNpQd3fcpn8XLJJw9GrpuF/KYpCF3JMLqyUF
-         pThwSa7ON/kLIr/2Uwr9nOhuasDLkYc5BMfdbTf9WAF3GKz1IJ6juggDWaHcN7ytq3J7
-         4itg==
-X-Gm-Message-State: ACgBeo0CXPNGeM35IrskWHzi+zZX3YhuM4iPmTrkDrpRITF09ky1C45D
-        nI8FfrjBGZKIXIbsppv2dAU=
-X-Google-Smtp-Source: AA6agR7VU84e7l6aGVkbcFw+tkLywcnjeN6b4ZIQYsTlc3xYB3BhyXpmuUjM/Tsb71Wj1g6nvgb6AQ==
-X-Received: by 2002:a63:5425:0:b0:41b:a9e0:bfc1 with SMTP id i37-20020a635425000000b0041ba9e0bfc1mr6783924pgb.206.1659259545257;
-        Sun, 31 Jul 2022 02:25:45 -0700 (PDT)
-Received: from biggie.. ([103.230.148.186])
-        by smtp.gmail.com with ESMTPSA id t1-20020a170902e84100b0016d1b708729sm7147827plg.132.2022.07.31.02.25.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Jul 2022 02:25:44 -0700 (PDT)
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     keescook@chromium.org, shuah@kernel.org, brauner@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@kernel.org
-Cc:     Gautam Menghani <gautammenghani201@gmail.com>, luto@amacapital.net,
-        wad@chromium.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bpf@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH] selftests/seccomp: Check CAP_SYS_ADMIN capability in the test mode_filter_without_nnp
-Date:   Sun, 31 Jul 2022 14:55:29 +0530
-Message-Id: <20220731092529.28760-1-gautammenghani201@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232174AbiGaJr7 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 31 Jul 2022 05:47:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FB111463;
+        Sun, 31 Jul 2022 02:47:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46A5A60AC6;
+        Sun, 31 Jul 2022 09:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62053C433C1;
+        Sun, 31 Jul 2022 09:47:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659260875;
+        bh=PXuhXAtEtlz/ee7wW/TouzcLsC3AOmyHAuLf8/PbQs0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NNzwY3e/fPX7A12FHKv9hlLY3FyPPbHFopiHQ21QGhaVE6g+qkiNb4cdrvtzYi3TO
+         4hQGmeoVJTtL2JE86RSTyUVvMTb9QW1OAV1BVGhftstFNG1I2H/91c3fiULkYq4LSh
+         DGWbuH0dqXNh3CjTLXNAkdwtfpHKo9zRajApkLkh3Sdw+f3CQGpXlRvbHgGnXAr2/I
+         VfDDaMw0MGjDC9VFSkXg2g3I/CpMBfr5QjT95qksslMUZuCzRBt4O9LNhk6uyiTCp8
+         Q/w2s/qGxPhWlFGvyvfxwSDoU5zda6mu7O6nxt7D70NbhXan+sn54mxOGI7ryesPtJ
+         dxB1v+Wa8zY3A==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, mark.rutland@arm.com
+Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: Add qspinlock support
+Date:   Sun, 31 Jul 2022 05:47:41 -0400
+Message-Id: <20220731094741.3770926-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-In the "mode_filter_without_nnp" test in seccomp_bpf, there is currently
-a TODO which asks to check the capability CAP_SYS_ADMIN instead of euid.
-This patch adds support to check if the calling process has the flag 
-CAP_SYS_ADMIN, and also if this flag has CAP_EFFECTIVE set.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+Enable qspinlock by the requirements mentioned in a8ad07e5240c9
+("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+
+C-SKY only has "ldex/stex" for all atomic operations. So csky give a
+strong forward guarantee for "ldex/stex." That means when ldex grabbed
+the cache line into $L1, it would block other cores from snooping the
+address with several cycles. The atomic_fetch_add & xchg16 has the same
+forward guarantee level in C-SKY.
+
+Qspinlock has better code size and performance in a fast path.
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/csky/Kconfig                      |  1 +
+ arch/csky/include/asm/Kbuild           |  4 ++--
+ arch/csky/include/asm/cmpxchg.h        | 20 ++++++++++++++++++++
+ arch/csky/include/asm/spinlock.h       | 12 ++++++++++++
+ arch/csky/include/asm/spinlock_types.h |  9 +++++++++
+ 5 files changed, 44 insertions(+), 2 deletions(-)
+ create mode 100644 arch/csky/include/asm/spinlock.h
+ create mode 100644 arch/csky/include/asm/spinlock_types.h
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 136df5b76319..16b0edc520ef 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -392,6 +392,8 @@ TEST(mode_filter_without_nnp)
- 		.filter = filter,
- 	};
- 	long ret;
-+	cap_t cap = cap_get_proc();
-+	cap_flag_value_t is_cap_sys_admin = 0;
- 
- 	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, NULL, 0, 0);
- 	ASSERT_LE(0, ret) {
-@@ -400,8 +402,8 @@ TEST(mode_filter_without_nnp)
- 	errno = 0;
- 	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
- 	/* Succeeds with CAP_SYS_ADMIN, fails without */
--	/* TODO(wad) check caps not euid */
--	if (geteuid()) {
-+	cap_get_flag(cap, CAP_SYS_ADMIN, CAP_EFFECTIVE, &is_cap_sys_admin);
-+	if (!is_cap_sys_admin) {
- 		EXPECT_EQ(-1, ret);
- 		EXPECT_EQ(EACCES, errno);
- 	} else {
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 41d7d614f7a2..333def12faef 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -8,6 +8,7 @@ config CSKY
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_QUEUED_RWLOCKS
++	select ARCH_USE_QUEUED_SPINLOCKS
+ 	select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+ 	select COMMON_CLK
+diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+index 103207a58f97..1117c28cb7e8 100644
+--- a/arch/csky/include/asm/Kbuild
++++ b/arch/csky/include/asm/Kbuild
+@@ -3,10 +3,10 @@ generic-y += asm-offsets.h
+ generic-y += extable.h
+ generic-y += gpio.h
+ generic-y += kvm_para.h
+-generic-y += spinlock.h
+-generic-y += spinlock_types.h
++generic-y += mcs_spinlock.h
+ generic-y += qrwlock.h
+ generic-y += qrwlock_types.h
++generic-y += qspinlock.h
+ generic-y += parport.h
+ generic-y += user.h
+ generic-y += vmlinux.lds.h
+diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
+index 5b8faccd65e4..5f693fadb56c 100644
+--- a/arch/csky/include/asm/cmpxchg.h
++++ b/arch/csky/include/asm/cmpxchg.h
+@@ -15,6 +15,26 @@ extern void __bad_xchg(void);
+ 	__typeof__(*(ptr)) __ret;				\
+ 	unsigned long tmp;					\
+ 	switch (size) {						\
++	case 2: {						\
++		u32 ret;					\
++		u32 shif = ((ulong)__ptr & 2) ? 16 : 0;		\
++		u32 mask = 0xffff << shif;			\
++		__ptr = (__typeof__(ptr))((ulong)__ptr & ~2);	\
++		__asm__ __volatile__ (				\
++			"1:	ldex.w %0, (%4)\n"		\
++			"	and    %1, %0, %2\n"		\
++			"	or     %1, %1, %3\n"		\
++			"	stex.w %1, (%4)\n"		\
++			"	bez    %1, 1b\n"		\
++			: "=&r" (ret), "=&r" (tmp)		\
++			: "r" (~mask),				\
++			  "r" ((u32)__new << shif),		\
++			  "r" (__ptr)				\
++			: "memory");				\
++		__ret = (__typeof__(*(ptr)))			\
++			((ret & mask) >> shif);			\
++		break;						\
++	}							\
+ 	case 4:							\
+ 		asm volatile (					\
+ 		"1:	ldex.w		%0, (%3) \n"		\
+diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
+new file mode 100644
+index 000000000000..83a2005341f5
+--- /dev/null
++++ b/arch/csky/include/asm/spinlock.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __ASM_CSKY_SPINLOCK_H
++#define __ASM_CSKY_SPINLOCK_H
++
++#include <asm/qspinlock.h>
++#include <asm/qrwlock.h>
++
++/* See include/linux/spinlock.h */
++#define smp_mb__after_spinlock()	smp_mb()
++
++#endif /* __ASM_CSKY_SPINLOCK_H */
+diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
+new file mode 100644
+index 000000000000..75bdf3af80ba
+--- /dev/null
++++ b/arch/csky/include/asm/spinlock_types.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __ASM_CSKY_SPINLOCK_TYPES_H
++#define __ASM_CSKY_SPINLOCK_TYPES_H
++
++#include <asm-generic/qspinlock_types.h>
++#include <asm-generic/qrwlock_types.h>
++
++#endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
 -- 
-2.34.1
+2.36.1
 
