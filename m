@@ -2,50 +2,48 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F635920FB
-	for <lists+linux-csky@lfdr.de>; Sun, 14 Aug 2022 17:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62D65921A6
+	for <lists+linux-csky@lfdr.de>; Sun, 14 Aug 2022 17:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240526AbiHNPck (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 14 Aug 2022 11:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S240751AbiHNPiy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 14 Aug 2022 11:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbiHNPcC (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 14 Aug 2022 11:32:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8BE1B791;
-        Sun, 14 Aug 2022 08:29:52 -0700 (PDT)
+        with ESMTP id S239944AbiHNPhD (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 14 Aug 2022 11:37:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E19205F2;
+        Sun, 14 Aug 2022 08:32:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17B24B80B7F;
-        Sun, 14 Aug 2022 15:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1068C433C1;
-        Sun, 14 Aug 2022 15:29:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CFF660BC9;
+        Sun, 14 Aug 2022 15:32:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83224C433D7;
+        Sun, 14 Aug 2022 15:32:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660490989;
+        s=k20201202; t=1660491138;
         bh=wx7auUZauTUrHSIJMex3tejmGanZog/dMv720xCvWTQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VK5reFUEzrt93F0C2zMvvnRUy3VBwc/z3EHp+4dKbc3qu44AwKO+DlQCSzMaBJCCA
-         eq0MNoZO8b8tPVEA5UdcrHSlM374VmWC0WGOqhEn63wxmm5NWfx9HejA2eAKsPUHXX
-         gjjyFmYdP+IxtZHz0Kcvy2f2f5smvM2zPWb1bJFNjzdM5lHb2FX/47o8nbiv4Z8/LA
-         2iOeu4+p6vwi3Ig3EQxYzfCvVYcL4LiQialfgQsFFKENteKrAn2EgMySrwrfRNtaRO
-         hNxP+dtNY54eFy/4pj3Xw/MautGg1lzNr2zHaPW0z7c3PcTNnB/kjJ4BmErX/QIKSw
-         B9/TP1H0msJPw==
+        b=Ijf/sVlqE0jSmuqda603FRotRLuFP0X/Plpd+/36M4aYGpqsQfuTx26FLVtHGHFNF
+         kkZJSbeR2e5ZWOyBl/hXEsiqQt9c+iTY5PmYgEu8xxbd1a/A+fLluU4ByGrDM1h5cm
+         6ttulPlQ2oA3CNjsB3DqR7eECmmS+OcRufOWXEaKNW2Om8pOwnU2DroyvMrffsVBjn
+         27VaLU/4Z5I9gKfRdW9DSZkiylbPRy3X06a6nPjAhUJVM/ks65Q2FtrMHtMDKwigJZ
+         yOuMfKmYp8dzQj0ASIRH/2xZV7MTOljaJMJ0mbRFQDJUrm4NzLL7+ggrPpRy5MmXdm
+         lO2EAOJFXXRcA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Liao Chang <liaochang1@huawei.com>,
         Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Guo Ren <guoren@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        rostedt@goodmis.org, julia.lawall@inria.fr,
-        akpm@linux-foundation.org, lkp@intel.com,
-        linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.19 49/64] csky/kprobe: reclaim insn_slot on kprobe unregistration
-Date:   Sun, 14 Aug 2022 11:24:22 -0400
-Message-Id: <20220814152437.2374207-49-sashal@kernel.org>
+        rostedt@goodmis.org, lkp@intel.com, linux-csky@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 43/56] csky/kprobe: reclaim insn_slot on kprobe unregistration
+Date:   Sun, 14 Aug 2022 11:30:13 -0400
+Message-Id: <20220814153026.2377377-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814152437.2374207-1-sashal@kernel.org>
-References: <20220814152437.2374207-1-sashal@kernel.org>
+In-Reply-To: <20220814153026.2377377-1-sashal@kernel.org>
+References: <20220814153026.2377377-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
