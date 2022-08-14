@@ -2,35 +2,35 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62D65921A6
-	for <lists+linux-csky@lfdr.de>; Sun, 14 Aug 2022 17:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EEA592242
+	for <lists+linux-csky@lfdr.de>; Sun, 14 Aug 2022 17:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240751AbiHNPiy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 14 Aug 2022 11:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S241187AbiHNPrI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 14 Aug 2022 11:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239944AbiHNPhD (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 14 Aug 2022 11:37:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E19205F2;
-        Sun, 14 Aug 2022 08:32:19 -0700 (PDT)
+        with ESMTP id S241239AbiHNPox (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 14 Aug 2022 11:44:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F3248E1;
+        Sun, 14 Aug 2022 08:34:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CFF660BC9;
-        Sun, 14 Aug 2022 15:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83224C433D7;
-        Sun, 14 Aug 2022 15:32:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35239B80B79;
+        Sun, 14 Aug 2022 15:34:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E452EC433C1;
+        Sun, 14 Aug 2022 15:34:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660491138;
-        bh=wx7auUZauTUrHSIJMex3tejmGanZog/dMv720xCvWTQ=;
+        s=k20201202; t=1660491244;
+        bh=lY8Vu6e1a86oTT8LLYHfgkFVDDyf4+IO166QYIoKdS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ijf/sVlqE0jSmuqda603FRotRLuFP0X/Plpd+/36M4aYGpqsQfuTx26FLVtHGHFNF
-         kkZJSbeR2e5ZWOyBl/hXEsiqQt9c+iTY5PmYgEu8xxbd1a/A+fLluU4ByGrDM1h5cm
-         6ttulPlQ2oA3CNjsB3DqR7eECmmS+OcRufOWXEaKNW2Om8pOwnU2DroyvMrffsVBjn
-         27VaLU/4Z5I9gKfRdW9DSZkiylbPRy3X06a6nPjAhUJVM/ks65Q2FtrMHtMDKwigJZ
-         yOuMfKmYp8dzQj0ASIRH/2xZV7MTOljaJMJ0mbRFQDJUrm4NzLL7+ggrPpRy5MmXdm
-         lO2EAOJFXXRcA==
+        b=reeUw7Su+x7OFAsbsfPGVuofObE0hWaoGYvoO9TMYmxOLzazFNOrzrx97MNNKBJnT
+         w3zYciuAZ62nvHhg6adb95y3+iYQqnpBgdhqqzO9AOsHoi20Dn3Q56ya1XuoCZLYFC
+         zEJWzjcpCO8pnJSdDkVIFY+YrLjT2Tw/foYKDyZnF4f7WIdRBrI2bsBRIA6+WbDKLM
+         EOH52PuNLMKJwc7dMAMu2tvi0jhKfil6XWtFPRI+Grea+7BMLvNKJB8/uu6fOQBs36
+         B/CWijjrSKSvPr48pFms1XtrEKxIjZtRM6Jja1h3BdgFb9S7UCv/wvwJg75dnZHXBU
+         Pj1K0n+cs1p7A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Liao Chang <liaochang1@huawei.com>,
@@ -38,12 +38,12 @@ Cc:     Liao Chang <liaochang1@huawei.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Guo Ren <guoren@kernel.org>, Sasha Levin <sashal@kernel.org>,
         rostedt@goodmis.org, lkp@intel.com, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 43/56] csky/kprobe: reclaim insn_slot on kprobe unregistration
-Date:   Sun, 14 Aug 2022 11:30:13 -0400
-Message-Id: <20220814153026.2377377-43-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 35/46] csky/kprobe: reclaim insn_slot on kprobe unregistration
+Date:   Sun, 14 Aug 2022 11:32:36 -0400
+Message-Id: <20220814153247.2378312-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220814153026.2377377-1-sashal@kernel.org>
-References: <20220814153026.2377377-1-sashal@kernel.org>
+In-Reply-To: <20220814153247.2378312-1-sashal@kernel.org>
+References: <20220814153247.2378312-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -76,7 +76,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/arch/csky/kernel/probes/kprobes.c b/arch/csky/kernel/probes/kprobes.c
-index 34ba684d5962..3c6e5c725d81 100644
+index 4045894d9280..584ed9f36290 100644
 --- a/arch/csky/kernel/probes/kprobes.c
 +++ b/arch/csky/kernel/probes/kprobes.c
 @@ -124,6 +124,10 @@ void __kprobes arch_disarm_kprobe(struct kprobe *p)
