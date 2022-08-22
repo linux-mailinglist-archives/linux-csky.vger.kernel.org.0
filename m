@@ -2,159 +2,121 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9923059B5AF
-	for <lists+linux-csky@lfdr.de>; Sun, 21 Aug 2022 19:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462F959BBFC
+	for <lists+linux-csky@lfdr.de>; Mon, 22 Aug 2022 10:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiHURm7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 21 Aug 2022 13:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S233380AbiHVItt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 22 Aug 2022 04:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiHURm5 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 21 Aug 2022 13:42:57 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE47721823;
-        Sun, 21 Aug 2022 10:42:53 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b5so6395216wrr.5;
-        Sun, 21 Aug 2022 10:42:53 -0700 (PDT)
+        with ESMTP id S232048AbiHVItl (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 22 Aug 2022 04:49:41 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A712E6A6;
+        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id x19so9309988plc.5;
+        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=7Nrg8mvlqxFEJfzKh/tw2+dBWE8D/s98GD2ZnmZvMl4=;
-        b=F0ptjTbxLv2NJaVf2gvBlBshDMfCokLJPPMsIV35UHBlxVECPPma43FPvPitouEYuo
-         8dgtnhsmPRFBvIO948wmtVOueVdGaHu/6efegZ+eBz+dquE2oOi9XMsurik6HL7oB6MX
-         jV8pUVxH3f1RrwF0NH6pncq2tH6AwoMHlp65ZDTNCyiT6v1mar/Hou3sFmBJRov6RKag
-         O1el0UDp9u/+GhEvUUZhnnL+z+SJXn9IfDfG4Dlp/Iuz3gqoHz6wEPHD+abHkg+f2q3v
-         w/lO0XWXR94cHio73ZqXyXjLv1uGE7J2Xgag56CksB4nH92y765Uk+pyJbn+nJIZ5N3k
-         uDSQ==
+        bh=iCDhhI8vpKAF6ccQbhIqtzhgqF2l3okiXUrZiiXnnm0=;
+        b=W9Bhg7iSBNOgvnU4J2cCOmqNHfLa6kD+gS/Usqk3AknhHc4v+WiAGy+JIEpPk93F0v
+         ZshHrlelmZNNgf8KNqLcb2tdv1RVNyQ8n2r9V1LafUXbS29Nfdmtx3Bk4T2UYNjQbWdQ
+         IROe8E7Zl0eewBHK1sXgs9MmGbJECKFYcUSw81vfilrCvGg+ZbUA4gOLuTUO6Q7BEYJe
+         MN+Wo90tD7jV4sH/X4vyuwR3x5Dph7r+EdaKdioVD6yx07RcnroQp+rGacCErIWwFtuE
+         QhTbdQdv1J//jmz2eZQHWOI5vKSy3TwcG8mOESrZt1vrbVa3t25yUqVLuSQfBzvMQnt4
+         I0Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=7Nrg8mvlqxFEJfzKh/tw2+dBWE8D/s98GD2ZnmZvMl4=;
-        b=wGX9SubZqi99/Ue3MgCKY3zxmsKb3MbnLb5/NwjxQpfZ5wzQmav5jjGeUc887aHKG4
-         rb1quJkyuDQV0w16GRoEqaC5GKtUWApRXiZ6SpWp2kVE+isc5HhWymU1P5gbmW/9rh6g
-         EuGnLJgqy31tUjF+OdqiMOH8zk08mK8ED/Z3sflQbo/YaBgSVwAiCBHWJ6+ZQI9HrDx+
-         nnVNX9ivFukySPjcqM9Df1TAIHvZTN/OaO7RL2ckutH6yN9K1GOts/zDsQxIIZSOZBKB
-         frVQ2VBy6h5LSVspcfzXODjQB1YWV6i+OshAtaElfnQP1PL1IduiKttThm30nyJectxt
-         CAsA==
-X-Gm-Message-State: ACgBeo3r87zs85hxGEUbeTgUNSAquEv54tMpf8lZSjYW7YwxyqZW3dsB
-        0BnN+1jJ+OwrJS44ytpizFU=
-X-Google-Smtp-Source: AA6agR6ii5ETBOVbnXGvrEQ2XHp9wCOCZjRgmUsSrgmsT/hEBxdRm1IL0twc5nHL0nICTG/92OzUKA==
-X-Received: by 2002:a05:6000:993:b0:222:d509:4b5b with SMTP id by19-20020a056000099300b00222d5094b5bmr9262211wrb.52.1661103772368;
-        Sun, 21 Aug 2022 10:42:52 -0700 (PDT)
-Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
-        by smtp.gmail.com with ESMTPSA id t24-20020a1c7718000000b003a643ac2b08sm6876286wmi.8.2022.08.21.10.42.51
+        bh=iCDhhI8vpKAF6ccQbhIqtzhgqF2l3okiXUrZiiXnnm0=;
+        b=VcMRJ34isvyMSdDDD+OPbnMLfThLay1pBwGTa4GBu5tmRA82NvFljBJ6wGWtZmk0Gv
+         ttjLVwjGt/z9Wd8vCgSvltjhb02ItUACWx5dbUg26w//0c35j2aQuUOWJ1gHiTKpwxp0
+         8xehUYDBnF1cCLL/M4u6T/1NIghMYeTgDcTXV8DOmbIA5F1TzoIyrYCry/sjvjPuc6HG
+         kSvVcajYXYKrN+4xOGBLDnfOe2wCtNMtH0vLPXzYz7eELVLTPNEjO/EXzTrHOEngVDFH
+         cw66SJFNfmv4mxbHN9qb15lXmpyvDZ/73uQCUgvVYa08ImSIYmwROs/qVbVoqa2a9RId
+         892g==
+X-Gm-Message-State: ACgBeo1tHY5uzHESZIGo3aDsoiqi3fwNjyTNlaY5Ygv9FOH3bZoWMqKg
+        iqxe2heRrwE4a9biylT94YE=
+X-Google-Smtp-Source: AA6agR6cvVQaqLj53v88y85bXAGnA2dBM9QOcc34rNSyJrlGP9xIQiKAtSUBCGRWwgaBCUY9lmf8Ow==
+X-Received: by 2002:a17:903:2602:b0:172:ba94:1590 with SMTP id jd2-20020a170903260200b00172ba941590mr17217787plb.146.1661158177309;
+        Mon, 22 Aug 2022 01:49:37 -0700 (PDT)
+Received: from fedora ([103.230.148.185])
+        by smtp.gmail.com with ESMTPSA id c2-20020a634e02000000b00401a9bc0f33sm6874136pgb.85.2022.08.22.01.49.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Aug 2022 10:42:51 -0700 (PDT)
-Date:   Sun, 21 Aug 2022 17:42:51 +0000
-From:   Stafford Horne <shorne@gmail.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH] kernel: exit: cleanup release_thread()
-Message-ID: <YwJum2c1I8JhY0B8@oscomms1>
-References: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
+        Mon, 22 Aug 2022 01:49:36 -0700 (PDT)
+Date:   Mon, 22 Aug 2022 14:19:28 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     keescook@chromium.org, shuah@kernel.org, brauner@kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, guoren@kernel.org
+Cc:     luto@amacapital.net, wad@chromium.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, bpf@vger.kernel.org,
+        linux-csky@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/seccomp: Check CAP_SYS_ADMIN capability in the
+ test mode_filter_without_nnp
+Message-ID: <YwNDGAVrik3DvWZf@fedora>
+References: <20220731092529.28760-1-gautammenghani201@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220819014406.32266-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220731092529.28760-1-gautammenghani201@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 09:44:06AM +0800, Kefeng Wang wrote:
-> Only x86 has own release_thread(), introduce a new weak
-> release_thread() function to clean empty definitions in
-> other ARCHs.
+On Sun, Jul 31, 2022 at 02:55:29PM +0530, Gautam Menghani wrote:
+> In the "mode_filter_without_nnp" test in seccomp_bpf, there is currently
+> a TODO which asks to check the capability CAP_SYS_ADMIN instead of euid.
+> This patch adds support to check if the calling process has the flag 
+> CAP_SYS_ADMIN, and also if this flag has CAP_EFFECTIVE set.
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
 > ---
-
->  arch/openrisc/include/asm/processor.h   | 1 -
->  arch/openrisc/kernel/process.c          | 4 ----
-
-> diff --git a/arch/openrisc/include/asm/processor.h b/arch/openrisc/include/asm/processor.h
-> index aa1699c18add..ed9efb430afa 100644
-> --- a/arch/openrisc/include/asm/processor.h
-> +++ b/arch/openrisc/include/asm/processor.h
-> @@ -72,7 +72,6 @@ struct thread_struct {
+>  tools/testing/selftests/seccomp/seccomp_bpf.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 136df5b76319..16b0edc520ef 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -392,6 +392,8 @@ TEST(mode_filter_without_nnp)
+>  		.filter = filter,
+>  	};
+>  	long ret;
+> +	cap_t cap = cap_get_proc();
+> +	cap_flag_value_t is_cap_sys_admin = 0;
 >  
->  
->  void start_thread(struct pt_regs *regs, unsigned long nip, unsigned long sp);
-> -void release_thread(struct task_struct *);
->  unsigned long __get_wchan(struct task_struct *p);
->  
->  #define cpu_relax()     barrier()
-> diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/process.c
-> index 52dc983ddeba..f94b5ec06786 100644
-> --- a/arch/openrisc/kernel/process.c
-> +++ b/arch/openrisc/kernel/process.c
-> @@ -125,10 +125,6 @@ void show_regs(struct pt_regs *regs)
->  	show_registers(regs);
->  }
->  
-> -void release_thread(struct task_struct *dead_task)
-> -{
-> -}
-> -
->  /*
->   * Copy the thread-specific (arch specific) info from the current
->   * process to the new one p
+>  	ret = prctl(PR_GET_NO_NEW_PRIVS, 0, NULL, 0, 0);
+>  	ASSERT_LE(0, ret) {
+> @@ -400,8 +402,8 @@ TEST(mode_filter_without_nnp)
+>  	errno = 0;
+>  	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog, 0, 0);
+>  	/* Succeeds with CAP_SYS_ADMIN, fails without */
+> -	/* TODO(wad) check caps not euid */
+> -	if (geteuid()) {
+> +	cap_get_flag(cap, CAP_SYS_ADMIN, CAP_EFFECTIVE, &is_cap_sys_admin);
+> +	if (!is_cap_sys_admin) {
+>  		EXPECT_EQ(-1, ret);
+>  		EXPECT_EQ(EACCES, errno);
+>  	} else {
+> -- 
+> 2.34.1
+> 
 
-For OpenRISC bits.
+Hi,
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+Please review the above patch and let me know if any changes are required.
+
+Thanks,
+Gautam
