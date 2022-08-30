@@ -2,82 +2,64 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D361B5A1AAC
-	for <lists+linux-csky@lfdr.de>; Thu, 25 Aug 2022 23:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0204D5A6D74
+	for <lists+linux-csky@lfdr.de>; Tue, 30 Aug 2022 21:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243477AbiHYVBh (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 25 Aug 2022 17:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
+        id S230041AbiH3ThJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 30 Aug 2022 15:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbiHYVBe (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 25 Aug 2022 17:01:34 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16701A346C
-        for <linux-csky@vger.kernel.org>; Thu, 25 Aug 2022 14:01:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id az27so6062356wrb.6
-        for <linux-csky@vger.kernel.org>; Thu, 25 Aug 2022 14:01:27 -0700 (PDT)
+        with ESMTP id S229457AbiH3ThI (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 30 Aug 2022 15:37:08 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574E661D68
+        for <linux-csky@vger.kernel.org>; Tue, 30 Aug 2022 12:37:06 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n18-20020a25d612000000b0069661a1dc48so498525ybg.20
+        for <linux-csky@vger.kernel.org>; Tue, 30 Aug 2022 12:37:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=Z63zwi7cGAuKiNoBIs10Ekj9CC9KQ4p8G+KukTWva3I=;
-        b=SJaPKdEKD3cZ4U2ILmGJ7YYl8jrjkW+umstaVhULXfth/8eB87EBEKn/1mLbA1W76X
-         PzwduEhBRnRX4YqA+aiPXjDTcwdjcfx/3gAU9DBS4WBTJpRmqny0NPSmw9G9ochTOInu
-         2WeWfYenhoC74R53yv/Z0OwTJEtmrKUx6FM/amJ0sZsda7+BI8NV+YKEpXHvhWWUIQjL
-         jIvX/rug3aVUgMdrWNpc6nGPjyF4/U1BUWb17IFkiyO/CnXUmbpjEQXfrqIv9bH9Ityb
-         Jo9HX3MLhnjEaryWcsPgu/zFHTD87Za/Foj2KTeWLFsfxj4oLiPHVvekJWAPqw55D4IJ
-         wP5A==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=HzbcF/PG+Qawg6hoRF5n8gXT8jVmH+0bSMmdlpBSH5Q=;
+        b=WpitjJHu8yxIzlhTDzfzTCcSOyFFbGrF9N7RrYOmSR07TVUgSws08DXXqfslj/EH5j
+         IsYZqhJ5K8tAhqVApAq2q/WIC/++F5MDzikJlI38OBsGNSnjrVnezaJyqELJ24AWj9oY
+         +7zvlA29KkLUGk9Uj43LWRMl4eQscf8yt8u3sVQKPxrcuFB3XdTu33eTM9AW7mrkzjHJ
+         MWB68cpxlcvUtd5L6VGzqO0qLNv4Hgt9Va3PWgaVR9ZPp1c62DtJKo0xM30WTUSA53v6
+         pG4vF6AJRUnrXSYmplq5oKz4I9od/3GkzCLSCofbWUy+mWFkhhKIj3T9xk09kAq1idXu
+         8d5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Z63zwi7cGAuKiNoBIs10Ekj9CC9KQ4p8G+KukTWva3I=;
-        b=1anvUlVhQcPcWdG27KhvMTHoKs0MX0cgKmqUX90hSNQCgQcqsGaVYuWJR6aZfSIbVi
-         hNfYtD5FyCUKErzl/qlqsMK0hL27dikFsh5mogD2cwsCvFCiDkkRs70cHYVimvJ8XZ4C
-         5RaIPSGIKdP9Db2m9XUc+zPHSjc0O6JXVhH8wvPpVpmp3UyT1H+9YeKwgBCyZY/sdNpy
-         P+bUL/TY/pff/M54mqboFMnQMoY0XKZP8eWpTZkX3qrrEhBWUrZR8Pydhn1QMh+2ykyR
-         w/0KB5ggH0Q5QzZqFR8qit5b9rlX4YnsH4vL8SF8dMJ/E+n81rFuEr9HxCjmMFQicIfN
-         zGLQ==
-X-Gm-Message-State: ACgBeo0EjRMw2I3sIBr2AimbLTWgUqB8TlgsMq68qnNOi7OWVM1LA97T
-        afY0Cn03W43FWLe7+yT6z4ra3A==
-X-Google-Smtp-Source: AA6agR6CHzaozIjR/7Q20mq4qiXqh3OzKi41CUQLkIeloF4Lpy2xCkUYlbFCvfPNRwRzxYHUk2X5VA==
-X-Received: by 2002:a5d:5b19:0:b0:225:3ed4:ff64 with SMTP id bx25-20020a5d5b19000000b002253ed4ff64mr3336331wrb.537.1661461285500;
-        Thu, 25 Aug 2022 14:01:25 -0700 (PDT)
-Received: from henark71.. ([51.37.149.245])
-        by smtp.gmail.com with ESMTPSA id i14-20020adffdce000000b00225213fd4a9sm220877wrs.33.2022.08.25.14.01.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Aug 2022 14:01:24 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     arnd@arndb.de, linux-arch@vger.kernel.org
-Cc:     richard.henderson@linaro.org, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, geert@linux-m68k.org, gerg@linux-m68k.org,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        shorne@gmail.com, deller@gmx.de, mpe@ellerman.id.au,
-        palmer@dabbelt.com, hca@linux.ibm.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, davem@davemloft.net, richard@nod.at,
-        x86@kernel.org, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-fsdevel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2] include/linux: declare cpuinfo_op in processor.h
-Date:   Thu, 25 Aug 2022 21:59:43 +0100
-Message-Id: <20220825205942.1713914-1-mail@conchuod.ie>
-X-Mailer: git-send-email 2.37.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=HzbcF/PG+Qawg6hoRF5n8gXT8jVmH+0bSMmdlpBSH5Q=;
+        b=796JXVvmmhNpIhcVIb3B1oOoe2DxP1Uog0ikrA+HSyooUPsTcD0hYZHfAQd2bBHTlH
+         X1sZbFfQJh9/DvPx/kDCH6psp13Jb1OOHZ3wnl5WB1o3NOEVygwg48ehLnur71R+k8QT
+         +Xt0/9MqeJmHHuCLSdX/FH8DEQoWNOKSHKP3UXjnt+LYwHjeSVAYtwgaXzGCZW4+E7BE
+         yerng8y3uSWhaQ7+OJoOagJPRR2S1k7Qp3RIiomvY8hlaPXzJP4jcp2X9x+rYpSPHPZA
+         ogU4dr3/nNR9uR+g/jWDhHlnyre/CmPnEmpEQZhM8RnB/inhoHYGU+ooparHGMr7Zt+d
+         kyuA==
+X-Gm-Message-State: ACgBeo19O701MGS+O86UplGe3JS+7kpVKPyEOi+6BqO8j/S09VE+V+NS
+        HMo8+m3P2c50zUNbAi9RiB1zVwJVc9TK
+X-Google-Smtp-Source: AA6agR7bVRyO8OFgpLGeXzgagUQGCk3zR5h8YG1Nini2V46NdLsYk5dAFhH/q7QqcX6WfjSFE1K09uH566NU
+X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:2c5:644c:c610:2bb9])
+ (user=maskray job=sendgmr) by 2002:a0d:eb4f:0:b0:341:8004:8ebd with SMTP id
+ u76-20020a0deb4f000000b0034180048ebdmr3573747ywe.396.1661888225675; Tue, 30
+ Aug 2022 12:37:05 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 12:37:01 -0700
+Mime-Version: 1.0
+Message-ID: <20220830193701.1702962-1-maskray@google.com>
+Subject: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic relocations
+From:   Fangrui Song <maskray@google.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
+Cc:     Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,436 +67,213 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+The actual intention is that no dynamic relocation exists. However, some
+GNU ld ports produce unneeded R_*_NONE. (If a port is not care enough to
+determine the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+relocations. E.g. powerpc64le ld as of 2.38 has the issue with
+defconfig.) R_*_NONE are generally no-op in the dynamic loaders. So just
+ignore them.
 
-RISC-V is missing a prototype for cpuinfo_op, triggering complaints
-from sparse. Rather than adding yet another `extern const struct
-seq_operations cpuinfo_op;` to an arch specific header file, create a
-generic variant and include it across the board.
+With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+not called "absolute relocations". (The patch is motivated by the arm64
+port missing R_AARCH64_RELATIVE.)
 
-Several archs already have a declaration in asm/processor.h - migrate
-these to include linux/processor.h instead. Most archs do not declare
-cpuinfo_op so one sparse complaint off their books.
+While here, replace "egrep" with "grep" as "egrep" is deprecated in GNU
+grep 3.7.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Fangrui Song <maskray@google.com>
 ---
-Changes since v1:
-- Per Geert, use linux/processor.h & include it on all archs &
-- Squash to a single patch
+ arch/arm/vdso/Makefile            |  3 ---
+ arch/arm64/kernel/vdso/Makefile   |  3 ---
+ arch/arm64/kernel/vdso32/Makefile |  3 ---
+ arch/csky/kernel/vdso/Makefile    |  3 ---
+ arch/loongarch/vdso/Makefile      |  3 ---
+ arch/mips/vdso/Makefile           |  3 ---
+ arch/powerpc/kernel/vdso/Makefile |  1 -
+ arch/riscv/kernel/vdso/Makefile   |  3 ---
+ arch/s390/kernel/vdso32/Makefile  |  2 --
+ arch/s390/kernel/vdso64/Makefile  |  2 --
+ arch/x86/entry/vdso/Makefile      |  4 ----
+ lib/vdso/Makefile                 | 13 ++++---------
+ 12 files changed, 4 insertions(+), 39 deletions(-)
 
-I pushed it out for LKP to take a look at, and was all good there.
-Only added one person per arch & the mailing lists to stay within a
-1024 character CC list. Please scream if I picked the wrong person.
----
- arch/alpha/kernel/setup.c               | 1 +
- arch/arc/kernel/setup.c                 | 1 +
- arch/arm/kernel/setup.c                 | 1 +
- arch/arm64/kernel/cpuinfo.c             | 1 +
- arch/csky/kernel/cpu-probe.c            | 1 +
- arch/hexagon/kernel/setup.c             | 1 +
- arch/ia64/kernel/setup.c                | 1 +
- arch/loongarch/kernel/proc.c            | 1 +
- arch/m68k/kernel/setup_mm.c             | 1 +
- arch/m68k/kernel/setup_no.c             | 1 +
- arch/microblaze/include/asm/processor.h | 2 --
- arch/microblaze/kernel/cpu/mb.c         | 1 +
- arch/mips/kernel/proc.c                 | 1 +
- arch/nios2/kernel/cpuinfo.c             | 1 +
- arch/openrisc/kernel/setup.c            | 1 +
- arch/parisc/kernel/setup.c              | 1 +
- arch/powerpc/kernel/setup-common.c      | 1 +
- arch/riscv/kernel/cpu.c                 | 3 ++-
- arch/s390/include/asm/processor.h       | 2 +-
- arch/s390/kernel/processor.c            | 1 +
- arch/sh/include/asm/processor.h         | 1 -
- arch/sh/kernel/cpu/proc.c               | 1 +
- arch/sparc/include/asm/cpudata.h        | 2 --
- arch/sparc/kernel/cpu.c                 | 1 +
- arch/um/kernel/um_arch.c                | 1 +
- arch/x86/include/asm/processor.h        | 2 --
- arch/x86/kernel/cpu/proc.c              | 1 +
- arch/xtensa/kernel/setup.c              | 1 +
- fs/proc/cpuinfo.c                       | 3 +--
- include/linux/processor.h               | 2 ++
- 30 files changed, 28 insertions(+), 11 deletions(-)
-
-diff --git a/arch/alpha/kernel/setup.c b/arch/alpha/kernel/setup.c
-index b4fbbba30aa2..d2c2546e9b1a 100644
---- a/arch/alpha/kernel/setup.c
-+++ b/arch/alpha/kernel/setup.c
-@@ -46,6 +46,7 @@
- #include <asm/io.h>
- #include <linux/log2.h>
- #include <linux/export.h>
-+#include <linux/processor.h>
+diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+index 8ca1c9f262a2..5ebd2e6f7d46 100644
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -1,8 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- static int alpha_panic_event(struct notifier_block *, unsigned long, void *);
- static struct notifier_block alpha_panic_block = {
-diff --git a/arch/arc/kernel/setup.c b/arch/arc/kernel/setup.c
-index 41f07b3e594e..b681bdd21a0c 100644
---- a/arch/arc/kernel/setup.c
-+++ b/arch/arc/kernel/setup.c
-@@ -17,6 +17,7 @@
- #include <linux/of_fdt.h>
- #include <linux/of.h>
- #include <linux/cache.h>
-+#include <linux/processor.h>
- #include <uapi/linux/mount.h>
- #include <asm/sections.h>
- #include <asm/arcregs.h>
-diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
-index 1e8a50a97edf..83240c3c0463 100644
---- a/arch/arm/kernel/setup.c
-+++ b/arch/arm/kernel/setup.c
-@@ -29,6 +29,7 @@
- #include <linux/compiler.h>
- #include <linux/sort.h>
- #include <linux/psci.h>
-+#include <linux/processor.h>
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+ include $(srctree)/lib/vdso/Makefile
  
- #include <asm/unified.h>
- #include <asm/cp15.h>
-diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-index d7702f39b4d3..4c1b12918aed 100644
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -20,6 +20,7 @@
- #include <linux/personality.h>
- #include <linux/preempt.h>
- #include <linux/printk.h>
-+#include <linux/processor.h>
- #include <linux/seq_file.h>
- #include <linux/sched.h>
- #include <linux/smp.h>
-diff --git a/arch/csky/kernel/cpu-probe.c b/arch/csky/kernel/cpu-probe.c
-index 5f15ca31d3e8..62580f5d0d74 100644
---- a/arch/csky/kernel/cpu-probe.c
-+++ b/arch/csky/kernel/cpu-probe.c
-@@ -5,6 +5,7 @@
- #include <linux/init.h>
- #include <linux/seq_file.h>
- #include <linux/memblock.h>
-+#include <linux/processor.h>
+ hostprogs := vdsomunge
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index bafbf78fab77..66dc4f338a86 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -6,9 +6,6 @@
+ # Heavily based on the vDSO Makefiles for other archs.
+ #
  
- #include <abi/reg_ops.h>
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_AARCH64_JUMP_SLOT|R_AARCH64_GLOB_DAT|R_AARCH64_ABS64
+ include $(srctree)/lib/vdso/Makefile
  
-diff --git a/arch/hexagon/kernel/setup.c b/arch/hexagon/kernel/setup.c
-index 1880d9beaf2b..395d2930dbd1 100644
---- a/arch/hexagon/kernel/setup.c
-+++ b/arch/hexagon/kernel/setup.c
-@@ -13,6 +13,7 @@
- #include <linux/seq_file.h>
- #include <linux/console.h>
- #include <linux/of_fdt.h>
-+#include <linux/processor.h>
- #include <asm/io.h>
- #include <asm/sections.h>
- #include <asm/setup.h>
-diff --git a/arch/ia64/kernel/setup.c b/arch/ia64/kernel/setup.c
-index fd6301eafa9d..973725c4ce1e 100644
---- a/arch/ia64/kernel/setup.c
-+++ b/arch/ia64/kernel/setup.c
-@@ -52,6 +52,7 @@
- #include <linux/cpufreq.h>
- #include <linux/kexec.h>
- #include <linux/crash_dump.h>
-+#include <linux/processor.h>
+ obj-vdso := vgettimeofday.o note.o sigreturn.o
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index 36c8f66cad25..48d713d59ef2 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -3,9 +3,6 @@
+ # Makefile for vdso32
+ #
  
- #include <asm/mca.h>
- #include <asm/meminit.h>
-diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-index 5c67cc4fd56d..a8cbebe839e2 100644
---- a/arch/loongarch/kernel/proc.c
-+++ b/arch/loongarch/kernel/proc.c
-@@ -6,6 +6,7 @@
- #include <linux/kernel.h>
- #include <linux/sched.h>
- #include <linux/seq_file.h>
-+#include <linux/processor.h>
- #include <asm/bootinfo.h>
- #include <asm/cpu.h>
- #include <asm/cpu-features.h>
-diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
-index e62fa8f2149b..45d82a4839fc 100644
---- a/arch/m68k/kernel/setup_mm.c
-+++ b/arch/m68k/kernel/setup_mm.c
-@@ -25,6 +25,7 @@
- #include <linux/module.h>
- #include <linux/nvram.h>
- #include <linux/initrd.h>
-+#include <linux/processor.h>
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+ include $(srctree)/lib/vdso/Makefile
  
- #include <asm/bootinfo.h>
- #include <asm/byteorder.h>
-diff --git a/arch/m68k/kernel/setup_no.c b/arch/m68k/kernel/setup_no.c
-index cb6def585851..86dd4b47ff43 100644
---- a/arch/m68k/kernel/setup_no.c
-+++ b/arch/m68k/kernel/setup_no.c
-@@ -33,6 +33,7 @@
- #include <linux/initrd.h>
- #include <linux/root_dev.h>
- #include <linux/rtc.h>
-+#include <linux/processor.h>
+ # Same as cc-*option, but using CC_COMPAT instead of CC
+diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
+index 0b6909f10667..86c8c4de1b0f 100644
+--- a/arch/csky/kernel/vdso/Makefile
++++ b/arch/csky/kernel/vdso/Makefile
+@@ -1,8 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
- #include <asm/setup.h>
- #include <asm/bootinfo.h>
-diff --git a/arch/microblaze/include/asm/processor.h b/arch/microblaze/include/asm/processor.h
-index 7e9e92670df3..c5877c91116a 100644
---- a/arch/microblaze/include/asm/processor.h
-+++ b/arch/microblaze/include/asm/processor.h
-@@ -15,8 +15,6 @@
- #include <asm/current.h>
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_CKCORE_ADDR32|R_CKCORE_JUMP_SLOT
+ include $(srctree)/lib/vdso/Makefile
  
- # ifndef __ASSEMBLY__
--/* from kernel/cpu/mb.c */
--extern const struct seq_operations cpuinfo_op;
+ # Symbols present in the vdso
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index d89e2ac75f7b..1b2e0f149f55 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -1,9 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Objects to go into the VDSO.
  
- # define cpu_relax()		barrier()
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
+ include $(srctree)/lib/vdso/Makefile
  
-diff --git a/arch/microblaze/kernel/cpu/mb.c b/arch/microblaze/kernel/cpu/mb.c
-index 9581d194d9e4..33f5be916121 100644
---- a/arch/microblaze/kernel/cpu/mb.c
-+++ b/arch/microblaze/kernel/cpu/mb.c
-@@ -14,6 +14,7 @@
- #include <linux/seq_file.h>
- #include <linux/cpu.h>
- #include <linux/initrd.h>
-+#include <linux/processor.h>
+ obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index f72658b3a53f..cea97abffc03 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -4,9 +4,6 @@
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+  KCSAN_SANITIZE			:= n
  
- #include <linux/bug.h>
- #include <asm/cpuinfo.h>
-diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
-index 8eba5a1ed664..54a4226cff84 100644
---- a/arch/mips/kernel/proc.c
-+++ b/arch/mips/kernel/proc.c
-@@ -8,6 +8,7 @@
- #include <linux/kernel.h>
- #include <linux/sched.h>
- #include <linux/seq_file.h>
-+#include <linux/processor.h>
- #include <asm/bootinfo.h>
- #include <asm/cpu.h>
- #include <asm/cpu-features.h>
-diff --git a/arch/nios2/kernel/cpuinfo.c b/arch/nios2/kernel/cpuinfo.c
-index 203870c4b86d..9641ca55377e 100644
---- a/arch/nios2/kernel/cpuinfo.c
-+++ b/arch/nios2/kernel/cpuinfo.c
-@@ -12,6 +12,7 @@
- #include <linux/seq_file.h>
- #include <linux/string.h>
- #include <linux/of.h>
-+#include <linux/processor.h>
- #include <asm/cpuinfo.h>
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
+ include $(srctree)/lib/vdso/Makefile
  
- struct cpuinfo cpuinfo;
-diff --git a/arch/openrisc/kernel/setup.c b/arch/openrisc/kernel/setup.c
-index 0cd04d936a7a..a628c928941b 100644
---- a/arch/openrisc/kernel/setup.c
-+++ b/arch/openrisc/kernel/setup.c
-@@ -33,6 +33,7 @@
- #include <linux/of_fdt.h>
- #include <linux/of.h>
- #include <linux/device.h>
-+#include <linux/processor.h>
+ obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
+diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+index 096b0bf1335f..d3c5be32034d 100644
+--- a/arch/powerpc/kernel/vdso/Makefile
++++ b/arch/powerpc/kernel/vdso/Makefile
+@@ -2,7 +2,6 @@
  
- #include <asm/sections.h>
- #include <asm/types.h>
-diff --git a/arch/parisc/kernel/setup.c b/arch/parisc/kernel/setup.c
-index f005ddedb50e..d00488507f49 100644
---- a/arch/parisc/kernel/setup.c
-+++ b/arch/parisc/kernel/setup.c
-@@ -25,6 +25,7 @@
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
- #include <linux/start_kernel.h>
-+#include <linux/processor.h>
+ # List of files in the vdso, has to be asm only for now
  
- #include <asm/cacheflush.h>
- #include <asm/processor.h>
-diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
-index dd98f43bd685..12ddcb1401be 100644
---- a/arch/powerpc/kernel/setup-common.c
-+++ b/arch/powerpc/kernel/setup-common.c
-@@ -34,6 +34,7 @@
- #include <linux/of_platform.h>
- #include <linux/hugetlb.h>
- #include <linux/pgtable.h>
-+#include <linux/processor.h>
- #include <asm/io.h>
- #include <asm/paca.h>
- #include <asm/processor.h>
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index 0be8a2403212..f28ec528d54a 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -4,8 +4,9 @@
-  */
+-ARCH_REL_TYPE_ABS := R_PPC_JUMP_SLOT|R_PPC_GLOB_DAT|R_PPC_ADDR32|R_PPC_ADDR24|R_PPC_ADDR16|R_PPC_ADDR16_LO|R_PPC_ADDR16_HI|R_PPC_ADDR16_HA|R_PPC_ADDR14|R_PPC_ADDR14_BRTAKEN|R_PPC_ADDR14_BRNTAKEN|R_PPC_REL24
+ include $(srctree)/lib/vdso/Makefile
  
- #include <linux/init.h>
--#include <linux/seq_file.h>
- #include <linux/of.h>
-+#include <linux/processor.h>
-+#include <linux/seq_file.h>
- #include <asm/hwcap.h>
- #include <asm/smp.h>
- #include <asm/pgtable.h>
-diff --git a/arch/s390/include/asm/processor.h b/arch/s390/include/asm/processor.h
-index bd66f8e34949..55fbb4f7f7f6 100644
---- a/arch/s390/include/asm/processor.h
-+++ b/arch/s390/include/asm/processor.h
-@@ -33,6 +33,7 @@
- #include <linux/cpumask.h>
- #include <linux/linkage.h>
- #include <linux/irqflags.h>
-+#include <linux/processor.h>
- #include <asm/cpu.h>
- #include <asm/page.h>
- #include <asm/ptrace.h>
-@@ -80,7 +81,6 @@ void s390_adjust_jiffies(void);
- void s390_update_cpu_mhz(void);
- void cpu_detect_mhz_feature(void);
+ obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o note-32.o getcpu-32.o
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index f2e065671e4d..77d6bed3a700 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -1,9 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ # Copied from arch/tile/kernel/vdso/Makefile
  
--extern const struct seq_operations cpuinfo_op;
- extern void execve_tail(void);
- extern void __bpon(void);
- unsigned long vdso_size(void);
-diff --git a/arch/s390/kernel/processor.c b/arch/s390/kernel/processor.c
-index a194611ba88c..267886605902 100644
---- a/arch/s390/kernel/processor.c
-+++ b/arch/s390/kernel/processor.c
-@@ -17,6 +17,7 @@
- #include <linux/mm_types.h>
- #include <linux/delay.h>
- #include <linux/cpu.h>
-+#include <linux/processor.h>
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
+ include $(srctree)/lib/vdso/Makefile
+ # Symbols present in the vdso
+ vdso-syms  = rt_sigreturn
+diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makefile
+index 245bddfe9bc0..e795fdbbf484 100644
+--- a/arch/s390/kernel/vdso32/Makefile
++++ b/arch/s390/kernel/vdso32/Makefile
+@@ -2,8 +2,6 @@
+ # List of files in the vdso
  
- #include <asm/diag.h>
- #include <asm/facility.h>
-diff --git a/arch/sh/include/asm/processor.h b/arch/sh/include/asm/processor.h
-index 85a6c1c3c16e..10c4b4b9af46 100644
---- a/arch/sh/include/asm/processor.h
-+++ b/arch/sh/include/asm/processor.h
-@@ -123,7 +123,6 @@ extern unsigned int mem_init_done;
+ KCOV_INSTRUMENT := n
+-ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+-ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
  
- /* arch/sh/kernel/setup.c */
- const char *get_cpu_subtype(struct sh_cpuinfo *c);
--extern const struct seq_operations cpuinfo_op;
+ include $(srctree)/lib/vdso/Makefile
+ obj-vdso32 = vdso_user_wrapper-32.o note-32.o
+diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
+index 9e2b95a222a9..47dbbfdfad68 100644
+--- a/arch/s390/kernel/vdso64/Makefile
++++ b/arch/s390/kernel/vdso64/Makefile
+@@ -2,8 +2,6 @@
+ # List of files in the vdso
  
- /* thread_struct flags */
- #define SH_THREAD_UAC_NOPRINT	(1 << 0)
-diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-index a306bcd6b341..f373a21c6705 100644
---- a/arch/sh/kernel/cpu/proc.c
-+++ b/arch/sh/kernel/cpu/proc.c
-@@ -2,6 +2,7 @@
- #include <linux/seq_file.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/processor.h>
- #include <asm/machvec.h>
- #include <asm/processor.h>
+ KCOV_INSTRUMENT := n
+-ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+-ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
  
-diff --git a/arch/sparc/include/asm/cpudata.h b/arch/sparc/include/asm/cpudata.h
-index d213165ee713..f7e690a7860b 100644
---- a/arch/sparc/include/asm/cpudata.h
-+++ b/arch/sparc/include/asm/cpudata.h
-@@ -7,8 +7,6 @@
- #include <linux/threads.h>
- #include <linux/percpu.h>
+ include $(srctree)/lib/vdso/Makefile
+ obj-vdso64 = vdso_user_wrapper.o note.o
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 12f6c4d714cd..a97f3630ca20 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -3,10 +3,6 @@
+ # Building vDSO images for x86.
+ #
  
--extern const struct seq_operations cpuinfo_op;
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_X86_64_JUMP_SLOT|R_X86_64_GLOB_DAT|R_X86_64_RELATIVE|
+-ARCH_REL_TYPE_ABS += R_386_GLOB_DAT|R_386_JMP_SLOT|R_386_RELATIVE
+ include $(srctree)/lib/vdso/Makefile
+ 
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
+index c415a685d61b..9f031eafc465 100644
+--- a/lib/vdso/Makefile
++++ b/lib/vdso/Makefile
+@@ -5,18 +5,13 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
+ 
+ c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix $(GENERIC_VDSO_DIR), gettimeofday.c)
+ 
+-# This cmd checks that the vdso library does not contain absolute relocation
++# This cmd checks that the vdso library does not contain dynamic relocations.
+ # It has to be called after the linking of the vdso library and requires it
+ # as a parameter.
+ #
+-# $(ARCH_REL_TYPE_ABS) is defined in the arch specific makefile and corresponds
+-# to the absolute relocation types printed by "objdump -R" and accepted by the
+-# dynamic linker.
+-ifndef ARCH_REL_TYPE_ABS
+-$(error ARCH_REL_TYPE_ABS is not set)
+-endif
 -
- #endif /* !(__ASSEMBLY__) */
- 
- #if defined(__sparc__) && defined(__arch64__)
-diff --git a/arch/sparc/kernel/cpu.c b/arch/sparc/kernel/cpu.c
-index 79cd6ccfeac0..ffdc7a825b80 100644
---- a/arch/sparc/kernel/cpu.c
-+++ b/arch/sparc/kernel/cpu.c
-@@ -12,6 +12,7 @@
- #include <linux/smp.h>
- #include <linux/threads.h>
- #include <linux/pgtable.h>
-+#include <linux/processor.h>
- 
- #include <asm/spitfire.h>
- #include <asm/oplib.h>
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index e0de60e503b9..4034f5b959f7 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -9,6 +9,7 @@
- #include <linux/ctype.h>
- #include <linux/module.h>
- #include <linux/panic_notifier.h>
-+#include <linux/processor.h>
- #include <linux/seq_file.h>
- #include <linux/string.h>
- #include <linux/utsname.h>
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 356308c73951..08ccd453ec4f 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -188,8 +188,6 @@ DECLARE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
- #define cpu_data(cpu)		boot_cpu_data
- #endif
- 
--extern const struct seq_operations cpuinfo_op;
--
- #define cache_line_size()	(boot_cpu_data.x86_cache_alignment)
- 
- extern void cpu_detect(struct cpuinfo_x86 *c);
-diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-index 099b6f0d96bd..5a0699d9ff7d 100644
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -4,6 +4,7 @@
- #include <linux/string.h>
- #include <linux/seq_file.h>
- #include <linux/cpufreq.h>
-+#include <linux/processor.h>
- 
- #include "cpu.h"
- 
-diff --git a/arch/xtensa/kernel/setup.c b/arch/xtensa/kernel/setup.c
-index 9191738f9941..d4417a174887 100644
---- a/arch/xtensa/kernel/setup.c
-+++ b/arch/xtensa/kernel/setup.c
-@@ -25,6 +25,7 @@
- #include <linux/cpu.h>
- #include <linux/of.h>
- #include <linux/of_fdt.h>
-+#include <linux/processor.h>
- 
- #if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_DUMMY_CONSOLE)
- # include <linux/console.h>
-diff --git a/fs/proc/cpuinfo.c b/fs/proc/cpuinfo.c
-index f38bda5b83ec..ca3065dfecd9 100644
---- a/fs/proc/cpuinfo.c
-+++ b/fs/proc/cpuinfo.c
-@@ -3,10 +3,9 @@
- #include <linux/fs.h>
- #include <linux/init.h>
- #include <linux/proc_fs.h>
-+#include <linux/processor.h>
- #include <linux/seq_file.h>
- 
--extern const struct seq_operations cpuinfo_op;
--
- static int cpuinfo_open(struct inode *inode, struct file *file)
- {
- 	return seq_open(file, &cpuinfo_op);
-diff --git a/include/linux/processor.h b/include/linux/processor.h
-index dc78bdc7079a..71bdf8626874 100644
---- a/include/linux/processor.h
-+++ b/include/linux/processor.h
-@@ -59,4 +59,6 @@ do {								\
- 
- #endif
- 
-+extern const struct seq_operations cpuinfo_op;
-+
- #endif /* _LINUX_PROCESSOR_H */
++# As a workaround for some GNU ld ports which produce unneeded R_*_NONE
++# dynamic relocations, ignore R_*_NONE.
+ quiet_cmd_vdso_check = VDSOCHK $@
+-      cmd_vdso_check = if $(OBJDUMP) -R $@ | egrep -h "$(ARCH_REL_TYPE_ABS)"; \
++      cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
+ 		       then (echo >&2 "$@: dynamic relocations are not supported"; \
+ 			     rm -f $@; /bin/false); fi
 -- 
-2.37.1
+2.37.2.672.g94769d06f0-goog
 
