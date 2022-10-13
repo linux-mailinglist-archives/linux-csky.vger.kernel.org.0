@@ -2,89 +2,67 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDCB5FBC43
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Oct 2022 22:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E80205FD5FA
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Oct 2022 10:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiJKUl4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 11 Oct 2022 16:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S229608AbiJMIMO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 13 Oct 2022 04:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiJKUl4 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 11 Oct 2022 16:41:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB9C71BC1;
-        Tue, 11 Oct 2022 13:41:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DE87B8169A;
-        Tue, 11 Oct 2022 20:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8570C433C1;
-        Tue, 11 Oct 2022 20:41:44 +0000 (UTC)
-Date:   Tue, 11 Oct 2022 16:41:43 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Douglas RAILLARD <douglas.raillard@arm.com>
-Subject: Re: [RFC PATCH 0/5] Generic IPI sending tracepoint
-Message-ID: <20221011164143.52c84421@rorschach.local.home>
-In-Reply-To: <xhsmhfsfufh51.mognet@vschneid.remote.csb>
-References: <20221007154145.1877054-1-vschneid@redhat.com>
-        <Y0CFnWDpMNGajIRD@fuller.cnet>
-        <xhsmhilkqfi7z.mognet@vschneid.remote.csb>
-        <3e680bb9-9896-3665-dd59-4f2e6f8205bb@redhat.com>
-        <xhsmhfsfufh51.mognet@vschneid.remote.csb>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229710AbiJMIMN (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 13 Oct 2022 04:12:13 -0400
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397E1CF191
+        for <linux-csky@vger.kernel.org>; Thu, 13 Oct 2022 01:12:12 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id F2109237E1; Thu, 13 Oct 2022 08:11:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1665648730; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=EEwW62b1pevnl8k+bWvtfxVOYBk4/u4ujVb34tIbI9YbmB4KVGEyYt7Trx50WP1Dl
+         8auAKBa0EZ2IwloFoSMNf29/Wh7auM3Bzx/nsZVpyRzfTmtRuWTeZgalZJmqVOpz+I
+         OL89poAq2NJgZr5l7qiH9zQi+RsxxBvC9b5dnBpYlzGNRjDg9RKzjJ2wXTcKEoVu44
+         QqkSeVgdfEpbOR/0jaDuHJiZnf05R/0wo62BXyDx2iN6dnSZp2k5jhf3mJTvwXEZIr
+         8zH+dHmwdI1XPKjRrVWnGO+W56rK8kKhwnTptnZItf6Lh8vWL6vCmJyU4tDOBk96n/
+         85Umf3UTV47bA==
+Received: by mail.fadrush.pl for <linux-csky@vger.kernel.org>; Thu, 13 Oct 2022 08:11:04 GMT
+Message-ID: <20221013064500-0.1.27.lye8.0.z959im43gg@fadrush.pl>
+Date:   Thu, 13 Oct 2022 08:11:04 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, 11 Oct 2022 17:40:26 +0100
-Valentin Schneider <vschneid@redhat.com> wrote:
+Dzie=C5=84 dobry,
 
-> > You could keep the tracepoint as a mask, and then make it pretty, like cpus=3-5,8
-> > in user-space. For example with a trace-cmd/perf loadable plugin, libtracefs helper.
-> >  
-> 
-> That's a nice idea, the one downside I see is that means registering an
-> event handler for all events with cpumasks rather than directly targeting
-> cpumask fields, but that doesn't look too horrible. I'll dig a bit in that
-> direction.
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-We could just make all all dynamic array's of unsigned long use that
-format? I don't know of any other event that has dynamic arrays of
-unsigned longs. And doing a search doesn't come up with any.
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
--- Steve
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
