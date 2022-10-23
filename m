@@ -2,122 +2,142 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F42608312
-	for <lists+linux-csky@lfdr.de>; Sat, 22 Oct 2022 03:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A0D609622
+	for <lists+linux-csky@lfdr.de>; Sun, 23 Oct 2022 22:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJVBR6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 21 Oct 2022 21:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S229658AbiJWUco (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 23 Oct 2022 16:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiJVBR5 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 21 Oct 2022 21:17:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A523C2A72D;
-        Fri, 21 Oct 2022 18:17:55 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MvNk03yRSzHv7f;
-        Sat, 22 Oct 2022 09:17:44 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 22 Oct 2022 09:17:53 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 22 Oct 2022 09:17:52 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Guo Ren <guoren@kernel.org>
-CC:     <linux-csky@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>
-Subject: [PATCH -next v2] csky: add arch support current_stack_pointer
-Date:   Sat, 22 Oct 2022 01:43:40 +0000
-Message-ID: <20221022014340.47688-1-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229574AbiJWUcn (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 23 Oct 2022 16:32:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C5B6705D;
+        Sun, 23 Oct 2022 13:32:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D915AB80DCD;
+        Sun, 23 Oct 2022 20:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51389C433D6;
+        Sun, 23 Oct 2022 20:32:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QnB2qtO6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666557154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eCkESx7tLbcl/nHIQwtIPhMNwZ8iCRtVJZ00kAPVrdA=;
+        b=QnB2qtO6lEOM4mxmjapSCxuIUb838GyXQD9dk5cHuNf7r1kHF1OS2YJOtpj4MajPA79g2y
+        QGM5P4bMHnEZYNxeABp8h+OC9XW5ZhtaXOplvIwtuUPSR4RupWA3lpwNA60vNAAYYFdeXD
+        J2Fu0drXLEG5BiOYGLbxOOeFisHSqfM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 40fbc149 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 23 Oct 2022 20:32:33 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org
+Subject: [PATCH v1 0/2] cleanup stackprotector canary generation
+Date:   Sun, 23 Oct 2022 22:32:06 +0200
+Message-Id: <20221023203208.118919-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-To follow the existing per-arch conventions, using "current_stack_pointer"
-to set sp.
+Stack canary generation currently lives partially in random.h, where it
+doesn't belong, and is in general a bit overcomplicated. This small
+patchset fixes up both issues. I'll take these in my tree, unless
+somebody else prefers to do so.
 
-This will let it be used in non-arch places(like HARDENED_USERCOPY).
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: H. Peter Anvin <hpa@zytor.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: x86@kernel.org
 
-Refer to the implementation of riscv commit fdecfea09328 ("riscv: Rename
-"sp_in_global" to "current_stack_pointer"").
+Jason A. Donenfeld (2):
+  stackprotector: move CANARY_MASK and get_random_canary() into
+    stackprotector.h
+  stackprotector: actually use get_random_canary()
 
-Link: https://lore.kernel.org/lkml/20220224060411.1855683-1-keescook@chromium.org/
+ arch/arm/include/asm/stackprotector.h     |  9 +--------
+ arch/arm64/include/asm/stackprotector.h   |  9 +--------
+ arch/csky/include/asm/stackprotector.h    | 10 +---------
+ arch/mips/include/asm/stackprotector.h    |  9 +--------
+ arch/powerpc/include/asm/stackprotector.h | 10 +---------
+ arch/riscv/include/asm/stackprotector.h   | 10 +---------
+ arch/sh/include/asm/stackprotector.h      | 10 +---------
+ arch/x86/include/asm/stackprotector.h     | 14 +-------------
+ arch/x86/kernel/cpu/common.c              |  2 +-
+ arch/x86/kernel/setup_percpu.c            |  2 +-
+ arch/x86/kernel/smpboot.c                 |  2 +-
+ arch/x86/xen/enlighten_pv.c               |  2 +-
+ arch/xtensa/include/asm/stackprotector.h  |  7 +------
+ include/linux/random.h                    | 19 -------------------
+ include/linux/stackprotector.h            | 19 +++++++++++++++++++
+ kernel/fork.c                             |  2 +-
+ 16 files changed, 33 insertions(+), 103 deletions(-)
 
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
----
-v1 -> v2:
-  Update commit message according to GuoRen's suggestion.
-
- arch/csky/Kconfig                 | 1 +
- arch/csky/include/asm/processor.h | 2 ++
- arch/csky/kernel/stacktrace.c     | 6 ++----
- 3 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index adee6ab36862..2236b5c0c213 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -9,6 +9,7 @@ config CSKY
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-+	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_INLINE_READ_LOCK if !PREEMPTION
- 	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
- 	select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
-diff --git a/arch/csky/include/asm/processor.h b/arch/csky/include/asm/processor.h
-index 63ad71fab30d..ea75d72dea86 100644
---- a/arch/csky/include/asm/processor.h
-+++ b/arch/csky/include/asm/processor.h
-@@ -84,4 +84,6 @@ unsigned long __get_wchan(struct task_struct *p);
- 
- #define cpu_relax() barrier()
- 
-+register unsigned long current_stack_pointer __asm__("sp");
-+
- #endif /* __ASM_CSKY_PROCESSOR_H */
-diff --git a/arch/csky/kernel/stacktrace.c b/arch/csky/kernel/stacktrace.c
-index 9f78f5d21511..27ecd63e321b 100644
---- a/arch/csky/kernel/stacktrace.c
-+++ b/arch/csky/kernel/stacktrace.c
-@@ -23,10 +23,9 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- 		sp = user_stack_pointer(regs);
- 		pc = instruction_pointer(regs);
- 	} else if (task == NULL || task == current) {
--		const register unsigned long current_sp __asm__ ("sp");
- 		const register unsigned long current_fp __asm__ ("r8");
- 		fp = current_fp;
--		sp = current_sp;
-+		sp = current_stack_pointer;
- 		pc = (unsigned long)walk_stackframe;
- 	} else {
- 		/* task blocked in __switch_to */
-@@ -68,8 +67,7 @@ static void notrace walk_stackframe(struct task_struct *task,
- 		sp = user_stack_pointer(regs);
- 		pc = instruction_pointer(regs);
- 	} else if (task == NULL || task == current) {
--		const register unsigned long current_sp __asm__ ("sp");
--		sp = current_sp;
-+		sp = current_stack_pointer;
- 		pc = (unsigned long)walk_stackframe;
- 	} else {
- 		/* task blocked in __switch_to */
 -- 
-2.25.1
+2.38.1
 
