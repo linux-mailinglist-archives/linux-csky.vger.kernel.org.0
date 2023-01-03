@@ -2,59 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A7A65BC19
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Jan 2023 09:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8C165BC1B
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Jan 2023 09:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbjACIWH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 3 Jan 2023 03:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S237077AbjACIWG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 3 Jan 2023 03:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbjACIWA (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 03:22:00 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0D61036
-        for <linux-csky@vger.kernel.org>; Tue,  3 Jan 2023 00:21:59 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id g13so44633483lfv.7
-        for <linux-csky@vger.kernel.org>; Tue, 03 Jan 2023 00:21:59 -0800 (PST)
+        with ESMTP id S237136AbjACIWE (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 03:22:04 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E85273
+        for <linux-csky@vger.kernel.org>; Tue,  3 Jan 2023 00:22:04 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id bf43so44665960lfb.6
+        for <linux-csky@vger.kernel.org>; Tue, 03 Jan 2023 00:22:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ifCo5FOIwokCxO0n+MVhGa5ic/79OUh35i/SK2lVaA=;
-        b=kM1Xdn4x5u6DrIrS/Lk4CaxK0H3MZ4Xp/ynvK1cN29tFo8bDKerM/ZQKiYqxpqY9PH
-         nlzMLn8ProPaLuBjJbDnbGjOSiWb+I7LAceEs8MygPjHLyKU7GYQenpv5h1e4rsZHBAx
-         y7lpwEEU9ofPxj+lOSkdri4oTD8h/6Ay13EB8ZuAXYJaj931itWDGFWUyX9FmBzzPpBa
-         yzegMbb9ZM3AaO9+EspKdwrAyRuZTd0QEthQZUd74xx1An9Z8HmA96R94ntQ3dwwtmLq
-         uVNMB4du7aOPVeNwxPx+YdWIhe2vImH5zh0ZV28Ur3ClE75235Cv2XpEkZLfhDBlfDpg
-         4OEg==
+        bh=hnNplO8zsSj05CAnhZjssEtarwgdK7a3BUAmXeHqfTE=;
+        b=IRDYFhgv7CWgApeZ9OhEzu4ziX6vYEoYanJOwxAVtNXXyq/6zS+qWU0v9JYWo+nTfr
+         75SUTilDQ6Wappp/0y36aU6HUHsoldMMAZOoCVs0bccvE8mHrAOQHuKhfI2OI8VjT+09
+         UU8jLYsLpZFuNwRey5xq1BPaD4oO9teX0QXKL95viaZ5J/EdMvJtY3X+lQMZB4tbEvGN
+         /tRbizkhie2NJuQiN0F8URex/wWIwEaW+ujREEPAJu8xRf2wnNfu8nz62Yr7iXHXrzLL
+         WwePuWhjeCaZvvfrBZH3flKA+v9TKZBDYwjyDQyhGYOqRV99y8Jyq0EJw3wNGjPhG68b
+         WQaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ifCo5FOIwokCxO0n+MVhGa5ic/79OUh35i/SK2lVaA=;
-        b=ewMgl/7CORDt/ktUk2IqiVU3ir6Ae+N/mVdB3CgWwqFBT56AH13zQ7zyLSU1xduMy3
-         gsbIAeJpjm8zarQaRExWqSGcWLsMk0mKB31VR5at6U+WPGAIKzFMs1FHXhJhE7rsVY0g
-         VC48BPABF9HUVAnvZzPVV94xwp7lVw91hE4wziNnVdCISJeBNuQNcI1JF9Sr98BzveuW
-         wUaLrMDu0hnedatThIFPqv5/fQYge4A0u9WNStZShODUOuOHhUpgRl0rByaWfpL8muKC
-         /9nK/DoZGUmawNJJQAn3riSW4r81PBVzL78degPzIj1k1IQNFZDJiRLONzpYJfKqtNO3
-         Kohw==
-X-Gm-Message-State: AFqh2koxO2R9HbgRoY00n6ZfAvpQ96DsMnH47SotPr7gBrrEo4Rd20sh
-        1qC4mUPH8/F4tytIOJfCLFYzXg==
-X-Google-Smtp-Source: AMrXdXtsbVV3d08q2p6h3Fhxh5/w6BwJ0fVyFb+0dMKZcc2dYyw/NiHcC+TEEXH5jwusbWDSDl+m1A==
-X-Received: by 2002:a05:6512:b0c:b0:4b5:97cf:8f1a with SMTP id w12-20020a0565120b0c00b004b597cf8f1amr14197071lfu.40.1672734117561;
-        Tue, 03 Jan 2023 00:21:57 -0800 (PST)
+        bh=hnNplO8zsSj05CAnhZjssEtarwgdK7a3BUAmXeHqfTE=;
+        b=uQMKJANFopN2ZoCLNphttO3ipmBwmq5H8pB4fxidcU0tVvAFQgqAJGGqu8VXwKSM3a
+         gfes0a11iS3qm5RqAFIXCj9PJlsyPszAuJVEbJe8X7DrRaoOgtA28KoOYYKuUPy6n37O
+         cFcXVeZtdL10F7eBktapwkLAx8GZtYzSc5U4Ii7SVLnn90YDSESWCnGmPXxDSdvZBSoE
+         zMMulSw6jSCYUZayCBZTCaxJrP0NKplMfV9cwJgs/ZYA4PfUUfQbO7nqJ8YmO1HiA11r
+         rA0OvRG7RZfdrESLxkI7hKEki5z2yKytX+T+QrQGpKhLLHGcbv45hAuTwJ4TLfJtd8Y7
+         Qbxg==
+X-Gm-Message-State: AFqh2kq36GwZzf+5NgTAVFELErVip7Z/aTW/TOnj7SPxiOLsrGCdkuyv
+        EW0iClkp+57igZNwyNHWMX862A==
+X-Google-Smtp-Source: AMrXdXvbZP6isWmvcJTEe2l329jkWLKnwxKfmHzK41+F7rk8tb5+8boVcvSBIznNrbeyntQ/Q+zNzQ==
+X-Received: by 2002:ac2:490f:0:b0:4b6:eca8:f6ca with SMTP id n15-20020ac2490f000000b004b6eca8f6camr10992900lfi.67.1672734122520;
+        Tue, 03 Jan 2023 00:22:02 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c19-20020a056512075300b004cafa01ebbfsm4286973lfs.101.2023.01.03.00.21.55
+        by smtp.gmail.com with ESMTPSA id p23-20020a056512139700b004b577085688sm4757340lfa.82.2023.01.03.00.22.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:21:57 -0800 (PST)
-Message-ID: <3f484fa3-680a-5f7f-c824-ec0cbd305d55@linaro.org>
-Date:   Tue, 3 Jan 2023 09:21:55 +0100
+        Tue, 03 Jan 2023 00:22:02 -0800 (PST)
+Message-ID: <dccc7a0f-9eaf-24ca-e800-8ee1417e74f9@linaro.org>
+Date:   Tue, 3 Jan 2023 09:22:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 1/4] dt-bindings: vendor-prefixes: Add microtips
+Subject: Re: [RFC PATCH 2/4] dt-bindings: vendor-prefixes: Add lincolntech
 Content-Language: en-US
 To:     Aradhya Bhatia <a-bhatia1@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -89,9 +89,9 @@ Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
         Jai Luthra <j-luthra@ti.com>,
         Jayesh Choudhary <j-choudhary@ti.com>
 References: <20230103064615.5311-1-a-bhatia1@ti.com>
- <20230103064615.5311-2-a-bhatia1@ti.com>
+ <20230103064615.5311-3-a-bhatia1@ti.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230103064615.5311-2-a-bhatia1@ti.com>
+In-Reply-To: <20230103064615.5311-3-a-bhatia1@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -104,7 +104,8 @@ List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 On 03/01/2023 07:46, Aradhya Bhatia wrote:
-> Add document vendor prefix for Microtips Technology USA (microtips).
+> Add document vendor prefix for Lincoln Technology Solutions
+> (lincolntech).
 > 
 > Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
 > ---
