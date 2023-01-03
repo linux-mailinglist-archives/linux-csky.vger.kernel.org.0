@@ -2,52 +2,62 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033B065BE97
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Jan 2023 12:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A47D65BEE5
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Jan 2023 12:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjACLDn (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 3 Jan 2023 06:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S237168AbjACL2S (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 3 Jan 2023 06:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236816AbjACLDU (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 06:03:20 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329E9FAFE;
-        Tue,  3 Jan 2023 03:03:19 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 303B2hbV053461;
-        Tue, 3 Jan 2023 05:02:43 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1672743763;
-        bh=MYxboYbzJR4OvXvxpcEQ87njqCWGC/PDqKTVrCSJiAs=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=HywghCs+8v2SpbkpRvg0oUkcmi5mXNkXDrmJOorl0xHf39M19DgRxj3KWVV8vwuJD
-         dpQwDVLmUUs6mEbekQpmOHi5FU809nVcNoGCBaF/JGw6g+Cy/EEy30U1SXtB5J6f/U
-         dgzmH5JzqKi+CT2mgjCQlNx3AtfsNwsX9PoU17vw=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 303B2huJ059716
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 3 Jan 2023 05:02:43 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 3
- Jan 2023 05:02:42 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 3 Jan 2023 05:02:42 -0600
-Received: from [172.24.217.116] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 303B2UDr029452;
-        Tue, 3 Jan 2023 05:02:31 -0600
-Message-ID: <32d66fb7-6c63-0985-222f-0bd3c36c165d@ti.com>
-Date:   Tue, 3 Jan 2023 16:32:30 +0530
+        with ESMTP id S233023AbjACL2R (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 3 Jan 2023 06:28:17 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DEFDE99
+        for <linux-csky@vger.kernel.org>; Tue,  3 Jan 2023 03:28:15 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id p36so45236110lfa.12
+        for <linux-csky@vger.kernel.org>; Tue, 03 Jan 2023 03:28:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kE4qqRxLpxxCedBuUJYA+jounttnp3G/CGQUAy2owUc=;
+        b=Ill95URu0ok8mTKcTGS2lBtZw4eZqXOgHuXYKVuUbo61K1thYXNo+Ruh9Glym7puZ0
+         zX+XPzU9HkF5NtDV9G9rXGtsfzmAOJikoXWin/OvNxtIq8uqfGhYmtrAPSEAsiU7V1Y5
+         oLVnULMbddELmoYJH5P78lCIHYZt6Xd4d5rGEnQ+jRQhTspmocjmECdaqb2f976PdL2z
+         TzHa+su9MOIZrwYWj4CqUurmPyIyctOCVXkevmsCzEw1W+ZEN/+9kvMz0UXZ0GelNyM3
+         ylERXrH6lkJrnMQzYqxWIvb8GHGOvWjgDwWntvVljGUDLd3hptx9gakn71TA3mAo2Yrd
+         L9gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kE4qqRxLpxxCedBuUJYA+jounttnp3G/CGQUAy2owUc=;
+        b=gktGWVQ0UN6cPUeQ/GAyFb6uSfyHhe/aNTVvs+FkKNgJ/9W+Vibgnb1Wb/pf88SghP
+         OWVCPCOyGiDHWrK48JIJIo1OghvTmFGDvRDW6BweVhvGVGdn+t3WALcOE2uFjEV5V8RN
+         1gss4kHkSRa2rfwZOVNX1loyi/YLSyO18AsZIos2NJrF8djo/9pwyVW/SsN6l7ZSZrw8
+         /bxqfb1M9BoDuxVy04Lj45LZCZGkEVezhWJlm0sUPkOcfgt8AotUUUq5CVdZqJFD300L
+         WFYpkp3loCr413ZkNCcYoRMHAnwbgt0knA7vu7y+INik+0qGtWqyGYl4TRSIWJ3PBTUT
+         Z/rQ==
+X-Gm-Message-State: AFqh2kpVhirydDqkBmKfNPDmwga27aZ7c9uKkn8LW1uG0EyRiVGdiDLD
+        17I5fruW7/EFS47/1ZrGZwLsvw==
+X-Google-Smtp-Source: AMrXdXvivJCiSvdg7M62GVqjA581ZqA/tb1WZnOzpgmcCBvtTZ9QkS3notudi/QiV+FIM4Pn1tKE8Q==
+X-Received: by 2002:a05:6512:3601:b0:4b7:13b:259d with SMTP id f1-20020a056512360100b004b7013b259dmr10839992lfs.48.1672745293524;
+        Tue, 03 Jan 2023 03:28:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac24e8a000000b004b4fefacd89sm4798236lfr.139.2023.01.03.03.28.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 03:28:13 -0800 (PST)
+Message-ID: <30423568-df03-1d72-81fe-3a4b33214e5c@linaro.org>
+Date:   Tue, 3 Jan 2023 12:28:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
 Subject: Re: [RFC PATCH 3/4] dt-bindings: panel: Introduce dual-link LVDS
  panel
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Aradhya Bhatia <a-bhatia1@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Tomi Valkeinen <tomba@kernel.org>,
@@ -66,7 +76,7 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Guo Ren <guoren@kernel.org>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
         Devicetree List <devicetree@vger.kernel.org>,
         Linux Kernel List <linux-kernel@vger.kernel.org>,
         Linux RISC-V List <linux-riscv@lists.infradead.org>,
@@ -82,234 +92,87 @@ CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
 References: <20230103064615.5311-1-a-bhatia1@ti.com>
  <20230103064615.5311-4-a-bhatia1@ti.com>
  <85837957-f6d2-4722-7693-98c6cf932096@linaro.org>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <85837957-f6d2-4722-7693-98c6cf932096@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <32d66fb7-6c63-0985-222f-0bd3c36c165d@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <32d66fb7-6c63-0985-222f-0bd3c36c165d@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Krzysztof,
-
-Thank you for reviewing the patches!
-
-On 03-Jan-23 14:02, Krzysztof Kozlowski wrote:
-> On 03/01/2023 07:46, Aradhya Bhatia wrote:
->> Dual-link LVDS interfaces have 2 links, with even pixels traveling on
->> one link, and odd pixels on the other. These panels are also generic in
->> nature, with no documented constraints, much like their single-link
->> counterparts, "panel-lvds".
+On 03/01/2023 12:02, Aradhya Bhatia wrote:
+> But this is throwing an error. I am confused what else could be done.
+> Can you please suggest what might be a more accurate check here?
+> 
 >>
->> Add a new compatible, "panel-dual-lvds", and a dt-binding document for
->> these panels.
+>>> +              required:
+>>> +                - dual-lvds-odd-pixels
+>>> +        then:
+>>> +          properties:
+>>> +            port@1:
+>>> +              properties:
+>>> +                dual-lvds-even-pixels: true
+>>> +                dual-lvds-odd-pixels: false
 >>
->> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->> ---
->>   .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
->>   MAINTAINERS                                   |   1 +
->>   2 files changed, 158 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
->> new file mode 100644
->> index 000000000000..88a7aa2410be
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
->> @@ -0,0 +1,157 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/panel/panel-dual-lvds.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Generic Dual-Link LVDS Display Panel
->> +
->> +maintainers:
->> +  - Aradhya Bhatia <a-bhatia1@ti.com>
->> +  - Thierry Reding <thierry.reding@gmail.com>
->> +
->> +description: |
->> +  A dual-LVDS interface is a dual-link connection with the even pixels
->> +  traveling on one link, and the odd pixels traveling on the other.
->> +
->> +allOf:
->> +  - $ref: panel-common.yaml#
->> +  - $ref: /schemas/display/lvds.yaml/#
+>> Why do you need this? Your oneOf before already solves it.
 > 
-> Drop trailing /
-
-Okay, will do!
-
+> I agree with your comment here. It makes sense to only have
 > 
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - lincolntech,lcd185-101ct
->> +              - microtips,13-101hieb0hf0-s
->> +          - const: panel-dual-lvds
->> +      - const: panel-dual-lvds
+> 	dual-lvds-even-pixels: true
 > 
-> You cannot have this compatible alone
-Okay, will make the change!
-
+> and have the oneOf condition take care of the other. But, I just tested
+> this and it was unable to pick-up this intentionally-added error.
 > 
->> +
->> +  ports:
->> +    $ref: /schemas/graph.yaml#/properties/ports
->> +
->> +    properties:
->> +      port@0:
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
->> +        unevaluatedProperties: false
->> +        description: The sink for first set of LVDS pixels.
->> +
->> +        properties:
->> +          dual-lvds-odd-pixels:
->> +            type: boolean
->> +
->> +          dual-lvds-even-pixels:
->> +            type: boolean
->> +
->> +        oneOf:
->> +          - required: [dual-lvds-odd-pixels]
->> +          - required: [dual-lvds-even-pixels]
->> +
->> +      port@1:
->> +        $ref: /schemas/graph.yaml#/$defs/port-base
->> +        unevaluatedProperties: false
->> +        description: The sink for second set of LVDS pixels.
->> +
->> +        properties:
->> +          dual-lvds-even-pixels:
->> +            type: boolean
->> +
->> +          dual-lvds-odd-pixels:
->> +            type: boolean
->> +
->> +        oneOf:
->> +          - required: [dual-lvds-even-pixels]
->> +          - required: [dual-lvds-odd-pixels]
->> +
->> +    allOf:
->> +      - if:
->> +          properties:
->> +            port@0:
->> +              properties:
->> +                dual-lvds-odd-pixels: true
+> I added 'dual-lvds-odd-pixels' property to both the nodes, and
+> dt_binding_check passes successfully (which it should have not.)
 > 
-> That's not correct clause. It has no effect.
-
-The idea behind this is to check the presence of the boolean property.
-
-if (dual-lvds-odd-pixels is present)
-then
-[..]
-
-
-I tried implementing this:
-
-	[..]
-	  dual-lvds-odd-pixels:
-	    - const: true
-	[..]
-
-But this is throwing an error. I am confused what else could be done.
-Can you please suggest what might be a more accurate check here?
-
+> Instead, if I only keep this,
 > 
->> +              required:
->> +                - dual-lvds-odd-pixels
->> +        then:
->> +          properties:
->> +            port@1:
->> +              properties:
->> +                dual-lvds-even-pixels: true
->> +                dual-lvds-odd-pixels: false
+> 	dual-lvds-odd-pixels: false
 > 
-> Why do you need this? Your oneOf before already solves it.
-
-I agree with your comment here. It makes sense to only have
-
-	dual-lvds-even-pixels: true
-
-and have the oneOf condition take care of the other. But, I just tested
-this and it was unable to pick-up this intentionally-added error.
-
-I added 'dual-lvds-odd-pixels' property to both the nodes, and
-dt_binding_check passes successfully (which it should have not.)
-
-Instead, if I only keep this,
-
-	dual-lvds-odd-pixels: false
-
-then the dt_binding_check detects the error as it should.
-
-Regardless, I am curious why the first method doesn't work. Will try to
-explore more on that.
-
+> then the dt_binding_check detects the error as it should.
 > 
->> +
->> +      - if:
->> +          properties:
->> +            port@0:
->> +              properties:
->> +                dual-lvds-even-pixels: true
->> +              required:
->> +                - dual-lvds-even-pixels
->> +        then:
->> +          properties:
->> +            port@1:
->> +              properties:
->> +                dual-lvds-odd-pixels: true
->> +                dual-lvds-even-pixels: false
->> +
->> +    required:
->> +      - port@0
->> +      - port@1
->> +
->> +  port: false
->> +
->> +unevaluatedProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - width-mm
->> +  - height-mm
->> +  - data-mapping
->> +  - panel-timing
->> +  - ports
->> +
->> +examples:
->> +  - |+
-> 
-> Drop +
+> Regardless, I am curious why the first method doesn't work. Will try to
+> explore more on that.
 
-Okay!
+The check for presence of properties is only against required:, but you
+added there properties. Like this:
 
-> 
->> +    panel-dual-lvds {
-> 
-> Just "panel". Node names should be generic.
+https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/mfd/samsung,s5m8767.yaml#L155
 
-Alright. Will make the change!
 
-> 
->> +      compatible = "microtips,13-101hieb0hf0-s", "panel-dual-lvds";
->> +
->> +      width-mm = <217>;
->> +      height-mm = <136>;
->> +
-> 
-Regards
-Aradhya
+Other way is to drop your both oneOf and entire allOf from ports and use:
+
+oneOf:
+  - properties:
+      ports:
+        $ref: /schemas/graph.yaml#/properties/ports
+        properties:
+          port@0:
+            required:
+              - dual-lvds-odd-pixels
+          port@1:
+            required:
+              - dual-lvds-even-pixels
+  - properties:
+      ports:
+        $ref: /schemas/graph.yaml#/properties/ports
+        properties:
+          port@1:
+            required:
+              - dual-lvds-odd-pixels
+          port@0:
+            required:
+              - dual-lvds-even-pixels
+
+
+Best regards,
+Krzysztof
+
