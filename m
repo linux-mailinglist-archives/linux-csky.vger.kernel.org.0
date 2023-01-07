@@ -2,111 +2,129 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634E865F2B8
-	for <lists+linux-csky@lfdr.de>; Thu,  5 Jan 2023 18:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAD9660E2C
+	for <lists+linux-csky@lfdr.de>; Sat,  7 Jan 2023 12:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjAERbz (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 5 Jan 2023 12:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
+        id S230243AbjAGLE4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 7 Jan 2023 06:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235231AbjAERbo (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 5 Jan 2023 12:31:44 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D458F4
-        for <linux-csky@vger.kernel.org>; Thu,  5 Jan 2023 09:31:43 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id az7so12435760wrb.5
-        for <linux-csky@vger.kernel.org>; Thu, 05 Jan 2023 09:31:43 -0800 (PST)
+        with ESMTP id S230135AbjAGLEz (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 7 Jan 2023 06:04:55 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9879F4F124;
+        Sat,  7 Jan 2023 03:04:54 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id ay40so2704294wmb.2;
+        Sat, 07 Jan 2023 03:04:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0RlYLuDmGetdsDeZovB7p+FtBbxQtFVDUeNrnEAwc+s=;
-        b=ERCj68n9SG0zOQ1PN95anDbYfACtwOJYeAzrNa9rQIMLHzeKsowVHAxMyACwNH5CUl
-         L09oApdQdbaHMqA4YlUh2DBHYWhYI+l1RnA8XsoHeHFxzlIw6zifu70BX0/RZEz7Kg5I
-         90f6g7XFkU+vosZSzQ9r0RnumC89iKbm3mcLnMLPlvwjZH47YXrYe/+T7lJO1Rh24BNH
-         kVJFhNjMLkZWywCmRemML+5Sm3Z3NDG5TSPyGwbzfwHkOzCRi8bjL7pNs645SgCDrFPB
-         Te9HeIoXw2T4n6TtcHlj0+DRF0euZe2Ntlyq9zZRg/hCDUQFSz+gtP704H8n9U7IYbuB
-         g5mA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jV2yBF+mbkDE0BvyOwe05ARE6EO7XhtOfB/KJLMsfFA=;
+        b=BzPTx+ODS2RwGu5d9Av3CGI6XJ0NbmKP1pStUzg0M0m6+VF6wu2vf0tqTwK0k6q0qV
+         Fbx7Y4Wluy9p+k8PZjL3FOoLufHJHxtq2K/BaarEwd/dPtd/DgO4uDiDqLUXCcfzSy4g
+         Wd0wz4xfpZYGbxR/O6enZWRjIhs25ZrrKgwvTGouDcupcbkSfLeRveiApotbcr4XMgph
+         w/4+08uhP/RwKAozhcyw6lYPvScMk8zL6fmWwbkyxQOkT9WdSUz8lze9ta3Mlh7zLg9k
+         cM2v76pe7iQT/2ZR+EkGweLVXlhhfTIoWJwjo2u32vXfi3qjeDrWte72tROnSs3wxhtS
+         1Wwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0RlYLuDmGetdsDeZovB7p+FtBbxQtFVDUeNrnEAwc+s=;
-        b=UY74K1PNFMS1wJcucspFZBH6JL60M2I3PsIn1Sb0lxyIdWZ4nSeUErk73rsYmR14EU
-         x7oCU5oyrktrC/OnV7/D4QI8NbPjQXidUEaAwyCFRP9KaIIw4kKwwepk9bPksPttvFfE
-         uPOAND/dWIXKED8Obs6SmV9wBzwRGTnkXUOhS2SwEIVdmDTtvctWO6nxSQJl7h+nruQ5
-         KhxPYLuhROZqrVyr5Vxmhu8Al1LxWNeggC79EocxWM8fn8734PCgpYjjXAGfT4JX5zRy
-         uqyWQ8v6wOR1wRPPGFaPJWtsntaUY9T7XHnJ4tX29+axJwjs3i/RI2bwWI0msxpdtibb
-         L0ww==
-X-Gm-Message-State: AFqh2kpa4Q7Wf5sPbLPzrOMgiJqDtCV8oGgmGlgm44Mo5mCYVlx9Qw9n
-        xj/hC9rc/zoSZkle2Wp68UMrhGUljVan77bILOc=
-X-Google-Smtp-Source: AMrXdXtgKzkTDcuycr0UBTsWPfBmnK3nqRtf275OnHVU4KHm6SQFCre+YMEVGMCqa45pm6PhU8DYjxw5ah655asMZS0=
-X-Received: by 2002:a05:6000:1b0f:b0:2b6:665:7d90 with SMTP id
- f15-20020a0560001b0f00b002b606657d90mr58994wrz.646.1672939901808; Thu, 05 Jan
- 2023 09:31:41 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jV2yBF+mbkDE0BvyOwe05ARE6EO7XhtOfB/KJLMsfFA=;
+        b=f6beJaoz3jCOL/c6eOjf3eeUBcHKDVUaH0Uw7trbB+q3preXNB8XQN+BgMEgXIqyrg
+         ztQ0YAwwQaBudBMFT671W0eam+CskRUARfQ2XtTMgg7PiwB16C4qvG0b2DGR8BAeYCdV
+         bjE0ugK+fesG9oz6KyRgSvF1+EPPvRlWpElpDIRlqjl3n5CE931DsOVRR67+Oc0OvvUU
+         qarRyALAo/0CgrsP1WoMbvFscUnStpWk5q7ULbXRDwxCcfn2VYXgqtcJFerXS2Z6O5F8
+         beGTpGvDntwL4xWdS5LKe1BVCIIzmFG6ZI1prA001YwkI8usgU5FZC7q8O2rG9nMPSjr
+         Vt0w==
+X-Gm-Message-State: AFqh2kp6KNn7SZRVsi7FHGQnApV2HTmVi/cE5A8/t+/ipcJNN8L/Cf0I
+        P0aGIHmiHJAhWmac1ay0yUU=
+X-Google-Smtp-Source: AMrXdXuUafS1AFxogNrZXZJj6k6oC1QjVGeJmfZCRFdf2sgwNHMbrVBUD4+y7GGme2gWJhcqxBhA0A==
+X-Received: by 2002:a05:600c:601e:b0:3c6:e61e:ae71 with SMTP id az30-20020a05600c601e00b003c6e61eae71mr50341357wmb.1.1673089493118;
+        Sat, 07 Jan 2023 03:04:53 -0800 (PST)
+Received: from gmail.com (1F2EF507.nat.pool.telekom.hu. [31.46.245.7])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003c6f8d30e40sm10657278wms.31.2023.01.07.03.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jan 2023 03:04:50 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 7 Jan 2023 12:04:47 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Valentin Schneider <vschneid@redhat.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3 3/8] sched, smp: Trace IPIs sent via
+ send_call_function_single_ipi()
+Message-ID: <Y7lRz7oCaAmAhoqS@gmail.com>
+References: <20221202155817.2102944-1-vschneid@redhat.com>
+ <20221202155817.2102944-4-vschneid@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6020:f4ca:b0:249:9e95:fbbe with HTTP; Thu, 5 Jan 2023
- 09:31:41 -0800 (PST)
-Reply-To: williamsloanfirm540@gmail.com
-From:   John Williams <juliusndiritu3@gmail.com>
-Date:   Thu, 5 Jan 2023 20:31:41 +0300
-Message-ID: <CAOy5vdSaqAQOpPsSWXNKqiUN+_mTObbTG+aBDaK33j9UPHRv3A@mail.gmail.com>
-Subject: Darlehen
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:436 listed in]
-        [list.dnswl.org]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.6981]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [juliusndiritu3[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [williamsloanfirm540[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [juliusndiritu3[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202155817.2102944-4-vschneid@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
---=20
-Ben=C3=B6tigen Sie ein schnelles und garantiertes Darlehen, um Ihre
-Rechnungen zu bezahlen oder ein Unternehmen zu gr=C3=BCnden? Ich biete
-sowohl Privat- als auch Gesch=C3=A4ftskredite an, um Ihre finanziellen
-Bed=C3=BCrfnisse zu einem niedrigen Zinssatz von 3 % zu erf=C3=BCllen.
-Kontaktieren Sie uns noch heute =C3=BCber williamsloanfirm540@gmail.com
 
+* Valentin Schneider <vschneid@redhat.com> wrote:
 
+> send_call_function_single_ipi() is the thing that sends IPIs at the bottom
+> of smp_call_function*() via either generic_exec_single() or
+> smp_call_function_many_cond(). Give it an IPI-related tracepoint.
+> 
+> Note that this ends up tracing any IPI sent via __smp_call_single_queue(),
+> which covers __ttwu_queue_wakelist() and irq_work_queue_on() "for free".
+> 
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
+Acked-by: Ingo Molnar <mingo@kernel.org>
 
+Patch series logistics:
 
-Do you need a Fast and Guarantee loan to pay your bills or start up a
-Business? I offer both personal and business loan services to  meet
-your financial needs at a low interest rate of 3%. Contact us today
-via  williamsloanfirm540@gmail.com
+ - No objections from the scheduler side, this feature looks pretty useful.
+
+ - Certain patches are incomplete, others are noted as being merged 
+   separately, so I presume you'll send an updated/completed series 
+   eventually?
+
+ - We can merge this via the scheduler tree I suspect, as most callbacks 
+   affected relate to tip:sched/core and tmp:smp/core - but if you have 
+   some other preferred tree that's fine too.
+
+Thanks,
+
+	Ingo
