@@ -2,168 +2,197 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5524D66BA5D
-	for <lists+linux-csky@lfdr.de>; Mon, 16 Jan 2023 10:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E4C66CC01
+	for <lists+linux-csky@lfdr.de>; Mon, 16 Jan 2023 18:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjAPJbI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 16 Jan 2023 04:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
+        id S234615AbjAPRVO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 16 Jan 2023 12:21:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbjAPJao (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 16 Jan 2023 04:30:44 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F89616AD5;
-        Mon, 16 Jan 2023 01:30:42 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D163D802;
-        Mon, 16 Jan 2023 10:30:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1673861440;
-        bh=9YWn45J/ZNgJKTD6UEkGgR2mEmqJ7NYekCQW2ePfKgc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N+zSHiOP3BPeIWVxgMUMZkbWSMpAwC7eyS7KRf00o33vAIM8HgnNlYZlsGe4NvEx+
-         ggan64ipd8TDap0zM7nKhc17S/7JZhs8uDIM+s21vxICnSvXcvLCGEqibqZ7MKdHAQ
-         GpwQEr5QqXpkio0Z6yTPKSTEHMw4GfSB6ctnf2Pk=
-Date:   Mon, 16 Jan 2023 11:30:40 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Aradhya Bhatia <a-bhatia1@ti.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
-        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
-        Linux RISC-V List <linux-riscv@lists.infradead.org>,
-        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Rahul T R <r-ravikumar@ti.com>
-Subject: Re: [RFC PATCH 0/4] dt-bindings: Introduce dual-link panels &
- panel-vendors
-Message-ID: <Y8UZQHvVT2VQcQ33@pendragon.ideasonboard.com>
-References: <20230103064615.5311-1-a-bhatia1@ti.com>
+        with ESMTP id S234411AbjAPRUv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 16 Jan 2023 12:20:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7CE036B1E;
+        Mon, 16 Jan 2023 08:59:27 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3313015A1;
+        Mon, 16 Jan 2023 09:00:09 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.162])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B0403F67D;
+        Mon, 16 Jan 2023 08:59:10 -0800 (PST)
+Date:   Mon, 16 Jan 2023 16:59:04 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        rostedt@goodmis.org, mhiramat@kernel.org, frederic@kernel.org,
+        paulmck@kernel.org, pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, ryabinin.a.a@gmail.com, glider@google.com,
+        andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
+Message-ID: <Y8WCWAuQSHN651dA@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230112194314.845371875@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103064615.5311-1-a-bhatia1@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230112194314.845371875@infradead.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Aradhya,
+On Thu, Jan 12, 2023 at 08:43:14PM +0100, Peter Zijlstra wrote:
+> Hi All!
 
-On Tue, Jan 03, 2023 at 12:16:11PM +0530, Aradhya Bhatia wrote:
-> Hi all,
-> 
-> Microtips Technology Solutions USA, and Lincoln Technology Solutions are
-> 2 display panel vendors, and the first 2 patches add their vendor
-> prefixes.
-> 
-> The fourth patch, simply introduces the new compatible for the generic
-> dual-link panels in the panel-lvds driver. This new compatible is based
-> from a new DT binding added in the third patch explained below.
-> 
-> The third patch introduces a dt-binding for generic dual-link LVDS
-> panels. These panels do not have any documented constraints, except for
-> their timing characteristics. Further, these panels have 2 pixel-sinks.
-> In a dual-link connection between an LVDS encoder and the panel, one
-> sink accepts the odd set of LVDS pixels and the other, the even set.
-> 
-> A lot of this has been based from the Advantech,idk-2121wr dual-link
-> panel[1] and Maxime's patches for generic LVDS panels[2] (which are
-> single-link by default.) and the discussions that happened before they
-> were finally merged.
-> 
-> Below are some notes and points that I want to bring forward.
-> 
->   - The advantech,idk-2121wr panel binding uses 2 boolean properties
->     dual-link-odd/even-pixels, to signify which port sink is being used
->     for which set of LVDS pixels. I too have added similar support and
->     introduced constraints around those properties, so as to not break
->     the ABI... but I believe there is a better way to achieve this.
-> 
->     A "pixel-type" enum property could be introduced in their stead,
->     which can accept one of the 2 options <dual-lvds-odd-pixels> or
->     <dual-lvds-even-pixels>.
-> 
->     This method, in my opinion, is more accurate and cleaner to
->     implement in the bindings as well.
-> 
->     If this does sound a better I can push out a new revision where the
->     driver supports both these methods (to not break the ABI) and the
->     advantech,2121wr panel can remain as an exception.
+Hi Peter,
 
-It's usually best not to change an existing system if there are no good
-reasons, so I'd ask why you think a pixel-type property would be better
-(including when taking into account the fact that we would have to
-maintain the advantech,2121wtr driver separately) if you want to go that
-way. Otherwise, if we were developing this from scratch, I would have no
-real preference.
+> The (hopefully) final respin of cpuidle vs rcu cleanup patches. Barring any
+> objections I'll be queueing these patches in tip/sched/core in the next few
+> days.
 
->   - As an alternative to the previous point, if that method is not
->     preferred for some reason, the advantech,2121wtr panel binding
->     could then be merged in the panel-dual-lvds binding as part of
->     future work.
-> 
-> 
->   - Another tweak, I am looking forward to do as part of future work and
->     would like all your comments is to introduce driver-based
->     implementation of the panel timing parameters, like it is with
->     "panel-simple". The driver can then support both the panel-timing
->     sources (DT node or hard-coded driver structure) and the binding
->     can remove this from the "required" section.
+I'm sorry to have to bear some bad news on that front. :(
 
-There's been a very long discussion in the past (multiple discussions
-actually) regarding whether timings should be set in DT or in drivers.
-There were multiple arguments supporting both sides, without (it seems)
-a clear winner. If you want driver-side timings for dual-link panels,
-I'd like to understand why you think that's better. If the reasons are
-the same as the ones expressed when we discussed simple panels, you
-should also look at whether or not any of the fears expressed on either
-side have materialized.
+I just had a go at testing this on a Juno dev board, using your queue.git
+sched/idle branch and defconfig + CONFIG_PROVE_LOCKING=y +
+CONFIG_DEBUG_LOCKDEP=y + CONFIG_DEBUG_ATOMIC_SLEEP=y.
 
-> Thank you!
-> 
-> [1]: https://patchwork.freedesktop.org/patch/357122/
-> [2]: https://patchwork.freedesktop.org/patch/471228/
-> 
-> Aradhya Bhatia (4):
->   dt-bindings: vendor-prefixes: Add microtips
->   dt-bindings: vendor-prefixes: Add lincolntech
->   dt-bindings: panel: Introduce dual-link LVDS panel
->   drm: panel-lvds: Introduce dual-link panels
-> 
->  .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
->  .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
->  MAINTAINERS                                   |   1 +
->  drivers/gpu/drm/panel/panel-lvds.c            |   1 +
->  4 files changed, 163 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+With that I consistently see RCU at boot time (log below).
 
--- 
-Regards,
+| =============================
+| WARNING: suspicious RCU usage
+| 6.2.0-rc3-00051-gced9b6eecb31 #1 Not tainted
+| -----------------------------
+| include/trace/events/ipi.h:19 suspicious rcu_dereference_check() usage!
+| 
+| other info that might help us debug this:
+| 
+| 
+| rcu_scheduler_active = 2, debug_locks = 1
+| RCU used illegally from extended quiescent state!
+| no locks held by swapper/0/0.
+| 
+| stack backtrace:
+| CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.2.0-rc3-00051-gced9b6eecb31 #1
+| Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II May 16 2021
+| Call trace:
+|  dump_backtrace.part.0+0xe4/0xf0
+|  show_stack+0x18/0x30
+|  dump_stack_lvl+0x98/0xd4
+|  dump_stack+0x18/0x34
+|  lockdep_rcu_suspicious+0xf8/0x10c
+|  trace_ipi_raise+0x1a8/0x1b0
+|  arch_irq_work_raise+0x4c/0x70
+|  __irq_work_queue_local+0x48/0x80
+|  irq_work_queue+0x50/0x80
+|  __wake_up_klogd.part.0+0x98/0xe0
+|  defer_console_output+0x20/0x30
+|  vprintk+0x98/0xf0
+|  _printk+0x5c/0x84
+|  lockdep_rcu_suspicious+0x34/0x10c
+|  trace_lock_acquire+0x174/0x180
+|  lock_acquire+0x3c/0x8c
+|  _raw_spin_lock_irqsave+0x70/0x150
+|  down_trylock+0x18/0x50
+|  __down_trylock_console_sem+0x3c/0xd0
+|  console_trylock+0x28/0x90
+|  vprintk_emit+0x11c/0x354
+|  vprintk_default+0x38/0x4c
+|  vprintk+0xd4/0xf0
+|  _printk+0x5c/0x84
+|  lockdep_rcu_suspicious+0x34/0x10c
+|  printk_sprint+0x238/0x240
+|  vprintk_store+0x32c/0x4b0
+|  vprintk_emit+0x104/0x354
+|  vprintk_default+0x38/0x4c
+|  vprintk+0xd4/0xf0
+|  _printk+0x5c/0x84
+|  lockdep_rcu_suspicious+0x34/0x10c
+|  trace_irq_disable+0x1ac/0x1b0
+|  trace_hardirqs_off+0xe8/0x110
+|  cpu_suspend+0x4c/0xfc
+|  psci_cpu_suspend_enter+0x58/0x6c
+|  psci_enter_idle_state+0x70/0x170
+|  cpuidle_enter_state+0xc4/0x464
+|  cpuidle_enter+0x38/0x50
+|  do_idle+0x230/0x2c0
+|  cpu_startup_entry+0x24/0x30
+|  rest_init+0x110/0x190
+|  arch_post_acpi_subsys_init+0x0/0x18
+|  start_kernel+0x6f8/0x738
+|  __primary_switched+0xbc/0xc4
 
-Laurent Pinchart
+IIUC what's happenign here is the PSCI cpuidle driver has entered idle and RCU
+is no longer watching when arm64's cpu_suspend() manipulates DAIF. Our
+local_daif_*() helpers poke lockdep and tracing, hence the call to
+trace_hardirqs_off() and the RCU usage.
+
+I think we need RCU to be watching all the way down to cpu_suspend(), and it's
+cpu_suspend() that should actually enter/exit idle context. That and we need to
+make cpu_suspend() and the low-level PSCI invocation noinstr.
+
+I'm not sure whether 32-bit will have a similar issue or not.
+
+I'm surprised no-one else who has tested has seen this; I suspect people
+haven't enabled lockdep and friends. :/
+
+Thanks,
+Mark. 
