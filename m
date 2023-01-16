@@ -2,99 +2,70 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BFF66AC71
-	for <lists+linux-csky@lfdr.de>; Sat, 14 Jan 2023 17:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5524D66BA5D
+	for <lists+linux-csky@lfdr.de>; Mon, 16 Jan 2023 10:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjANQJw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 14 Jan 2023 11:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S231984AbjAPJbI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 16 Jan 2023 04:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjANQJt (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 14 Jan 2023 11:09:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CED93C3
-        for <linux-csky@vger.kernel.org>; Sat, 14 Jan 2023 08:09:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673712585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q3R4pvBr6dG+A0u3o+nBNguX6qX9S+oXSEacD+sP77s=;
-        b=WEHe9K+xAy6oigFcSDK+FWRPiXdaPr+oBmYe6CQlwXTNxpU+i2IXzcvWpQF+umNYd7No1b
-        iLs7TRio9nK5/U1C+mHafht+qs8s20Zr51bBiOZhYOUe4we1HXEYkijnVdliwSz3KK5RCT
-        pw+KMvz7kO35YQsgZ02vLWHd/lDvkLM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-642-2ar3UPJhM5y_FomADV3IRg-1; Sat, 14 Jan 2023 11:09:39 -0500
-X-MC-Unique: 2ar3UPJhM5y_FomADV3IRg-1
-Received: by mail-wr1-f71.google.com with SMTP id o14-20020adfa10e000000b002631c56fe26so4575369wro.1
-        for <linux-csky@vger.kernel.org>; Sat, 14 Jan 2023 08:09:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q3R4pvBr6dG+A0u3o+nBNguX6qX9S+oXSEacD+sP77s=;
-        b=3zH/sO75wjB85eNDWE2NxXd8lCuszAbmUTvnrKE+Uw7ewWSumZYwweMb3eVZbPkX94
-         ZuPp+566PCmWccos9QegQ2wZED9lLY5sT0kqclFv2ikQAdTFHI0MTv7BSse6smltZFMB
-         4eVgiux1JZv7FqNtm7oOHNdhVEFXbn+LgF+EyC70lGIYdxTeUUY4XD27UOziP36kwbkn
-         OP2+47xRY1V3+3f36X+DfNatJb2sSAisfB1jfv7wkMAtuuFEFz9JRMyedlLdFMVcsx1J
-         wx1Ecz+erwKed1tr3OCofK5WNBko2cmo5/bo4+Ru249153bpjB8CbgCgDrFQhzgRVu33
-         zRIw==
-X-Gm-Message-State: AFqh2koAFDQP6ZleUTNgd8KKy7qvMlJlFg29x9hSka+p12s5t6f1MpfI
-        xZ7A2ZYbvs6EsqLdIVtFzT6AmavhmVVq0Og/6HVkXPIgrGI5TsWJ2cyLX56no9LRl/zfzt9XwMQ
-        1lo7yzHTcR9S1MwcOGO+Yiw==
-X-Received: by 2002:a05:600c:348b:b0:3d1:f16b:30e6 with SMTP id a11-20020a05600c348b00b003d1f16b30e6mr62422463wmq.28.1673712578319;
-        Sat, 14 Jan 2023 08:09:38 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtvXECQ77f+OwG9Mdcw6TdAWlLhcG76s2TeMh5Hr9A1VofwYXs3lPZWG9daADyc7xNo4jh7zQ==
-X-Received: by 2002:a05:600c:348b:b0:3d1:f16b:30e6 with SMTP id a11-20020a05600c348b00b003d1f16b30e6mr62422426wmq.28.1673712578037;
-        Sat, 14 Jan 2023 08:09:38 -0800 (PST)
-Received: from ?IPV6:2003:cb:c71c:9800:fa4a:c1fc:a860:85af? (p200300cbc71c9800fa4ac1fca86085af.dip0.t-ipconnect.de. [2003:cb:c71c:9800:fa4a:c1fc:a860:85af])
-        by smtp.gmail.com with ESMTPSA id q18-20020adfdfd2000000b002bdc129c8f6sm10260315wrn.43.2023.01.14.08.09.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Jan 2023 08:09:37 -0800 (PST)
-Message-ID: <6aaad548-cf48-77fa-9d6c-db83d724b2eb@redhat.com>
-Date:   Sat, 14 Jan 2023 17:09:35 +0100
+        with ESMTP id S232229AbjAPJao (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 16 Jan 2023 04:30:44 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F89616AD5;
+        Mon, 16 Jan 2023 01:30:42 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D163D802;
+        Mon, 16 Jan 2023 10:30:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673861440;
+        bh=9YWn45J/ZNgJKTD6UEkGgR2mEmqJ7NYekCQW2ePfKgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N+zSHiOP3BPeIWVxgMUMZkbWSMpAwC7eyS7KRf00o33vAIM8HgnNlYZlsGe4NvEx+
+         ggan64ipd8TDap0zM7nKhc17S/7JZhs8uDIM+s21vxICnSvXcvLCGEqibqZ7MKdHAQ
+         GpwQEr5QqXpkio0Z6yTPKSTEHMw4GfSB6ctnf2Pk=
+Date:   Mon, 16 Jan 2023 11:30:40 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Aradhya Bhatia <a-bhatia1@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Linux RISC-V List <linux-riscv@lists.infradead.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Rahul T R <r-ravikumar@ti.com>
+Subject: Re: [RFC PATCH 0/4] dt-bindings: Introduce dual-link panels &
+ panel-vendors
+Message-ID: <Y8UZQHvVT2VQcQ33@pendragon.ideasonboard.com>
+References: <20230103064615.5311-1-a-bhatia1@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-References: <20230113171026.582290-1-david@redhat.com>
- <20230113171026.582290-2-david@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH mm-unstable v1 01/26] mm/debug_vm_pgtable: more
- pte_swp_exclusive() sanity checks
-In-Reply-To: <20230113171026.582290-2-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230103064615.5311-1-a-bhatia1@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,81 +73,97 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 13.01.23 18:10, David Hildenbrand wrote:
-> We want to implement __HAVE_ARCH_PTE_SWP_EXCLUSIVE on all architectures.
-> Let's extend our sanity checks, especially testing that our PTE bit
-> does not affect:
-> * is_swap_pte() -> pte_present() and pte_none()
-> * the swap entry + type
-> * pte_swp_soft_dirty()
+Hi Aradhya,
+
+On Tue, Jan 03, 2023 at 12:16:11PM +0530, Aradhya Bhatia wrote:
+> Hi all,
 > 
-> Especially, the pfn_pte() is dodgy when the swap PTE layout differs
-> heavily from ordinary PTEs. Let's properly construct a swap PTE from
-> swap type+offset.
+> Microtips Technology Solutions USA, and Lincoln Technology Solutions are
+> 2 display panel vendors, and the first 2 patches add their vendor
+> prefixes.
 > 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
+> The fourth patch, simply introduces the new compatible for the generic
+> dual-link panels in the panel-lvds driver. This new compatible is based
+> from a new DT binding added in the third patch explained below.
+> 
+> The third patch introduces a dt-binding for generic dual-link LVDS
+> panels. These panels do not have any documented constraints, except for
+> their timing characteristics. Further, these panels have 2 pixel-sinks.
+> In a dual-link connection between an LVDS encoder and the panel, one
+> sink accepts the odd set of LVDS pixels and the other, the even set.
+> 
+> A lot of this has been based from the Advantech,idk-2121wr dual-link
+> panel[1] and Maxime's patches for generic LVDS panels[2] (which are
+> single-link by default.) and the discussions that happened before they
+> were finally merged.
+> 
+> Below are some notes and points that I want to bring forward.
+> 
+>   - The advantech,idk-2121wr panel binding uses 2 boolean properties
+>     dual-link-odd/even-pixels, to signify which port sink is being used
+>     for which set of LVDS pixels. I too have added similar support and
+>     introduced constraints around those properties, so as to not break
+>     the ABI... but I believe there is a better way to achieve this.
+> 
+>     A "pixel-type" enum property could be introduced in their stead,
+>     which can accept one of the 2 options <dual-lvds-odd-pixels> or
+>     <dual-lvds-even-pixels>.
+> 
+>     This method, in my opinion, is more accurate and cleaner to
+>     implement in the bindings as well.
+> 
+>     If this does sound a better I can push out a new revision where the
+>     driver supports both these methods (to not break the ABI) and the
+>     advantech,2121wr panel can remain as an exception.
 
-The following fixup for !CONFIG_SWAP on top, which makes it compile for me and
-passes when booting on x86_64 with CONFIG_DEBUG_VM_PGTABLE:
+It's usually best not to change an existing system if there are no good
+reasons, so I'd ask why you think a pixel-type property would be better
+(including when taking into account the fact that we would have to
+maintain the advantech,2121wtr driver separately) if you want to go that
+way. Otherwise, if we were developing this from scratch, I would have no
+real preference.
 
-...
-[    0.347112] Loaded X.509 cert 'Build time autogenerated kernel key: ee6afc0578f6475656fec8a4f9d02832'
-[    0.350112] debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
-[    0.351217] page_owner is disabled
-...
+>   - As an alternative to the previous point, if that method is not
+>     preferred for some reason, the advantech,2121wtr panel binding
+>     could then be merged in the panel-dual-lvds binding as part of
+>     future work.
+> 
+> 
+>   - Another tweak, I am looking forward to do as part of future work and
+>     would like all your comments is to introduce driver-based
+>     implementation of the panel timing parameters, like it is with
+>     "panel-simple". The driver can then support both the panel-timing
+>     sources (DT node or hard-coded driver structure) and the binding
+>     can remove this from the "required" section.
 
+There's been a very long discussion in the past (multiple discussions
+actually) regarding whether timings should be set in DT or in drivers.
+There were multiple arguments supporting both sides, without (it seems)
+a clear winner. If you want driver-side timings for dual-link panels,
+I'd like to understand why you think that's better. If the reasons are
+the same as the ones expressed when we discussed simple panels, you
+should also look at whether or not any of the fears expressed on either
+side have materialized.
 
- From 6a6162e8af62a4b3f7b9d823fdfae86de3f34a9d Mon Sep 17 00:00:00 2001
-From: David Hildenbrand <david@redhat.com>
-Date: Sat, 14 Jan 2023 16:47:12 +0100
-Subject: [PATCH] fixup: mm/debug_vm_pgtable: more pte_swp_exclusive() sanity
-  checks
+> Thank you!
+> 
+> [1]: https://patchwork.freedesktop.org/patch/357122/
+> [2]: https://patchwork.freedesktop.org/patch/471228/
+> 
+> Aradhya Bhatia (4):
+>   dt-bindings: vendor-prefixes: Add microtips
+>   dt-bindings: vendor-prefixes: Add lincolntech
+>   dt-bindings: panel: Introduce dual-link LVDS panel
+>   drm: panel-lvds: Introduce dual-link panels
+> 
+>  .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+>  MAINTAINERS                                   |   1 +
+>  drivers/gpu/drm/panel/panel-lvds.c            |   1 +
+>  4 files changed, 163 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
 
-generic_max_swapfile_size() is only available with CONFIG_SWAP -- which
-makes sense, because without SWAP there are no swap files. Let's
-simply probe manually which bits we can obtain after storing them in a
-PTE, and properly call it "max swap offset", which is more generic for
-a swap entry.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-  mm/debug_vm_pgtable.c | 8 +++++---
-  1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-index 3da0cc380c35..af59cc7bd307 100644
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -810,15 +810,17 @@ static void __init pmd_swap_soft_dirty_tests(struct pgtable_debug_args *args) {
-  
-  static void __init pte_swap_exclusive_tests(struct pgtable_debug_args *args)
-  {
--	unsigned long max_swapfile_size = generic_max_swapfile_size();
-+	unsigned long max_swap_offset;
-  	swp_entry_t entry, entry2;
-  	pte_t pte;
-  
-  	pr_debug("Validating PTE swap exclusive\n");
-  
-+	/* See generic_max_swapfile_size(): probe the maximum offset */
-+	max_swap_offset = swp_offset(pte_to_swp_entry(swp_entry_to_pte(swp_entry(0, ~0UL))));
-+
-  	/* Create a swp entry with all possible bits set */
--	entry = swp_entry((1 << MAX_SWAPFILES_SHIFT) - 1,
--			  max_swapfile_size - 1);
-+	entry = swp_entry((1 << MAX_SWAPFILES_SHIFT) - 1, max_swap_offset);
-  
-  	pte = swp_entry_to_pte(entry);
-  	WARN_ON(pte_swp_exclusive(pte));
 -- 
-2.39.0
+Regards,
 
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Laurent Pinchart
