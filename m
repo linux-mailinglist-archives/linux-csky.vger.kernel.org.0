@@ -2,58 +2,45 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FEA66DB0E
-	for <lists+linux-csky@lfdr.de>; Tue, 17 Jan 2023 11:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE64866DDC2
+	for <lists+linux-csky@lfdr.de>; Tue, 17 Jan 2023 13:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236305AbjAQK2t (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 17 Jan 2023 05:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S236402AbjAQMjG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 17 Jan 2023 07:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236292AbjAQK1o (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 17 Jan 2023 05:27:44 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D87279A9;
-        Tue, 17 Jan 2023 02:27:42 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30HAQsXv103287;
-        Tue, 17 Jan 2023 04:26:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1673951214;
-        bh=HLR+mGL+Qj5K/UgXvir37XZAI7z3g+0nfN0Ej2ahbJU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Rh5hZ4g0uh5A8jXmMjycfiTYYjzSQhfMkIr6i2Ce4ZhOvL8rMUq6rlIJsD1kKZE86
-         DcWJK+SeByxXW65XzxNxc7XsKAuXuBdLLpg0Txu2DUmjCBfQLHvZbPmYstw+QKmlLf
-         rmXBqH19WuBZcRX3abXXxn72Ve78vvFtr+7zfbKo=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30HAQsJs029663
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 Jan 2023 04:26:54 -0600
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 17
- Jan 2023 04:26:53 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 17 Jan 2023 04:26:53 -0600
-Received: from [172.24.223.35] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30HAQj0K053861;
-        Tue, 17 Jan 2023 04:26:45 -0600
-Message-ID: <10ca38d8-df9a-33f1-3f66-8342580ef5a9@ti.com>
-Date:   Tue, 17 Jan 2023 15:56:44 +0530
+        with ESMTP id S236129AbjAQMjF (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 17 Jan 2023 07:39:05 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BC535252;
+        Tue, 17 Jan 2023 04:39:04 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B5E8310C;
+        Tue, 17 Jan 2023 13:38:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1673959141;
+        bh=0xanUWyMoxJnvXqqNZ5UOGy3oyg6sQdr/aJLg0bLmX0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lhXA6EOBtju3hz7RVGApa3gFkm8IjwyEevWIttJjwuSssA6tWWX3VMk4dP6KCwshf
+         D1TXAw5l8b9t1Vd5W0sbVT1fBO26Skg59JiGVMd89TgWhDkXbpcp0S0PTFKKS9B67y
+         fFirV+o2rzHN81rIAuhffeTrNvXXekunotwKsK54=
+Message-ID: <808e831f-4282-0e58-ebb2-2f556aaeaca4@ideasonboard.com>
+Date:   Tue, 17 Jan 2023 14:38:57 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 0/4] dt-bindings: Introduce dual-link panels &
- panel-vendors
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 3/4] dt-bindings: panel: Introduce dual-link LVDS
+ panel
 Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
+To:     Aradhya Bhatia <a-bhatia1@ti.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Tomi Valkeinen <tomba@kernel.org>,
         Jyri Sarha <jyri.sarha@iki.fi>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         Maxime Ripard <maxime@cerno.tech>,
@@ -64,152 +51,176 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Guo Ren <guoren@kernel.org>
+Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
         Devicetree List <devicetree@vger.kernel.org>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Jai Luthra <j-luthra@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
         Linux Kernel List <linux-kernel@vger.kernel.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
-        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
         Linux RISC-V List <linux-riscv@lists.infradead.org>,
         Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
-        Rahul T R <r-ravikumar@ti.com>
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
 References: <20230103064615.5311-1-a-bhatia1@ti.com>
- <Y8UZQHvVT2VQcQ33@pendragon.ideasonboard.com>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <Y8UZQHvVT2VQcQ33@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230103064615.5311-4-a-bhatia1@ti.com>
+ <09f1ca83-c7d5-a186-6fa6-09cdd7a0b9cc@collabora.com>
+ <431ddd82-055b-2526-3d5e-f6563e48d264@ti.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <431ddd82-055b-2526-3d5e-f6563e48d264@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Laurent,
-
-Thank you for taking a look at this!
-
-On 16-Jan-23 15:00, Laurent Pinchart wrote:
-> Hi Aradhya,
+On 09/01/2023 18:21, Aradhya Bhatia wrote:
+> Hi Angelo,
 > 
-> On Tue, Jan 03, 2023 at 12:16:11PM +0530, Aradhya Bhatia wrote:
->> Hi all,
->>
->> Microtips Technology Solutions USA, and Lincoln Technology Solutions are
->> 2 display panel vendors, and the first 2 patches add their vendor
->> prefixes.
->>
->> The fourth patch, simply introduces the new compatible for the generic
->> dual-link panels in the panel-lvds driver. This new compatible is based
->> from a new DT binding added in the third patch explained below.
->>
->> The third patch introduces a dt-binding for generic dual-link LVDS
->> panels. These panels do not have any documented constraints, except for
->> their timing characteristics. Further, these panels have 2 pixel-sinks.
->> In a dual-link connection between an LVDS encoder and the panel, one
->> sink accepts the odd set of LVDS pixels and the other, the even set.
->>
->> A lot of this has been based from the Advantech,idk-2121wr dual-link
->> panel[1] and Maxime's patches for generic LVDS panels[2] (which are
->> single-link by default.) and the discussions that happened before they
->> were finally merged.
->>
->> Below are some notes and points that I want to bring forward.
->>
->>    - The advantech,idk-2121wr panel binding uses 2 boolean properties
->>      dual-link-odd/even-pixels, to signify which port sink is being used
->>      for which set of LVDS pixels. I too have added similar support and
->>      introduced constraints around those properties, so as to not break
->>      the ABI... but I believe there is a better way to achieve this.
->>
->>      A "pixel-type" enum property could be introduced in their stead,
->>      which can accept one of the 2 options <dual-lvds-odd-pixels> or
->>      <dual-lvds-even-pixels>.
->>
->>      This method, in my opinion, is more accurate and cleaner to
->>      implement in the bindings as well.
->>
->>      If this does sound a better I can push out a new revision where the
->>      driver supports both these methods (to not break the ABI) and the
->>      advantech,2121wr panel can remain as an exception.
+> Thanks for taking a look at the patches!
 > 
-> It's usually best not to change an existing system if there are no good
-> reasons, so I'd ask why you think a pixel-type property would be better
-> (including when taking into account the fact that we would have to
-> maintain the advantech,2121wtr driver separately) if you want to go that
-> way. Otherwise, if we were developing this from scratch, I would have no
-> real preference.
+> On 03-Jan-23 17:21, AngeloGioacchino Del Regno wrote:
+>> Il 03/01/23 07:46, Aradhya Bhatia ha scritto:
+>>> Dual-link LVDS interfaces have 2 links, with even pixels traveling on
+>>> one link, and odd pixels on the other. These panels are also generic in
+>>> nature, with no documented constraints, much like their single-link
+>>> counterparts, "panel-lvds".
+>>>
+>>> Add a new compatible, "panel-dual-lvds", and a dt-binding document for
+>>> these panels.
+>>>
+>>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>>> ---
+>>>   .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
+>>>   MAINTAINERS                                   |   1 +
+>>>   2 files changed, 158 insertions(+)
+>>>   create mode 100644 
+>>> Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+>>> new file mode 100644
+>>> index 000000000000..88a7aa2410be
+>>> --- /dev/null
+>>> +++ 
+>>> b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+>>> @@ -0,0 +1,157 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/display/panel/panel-dual-lvds.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Generic Dual-Link LVDS Display Panel
+>>> +
+>>> +maintainers:
+>>> +  - Aradhya Bhatia <a-bhatia1@ti.com>
+>>> +  - Thierry Reding <thierry.reding@gmail.com>
+>>> +
+>>> +description: |
+>>> +  A dual-LVDS interface is a dual-link connection with the even pixels
+>>> +  traveling on one link, and the odd pixels traveling on the other.
+>>> +
+>>> +allOf:
+>>> +  - $ref: panel-common.yaml#
+>>> +  - $ref: /schemas/display/lvds.yaml/#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - items:
+>>> +          - enum:
+>>> +              - lincolntech,lcd185-101ct
+>>> +              - microtips,13-101hieb0hf0-s
+>>> +          - const: panel-dual-lvds
+>>> +      - const: panel-dual-lvds
+>>> +
+>>> +  ports:
+>>> +    $ref: /schemas/graph.yaml#/properties/ports
+>>> +
+>>> +    properties:
+>>> +      port@0:
+>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>>> +        unevaluatedProperties: false
+>>> +        description: The sink for first set of LVDS pixels.
+>>> +
+>>> +        properties:
+>>> +          dual-lvds-odd-pixels:
+>>> +            type: boolean
+>>> +
+>>> +          dual-lvds-even-pixels:
+>>> +            type: boolean
+>>> +
+>>> +        oneOf:
+>>> +          - required: [dual-lvds-odd-pixels]
+>>
+>> One question: why do we need a "panel-dual-lvds" compatible?
+>> A Dual-LVDS panel is a LVDS panel using two ports, hence still a 
+>> panel-lvds.
+>>
+>> If you're doing this to clearly distinguish, for human readability 
+>> purposes,
+>> single-link vs dual-link panels, I think that this would still be 
+>> clear even
+>> if we use panel-lvds alone because dual-link panels, as you wrote in this
+>> binding, does *require* two ports, with "dual-lvds-{odd,even}-pixels" 
+>> properties.
 > 
-Such a property would have been a more accurate representation of the
-case here, voiding the need of a "oneOf:" clause, and simplifying the
-overall binding implementation.
-
-Furthermore, I saw this as a fair opportunity to introduce the new
-property because there was only one other dual link panel which used the
-original properties.
-And, while the code delta shall be same in implementing the pixel-type
-property irrespective of the number of existing dual-link panels that
-support the original method, I believe with pixel-type, we can set a
-fresh precedence for future scenarios (perhaps for "quad-link" LVDS, if
-there ever will be one).
-
-Having said that, this was merely a suggestion. If this does not seem to
-be a strong enough reason to change the existing system, I can keep
-using the original properties (as I have in the patches) and send a v2.
-
->>    - As an alternative to the previous point, if that method is not
->>      preferred for some reason, the advantech,2121wtr panel binding
->>      could then be merged in the panel-dual-lvds binding as part of
->>      future work.
->>
->>
->>    - Another tweak, I am looking forward to do as part of future work and
->>      would like all your comments is to introduce driver-based
->>      implementation of the panel timing parameters, like it is with
->>      "panel-simple". The driver can then support both the panel-timing
->>      sources (DT node or hard-coded driver structure) and the binding
->>      can remove this from the "required" section.
+> Yes, while they are both LVDS based panels the extra LVDS sink in these
+> panels, and the capability to decode and display the 2 sets of signals
+> are enough hardware differences that warrant for an addition of a new
+> compatible.
 > 
-> There's been a very long discussion in the past (multiple discussions
-> actually) regarding whether timings should be set in DT or in drivers.
-> There were multiple arguments supporting both sides, without (it seems)
-> a clear winner. If you want driver-side timings for dual-link panels,
-> I'd like to understand why you think that's better. If the reasons are
-> the same as the ones expressed when we discussed simple panels, you
-> should also look at whether or not any of the fears expressed on either
-> side have materialized.
-
-I went through the discussions that you mentioned above. For now, I will
-stick to the status-quo that there is for LVDS panels. =)
-
+>>
+>> So... the devicetree node would look like this:
+>>
+>> panel {
+>>      compatible = "vendor,panel", "panel-lvds";
+>>      ....
+>>      ports {
+>>          port@0 {
+>>              .....
+>>              -> dual-lvds-odd-pixels <-
+>>          }
+>>
+>>          port@1 {
+>>              .....
+>>              -> dual-lvds-even-pixels <-
+>>          };
+>>      };
+>> };
+>>
+>>> +          - required: [dual-lvds-even-pixels]
+>>
+>> ...Though, if you expect dual-lvds panels to get other quirks in the 
+>> future,
+>> that's a whole different story and you may actually need the 
+>> panel-dual-lvds
+>> compatible.
 > 
->> Thank you!
->>
->> [1]: https://patchwork.freedesktop.org/patch/357122/
->> [2]: https://patchwork.freedesktop.org/patch/471228/
->>
->> Aradhya Bhatia (4):
->>    dt-bindings: vendor-prefixes: Add microtips
->>    dt-bindings: vendor-prefixes: Add lincolntech
->>    dt-bindings: panel: Introduce dual-link LVDS panel
->>    drm: panel-lvds: Introduce dual-link panels
->>
->>   .../display/panel/panel-dual-lvds.yaml        | 157 ++++++++++++++++++
->>   .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
->>   MAINTAINERS                                   |   1 +
->>   drivers/gpu/drm/panel/panel-lvds.c            |   1 +
->>   4 files changed, 163 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
-> 
+> Yes, exactly. Even while being non-smart, there are going to be more
+> quirks in future. And it would be better if they have their own
+> compatible/binding, and are not getting appended in an ever-growing
+> if-else ladder. :)
 
-Regards
-Aradhya
+I can imagine a panel which you can use with a single LVDS link if the 
+clock is high enough, or two LVDS links if the clock has to be lower. Is 
+that a dual-lvds panel? =)
+
+But probably that situation is no different than a panel that can work 
+with DSI or DPI input.
+
+Still, I'm agree with Angelo in that a new compatible string for dual 
+link lvds feels a bit odd. That said, it's possible the panel-lvds 
+bindings might get rather confusing. So I don't have a strong feeling here.
+
+  Tomi
+
