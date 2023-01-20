@@ -2,80 +2,97 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69F5673C81
-	for <lists+linux-csky@lfdr.de>; Thu, 19 Jan 2023 15:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F394674BE6
+	for <lists+linux-csky@lfdr.de>; Fri, 20 Jan 2023 06:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjASOl3 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 19 Jan 2023 09:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S231307AbjATFMm (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 20 Jan 2023 00:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjASOkb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 19 Jan 2023 09:40:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BEB59576
-        for <linux-csky@vger.kernel.org>; Thu, 19 Jan 2023 06:37:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674139056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KQsQYSoiV7axOHu2SHPkYXMBMlM95JI1QYM4ca5S0lU=;
-        b=fX2f+WmWkfO4XZj5Ezbqw/74oczmYXvltgTOmsQLdS+1R+lUN/6t6iV0uXfm1wjKMUEauF
-        bhkI+hcyCEE/hGFDn9BReK3NO8EmhRhf3XUVTgv+MnbyTipM1xSWHR1YmwUUoIwFSKulQo
-        1FiQpG/54iS33qbF16m5CEqcEFwhAxQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-339-SfVp0ibUOxOmeBYwt3eAmQ-1; Thu, 19 Jan 2023 09:37:34 -0500
-X-MC-Unique: SfVp0ibUOxOmeBYwt3eAmQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8CC143815F70;
-        Thu, 19 Jan 2023 14:37:32 +0000 (UTC)
-Received: from vschneid.remote.csb (unknown [10.33.36.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 544032026D68;
-        Thu, 19 Jan 2023 14:37:27 +0000 (UTC)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH v4 7/7] sched, smp: Trace smp callback causing an IPI
-Date:   Thu, 19 Jan 2023 14:36:19 +0000
-Message-Id: <20230119143619.2733236-8-vschneid@redhat.com>
-In-Reply-To: <20230119143619.2733236-1-vschneid@redhat.com>
-References: <20230119143619.2733236-1-vschneid@redhat.com>
+        with ESMTP id S231312AbjATFMV (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 20 Jan 2023 00:12:21 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C593CA3E;
+        Thu, 19 Jan 2023 21:00:16 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30K4wwaL059217;
+        Thu, 19 Jan 2023 22:58:58 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1674190738;
+        bh=FhdMm8snS4EyWglAxG9HV9C8rgTh2MdCa/PV2daai+0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=IQIjXef8eot9FsusDlpnq4ExSa3ShrotvDLKZTWVWjFVwfIti0C44gBEdKYHbZ941
+         d4FgjRzaupR90M0pb3/LnJq5dmc3YnXkhoE3pJDNHx0Qr1bjWPdqMFChFPaLYKEnYn
+         t+rnl+NLCidenbOG2q/xjWzNgOKMsVQqdVS3O2H4=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30K4wwvM108629
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 19 Jan 2023 22:58:58 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 19
+ Jan 2023 22:58:57 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 19 Jan 2023 22:58:57 -0600
+Received: from [172.24.223.178] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30K4wmmo100309;
+        Thu, 19 Jan 2023 22:58:49 -0600
+Message-ID: <36fe032b-a00c-dad1-a3db-bea1f15726c0@ti.com>
+Date:   Fri, 20 Jan 2023 10:28:48 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 3/4] dt-bindings: panel: Introduce dual-link LVDS
+ panel
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guo Ren <guoren@kernel.org>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Linux RISC-V List <linux-riscv@lists.infradead.org>,
+        Linux ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
+        Linux Mediatek List <linux-mediatek@lists.infradead.org>,
+        Linux C-SKY Arch List <linux-csky@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230103064615.5311-1-a-bhatia1@ti.com>
+ <20230103064615.5311-4-a-bhatia1@ti.com>
+ <09f1ca83-c7d5-a186-6fa6-09cdd7a0b9cc@collabora.com>
+ <431ddd82-055b-2526-3d5e-f6563e48d264@ti.com>
+ <808e831f-4282-0e58-ebb2-2f556aaeaca4@ideasonboard.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <808e831f-4282-0e58-ebb2-2f556aaeaca4@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,217 +100,160 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Context
-=======
+Hi Tomi,
 
-The newly-introduced ipi_send_cpumask tracepoint has a "callback" parameter
-which so far has only been fed with NULL.
+Thank you for taking a look at the patches!
 
-While CSD_TYPE_SYNC/ASYNC and CSD_TYPE_IRQ_WORK share a similar backing
-struct layout (meaning their callback func can be accessed without caring
-about the actual CSD type), CSD_TYPE_TTWU doesn't even have a function
-attached to its struct. This means we need to check the type of a CSD
-before eventually dereferencing its associated callback.
+On 17-Jan-23 18:08, Tomi Valkeinen wrote:
+> On 09/01/2023 18:21, Aradhya Bhatia wrote:
+>> Hi Angelo,
+>>
+>> Thanks for taking a look at the patches!
+>>
+>> On 03-Jan-23 17:21, AngeloGioacchino Del Regno wrote:
+>>> Il 03/01/23 07:46, Aradhya Bhatia ha scritto:
+>>>> Dual-link LVDS interfaces have 2 links, with even pixels traveling on
+>>>> one link, and odd pixels on the other. These panels are also generic in
+>>>> nature, with no documented constraints, much like their single-link
+>>>> counterparts, "panel-lvds".
+>>>>
+>>>> Add a new compatible, "panel-dual-lvds", and a dt-binding document for
+>>>> these panels.
+>>>>
+>>>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>>>> ---
+>>>>   .../display/panel/panel-dual-lvds.yaml        | 157 
+>>>> ++++++++++++++++++
+>>>>   MAINTAINERS                                   |   1 +
+>>>>   2 files changed, 158 insertions(+)
+>>>>   create mode 100644 
+>>>> Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+>>>>
+>>>> diff --git 
+>>>> a/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..88a7aa2410be
+>>>> --- /dev/null
+>>>> +++ 
+>>>> b/Documentation/devicetree/bindings/display/panel/panel-dual-lvds.yaml
+>>>> @@ -0,0 +1,157 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/display/panel/panel-dual-lvds.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Generic Dual-Link LVDS Display Panel
+>>>> +
+>>>> +maintainers:
+>>>> +  - Aradhya Bhatia <a-bhatia1@ti.com>
+>>>> +  - Thierry Reding <thierry.reding@gmail.com>
+>>>> +
+>>>> +description: |
+>>>> +  A dual-LVDS interface is a dual-link connection with the even pixels
+>>>> +  traveling on one link, and the odd pixels traveling on the other.
+>>>> +
+>>>> +allOf:
+>>>> +  - $ref: panel-common.yaml#
+>>>> +  - $ref: /schemas/display/lvds.yaml/#
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    oneOf:
+>>>> +      - items:
+>>>> +          - enum:
+>>>> +              - lincolntech,lcd185-101ct
+>>>> +              - microtips,13-101hieb0hf0-s
+>>>> +          - const: panel-dual-lvds
+>>>> +      - const: panel-dual-lvds
+>>>> +
+>>>> +  ports:
+>>>> +    $ref: /schemas/graph.yaml#/properties/ports
+>>>> +
+>>>> +    properties:
+>>>> +      port@0:
+>>>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>>>> +        unevaluatedProperties: false
+>>>> +        description: The sink for first set of LVDS pixels.
+>>>> +
+>>>> +        properties:
+>>>> +          dual-lvds-odd-pixels:
+>>>> +            type: boolean
+>>>> +
+>>>> +          dual-lvds-even-pixels:
+>>>> +            type: boolean
+>>>> +
+>>>> +        oneOf:
+>>>> +          - required: [dual-lvds-odd-pixels]
+>>>
+>>> One question: why do we need a "panel-dual-lvds" compatible?
+>>> A Dual-LVDS panel is a LVDS panel using two ports, hence still a 
+>>> panel-lvds.
+>>>
+>>> If you're doing this to clearly distinguish, for human readability purposes,
+>>> single-link vs dual-link panels, I think that this would still be clear even
+>>> if we use panel-lvds alone because dual-link panels, as you wrote in this
+>>> binding, does *require* two ports, with "dual-lvds-{odd,even}-pixels" properties.
+>>
+>> Yes, while they are both LVDS based panels the extra LVDS sink in these
+>> panels, and the capability to decode and display the 2 sets of signals
+>> are enough hardware differences that warrant for an addition of a new
+>> compatible.
+>>
+>>>
+>>> So... the devicetree node would look like this:
+>>>
+>>> panel {
+>>>      compatible = "vendor,panel", "panel-lvds";
+>>>      ....
+>>>      ports {
+>>>          port@0 {
+>>>              .....
+>>>              -> dual-lvds-odd-pixels <-
+>>>          }
+>>>
+>>>          port@1 {
+>>>              .....
+>>>              -> dual-lvds-even-pixels <-
+>>>          };
+>>>      };
+>>> };
+>>>
+>>>> +          - required: [dual-lvds-even-pixels]
+>>>
+>>> ...Though, if you expect dual-lvds panels to get other quirks in the future,
+>>> that's a whole different story and you may actually need the panel-dual-lvds
+>>> compatible.
+>>
+>> Yes, exactly. Even while being non-smart, there are going to be more
+>> quirks in future. And it would be better if they have their own
+>> compatible/binding, and are not getting appended in an ever-growing
+>> if-else ladder. :)
+> 
+> I can imagine a panel which you can use with a single LVDS link if the 
+> clock is high enough, or two LVDS links if the clock has to be lower. Is 
+> that a dual-lvds panel? =)
 
-This isn't as trivial as it sounds: the CSD type is stored in
-__call_single_node.u_flags, which get cleared right before the callback is
-executed via csd_unlock(). This implies checking the CSD type before it is
-enqueued on the call_single_queue, as the target CPU's queue can be flushed
-before we get to sending an IPI.
+Hmm, I can see what you are saying here.
 
-Furthermore, send_call_function_single_ipi() only has a CPU parameter, and
-would need to have an additional argument to trickle down the invoked
-function. This is somewhat silly, as the extra argument will always be
-pushed down to the function even when nothing is being traced, which is
-unnecessary overhead.
+If one wants to run a dual-link panel, with 1 link (given enough clock
+frequency), then the bindings here will *not* allow for a single port
+with the odd/even properties absent.
 
-Changes
-=======
+In such a case, the compatible will indeed need to be changed to
+"panel-lvds".
 
-send_call_function_single_ipi() is only used by smp.c, and is defined in
-sched/core.c as it contains scheduler-specific ops (set_nr_if_polling() of
-a CPU's idle task).
+While it does feel a tad bit odd, I believe it is still worth
+maintaining the clarity and HW differences between the single and dual
+link panels. :)
 
-Split it into two parts: the scheduler bits remain in sched/core.c, and the
-actual IPI emission is moved into smp.c. This lets us define an
-__always_inline helper function that can take the related callback as
-parameter without creating useless register pressure in the non-traced path
-which only gains a (disabled) static branch.
+> 
+> But probably that situation is no different than a panel that can work 
+> with DSI or DPI input.
+> 
+> Still, I'm agree with Angelo in that a new compatible string for dual 
+> link lvds feels a bit odd. That said, it's possible the panel-lvds  > bindings might get rather confusing. So I don't have a strong feeling 
+here.
 
-Do the same thing for the multi IPI case.
-
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- kernel/sched/core.c | 18 +++++++-----
- kernel/sched/smp.h  |  2 +-
- kernel/smp.c        | 72 +++++++++++++++++++++++++++++++++------------
- 3 files changed, 66 insertions(+), 26 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index c0d09eb249603..9733c3ecdbf16 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3816,16 +3816,20 @@ void sched_ttwu_pending(void *arg)
- 	rq_unlock_irqrestore(rq, &rf);
- }
- 
--void send_call_function_single_ipi(int cpu)
-+/*
-+ * Prepare the scene for sending an IPI for a remote smp_call
-+ *
-+ * Returns true if the caller can proceed with sending the IPI.
-+ * Returns false otherwise.
-+ */
-+bool call_function_single_prep_ipi(int cpu)
- {
--	struct rq *rq = cpu_rq(cpu);
--
--	if (!set_nr_if_polling(rq->idle)) {
--		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);
--		arch_send_call_function_single_ipi(cpu);
--	} else {
-+	if (set_nr_if_polling(cpu_rq(cpu)->idle)) {
- 		trace_sched_wake_idle_without_ipi(cpu);
-+		return false;
- 	}
-+
-+	return true;
- }
- 
- /*
-diff --git a/kernel/sched/smp.h b/kernel/sched/smp.h
-index 2eb23dd0f2856..21ac44428bb02 100644
---- a/kernel/sched/smp.h
-+++ b/kernel/sched/smp.h
-@@ -6,7 +6,7 @@
- 
- extern void sched_ttwu_pending(void *arg);
- 
--extern void send_call_function_single_ipi(int cpu);
-+extern bool call_function_single_prep_ipi(int cpu);
- 
- #ifdef CONFIG_SMP
- extern void flush_smp_call_function_queue(void);
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 821b5986721ac..5cd680a7e78ef 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -161,9 +161,18 @@ void __init call_function_init(void)
- }
- 
- static __always_inline void
--send_call_function_ipi_mask(const struct cpumask *mask)
-+send_call_function_single_ipi(int cpu, smp_call_func_t func)
- {
--	trace_ipi_send_cpumask(mask, _RET_IP_, NULL);
-+	if (call_function_single_prep_ipi(cpu)) {
-+		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, func);
-+		arch_send_call_function_single_ipi(cpu);
-+	}
-+}
-+
-+static __always_inline void
-+send_call_function_ipi_mask(const struct cpumask *mask, smp_call_func_t func)
-+{
-+	trace_ipi_send_cpumask(mask, _RET_IP_, func);
- 	arch_send_call_function_ipi_mask(mask);
- }
- 
-@@ -430,12 +439,16 @@ static void __smp_call_single_queue_debug(int cpu, struct llist_node *node)
- 	struct cfd_seq_local *seq = this_cpu_ptr(&cfd_seq_local);
- 	struct call_function_data *cfd = this_cpu_ptr(&cfd_data);
- 	struct cfd_percpu *pcpu = per_cpu_ptr(cfd->pcpu, cpu);
-+	struct __call_single_data *csd;
-+
-+	csd = container_of(node, call_single_data_t, node.llist);
-+	WARN_ON_ONCE(!(CSD_TYPE(csd) & (CSD_TYPE_SYNC | CSD_TYPE_ASYNC)));
- 
- 	cfd_seq_store(pcpu->seq_queue, this_cpu, cpu, CFD_SEQ_QUEUE);
- 	if (llist_add(node, &per_cpu(call_single_queue, cpu))) {
- 		cfd_seq_store(pcpu->seq_ipi, this_cpu, cpu, CFD_SEQ_IPI);
- 		cfd_seq_store(seq->ping, this_cpu, cpu, CFD_SEQ_PING);
--		send_call_function_single_ipi(cpu);
-+		send_call_function_single_ipi(cpu, csd->func);
- 		cfd_seq_store(seq->pinged, this_cpu, cpu, CFD_SEQ_PINGED);
- 	} else {
- 		cfd_seq_store(pcpu->seq_noipi, this_cpu, cpu, CFD_SEQ_NOIPI);
-@@ -477,6 +490,25 @@ static __always_inline void csd_unlock(struct __call_single_data *csd)
- 	smp_store_release(&csd->node.u_flags, 0);
- }
- 
-+static __always_inline void
-+raw_smp_call_single_queue(int cpu, struct llist_node *node, smp_call_func_t func)
-+{
-+	/*
-+	 * The list addition should be visible to the target CPU when it pops
-+	 * the head of the list to pull the entry off it in the IPI handler
-+	 * because of normal cache coherency rules implied by the underlying
-+	 * llist ops.
-+	 *
-+	 * If IPIs can go out of order to the cache coherency protocol
-+	 * in an architecture, sufficient synchronisation should be added
-+	 * to arch code to make it appear to obey cache coherency WRT
-+	 * locking and barrier primitives. Generic code isn't really
-+	 * equipped to do the right thing...
-+	 */
-+	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
-+		send_call_function_single_ipi(cpu, func);
-+}
-+
- static DEFINE_PER_CPU_SHARED_ALIGNED(call_single_data_t, csd_data);
- 
- void __smp_call_single_queue(int cpu, struct llist_node *node)
-@@ -493,21 +525,25 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
- 		}
- 	}
- #endif
--
- 	/*
--	 * The list addition should be visible to the target CPU when it pops
--	 * the head of the list to pull the entry off it in the IPI handler
--	 * because of normal cache coherency rules implied by the underlying
--	 * llist ops.
--	 *
--	 * If IPIs can go out of order to the cache coherency protocol
--	 * in an architecture, sufficient synchronisation should be added
--	 * to arch code to make it appear to obey cache coherency WRT
--	 * locking and barrier primitives. Generic code isn't really
--	 * equipped to do the right thing...
-+	 * We have to check the type of the CSD before queueing it, because
-+	 * once queued it can have its flags cleared by
-+	 *   flush_smp_call_function_queue()
-+	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
-+	 * executes migration_cpu_stop() on the remote CPU).
- 	 */
--	if (llist_add(node, &per_cpu(call_single_queue, cpu)))
--		send_call_function_single_ipi(cpu);
-+	if (trace_ipi_send_cpumask_enabled()) {
-+		call_single_data_t *csd;
-+		smp_call_func_t func;
-+
-+		csd = container_of(node, call_single_data_t, node.llist);
-+		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
-+			sched_ttwu_pending : csd->func;
-+
-+		raw_smp_call_single_queue(cpu, node, func);
-+	} else {
-+		raw_smp_call_single_queue(cpu, node, NULL);
-+	}
- }
- 
- /*
-@@ -976,9 +1012,9 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		 * provided mask.
- 		 */
- 		if (nr_cpus == 1)
--			send_call_function_single_ipi(last_cpu);
-+			send_call_function_single_ipi(last_cpu, func);
- 		else if (likely(nr_cpus > 1))
--			send_call_function_ipi_mask(cfd->cpumask_ipi);
-+			send_call_function_ipi_mask(cfd->cpumask_ipi, func);
- 
- 		cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->pinged, this_cpu, CFD_SEQ_NOCPU, CFD_SEQ_PINGED);
- 	}
--- 
-2.31.1
-
+Regards
+Aradhya
