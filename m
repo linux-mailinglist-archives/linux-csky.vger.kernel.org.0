@@ -2,71 +2,66 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFF768CB28
-	for <lists+linux-csky@lfdr.de>; Tue,  7 Feb 2023 01:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2740268DF01
+	for <lists+linux-csky@lfdr.de>; Tue,  7 Feb 2023 18:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjBGAc2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 6 Feb 2023 19:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S231562AbjBGRdW (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 7 Feb 2023 12:33:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjBGAc1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 6 Feb 2023 19:32:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1CB7DB4;
-        Mon,  6 Feb 2023 16:32:25 -0800 (PST)
+        with ESMTP id S230421AbjBGRdV (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 7 Feb 2023 12:33:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9733CE32;
+        Tue,  7 Feb 2023 09:33:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56C79B816A4;
-        Tue,  7 Feb 2023 00:32:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991E0C433D2;
-        Tue,  7 Feb 2023 00:32:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E891F60F95;
+        Tue,  7 Feb 2023 17:33:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45330C433EF;
+        Tue,  7 Feb 2023 17:33:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675729943;
-        bh=iZCN6sGc9yW2zYcxaQotSvnk+ZA53AaN/sDVv0yII50=;
+        s=k20201202; t=1675791189;
+        bh=OOFodDg/RJjo5qTVphmNP/E/fr/ShyEQVDZAWMtFoM0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r7OTSPs0ofYJfz2HfC9yS/lpbY7S0BFzpXiLK3x7Ke/Y6aWFhktLvs6Bvgj2Al5Wk
-         B6UkcQ+D4VR40u7HKhXzSQ4KgoVE+1waBFZlM5JqHCpnVJMmvdP6KTKtVHMcYXlvDW
-         HvMYz5Nv/QvWcqkqgdC8HtG5iSFLz+5CT0wM3dg+r8XfX8Uoay6JHXFHAsy/jvcyaE
-         Y+YyyHfN2C/hXNPxeqGA7nAR2Ackxd1K6CCBh1BVMg4QrPnhB6To8MjHdG4AQb2uIw
-         smNsNDMgzHTMzUtoipazT928V76wO/Qhc/hW1DhF+HtdqhyqNOakQKfsfeblr/+0mf
-         LLy3JzbNDtsBw==
-Date:   Tue, 7 Feb 2023 00:32:12 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH mm-unstable v1 04/26] arm/mm: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Message-ID: <Y+GcDFMNHw2cdDN1@sirena.org.uk>
-References: <20230113171026.582290-1-david@redhat.com>
- <20230113171026.582290-5-david@redhat.com>
+        b=tXxwcE/gOF0eNx0XF92RAoYkNum7JZnXOZnnavM7kzrO0MQevxJJtXQxPJNmPEoZR
+         tAMLz9nlYUiMrkjH/XKT2k/4CJZ7++RadCYpn6C4IHt8JHwnxoVyjFlB66hlg6cJRQ
+         RtVlmuj69eecz4+uNG9d2OCUVRkR6tgweGdQ7Ag3A9B3i0x3l1Z/3o2JXHp4uErqyf
+         t3GKQ32zFVa94qvR26M0CjRf2YghqCdXlloIl2kbFkmDdMkoXcoi91RlDvfyQm8h4p
+         fB3bxwZHldFOuKK/WwIFRqJvJxjNiXAvBoMPfmM9C2dJCIEbPzS8z2Zbf2jvHi7ZV3
+         3Wl3kMwIvcAmA==
+Date:   Tue, 7 Feb 2023 09:33:04 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: [PATCH v1.1 22/22] sched/idle: Mark arch_cpu_idle_dead() __noreturn
+Message-ID: <20230207173304.le5rvsz2emasye7s@treble>
+References: <cover.1675461757.git.jpoimboe@kernel.org>
+ <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NWKvUnutYufNxY+M"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230113171026.582290-5-david@redhat.com>
-X-Cookie: No guts, no glory.
+In-Reply-To: <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -76,105 +71,273 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+Before commit 076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead()
+return"), in Xen, when a previously offlined CPU was brought back
+online, it unexpectedly resumed execution where it left off in the
+middle of the idle loop.
 
---NWKvUnutYufNxY+M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There were some hacks to make that work, but the behavior was surprising
+as do_idle() doesn't expect an offlined CPU to return from the dead (in
+arch_cpu_idle_dead()).
 
-On Fri, Jan 13, 2023 at 06:10:04PM +0100, David Hildenbrand wrote:
-> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by stealing one bit from the
-> offset. This reduces the maximum swap space per file to 64 GiB (was 128
-> GiB).
->=20
-> While at it drop the PTE_TYPE_FAULT from __swp_entry_to_pte() which is
-> defined to be 0 and is rather confusing because we should be dealing
-> with "Linux PTEs" not "hardware PTEs". Also, properly mask the type in
-> __swp_entry().
+Now that Xen has been fixed, and the arch-specific implementations of
+arch_cpu_idle_dead() also don't return, give it a __noreturn attribute.
 
-Today's -next (and at least back to Friday, older logs are unclear - I
-only noticed -next issues today) fails to NFS boot on an AT91SAM9G20-EK
-(an old ARMv5 platform) with multi_v5_defconfig, a bisect appears to
-point to this patch (20aae9eff5acd8f5 in today's -next) as the culprit.
+This will cause the compiler to complain if an arch-specific
+implementation might return.  It also improves code generation for both
+caller and callee.
 
-The failure happens at some point after starting userspace, the kernel
-starts spamming the console with messages in the form:
+Also fixes the following warning:
 
-    get_swap_device: Bad swap file entry 10120d20
+  vmlinux.o: warning: objtool: do_idle+0x25f: unreachable instruction
 
-repeating the same entry number, though different numbers per boot.  The
-system is booting a Debian userspace and shouldn't have swap configured
-(I verfified that successful boots don't), though it only has 64M of RAM
-so there will be some memory pressure, especially during boot.  The
-exact point things fall over seems to vary a little.
+Reported-by: Paul E. McKenney <paulmck@kernel.org>
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+v1.1:
+- add __noreturn to the implementations (in addition to just the
+  prototype)
 
-A sample failing job with the full log is here:
+ arch/alpha/kernel/process.c     | 2 +-
+ arch/arm/kernel/smp.c           | 2 +-
+ arch/arm64/kernel/process.c     | 2 +-
+ arch/csky/kernel/smp.c          | 2 +-
+ arch/ia64/kernel/process.c      | 2 +-
+ arch/loongarch/kernel/process.c | 2 +-
+ arch/mips/kernel/process.c      | 2 +-
+ arch/parisc/kernel/process.c    | 2 +-
+ arch/powerpc/kernel/smp.c       | 2 +-
+ arch/riscv/kernel/cpu-hotplug.c | 2 +-
+ arch/s390/kernel/idle.c         | 2 +-
+ arch/sh/kernel/idle.c           | 2 +-
+ arch/sparc/kernel/process_64.c  | 2 +-
+ arch/x86/kernel/process.c       | 2 +-
+ arch/xtensa/kernel/smp.c        | 2 +-
+ include/linux/cpu.h             | 2 +-
+ tools/objtool/check.c           | 1 +
+ 17 files changed, 17 insertions(+), 16 deletions(-)
 
-    https://lava.sirena.org.uk/scheduler/job/262719
+diff --git a/arch/alpha/kernel/process.c b/arch/alpha/kernel/process.c
+index 94938f856545..c9a5ed23c5a6 100644
+--- a/arch/alpha/kernel/process.c
++++ b/arch/alpha/kernel/process.c
+@@ -60,7 +60,7 @@ void arch_cpu_idle(void)
+ 	wtint(0);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	wtint(INT_MAX);
+ 	BUG();
+diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
+index adcd417c526b..c2daa0f2f784 100644
+--- a/arch/arm/kernel/smp.c
++++ b/arch/arm/kernel/smp.c
+@@ -320,7 +320,7 @@ void __cpu_die(unsigned int cpu)
+  * of the other hotplug-cpu capable cores, so presumably coming
+  * out of idle fixes this.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	unsigned int cpu = smp_processor_id();
+ 
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 71d59b5abede..089ced6d6bd6 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -69,7 +69,7 @@ void (*pm_power_off)(void);
+ EXPORT_SYMBOL_GPL(pm_power_off);
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+        cpu_die();
+ }
+diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+index 0ec20efaf5fd..9c7a20b73ac6 100644
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -300,7 +300,7 @@ void __cpu_die(unsigned int cpu)
+ 	pr_notice("CPU%u: shutdown\n", cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	idle_task_exit();
+ 
+diff --git a/arch/ia64/kernel/process.c b/arch/ia64/kernel/process.c
+index 78f5794b2dde..9a5cd9fad3a9 100644
+--- a/arch/ia64/kernel/process.c
++++ b/arch/ia64/kernel/process.c
+@@ -225,7 +225,7 @@ static inline void __noreturn play_dead(void)
+ }
+ #endif /* CONFIG_HOTPLUG_CPU */
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
+index edfd220a3737..ba70e94eb996 100644
+--- a/arch/loongarch/kernel/process.c
++++ b/arch/loongarch/kernel/process.c
+@@ -61,7 +61,7 @@ unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
+ EXPORT_SYMBOL(boot_option_idle_override);
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 093dbbd6b843..a3225912c862 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -40,7 +40,7 @@
+ #include <asm/stacktrace.h>
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
+index c064719b49b0..97c6f875bd0e 100644
+--- a/arch/parisc/kernel/process.c
++++ b/arch/parisc/kernel/process.c
+@@ -159,7 +159,7 @@ EXPORT_SYMBOL(running_on_qemu);
+ /*
+  * Called from the idle thread for the CPU which has been shutdown.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ #ifdef CONFIG_HOTPLUG_CPU
+ 	idle_task_exit();
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 6b90f10a6c81..f62e5e651bcd 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1752,7 +1752,7 @@ void __cpu_die(unsigned int cpu)
+ 		smp_ops->cpu_die(cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	/*
+ 	 * Disable on the down path. This will be re-enabled by
+diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
+index f7a832e3a1d1..59b80211c25f 100644
+--- a/arch/riscv/kernel/cpu-hotplug.c
++++ b/arch/riscv/kernel/cpu-hotplug.c
+@@ -71,7 +71,7 @@ void __cpu_die(unsigned int cpu)
+ /*
+  * Called from the idle thread for the CPU which has been shutdown.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	idle_task_exit();
+ 
+diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
+index cb653c87018f..481ca32e628e 100644
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@ -143,7 +143,7 @@ void arch_cpu_idle_exit(void)
+ {
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	cpu_die();
+ }
+diff --git a/arch/sh/kernel/idle.c b/arch/sh/kernel/idle.c
+index 114f0c4abeac..d662503b0665 100644
+--- a/arch/sh/kernel/idle.c
++++ b/arch/sh/kernel/idle.c
+@@ -30,7 +30,7 @@ void default_idle(void)
+ 	clear_bl_bit();
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
+index 91c2b8124527..b51d8fb0ecdc 100644
+--- a/arch/sparc/kernel/process_64.c
++++ b/arch/sparc/kernel/process_64.c
+@@ -95,7 +95,7 @@ void arch_cpu_idle(void)
+ }
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	sched_preempt_enable_no_resched();
+ 	cpu_play_dead();
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index f1ec36caf1d8..3e30147a537e 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -727,7 +727,7 @@ void arch_cpu_idle_enter(void)
+ 	local_touch_nmi();
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/xtensa/kernel/smp.c b/arch/xtensa/kernel/smp.c
+index 7bad78495536..054bd64eab19 100644
+--- a/arch/xtensa/kernel/smp.c
++++ b/arch/xtensa/kernel/smp.c
+@@ -322,7 +322,7 @@ void __cpu_die(unsigned int cpu)
+ 	pr_err("CPU%u: unable to kill\n", cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	cpu_die();
+ }
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index f83e4519c5f0..8582a7142623 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -182,7 +182,7 @@ void arch_cpu_idle(void);
+ void arch_cpu_idle_prepare(void);
+ void arch_cpu_idle_enter(void);
+ void arch_cpu_idle_exit(void);
+-void arch_cpu_idle_dead(void);
++void __noreturn arch_cpu_idle_dead(void);
+ 
+ int cpu_report_state(int cpu);
+ int cpu_check_up_prepare(int cpu);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 0f67c6a8bc98..e3fa2279d612 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -167,6 +167,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+ 		"__reiserfs_panic",
+ 		"__stack_chk_fail",
+ 		"__ubsan_handle_builtin_unreachable",
++		"arch_cpu_idle_dead",
+ 		"cpu_bringup_and_idle",
+ 		"cpu_startup_entry",
+ 		"do_exit",
+-- 
+2.39.0
 
-Full bisect log:
-
-git bisect start
-# bad: [129af770823407ee115a56c69a04b440fd2fbe61] Add linux-next specific f=
-iles for 20230206
-git bisect bad 129af770823407ee115a56c69a04b440fd2fbe61
-# good: [4ec5183ec48656cec489c49f989c508b68b518e3] Linux 6.2-rc7
-git bisect good 53b3c6467004c627f42d96ef839b223a749bcdd9
-# good: [17b9d0b05d4fa79afb7bd00edb1b97397418a57a] Merge branch 'master' of=
- git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect good 17b9d0b05d4fa79afb7bd00edb1b97397418a57a
-# good: [7044a4e1fab22f437d275b1cf85f5c925741276b] Merge branch 'for-next' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-git bisect good 7044a4e1fab22f437d275b1cf85f5c925741276b
-# good: [bef6844b00f0c24543d60b79c558f353a43709f1] Merge branch 'staging-ne=
-xt' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-git bisect good bef6844b00f0c24543d60b79c558f353a43709f1
-# good: [f6737c53676f9db99daee069407daf203e75bc0f] Merge branch 'for-next' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock.git
-git bisect good f6737c53676f9db99daee069407daf203e75bc0f
-# bad: [05cda97ecb7046f4192a921741aae33b300dd628] mm: factor out a swap_wri=
-tepage_bdev helper
-git bisect bad 05cda97ecb7046f4192a921741aae33b300dd628
-# good: [ee0800c2f6a9e605947ce499d79fb7e2be16d6dd] mm: convert page_add_ano=
-n_rmap() to use a folio internally
-git bisect good ee0800c2f6a9e605947ce499d79fb7e2be16d6dd
-# bad: [590a2b5f0a9b740e415e0d52bd8a0f87fc15b87b] ceph: convert ceph_writep=
-ages_start() to use filemap_get_folios_tag()
-git bisect bad 590a2b5f0a9b740e415e0d52bd8a0f87fc15b87b
-# good: [92644f583d5124b60bc20a3dd21b0bc9142f020c] mm/khugepaged: introduce=
- release_pte_folio() to replace release_pte_page()
-git bisect good 92644f583d5124b60bc20a3dd21b0bc9142f020c
-# bad: [cca10df1029373cda5904887544ca6fcbbd2bac7] sh/mm: support __HAVE_ARC=
-H_PTE_SWP_EXCLUSIVE
-git bisect bad cca10df1029373cda5904887544ca6fcbbd2bac7
-# bad: [ad464ff2c0f91fcacc24167fc435aa45fe0b7d1b] m68k/mm: remove dummy __s=
-wp definitions for nommu
-git bisect bad ad464ff2c0f91fcacc24167fc435aa45fe0b7d1b
-# bad: [20aae9eff5acd8f50f72adca1176f9269a46b827] arm/mm: support __HAVE_AR=
-CH_PTE_SWP_EXCLUSIVE
-git bisect bad 20aae9eff5acd8f50f72adca1176f9269a46b827
-# good: [2321ba3e3733f513e46e29b9c70512ecddbf1085] mm/debug_vm_pgtable: mor=
-e pte_swp_exclusive() sanity checks
-git bisect good 2321ba3e3733f513e46e29b9c70512ecddbf1085
-# good: [4a446b3dd335d0bd14a5ca3e563688de3637be0c] arc/mm: support __HAVE_A=
-RCH_PTE_SWP_EXCLUSIVE
-git bisect good 4a446b3dd335d0bd14a5ca3e563688de3637be0c
-# first bad commit: [20aae9eff5acd8f50f72adca1176f9269a46b827] arm/mm: supp=
-ort __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-
---NWKvUnutYufNxY+M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPhnAwACgkQJNaLcl1U
-h9D7vgf/U3zBEYllgLPQkDLvGQVNlA4YlBJWjoZUOxdqvOZpwxsxFZ/aia+43O0B
-TMZThl9G4WF69YEjqEYV7m4FyfodFzxRw67Z/BCVTINhlSPp8SakUVz0PyMB6IzP
-CpyMhm1L4Qk4wu+FOVPxQ2pEdWlYa2RWWD3TUQUIw/kTwiBILlQAQocSsrKSHSya
-QoivSxIlvDbX1b3D2XPYaTnnQfHnGrcTXKHxR+r01jHeLvwrQ/Q8wEVSsB/lgItx
-bcLc4KvDG0yCWfPa30KHM30ccbZvLmWVw7D7WqT0ASjc2Rkvgi1G7q3QpOOZPWC+
-QjoJLvNMLQb/bbvVbDMElcjLaSuyQw==
-=EHrm
------END PGP SIGNATURE-----
-
---NWKvUnutYufNxY+M--
