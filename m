@@ -2,129 +2,62 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E663968F35C
-	for <lists+linux-csky@lfdr.de>; Wed,  8 Feb 2023 17:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058A4690290
+	for <lists+linux-csky@lfdr.de>; Thu,  9 Feb 2023 09:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjBHQkH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 8 Feb 2023 11:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
+        id S229602AbjBIIzw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 9 Feb 2023 03:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbjBHQkG (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 8 Feb 2023 11:40:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563514DE2C;
-        Wed,  8 Feb 2023 08:39:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D682261718;
-        Wed,  8 Feb 2023 16:39:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C217C433EF;
-        Wed,  8 Feb 2023 16:39:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675874394;
-        bh=k2WDmJefTVbmF4UtYjVTRVt38vEfq5VHOD9s78R7eyg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rm1BIDwVjM+vtyitHjo1e7C/8O3osDSw3ddUWkl4Wx2bC5t9PAYPPNOMyPOnhDGBE
-         x0/ntl8Z+mYIwUFJ4SJYgRaphWg6Yt4w739Gu/lXfntdZ6JeZX0Y+rfAbGvNs2ZHt8
-         st0eJcGbt8o4IXvW5Pd80HgnuHqj+dz7ZtRrgPBzs0UpJBQvPfkACmHMCJmVksp2u1
-         7j+OBIBzFLzMDdGcGKQCjlEbr0xBVw1CpjWop+Te/iJBfsS4i7ncKglT5iTBbI8VBo
-         HOM9qBR39AlYqQf2ZmUflFWYvSQAKch5roLODmzzrvB8D8QMKelVKI/xJc21XFfhdD
-         dus+tchf6H0SA==
-Date:   Wed, 8 Feb 2023 16:39:44 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH mm-unstable v1 04/26] arm/mm: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-Message-ID: <Y+PQUMwH4AZSVpjb@sirena.org.uk>
-References: <20230113171026.582290-1-david@redhat.com>
- <20230113171026.582290-5-david@redhat.com>
- <Y+GcDFMNHw2cdDN1@sirena.org.uk>
- <39fd91e3-c93b-23c6-afc6-cbe473bb0ca9@redhat.com>
+        with ESMTP id S229468AbjBIIzv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 9 Feb 2023 03:55:51 -0500
+Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CA553E5D
+        for <linux-csky@vger.kernel.org>; Thu,  9 Feb 2023 00:55:50 -0800 (PST)
+Received: by mail.corrib.pl (Postfix, from userid 1001)
+        id 61C47A3829; Thu,  9 Feb 2023 08:55:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
+        t=1675932954; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
+        h=Date:From:To:Subject:From;
+        b=cJjrHYuq0x8a8bfb+l4nl19h43YEgmq0mkFFG609IfrXRDzdujPMfY+pegihSQ158
+         6u6B+au0wi0msG76gRuZOZN5qR3jxD1gA0/bvwGp7ZPguPceEG4/DHzwM1ueUv9g09
+         U/jkkhDDieKMsW1AEOmG2dSjz+d3j//BgizY3P8XiLLU7xpnYmktvWKDBW9AvHD1nD
+         +eh4mclOM68v2tTuXozlAF/EbO6VWASKh16kLjFErI5aP7CwgfhLNttJNauj9GH4dc
+         hD8Dm3NsCOJ9MfLds8S9ELIRLmXyg6RHYDX/sG4KNz9luaOAGdHawM/Rs4341JJFEJ
+         BcZfZQCfsdzMw==
+Received: by mail.corrib.pl for <linux-csky@vger.kernel.org>; Thu,  9 Feb 2023 08:55:31 GMT
+Message-ID: <20230209074500-0.1.5e.ghb0.0.b4upu9g2ng@corrib.pl>
+Date:   Thu,  9 Feb 2023 08:55:31 GMT
+From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
+        <szczepan.kielbasa@corrib.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: Faktoring
+X-Mailer: mail.corrib.pl
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="W0tQR/5xWRekS1hu"
-Content-Disposition: inline
-In-Reply-To: <39fd91e3-c93b-23c6-afc6-cbe473bb0ca9@redhat.com>
-X-Cookie: Walk softly and carry a megawatt laser.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
---W0tQR/5xWRekS1hu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
+ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
+wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
 
-On Wed, Feb 08, 2023 at 03:12:06PM +0100, David Hildenbrand wrote:
-> On 07.02.23 01:32, Mark Brown wrote:
+Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
+stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
+z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
+ kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
+adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
+Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
 
-> > Today's -next (and at least back to Friday, older logs are unclear - I
-> > only noticed -next issues today) fails to NFS boot on an AT91SAM9G20-EK
-> > (an old ARMv5 platform) with multi_v5_defconfig, a bisect appears to
-> > point to this patch (20aae9eff5acd8f5 in today's -next) as the culprit.
 
-> It's been in -next for quite a while, thanks for the report!
-
-Yeah, there's been some other things obscuring the issue.
-
-> Could you give the following a test?
->=20
->=20
-> From 8c4bdbd9862f85782d5919d044c172b584063e83 Mon Sep 17 00:00:00 2001
-> From: David Hildenbrand <david@redhat.com>
-> Date: Wed, 8 Feb 2023 15:08:01 +0100
-> Subject: [PATCH] arm/mm: Fix swp type masking in __swp_entry()
->=20
-> We're masking with the number of type bits instead of the type mask, which
-> is obviously wrong.
-
-Tested-by: Mark Brown <broonie@kernel.org>
-
-but note that I had to manually apply it, though it's pretty trivial so
-I probably applied the right thing.
-
---W0tQR/5xWRekS1hu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPj0FAACgkQJNaLcl1U
-h9C7hQf/VKRwP16M1jInUqUdUtyzPdvalnHTpasxKVZ8Sy0U3jwXMqNUqmnpEOSO
-UB3Q8audVEzRc8pj92dk3jilZBDPHyP58UUKRsjkrZVz22Q2/R16FcjaLrdlwNlj
-GWMfEWv5OKYPHaxP4W/VX0sXzS0XMTuulvAF1BOQRlOAS3L3jYsYUtzI2pkzJm1G
-64ICND0ZQRerzQmdQd6oO2tVhymhv8Y1LPY4TT0HikINGVpwwCJoOiocmstgqqGW
-uE+M+XJ9Lp/p78SIjfccjF1rdCWlc5MJJLS/qZzYnm6OnkKMOlBAUX9bwqvyrvE9
-quDK6fshhrFo/uJ5YVAQnAEuDKLv9g==
-=rC9E
------END PGP SIGNATURE-----
-
---W0tQR/5xWRekS1hu--
+Pozdrawiam
+Szczepan Kie=C5=82basa
