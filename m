@@ -2,62 +2,171 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058A4690290
-	for <lists+linux-csky@lfdr.de>; Thu,  9 Feb 2023 09:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C850A6917D8
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Feb 2023 06:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjBIIzw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 9 Feb 2023 03:55:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S230047AbjBJFIV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 10 Feb 2023 00:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBIIzv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 9 Feb 2023 03:55:51 -0500
-Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CA553E5D
-        for <linux-csky@vger.kernel.org>; Thu,  9 Feb 2023 00:55:50 -0800 (PST)
-Received: by mail.corrib.pl (Postfix, from userid 1001)
-        id 61C47A3829; Thu,  9 Feb 2023 08:55:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
-        t=1675932954; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
-        h=Date:From:To:Subject:From;
-        b=cJjrHYuq0x8a8bfb+l4nl19h43YEgmq0mkFFG609IfrXRDzdujPMfY+pegihSQ158
-         6u6B+au0wi0msG76gRuZOZN5qR3jxD1gA0/bvwGp7ZPguPceEG4/DHzwM1ueUv9g09
-         U/jkkhDDieKMsW1AEOmG2dSjz+d3j//BgizY3P8XiLLU7xpnYmktvWKDBW9AvHD1nD
-         +eh4mclOM68v2tTuXozlAF/EbO6VWASKh16kLjFErI5aP7CwgfhLNttJNauj9GH4dc
-         hD8Dm3NsCOJ9MfLds8S9ELIRLmXyg6RHYDX/sG4KNz9luaOAGdHawM/Rs4341JJFEJ
-         BcZfZQCfsdzMw==
-Received: by mail.corrib.pl for <linux-csky@vger.kernel.org>; Thu,  9 Feb 2023 08:55:31 GMT
-Message-ID: <20230209074500-0.1.5e.ghb0.0.b4upu9g2ng@corrib.pl>
-Date:   Thu,  9 Feb 2023 08:55:31 GMT
-From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
-        <szczepan.kielbasa@corrib.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Faktoring
-X-Mailer: mail.corrib.pl
+        with ESMTP id S229455AbjBJFIU (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 10 Feb 2023 00:08:20 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7035C4BC;
+        Thu,  9 Feb 2023 21:08:17 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PChZj6hzVz4xwy;
+        Fri, 10 Feb 2023 16:08:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1676005696;
+        bh=gjOEhpmQ4QzYiJxNRSCplO6mzBIo8CgdHMudas4f4m4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VzBHDakF5oapgbqSwyCXW4NlOxuhWIXgHT5bnjksmwxnwzB2j77QlwtNy9auFKO5k
+         R5zuzvTLv5v6JR0g4zAQSDALbGO0+HtyCcaxIv+XCmtUOUNdsZXpr/60HJ8m0se9Ac
+         HCqPfRmHl1K9cRm2zGL0JLt1dLbvDoohuA4JmvWcFN0J1XTPyIZXfr0n3q8zPBgbwM
+         2KTETWI8PkOX6ZP5se3LmuOaFIoUbfwmRFq7s/gffXRM+ntl6Tsz8s7uIuoBncovYH
+         169scsrJUZSYlGwI60JQl2lk38JbvV/eRPo8tLjsBgWQeltv5kZiHwGm5Gqurl9z/4
+         hTaeq+aYRbc4A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        David Hildenbrand <david@redhat.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH mm-unstable v1 17/26] powerpc/mm: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE on 32bit book3s
+In-Reply-To: <20230113171026.582290-18-david@redhat.com>
+References: <20230113171026.582290-1-david@redhat.com>
+ <20230113171026.582290-18-david@redhat.com>
+Date:   Fri, 10 Feb 2023 16:08:07 +1100
+Message-ID: <87cz6iw1jc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
+David Hildenbrand <david@redhat.com> writes:
+> We already implemented support for 64bit book3s in commit bff9beaa2e80
+> ("powerpc/pgtable: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE for book3s")
+>
+> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE also in 32bit by reusing yet
+> unused LSB 2 / MSB 29. There seems to be no real reason why that bit cannot
+> be used, and reusing it avoids having to steal one bit from the swap
+> offset.
+>
+> While at it, mask the type in __swp_entry().
+>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  arch/powerpc/include/asm/book3s/32/pgtable.h | 38 +++++++++++++++++---
+>  1 file changed, 33 insertions(+), 5 deletions(-)
 
-rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
-ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
-wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
+I gave this a quick test on a ppc32 machine, everything seems fine.
 
-Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
-stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
-z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
- kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
-adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
-Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
+Your test_swp_exclusive.c passes, and an LTP run looks normal.
 
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Pozdrawiam
-Szczepan Kie=C5=82basa
+cheers
+
+> diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h b/arch/powerpc/include/asm/book3s/32/pgtable.h
+> index 75823f39e042..0ecb3a58f23f 100644
+> --- a/arch/powerpc/include/asm/book3s/32/pgtable.h
+> +++ b/arch/powerpc/include/asm/book3s/32/pgtable.h
+> @@ -42,6 +42,9 @@
+>  #define _PMD_PRESENT_MASK (PAGE_MASK)
+>  #define _PMD_BAD	(~PAGE_MASK)
+>  
+> +/* We borrow the _PAGE_USER bit to store the exclusive marker in swap PTEs. */
+> +#define _PAGE_SWP_EXCLUSIVE	_PAGE_USER
+> +
+>  /* And here we include common definitions */
+>  
+>  #define _PAGE_KERNEL_RO		0
+> @@ -363,17 +366,42 @@ static inline void __ptep_set_access_flags(struct vm_area_struct *vma,
+>  #define pmd_page(pmd)		pfn_to_page(pmd_pfn(pmd))
+>  
+>  /*
+> - * Encode and decode a swap entry.
+> - * Note that the bits we use in a PTE for representing a swap entry
+> - * must not include the _PAGE_PRESENT bit or the _PAGE_HASHPTE bit (if used).
+> - *   -- paulus
+> + * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
+> + * are !pte_none() && !pte_present().
+> + *
+> + * Format of swap PTEs (32bit PTEs):
+> + *
+> + *                         1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
+> + *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+> + *   <----------------- offset --------------------> < type -> E H P
+> + *
+> + *   E is the exclusive marker that is not stored in swap entries.
+> + *   _PAGE_PRESENT (P) and __PAGE_HASHPTE (H) must be 0.
+> + *
+> + * For 64bit PTEs, the offset is extended by 32bit.
+>   */
+>  #define __swp_type(entry)		((entry).val & 0x1f)
+>  #define __swp_offset(entry)		((entry).val >> 5)
+> -#define __swp_entry(type, offset)	((swp_entry_t) { (type) | ((offset) << 5) })
+> +#define __swp_entry(type, offset)	((swp_entry_t) { ((type) & 0x1f) | ((offset) << 5) })
+>  #define __pte_to_swp_entry(pte)		((swp_entry_t) { pte_val(pte) >> 3 })
+>  #define __swp_entry_to_pte(x)		((pte_t) { (x).val << 3 })
+>  
+> +#define __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+> +static inline int pte_swp_exclusive(pte_t pte)
+> +{
+> +	return pte_val(pte) & _PAGE_SWP_EXCLUSIVE;
+> +}
+> +
+> +static inline pte_t pte_swp_mkexclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) | _PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+> +static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) & ~_PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+>  /* Generic accessors to PTE bits */
+>  static inline int pte_write(pte_t pte)		{ return !!(pte_val(pte) & _PAGE_RW);}
+>  static inline int pte_read(pte_t pte)		{ return 1; }
+> -- 
+> 2.39.0
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
