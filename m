@@ -2,59 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35802695BF6
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Feb 2023 09:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1230A695C11
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Feb 2023 09:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjBNIFd (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Feb 2023 03:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S231769AbjBNIGo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Feb 2023 03:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjBNIFO (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Feb 2023 03:05:14 -0500
+        with ESMTP id S231797AbjBNIG0 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Feb 2023 03:06:26 -0500
 Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69C6869A
-        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 00:05:12 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id g6-20020a05600c310600b003e1f6dff952so391021wmo.1
-        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 00:05:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A04BDC5
+        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 00:06:25 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id hg24-20020a05600c539800b003e1f5f2a29cso585301wmb.4
+        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 00:06:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JF52YzZhW4elUM7Kky6bPhzQenJZTY4P/46jrbrklX0=;
-        b=evhLL97JMkNYAYn9bGpom2GYrZHUYt2CtyFeYuIEml6T8racA9Aij5ni53nA2qN2B/
-         7ol3c+EAOiUcR3bb0Nbg6oEblv3Vg7fMwY7/0LEF5VCVPbgg/9qJMYGdcPWyfh/NzUJP
-         nVm8iXoCxY27TAbyblLvNVZ54uQ2sCsTY83Lokf3aopdz/EdDYYXBo8GWIClq0AGjewl
-         aTkyCiKCaGx5UjLiSjzaakSSVH5DgeZyjpiMZih++pjBLki4KH45JDUvESt1xmw+rXib
-         kUDSlfXab71A8Mkvhrw8TlHo9Ob8++YPLFpUADMuiGoEgIwoLSkBvntwalRx8rWTfTF1
-         ikQA==
+        bh=CexkYCgiU8jqIy3gLQMuVr94YSYODTF1ZIZpmznHWI0=;
+        b=oq8fELe1ypAvc08FOz5CbHNTQBld5o23Jvdy+nLY0zG/DnFqza+VDZVuxwBfk8xIVm
+         ImZ0fQYX3iD2kpEI2wrrJJ+EOv/ECI1pGCu4gDD9IhpbKAyXQe2Gg+36UgHDi0uWRsxw
+         QKFTlhrsHNwTjUGRfM18bUeuqZqenYwJ9+lXPP+TIJmtJqj3qO11s6scjudecRVlXd8G
+         yx+52LcS4QzLrkx17Mf0iokjziy/G8h1s4OnVBPi13160Z/MlgxAwmyWSoN4FxAoR886
+         R7GzWQlscuhv0+syQCFg7BJqUBMsODphxlVZ4n5BE8SY37bZ4PSRi5tZBcsQ8dac5j5Y
+         pIYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JF52YzZhW4elUM7Kky6bPhzQenJZTY4P/46jrbrklX0=;
-        b=N/LMLBQgfnwNcXaKiKanb/9V8dCLk1anOtPGCHNHoyfQsj4u0GU9ZhsLAgBAoDgGx3
-         zBqJx2rTHPZEJsoWsQCtyP8uR5/vLWg9aB1deyguZrKVMSMZ/OISspulLC3WEJt6G3ar
-         1n/pu6mvhpwEpj+a7iw648CpmwJIs69DCO0Paux5gpaztmlCAjnJGMeMlWgwAK8DY2k+
-         lNpBfsy0nv8aYAyFm10W4O+z8gU+DWHN0IRiBEeuuqAEPfH8utOxnglhJ6uKTLr02kOc
-         dSd8jtmdl+XkUQ/A7e91PFPPD+L+ONFFqzxQmnj5qpPIE/UH5slnJezmD/x0uHW0xtwv
-         K/vQ==
-X-Gm-Message-State: AO0yUKULKrSGpmj2aX1tlIccMem3Esrq8/+xb/Bu1tADJ+hIj4zPkuVb
-        wrUqFN5ORq5frRwzZixP/TSXdw==
-X-Google-Smtp-Source: AK7set+HRG63gtrfZ+yNMRuCoXR1/Fc+yCbk1jg17GVbOh3n568w3mx2NtmeBnWmKBshSuBezAU6Uw==
-X-Received: by 2002:a05:600c:3d98:b0:3e1:e149:b67b with SMTP id bi24-20020a05600c3d9800b003e1e149b67bmr8681792wmb.18.1676361911280;
-        Tue, 14 Feb 2023 00:05:11 -0800 (PST)
+        bh=CexkYCgiU8jqIy3gLQMuVr94YSYODTF1ZIZpmznHWI0=;
+        b=35VQD5FfkdPafukKYR8zNlg2P4O58VBhgwI+rwJdpzMt6rU0pJRtJpIyjyXYELgu67
+         WLC6iaD5ErjHkL1X+lncS5Z6XbwaNlUZlgQukdVls7y4BYfN4acv3JSisc4yQFG+XhZo
+         V42bnAeIu5vWFztc4VQnw0N++THzIKuHwnjKKHgTt9V9z8MTFbvgAXqwamzZv97HaixL
+         EgfpK8noB1oEVdrtxVfJwmEfnOOsIajj/39vV5On6BpXyt2/Dc8SPQxzxI25fBCx1kKO
+         ZLL5ct51xJclW4OHKsdK5Yo0Rfg49BkV5gwTD06XOKD713KKbeHlZbpFtyHn+5PfczU9
+         9T6A==
+X-Gm-Message-State: AO0yUKWkeDgtUk1rlXOO972aVaC+gxNwseRTbBbPnf3fRHBMQLpZ66QY
+        XI4ZMvHKazw3YGnxBrj9C9m/QA==
+X-Google-Smtp-Source: AK7set/UWPyupxpQUXAnyOBo4TUryVO/JI+oWwYyspwHedd26Hv1CWYJdsr5ZpbLTAOsriaer/Ifsg==
+X-Received: by 2002:a05:600c:a698:b0:3db:bc5:b2ae with SMTP id ip24-20020a05600ca69800b003db0bc5b2aemr1053106wmb.41.1676361983644;
+        Tue, 14 Feb 2023 00:06:23 -0800 (PST)
 Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id d5-20020a1c7305000000b003dc4baaedd3sm18757416wmb.37.2023.02.14.00.05.08
+        by smtp.gmail.com with ESMTPSA id he7-20020a05600c540700b003e1f6e18c95sm773496wmb.21.2023.02.14.00.06.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 00:05:10 -0800 (PST)
-Message-ID: <579b0715-dba2-246c-63a1-7e0ef4e9f9a5@linaro.org>
-Date:   Tue, 14 Feb 2023 09:05:07 +0100
+        Tue, 14 Feb 2023 00:06:23 -0800 (PST)
+Message-ID: <fa2028d1-501f-523e-7b83-2e72d374812c@linaro.org>
+Date:   Tue, 14 Feb 2023 09:06:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 17/24] x86/cpu: Make sure play_dead() doesn't return
+Subject: Re: [PATCH v2 08/24] loongarch/cpu: Mark play_dead() __noreturn
 Content-Language: en-US
 To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     jgross@suse.com, richard.henderson@linaro.org,
@@ -78,11 +78,11 @@ Cc:     jgross@suse.com, richard.henderson@linaro.org,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         paulmck@kernel.org
 References: <cover.1676358308.git.jpoimboe@kernel.org>
- <11e6ac1cf10f92967882926e3ac16287b50642f2.1676358308.git.jpoimboe@kernel.org>
+ <4da55acfdec8a9132c4e21ffb7edb1f846841193.1676358308.git.jpoimboe@kernel.org>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <11e6ac1cf10f92967882926e3ac16287b50642f2.1676358308.git.jpoimboe@kernel.org>
+In-Reply-To: <4da55acfdec8a9132c4e21ffb7edb1f846841193.1676358308.git.jpoimboe@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -94,28 +94,14 @@ List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 On 14/2/23 08:05, Josh Poimboeuf wrote:
-> After commit 076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead()
-> return"), play_dead() never returns.  Make that more explicit with a
-> BUG().
-> 
-> BUG() is preferable to unreachable() because BUG() is a more explicit
-> failure mode and avoids undefined behavior like falling off the edge of
-> the function into whatever code happens to be next.
+> play_dead() doesn't return.  Annotate it as such.  By extension this
+> also makes arch_cpu_idle_dead() noreturn.
 > 
 > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 > ---
->   arch/x86/include/asm/smp.h | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-> index b4dbb20dab1a..8f628e08b25a 100644
-> --- a/arch/x86/include/asm/smp.h
-> +++ b/arch/x86/include/asm/smp.h
-> @@ -96,6 +96,7 @@ static inline void __cpu_die(unsigned int cpu)
->   static inline void play_dead(void)
->   {
->   	smp_ops.play_dead();
-> +	BUG();
->   }
+>   arch/loongarch/include/asm/smp.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-Similarly, smp_ops::play_dead() should be decorated noreturn first.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
+
