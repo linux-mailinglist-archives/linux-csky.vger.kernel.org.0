@@ -2,59 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F51C695C8A
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Feb 2023 09:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D361695F07
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Feb 2023 10:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjBNINg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Feb 2023 03:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S231891AbjBNJ0g (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Feb 2023 04:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjBNINR (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Feb 2023 03:13:17 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D576468F
-        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 00:13:13 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so10893661wms.1
-        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 00:13:13 -0800 (PST)
+        with ESMTP id S232385AbjBNJ0R (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Feb 2023 04:26:17 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9388524492
+        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 01:25:55 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id y1so14934599wru.2
+        for <linux-csky@vger.kernel.org>; Tue, 14 Feb 2023 01:25:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cRk5ZZgGHESQjRAciCkzTAgvsM2DNZ9ZsvdntVwJ0aM=;
-        b=VyF1fPdQ9QypQQWSzFllqGzI7seyTSuDNNWwfWkkysTNgd3Z0AjIHNF4LL0vR9kDt1
-         TWXLrpk12hmDLU5xwDRS8oUfZzApeC/OHNNgO/kMt5igi3066XuNNQHPHFYxq5aB3Iio
-         Rm5A78vOgv0qZPG3TgPZ61nsLc76jlc9DVGKtErGMeKDI9u1sAq/m/nABeTJZydjJdxc
-         KGyGm1+PtUnlS5irzivoc/koNSZhBHg8b061deMm/1IYjdDegSeovedsXz378PrcPSkc
-         AtwiyODrhxTX3DivF8dzOcKQXifNwgDmLtIw7KfLqn/lQcvbpYuvCV1bwFmaRQqmk4vF
-         cK6A==
+        bh=QDxRPg0tzmSlpSdGNasFtKDU/RizntlcLVEvFLg/3J0=;
+        b=NES+X0jitlSFN9CMyxtOBnwXvr4UEkpCwjSf8ktPB+wXMhbktMrNUflH+JM2ssaH9K
+         1szwzK+H0w1R1obMWrGYq2h5EqmbiN8TzRSCSDfQ0xIRnMtUM0YXe0sOqWpLCMwXuGjf
+         pq5Tp+btAH/Jp2UMc+IUaq03lyRqROMWnwZHj0SyNjg2aEHISp2YzMuCIH2fFqgRFL2C
+         nh8rUW+D8G8ohs7qk9rK8//cKtczB59ooJFvWHa+cMfxk4FIJRL/sUbUY+TwB9aq5oQ6
+         5XNgdahaS2tg0VmMYr3n7xy9L8AkuRxwtGbyTzFH3A9vsOSJ49wrhdrqe9fR4BHUPm/1
+         +QNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cRk5ZZgGHESQjRAciCkzTAgvsM2DNZ9ZsvdntVwJ0aM=;
-        b=zQTWyYYEfXiotlWjmER0i8F0oENe2ucjhXaowweeNkiJUEad/xoZL6vXAoWuvkoB51
-         xCOhg45MAiHmEKcfAiBTAJoqul6bzxQ/Baar1VVm8JKRJu/2GdAlGHFjl/I2wiDHnp3o
-         TXOaJeNem6dh7HcXy42LxlLK1ICHJc1yhNDrTVQDYnrtlFU1W942rz06+WyTUNodGbCm
-         z+Zha+Pp/TqMlohtIrCvC3wEIlyYlie8qfl/ADBHCwwtCsJwKAn4qzo5JdMijDbNSSRN
-         /cpMmV34mLwrA6y1OqaYFJql0BVVWK6Crq1KRcaA3Fme89O7OfuI5UuLZcuYhwG8afSx
-         ASQw==
-X-Gm-Message-State: AO0yUKWXsLiauMS2YTsZaZOD9w1483BTg2fgKGVTWrXSINeXXT/IOG/x
-        6YSKUmGhrU1o0jpwj42WrkTamw==
-X-Google-Smtp-Source: AK7set86AEK8D+D8+uPrCG75m0oQUNX8HZoOAkr8DDcCJCZFL80/CRikdClz+P95k5T2L/MBj1J/jQ==
-X-Received: by 2002:a05:600c:30d2:b0:3dc:4fd7:31f7 with SMTP id h18-20020a05600c30d200b003dc4fd731f7mr1177763wmn.41.1676362392093;
-        Tue, 14 Feb 2023 00:13:12 -0800 (PST)
+        bh=QDxRPg0tzmSlpSdGNasFtKDU/RizntlcLVEvFLg/3J0=;
+        b=GwZlE4jmg/DHMo/CAG9/Llz5T/S43ApS4W6YEE0x246IPMiordItpPdgvaUxdPMhtO
+         YMgFflKq7GFCC84yCwgE7+zFgXPdQnE+ahKhodiWwJQMEqBZv4RHumrKi+BJsV4BvLO6
+         eJuAxZJRzIFQxAabZsQER6xfYSH8IB5nozyJLECIn+0GVlyLbBIEfOHptDkFj1nGFWzT
+         gmjD0OkccAVrXU6S7v846fthQCCd+rpDUf8vQyXxM1PKE7qNupRcGXrIJbGPevGMwh+F
+         fQaP7Q0fPvqQGe4koY9D70kLhhTTZiES+f8VtVNtQgm8b3Lng2DBccpsG4O92JidOR+m
+         jOoA==
+X-Gm-Message-State: AO0yUKVZa4Wyy8udIxrsTafSekoVj5Cz/IGiShGl2+z9XuVhVH7oXFVZ
+        jzubbFdYZd2biJiSFki1a7/OUQ==
+X-Google-Smtp-Source: AK7set/9MnT573XDoeCr+EYDww6Z0dgS8IXweDvdGBdO2qa8Cb9d8o+MYY77g+qurwoNXDnWtaacEA==
+X-Received: by 2002:adf:e9c5:0:b0:2c5:4dbf:587 with SMTP id l5-20020adfe9c5000000b002c54dbf0587mr1635221wrn.57.1676366753443;
+        Tue, 14 Feb 2023 01:25:53 -0800 (PST)
 Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id l9-20020a05600c4f0900b003db1ca20170sm17626418wmq.37.2023.02.14.00.13.09
+        by smtp.gmail.com with ESMTPSA id d15-20020a5d6dcf000000b002c3f9404c45sm12906865wrz.7.2023.02.14.01.25.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 00:13:11 -0800 (PST)
-Message-ID: <14274f04-2991-95bd-c29b-07e86e8755c1@linaro.org>
-Date:   Tue, 14 Feb 2023 09:13:08 +0100
+        Tue, 14 Feb 2023 01:25:53 -0800 (PST)
+Message-ID: <a48ebe98-82b5-8f7b-8327-4e60bdb231c8@linaro.org>
+Date:   Tue, 14 Feb 2023 10:25:50 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 04/24] arm64/cpu: Mark cpu_die() __noreturn
+Subject: Re: [PATCH v2 00/24] cpu,sched: Mark arch_cpu_idle_dead() __noreturn
 Content-Language: en-US
 To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
 Cc:     jgross@suse.com, richard.henderson@linaro.org,
@@ -78,12 +78,11 @@ Cc:     jgross@suse.com, richard.henderson@linaro.org,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         paulmck@kernel.org
 References: <cover.1676358308.git.jpoimboe@kernel.org>
- <e47fc487980d5330e6059ac6e16416bec88cda0e.1676358308.git.jpoimboe@kernel.org>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <e47fc487980d5330e6059ac6e16416bec88cda0e.1676358308.git.jpoimboe@kernel.org>
+In-Reply-To: <cover.1676358308.git.jpoimboe@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
@@ -94,25 +93,15 @@ List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 On 14/2/23 08:05, Josh Poimboeuf wrote:
-> cpu_die() doesn't return.  Annotate it as such.  By extension this also
-> makes arch_cpu_idle_dead() noreturn.
+> v2:
+> - make arch_call_rest_init() and rest_init() __noreturn
+> - make objtool 'global_returns' work for weak functions
+> - rebase on tip/objtool/core with dependencies merged in (mingo)
+> - add acks
 > 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> ---
->   arch/arm64/include/asm/smp.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-> index fc55f5a57a06..5733a31bab08 100644
-> --- a/arch/arm64/include/asm/smp.h
-> +++ b/arch/arm64/include/asm/smp.h
-> @@ -100,7 +100,7 @@ static inline void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
->   extern int __cpu_disable(void);
->   
->   extern void __cpu_die(unsigned int cpu);
-> -extern void cpu_die(void);
-> +extern void __noreturn cpu_die(void);
->   extern void cpu_die_early(void);
+> v1.1:
+> - add __noreturn to all arch_cpu_idle_dead() implementations (mpe)
 
-Shouldn't cpu_operations::cpu_die() be declared noreturn first?
+Possible similar candidates: panic_smp_self_stop, nmi_panic_self_stop
+and kexec.
 
