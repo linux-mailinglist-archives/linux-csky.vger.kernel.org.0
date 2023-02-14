@@ -2,111 +2,97 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6D9695FEE
-	for <lists+linux-csky@lfdr.de>; Tue, 14 Feb 2023 10:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A62696228
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Feb 2023 12:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjBNJ4r (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 14 Feb 2023 04:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
+        id S231707AbjBNLP7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Feb 2023 06:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232571AbjBNJ4L (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Feb 2023 04:56:11 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEE724CB5;
-        Tue, 14 Feb 2023 01:55:53 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id AB0771BF20A;
-        Tue, 14 Feb 2023 09:55:43 +0000 (UTC)
-Message-ID: <0bf59207-838b-2a0b-a95e-925a6bbf1913@ghiti.fr>
-Date:   Tue, 14 Feb 2023 10:55:43 +0100
+        with ESMTP id S231442AbjBNLP5 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Feb 2023 06:15:57 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCB7F778;
+        Tue, 14 Feb 2023 03:15:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=feq3IC/5/KiRJvfHlVv2CcC6RUdK5q3PrTHL48yu34g=; b=IY8/3BJNJqlfYIiiRrZQQvZRUI
+        zXN8H4czV7EjZe5bPaMktsEvmq8U8pjvTYyya4cup7cL54SMKx0ge7QbY/CCsvf5wXCv2iPz0GOx4
+        E5tXkN8wXUf2WObc0lbe9bNZO8+jSngczSvjZgzbXVzX/MMqHq4sFtiuakUAYJPlM1M9zqdQJlIfr
+        V07xAJElzJ+Whli8AotdwvSsa63tFe/X5tzZIWB6YKO486nz1mePmMAAZDniIvhIYll/bwnB7VTq7
+        8wf/BdqedSuWIZnXNdaxjhsP+/0iN78krPZrjnhtZAPNPNRdu+yIjI4AmWeyCmWxNir6FF+aWsTDw
+        k/OkNWFg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41016)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pRtHe-0005Jd-PH; Tue, 14 Feb 2023 11:15:38 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pRtHP-0003rk-Gx; Tue, 14 Feb 2023 11:15:23 +0000
+Date:   Tue, 14 Feb 2023 11:15:23 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: Re: [PATCH v2 03/24] arm/cpu: Make sure arch_cpu_idle_dead() doesn't
+ return
+Message-ID: <Y+ttS0japRCzHoFM@shell.armlinux.org.uk>
+References: <cover.1676358308.git.jpoimboe@kernel.org>
+ <ed361403b8ee965f758fe491c47336dddcfb8fd5.1676358308.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: API for setting multiple PTEs at once
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>, linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-References: <Y9wnr8SGfGGbi/bk@casper.infradead.org>
- <Y+K0O35jNNzxiXE6@casper.infradead.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <Y+K0O35jNNzxiXE6@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed361403b8ee965f758fe491c47336dddcfb8fd5.1676358308.git.jpoimboe@kernel.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Matthew,
+On Mon, Feb 13, 2023 at 11:05:37PM -0800, Josh Poimboeuf wrote:
+> arch_cpu_idle_dead() doesn't return.  Make that more explicit with a
+> BUG().
+> 
+> BUG() is preferable to unreachable() because BUG() is a more explicit
+> failure mode and avoids undefined behavior like falling off the edge of
+> the function into whatever code happens to be next.
 
-On 2/7/23 21:27, Matthew Wilcox wrote:
-> On Thu, Feb 02, 2023 at 09:14:23PM +0000, Matthew Wilcox wrote:
->> For those of you not subscribed, linux-mm is currently discussing
->> how best to handle page faults on large folios.  I simply made it work
->> when adding large folio support.  Now Yin Fengwei is working on
->> making it fast.
-> OK, here's an actual implementation:
->
-> https://lore.kernel.org/linux-mm/20230207194937.122543-3-willy@infradead.org/
->
-> It survives a run of xfstests.  If your architecture doesn't store its
-> PFNs at PAGE_SHIFT, you're going to want to implement your own set_ptes(),
-> or you'll see entirely the wrong pages mapped into userspace.  You may
-> also wish to implement set_ptes() if it can be done more efficiently
-> than __pte(pteval(pte) + PAGE_SIZE).
->
-> Architectures that implement things like flush_icache_page() and
-> update_mmu_cache() may want to propose batched versions of those.
-> That's alpha, csky, m68k, mips, nios2, parisc, sh,
-> arm, loongarch, openrisc, powerpc, riscv, sparc and xtensa.
-> Maintainers BCC'd, mailing lists CC'd.
->
-> I'm happy to collect implementations and submit them as part of a v6.
+This is silly. Just mark the function __noreturn and be done with it.
+If the CPU ever executes code past the "b" instruction, it's already
+really broken that the extra instructions that BUG() gives will be
+meaningless.
 
+This patch does nothing except add yet more bloat the kernel.
 
-Please find below the riscv implementation for set_ptes:
+Sorry, but NAK.
 
-diff --git a/arch/riscv/include/asm/pgtable.h 
-b/arch/riscv/include/asm/pgtable.h
-index ebee56d47003..10bf812776a4 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -463,6 +463,20 @@ static inline void set_pte_at(struct mm_struct *mm,
-         __set_pte_at(mm, addr, ptep, pteval);
-  }
-
-+#define set_ptes set_ptes
-+static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-+                           pte_t *ptep, pte_t pte, unsigned int nr)
-+{
-+       for (;;) {
-+               set_pte_at(mm, addr, ptep, pte);
-+               if (--nr == 0)
-+                       break;
-+               ptep++;
-+               addr += PAGE_SIZE;
-+               pte = __pte(pte_val(pte) + (1 << _PAGE_PFN_SHIFT));
-+       }
-+}
-+
-  static inline void pte_clear(struct mm_struct *mm,
-         unsigned long addr, pte_t *ptep)
-  {
-
-
-Thanks,
-
-Alex
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
