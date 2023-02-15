@@ -2,70 +2,35 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23336697828
-	for <lists+linux-csky@lfdr.de>; Wed, 15 Feb 2023 09:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9D1697CD6
+	for <lists+linux-csky@lfdr.de>; Wed, 15 Feb 2023 14:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbjBOI33 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 15 Feb 2023 03:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
+        id S232277AbjBONJg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 15 Feb 2023 08:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbjBOI32 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 15 Feb 2023 03:29:28 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CD56EAC
-        for <linux-csky@vger.kernel.org>; Wed, 15 Feb 2023 00:29:26 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id co8so14449479wrb.1
-        for <linux-csky@vger.kernel.org>; Wed, 15 Feb 2023 00:29:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D+uRuWA2my0PkLfTRJkVAZ05w6wbQaFzpjSQTlA3Y10=;
-        b=EAjtSefiFMcRJUjTT1vKa++/98Yo1SN60xpEBkPSeru5QVrOombFl7ZHZ9y0eBb+k8
-         1ZpycnMJayGmVT6T6UnuPRjCB3nPxmBujGFtXaNp8cbOZSlWgdaIEhXU+GGjztzV/czy
-         1WDq6VfomA00oo7hLpCf0eBYSqerRkvKuSrVmRTM4XbxzJrQVoIbRj0AGC+iAePl6sTf
-         Z2xptiD/VOo1nfoRA4XWNffLKM3ZE08q46EkUvIRst5VglioETpQYFtr/iY0tCSkcOlD
-         bJtursUf7vQFXV0RL9Rz9XvQSF18NBopDoEorHB9a2ffDlY3yM0iSt8r0hW9VmbKY8B/
-         Tfog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+uRuWA2my0PkLfTRJkVAZ05w6wbQaFzpjSQTlA3Y10=;
-        b=hHDObC7a1Zkm4csRyJwF3BjYHx/6qRo3zGxLHcIzecYMjYH8cXaSc9clNp0U4tILFS
-         di/F6e0MjIY9vnByqv3pCcfXdM+TouebDOHD8hdsv2ltRzfDJB8rY1CLu8vlD/JktJGP
-         3bk3CEjPskIMztevIkm+zJhRAJXpLsDFHETLQH30+9ZfQRm4eZl8snwVl1zb5WusbZbx
-         RaHReneFG54H7JONQfaTFvbk8nud2wNTCdaer2iOLli0/g2OSGNUbzTOaAjAF2ycZSp5
-         AiCzVk6Eba6oc2+2fO6mrToOPraHLyf/uhIWXYLCOSY8hSgNk9acLY5nzqmp9Z9cxPd6
-         HP/g==
-X-Gm-Message-State: AO0yUKW7Ink2wwmyHM89QJAQ8HO8P6ha7H35HFDZyduIDAp30Vc5eAX2
-        2qsne86Bjy0ueWkMkeA7O9GcZA==
-X-Google-Smtp-Source: AK7set8G2iiFdHjvUAVVY5llFOflusvwqwWTyX5fVt/Awzv2HxyXMg5++kq1nd94kDMQiFL/tQeRqw==
-X-Received: by 2002:a5d:67cc:0:b0:2c5:58fc:e1bb with SMTP id n12-20020a5d67cc000000b002c558fce1bbmr826926wrw.10.1676449764713;
-        Wed, 15 Feb 2023 00:29:24 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id i2-20020adfefc2000000b002c553e061fdsm8524783wrp.112.2023.02.15.00.29.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 00:29:24 -0800 (PST)
-Message-ID: <c56dc4b9-035d-7773-ecb2-0e1ac6af7abc@linaro.org>
-Date:   Wed, 15 Feb 2023 09:29:20 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.7.2
-Subject: Re: [PATCH v2 09/24] mips/cpu: Expose play_dead()'s prototype
- definition
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux-alpha@vger.kernel.org,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        with ESMTP id S229578AbjBONJf (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 15 Feb 2023 08:09:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FF061B0;
+        Wed, 15 Feb 2023 05:09:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F7ABFEC;
+        Wed, 15 Feb 2023 05:10:16 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.89.142])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8797A3F663;
+        Wed, 15 Feb 2023 05:09:26 -0800 (PST)
+Date:   Wed, 15 Feb 2023 13:09:21 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
+        jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
         bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
         linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
         mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
@@ -79,97 +44,74 @@ Cc:     linux-kernel@vger.kernel.org, jgross@suse.com,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         paulmck@kernel.org
+Subject: Re: [PATCH v2 04/24] arm64/cpu: Mark cpu_die() __noreturn
+Message-ID: <Y+zZgZIP7RPIgyQf@FVFF77S0Q05N>
 References: <cover.1676358308.git.jpoimboe@kernel.org>
- <39835bc75af2e812fce56400533cb2ab41bcf0e2.1676358308.git.jpoimboe@kernel.org>
- <080a5ccb-7fa0-1a75-538f-a09dc146fc4e@linaro.org>
- <20230214181101.3a2tscbmwdnwbqpu@treble>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230214181101.3a2tscbmwdnwbqpu@treble>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <e47fc487980d5330e6059ac6e16416bec88cda0e.1676358308.git.jpoimboe@kernel.org>
+ <14274f04-2991-95bd-c29b-07e86e8755c1@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <14274f04-2991-95bd-c29b-07e86e8755c1@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 14/2/23 19:11, Josh Poimboeuf wrote:
-> On Tue, Feb 14, 2023 at 08:46:41AM +0100, Philippe Mathieu-Daudé wrote:
->> Hi Josh,
->>
->> On 14/2/23 08:05, Josh Poimboeuf wrote:
->>> Include <asm/smp.h> to make sure play_dead() matches its prototype going
->>> forward.
->>>
->>> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
->>> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
->>> ---
->>>    arch/mips/kernel/smp-bmips.c | 1 +
->>>    1 file changed, 1 insertion(+)
->>>
->>> diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
->>> index f5d7bfa3472a..df9158e8329d 100644
->>> --- a/arch/mips/kernel/smp-bmips.c
->>> +++ b/arch/mips/kernel/smp-bmips.c
->>> @@ -38,6 +38,7 @@
->>>    #include <asm/traps.h>
->>>    #include <asm/barrier.h>
->>>    #include <asm/cpu-features.h>
->>> +#include <asm/smp.h>
->>
->> What about the other implementations?
->>
->> $ git grep -L asm/smp.h $(git grep -wlF 'play_dead(void)' arch/mips)
->> arch/mips/cavium-octeon/smp.c
->> arch/mips/kernel/smp-bmips.c
->> arch/mips/kernel/smp-cps.c
->> arch/mips/loongson64/smp.c
+On Tue, Feb 14, 2023 at 09:13:08AM +0100, Philippe Mathieu-Daudé wrote:
+> On 14/2/23 08:05, Josh Poimboeuf wrote:
+> > cpu_die() doesn't return.  Annotate it as such.  By extension this also
+> > makes arch_cpu_idle_dead() noreturn.
+> > 
+> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> > ---
+> >   arch/arm64/include/asm/smp.h | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
+> > index fc55f5a57a06..5733a31bab08 100644
+> > --- a/arch/arm64/include/asm/smp.h
+> > +++ b/arch/arm64/include/asm/smp.h
+> > @@ -100,7 +100,7 @@ static inline void arch_send_wakeup_ipi_mask(const struct cpumask *mask)
+> >   extern int __cpu_disable(void);
+> >   extern void __cpu_die(unsigned int cpu);
+> > -extern void cpu_die(void);
+> > +extern void __noreturn cpu_die(void);
+> >   extern void cpu_die_early(void);
 > 
-> Indeed.  I really wish we had -Wmissing-prototypes.
-> 
-> I'll squash this in:
-> 
-> diff --git a/arch/mips/cavium-octeon/smp.c b/arch/mips/cavium-octeon/smp.c
-> index 89954f5f87fb..4212584e6efa 100644
-> --- a/arch/mips/cavium-octeon/smp.c
-> +++ b/arch/mips/cavium-octeon/smp.c
-> @@ -20,6 +20,7 @@
->   #include <asm/mmu_context.h>
->   #include <asm/time.h>
->   #include <asm/setup.h>
-> +#include <asm/smp.h>
->   
->   #include <asm/octeon/octeon.h>
->   
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index bcd6a944b839..6d69a9ba8167 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -20,6 +20,7 @@
->   #include <asm/mipsregs.h>
->   #include <asm/pm-cps.h>
->   #include <asm/r4kcache.h>
-> +#include <asm/smp.h>
->   #include <asm/smp-cps.h>
->   #include <asm/time.h>
->   #include <asm/uasm.h>
-> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-> index c81c2bd07c62..df8d789ede3c 100644
-> --- a/arch/mips/loongson64/smp.c
-> +++ b/arch/mips/loongson64/smp.c
-> @@ -14,6 +14,7 @@
->   #include <linux/cpufreq.h>
->   #include <linux/kexec.h>
->   #include <asm/processor.h>
-> +#include <asm/smp.h>
->   #include <asm/time.h>
->   #include <asm/tlbflush.h>
->   #include <asm/cacheflush.h>
+> Shouldn't cpu_operations::cpu_die() be declared noreturn first?
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+The cpu_die() function ends with a BUG(), and so does not return, even if a
+cpu_operations::cpu_die() function that it calls erroneously returned.
 
-Thanks.
+We *could* mark cpu_operations::cpu_die() as noreturn, but I'd prefer that we
+did not so that the compiler doesn't optimize away the BUG() which is there to
+catch such erroneous returns.
+
+That said, could we please add __noreturn to the implementation of cpu_die() in
+arch/arm64/kernel/smp.c? i.e. the fixup below.
+
+With that fixup:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
+---->8----
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index ffc5d76cf695..a98a76f7c1c6 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -361,7 +361,7 @@ void __cpu_die(unsigned int cpu)
+  * Called from the idle thread for the CPU which has been shutdown.
+  *
+  */
+-void cpu_die(void)
++void __noreturn cpu_die(void)
+ {
+        unsigned int cpu = smp_processor_id();
+        const struct cpu_operations *ops = get_cpu_ops(cpu);
