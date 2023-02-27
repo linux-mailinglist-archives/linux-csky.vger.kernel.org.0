@@ -2,176 +2,79 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FD86A33DB
-	for <lists+linux-csky@lfdr.de>; Sun, 26 Feb 2023 21:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FC26A3B6A
+	for <lists+linux-csky@lfdr.de>; Mon, 27 Feb 2023 08:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjBZUNw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 26 Feb 2023 15:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
+        id S229501AbjB0HBc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 27 Feb 2023 02:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBZUNv (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 26 Feb 2023 15:13:51 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6BAD301;
-        Sun, 26 Feb 2023 12:13:50 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id cf14so4701877qtb.10;
-        Sun, 26 Feb 2023 12:13:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gg5lD1thnSOjSPD2ugSmhhuDJpRIfjxQ4WV4ji/sEm4=;
-        b=b4fvqlKEnKtSkihrg55JYq+ke0pEzfiymXjhN3I6/fQybr+DvLraWGgthf8ZtPjCuQ
-         6xXuuE3Y+TLKzGA8BaKIGqVv49ebOFSGwJQ+h5Ngr2W1Xu8xllIDi1ZXlwoERY0x45ra
-         ReBdvXHBsf3RgUvVSazqK8baSqpxGG3NGPUro9cfOO02NMuyy4/uhKWAxVoiMIuXrV88
-         l+K48IrSMo4w6Z6EThjVQfC/gdYNb460HM6nurUHmXYspkS4R1cQLrryx70FCmqQntv1
-         tsgV9ECV6YcDKfNlVpnl2VYdVjOSEMg41u2aMYCXM5p6wALfJw9b8DSaeoYU8tB/ukpo
-         ZDqg==
-X-Gm-Message-State: AO0yUKXVUfRCo9lua3f27kFTNtm06jvdTBQ/z3wEd2OdaiblPaBAWZyw
-        jPnSQ54eFzaQTRJV29N2cVkUnHiCg/Uz/w==
-X-Google-Smtp-Source: AK7set/moY1L6F+ebE6HKWgvhvMgP5uM2L9z7Rmqe5nF1PsdDFF11lerf3DY0AEL23MzZqU7yIzsFA==
-X-Received: by 2002:ac8:5907:0:b0:3b8:3629:7cb7 with SMTP id 7-20020ac85907000000b003b836297cb7mr39427624qty.64.1677442428848;
-        Sun, 26 Feb 2023 12:13:48 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id k8-20020a05620a142800b0073ba211e765sm3591529qkj.19.2023.02.26.12.13.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Feb 2023 12:13:47 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-536af432ee5so124981857b3.0;
-        Sun, 26 Feb 2023 12:13:47 -0800 (PST)
-X-Received: by 2002:a81:af5f:0:b0:536:38b4:f51 with SMTP id
- x31-20020a81af5f000000b0053638b40f51mr8731562ywj.5.1677442427017; Sun, 26 Feb
- 2023 12:13:47 -0800 (PST)
+        with ESMTP id S229451AbjB0HBb (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 27 Feb 2023 02:01:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0621A495;
+        Sun, 26 Feb 2023 23:01:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30E1FB80C95;
+        Mon, 27 Feb 2023 07:01:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DC5C433EF;
+        Mon, 27 Feb 2023 07:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677481287;
+        bh=yx/JP9DY2+Ns9YVFs9b7YUupR2IltXfb3fYeyIdlu7A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sQCMBnx+0V3Gmv7jt08xoll+puX2HcX25pJDjIQdeH3qCULUDhqB9/kyBelmHP9R7
+         eEeLzM1MszQi14iFaMSD4eVNHiwYRdbaB81zuZa89n0oLd6fO/xQrgCfqE1fmAhXu3
+         RAzh8DvKCSAqQ8ll20J7ubzHikTYMN4snlwrCTLMT5VuWCKC/KefYUbDCBFAfox53Z
+         ats5QoLwd50Wvi6VvJKRrOj/EfEGHY6Kj6cOULJSq58UDHkR+fiha7/f/tXbBHTkAL
+         Z8MtXFUwFbgXmQyP4bvCHwKI7a2F2CFQGDla762TKw9RLHNSIQ0PBpjCxY8pEKde+E
+         OQeFu1KJSXabQ==
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky changes for v6.3
+Date:   Mon, 27 Feb 2023 02:01:22 -0500
+Message-Id: <20230227070122.1840809-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20230113171026.582290-1-david@redhat.com> <20230113171026.582290-12-david@redhat.com>
-In-Reply-To: <20230113171026.582290-12-david@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 26 Feb 2023 21:13:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
-Message-ID: <CAMuHMdX-FDga8w=pgg1myskEx6wp+oyZifhPPPFnWrc1zW7ZpQ@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1 11/26] microblaze/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        Michal Simek <monstr@monstr.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi David,
+Hi Linus,
 
-On Fri, Jan 13, 2023 at 6:16 PM David Hildenbrand <david@redhat.com> wrote:
-> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by stealing one bit
-> from the type. Generic MM currently only uses 5 bits for the type
-> (MAX_SWAPFILES_SHIFT), so the stolen bit is effectively unused.
->
-> The shift by 2 when converting between PTE and arch-specific swap entry
-> makes the swap PTE layout a little bit harder to decipher.
->
-> While at it, drop the comment from paulus---copy-and-paste leftover
-> from powerpc where we actually have _PAGE_HASHPTE---and mask the type in
-> __swp_entry_to_pte() as well.
->
-> Cc: Michal Simek <monstr@monstr.eu>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Please pull the latest csky changes from:
 
-Thanks for your patch, which is now commit b5c88f21531c3457
-("microblaze/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE") in
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
->  arch/m68k/include/asm/mcf_pgtable.h   |  4 +--
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-What is this m68k change doing here?
-Sorry for not noticing this earlier.
+are available in the Git repository at:
 
-Furthermore, several things below look strange to me...
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.3
 
->  arch/microblaze/include/asm/pgtable.h | 45 +++++++++++++++++++++------
->  2 files changed, 37 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/m68k/include/asm/mcf_pgtable.h b/arch/m68k/include/asm/mcf_pgtable.h
-> index 3f8f4d0e66dd..e573d7b649f7 100644
-> --- a/arch/m68k/include/asm/mcf_pgtable.h
-> +++ b/arch/m68k/include/asm/mcf_pgtable.h
-> @@ -46,8 +46,8 @@
->  #define _CACHEMASK040          (~0x060)
->  #define _PAGE_GLOBAL040                0x400   /* 68040 global bit, used for kva descs */
->
-> -/* We borrow bit 7 to store the exclusive marker in swap PTEs. */
-> -#define _PAGE_SWP_EXCLUSIVE    0x080
-> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
-> +#define _PAGE_SWP_EXCLUSIVE    CF_PAGE_NOCACHE
+for you to fetch changes up to 4a3ec00957fdf182be705d46e77acacc430f7d65:
 
-CF_PAGE_NOCACHE is 0x80, so this is still bit 7, thus the new comment
-is wrong?
+  csky: delay: Add function alignment (2022-12-29 23:47:52 -0500)
 
->
->  /*
->   * Externally used page protection values.
-> diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
-> index 42f5988e998b..7e3de54bf426 100644
-> --- a/arch/microblaze/include/asm/pgtable.h
-> +++ b/arch/microblaze/include/asm/pgtable.h
-> @@ -131,10 +131,10 @@ extern pte_t *va_to_pte(unsigned long address);
->   * of the 16 available.  Bit 24-26 of the TLB are cleared in the TLB
->   * miss handler.  Bit 27 is PAGE_USER, thus selecting the correct
->   * zone.
-> - * - PRESENT *must* be in the bottom two bits because swap cache
-> - * entries use the top 30 bits.  Because 4xx doesn't support SMP
-> - * anyway, M is irrelevant so we borrow it for PAGE_PRESENT.  Bit 30
-> - * is cleared in the TLB miss handler before the TLB entry is loaded.
-> + * - PRESENT *must* be in the bottom two bits because swap PTEs use the top
-> + * 30 bits.  Because 4xx doesn't support SMP anyway, M is irrelevant so we
-> + * borrow it for PAGE_PRESENT.  Bit 30 is cleared in the TLB miss handler
-> + * before the TLB entry is loaded.
+----------------------------------------------------------------
+rch/csky patches for 6.3
 
-So the PowerPC 4xx comment is still here?
+The pull request we've done:
+ - Optimize delay accuracy
 
->   * - All other bits of the PTE are loaded into TLBLO without
->   *  * modification, leaving us only the bits 20, 21, 24, 25, 26, 30 for
->   * software PTE bits.  We actually use bits 21, 24, 25, and
-> @@ -155,6 +155,9 @@ extern pte_t *va_to_pte(unsigned long address);
->  #define _PAGE_ACCESSED 0x400   /* software: R: page referenced */
->  #define _PMD_PRESENT   PAGE_MASK
->
-> +/* We borrow bit 24 to store the exclusive marker in swap PTEs. */
-> +#define _PAGE_SWP_EXCLUSIVE    _PAGE_DIRTY
+----------------------------------------------------------------
+Jialu Xu (1):
+      csky: delay: Add function alignment
 
-_PAGE_DIRTY is 0x80, so this is also bit 7, thus the new comment is
-wrong?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ arch/csky/lib/delay.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
