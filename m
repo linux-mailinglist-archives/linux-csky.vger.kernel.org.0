@@ -2,293 +2,181 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF546A51C0
-	for <lists+linux-csky@lfdr.de>; Tue, 28 Feb 2023 04:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AEC6A5C54
+	for <lists+linux-csky@lfdr.de>; Tue, 28 Feb 2023 16:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjB1DRZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 27 Feb 2023 22:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S230158AbjB1Puk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 28 Feb 2023 10:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjB1DRZ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 27 Feb 2023 22:17:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB63323132;
-        Mon, 27 Feb 2023 19:17:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 719BD60FD4;
-        Tue, 28 Feb 2023 03:17:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29CBC4339B;
-        Tue, 28 Feb 2023 03:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677554242;
-        bh=NElAjJZryg7JqzKiDR8hC0eEVOkhIJa3SMKpSyMnJPI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CrxWV0qs/bnkl58pZool2aJVFtKcw/Q0uWRr07irmOendQ/16LRWgXEpQ273LM1XI
-         Yc/MFZGMTq3FqTcvny5OSqZ+uQOgcIgBYSPc6u6+dB/zVuU7lYdLthMuD2+B6fjaKI
-         fZaxsBKEh1GiyyBhexpbZ/YU60Ag+S+r0RxliIk0Us4/6pVHlVlPV50nZPsIYMc0Mf
-         HafcTHfpR1Y1h8GT3dlVZ8UgHuOZJ3Axa1A6G+19K0kAJ+rXN1vjLNNB5ZLrA8BBNh
-         ulEo5kCsRYZv389cHyzPLKBumdjeovZlvDMvAORBYbyh9eiFMPcpRlITKr5bj2FvYF
-         yA8VxA7wXfXpg==
-Received: by mail-ed1-f43.google.com with SMTP id eg37so34172947edb.12;
-        Mon, 27 Feb 2023 19:17:22 -0800 (PST)
-X-Gm-Message-State: AO0yUKWZXA20Tp/fBx7b/eR7aaiROhHxQJBvc8/ozsNXen3PCHqHhh0U
-        noPgeYNE004Zq1FRVEdU4jg2MIeXLxTpJH06m0c=
-X-Google-Smtp-Source: AK7set+bzZT0otZA1dOZY7LboCwv3Txnx/Swz/QBYMaC3LUaGbGKhbHB4c/PEyIMCRek7vw859XlE0k3OlADVcOemPk=
-X-Received: by 2002:a17:906:aac1:b0:87b:fa21:7953 with SMTP id
- kt1-20020a170906aac100b0087bfa217953mr431807ejb.8.1677554241057; Mon, 27 Feb
- 2023 19:17:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20230227175741.71216-1-willy@infradead.org> <20230227175741.71216-9-willy@infradead.org>
-In-Reply-To: <20230227175741.71216-9-willy@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 28 Feb 2023 11:17:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRXsnZdJBKJGAwvsNstUGRgwi=uW2Zz13PgHUg5g5hNSA@mail.gmail.com>
-Message-ID: <CAJF2gTRXsnZdJBKJGAwvsNstUGRgwi=uW2Zz13PgHUg5g5hNSA@mail.gmail.com>
-Subject: Re: [PATCH v2 08/30] csky: Implement the new page table range API
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229796AbjB1Puj (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 28 Feb 2023 10:50:39 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4E030EB3
+        for <linux-csky@vger.kernel.org>; Tue, 28 Feb 2023 07:50:37 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id oj5so6310092pjb.5
+        for <linux-csky@vger.kernel.org>; Tue, 28 Feb 2023 07:50:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1677599437;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UryJW0EuVY8u2sW6z9mCQGQjWTzi+ldNIkpQGB8+HtU=;
+        b=B87Sz4AD1+v0XwCsrRoMpTHOfPGa5C2kWXfopmI+Go4uM/GlteH88Prr3xnOjgOBpK
+         5TXEM23YJaNZ7g9EbVYCuK/JD08Tarh0thhlMnTFFyMOEygBOFNnHXUltVMCUsr+soSV
+         N7JymoT7+eTk9L3hW6gd0jRYqCQJylQ1Sv9bK+MVkRTzPo6kpx2lySfN5ZcoLvOslGRO
+         KPapypwptYDfTKoui/kxjkto9aXQEXnB0zNI2xnF9K9K1w6AMTAlsuNOBVAzoDOh6S9m
+         XMeLlvUu7AtZRerpGExszQw24rKkktWNdf98ePl6noAkKeRplxZuYNOqKiII4Yi6n3n8
+         TCXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677599437;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UryJW0EuVY8u2sW6z9mCQGQjWTzi+ldNIkpQGB8+HtU=;
+        b=xRCo02rP3hkCsGn3dptcqjBGAG0GCbpxpjiNPl7p9gOGQFaSVWxCQvj+JprmA5qgD2
+         Vm34JIUhraKQeBsvJI8nGS3+40lZnHUsfNgFqiqc4Kt365GPXFwdNPbVm99LFl3WsTSJ
+         M3xeC5K1I5m74tpKyOpXtte+zk13+SAXRvRf/m5TPHiPAh9ruAZGCTBEt5oMY4rl3ZVR
+         LaI3Uh4Yg+uJ3bzefU/K2iwTUpbQXDb/obVaFsGMeLsBAz3kjkJkyXHN0ngKA2yge1s7
+         YIasNJOu796hD9zmN5b2pUCyEuIvEBBhPlnNxe9gaWG1e9SaopFbpmoAYqbP8PFncEsB
+         XgGg==
+X-Gm-Message-State: AO0yUKWU6wBjLqBtl4g2vZbQI/5G4L+BIlNqns1M2I3HPdYY1JKKcrbC
+        bIomJ7WyXgTx+mzGDzaQDtLjsKmSi7qFr7IivJ0=
+X-Google-Smtp-Source: AK7set80NPLuAAPSgZZsRqS35byB+8nywbDP9pe24Tyk+tjImkNZjMRv8vvzE4HsisyOpmumYVDG2Q==
+X-Received: by 2002:a17:902:d2c7:b0:19c:fbdb:43cb with SMTP id n7-20020a170902d2c700b0019cfbdb43cbmr3953598plc.51.1677599436809;
+        Tue, 28 Feb 2023 07:50:36 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id h12-20020a170902f7cc00b0019d1f42b00csm3612084plw.17.2023.02.28.07.50.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 07:50:36 -0800 (PST)
+Date:   Tue, 28 Feb 2023 07:50:36 -0800 (PST)
+X-Google-Original-Date: Tue, 28 Feb 2023 07:49:44 PST (-0800)
+Subject:     Re: [PATCH mm-unstable v1 19/26] riscv/mm: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+In-Reply-To: <20230113171026.582290-20-david@redhat.com>
+CC:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        hughd@google.com, jhubbard@nvidia.com, jgg@nvidia.com,
+        rppt@linux.ibm.com, shy828301@gmail.com, vbabka@suse.cz,
+        namit@vmware.com, aarcange@redhat.com, peterx@redhat.com,
+        linux-mm@kvack.org, x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        david@redhat.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     david@redhat.com
+Message-ID: <mhng-b8dc8a57-dde0-4995-bbb7-3948a95ba0b1@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-For csky part
+On Fri, 13 Jan 2023 09:10:19 PST (-0800), david@redhat.com wrote:
+> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE by stealing one bit
+> from the offset. This reduces the maximum swap space per file: on 32bit
+> to 16 GiB (was 32 GiB).
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Seems fine to me, I doubt anyone wants a huge pile of swap on rv32.
 
-On Tue, Feb 28, 2023 at 1:57=E2=80=AFAM Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
 >
-> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
-> Change the PG_dcache_clean flag from being per-page to per-folio.
+> Note that this bit does not conflict with swap PMDs and could also be used
+> in swap PMD context later.
 >
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: linux-csky@vger.kernel.org
+> While at it, mask the type in __swp_entry().
+>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
->  arch/csky/abiv1/cacheflush.c         | 32 +++++++++++++++++-----------
->  arch/csky/abiv1/inc/abi/cacheflush.h |  2 ++
->  arch/csky/abiv2/cacheflush.c         | 30 +++++++++++++-------------
->  arch/csky/abiv2/inc/abi/cacheflush.h | 10 +++++++--
->  arch/csky/include/asm/pgtable.h      | 21 +++++++++++++++---
->  5 files changed, 62 insertions(+), 33 deletions(-)
+>  arch/riscv/include/asm/pgtable-bits.h |  3 +++
+>  arch/riscv/include/asm/pgtable.h      | 29 ++++++++++++++++++++++-----
+>  2 files changed, 27 insertions(+), 5 deletions(-)
 >
-> diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
-> index fb91b069dc69..ba43f6c26b4f 100644
-> --- a/arch/csky/abiv1/cacheflush.c
-> +++ b/arch/csky/abiv1/cacheflush.c
-> @@ -14,43 +14,49 @@
+> diff --git a/arch/riscv/include/asm/pgtable-bits.h b/arch/riscv/include/asm/pgtable-bits.h
+> index b9e13a8fe2b7..f896708e8331 100644
+> --- a/arch/riscv/include/asm/pgtable-bits.h
+> +++ b/arch/riscv/include/asm/pgtable-bits.h
+> @@ -27,6 +27,9 @@
+>   */
+>  #define _PAGE_PROT_NONE _PAGE_GLOBAL
 >
->  #define PG_dcache_clean                PG_arch_1
->
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->  {
->         struct address_space *mapping;
->
-> -       if (page =3D=3D ZERO_PAGE(0))
-> +       if (is_zero_pfn(folio_pfn(folio)))
->                 return;
->
-> -       mapping =3D page_mapping_file(page);
-> +       mapping =3D folio_flush_mapping(folio);
->
-> -       if (mapping && !page_mapcount(page))
-> -               clear_bit(PG_dcache_clean, &page->flags);
-> +       if (mapping && !folio_mapped(folio))
-> +               clear_bit(PG_dcache_clean, &folio->flags);
->         else {
->                 dcache_wbinv_all();
->                 if (mapping)
->                         icache_inv_all();
-> -               set_bit(PG_dcache_clean, &page->flags);
-> +               set_bit(PG_dcache_clean, &folio->flags);
->         }
->  }
-> +EXPORT_SYMBOL(flush_dcache_folio);
+> +/* Used for swap PTEs only. */
+> +#define _PAGE_SWP_EXCLUSIVE _PAGE_ACCESSED
 > +
-> +void flush_dcache_page(struct page *page)
+>  #define _PAGE_PFN_SHIFT 10
+>
+>  /*
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 4eba9a98d0e3..03a4728db039 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -724,16 +724,18 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>
+>  /*
+> - * Encode and decode a swap entry
+> + * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
+> + * are !pte_none() && !pte_present().
+>   *
+>   * Format of swap PTE:
+>   *	bit            0:	_PAGE_PRESENT (zero)
+>   *	bit       1 to 3:       _PAGE_LEAF (zero)
+>   *	bit            5:	_PAGE_PROT_NONE (zero)
+> - *	bits      6 to 10:	swap type
+> - *	bits 10 to XLEN-1:	swap offset
+> + *	bit            6:	exclusive marker
+> + *	bits      7 to 11:	swap type
+> + *	bits 11 to XLEN-1:	swap offset
+>   */
+> -#define __SWP_TYPE_SHIFT	6
+> +#define __SWP_TYPE_SHIFT	7
+>  #define __SWP_TYPE_BITS		5
+>  #define __SWP_TYPE_MASK		((1UL << __SWP_TYPE_BITS) - 1)
+>  #define __SWP_OFFSET_SHIFT	(__SWP_TYPE_BITS + __SWP_TYPE_SHIFT)
+> @@ -744,11 +746,28 @@ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
+>  #define __swp_type(x)	(((x).val >> __SWP_TYPE_SHIFT) & __SWP_TYPE_MASK)
+>  #define __swp_offset(x)	((x).val >> __SWP_OFFSET_SHIFT)
+>  #define __swp_entry(type, offset) ((swp_entry_t) \
+> -	{ ((type) << __SWP_TYPE_SHIFT) | ((offset) << __SWP_OFFSET_SHIFT) })
+> +	{ (((type) & __SWP_TYPE_MASK) << __SWP_TYPE_SHIFT) | \
+> +	  ((offset) << __SWP_OFFSET_SHIFT) })
+>
+>  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
+>  #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
+>
+> +#define __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+> +static inline int pte_swp_exclusive(pte_t pte)
 > +{
-> +       flush_dcache_folio(page_folio(page));
-> +}
->  EXPORT_SYMBOL(flush_dcache_page);
->
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
-> -       pte_t *ptep)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long ad=
-dr,
-> +               pte_t *ptep, unsigned int nr)
->  {
->         unsigned long pfn =3D pte_pfn(*ptep);
-> -       struct page *page;
-> +       struct folio *folio;
->
->         if (!pfn_valid(pfn))
->                 return;
->
-> -       page =3D pfn_to_page(pfn);
-> -       if (page =3D=3D ZERO_PAGE(0))
-> +       if (is_zero_pfn(pfn))
->                 return;
->
-> -       if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-> +       folio =3D page_folio(pfn_to_page(pfn));
-> +       if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
->                 dcache_wbinv_all();
->
-> -       if (page_mapping_file(page)) {
-> +       if (folio_flush_mapping(folio)) {
->                 if (vma->vm_flags & VM_EXEC)
->                         icache_inv_all();
->         }
-> diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/a=
-bi/cacheflush.h
-> index ed62e2066ba7..0d6cb65624c4 100644
-> --- a/arch/csky/abiv1/inc/abi/cacheflush.h
-> +++ b/arch/csky/abiv1/inc/abi/cacheflush.h
-> @@ -9,6 +9,8 @@
->
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  extern void flush_dcache_page(struct page *);
-> +void flush_dcache_folio(struct folio *);
-> +#define flush_dcache_folio flush_dcache_folio
->
->  #define flush_cache_mm(mm)                     dcache_wbinv_all()
->  #define flush_cache_page(vma, page, pfn)       cache_wbinv_all()
-> diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
-> index 39c51399dd81..c1cf0d55a2a1 100644
-> --- a/arch/csky/abiv2/cacheflush.c
-> +++ b/arch/csky/abiv2/cacheflush.c
-> @@ -6,30 +6,30 @@
->  #include <linux/mm.h>
->  #include <asm/cache.h>
->
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -                     pte_t *pte)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long ad=
-dress,
-> +               pte_t *pte, unsigned int nr)
->  {
-> -       unsigned long addr;
-> +       unsigned long pfn =3D pte_pfn(*pte);
->         struct page *page;
-> +       unsigned int i;
->
-> -       if (!pfn_valid(pte_pfn(*pte)))
-> +       if (!pfn_valid(pfn) || is_zero_pfn(pfn))
->                 return;
->
-> -       page =3D pfn_to_page(pte_pfn(*pte));
-> -       if (page =3D=3D ZERO_PAGE(0))
-> -               return;
-> +       folio =3D page_folio(pfn_to_page(pfn));
->
-> -       if (test_and_set_bit(PG_dcache_clean, &page->flags))
-> +       if (test_and_set_bit(PG_dcache_clean, &folio->flags))
->                 return;
->
-> -       addr =3D (unsigned long) kmap_atomic(page);
-> -
-> -       dcache_wb_range(addr, addr + PAGE_SIZE);
-> +       for (i =3D 0; i < folio_nr_pages(folio); i++) {
-> +               unsigned long addr =3D (unsigned long) kmap_local_folio(f=
-olio,
-> +                                                               i * PAGE_=
-SIZE);
->
-> -       if (vma->vm_flags & VM_EXEC)
-> -               icache_inv_range(addr, addr + PAGE_SIZE);
-> -
-> -       kunmap_atomic((void *) addr);
-> +               dcache_wb_range(addr, addr + PAGE_SIZE);
-> +               if (vma->vm_flags & VM_EXEC)
-> +                       icache_inv_range(addr, addr + PAGE_SIZE);
-> +               kunmap_local((void *) addr);
-> +       }
->  }
->
->  void flush_icache_deferred(struct mm_struct *mm)
-> diff --git a/arch/csky/abiv2/inc/abi/cacheflush.h b/arch/csky/abiv2/inc/a=
-bi/cacheflush.h
-> index a565e00c3f70..9c728933a776 100644
-> --- a/arch/csky/abiv2/inc/abi/cacheflush.h
-> +++ b/arch/csky/abiv2/inc/abi/cacheflush.h
-> @@ -18,11 +18,17 @@
->
->  #define PG_dcache_clean                PG_arch_1
->
-> +static inline void flush_dcache_folio(struct folio *folio)
-> +{
-> +       if (test_bit(PG_dcache_clean, &folio->flags))
-> +               clear_bit(PG_dcache_clean, &folio->flags);
-> +}
-> +#define flush_dcache_folio flush_dcache_folio
-> +
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  static inline void flush_dcache_page(struct page *page)
->  {
-> -       if (test_bit(PG_dcache_clean, &page->flags))
-> -               clear_bit(PG_dcache_clean, &page->flags);
-> +       flush_dcache_folio(page_folio(page));
->  }
->
->  #define flush_dcache_mmap_lock(mapping)                do { } while (0)
-> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgta=
-ble.h
-> index d4042495febc..a30ae048233e 100644
-> --- a/arch/csky/include/asm/pgtable.h
-> +++ b/arch/csky/include/asm/pgtable.h
-> @@ -90,7 +90,20 @@ static inline void set_pte(pte_t *p, pte_t pte)
->         /* prevent out of order excution */
->         smp_mb();
->  }
-> -#define set_pte_at(mm, addr, ptep, pteval) set_pte(ptep, pteval)
-> +
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +               pte_t *ptep, pte_t pte, unsigned int nr)
-> +{
-> +       for (;;) {
-> +               set_pte(ptep, pte);
-> +               if (--nr =3D=3D 0)
-> +                       break;
-> +               ptep++;
-> +               pte_val(pte) +=3D PAGE_SIZE;
-> +       }
+> +	return pte_val(pte) & _PAGE_SWP_EXCLUSIVE;
 > +}
 > +
-> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
->
->  static inline pte_t *pmd_page_vaddr(pmd_t pmd)
->  {
-> @@ -263,8 +276,10 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t n=
-ewprot)
->  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
->  extern void paging_init(void);
->
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -                     pte_t *pte);
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long ad=
-dress,
-> +               pte_t *pte, unsigned int nr);
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +       update_mmu_cache_range(vma, addr, ptep, 1)
->
->  #define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
->         remap_pfn_range(vma, vaddr, pfn, size, prot)
-> --
-> 2.39.1
->
+> +static inline pte_t pte_swp_mkexclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) | _PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+> +static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+> +{
+> +	return __pte(pte_val(pte) & ~_PAGE_SWP_EXCLUSIVE);
+> +}
+> +
+>  #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+>  #define __pmd_to_swp_entry(pmd) ((swp_entry_t) { pmd_val(pmd) })
+>  #define __swp_entry_to_pmd(swp) __pmd((swp).val)
 
-
---=20
-Best Regards
- Guo Ren
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
