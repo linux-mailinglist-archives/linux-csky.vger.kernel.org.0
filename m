@@ -2,76 +2,89 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8B96AF629
-	for <lists+linux-csky@lfdr.de>; Tue,  7 Mar 2023 20:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D67E6B3039
+	for <lists+linux-csky@lfdr.de>; Thu,  9 Mar 2023 23:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjCGT4L (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 7 Mar 2023 14:56:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
+        id S230281AbjCIWMK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 9 Mar 2023 17:12:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbjCGTzw (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 7 Mar 2023 14:55:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4AC3B3E3;
-        Tue,  7 Mar 2023 11:47:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D7F4B81A12;
-        Tue,  7 Mar 2023 19:47:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29617C433D2;
-        Tue,  7 Mar 2023 19:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678218477;
-        bh=/1zAIbTQcsRF2izXv8x+EJJixmh8dm5+NhK5ibW2Rsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AyyYAwqUTTOk9EKiTutS5g25pM/VHwE2Yo3m82FjZAEXqu/CleA62t3i3SG/UTcG8
-         cfH4mySgtTAl/FkN3gD0CJ7euNCSl9MX75AxDRKpva3vVaLJWbvyQOasMf1XPhtEse
-         iBPu1h6EuVXY5lSdO/v6rwRJyxtn75T589Un0p3nRcpQZTj4bzppHMLBRDyhPnoXuz
-         bHLOcMt+mmUsAQeljRkMmtZP9ekqGRdabMDAkS8V22Sb9MTBleK1hrduVVF14vWP/W
-         aM3Nzol2A4VsZbRWcmcKEm4dvZ7lbDMj/phDraV03qLey3PXcapCMK6yTL8Mqeg2US
-         bLMU3ZOVlo9ww==
-Date:   Tue, 7 Mar 2023 11:47:54 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
+        with ESMTP id S229895AbjCIWMJ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 9 Mar 2023 17:12:09 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C22F690D;
+        Thu,  9 Mar 2023 14:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=0Iy5i1KRt9BRu51UqkHEc8TWm2Sma1QI6oHERNxIFTE=; b=4avk2FIZAloQ6Je2ulx3/bhxiD
+        KZ0Rb78uqiP3BhAhEbXxg+9ZAm7d8f7Bk8zJDQw1jeCBK6hshVwpaUDpWh0wr1ubr+P6j656/rTo+
+        NEcAbZGe1ztYqtdFZVe9HZJaK8qentKzwQ34m3yiHt7K6h9fBlaaiqPOlw4bA1bdbdIcYwTLfFJMd
+        5RIH2wnpqdyASvO8vvmzKSS07e0mXlLEcGiWhoY30d7FBmgLBQrKZgHiaCKOLji1IhrrFivzc2Wqz
+        JrT9bLZ/l4Mw3pDNSibfSLYuQ6r9YLlB+uqSCswBw6H0KXPLAnWTGvDUHL4iOMEE+cDBPl+pKiy2I
+        JoQR9yDQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1paOTv-00C7rj-Sk; Thu, 09 Mar 2023 22:11:27 +0000
+Date:   Thu, 9 Mar 2023 14:11:27 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Jeff Xu <jeffxu@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>
 Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
         john.johansen@canonical.com, paul@paul-moore.com,
         jmorris@namei.org, serge@hallyn.com, luto@amacapital.net,
         wad@chromium.org, dverkamp@chromium.org, paulmck@kernel.org,
-        baihaowen@meizu.com, frederic@kernel.org, jeffxu@google.com,
+        baihaowen@meizu.com, frederic@kernel.org, ebiggers@kernel.org,
         tytso@mit.edu, guoren@kernel.org, j.granados@samsung.com,
         zhangpeng362@huawei.com, tangmeng@uniontech.com,
         willy@infradead.org, nixiaoming@huawei.com, sujiaxun@uniontech.com,
         patches@lists.linux.dev, linux-fsdevel@vger.kernel.org,
         apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
         linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/11] fs-verity: simplify sysctls with register_sysctl()
-Message-ID: <ZAeU6shP3vjBOqo7@sol.localdomain>
+Subject: Re: [PATCH 08/11] kernel: pid_namespace: simplify sysctls with
+ register_sysctl()
+Message-ID: <ZApZj9DmMYKuCQ3g@bombadil.infradead.org>
 References: <20230302202826.776286-1-mcgrof@kernel.org>
- <20230302202826.776286-10-mcgrof@kernel.org>
+ <20230302202826.776286-9-mcgrof@kernel.org>
+ <CALmYWFucv6-9yfS=gamwSsqjgxSKZS0nvVjj_QfBmsLmQD5XOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230302202826.776286-10-mcgrof@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALmYWFucv6-9yfS=gamwSsqjgxSKZS0nvVjj_QfBmsLmQD5XOQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 12:28:24PM -0800, Luis Chamberlain wrote:
-> register_sysctl_paths() is only needed if your child (directories) have
-> entries but this does not so just use register_sysctl() so to do away
-> with the path specification.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->  fs/verity/signature.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
+On Thu, Mar 02, 2023 at 03:13:54PM -0800, Jeff Xu wrote:
+> On Thu, Mar 2, 2023 at 12:28 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >  kernel/pid_sysctl.h    | 3 +--
+> >  2 files changed, 2 insertions(+), 4 deletions(-)
+> >
+> Acked-by: Jeff Xu <jeffxu@google.com>
 
-Applied to https://git.kernel.org/pub/scm/fs/fsverity/linux.git/log/?h=for-next  
+Andrew, kernel/pid_sysctl.h is new, not on v6.3-rc1 and so I cannot
+carry this on sysctl-next. Can you carry this patch on your tree?
 
-- Eric
+I see Eric Biggers already took in the fs-verity patch, so I will drop
+that from my queue.
+
+I can take the rest in this series.
+
+I will also hold off on the last patch which deprecates the routine
+register_sysctl_paths() until after say the first part of the merge
+window.
+
+This will allow all of our trees to work on linux-next without conflict.
+
+Let me know if this is OK with you and Eric!
+
+  Luis
