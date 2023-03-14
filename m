@@ -2,118 +2,96 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651B56B6604
-	for <lists+linux-csky@lfdr.de>; Sun, 12 Mar 2023 13:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F656B9661
+	for <lists+linux-csky@lfdr.de>; Tue, 14 Mar 2023 14:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjCLMm2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 12 Mar 2023 08:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S229626AbjCNNfo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 14 Mar 2023 09:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjCLMm1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 12 Mar 2023 08:42:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0CA4FF3C;
-        Sun, 12 Mar 2023 05:42:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232562AbjCNNfN (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 14 Mar 2023 09:35:13 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679771F49C;
+        Tue, 14 Mar 2023 06:31:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AC0B60F07;
-        Sun, 12 Mar 2023 12:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D9DC433EF;
-        Sun, 12 Mar 2023 12:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678624943;
-        bh=OFQdNglFI1NSHGUTJ5ckoAxc4WHC7HuhP+EF7KanK/4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PltZMWCMOypqC6ZHwTFD8bjEUjYQ8jO+tPUrIY4apSGPHU16hGsCnsduNrEaHFSdK
-         6fNuhnN9xv0FtG3RAJ0Ofm57ut/e2Y9D+tPzRbKEyDBykY85Gjm8+xuLdccA9UA3jZ
-         aO74F7PYbhGz+n65b+qKFYRxX+93p1kTPqzp2HbRZfRmAPhnlSxuYrZaNSkCQ7hSCG
-         t8i6xnf/OLCSQN1ex0u+BUBDq2skGYoHAGC5gMy8/gnMabXuhOnOZwxnIpZR9IgJuS
-         jMPZnoWS45BYJ62wrNsjKZfdX0PyaktgQfM6vFvtPYu8G42ErriXAXLyHKw2qIejl8
-         5BoANJnlS9MPg==
-Received: by mail-ed1-f44.google.com with SMTP id s11so38316840edy.8;
-        Sun, 12 Mar 2023 05:42:22 -0700 (PDT)
-X-Gm-Message-State: AO0yUKUgfcP47dQJ1ZdvMqHs30LIbx6W2H0ghKBf/FgifrdKdIRRtNOn
-        V3TS4Q5e1t3Ik7GScTuJhQE8S2Y7UitRAM5KJz8=
-X-Google-Smtp-Source: AK7set/J9ue8nEOQxcHGaZaDmH8jLtekYukBmKnmWZUTmBHd3+lZTFydgcK5tTNK9QRO/X7dLQsyxkALKEkk+gnWzMw=
-X-Received: by 2002:a50:bb49:0:b0:4fb:adb4:d9b9 with SMTP id
- y67-20020a50bb49000000b004fbadb4d9b9mr665337ede.7.1678624941236; Sun, 12 Mar
- 2023 05:42:21 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbZD96Sf2z4x5R;
+        Wed, 15 Mar 2023 00:31:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1678800666;
+        bh=RWpQH91z9oCPCV7UgB1VjeBlCalvsZzq/D68BsBI0Ww=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Gmi2DLvR7FFuYEzpwxyajVFJgqqPUe+t2SrIuwdBqzYcgbPpV3TLjtx3waxpWL6PS
+         Tlm2qgbZO6FByZBDH6vF20yDA6dWo8oqnebJk3mUZNrFfgeS07oV/YOl+wQ/pjVzZu
+         NwgdFlLy64biV7j4n9vGCDKf7dkUIoM/W/PbkbUt8GCcCNGFWLT03R3isUmlhyjLoN
+         z+e+Uak4GXq1yhQ7L0Ld0I2uWeJ7ZdLzkVARLCWcim1o6ZC2zU4FnwLI9WmUPUXLXt
+         pck/4eDZ5TqTFY6UejLoZnpTjGPIH2V00sS3IcxUEmiEM4sMhD557XPpadOlNh7qRi
+         JJdlXEA0IptgQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Fangrui Song <maskray@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        Fangrui Song <maskray@google.com>
+Subject: Re: [PATCH v3] vdso: Improve cmd_vdso_check to check all dynamic
+ relocations
+In-Reply-To: <20230310190750.3323802-1-maskray@google.com>
+References: <20230310190750.3323802-1-maskray@google.com>
+Date:   Wed, 15 Mar 2023 00:28:53 +1100
+Message-ID: <87jzzjo416.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20230310144710.1543070-1-robh@kernel.org>
-In-Reply-To: <20230310144710.1543070-1-robh@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 12 Mar 2023 20:42:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRmf6C0fZs6L4VoRtNivu9dm_6Nibej-oOhZ=69FzLhrA@mail.gmail.com>
-Message-ID: <CAJF2gTRmf6C0fZs6L4VoRtNivu9dm_6Nibej-oOhZ=69FzLhrA@mail.gmail.com>
-Subject: Re: [PATCH] irqchip: Use of_property_read_bool() for boolean properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org> (csky)
-
-On Fri, Mar 10, 2023 at 10:48=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
-e:
+Fangrui Song <maskray@google.com> writes:
+> The actual intention is that no dynamic relocation exists. However, some
+> GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
+> the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+> relocations. E.g. ld's powerpc port recently fixed
+> https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
+> generally no-op in the dynamic loaders. So just ignore them.
 >
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties.
-> Convert reading boolean properties to to of_property_read_bool().
+> With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+> bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+> not called "absolute relocations". (The patch is motivated by the arm64
+> port missing R_AARCH64_RELATIVE.)
 >
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com> # for vDSO, aarch64
+> Tested-by: Vincenzo Frascino <vincenzo.frascino@arm.com> # for aarch64
 > ---
->  drivers/irqchip/irq-csky-apb-intc.c | 2 +-
->  drivers/irqchip/irq-gic-v2m.c       | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Changes from v2:
+> * rebase
 >
-> diff --git a/drivers/irqchip/irq-csky-apb-intc.c b/drivers/irqchip/irq-cs=
-ky-apb-intc.c
-> index 42d8a2438ebc..6710691e4c25 100644
-> --- a/drivers/irqchip/irq-csky-apb-intc.c
-> +++ b/drivers/irqchip/irq-csky-apb-intc.c
-> @@ -68,7 +68,7 @@ static void __init ck_set_gc(struct device_node *node, =
-void __iomem *reg_base,
->         gc->chip_types[0].chip.irq_mask =3D irq_gc_mask_clr_bit;
->         gc->chip_types[0].chip.irq_unmask =3D irq_gc_mask_set_bit;
->
-> -       if (of_find_property(node, "csky,support-pulse-signal", NULL))
-> +       if (of_property_read_bool(node, "csky,support-pulse-signal"))
->                 gc->chip_types[0].chip.irq_unmask =3D irq_ck_mask_set_bit=
-;
->  }
->
-> diff --git a/drivers/irqchip/irq-gic-v2m.c b/drivers/irqchip/irq-gic-v2m.=
-c
-> index f1e75b35a52a..f2ff4387870d 100644
-> --- a/drivers/irqchip/irq-gic-v2m.c
-> +++ b/drivers/irqchip/irq-gic-v2m.c
-> @@ -421,7 +421,7 @@ static int __init gicv2m_of_init(struct fwnode_handle=
- *parent_handle,
->                 u32 spi_start =3D 0, nr_spis =3D 0;
->                 struct resource res;
->
-> -               if (!of_find_property(child, "msi-controller", NULL))
-> +               if (!of_property_read_bool(child, "msi-controller"))
->                         continue;
->
->                 ret =3D of_address_to_resource(child, 0, &res);
-> --
-> 2.39.2
->
+> Changes from v3:
+> * Add a comment before `include $(srctree)/lib/vdso/Makefile` in every touched arch Makefile
+> ---
+>  arch/arm/vdso/Makefile            |  4 +---
+>  arch/arm64/kernel/vdso/Makefile   |  4 +---
+>  arch/arm64/kernel/vdso32/Makefile |  3 ---
+>  arch/csky/kernel/vdso/Makefile    |  4 +---
+>  arch/loongarch/vdso/Makefile      |  4 +---
+>  arch/mips/vdso/Makefile           |  4 +---
+>  arch/powerpc/kernel/vdso/Makefile |  2 +-
 
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
---=20
-Best Regards
- Guo Ren
+cheers
