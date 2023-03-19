@@ -2,64 +2,80 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E27F6BCAA2
-	for <lists+linux-csky@lfdr.de>; Thu, 16 Mar 2023 10:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8336C04E0
+	for <lists+linux-csky@lfdr.de>; Sun, 19 Mar 2023 21:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjCPJU2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 16 Mar 2023 05:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S229592AbjCSUr4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 19 Mar 2023 16:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbjCPJU1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 16 Mar 2023 05:20:27 -0400
-X-Greylist: delayed 496 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Mar 2023 02:20:24 PDT
-Received: from mail.gardendale.pl (mail.gardendale.pl [217.61.16.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97FA23A4C
-        for <linux-csky@vger.kernel.org>; Thu, 16 Mar 2023 02:20:24 -0700 (PDT)
-Received: by mail.gardendale.pl (Postfix, from userid 1001)
-        id 78C6A836EA; Thu, 16 Mar 2023 09:11:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gardendale.pl;
-        s=mail; t=1678957882;
-        bh=31D0ceVBj9Zv8EBW8xMfX4yGKmKeC0JhS8zrjplbiwM=;
-        h=Date:From:To:Subject:From;
-        b=edSXMsmRa9D4AGBEijOQ0PS65Y+PiJouvDb25ha/DZpzBxCE2D6zhEg/wLKt/dEpV
-         RZTbEBoOybsdPUkE7v63eDJpNckLWIsVZCwaUubAu96wKS1HCElELcqmOUBuPFLt0Y
-         wqdVOvsSzZ9kxKlaLz6G8h5NCUoCv4gHOVytOCPA+JB14pgc/q4f6iOEWgnxXUUVxs
-         kYnpugAARwb4Ty/hyav26YBEKX28QETbmItuqGS6k2WFXJEsfhAOhpB5RZi8O5jzbo
-         PXghvHZmPL41tD7h3g+vpzpL84s5hzZyrMhVsSepEUOCpfG/nFDzm6rBArQzJHZ5mi
-         pA9rjeLWJ9mYw==
-Received: by mail.gardendale.pl for <linux-csky@vger.kernel.org>; Thu, 16 Mar 2023 09:10:55 GMT
-Message-ID: <20230316074500-0.1.53.mn07.0.4m86eeimeo@gardendale.pl>
-Date:   Thu, 16 Mar 2023 09:10:55 GMT
-From:   "Jakub Daroch" <jakub.daroch@gardendale.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Fotowoltaika - nowe warunki
-X-Mailer: mail.gardendale.pl
+        with ESMTP id S229538AbjCSUrz (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 19 Mar 2023 16:47:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649561420F;
+        Sun, 19 Mar 2023 13:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bpylSVII1FYDPpIVeV+6MThI+CQatbJ+23qCa7MroYI=; b=h79wg4kJj+IQX0Ct/ULTrC7dxx
+        v0HiZsAxr9rRp7MAlzrIs6Qon3wmZm355l7uwPG+9CwpJ3SVqcIllLqxIVBoQIrKj4NVoM62ach6f
+        sFjamd25p6gWQDmSMtexer35BP89oCUHk6yZk8WHnAIFMegzx9Y6G5iwL5g1M5zV48U7EFd/ZXCBh
+        nv9hgAc7XcvLw8zVCPpn5nakGDILXl34n1bbIamb2erFNDuFs0loLUhRTWSiIHRXWDzvzJK5W0Y2e
+        2S5BIWC1xBAToDLYy8pqvRXgYTFPUeCO3nUzOC1vlEofgKDXiZeZB7ITDzKmkSu3hb0/hUo2vImMW
+        hF2zuyKw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pdzvo-007PPe-0v;
+        Sun, 19 Mar 2023 20:47:08 +0000
+Date:   Sun, 19 Mar 2023 13:47:08 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jeff Xu <jeffxu@google.com>, Eric Biggers <ebiggers@kernel.org>,
+        ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, luto@amacapital.net,
+        wad@chromium.org, dverkamp@chromium.org, paulmck@kernel.org,
+        baihaowen@meizu.com, frederic@kernel.org, tytso@mit.edu,
+        guoren@kernel.org, j.granados@samsung.com, zhangpeng362@huawei.com,
+        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
+        sujiaxun@uniontech.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] kernel: pid_namespace: simplify sysctls with
+ register_sysctl()
+Message-ID: <ZBd0zOqlH2H423ux@bombadil.infradead.org>
+References: <20230302202826.776286-1-mcgrof@kernel.org>
+ <20230302202826.776286-9-mcgrof@kernel.org>
+ <CALmYWFucv6-9yfS=gamwSsqjgxSKZS0nvVjj_QfBmsLmQD5XOQ@mail.gmail.com>
+ <ZApZj9DmMYKuCQ3g@bombadil.infradead.org>
+ <20230309142746.0bc649a31e76bc46fd929304@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309142746.0bc649a31e76bc46fd929304@linux-foundation.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Thu, Mar 09, 2023 at 02:27:46PM -0800, Andrew Morton wrote:
+> On Thu, 9 Mar 2023 14:11:27 -0800 Luis Chamberlain <mcgrof@kernel.org> wrote:
+> 
+> > Andrew, kernel/pid_sysctl.h is new, not on v6.3-rc1 and so I cannot
+> > carry this on sysctl-next. Can you carry this patch on your tree?
+> 
+> Sure, no probs.
 
-chcia=C5=82bym poinformowa=C4=87, i=C5=BC mog=C4=85 Pa=C5=84stwo uzyska=C4=
-=87 dofinansowanie na systemy fotowoltaiczne w ramach nowej edycji progra=
-mu M=C3=B3j Pr=C4=85d.
+Andrew, this one patch will have to go through your tree as kernel/pid_sysctl.h
+only exist on your tree. I'll drop it on my end!
 
-Program zapewnia 6000 z=C5=82 dofinansowania na instalacj=C4=99 paneli i =
-16 000 z=C5=82 na magazyn energii, ni=C5=BCsze cen pr=C4=85du i mo=C5=BCl=
-iwo=C5=9B=C4=87 odliczenia koszt=C3=B3w zwi=C4=85zanych z instalacj=C4=85=
- fotowoltaiki w ramach rozliczenia PIT (tzw. ulga termomodernizacyjna).
+Thanks!
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
-
-
-Pozdrawiam,
-Jakub Daroch
+  Luis
