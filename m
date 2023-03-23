@@ -2,148 +2,297 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D91D6C6D6B
-	for <lists+linux-csky@lfdr.de>; Thu, 23 Mar 2023 17:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1826C6E74
+	for <lists+linux-csky@lfdr.de>; Thu, 23 Mar 2023 18:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjCWQ0V (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 23 Mar 2023 12:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S231490AbjCWRMw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 23 Mar 2023 13:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231904AbjCWQ0U (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 23 Mar 2023 12:26:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298411BF3
-        for <linux-csky@vger.kernel.org>; Thu, 23 Mar 2023 09:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679588731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rf1EargHhjBzXfO07IgMLtInuWGSM9rCL6OoPVE8vbA=;
-        b=WtAcDI5Li9QEuKB6ODiSX0jbpDGrOdDIqwDU2vDXzdQwZ4qWnByqG4ED6i+CW3k0/Gt+V+
-        SVdKQ2jON8/0A7itlPWthpIyCtnBE9lSlxelDZpNicneCJ0cDdPReRYWbuxzJPXW1v+V1a
-        wK0EDzKZaf+WDd+bqZnKQXTlkS1uyOQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-282-bdpCFZYEOAuLDT0AfMO6vQ-1; Thu, 23 Mar 2023 12:25:29 -0400
-X-MC-Unique: bdpCFZYEOAuLDT0AfMO6vQ-1
-Received: by mail-wm1-f72.google.com with SMTP id k29-20020a05600c1c9d00b003ee3a8d547eso4224413wms.2
-        for <linux-csky@vger.kernel.org>; Thu, 23 Mar 2023 09:25:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679588728;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rf1EargHhjBzXfO07IgMLtInuWGSM9rCL6OoPVE8vbA=;
-        b=hE+59m5wyu0XLHc4pJ15IOm2aEGfiyURdbaqXPc7ijjjP/XxNu8VnskTVXuFxBLuXX
-         XTHDvWpYPR65ulmwcqtk53svKuL6d7uth3qrK9m+ty6PHxXr3v2nv0qwTCGrpHJkZi4N
-         dPKpNYLVeSlws/+3vU/xRdmGxG/LZ4ZkJ8OD4QPSQWpCC8RLGm2caS84cK1dIUC3X6o1
-         HGzN2Fo9oNMvHosS8kpmy3+yTLJJ4WJiMdRKchFeFhOvQCMp4TymQZyylpOWHlzH8ra3
-         T+XGgvSuzmVM/7lvYA08krRzDygLWEzc9N6KNot13BwmiKGwbuhLrH5xEGUNUUzydgMX
-         +/9g==
-X-Gm-Message-State: AAQBX9dYOod9o3FN8n0IA8WzdnxzjswCqts75gkqCYk6FmOxIFO8AkRp
-        Av6jhAhd/BGBAFag/duVCs2Ec5kN+3x23uB1jCfqxkCr2+RiIFAXOj0ZrmJgyDkyuxIjhk1LjSN
-        cf7adsWaVXwCslNGzwsrA+A==
-X-Received: by 2002:a5d:4568:0:b0:2c7:e5f:e0e0 with SMTP id a8-20020a5d4568000000b002c70e5fe0e0mr2967356wrc.65.1679588728476;
-        Thu, 23 Mar 2023 09:25:28 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z2pOP19Ooh7wiG9F4iyBZnUcLGOtnlVl1iiXTySJV6QCXnwRVxEdgZiRrRO9IHVKHT4hkvPQ==
-X-Received: by 2002:a5d:4568:0:b0:2c7:e5f:e0e0 with SMTP id a8-20020a5d4568000000b002c70e5fe0e0mr2967333wrc.65.1679588728212;
-        Thu, 23 Mar 2023 09:25:28 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id d10-20020adfe88a000000b002c70e60abd4sm16586783wrm.2.2023.03.23.09.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Mar 2023 09:25:27 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
+        with ESMTP id S231466AbjCWRMv (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 23 Mar 2023 13:12:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAEA244BD;
+        Thu, 23 Mar 2023 10:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679591569; x=1711127569;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bOk/bK3iytGpOoPzSN/P3lMEMqW4rV3s8Am9+KQ4/Qo=;
+  b=VVz38drQNTRqjT8lKjzwPT0RNtJCyq0wpAgv28ZPNHzDOyykzzIfFGcD
+   O2QnXfSUW8DT38HkAdk4CxptF5mFmsvcCu1KJY//35ffzkf+d5gh9rx+Y
+   wcKC1WGZsD494Mp+ghiWFl+Hhvesk47IhIdoelPRbOdXxXadBM+SsVXcc
+   vLgp04hpIJfpWw4CK7+Jm4tmmD1mpqyComRiyIFVyxYuqSp1VoFT3h01m
+   QLWX7dhTIvw4vUsFQMFL+FB1DZhMaWSqEA3OBT5macRNhcQ4X8ggC1MfE
+   ej5WmUAZ7M414ov8EOhGFHLDJzFGw6rxvKtGjCm4FFnnumgrqbYz/FKq0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="338283365"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="338283365"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2023 10:12:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10658"; a="825909467"
+X-IronPort-AV: E=Sophos;i="5.98,285,1673942400"; 
+   d="scan'208";a="825909467"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Mar 2023 10:12:41 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfOUO-000EZ8-0H;
+        Thu, 23 Mar 2023 17:12:36 +0000
+Date:   Fri, 24 Mar 2023 01:11:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Guo Ren <guoren@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 7/7] sched, smp: Trace smp callback causing an IPI
-In-Reply-To: <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
-References: <20230307143558.294354-1-vschneid@redhat.com>
- <20230307143558.294354-8-vschneid@redhat.com>
- <20230322095329.GS2017917@hirez.programming.kicks-ass.net>
- <xhsmhmt45c703.mognet@vschneid.remote.csb>
- <20230322140434.GC2357380@hirez.programming.kicks-ass.net>
-Date:   Thu, 23 Mar 2023 16:25:25 +0000
-Message-ID: <xhsmhbkkjcu4q.mognet@vschneid.remote.csb>
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@kernel.org>, Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 02/14] arm64: drop ranges in definition of
+ ARCH_FORCE_MAX_ORDER
+Message-ID: <202303240155.01y6T6Fj-lkp@intel.com>
+References: <20230323092156.2545741-3-rppt@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323092156.2545741-3-rppt@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 22/03/23 15:04, Peter Zijlstra wrote:
-> @@ -798,14 +794,20 @@ static void smp_call_function_many_cond(
->  		}
->  
->  		/*
-> +		 * Trace each smp_function_call_*() as an IPI, actual IPIs
-> +		 * will be traced with func==generic_smp_call_function_single_ipi().
-> +		 */
-> +		trace_ipi_send_cpumask(cfd->cpumask_ipi, _RET_IP_, func);
+Hi Mike,
 
-I just got a trace pointing out this can emit an event even though no IPI
-is sent if e.g. the cond_func predicate filters all CPUs in the argument
-mask:
+Thank you for the patch! Yet something to improve:
 
-  ipi_send_cpumask:     cpumask= callsite=on_each_cpu_cond_mask+0x3c callback=flush_tlb_func+0x0
+[auto build test ERROR on 51551d71edbc998fd8c8afa7312db3d270f5998e]
 
-Maybe something like so on top?
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Rapoport/arm-reword-ARCH_FORCE_MAX_ORDER-prompt-and-help-text/20230323-172512
+base:   51551d71edbc998fd8c8afa7312db3d270f5998e
+patch link:    https://lore.kernel.org/r/20230323092156.2545741-3-rppt%40kernel.org
+patch subject: [PATCH 02/14] arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
+config: arm64-randconfig-r031-20230322 (https://download.01.org/0day-ci/archive/20230324/202303240155.01y6T6Fj-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0522f943c071abf1610651ea40405b7489c50987
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mike-Rapoport/arm-reword-ARCH_FORCE_MAX_ORDER-prompt-and-help-text/20230323-172512
+        git checkout 0522f943c071abf1610651ea40405b7489c50987
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iommu/ kernel/dma/ mm/
 
----
-diff --git a/kernel/smp.c b/kernel/smp.c
-index ba5478814e677..1dc452017d000 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -791,6 +791,8 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 			}
- 		}
- 
-+		if (!nr_cpus)
-+			goto local;
- 		/*
- 		 * Trace each smp_function_call_*() as an IPI, actual IPIs
- 		 * will be traced with func==generic_smp_call_function_single_ipi().
-@@ -804,10 +806,10 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
- 		 */
- 		if (nr_cpus == 1)
- 			send_call_function_single_ipi(last_cpu);
--		else if (likely(nr_cpus > 1))
-+		else
- 			send_call_function_ipi_mask(cfd->cpumask_ipi);
- 	}
--
-+local:
- 	if (run_local && (!cond_func || cond_func(this_cpu, info))) {
- 		unsigned long flags;
- 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303240155.01y6T6Fj-lkp@intel.com/
 
+All error/warnings (new ones prefixed by >>):
+
+>> mm/memory.c:5791:37: warning: shift count is negative [-Wshift-count-negative]
+           if (unlikely(pages_per_huge_page > MAX_ORDER_NR_PAGES)) {
+                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/mmzone.h:33:31: note: expanded from macro 'MAX_ORDER_NR_PAGES'
+   #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+                                 ^  ~~~~~~~~~
+   include/linux/compiler.h:48:41: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                                             ^
+   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
+                           ______r = __builtin_expect(!!(x), expect);      \
+                                                         ^
+>> mm/memory.c:5791:37: warning: shift count is negative [-Wshift-count-negative]
+           if (unlikely(pages_per_huge_page > MAX_ORDER_NR_PAGES)) {
+                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/mmzone.h:33:31: note: expanded from macro 'MAX_ORDER_NR_PAGES'
+   #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+                                 ^  ~~~~~~~~~
+   include/linux/compiler.h:48:68: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                                                                        ^
+   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
+                                                expect, is_constant);      \
+                                                        ^~~~~~~~~~~
+   mm/memory.c:5843:37: warning: shift count is negative [-Wshift-count-negative]
+           if (unlikely(pages_per_huge_page > MAX_ORDER_NR_PAGES)) {
+                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/mmzone.h:33:31: note: expanded from macro 'MAX_ORDER_NR_PAGES'
+   #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+                                 ^  ~~~~~~~~~
+   include/linux/compiler.h:48:41: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                                             ^
+   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
+                           ______r = __builtin_expect(!!(x), expect);      \
+                                                         ^
+   mm/memory.c:5843:37: warning: shift count is negative [-Wshift-count-negative]
+           if (unlikely(pages_per_huge_page > MAX_ORDER_NR_PAGES)) {
+                                              ^~~~~~~~~~~~~~~~~~
+   include/linux/mmzone.h:33:31: note: expanded from macro 'MAX_ORDER_NR_PAGES'
+   #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+                                 ^  ~~~~~~~~~
+   include/linux/compiler.h:48:68: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                                                                        ^
+   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
+                                                expect, is_constant);      \
+                                                        ^~~~~~~~~~~
+   4 warnings generated.
+--
+>> drivers/iommu/dma-iommu.c:739:16: error: anonymous bit-field has negative width (-1)
+           order_mask &= GENMASK(MAX_ORDER, 0);
+                         ^
+   include/linux/bits.h:37:3: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+            ^
+   include/linux/bits.h:23:3: note: expanded from macro 'GENMASK_INPUT_CHECK'
+           (BUILD_BUG_ON_ZERO(__builtin_choose_expr( \
+            ^
+   include/linux/build_bug.h:16:53: note: expanded from macro 'BUILD_BUG_ON_ZERO'
+   #define BUILD_BUG_ON_ZERO(e) ((int)(sizeof(struct { int:(-!!(e)); })))
+                                                       ^
+>> drivers/iommu/dma-iommu.c:739:16: warning: shift count >= width of type [-Wshift-count-overflow]
+           order_mask &= GENMASK(MAX_ORDER, 0);
+                         ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/bits.h:37:31: note: expanded from macro 'GENMASK'
+           (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+                                        ^~~~~~~~~~~~~~~
+   include/linux/bits.h:35:11: note: expanded from macro '__GENMASK'
+            (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
+                    ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+--
+>> kernel/dma/pool.c:197:39: warning: shift count is negative [-Wshift-count-negative]
+                   pages = min_t(unsigned long, pages, MAX_ORDER_NR_PAGES);
+                                                       ^~~~~~~~~~~~~~~~~~
+   include/linux/mmzone.h:33:31: note: expanded from macro 'MAX_ORDER_NR_PAGES'
+   #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+                                 ^  ~~~~~~~~~
+   include/linux/minmax.h:126:59: note: expanded from macro 'min_t'
+   #define min_t(type, x, y)       __careful_cmp((type)(x), (type)(y), <)
+                                                                   ^
+   include/linux/minmax.h:37:12: note: expanded from macro '__careful_cmp'
+                   __cmp(x, y, op), \
+                            ^
+   include/linux/minmax.h:28:34: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                                    ^
+>> kernel/dma/pool.c:197:39: warning: shift count is negative [-Wshift-count-negative]
+                   pages = min_t(unsigned long, pages, MAX_ORDER_NR_PAGES);
+                                                       ^~~~~~~~~~~~~~~~~~
+   include/linux/mmzone.h:33:31: note: expanded from macro 'MAX_ORDER_NR_PAGES'
+   #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+                                 ^  ~~~~~~~~~
+   include/linux/minmax.h:126:59: note: expanded from macro 'min_t'
+   #define min_t(type, x, y)       __careful_cmp((type)(x), (type)(y), <)
+                                                                   ^
+   include/linux/minmax.h:37:12: note: expanded from macro '__careful_cmp'
+                   __cmp(x, y, op), \
+                            ^
+   include/linux/minmax.h:28:46: note: expanded from macro '__cmp'
+   #define __cmp(x, y, op) ((x) op (y) ? (x) : (y))
+                                                ^
+>> kernel/dma/pool.c:197:39: warning: shift count is negative [-Wshift-count-negative]
+                   pages = min_t(unsigned long, pages, MAX_ORDER_NR_PAGES);
+                                                       ^~~~~~~~~~~~~~~~~~
+   include/linux/mmzone.h:33:31: note: expanded from macro 'MAX_ORDER_NR_PAGES'
+   #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+                                 ^  ~~~~~~~~~
+   include/linux/minmax.h:126:59: note: expanded from macro 'min_t'
+   #define min_t(type, x, y)       __careful_cmp((type)(x), (type)(y), <)
+                                                                   ^
+   include/linux/minmax.h:38:17: note: expanded from macro '__careful_cmp'
+                   __cmp_once(x, y, __UNIQUE_ID(__x), __UNIQUE_ID(__y), op))
+                                 ^
+   include/linux/minmax.h:32:25: note: expanded from macro '__cmp_once'
+                   typeof(y) unique_y = (y);               \
+                                         ^
+   3 warnings generated.
+
+
+vim +739 drivers/iommu/dma-iommu.c
+
+0db2e5d18f76a6 Robin Murphy        2015-10-01  732  
+c4b17afb0a4e8d Ganapatrao Kulkarni 2018-11-30  733  static struct page **__iommu_dma_alloc_pages(struct device *dev,
+c4b17afb0a4e8d Ganapatrao Kulkarni 2018-11-30  734  		unsigned int count, unsigned long order_mask, gfp_t gfp)
+0db2e5d18f76a6 Robin Murphy        2015-10-01  735  {
+0db2e5d18f76a6 Robin Murphy        2015-10-01  736  	struct page **pages;
+c4b17afb0a4e8d Ganapatrao Kulkarni 2018-11-30  737  	unsigned int i = 0, nid = dev_to_node(dev);
+3b6b7e19e31a81 Robin Murphy        2016-04-13  738  
+98d56389a5e38b Kirill A. Shutemov  2023-03-15 @739  	order_mask &= GENMASK(MAX_ORDER, 0);
+3b6b7e19e31a81 Robin Murphy        2016-04-13  740  	if (!order_mask)
+3b6b7e19e31a81 Robin Murphy        2016-04-13  741  		return NULL;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  742  
+ab6f4b001c8c72 Gustavo A. R. Silva 2021-09-28  743  	pages = kvcalloc(count, sizeof(*pages), GFP_KERNEL);
+0db2e5d18f76a6 Robin Murphy        2015-10-01  744  	if (!pages)
+0db2e5d18f76a6 Robin Murphy        2015-10-01  745  		return NULL;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  746  
+0db2e5d18f76a6 Robin Murphy        2015-10-01  747  	/* IOMMU can map any pages, so himem can also be used here */
+0db2e5d18f76a6 Robin Murphy        2015-10-01  748  	gfp |= __GFP_NOWARN | __GFP_HIGHMEM;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  749  
+0db2e5d18f76a6 Robin Murphy        2015-10-01  750  	while (count) {
+0db2e5d18f76a6 Robin Murphy        2015-10-01  751  		struct page *page = NULL;
+3b6b7e19e31a81 Robin Murphy        2016-04-13  752  		unsigned int order_size;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  753  
+0db2e5d18f76a6 Robin Murphy        2015-10-01  754  		/*
+0db2e5d18f76a6 Robin Murphy        2015-10-01  755  		 * Higher-order allocations are a convenience rather
+0db2e5d18f76a6 Robin Murphy        2015-10-01  756  		 * than a necessity, hence using __GFP_NORETRY until
+3b6b7e19e31a81 Robin Murphy        2016-04-13  757  		 * falling back to minimum-order allocations.
+0db2e5d18f76a6 Robin Murphy        2015-10-01  758  		 */
+a706e6e10225fb Kirill A. Shutemov  2023-03-15  759  		for (order_mask &= GENMASK(__fls(count), 0);
+3b6b7e19e31a81 Robin Murphy        2016-04-13  760  		     order_mask; order_mask &= ~order_size) {
+3b6b7e19e31a81 Robin Murphy        2016-04-13  761  			unsigned int order = __fls(order_mask);
+c4b17afb0a4e8d Ganapatrao Kulkarni 2018-11-30  762  			gfp_t alloc_flags = gfp;
+3b6b7e19e31a81 Robin Murphy        2016-04-13  763  
+3b6b7e19e31a81 Robin Murphy        2016-04-13  764  			order_size = 1U << order;
+c4b17afb0a4e8d Ganapatrao Kulkarni 2018-11-30  765  			if (order_mask > order_size)
+c4b17afb0a4e8d Ganapatrao Kulkarni 2018-11-30  766  				alloc_flags |= __GFP_NORETRY;
+c4b17afb0a4e8d Ganapatrao Kulkarni 2018-11-30  767  			page = alloc_pages_node(nid, alloc_flags, order);
+0db2e5d18f76a6 Robin Murphy        2015-10-01  768  			if (!page)
+0db2e5d18f76a6 Robin Murphy        2015-10-01  769  				continue;
+4604393ca0c6e4 Robin Murphy        2020-09-03  770  			if (order)
+0db2e5d18f76a6 Robin Murphy        2015-10-01  771  				split_page(page, order);
+0db2e5d18f76a6 Robin Murphy        2015-10-01  772  			break;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  773  		}
+0db2e5d18f76a6 Robin Murphy        2015-10-01  774  		if (!page) {
+0db2e5d18f76a6 Robin Murphy        2015-10-01  775  			__iommu_dma_free_pages(pages, i);
+0db2e5d18f76a6 Robin Murphy        2015-10-01  776  			return NULL;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  777  		}
+3b6b7e19e31a81 Robin Murphy        2016-04-13  778  		count -= order_size;
+3b6b7e19e31a81 Robin Murphy        2016-04-13  779  		while (order_size--)
+0db2e5d18f76a6 Robin Murphy        2015-10-01  780  			pages[i++] = page++;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  781  	}
+0db2e5d18f76a6 Robin Murphy        2015-10-01  782  	return pages;
+0db2e5d18f76a6 Robin Murphy        2015-10-01  783  }
+0db2e5d18f76a6 Robin Murphy        2015-10-01  784  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
