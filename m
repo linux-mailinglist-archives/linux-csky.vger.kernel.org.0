@@ -2,102 +2,116 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D586D2DC9
-	for <lists+linux-csky@lfdr.de>; Sat,  1 Apr 2023 04:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC5A6D35D8
+	for <lists+linux-csky@lfdr.de>; Sun,  2 Apr 2023 08:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbjDACvx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 31 Mar 2023 22:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
+        id S229379AbjDBGwO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 2 Apr 2023 02:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbjDACvw (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 31 Mar 2023 22:51:52 -0400
+        with ESMTP id S229567AbjDBGwN (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 2 Apr 2023 02:52:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4924511E82;
-        Fri, 31 Mar 2023 19:51:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA601BD8;
+        Sat,  1 Apr 2023 23:52:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F08B9B832B2;
-        Sat,  1 Apr 2023 02:51:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D99CC433EF;
-        Sat,  1 Apr 2023 02:51:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BE9DB80D9D;
+        Sun,  2 Apr 2023 06:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172F1C433EF;
+        Sun,  2 Apr 2023 06:51:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680317507;
-        bh=ZJGSXjvvnz5W52E3CrV9StYn5zk+nNKPLbd9LzSV5kQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OEdgHiHGSYrvK78dI33PrrjoiBdkSdqy9d8v76n1X+jJzRRXZaRGih2g7otw1SBqm
-         qYcTIstp5C405BsXkXGZzcE6hbSnWAFlezWP+wke+3BZrBqnhhb5JY8WN2dIAQEtUf
-         9z0KdXBFHeYoY+l9jPqYis/e0VisTd1GIyvApmbgc61ZLpOicYmM+BpJaiA6kLP0I5
-         OQFgqnYqaxF+h0KITCM9COzAwbFeyZx1kmQo3KO3fn4JieSmROECRgb8Wac0cwAO6r
-         ZzzoCyFFd1mNQ5wAeTNNqKARdAf6mOuTWNduOlHUT767K9TjztMnljZgANYh/8B+md
-         0tidlbTEz414Q==
-Received: by mail-ed1-f42.google.com with SMTP id ew6so96933815edb.7;
-        Fri, 31 Mar 2023 19:51:46 -0700 (PDT)
-X-Gm-Message-State: AAQBX9c99BQYvtZwA0KlgW4+vTI3fM7aA7sZjzwiJX84buUCfakkaBtC
-        wlcfPAzL6mbIiy6xq+mTRkDlQCdMb6ZSjLlmDEw=
-X-Google-Smtp-Source: AKy350ZJfD8TE3sQxeFgTGPTpSByp8FZdipz5S9Q4l/zmHf3Kg16Xy5RgG1cDJLdtWRBifM9WIi4bkR9hcJkOA3FfNk=
-X-Received: by 2002:a50:8d57:0:b0:502:4a93:9c51 with SMTP id
- t23-20020a508d57000000b005024a939c51mr8890460edt.5.1680317504640; Fri, 31 Mar
- 2023 19:51:44 -0700 (PDT)
+        s=k20201202; t=1680418330;
+        bh=a/EFMMyTJLmdvL39oZFGsprYDxcAb3c4B++/AP48aI8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=pqQ8UGR2W/sRFjxT8DARJF1gEKMVmWBdp+qDC9PGt0i4TRAg0xAwoG7YQQxAtDcdi
+         4Pb253Uxof3u9uF71S5Xrs095QXIy4AdVj3153ZRySY7w6oib4sTzQ8CqAmyQSRayG
+         2EAT/e6m3unLAUSKk8zn/YhBr3R6k1eBeKiApm9beA6GV7oD5h7f9NbOa+/z/XcUUq
+         Wo1iHf9vVkeyRvdktceSDmuJx7kOOEGZtUZ6DOOxmfVTUgf0Rrb6I9FB+HQBZqNZ1B
+         jIzLWCQM2V8D9tYxUPIRptyXw28M0O5YuIe+Fd2OoUguwXFRn6X5yntmmRZtkvx66T
+         3696IoVFPDlHA==
+Message-ID: <2b298e8c-e6fc-a973-9f42-b6a88e92838a@kernel.org>
+Date:   Sun, 2 Apr 2023 12:22:20 +0530
 MIME-Version: 1.0
-References: <20230330110710.20784-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20230330110710.20784-1-lukas.bulwahn@gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 31 Mar 2023 22:51:33 -0400
-X-Gmail-Original-Message-ID: <CAJF2gTSYJAK5X1=4HfjhL25P2cp-_jOMtW4h3=1GWJVDvZeh8w@mail.gmail.com>
-Message-ID: <CAJF2gTSYJAK5X1=4HfjhL25P2cp-_jOMtW4h3=1GWJVDvZeh8w@mail.gmail.com>
-Subject: Re: [PATCH] csky: remove obsolete config CPU_TLB_SIZE
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     linux-csky@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 13/21] arc: dma-mapping: skip invalidating before
+ bidirectional DMA
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org,
+        Shahab Vahedi <Shahab.Vahedi@synopsys.com>
+References: <20230327121317.4081816-1-arnd@kernel.org>
+ <20230327121317.4081816-14-arnd@kernel.org>
+From:   Vineet Gupta <vgupta@kernel.org>
+In-Reply-To: <20230327121317.4081816-14-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Thx, got it.
+CC Shahab
 
-On Thu, Mar 30, 2023 at 7:07=E2=80=AFAM Lukas Bulwahn <lukas.bulwahn@gmail.=
-com> wrote:
+On 3/27/23 17:43, Arnd Bergmann wrote:
+> From: Arnd Bergmann<arnd@arndb.de>
 >
-> Commit 9d35dc3006a9 ("csky: Revert mmu ASID mechanism") removes the only
-> use of CONFIG_CPU_TLB_SIZE. Since then, this config has no effect and can
-> be deleted.
+> Some architectures that need to invalidate buffers after bidirectional
+> DMA because of speculative prefetching only do a simpler writeback
+> before that DMA, while architectures that don't need to do the second
+> invalidate tend to have a combined writeback+invalidate before the
+> DMA.
 >
-> Remove the obsolete config CPU_TLB_SIZE.
+> arc is one of the architectures that does both, which seems unnecessary.
 >
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->  arch/csky/Kconfig | 5 -----
->  1 file changed, 5 deletions(-)
+> Change it to behave like arm/arm64/xtensa instead, and use just a
+> writeback before the DMA when we do the invalidate afterwards.
 >
-> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> index dba02da6fa34..1fb5f066a885 100644
-> --- a/arch/csky/Kconfig
-> +++ b/arch/csky/Kconfig
-> @@ -166,11 +166,6 @@ config STACKTRACE_SUPPORT
->  config TIME_LOW_RES
->         def_bool y
->
-> -config CPU_TLB_SIZE
-> -       int
-> -       default "128"   if (CPU_CK610 || CPU_CK807 || CPU_CK810)
-> -       default "1024"  if (CPU_CK860)
-> -
->  config CPU_ASID_BITS
->         int
->         default "8"     if (CPU_CK610 || CPU_CK807 || CPU_CK810)
-> --
-> 2.17.1
->
+> Signed-off-by: Arnd Bergmann<arnd@arndb.de>
 
+Reviewed-by: Vineet Gupta <vgupta@kernel.org>
 
---=20
-Best Regards
- Guo Ren
+Shahab can you give this a spin on hsdk - run glibc testsuite over ssh 
+and make sure nothing strange happens.
+
+Thx,
+-Vineet
