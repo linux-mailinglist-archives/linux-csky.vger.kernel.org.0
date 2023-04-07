@@ -2,59 +2,47 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F576D9628
-	for <lists+linux-csky@lfdr.de>; Thu,  6 Apr 2023 13:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA816DAA78
+	for <lists+linux-csky@lfdr.de>; Fri,  7 Apr 2023 10:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235777AbjDFLpg (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 6 Apr 2023 07:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S238501AbjDGIyp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 7 Apr 2023 04:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238921AbjDFLpG (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 6 Apr 2023 07:45:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887F11114D;
-        Thu,  6 Apr 2023 04:41:04 -0700 (PDT)
+        with ESMTP id S232421AbjDGIyo (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 7 Apr 2023 04:54:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59F59B;
+        Fri,  7 Apr 2023 01:54:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13DE164663;
-        Thu,  6 Apr 2023 11:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2634C433D2;
-        Thu,  6 Apr 2023 11:34:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A30061055;
+        Fri,  7 Apr 2023 08:54:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA56C433EF;
+        Fri,  7 Apr 2023 08:54:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680780871;
-        bh=V5BQsr3kjpmrNU85YSATEXJCjRsQghWvapoHfDmbADI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CL2DFiJbpiVUHZyaRsFIKr64609SX2qUMaRuLbfgBNegShercRs9iCTf+yaN78Anc
-         lXdjRVE1CpRpS3YNsW4ERROQe09TUQOhaeYRsKUJdcfSzwr0cMwzTJHgSvK9Zw8RH3
-         2j/Y/C4mCwZTjlq1rPM223zHnR89CcQUDkrZNCXvtzx/HaPVPUEEED0AMp92N5sWss
-         siF6c3QojJ6ujju+qR3B6IwkZWSVxS/DwTwFUM0FS6Jdyd4X+eDwOvEetUPVHs9Iom
-         WI5z0qLtXQjKQJYmDAOFLAD8Q8sX8xhYy06cTsXK7UVbsNXISNk8Zy6sc1dqX4mvnZ
-         f5+Si1Uunj7bA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@kernel.org, nathan@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14 2/7] selftests: sigaltstack: fix -Wuninitialized
-Date:   Thu,  6 Apr 2023 07:34:16 -0400
-Message-Id: <20230406113421.649149-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113421.649149-1-sashal@kernel.org>
-References: <20230406113421.649149-1-sashal@kernel.org>
+        s=k20201202; t=1680857682;
+        bh=EvA6NlZ91K5IE11Qbj4sH4qqEtPca3tMfVWSQYjOy2A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KYcRe90vJBmgZDk8WX2B03GdBkIJFC5DBlP9VgWOsTNpmM3Q9OSey6MhDvrJH1DiC
+         Q77Y0KB5RvKe16Rctbo8naMajPOW+XnM9WvnkGRcMfD4HWNM04T9ar3zgyd1CfZiGS
+         DUCaZ5Gk2FYEv01y7XEPSLfAKVj0JtJY0a1TUs7HRty/K/pQTR8PudGG6EMyc38Oe3
+         h1ARV9YMIazMG1eJ2flkOQAo8o433T1zq4VvrBkDjQqCgvH3Ffq8pf55johrWeSyXX
+         ogvCbklSdbgjMBV0GNiojB2qyMvW7LRrzH0MspCZPg8LjkXfAXD1lWs+VJb6gakpr3
+         0uNIbfq0Az9aw==
+From:   guoren@kernel.org
+To:     guoren@kernel.org
+Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: mmu: Prevent spurious page faults
+Date:   Fri,  7 Apr 2023 04:54:34 -0400
+Message-Id: <20230407085434.348938-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,93 +50,66 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-[ Upstream commit 05107edc910135d27fe557267dc45be9630bf3dd ]
+C-SKY MMU would pre-fetch invalid pte entries, and it could work with
+flush_tlb_fix_spurious_fault, but the additional page fault exceptions
+would reduce performance. So flushing the entry of the TLB would prevent
+the following spurious page faults. Here is the test code:
 
-Building sigaltstack with clang via:
-$ ARCH=x86 make LLVM=1 -C tools/testing/selftests/sigaltstack/
+define DATA_LEN  4096
+define COPY_NUM  (504*100)
 
-produces the following warning:
-  warning: variable 'sp' is uninitialized when used here [-Wuninitialized]
-  if (sp < (unsigned long)sstack ||
-      ^~
+unsigned char src[DATA_LEN*COPY_NUM] = {0};
+unsigned char dst[DATA_LEN*COPY_NUM] = {0};
 
-Clang expects these to be declared at global scope; we've fixed this in
-the kernel proper by using the macro `current_stack_pointer`. This is
-defined in different headers for different target architectures, so just
-create a new header that defines the arch-specific register names for
-the stack pointer register, and define it for more targets (at least the
-ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER).
+unsigned char func_src[DATA_LEN*COPY_NUM] = {0};
+unsigned char func_dst[DATA_LEN*COPY_NUM] = {0};
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com/
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+void main(void)
+{
+	int j;
+	for (j = 0; j < COPY_NUM; j++)
+		memcpy(&dst[j*DATA_LEN], &src[j*DATA_LEN], 4);
+}
+
+perf stat -e page-faults ./main.elf
+
+The amount of page fault traps would be reduced in half with the patch.
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- .../sigaltstack/current_stack_pointer.h       | 23 +++++++++++++++++++
- tools/testing/selftests/sigaltstack/sas.c     |  7 +-----
- 2 files changed, 24 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/sigaltstack/current_stack_pointer.h
+ arch/csky/abiv1/cacheflush.c | 2 ++
+ arch/csky/abiv2/cacheflush.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/sigaltstack/current_stack_pointer.h b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-new file mode 100644
-index 0000000000000..ea9bdf3a90b16
---- /dev/null
-+++ b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
+index fb91b069dc69..6f38cc7944e1 100644
+--- a/arch/csky/abiv1/cacheflush.c
++++ b/arch/csky/abiv1/cacheflush.c
+@@ -40,6 +40,8 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
+ 	unsigned long pfn = pte_pfn(*ptep);
+ 	struct page *page;
+ 
++	flush_tlb_page(vma, addr);
 +
-+#if __alpha__
-+register unsigned long sp asm("$30");
-+#elif __arm__ || __aarch64__ || __csky__ || __m68k__ || __mips__ || __riscv
-+register unsigned long sp asm("sp");
-+#elif __i386__
-+register unsigned long sp asm("esp");
-+#elif __loongarch64
-+register unsigned long sp asm("$sp");
-+#elif __ppc__
-+register unsigned long sp asm("r1");
-+#elif __s390x__
-+register unsigned long sp asm("%15");
-+#elif __sh__
-+register unsigned long sp asm("r15");
-+#elif __x86_64__
-+register unsigned long sp asm("rsp");
-+#elif __XTENSA__
-+register unsigned long sp asm("a1");
-+#else
-+#error "implement current_stack_pointer equivalent"
-+#endif
-diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
-index 228c2ae47687d..6069d97bf5063 100644
---- a/tools/testing/selftests/sigaltstack/sas.c
-+++ b/tools/testing/selftests/sigaltstack/sas.c
-@@ -19,6 +19,7 @@
- #include <errno.h>
+ 	if (!pfn_valid(pfn))
+ 		return;
  
- #include "../kselftest.h"
-+#include "current_stack_pointer.h"
+diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
+index 39c51399dd81..ff39c897c820 100644
+--- a/arch/csky/abiv2/cacheflush.c
++++ b/arch/csky/abiv2/cacheflush.c
+@@ -12,6 +12,8 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+ 	unsigned long addr;
+ 	struct page *page;
  
- #ifndef SS_AUTODISARM
- #define SS_AUTODISARM  (1U << 31)
-@@ -40,12 +41,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
- 	stack_t stk;
- 	struct stk_data *p;
++	flush_tlb_page(vma, address);
++
+ 	if (!pfn_valid(pte_pfn(*pte)))
+ 		return;
  
--#if __s390x__
--	register unsigned long sp asm("%15");
--#else
--	register unsigned long sp asm("sp");
--#endif
--
- 	if (sp < (unsigned long)sstack ||
- 			sp >= (unsigned long)sstack + SIGSTKSZ) {
- 		ksft_exit_fail_msg("SP is not on sigaltstack\n");
 -- 
-2.39.2
+2.36.1
 
