@@ -2,42 +2,62 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1B56E2D80
-	for <lists+linux-csky@lfdr.de>; Sat, 15 Apr 2023 01:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02E06E3175
+	for <lists+linux-csky@lfdr.de>; Sat, 15 Apr 2023 14:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjDNXrX (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 14 Apr 2023 19:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S229790AbjDOM6p (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 15 Apr 2023 08:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjDNXq4 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 14 Apr 2023 19:46:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2932EBB96;
-        Fri, 14 Apr 2023 16:45:53 -0700 (PDT)
-Message-ID: <20230414232311.505152290@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681515914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=nUZSh5064m2aKoxr+KQn5JPMu6mMKtsaGAC9NSZVNms=;
-        b=tXdZ+JNXwmoFAj/D4wiLzLK3B9Tdjf372IqdJt5Tv46gv42xMEL/Nl0g5kdyiZHT7x9AOz
-        mlFylzsIhnrXORGzmbDeoOd0v4PWWxn8r5JfaFvKB5y4Myd0UBCMyCyRl33Zi088uSB2Ir
-        SvONUInWoGIX09mANT0wqHnMa8plhV/+A02oVVT5ueBVnLW3psXBgZVX1wGuoSRuwDa/iV
-        WCxZeGiReQ8KfEt87/havCjKqbuogL4jZdqFqdulIebLR5I3xNrYIQ3tyIgS/ypjvwLm3u
-        ZY0rsKukGMk7diouGwNhACQ22cLpXT7hOtDVbk+HLvlFHbrtTgmHuHYua/2ZDA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681515914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=nUZSh5064m2aKoxr+KQn5JPMu6mMKtsaGAC9NSZVNms=;
-        b=pkIQhDhWjPpGLy6aH5XoCk5G1NoyA94urqDixfl4xi4JgoGh52mUmdlWbRdLMez3lvqnCR
-        cNwc4JXhAqWj08Aw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
+        with ESMTP id S229678AbjDOM6o (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 15 Apr 2023 08:58:44 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0C74685;
+        Sat, 15 Apr 2023 05:58:42 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54fa9da5e5bso178347167b3.1;
+        Sat, 15 Apr 2023 05:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681563521; x=1684155521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ccV6fJmLsZscVpXweMcEv4sovH+IDrkvejv50k6gs/U=;
+        b=BSOaYfaXyd5Wb+epLfvjrJB5ddMbSfuRSPgkDv/0OOsO8ij2hFGojnuviqXm0GCrkP
+         ID2hBr77xwAaGcKnrXJiZAUdBojhzD8cglmd8qXgd51iUqdS7A9NAWUQz0MUF5ZcciE8
+         AWz1SY3aKamn3My6fXKs/8E5eqVabut4SfZKc0c5sbIlrZyG34ztRaxzO3zCWgWJeeks
+         vL5yfHXHE0t7DNIuTqx162KoYvLaNpuXLEhcNNNv20NmCKzlwGF6mcKsLN10ua6WOBit
+         5o9zCg+9j1R+WkmMZNRoFuK0k+WfhwAjMsbRMXWBbGHiHnx9KcILf1NV5DEtKeNZyNxV
+         c60w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681563521; x=1684155521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ccV6fJmLsZscVpXweMcEv4sovH+IDrkvejv50k6gs/U=;
+        b=RK2xoZUrJD1zo3s1mnsAVQBq71ezNtnDkNq61RlCwomL6JkFW/Lw2BKYo7X+/2yiBX
+         FuXwwgqOEeSVGl0/Q/W0+If2qJ52a+qMBOT9zJ4cuPX2bAk2hhI0CYb5lAYBa1cWc2gr
+         A3C6eiPILaQ9Tu2ZqZF8D83r0/UC466yHf+AT2slGLFJbLqWvC8i1C5SV77+tSVmXXdX
+         WiOtBwMiEVExaG8LJSYbFFUUs8d7E1lXDHU8zct2ga+YKxfVM7xXwvhLtcR2zlm58D+H
+         Kx+vdN7ZCyYYPcTbYVfWYW0rQ53Smhxra0nifThEc3wN8WMKk3rlBetttEBBZ6oc9qGx
+         oF7g==
+X-Gm-Message-State: AAQBX9cxCc/GYZvHwwyYYGAhfnQA74671W/tUbBRnbpxLJh5bU49CEyq
+        DHSRUFghuoyHbpQ8JIrPYO7igv4WTPuopSAlrQ==
+X-Google-Smtp-Source: AKy350bkbiaOTV48G/m6wg5f7oTu79ZcJL2xRJuRL2it4F9Xsb2JgTwgmruSWgxfXHK3zLR53InjScARyCku/VQAIuk=
+X-Received: by 2002:a81:b245:0:b0:54f:b721:5325 with SMTP id
+ q66-20020a81b245000000b0054fb7215325mr5587058ywh.1.1681563521186; Sat, 15 Apr
+ 2023 05:58:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230414225551.858160935@linutronix.de> <20230414232310.382005483@linutronix.de>
+In-Reply-To: <20230414232310.382005483@linutronix.de>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Sat, 15 Apr 2023 08:58:30 -0400
+Message-ID: <CAMzpN2j4NbGGR=jfxpVVQwYCZ=hHOUKm3oBpw1WKGiTUJ73EXA@mail.gmail.com>
+Subject: Re: [patch 19/37] x86/smpboot: Switch to hotplug core state synchronization
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        "Arjan van de Veen" <arjan@linux.intel.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Paul McKenney <paulmck@kernel.org>,
         Tom Lendacky <thomas.lendacky@amd.com>,
@@ -46,12 +66,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
         Paul Menzel <pmenzel@molgen.mpg.de>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
         Juergen Gross <jgross@suse.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         xen-devel@lists.xenproject.org,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
         Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         linux-arm-kernel@lists.infradead.org,
@@ -60,168 +79,183 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw@infradead.org>,
         linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
         Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [patch 37/37] x86/smpboot: Allow parallel bringup for SEV-ES
-References: <20230414225551.858160935@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 15 Apr 2023 01:45:13 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Fri, Apr 14, 2023 at 7:44=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
+>
+> The new AP state tracking and synchronization mechanism in the CPU hotplu=
+g
+> core code allows to remove quite some x86 specific code:
+>
+>   1) The AP alive synchronization based on cpumasks
+>
+>   2) The decision whether an AP can be brought up again
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Juergen Gross <jgross@suse.com>
+> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+> Cc: xen-devel@lists.xenproject.org
+> ---
+>  arch/x86/Kconfig           |    1
+>  arch/x86/include/asm/smp.h |    7 +
+>  arch/x86/kernel/smp.c      |    1
+>  arch/x86/kernel/smpboot.c  |  159 ++++++++++----------------------------=
+-------
+>  arch/x86/xen/smp_hvm.c     |   16 +---
+>  arch/x86/xen/smp_pv.c      |   39 ++++++-----
+>  6 files changed, 72 insertions(+), 151 deletions(-)
+>
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -272,6 +272,7 @@ config X86
+>         select HAVE_UNSTABLE_SCHED_CLOCK
+>         select HAVE_USER_RETURN_NOTIFIER
+>         select HAVE_GENERIC_VDSO
+> +       select HOTPLUG_CORE_SYNC_FULL           if SMP
+>         select HOTPLUG_SMT                      if SMP
+>         select IRQ_FORCED_THREADING
+>         select NEED_PER_CPU_EMBED_FIRST_CHUNK
+> --- a/arch/x86/include/asm/smp.h
+> +++ b/arch/x86/include/asm/smp.h
+> @@ -38,6 +38,8 @@ struct smp_ops {
+>         void (*crash_stop_other_cpus)(void);
+>         void (*smp_send_reschedule)(int cpu);
+>
+> +       void (*cleanup_dead_cpu)(unsigned cpu);
+> +       void (*poll_sync_state)(void);
+>         int (*cpu_up)(unsigned cpu, struct task_struct *tidle);
+>         int (*cpu_disable)(void);
+>         void (*cpu_die)(unsigned int cpu);
+> @@ -90,7 +92,8 @@ static inline int __cpu_disable(void)
+>
+>  static inline void __cpu_die(unsigned int cpu)
+>  {
+> -       smp_ops.cpu_die(cpu);
+> +       if (smp_ops.cpu_die)
+> +               smp_ops.cpu_die(cpu);
+>  }
+>
+>  static inline void play_dead(void)
+> @@ -122,8 +125,6 @@ void native_smp_cpus_done(unsigned int m
+>  int common_cpu_up(unsigned int cpunum, struct task_struct *tidle);
+>  int native_cpu_up(unsigned int cpunum, struct task_struct *tidle);
+>  int native_cpu_disable(void);
+> -int common_cpu_die(unsigned int cpu);
+> -void native_cpu_die(unsigned int cpu);
+>  void hlt_play_dead(void);
+>  void native_play_dead(void);
+>  void play_dead_common(void);
+> --- a/arch/x86/kernel/smp.c
+> +++ b/arch/x86/kernel/smp.c
+> @@ -269,7 +269,6 @@ struct smp_ops smp_ops =3D {
+>         .smp_send_reschedule    =3D native_smp_send_reschedule,
+>
+>         .cpu_up                 =3D native_cpu_up,
+> -       .cpu_die                =3D native_cpu_die,
+>         .cpu_disable            =3D native_cpu_disable,
+>         .play_dead              =3D native_play_dead,
+>
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -57,6 +57,7 @@
+>  #include <linux/pgtable.h>
+>  #include <linux/overflow.h>
+>  #include <linux/stackprotector.h>
+> +#include <linux/cpuhotplug.h>
+>
+>  #include <asm/acpi.h>
+>  #include <asm/cacheinfo.h>
+> @@ -101,9 +102,6 @@ EXPORT_PER_CPU_SYMBOL(cpu_die_map);
+>  DEFINE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
+>  EXPORT_PER_CPU_SYMBOL(cpu_info);
+>
+> -/* All of these masks are initialized in setup_cpu_local_masks() */
+> -static cpumask_var_t cpu_initialized_mask;
+> -static cpumask_var_t cpu_callout_mask;
+>  /* Representing CPUs for which sibling maps can be computed */
+>  static cpumask_var_t cpu_sibling_setup_mask;
+>
+> @@ -169,8 +167,8 @@ static void smp_callin(void)
+>         int cpuid =3D smp_processor_id();
+>
+>         /*
+> -        * If waken up by an INIT in an 82489DX configuration
+> -        * cpu_callout_mask guarantees we don't get here before an
+> +        * If waken up by an INIT in an 82489DX configuration the alive
+> +        * synchronization guarantees we don't get here before an
+>          * INIT_deassert IPI reaches our local APIC, so it is now safe to
+>          * touch our local APIC.
+>          *
+> @@ -216,17 +214,6 @@ static void ap_calibrate_delay(void)
+>         cpu_data(smp_processor_id()).loops_per_jiffy =3D loops_per_jiffy;
+>  }
+>
+> -static void wait_for_master_cpu(int cpu)
+> -{
+> -       /*
+> -        * Wait for release by control CPU before continuing with AP
+> -        * initialization.
+> -        */
+> -       WARN_ON(cpumask_test_and_set_cpu(cpu, cpu_initialized_mask));
+> -       while (!cpumask_test_cpu(cpu, cpu_callout_mask))
+> -               cpu_relax();
+> -}
+> -
+>  /*
+>   * Activate a secondary processor.
+>   */
+> @@ -247,11 +234,10 @@ static void notrace start_secondary(void
+>         cpu_init_exception_handling();
+>
+>         /*
+> -        * Sync point with wait_cpu_initialized(). Sets AP in
+> -        * cpu_initialized_mask and then waits for the control CPU
+> -        * to release it.
+> +        * Sync point with the hotplug core. Sets the sync state to ALIVE
+> +        * and waits for the control CPU to release it.
+>          */
+> -       wait_for_master_cpu(raw_smp_processor_id());
+> +       cpuhp_ap_sync_alive();
+>
+>         cpu_init();
+>         rcu_cpu_starting(raw_smp_processor_id());
+> @@ -285,7 +271,6 @@ static void notrace start_secondary(void
+>         set_cpu_online(smp_processor_id(), true);
+>         lapic_online();
+>         unlock_vector_lock();
+> -       cpu_set_state_online(smp_processor_id());
+>         x86_platform.nmi_init();
+>
+>         /* enable local interrupts */
+> @@ -736,9 +721,10 @@ static void impress_friends(void)
+>          * Allow the user to impress friends.
+>          */
+>         pr_debug("Before bogomips\n");
+> -       for_each_possible_cpu(cpu)
+> -               if (cpumask_test_cpu(cpu, cpu_callout_mask))
+> +       for_each_possible_cpu(cpu) {
+> +               if (cpumask_test_cpu(cpu, cpu_online_mask))
+>                         bogosum +=3D cpu_data(cpu).loops_per_jiffy;
 
-Enable parallel bringup for SEV-ES guests. The APs can't actually execute
-the CPUID instruction directly during early startup, but they can make the
-GHCB call directly instead, just as the #VC trap handler would do.
+This should be the same as for_each_online_cpu().
 
-Thanks to Sabin for talking me through the way this works.
-
-Suggested-by: Sabin Rapan <sabrapan@amazon.com>
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-
----
- arch/x86/include/asm/sev-common.h |    3 +++
- arch/x86/include/asm/smp.h        |    1 +
- arch/x86/kernel/head_64.S         |   30 ++++++++++++++++++++++++++++++
- arch/x86/kernel/smpboot.c         |   14 ++++++++++++--
- 4 files changed, 46 insertions(+), 2 deletions(-)
-
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -70,6 +70,7 @@
- 	/* GHCBData[63:12] */				\
- 	(((u64)(v) & GENMASK_ULL(63, 12)) >> 12)
- 
-+#ifndef __ASSEMBLY__
- /*
-  * SNP Page State Change Operation
-  *
-@@ -161,6 +162,8 @@ struct snp_psc_desc {
- 
- #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
- 
-+#endif /* __ASSEMBLY__ */
-+
- /*
-  * Error codes related to GHCB input that can be communicated back to the guest
-  * by setting the lower 32-bits of the GHCB SW_EXITINFO1 field to 2.
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -202,6 +202,7 @@ extern unsigned int smpboot_control;
- #define STARTUP_APICID_CPUID_1F 0x80000000
- #define STARTUP_APICID_CPUID_0B 0x40000000
- #define STARTUP_APICID_CPUID_01 0x20000000
-+#define STARTUP_APICID_SEV_ES	0x10000000
- 
- /* Top 8 bits are reserved for control */
- #define STARTUP_PARALLEL_MASK	0xFF000000
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -26,6 +26,7 @@
- #include <asm/nospec-branch.h>
- #include <asm/fixmap.h>
- #include <asm/smp.h>
-+#include <asm/sev-common.h>
- 
- /*
-  * We are not able to switch in one step to the final KERNEL ADDRESS SPACE
-@@ -243,9 +244,14 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 	 * Bit 31	STARTUP_APICID_CPUID_1F flag (use CPUID 0x1f)
- 	 * Bit 30	STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
- 	 * Bit 29	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
-+	 * Bit 28	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
- 	 * Bit 0-23	CPU# if STARTUP_APICID_CPUID_xx flags are not set
- 	 */
- 	movl	smpboot_control(%rip), %ecx
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+	testl	$STARTUP_APICID_SEV_ES, %ecx
-+	jnz	.Luse_sev_cpuid_0b
-+#endif
- 	testl	$STARTUP_APICID_CPUID_1F, %ecx
- 	jnz	.Luse_cpuid_1f
- 	testl	$STARTUP_APICID_CPUID_0B, %ecx
-@@ -262,6 +268,30 @@ SYM_INNER_LABEL(secondary_startup_64_no_
- 	shr	$24, %edx
- 	jmp	.Lsetup_AP
- 
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+.Luse_sev_cpuid_0b:
-+	/* Set the GHCB MSR to request CPUID 0x0B_EDX */
-+	movl	$MSR_AMD64_SEV_ES_GHCB, %ecx
-+	movl	$(GHCB_CPUID_REQ_EDX << 30) | GHCB_MSR_CPUID_REQ, %eax
-+	movl	$0x0b, %edx
-+	wrmsr
-+
-+	/* Perform GHCB MSR protocol */
-+	rep; vmmcall		/* vmgexit */
-+
-+	/*
-+	 * Get the result. After the RDMSR:
-+	 *   EAX should be 0xc0000005
-+	 *   EDX should have the CPUID register value and since EDX
-+	 *   is the target register, no need to move the result.
-+	 */
-+	rdmsr
-+	andl	$GHCB_MSR_INFO_MASK, %eax
-+	cmpl	$GHCB_MSR_CPUID_RESP, %eax
-+	jne	1f
-+	jmp	.Lsetup_AP
-+#endif
-+
- .Luse_cpuid_0b:
- 	mov	$0x0B, %eax
- 	xorl	%ecx, %ecx
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -86,6 +86,7 @@
- #include <asm/hw_irq.h>
- #include <asm/stackprotector.h>
- #include <asm/sev.h>
-+#include <asm/coco.h>
- 
- /* representing HT siblings of each logical CPU */
- DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
-@@ -1266,8 +1267,16 @@ bool __init arch_cpuhp_init_parallel_bri
- 
- 	/* Encrypted guests require special CPUID handling. */
- 	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
--		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
--		return false;
-+		switch (cc_get_vendor()) {
-+		case CC_VENDOR_AMD:
-+			ctrl = STARTUP_APICID_SEV_ES;
-+			if (topology_extended_leaf == 0x0b)
-+				goto setup;
-+			fallthrough;
-+		default:
-+			pr_info("Parallel CPU startup disabled due to guest state encryption\n");
-+			return false;
-+		}
- 	}
- 
- 	switch (topology_extended_leaf) {
-@@ -1290,6 +1299,7 @@ bool __init arch_cpuhp_init_parallel_bri
- 		return false;
- 	}
- 
-+setup:
- 	pr_debug("Parallel CPU startup enabled: 0x%08x\n", ctrl);
- 	smpboot_control = ctrl;
- 	return true;
-
+--
+Brian Gerst
