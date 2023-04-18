@@ -2,131 +2,135 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AAF6E5C52
-	for <lists+linux-csky@lfdr.de>; Tue, 18 Apr 2023 10:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955696E687F
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Apr 2023 17:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjDRIlH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 18 Apr 2023 04:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S231712AbjDRPp7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 18 Apr 2023 11:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230359AbjDRIlE (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 18 Apr 2023 04:41:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF0B1FCA;
-        Tue, 18 Apr 2023 01:41:01 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681807259;
+        with ESMTP id S231144AbjDRPp6 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 18 Apr 2023 11:45:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472BCB454
+        for <linux-csky@vger.kernel.org>; Tue, 18 Apr 2023 08:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681832709;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
-        b=YSKoMebO1SMgoiijw3sT6dUmL/DeC/wEBV7I8b1z9zceTKQGSQcXYB/YeSo0ccQDTS56AJ
-        nhdRaDZ0NwXgH8hEOLQ/dTVz+deZ2fOLHnFZiiQisU0IHpMqNc6BSUUtDUgjhVk1lqhuiZ
-        hUb1G4MomabLXGs1y5CDoqcnpdFFKWDNC8+YA3UX2Tbl5n22OpF5WIiJBUlmrHKqBerKx2
-        wlWzIAPgOX14nhVpRxuNgRbo/aKsOKfHG6jdAiFfsWbGz9WdOu4gVRxQNpL5YEqBPaHGvU
-        oTthGjE00T8jwQcWEiZWH5/TiAxdRfJ1M3JoIe2bb3crK0Gl32O2LSnNFxiq6g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681807259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
-        b=rNfKPYcxDWHHNemvWuh/rsGPuG8dn/TolEBJI+1ZiBhvXwc9cXh+Pw7pgY4xNT8GFDtc33
-        j+rvG82H6UitkyAQ==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <87ttxd4qxz.ffs@tglx>
-References: <20230414225551.858160935@linutronix.de>
- <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
- <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de> <87ttxd4qxz.ffs@tglx>
-Date:   Tue, 18 Apr 2023 10:40:57 +0200
-Message-ID: <87r0sh4m7a.ffs@tglx>
+        bh=27YuiGTc/1Ayk3pIwHwifC0cK9cQSm41NYDsP6qMI7E=;
+        b=CDPJWjw7922+HWw5MqXWuotkaTCG5XVEvGU1OSihcrxAc9NydIVybPt59TN32MBRtuA/5m
+        UFxuV07/YeaK2h96WTHKE4Xc2Lrlnzyri5go6ZXhcHvV4A47wf/QxXJa4YP8FT4DCwQ8QM
+        +Mu/7eMO8xZc5VF/cbvXjIiEcZcwDkE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-479-6OKC3k1jOBW--ssTYJf5pw-1; Tue, 18 Apr 2023 11:45:07 -0400
+X-MC-Unique: 6OKC3k1jOBW--ssTYJf5pw-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f08ed462c0so42522915e9.1
+        for <linux-csky@vger.kernel.org>; Tue, 18 Apr 2023 08:45:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681832706; x=1684424706;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=27YuiGTc/1Ayk3pIwHwifC0cK9cQSm41NYDsP6qMI7E=;
+        b=hQn4hrXR8agqf2GrSuhO8sHdgkjr4HvG2tR4u3HZOr1KgVtpvRtVhB2tYSZ1Z0tJkP
+         Y+LoWU0seD9EWMmL+WcW80pWtUp7QuRBB5g0n/z/KcbEuZaP11JlIk0X8kSyleB8HGN8
+         Ct519IUCwGiPgT3qcYTzwG300sykp2wNJ+fIkSEx4BQGXXdL7ivhP8kZtE+HTpDHpCSF
+         aPPybqJu5wcOYEMEGY5NbI+QC3HPjkiUoqhABz2uP2VBmwvlnsQioeT54S9E6M0HzzBy
+         D2pgc+1oDGlKY6eWvU8EYsQQQFpFoFTwZ7CFEHD6nWemgboIuzhKs9EZbLqfhBN6dBqS
+         gMZA==
+X-Gm-Message-State: AAQBX9fNYKnqipPKgVMmz9KpqNF/jHUGL0ScSUvkck7cjK6vGABmfa6n
+        8tOv8hCTGJc2jhzBmsU90R1J271kZqHCmS+K3E4ekRfg+2M1uR6WAU6+/Ecc8ZEpJY3J+4tBEUG
+        4N4Lc7EcH2BKtzhEypBdhWA==
+X-Received: by 2002:a5d:6dcc:0:b0:2ef:b8ae:8791 with SMTP id d12-20020a5d6dcc000000b002efb8ae8791mr2341923wrz.10.1681832706618;
+        Tue, 18 Apr 2023 08:45:06 -0700 (PDT)
+X-Google-Smtp-Source: AKy350boD2pgyaTgtT87B/OGZT/ZiXFytTcP4U4+Qx8x/yMODSTgYDG7+n20ySQtuSYJgFc2NPKTdg==
+X-Received: by 2002:a5d:6dcc:0:b0:2ef:b8ae:8791 with SMTP id d12-20020a5d6dcc000000b002efb8ae8791mr2341904wrz.10.1681832706235;
+        Tue, 18 Apr 2023 08:45:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c715:3f00:7545:deb6:f2f4:27ef? (p200300cbc7153f007545deb6f2f427ef.dip0.t-ipconnect.de. [2003:cb:c715:3f00:7545:deb6:f2f4:27ef])
+        by smtp.gmail.com with ESMTPSA id z10-20020a5d654a000000b002daeb108304sm13380984wrv.33.2023.04.18.08.45.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Apr 2023 08:45:05 -0700 (PDT)
+Message-ID: <da600570-51c7-8088-b46b-7524c9e66e5d@redhat.com>
+Date:   Tue, 18 Apr 2023 17:45:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 01/33] s390: Use _pt_s390_gaddr for gmap address tracking
+Content-Language: en-US
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org
+References: <20230417205048.15870-1-vishal.moola@gmail.com>
+ <20230417205048.15870-2-vishal.moola@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230417205048.15870-2-vishal.moola@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Apr 18 2023 at 08:58, Thomas Gleixner wrote:
-> On Mon, Apr 17 2023 at 19:40, Paul Menzel wrote:
->> Am 17.04.23 um 16:48 schrieb Thomas Gleixner:
->>
->>> On Mon, Apr 17 2023 at 13:19, Paul Menzel wrote:
->>>> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
->>>> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD
->>>> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
->>>> [=E2=80=A6]
->>>> [    0.259329] smp: Bringing up secondary CPUs ...
->>>> [    0.259527] x86: Booting SMP configuration:
->>>> [    0.259528] .... node  #0, CPUs:      #1
->>>> [    0.261007] After schedule_preempt_disabled
->>>> [   10.260990] CPU1 failed to report alive state
->>>=20
->>> Weird. CPU1 fails to come up and report that it has reached the
->>> synchronization point.
->>>=20
->>> Does it work when you add cpuhp.parallel=3Doff on the kernel command li=
-ne?
->>
->> Yes, the ten seconds delay is gone with `cpuhp.parallel=3Doff`.
->>
->> There was a patch set in the past, that worked on that device. I think=20
->> up to v4 it did *not* work at all and hung [1]. I need some days to=20
->> collect the results again.
->
-> Can you please apply the patch below on top of the pile remove the
-> command line option again?
+On 17.04.23 22:50, Vishal Moola (Oracle) wrote:
+> s390 uses page->index to keep track of page tables for the guest address
+> space. In an attempt to consolidate the usage of page fields in s390,
+> replace _pt_pad_2 with _pt_s390_gaddr to replace page->index in gmap.
+> 
+> This will help with the splitting of struct ptdesc from struct page, as
+> well as allow s390 to use _pt_frag_refcount for fragmented page table
+> tracking.
+> 
+> Since page->_pt_s390_gaddr aliases with mapping, ensure its set to NULL
+> before freeing the pages as well.
+> 
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
 
-Bah. That patch does not make any sense at all. Not enough coffee.
+[...]
 
-Can you please provide the output of cpuid?
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 3fc9e680f174..2616d64c0e8c 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -144,7 +144,7 @@ struct page {
+>   		struct {	/* Page table pages */
+>   			unsigned long _pt_pad_1;	/* compound_head */
+>   			pgtable_t pmd_huge_pte; /* protected by page->ptl */
+> -			unsigned long _pt_pad_2;	/* mapping */
+> +			unsigned long _pt_s390_gaddr;	/* mapping */
+>   			union {
+>   				struct mm_struct *pt_mm; /* x86 pgds only */
+>   				atomic_t pt_frag_refcount; /* powerpc */
 
+The confusing part is, that these gmap page tables are not ordinary 
+process page tables that we would ordinarily place into this section 
+here. That's why they are also not allocated/freed using the typical 
+page table constructor/destructor ...
+
+-- 
 Thanks,
 
-        tglx
-
-
-
+David / dhildenb
 
