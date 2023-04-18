@@ -2,40 +2,40 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2270E6E59F9
-	for <lists+linux-csky@lfdr.de>; Tue, 18 Apr 2023 08:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AAF6E5C52
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Apr 2023 10:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjDRG6i (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 18 Apr 2023 02:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S231234AbjDRIlH (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 18 Apr 2023 04:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjDRG6h (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 18 Apr 2023 02:58:37 -0400
+        with ESMTP id S230359AbjDRIlE (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 18 Apr 2023 04:41:04 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA38FCD;
-        Mon, 17 Apr 2023 23:58:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF0B1FCA;
+        Tue, 18 Apr 2023 01:41:01 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681801114;
+        s=2020; t=1681807259;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7JrvTFx0WVeMY9cJy762Xh8k6ZgcD547tgSMeBaRvfE=;
-        b=Et6llJLqBk0yfoU12mOHK72SfYQgEWu+q48gtjbOp01/oW1pWwNWzYkMj3rsubBi7GEzq5
-        mPT5IZDLQl4QKMdJBFAIqKyeL5/EHZMZmHN21initZgWfHDK9dVyf4svi0aLfhUnyeDqQK
-        I3vYRVmGWdTJWrOGtNsTNLH4myxFa9B/Cic2FVRJKblYIYu57zyU8GZBAWAfanD+weXHiR
-        ms33Y/xbIFrXQYi8r9H5uTRDm8lfMric1/URavwJ7tQwqLrW0R7pwMbi7rSmGj07t3TRXL
-        qWncTgcrXxLCvAZcnDKbYXnQQ7HAmFlnUm/wlHJLSqR024Ajk5DxDVTQi7RWeg==
+        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
+        b=YSKoMebO1SMgoiijw3sT6dUmL/DeC/wEBV7I8b1z9zceTKQGSQcXYB/YeSo0ccQDTS56AJ
+        nhdRaDZ0NwXgH8hEOLQ/dTVz+deZ2fOLHnFZiiQisU0IHpMqNc6BSUUtDUgjhVk1lqhuiZ
+        hUb1G4MomabLXGs1y5CDoqcnpdFFKWDNC8+YA3UX2Tbl5n22OpF5WIiJBUlmrHKqBerKx2
+        wlWzIAPgOX14nhVpRxuNgRbo/aKsOKfHG6jdAiFfsWbGz9WdOu4gVRxQNpL5YEqBPaHGvU
+        oTthGjE00T8jwQcWEiZWH5/TiAxdRfJ1M3JoIe2bb3crK0Gl32O2LSnNFxiq6g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681801114;
+        s=2020e; t=1681807259;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7JrvTFx0WVeMY9cJy762Xh8k6ZgcD547tgSMeBaRvfE=;
-        b=2IDo3vCdzNc6EWeefm49U4euIaA6bLjlIhlJmFMjsR5vvqBpGyDNOwFnUfvXHrOiAPFmV7
-        jCwlVmV4XYpFQwCw==
+        bh=ZcloEN6PHwdxX+wR7PTxsLZ5R7H2GaplG8eadvwcPdo=;
+        b=rNfKPYcxDWHHNemvWuh/rsGPuG8dn/TolEBJI+1ZiBhvXwc9cXh+Pw7pgY4xNT8GFDtc33
+        j+rvG82H6UitkyAQ==
 To:     Paul Menzel <pmenzel@molgen.mpg.de>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
@@ -70,12 +70,12 @@ Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>
 Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de>
+In-Reply-To: <87ttxd4qxz.ffs@tglx>
 References: <20230414225551.858160935@linutronix.de>
  <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
- <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de>
-Date:   Tue, 18 Apr 2023 08:58:32 +0200
-Message-ID: <87ttxd4qxz.ffs@tglx>
+ <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de> <87ttxd4qxz.ffs@tglx>
+Date:   Tue, 18 Apr 2023 10:40:57 +0200
+Message-ID: <87r0sh4m7a.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -89,52 +89,44 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Paul!
+On Tue, Apr 18 2023 at 08:58, Thomas Gleixner wrote:
+> On Mon, Apr 17 2023 at 19:40, Paul Menzel wrote:
+>> Am 17.04.23 um 16:48 schrieb Thomas Gleixner:
+>>
+>>> On Mon, Apr 17 2023 at 13:19, Paul Menzel wrote:
+>>>> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
+>>>> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD
+>>>> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
+>>>> [=E2=80=A6]
+>>>> [    0.259329] smp: Bringing up secondary CPUs ...
+>>>> [    0.259527] x86: Booting SMP configuration:
+>>>> [    0.259528] .... node  #0, CPUs:      #1
+>>>> [    0.261007] After schedule_preempt_disabled
+>>>> [   10.260990] CPU1 failed to report alive state
+>>>=20
+>>> Weird. CPU1 fails to come up and report that it has reached the
+>>> synchronization point.
+>>>=20
+>>> Does it work when you add cpuhp.parallel=3Doff on the kernel command li=
+ne?
+>>
+>> Yes, the ten seconds delay is gone with `cpuhp.parallel=3Doff`.
+>>
+>> There was a patch set in the past, that worked on that device. I think=20
+>> up to v4 it did *not* work at all and hung [1]. I need some days to=20
+>> collect the results again.
+>
+> Can you please apply the patch below on top of the pile remove the
+> command line option again?
 
-On Mon, Apr 17 2023 at 19:40, Paul Menzel wrote:
-> Am 17.04.23 um 16:48 schrieb Thomas Gleixner:
->
->> On Mon, Apr 17 2023 at 13:19, Paul Menzel wrote:
->>> Am 15.04.23 um 01:44 schrieb Thomas Gleixner:
->>> [    0.258193] smpboot: CPU0: AMD A6-6400K APU with Radeon(tm) HD
->>> Graphics (family: 0x15, model: 0x13, stepping: 0x1)
->>> [=E2=80=A6]
->>> [    0.259329] smp: Bringing up secondary CPUs ...
->>> [    0.259527] x86: Booting SMP configuration:
->>> [    0.259528] .... node  #0, CPUs:      #1
->>> [    0.261007] After schedule_preempt_disabled
->>> [   10.260990] CPU1 failed to report alive state
->>=20
->> Weird. CPU1 fails to come up and report that it has reached the
->> synchronization point.
->>=20
->> Does it work when you add cpuhp.parallel=3Doff on the kernel command lin=
-e?
->
-> Yes, the ten seconds delay is gone with `cpuhp.parallel=3Doff`.
->
-> There was a patch set in the past, that worked on that device. I think=20
-> up to v4 it did *not* work at all and hung [1]. I need some days to=20
-> collect the results again.
+Bah. That patch does not make any sense at all. Not enough coffee.
 
-Can you please apply the patch below on top of the pile remove the
-command line option again?
+Can you please provide the output of cpuid?
 
 Thanks,
 
-
         tglx
----
- kernel/cpu.c |    1 +
- 1 file changed, 1 insertion(+)
 
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1777,6 +1777,7 @@ static void __init cpuhp_bringup_mask(co
- 			 */
- 			WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
- 		}
-+		msleep(20);
- 	}
- }
-=20
+
+
+
