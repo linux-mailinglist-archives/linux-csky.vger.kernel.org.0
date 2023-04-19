@@ -2,115 +2,108 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874426E7676
-	for <lists+linux-csky@lfdr.de>; Wed, 19 Apr 2023 11:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273746E7804
+	for <lists+linux-csky@lfdr.de>; Wed, 19 Apr 2023 13:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjDSJi1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 19 Apr 2023 05:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S232186AbjDSLFl (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 19 Apr 2023 07:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbjDSJi0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 19 Apr 2023 05:38:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532DCE7;
-        Wed, 19 Apr 2023 02:38:25 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1681897102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ahWW2+Q3S/RvB6qR72sS8HIsTdCuAt1S9bqdH2z+7w=;
-        b=qc5CvobL2r3hZWvSzSJqNdvsc3YOVQi05uwUK7zoWReiby465BIJI/zuxMUu5qXpSXXyVJ
-        vzTv9ILxgQrJkJR8zzEJpve7BFlEE6OioXHOKbuuQuiRK8FoLk871pSTksNqCCIxl8ucz5
-        wmXiG7xJVjNb7Bo6RoRV9J4Lz7UUc8BPgbwLe4YNDPdH4DGHf7Ptnhs3DupHwgSPtRAHBW
-        rOKHJXmOZJEWGQe1t29Q6HPEqx9hwBtb4vRyuoV7kVeWG6zEx76YqS0yoDbWMbvMs5WCQW
-        MFgUf5iaArW/mcuy/Cw2R/4IofuuCDjuJoLMyvJOsnpRGsf+HQwI40VP2uCO1Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1681897102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ahWW2+Q3S/RvB6qR72sS8HIsTdCuAt1S9bqdH2z+7w=;
-        b=h9kGxEZF0/449e5pzKL8RjkYF5PGK7O3l0s7czECIEu7mvAFDvboALol8fOrjIlj6I4Yg9
-        stFZXVlGYGrqZrAQ==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
+        with ESMTP id S231527AbjDSLFi (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 19 Apr 2023 07:05:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6A24C19;
+        Wed, 19 Apr 2023 04:05:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C896963D4C;
+        Wed, 19 Apr 2023 11:05:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C58FEC433EF;
+        Wed, 19 Apr 2023 11:05:31 +0000 (UTC)
+Date:   Wed, 19 Apr 2023 12:05:28 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Justin Forbes <jforbes@fedoraproject.org>,
+        Mike Rapoport <rppt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Rich Felker <dalias@libc.org>,
         Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de>
-References: <20230414225551.858160935@linutronix.de>
- <8247ce4d-15b7-03b2-0c9b-74f8cd6cad50@molgen.mpg.de> <87wn2a4la5.ffs@tglx>
- <bd5a6a93-def1-9248-2258-c3d3b40071ef@molgen.mpg.de> <87ttxd4qxz.ffs@tglx>
- <87r0sh4m7a.ffs@tglx> <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de>
-Date:   Wed, 19 Apr 2023 11:38:21 +0200
-Message-ID: <87a5z443g2.ffs@tglx>
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mm@kvack.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v3 02/14] arm64: drop ranges in definition of
+ ARCH_FORCE_MAX_ORDER
+Message-ID: <ZD/K+Mof/Dx5yzjQ@arm.com>
+References: <20230325060828.2662773-1-rppt@kernel.org>
+ <20230325060828.2662773-3-rppt@kernel.org>
+ <CAFxkdAr5C7ggZ+WdvDbsfmwuXujT_z_x3qcUnhnCn-WrAurvgA@mail.gmail.com>
+ <ZCvQGJzdED+An8an@kernel.org>
+ <CAFbkSA38eTA_iJ3ttBvQ8G4Rjj8qB12GxY7Z=qmZ8wm+0tZieA@mail.gmail.com>
+ <ZDbp7LAHES3YFo30@arm.com>
+ <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Paul!
+On Tue, Apr 18, 2023 at 03:05:57PM -0700, Andrew Morton wrote:
+> On Wed, 12 Apr 2023 18:27:08 +0100 Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > It sounds nice in theory. In practice. EXPERT hides too much. When you
+> > > flip expert, you expose over a 175ish new config options which are
+> > > hidden behind EXPERT.  You don't have to know what you are doing just
+> > > with the MAX_ORDER, but a whole bunch more as well.  If everyone were
+> > > already running 10, this might be less of a problem. At least Fedora
+> > > and RHEL are running 13 for 4K pages on aarch64. This was not some
+> > > accidental choice, we had to carry a patch to even allow it for a
+> > > while.  If this does go in as is, we will likely just carry a patch to
+> > > remove the "if EXPERT", but that is a bit of a disservice to users who
+> > > might be trying to debug something else upstream, bisecting upstream
+> > > kernels or testing a patch.  In those cases, people tend to use
+> > > pristine upstream sources without distro patches to verify, and they
+> > > tend to use their existing configs. With this change, their MAX_ORDER
+> > > will drop to 10 from 13 silently.   That can look like a different
+> > > issue enough to ruin a bisect or have them give bad feedback on a
+> > > patch because it introduces a "regression" which is not a regression
+> > > at all, but a config change they couldn't see.
+> > 
+> > If we remove EXPERT (as prior to this patch), I'd rather keep the ranges
+> > and avoid having to explain to people why some random MAX_ORDER doesn't
+> > build (keeping the range would also make sense for randconfig, not sure
+> > we got to any conclusion there).
+> 
+> Well this doesn't seem to have got anywhere.  I think I'll send the
+> patchset into Linus for the next merge window as-is.  Please let's take
+> a look at this Kconfig presentation issue during the following -rc
+> cycle.
 
-On Tue, Apr 18 2023 at 22:10, Paul Menzel wrote:
-> Am 18.04.23 um 10:40 schrieb Thomas Gleixner:
->> Can you please provide the output of cpuid?
->
-> Of course. Here the top, and the whole output is attached.
+That's fine by me. I have a slight preference to drop EXPERT and keep
+the ranges in, especially if it affects current distro kernels. Debian
+seems to enable EXPERT already in their arm64 kernel config but I'm not
+sure about the Fedora or other distro kernels. If they don't, we can
+fix/revert this Kconfig entry once the merging window is closed.
 
-Thanks for the data. Can you please apply the debug patch below and
-provide the dmesg output? Just the line which is added by the patch is
-enough. You can boot with cpuhp.parallel=off so you don't have wait for
-10 seconds.
-
-Thanks,
-
-        tglx
----
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -814,6 +814,7 @@ static int wakeup_secondary_cpu_via_init
- 	unsigned long send_status = 0, accept_status = 0;
- 	int maxlvt, num_starts, j;
- 
-+	pr_info("Kicking AP alive: %d\n", phys_apicid);
- 	preempt_disable();
- 	maxlvt = lapic_get_maxlvt();
- 
+-- 
+Catalin
