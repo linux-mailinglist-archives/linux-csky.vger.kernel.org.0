@@ -2,108 +2,109 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C0E6EB2EF
-	for <lists+linux-csky@lfdr.de>; Fri, 21 Apr 2023 22:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7866EAF42
+	for <lists+linux-csky@lfdr.de>; Fri, 21 Apr 2023 18:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjDUUbY (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 21 Apr 2023 16:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S233153AbjDUQgR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 21 Apr 2023 12:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjDUUbX (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 21 Apr 2023 16:31:23 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE0199C
-        for <linux-csky@vger.kernel.org>; Fri, 21 Apr 2023 13:31:20 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:ed8d:a29e:2b31:5e96])
-        by albert.telenet-ops.be with bizsmtp
-        id nYXB2900E3ESaBb06YXB6H; Fri, 21 Apr 2023 22:31:17 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ppxPT-000CKc-HJ;
-        Fri, 21 Apr 2023 22:31:11 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pps9Z-000FzO-6K;
-        Fri, 21 Apr 2023 16:54:25 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] libgcc: Add forward declarations for generic library routines
-Date:   Fri, 21 Apr 2023 16:54:24 +0200
-Message-Id: <5cdbe08296693dd53849f199c3933e16e97b33c1.1682088593.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S233157AbjDUQgP (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 21 Apr 2023 12:36:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21291544C;
+        Fri, 21 Apr 2023 09:36:14 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682094973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AMzOR95vay5pg0WrO+uJUGs+TLmecn0h01ht4y+YBW4=;
+        b=o/TkSlykoJbZmwaCartOT04EgN5C+kODI7gZukI9DsIFy2Dgj3RH1WuWvwMvvYXkyiHIQk
+        oxshpYHuRgHC8o/JYqoEGQ0sMgPeCIrVwZGLDjjKa0oD47tebLMPcc0kwKmrYNmhibL69p
+        CuPI7WXBesGu+IQZaD33O9Vh8aqxpxbvEKmf8Inm6RIaaj7YSGPtkcXqQaDLBztSRLFiTD
+        jAl7P2Gr2fqg2KdBtxFZJUc3m5xmd9qgJZ7OLjPxBmIrUzXSJ1uWPWJLXceKreW9vWpPl+
+        SmWK7o2t1K1ok1OKIOZ0yX0u1SEvxXShW0sf3Kg6kxQp0c93gSDpceB1rVFESQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682094973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AMzOR95vay5pg0WrO+uJUGs+TLmecn0h01ht4y+YBW4=;
+        b=44dX9VJX+TMEmkgFv0MNfddpnQu4SMuQ4SBx4WdfdKvH1kS+zbYESmYQqIpwSH+YghznlV
+        s1xiQKd/rkmpEKCg==
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+In-Reply-To: <87sfcu2wup.ffs@tglx>
+References: <87r0sh4m7a.ffs@tglx>
+ <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de> <87a5z443g2.ffs@tglx>
+ <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
+ <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com>
+ <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com> <871qkf3qek.ffs@tglx>
+ <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
+ <ZEFRhXua6Jxvit1R@google.com> <87v8hq35sk.ffs@tglx>
+ <56e59a4d-a47f-4bfe-7db5-5f921062ad69@molgen.mpg.de> <87sfcu2wup.ffs@tglx>
+Date:   Fri, 21 Apr 2023 18:36:12 +0200
+Message-ID: <87bkjh2nwj.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-With W=1 on platforms that use the generic gcc library routines
-(csky/loongarch/mips/riscv/sh/xtensa):
+On Thu, Apr 20 2023 at 21:10, Thomas Gleixner wrote:
+> On Thu, Apr 20 2023 at 18:47, Paul Menzel wrote:
+>> Am 20.04.23 um 17:57 schrieb Thomas Gleixner:
+>> I quickly applied it on top of your branch, but I am getting:
+>
+> As I said it was untested. I was traveling and did not have access to a
+> machine to even build it completely. Fixed up and tested version below.
 
-    lib/ashldi3.c:9:19: warning: no previous prototype for '__ashldi3' [-Wmissing-prototypes]
-	9 | long long notrace __ashldi3(long long u, word_type b)
-	  |                   ^~~~~~~~~
-      CC      lib/ashrdi3.o
-    lib/ashrdi3.c:9:19: warning: no previous prototype for '__ashrdi3' [-Wmissing-prototypes]
-	9 | long long notrace __ashrdi3(long long u, word_type b)
-	  |                   ^~~~~~~~~
-      CC      lib/cmpdi2.o
-    lib/cmpdi2.c:9:19: warning: no previous prototype for '__cmpdi2' [-Wmissing-prototypes]
-	9 | word_type notrace __cmpdi2(long long a, long long b)
-	  |                   ^~~~~~~~
-      CC      lib/lshrdi3.o
-    lib/lshrdi3.c:9:19: warning: no previous prototype for '__lshrdi3' [-Wmissing-prototypes]
-	9 | long long notrace __lshrdi3(long long u, word_type b)
-	  |                   ^~~~~~~~~
-      CC      lib/muldi3.o
-    lib/muldi3.c:49:19: warning: no previous prototype for '__muldi3' [-Wmissing-prototypes]
-       49 | long long notrace __muldi3(long long u, long long v)
-	  |                   ^~~~~~~~
-      CC      lib/ucmpdi2.o
-    lib/ucmpdi2.c:8:19: warning: no previous prototype for '__ucmpdi2' [-Wmissing-prototypes]
-	8 | word_type notrace __ucmpdi2(unsigned long long a, unsigned long long b)
-	  |                   ^~~~~~~~~
+I've updated
 
-Fix this by adding forward declarations to the common libgcc header
-file.
+  git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303272214.RxzpA6bP-lkp@intel.com/
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- include/linux/libgcc.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+for your conveniance.
 
-diff --git a/include/linux/libgcc.h b/include/linux/libgcc.h
-index b8dc75f0c8308bd4..fc388da6a027faaf 100644
---- a/include/linux/libgcc.h
-+++ b/include/linux/libgcc.h
-@@ -27,4 +27,11 @@ typedef union {
- 	long long ll;
- } DWunion;
- 
-+long long notrace __ashldi3(long long u, word_type b);
-+long long notrace __ashrdi3(long long u, word_type b);
-+word_type notrace __cmpdi2(long long a, long long b);
-+long long notrace __lshrdi3(long long u, word_type b);
-+long long notrace __muldi3(long long u, long long v);
-+word_type notrace __ucmpdi2(unsigned long long a, unsigned long long b);
-+
- #endif /* __ASM_LIBGCC_H */
--- 
-2.34.1
+Thanks,
 
+        tglx
