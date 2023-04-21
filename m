@@ -2,109 +2,105 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7866EAF42
-	for <lists+linux-csky@lfdr.de>; Fri, 21 Apr 2023 18:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5006EB2F9
+	for <lists+linux-csky@lfdr.de>; Fri, 21 Apr 2023 22:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbjDUQgR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 21 Apr 2023 12:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S229748AbjDUUjR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 21 Apr 2023 16:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbjDUQgP (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 21 Apr 2023 12:36:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21291544C;
-        Fri, 21 Apr 2023 09:36:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682094973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AMzOR95vay5pg0WrO+uJUGs+TLmecn0h01ht4y+YBW4=;
-        b=o/TkSlykoJbZmwaCartOT04EgN5C+kODI7gZukI9DsIFy2Dgj3RH1WuWvwMvvYXkyiHIQk
-        oxshpYHuRgHC8o/JYqoEGQ0sMgPeCIrVwZGLDjjKa0oD47tebLMPcc0kwKmrYNmhibL69p
-        CuPI7WXBesGu+IQZaD33O9Vh8aqxpxbvEKmf8Inm6RIaaj7YSGPtkcXqQaDLBztSRLFiTD
-        jAl7P2Gr2fqg2KdBtxFZJUc3m5xmd9qgJZ7OLjPxBmIrUzXSJ1uWPWJLXceKreW9vWpPl+
-        SmWK7o2t1K1ok1OKIOZ0yX0u1SEvxXShW0sf3Kg6kxQp0c93gSDpceB1rVFESQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682094973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AMzOR95vay5pg0WrO+uJUGs+TLmecn0h01ht4y+YBW4=;
-        b=44dX9VJX+TMEmkgFv0MNfddpnQu4SMuQ4SBx4WdfdKvH1kS+zbYESmYQqIpwSH+YghznlV
-        s1xiQKd/rkmpEKCg==
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        =?utf-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>
-Subject: Re: [patch 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-In-Reply-To: <87sfcu2wup.ffs@tglx>
-References: <87r0sh4m7a.ffs@tglx>
- <8592a301-9933-1cad-bd61-8d97e7c7493b@molgen.mpg.de> <87a5z443g2.ffs@tglx>
- <877cu83v45.ffs@tglx> <874jpc3s3r.ffs@tglx>
- <0f5463fd-9c4a-6361-adbb-dd89dbb9138d@citrix.com>
- <c2aaa4fb-a5ba-d5bf-634a-dcf4fd8ad246@citrix.com> <871qkf3qek.ffs@tglx>
- <26d385da-2ede-5d73-2959-84c8f7d89e03@citrix.com> <87y1mm3iqz.ffs@tglx>
- <ZEFRhXua6Jxvit1R@google.com> <87v8hq35sk.ffs@tglx>
- <56e59a4d-a47f-4bfe-7db5-5f921062ad69@molgen.mpg.de> <87sfcu2wup.ffs@tglx>
-Date:   Fri, 21 Apr 2023 18:36:12 +0200
-Message-ID: <87bkjh2nwj.ffs@tglx>
-MIME-Version: 1.0
+        with ESMTP id S229557AbjDUUjR (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 21 Apr 2023 16:39:17 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82FC1BD6;
+        Fri, 21 Apr 2023 13:39:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C3FEF3200B68;
+        Fri, 21 Apr 2023 16:39:13 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 21 Apr 2023 16:39:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682109553; x=1682195953; bh=G5
+        baiNIip/EtCwDIuLtcOUpxLQymRj9yAPz3xryqCiI=; b=mmDihcGhHnhrPxdxOw
+        EzbUyNwOEHsybBv1V9kWN7+mzWYN2c7Jf+Y5jSOz8RMvc6UUyWik1e48BRESKYcf
+        OklYCbNhQ2TCIHPkrF9mQo4ZEC+pcOljO3zo/3Ukhvymg0p7U5gnwr5Ow6xG7TFm
+        R17Mgu5Jy6TGYTIAngd51jbQqI+VGbUsDptA1qG+0INu0BTSY31c5k8laaIUzYUr
+        kOjXIjTnrppOI1ZQeyjHkckZvWY59QaGHATmO5nuWepbsLZAuu7+U2aExnfCBhCe
+        v6wSIKs3Ajq52Ebuxi0YT6sUK03nUEGVZa6/gHlq7/6gNWWefN6Ij4DoedJ9ml7c
+        e9Tg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682109553; x=1682195953; bh=G5baiNIip/EtC
+        wDIuLtcOUpxLQymRj9yAPz3xryqCiI=; b=Mwrg37u8XRQTiWhGNQRPceLvqklBn
+        XfpaqO4rgXmDaV8DNRhh43x01e7uoUnx8E01OAEKTYAtMjfYNyUJze6mKE01t5h3
+        NHbBGAiutFbF3mmryBu/+awGvUWaBHQvgT9KzXo9w/qFzutp4PBIll7E9/H2+uOV
+        QrHP82W2Nb4obQf1FAdYx4AvqV+ZgtT3Tdxfg+GVloxuOJdPWvZNl6Pl/7Qfxvzf
+        mvZP4uXQuxC6tqDSsih275ZC2sATBBrz7deP3Q9bKUrHwZHtfBczgm+8quMJtWW+
+        9qXaH/m4ulM097nyeATHDrVnWNlmCwgO3MS4UONQKLD03aWdFmTBOhTtA==
+X-ME-Sender: <xms:cfRCZOfxUh4UvRVleAB8g0sJgs65GAqZ_KyUIKDeI5J1CKvJfalfvA>
+    <xme:cfRCZIOlkAlAHD_7_xgGM8jlpyXZ6cXjym4CZlsmpq9QRq0c6a4oEhvM1-Dy44oAk
+    bp2WjqgdiSa6YDOKT8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedgudehtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cfRCZPiCbi0iizyUCgV3DukiFw2pskRPGZFe8DTIn2pTVLZ0arrSAg>
+    <xmx:cfRCZL__O7NGd6nLgFiUswzS4dCbJXwL35HtRfKR8RGKEats0kGgjQ>
+    <xmx:cfRCZKtCqdpe86fbxslNjibDysaLQkDi3yuJbv7yEJ_6fDKy-nEelQ>
+    <xmx:cfRCZH-WyqBJriJdN97gm2GEDtxERX6Z3NS2u7qKxETWOimOSzqyvA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E5ED8B60086; Fri, 21 Apr 2023 16:39:12 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
+Mime-Version: 1.0
+Message-Id: <74a647f7-cf5f-4c23-aad6-77bf5b04e116@app.fastmail.com>
+In-Reply-To: <5cdbe08296693dd53849f199c3933e16e97b33c1.1682088593.git.geert+renesas@glider.be>
+References: <5cdbe08296693dd53849f199c3933e16e97b33c1.1682088593.git.geert+renesas@glider.be>
+Date:   Fri, 21 Apr 2023 22:38:52 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        "Chris Zankel" <chris@zankel.net>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: Re: [PATCH] libgcc: Add forward declarations for generic library routines
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Apr 20 2023 at 21:10, Thomas Gleixner wrote:
-> On Thu, Apr 20 2023 at 18:47, Paul Menzel wrote:
->> Am 20.04.23 um 17:57 schrieb Thomas Gleixner:
->> I quickly applied it on top of your branch, but I am getting:
+On Fri, Apr 21, 2023, at 16:54, Geert Uytterhoeven wrote:
+> With W=1 on platforms that use the generic gcc library routines
+> (csky/loongarch/mips/riscv/sh/xtensa):
 >
-> As I said it was untested. I was traveling and did not have access to a
-> machine to even build it completely. Fixed up and tested version below.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202303272214.RxzpA6bP-lkp@intel.com/
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I've updated
+Nice, this is one I don't have in my series,
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-for your conveniance.
+I have patches for a lot of other missing prototype warnings, plan
+to send them out after -rc1.
 
-Thanks,
-
-        tglx
+      Arnd
