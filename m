@@ -2,105 +2,88 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5006EB2F9
-	for <lists+linux-csky@lfdr.de>; Fri, 21 Apr 2023 22:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6F66EBC52
+	for <lists+linux-csky@lfdr.de>; Sun, 23 Apr 2023 03:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjDUUjR (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 21 Apr 2023 16:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S229819AbjDWBkD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 22 Apr 2023 21:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjDUUjR (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 21 Apr 2023 16:39:17 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82FC1BD6;
-        Fri, 21 Apr 2023 13:39:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id C3FEF3200B68;
-        Fri, 21 Apr 2023 16:39:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 21 Apr 2023 16:39:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1682109553; x=1682195953; bh=G5
-        baiNIip/EtCwDIuLtcOUpxLQymRj9yAPz3xryqCiI=; b=mmDihcGhHnhrPxdxOw
-        EzbUyNwOEHsybBv1V9kWN7+mzWYN2c7Jf+Y5jSOz8RMvc6UUyWik1e48BRESKYcf
-        OklYCbNhQ2TCIHPkrF9mQo4ZEC+pcOljO3zo/3Ukhvymg0p7U5gnwr5Ow6xG7TFm
-        R17Mgu5Jy6TGYTIAngd51jbQqI+VGbUsDptA1qG+0INu0BTSY31c5k8laaIUzYUr
-        kOjXIjTnrppOI1ZQeyjHkckZvWY59QaGHATmO5nuWepbsLZAuu7+U2aExnfCBhCe
-        v6wSIKs3Ajq52Ebuxi0YT6sUK03nUEGVZa6/gHlq7/6gNWWefN6Ij4DoedJ9ml7c
-        e9Tg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682109553; x=1682195953; bh=G5baiNIip/EtC
-        wDIuLtcOUpxLQymRj9yAPz3xryqCiI=; b=Mwrg37u8XRQTiWhGNQRPceLvqklBn
-        XfpaqO4rgXmDaV8DNRhh43x01e7uoUnx8E01OAEKTYAtMjfYNyUJze6mKE01t5h3
-        NHbBGAiutFbF3mmryBu/+awGvUWaBHQvgT9KzXo9w/qFzutp4PBIll7E9/H2+uOV
-        QrHP82W2Nb4obQf1FAdYx4AvqV+ZgtT3Tdxfg+GVloxuOJdPWvZNl6Pl/7Qfxvzf
-        mvZP4uXQuxC6tqDSsih275ZC2sATBBrz7deP3Q9bKUrHwZHtfBczgm+8quMJtWW+
-        9qXaH/m4ulM097nyeATHDrVnWNlmCwgO3MS4UONQKLD03aWdFmTBOhTtA==
-X-ME-Sender: <xms:cfRCZOfxUh4UvRVleAB8g0sJgs65GAqZ_KyUIKDeI5J1CKvJfalfvA>
-    <xme:cfRCZIOlkAlAHD_7_xgGM8jlpyXZ6cXjym4CZlsmpq9QRq0c6a4oEhvM1-Dy44oAk
-    bp2WjqgdiSa6YDOKT8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedtgedgudehtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:cfRCZPiCbi0iizyUCgV3DukiFw2pskRPGZFe8DTIn2pTVLZ0arrSAg>
-    <xmx:cfRCZL__O7NGd6nLgFiUswzS4dCbJXwL35HtRfKR8RGKEats0kGgjQ>
-    <xmx:cfRCZKtCqdpe86fbxslNjibDysaLQkDi3yuJbv7yEJ_6fDKy-nEelQ>
-    <xmx:cfRCZH-WyqBJriJdN97gm2GEDtxERX6Z3NS2u7qKxETWOimOSzqyvA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E5ED8B60086; Fri, 21 Apr 2023 16:39:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-372-g43825cb665-fm-20230411.003-g43825cb6
-Mime-Version: 1.0
-Message-Id: <74a647f7-cf5f-4c23-aad6-77bf5b04e116@app.fastmail.com>
-In-Reply-To: <5cdbe08296693dd53849f199c3933e16e97b33c1.1682088593.git.geert+renesas@glider.be>
-References: <5cdbe08296693dd53849f199c3933e16e97b33c1.1682088593.git.geert+renesas@glider.be>
-Date:   Fri, 21 Apr 2023 22:38:52 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Cc:     "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        "Chris Zankel" <chris@zankel.net>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        "kernel test robot" <lkp@intel.com>
-Subject: Re: [PATCH] libgcc: Add forward declarations for generic library routines
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229794AbjDWBkC (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 22 Apr 2023 21:40:02 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E97010FD;
+        Sat, 22 Apr 2023 18:39:59 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dxj81ujERkzdEgAA--.51391S3;
+        Sun, 23 Apr 2023 09:39:58 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxib1ujERkGfo1AA--.7609S2;
+        Sun, 23 Apr 2023 09:39:58 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] csky: uprobes: Restore thread.trap_no
+Date:   Sun, 23 Apr 2023 09:39:47 +0800
+Message-Id: <1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Dxib1ujERkGfo1AA--.7609S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWrZw13uw1rWw1UKry7KF4rZrb_yoW8Jr4fpa
+        1DA345t3WUJr1ftFWUJaykZ3ySva4kXr47Wr47Ca4fJ3yDKrWYqF4IqFWjyF4Yvrs5Kw10
+        qFyvyryDta97AF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b78YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I2
+        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
+        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvj
+        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU1LiSJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, Apr 21, 2023, at 16:54, Geert Uytterhoeven wrote:
-> With W=1 on platforms that use the generic gcc library routines
-> (csky/loongarch/mips/riscv/sh/xtensa):
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303272214.RxzpA6bP-lkp@intel.com/
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+thread.trap_no is saved in arch_uprobe_pre_xol(), it should be restored
+in arch_uprobe_{post,abort}_xol() accordingly, otherwise the save operation
+is meaningless, this change is similar with x86 and powerpc.
 
-Nice, this is one I don't have in my series,
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/csky/kernel/probes/uprobes.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+diff --git a/arch/csky/kernel/probes/uprobes.c b/arch/csky/kernel/probes/uprobes.c
+index 2d31a12..6277f2b 100644
+--- a/arch/csky/kernel/probes/uprobes.c
++++ b/arch/csky/kernel/probes/uprobes.c
+@@ -64,6 +64,7 @@ int arch_uprobe_post_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
+ 	struct uprobe_task *utask = current->utask;
+ 
+ 	WARN_ON_ONCE(current->thread.trap_no != UPROBE_TRAP_NR);
++	current->thread.trap_no = utask->autask.saved_trap_no;
+ 
+ 	instruction_pointer_set(regs, utask->vaddr + auprobe->insn_size);
+ 
+@@ -101,6 +102,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
+ {
+ 	struct uprobe_task *utask = current->utask;
+ 
++	current->thread.trap_no = utask->autask.saved_trap_no;
+ 	/*
+ 	 * Task has received a fatal signal, so reset back to probed
+ 	 * address.
+-- 
+2.1.0
 
-I have patches for a lot of other missing prototype warnings, plan
-to send them out after -rc1.
-
-      Arnd
