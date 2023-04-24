@@ -2,88 +2,118 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895176ED150
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Apr 2023 17:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764A16ED3FE
+	for <lists+linux-csky@lfdr.de>; Mon, 24 Apr 2023 19:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjDXP3S (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Apr 2023 11:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S231325AbjDXR6m (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 24 Apr 2023 13:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjDXP3R (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Apr 2023 11:29:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFC33591
-        for <linux-csky@vger.kernel.org>; Mon, 24 Apr 2023 08:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682350113;
+        with ESMTP id S229625AbjDXR6l (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Apr 2023 13:58:41 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E48E6A42;
+        Mon, 24 Apr 2023 10:58:40 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682359118;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uIDKs7C3LWJvB7Ayc1EEStt5gge8jFMIwXcZbhssBfA=;
-        b=g57IikFuCzuZr7ks+JamjMT3ahKAhk1Gky7X7ePy+ZQM1YpbcKZph9Q6Hu9msMwD7sAbIG
-        zyK0PsAIOErTaskwIeWNtoClsqVpteumseMY3BdEq1sjovEPJQKS/b7y+jo2SUoK4Vqys2
-        5k1SGMKdNKSPiBF+V6lrXBNcGo4Wwwg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-U95PYXJNN2yT1yIIZ1hCnA-1; Mon, 24 Apr 2023 11:28:29 -0400
-X-MC-Unique: U95PYXJNN2yT1yIIZ1hCnA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 220DE29AA3BF;
-        Mon, 24 Apr 2023 15:28:29 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.225])
-        by smtp.corp.redhat.com (Postfix) with SMTP id F3658492B03;
-        Mon, 24 Apr 2023 15:28:26 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 24 Apr 2023 17:28:18 +0200 (CEST)
-Date:   Mon, 24 Apr 2023 17:28:15 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [PATCH] csky: uprobes: Restore thread.trap_no
-Message-ID: <20230424152815.GA32615@redhat.com>
-References: <1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn>
- <cdacf9d8-cf59-bf4e-5379-0b5bfc03a4e2@loongson.cn>
+        bh=/B8ViPkT84zF77YJVg/Vg+DuX3x6sDAhKrSrx63B0t8=;
+        b=zNVUbHm89L6WRj2i94+vPyVn3/KO1LB2C60TWY+kKf2/e8X9/9XtdKbM639oCyDfzo+kF6
+        y7T/sJmhL5ytO4DUh414kpf+vt4CvUe/YodEpDD02hfzlBINbTEIvI3SsdLqezsCo+5tFW
+        AvbLWyv3qGi42txG7eIeRdoNoCDf86KN/QgJXAPPGmhTl1TqeCcHqSPF7eM9+ujvoD5z/m
+        AjrKuWx0mKwm8kHTyjPIB1SSadCZzqxSWvKRYA61NK+fA/i4N78zaZprmbihpUvGoCep3s
+        2RQE5w5ABRrYdGBrSZjZPmPvtUXxeogAae/i/g9/9f8KekX5LyUd6mtLrTj6qw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682359118;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/B8ViPkT84zF77YJVg/Vg+DuX3x6sDAhKrSrx63B0t8=;
+        b=ZaMRZ/Y/wVrPL6Kd1U5Zo8HZlUCLMRTrTHQ/7Xvf+abFcSRFeSo9Dw3jXKeMeUtXfr3+up
+        aT9nxD885g2bqnAA==
+To:     Brian Gerst <brgerst@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 35/37] x86/smpboot: Support parallel startup of
+ secondary CPUs
+In-Reply-To: <87mt38yhwh.ffs@tglx>
+References: <20230414225551.858160935@linutronix.de>
+ <20230414232311.379210081@linutronix.de>
+ <CAMzpN2hUbYpYrqDL1ViXUWGKGa7mDEG6iHtWEZg9GvrAoRgvKQ@mail.gmail.com>
+ <87mt38yhwh.ffs@tglx>
+Date:   Mon, 24 Apr 2023 19:58:36 +0200
+Message-ID: <878reh17sj.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cdacf9d8-cf59-bf4e-5379-0b5bfc03a4e2@loongson.cn>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 04/24, Tiezhu Yang wrote:
+On Sat, Apr 15 2023 at 23:06, Thomas Gleixner wrote:
+
+> On Sat, Apr 15 2023 at 09:22, Brian Gerst wrote:
+>> On Fri, Apr 14, 2023 at 7:45=E2=80=AFPM Thomas Gleixner <tglx@linutronix=
+.de> wrote:
+>>> @@ -248,10 +311,20 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>>>          *
+>>>          * RDX contains the per-cpu offset
+>>>          */
+>>> -       movq    pcpu_hot + X86_current_task(%rdx), %rax
+>>> -       movq    TASK_threadsp(%rax), %rsp
+>>> +       movq    pcpu_hot + X86_top_of_stack(%rdx), %rsp
+>>
+>> Switching to using pcpu_hot.top_of_stack is ok, but it's not
+>> completely equivalent.  top_of_stack points to the end of the pt_regs
+>> structure, while the kernel stack starts below pt_regs even for kernel
+>> threads.  So you need to subtract PTREGS_SIZE from the stack pointer
+>> after this.
+>>
+>> This change should also be a separate patch.
 >
-> >--- a/arch/csky/kernel/probes/uprobes.c
-> >+++ b/arch/csky/kernel/probes/uprobes.c
-> >@@ -64,6 +64,7 @@ int arch_uprobe_post_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
-> > 	struct uprobe_task *utask = current->utask;
-> >
-> > 	WARN_ON_ONCE(current->thread.trap_no != UPROBE_TRAP_NR);
-> >+	current->thread.trap_no = utask->autask.saved_trap_no;
-> >
-> > 	instruction_pointer_set(regs, utask->vaddr + auprobe->insn_size);
-> >
-> >@@ -101,6 +102,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
-> > {
-> > 	struct uprobe_task *utask = current->utask;
-> >
-> >+	current->thread.trap_no = utask->autask.saved_trap_no;
-> > 	/*
-> > 	 * Task has received a fatal signal, so reset back to probed
-> > 	 * address.
+> You're right on both counts.
 
-Acked-by: Oleg Nesterov <oleg@redhat.com>
+Actually no. We can't do that as this breaks suspend/resume (again).
 
+/me drops it.
