@@ -2,108 +2,88 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72906ECB86
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Apr 2023 13:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895176ED150
+	for <lists+linux-csky@lfdr.de>; Mon, 24 Apr 2023 17:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjDXLrS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 24 Apr 2023 07:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S231821AbjDXP3S (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 24 Apr 2023 11:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDXLrR (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Apr 2023 07:47:17 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 772C335BE;
-        Mon, 24 Apr 2023 04:47:15 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxV+lCbEZkZAYAAA--.48S3;
-        Mon, 24 Apr 2023 19:47:14 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxurJBbEZkAbc4AA--.11472S3;
-        Mon, 24 Apr 2023 19:47:13 +0800 (CST)
-Subject: Re: [PATCH] csky: uprobes: Restore thread.trap_no
-Reply-To: loongson-kernel@lists.loongnix.cn
-References: <1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, Oleg Nesterov <oleg@redhat.com>,
+        with ESMTP id S231796AbjDXP3R (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 24 Apr 2023 11:29:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFC33591
+        for <linux-csky@vger.kernel.org>; Mon, 24 Apr 2023 08:28:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682350113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uIDKs7C3LWJvB7Ayc1EEStt5gge8jFMIwXcZbhssBfA=;
+        b=g57IikFuCzuZr7ks+JamjMT3ahKAhk1Gky7X7ePy+ZQM1YpbcKZph9Q6Hu9msMwD7sAbIG
+        zyK0PsAIOErTaskwIeWNtoClsqVpteumseMY3BdEq1sjovEPJQKS/b7y+jo2SUoK4Vqys2
+        5k1SGMKdNKSPiBF+V6lrXBNcGo4Wwwg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-U95PYXJNN2yT1yIIZ1hCnA-1; Mon, 24 Apr 2023 11:28:29 -0400
+X-MC-Unique: U95PYXJNN2yT1yIIZ1hCnA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 220DE29AA3BF;
+        Mon, 24 Apr 2023 15:28:29 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.225])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F3658492B03;
+        Mon, 24 Apr 2023 15:28:26 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 24 Apr 2023 17:28:18 +0200 (CEST)
+Date:   Mon, 24 Apr 2023 17:28:15 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
         Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <cdacf9d8-cf59-bf4e-5379-0b5bfc03a4e2@loongson.cn>
-Date:   Mon, 24 Apr 2023 19:47:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+Subject: Re: [PATCH] csky: uprobes: Restore thread.trap_no
+Message-ID: <20230424152815.GA32615@redhat.com>
+References: <1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn>
+ <cdacf9d8-cf59-bf4e-5379-0b5bfc03a4e2@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxurJBbEZkAbc4AA--.11472S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Aw1Utr47WFyrGryfJFWxtFb_yoW8Xr4kpa
-        1DAay5t3WDGr13tFWUJa95ZryFva4kJrsrWry7uayfJ3yDKrW5Xr40grWqvF4YvrsYkw40
-        qFy0qryqya9rAF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8hiSPUUUUU==
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cdacf9d8-cf59-bf4e-5379-0b5bfc03a4e2@loongson.cn>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Cc:
-Oleg Nesterov <oleg@redhat.com>
-Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+On 04/24, Tiezhu Yang wrote:
+>
+> >--- a/arch/csky/kernel/probes/uprobes.c
+> >+++ b/arch/csky/kernel/probes/uprobes.c
+> >@@ -64,6 +64,7 @@ int arch_uprobe_post_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
+> > 	struct uprobe_task *utask = current->utask;
+> >
+> > 	WARN_ON_ONCE(current->thread.trap_no != UPROBE_TRAP_NR);
+> >+	current->thread.trap_no = utask->autask.saved_trap_no;
+> >
+> > 	instruction_pointer_set(regs, utask->vaddr + auprobe->insn_size);
+> >
+> >@@ -101,6 +102,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
+> > {
+> > 	struct uprobe_task *utask = current->utask;
+> >
+> >+	current->thread.trap_no = utask->autask.saved_trap_no;
+> > 	/*
+> > 	 * Task has received a fatal signal, so reset back to probed
+> > 	 * address.
 
-On 04/23/2023 09:39 AM, Tiezhu Yang wrote:
-> thread.trap_no is saved in arch_uprobe_pre_xol(), it should be restored
-> in arch_uprobe_{post,abort}_xol() accordingly, otherwise the save operation
-> is meaningless, this change is similar with x86 and powerpc.
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/csky/kernel/probes/uprobes.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/csky/kernel/probes/uprobes.c b/arch/csky/kernel/probes/uprobes.c
-> index 2d31a12..6277f2b 100644
-> --- a/arch/csky/kernel/probes/uprobes.c
-> +++ b/arch/csky/kernel/probes/uprobes.c
-> @@ -64,6 +64,7 @@ int arch_uprobe_post_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
->  	struct uprobe_task *utask = current->utask;
->
->  	WARN_ON_ONCE(current->thread.trap_no != UPROBE_TRAP_NR);
-> +	current->thread.trap_no = utask->autask.saved_trap_no;
->
->  	instruction_pointer_set(regs, utask->vaddr + auprobe->insn_size);
->
-> @@ -101,6 +102,7 @@ void arch_uprobe_abort_xol(struct arch_uprobe *auprobe, struct pt_regs *regs)
->  {
->  	struct uprobe_task *utask = current->utask;
->
-> +	current->thread.trap_no = utask->autask.saved_trap_no;
->  	/*
->  	 * Task has received a fatal signal, so reset back to probed
->  	 * address.
->
-
-Hi Oleg and Srikar,
-
-Could you please review this patch, thank you.
-
-Thanks,
-Tiezhu
+Acked-by: Oleg Nesterov <oleg@redhat.com>
 
