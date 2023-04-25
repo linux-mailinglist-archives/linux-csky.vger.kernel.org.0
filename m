@@ -2,149 +2,125 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA9E6EE547
-	for <lists+linux-csky@lfdr.de>; Tue, 25 Apr 2023 18:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25356EE8A1
+	for <lists+linux-csky@lfdr.de>; Tue, 25 Apr 2023 21:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbjDYQKV (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 25 Apr 2023 12:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
+        id S236144AbjDYTvS (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 25 Apr 2023 15:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbjDYQKR (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 25 Apr 2023 12:10:17 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61729210A
-        for <linux-csky@vger.kernel.org>; Tue, 25 Apr 2023 09:10:14 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4efefbd2c5eso3190659e87.0
-        for <linux-csky@vger.kernel.org>; Tue, 25 Apr 2023 09:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1682439012; x=1685031012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gzBCWhkUry18zVOWXW5QyNYiFJMq+EJv8KjCsvLzxVI=;
-        b=OEsh3Ha0fv/GvM9NceuJERdh/AN1wSAVr2EhijIFjkVHswDXjKoPhH3mAEFBbNw+Io
-         2UptSQ5jS92pwweanKka73zBf+avZ2fMMd4xq5EGumwxywAMAr24B9mYzB9b547tEm3g
-         9fC3BbVQd9QdO5Y9b/fmEQbg06t5vgQ5hC69Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682439012; x=1685031012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gzBCWhkUry18zVOWXW5QyNYiFJMq+EJv8KjCsvLzxVI=;
-        b=RfvmRXWE9Qh2cxlZdoZQb+uuh8AQNUZx7KOfu/p0l6EOY6Fs8UnEq9Ksu9RfGF7bW/
-         hzT7SZQGqvAdAXyfvFQrn3s3oEI3ZUpWCKuEKsUPgNqsstkCw+s3AFFoySZR0DFKMUE2
-         GqeU9oslZ2IsPHTxNf9xJTiVZplSFUSobnuXV/72VtevqPCa10Mo+BR2rbvI/eNJAYnD
-         Fy/Bdz9MHNhIPN5ieMklMQ8QNJVpzmlgw8RiG+gIQ+yDQcLlxkeGE6ZSIsSqyoZCjaml
-         epuadAyGLdrR2Ej7uhcsiQOCBW7MqbPCQYxJ30d4y3cBbbXXINYPuPYcrHCBDsiN3JbN
-         9zVw==
-X-Gm-Message-State: AAQBX9eeFJjA28np667p4/Fuynk9dC+p86qBnsWUAmZxp1qGnvsaaCcI
-        VvAfTliFCqlWppo1Va972TY5gIl7APet09/LkpWDzQ==
-X-Google-Smtp-Source: AKy350baar2nLpUbvflZjbFt0NiD21E9rhBX0WzkAZzkLHJ+UE6DHCwAttfmCb5aV0EM4+WkSgrqOg==
-X-Received: by 2002:a19:ee17:0:b0:4e9:c327:dd81 with SMTP id g23-20020a19ee17000000b004e9c327dd81mr4428482lfb.63.1682439012285;
-        Tue, 25 Apr 2023 09:10:12 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id k1-20020a2e9201000000b002a76f865347sm2122973ljg.95.2023.04.25.09.10.11
-        for <linux-csky@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 09:10:11 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4edcdfa8638so6492413e87.2
-        for <linux-csky@vger.kernel.org>; Tue, 25 Apr 2023 09:10:11 -0700 (PDT)
-X-Received: by 2002:a05:6512:145:b0:4d7:44c9:9f4c with SMTP id
- m5-20020a056512014500b004d744c99f4cmr4233943lfo.4.1682439010843; Tue, 25 Apr
- 2023 09:10:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230325060828.2662773-1-rppt@kernel.org> <20230325060828.2662773-3-rppt@kernel.org>
- <CAFxkdAr5C7ggZ+WdvDbsfmwuXujT_z_x3qcUnhnCn-WrAurvgA@mail.gmail.com>
- <ZCvQGJzdED+An8an@kernel.org> <CAFbkSA38eTA_iJ3ttBvQ8G4Rjj8qB12GxY7Z=qmZ8wm+0tZieA@mail.gmail.com>
- <ZDbp7LAHES3YFo30@arm.com> <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
-In-Reply-To: <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
-From:   Justin Forbes <jforbes@fedoraproject.org>
-Date:   Tue, 25 Apr 2023 11:09:58 -0500
-X-Gmail-Original-Message-ID: <CAFbkSA2hU+2V0i5OG0BBD-s3yNOAZwBmyGmxMLkbzoWZK6cxOQ@mail.gmail.com>
-Message-ID: <CAFbkSA2hU+2V0i5OG0BBD-s3yNOAZwBmyGmxMLkbzoWZK6cxOQ@mail.gmail.com>
-Subject: Re: [PATCH v3 02/14] arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mike Rapoport <rppt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Rich Felker <dalias@libc.org>,
-        Russell King <linux@armlinux.org.uk>,
+        with ESMTP id S235087AbjDYTvR (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 25 Apr 2023 15:51:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79BC122;
+        Tue, 25 Apr 2023 12:51:15 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682452273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=epqrrIP9XVMR1rQYOgUv6OMHFSXsoKyAhdvov9JTG3c=;
+        b=hcfCyrdfQ/+yHnKF3T+I49mLvnN7Y7S69gBRQL7PhhKJcZIQM6dUY5pvAbw4x5UtKBksj5
+        +gNdAWyqbtppxTS6xk/OOGkQEgCKZ50daZMUpYiSsjHUolnRQ63od8fRIwCIy22iqsL7Jz
+        ptuYgLF2Vyi6TxSoYJlRddHoLRBh0aBb/2ut263viqoCn4L8IM34OuGeUFz0vHjf3uDsn9
+        kzIwMYp79iEd+cDm0M3l/TvJoQ8Ebljb98ttQPEip+uioS6jdgokPZm34PxDLgh8kTLkX7
+        Tk0Brm7tWOMbl31MYKpF+X1fNVmxtHUKna8IUJdeJdt+TiqryaL2tjxt/WxUaA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682452273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=epqrrIP9XVMR1rQYOgUv6OMHFSXsoKyAhdvov9JTG3c=;
+        b=mlbSRhNUu/9kpluKPqwDbDiOM+hdImwLPmR+/CiZOtx2CU7HgipiQ7bg9V2pgBimVEqMmi
+        qqHiWR0zzWYsg/Bg==
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 22/37] arm64: smp: Switch to hotplug core state
+ synchronization
+In-Reply-To: <ZD1q3TF2ixVD1f2M@FVFF77S0Q05N>
+References: <20230414225551.858160935@linutronix.de>
+ <20230414232310.569498144@linutronix.de> <ZD1q3TF2ixVD1f2M@FVFF77S0Q05N>
+Date:   Tue, 25 Apr 2023 21:51:12 +0200
+Message-ID: <87ttx3zqof.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 5:22=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
+On Mon, Apr 17 2023 at 16:50, Mark Rutland wrote:
+> On Sat, Apr 15, 2023 at 01:44:49AM +0200, Thomas Gleixner wrote:
+> I gave this a spin on arm64 (in a 64-vCPU VM on an M1 host), and it seems to
+> work fine with a bunch of vCPUs being hotplugged off and on again randomly.
 >
-> On Wed, 12 Apr 2023 18:27:08 +0100 Catalin Marinas <catalin.marinas@arm.c=
-om> wrote:
+> FWIW:
 >
-> > > It sounds nice in theory. In practice. EXPERT hides too much. When yo=
-u
-> > > flip expert, you expose over a 175ish new config options which are
-> > > hidden behind EXPERT.  You don't have to know what you are doing just
-> > > with the MAX_ORDER, but a whole bunch more as well.  If everyone were
-> > > already running 10, this might be less of a problem. At least Fedora
-> > > and RHEL are running 13 for 4K pages on aarch64. This was not some
-> > > accidental choice, we had to carry a patch to even allow it for a
-> > > while.  If this does go in as is, we will likely just carry a patch t=
-o
-> > > remove the "if EXPERT", but that is a bit of a disservice to users wh=
-o
-> > > might be trying to debug something else upstream, bisecting upstream
-> > > kernels or testing a patch.  In those cases, people tend to use
-> > > pristine upstream sources without distro patches to verify, and they
-> > > tend to use their existing configs. With this change, their MAX_ORDER
-> > > will drop to 10 from 13 silently.   That can look like a different
-> > > issue enough to ruin a bisect or have them give bad feedback on a
-> > > patch because it introduces a "regression" which is not a regression
-> > > at all, but a config change they couldn't see.
-> >
-> > If we remove EXPERT (as prior to this patch), I'd rather keep the range=
-s
-> > and avoid having to explain to people why some random MAX_ORDER doesn't
-> > build (keeping the range would also make sense for randconfig, not sure
-> > we got to any conclusion there).
+> Tested-by: Mark Rutland <mark.rutland@arm.com>
 >
-> Well this doesn't seem to have got anywhere.  I think I'll send the
-> patchset into Linus for the next merge window as-is.  Please let's take
-> a look at this Kconfig presentation issue during the following -rc
-> cycle.
+> I also hacked the code to have the dying CPU spin forever before the call to
+> cpuhp_ap_report_dead(). In that case I see a warning, and that we don't call
+> arch_cpuhp_cleanup_dead_cpu(), and that the CPU is marked as offline (per
+> /sys/devices/system/cpu/$N/online).
 
-Well, I am very sorry to see this going in as is.  It will silently
-change people building with oldconfig, and anyone not paying attention
-will not notice until an issue is hit where "it worked before, and my
-config hasn't changed".  If EXPERT is unset, there is no notification,
-just a changed behavior.  While it would be easy for me to carry a
-patch dropping the if EXPERT, it will not help any users building on
-upstream with our configs, whether for their own regular use, or while
-trying to debug other issues,  I expect it will result in a reasonable
-amount of frustration from users trying to do the right thing and
-bisect or test patches upstream.
+Nice!
 
-Justin
+> As a tangent/aside, we might need to improve that for confidential compute
+> architectures, and we might want to generically track cpus which might still be
+> using kernel text/data. On arm64 we ensure that via our cpu_kill() callback
+> (which'll use PSCI CPU_AFFINITY_INFO), but I'm not sure if TDX and/or SEV-SNP
+> have a similar mechanism.
+>
+> Otherwise, a malicious hypervisor can pause a vCPU just before it leaves the
+> kernel (e.g. immediately after the arch_cpuhp_cleanup_dead_cpu() call), wait
+> for a kexec (or resuse of stack memroy), and unpause the vCPU to cause things
+> to blow up.
+
+There are a gazillion ways for a malicious hypervisor to blow up a
+'squint enough to be confident' guest.
+
+The real question is whether it can utilize such a blow up to extract
+confidential information from the guest.
+
+If not then it's just yet another way of DoS which is an "acceptable"
+attack as it only affects availability but not confidentiality.
+
+Thanks,
+
+        tglx
