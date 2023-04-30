@@ -2,98 +2,110 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11906F2665
-	for <lists+linux-csky@lfdr.de>; Sat, 29 Apr 2023 22:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F4E6F28F8
+	for <lists+linux-csky@lfdr.de>; Sun, 30 Apr 2023 15:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjD2UU4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 29 Apr 2023 16:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S230114AbjD3NDp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-csky@lfdr.de>); Sun, 30 Apr 2023 09:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjD2UUz (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 29 Apr 2023 16:20:55 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568910C0
-        for <linux-csky@vger.kernel.org>; Sat, 29 Apr 2023 13:20:54 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aad6f2be8eso6285595ad.3
-        for <linux-csky@vger.kernel.org>; Sat, 29 Apr 2023 13:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682799653; x=1685391653;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eT6Iosx0mXfdelnB+/awy2djLbdEQHSWYwF0l6D7UZk=;
-        b=ECOq4apJvbMRfpWybGzzN8N3SQxb+4g3QZ5Ja3lycK6jef0tEat0EPoSm+c5Rl2HQZ
-         7M/5vLkgGavbRBNI/Iph1n9oWKXV68c0zRBv/DfNjXL/GpZpy4RmZH/Zl8PQf9bLz8zn
-         y6NfIlL5q35D9/JLi7IjUhXukABkG0GPFnHJJPnMg1xpwv0WoRV0MMF09L5WXl1w+pWw
-         /8g3OdFZFtvkTkm+joMcc37KH8hz1dNB+hEouJPjOTUVnwoyr2TioClxNWGF2oGtwwn9
-         AtCq5qiqM4UMvf9nLwYlqV5rLwkB/9B2nY6FVam34vPR+78+zno8EG0Oblwjci0k1lsv
-         ip5g==
+        with ESMTP id S229531AbjD3NDo (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 30 Apr 2023 09:03:44 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D22A10DB;
+        Sun, 30 Apr 2023 06:03:41 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so16017321276.0;
+        Sun, 30 Apr 2023 06:03:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682799653; x=1685391653;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eT6Iosx0mXfdelnB+/awy2djLbdEQHSWYwF0l6D7UZk=;
-        b=EuX/9M5vvFsMDrl6rLSfCyxlinkwsu4t5ygU3kS2QkTb0rSMxQyo4COS2L+H7xMCo/
-         itETmYs5lDcF9wQEZwbzZEiOfzsOap1uAjYo+RgFfBU7+QEEx7q5niFbLEhKnUikBep6
-         0H0fi4/liyx/WSiSKuXa9lMCFmazYXET9juew1LcFqqBZxiUdm7BsyHSV4PFVMKZpz35
-         BurcufojkA2KCgwZeqqD5WoQQ51Taz4xS6qTSOaMWXy+BxICjCR8xIT2l4rSItw8y95K
-         B6jRTuat6HuvHPFA2zc0qGgrNh41XIm/BwbWsyUC9I0Co4YruJS91hxTEAM0vtbnp7mq
-         EabQ==
-X-Gm-Message-State: AC+VfDz0Jj+jJNSQwQbSth/7gABFRYnu9hmMfp1KRJrlEvF2kJAjjAkg
-        DJeFK1uM6Rr8SKrbHnWdO7gClw==
-X-Google-Smtp-Source: ACHHUZ5WOI/1aioBsqwebacxzZ9ZdQY0r+MMnoJ8pEVhZBGss1o6w2KghYZKaT+eG3K6P9EOLAdM9w==
-X-Received: by 2002:a17:902:cece:b0:1aa:e451:e22 with SMTP id d14-20020a170902cece00b001aae4510e22mr1575813plg.40.1682799653446;
-        Sat, 29 Apr 2023 13:20:53 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902a50d00b001a64ce7b18dsm15229418plq.165.2023.04.29.13.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 13:20:52 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 13:20:52 -0700 (PDT)
-X-Google-Original-Date: Sat, 29 Apr 2023 13:20:35 PDT (-0700)
-Subject:     Re: [PATCH] libgcc: Add forward declarations for generic library routines
-In-Reply-To: <74a647f7-cf5f-4c23-aad6-77bf5b04e116@app.fastmail.com>
-CC:     geert+renesas@glider.be, akpm@linux-foundation.org,
-        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
-        lkp@intel.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Message-ID: <mhng-8d0e378d-10f7-4107-99aa-b204c3d2a619@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1682859820; x=1685451820;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E7WF7SpO6yLlGrM65QrDk8wld6xpe3XopvGtDDxj/oU=;
+        b=b1d08zJ62G08B0tzTrAn7ooNE+ea9969/G2AEOxxbvuVhyJtJUrlLlDsX1pWtdB7+I
+         IHUvHOmC68r7b4swDWXtKrPYD8rID2BaL6rVtuXdFUuZHcKZc/JkDPRYZ2qonTU+HwdN
+         DDlsZoWIUfolyWcJBfK2mYWxhAKq7JqbqFvIoZlrXCxYytqjnjMjzIOOqkYhi6DMHBOx
+         CneY6s1Xuv4BMD7LrHgyJe3dlL3F61VqBTWVyvSK73PI0oSSwRTCaxPzfC0X2+w3w82l
+         DU+YBE5K7HbvfgQ4XREtILVOyxvYH0KVm9JGsMH/GkDlxtY7MPz6vvjQTSWF3uUE7Tf3
+         +omA==
+X-Gm-Message-State: AC+VfDyKr1H5mi9Zt7Xmc+5rgSENr99I7bJ5a6BFZck981Uxfvaw1Ej9
+        P0RpbzJHyc5EKyZ68KAfcyKM0QA7UvDjrw==
+X-Google-Smtp-Source: ACHHUZ6FRhlovl/iKVtUV2Fz1wira6l+eMUCPrG7OihQsUHYcOm6KZcCsyrwfR6/rk5Ul8/4KP8OjA==
+X-Received: by 2002:a81:9c1:0:b0:559:e21e:6f44 with SMTP id 184-20020a8109c1000000b00559e21e6f44mr4635938ywj.16.1682859819785;
+        Sun, 30 Apr 2023 06:03:39 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id x128-20020a818786000000b00545a08184bdsm5173331ywf.77.2023.04.30.06.03.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Apr 2023 06:03:38 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so16017212276.0;
+        Sun, 30 Apr 2023 06:03:37 -0700 (PDT)
+X-Received: by 2002:a81:5253:0:b0:54f:b615:1e44 with SMTP id
+ g80-20020a815253000000b0054fb6151e44mr9871377ywb.7.1682859817683; Sun, 30 Apr
+ 2023 06:03:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <74a647f7-cf5f-4c23-aad6-77bf5b04e116@app.fastmail.com> <mhng-8d0e378d-10f7-4107-99aa-b204c3d2a619@palmer-ri-x1c9a>
+In-Reply-To: <mhng-8d0e378d-10f7-4107-99aa-b204c3d2a619@palmer-ri-x1c9a>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 30 Apr 2023 15:03:26 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVVgAETQPzYNgEnSijt8K6LE86xM2GuJdh7b6_SNCFj2w@mail.gmail.com>
+Message-ID: <CAMuHMdVVgAETQPzYNgEnSijt8K6LE86xM2GuJdh7b6_SNCFj2w@mail.gmail.com>
+Subject: Re: [PATCH] libgcc: Add forward declarations for generic library routines
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, geert+renesas@glider.be,
+        akpm@linux-foundation.org, linux-csky@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        chris@zankel.net, jcmvbkbc@gmail.com, lkp@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Fri, 21 Apr 2023 13:38:52 PDT (-0700), Arnd Bergmann wrote:
-> On Fri, Apr 21, 2023, at 16:54, Geert Uytterhoeven wrote:
->> With W=1 on platforms that use the generic gcc library routines
->> (csky/loongarch/mips/riscv/sh/xtensa):
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/oe-kbuild-all/202303272214.RxzpA6bP-lkp@intel.com/
->> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Nice, this is one I don't have in my series,
->
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
->
-> I have patches for a lot of other missing prototype warnings, plan
-> to send them out after -rc1.
+Hi Palmer,
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Sat, Apr 29, 2023 at 10:20 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> On Fri, 21 Apr 2023 13:38:52 PDT (-0700), Arnd Bergmann wrote:
+> > On Fri, Apr 21, 2023, at 16:54, Geert Uytterhoeven wrote:
+> >> With W=1 on platforms that use the generic gcc library routines
+> >> (csky/loongarch/mips/riscv/sh/xtensa):
+> >>
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >> Link: https://lore.kernel.org/oe-kbuild-all/202303272214.RxzpA6bP-lkp@intel.com/
+> >> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> >
+> > Nice, this is one I don't have in my series,
+> >
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > I have patches for a lot of other missing prototype warnings, plan
+> > to send them out after -rc1.
+>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-I think I've merged some stuff around here before, but it's probably 
-better for some more generic tree?  LMK if you guys wanted me to pick 
-these up, though, I've got a smattering of small stuff already so I'll 
-have another PR either way.
+Thanks!
+
+> I think I've merged some stuff around here before, but it's probably
+> better for some more generic tree?  LMK if you guys wanted me to pick
+> these up, though, I've got a smattering of small stuff already so I'll
+> have another PR either way.
+
+Too late ;-) Already upstream via akpm's tree.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
