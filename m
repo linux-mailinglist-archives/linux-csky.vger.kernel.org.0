@@ -2,164 +2,86 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A926F3C17
-	for <lists+linux-csky@lfdr.de>; Tue,  2 May 2023 04:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6CD6F6AFE
+	for <lists+linux-csky@lfdr.de>; Thu,  4 May 2023 14:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjEBCWU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 1 May 2023 22:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
+        id S229873AbjEDMS1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 4 May 2023 08:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjEBCWT (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 1 May 2023 22:22:19 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468F93AB8;
-        Mon,  1 May 2023 19:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682994127; x=1714530127;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=85LkbDK+KApuWepVvTrNKkbkOtRXRZZHLuh2xgotSTc=;
-  b=SWG2C9mkUi9n7rSt0nciLqhoZZlIgS1cK0m1feX/w1nZ77bfRr6lra8p
-   nAvGgMzUYK3HkUVtkYKeXZgeNURAhOhf6M/AwuVJzvSPOOysfRUgrHk+V
-   3sfvl7u47s005rzV98welPZTZw3zziuKtzFvzkY3DbG+PcNPsNHR9TXvG
-   tQQzG4/IxK9BoZMn/ESTVdIEwj+mgIY/0pP2FtXbnPlfh0chOzBJKms6T
-   34UnUQ3n84LUH6pMRzyPdfu4+r9086uFzMaTllREGcvV4tKNlVOgD3c+N
-   6BavtjK6PDWhF9S57Dy8A2REq3O4vhVwTUmzmKpbvKauKfnK3cPltzr7f
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="376342293"
-X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
-   d="scan'208";a="376342293"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 19:22:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="646346632"
-X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
-   d="scan'208";a="646346632"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 May 2023 19:22:01 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptfeS-0000m8-1s;
-        Tue, 02 May 2023 02:22:00 +0000
-Date:   Tue, 2 May 2023 10:21:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH v2 21/34] arm64: Convert various functions to use ptdescs
-Message-ID: <202305021038.c9jfVDsv-lkp@intel.com>
-References: <20230501192829.17086-22-vishal.moola@gmail.com>
+        with ESMTP id S230385AbjEDMSY (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 4 May 2023 08:18:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FC76190;
+        Thu,  4 May 2023 05:18:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38678633CC;
+        Thu,  4 May 2023 12:18:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5447AC433EF;
+        Thu,  4 May 2023 12:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683202700;
+        bh=nGxeARBJkikCTCERlSlzDIaX91rrXwF9UAD1tOJJhxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=STXMxlDT5ipVz/GKUn6V9IfBxaM8e7ytBWYJG9QU3X8YqoPzhGVZM7MS5vpHI6aBl
+         WvgVLVvtgY4KzgNxiVAVOxnBB5sblr4P4Jk10bzcdjm/zBVu3gO40jTtVk3eBcOzco
+         5W48GJcc1p5nA6+yPlgY1/SXHZ3UQgJs7jNC5oFJ3eFmqqx77UaC36hTnrc8GJGdyb
+         zfxtVxuHmlOykTFbErpilokpabIlFHGG2CQz3EEzpjt+NAgljfG/JqQpkb8apoMqVx
+         NziRyisxp3VU64n85GNhSECBPYuGNKs0oLreyYmkez+l5c8T9dKd5h3vgaH9In14f/
+         PAjy2LGIykH5w==
+From:   guoren@kernel.org
+To:     torvalds@linux-foundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky changes for v6.4
+Date:   Thu,  4 May 2023 08:18:15 -0400
+Message-Id: <20230504121815.1537054-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230501192829.17086-22-vishal.moola@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Vishal,
+Hi Linus,
 
-kernel test robot noticed the following build errors:
+Please pull the latest csky changes from:
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master next-20230428]
-[cannot apply to s390/features powerpc/next powerpc/fixes geert-m68k/for-next geert-m68k/for-linus v6.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230502-033042
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230501192829.17086-22-vishal.moola%40gmail.com
-patch subject: [PATCH v2 21/34] arm64: Convert various functions to use ptdescs
-config: arm64-randconfig-r023-20230430 (https://download.01.org/0day-ci/archive/20230502/202305021038.c9jfVDsv-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b1465cd49efcbc114a75220b153f5a055ce7911f)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/8e9481b63b5773d7c914836dcd7fbec2449902bc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230502-033042
-        git checkout 8e9481b63b5773d7c914836dcd7fbec2449902bc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305021038.c9jfVDsv-lkp@intel.com/
+are available in the Git repository at:
 
-All errors (new ones prefixed by >>):
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.4
 
->> arch/arm64/mm/mmu.c:440:10: error: invalid argument type 'void' to unary expression
-                   BUG_ON(!ptdesc_pte_dtor(ptdesc));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:71:45: note: expanded from macro 'BUG_ON'
-   #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-                                               ^~~~~~~~~
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   arch/arm64/mm/mmu.c:442:10: error: invalid argument type 'void' to unary expression
-                   BUG_ON(!ptdesc_pte_dtor(ptdesc));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:71:45: note: expanded from macro 'BUG_ON'
-   #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
-                                               ^~~~~~~~~
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   2 errors generated.
+for you to fetch changes up to 1f62ed00a56bf01becaccd81bf30f2fcb0322fd2:
 
+  csky: mmu: Prevent spurious page faults (2023-04-13 02:36:14 -0400)
 
-vim +/void +440 arch/arm64/mm/mmu.c
+----------------------------------------------------------------
+arch/csky patches for 6.4
 
-   425	
-   426	static phys_addr_t pgd_pgtable_alloc(int shift)
-   427	{
-   428		phys_addr_t pa = __pgd_pgtable_alloc(shift);
-   429		struct ptdesc *ptdesc = page_ptdesc(phys_to_page(pa));
-   430	
-   431		/*
-   432		 * Call proper page table ctor in case later we need to
-   433		 * call core mm functions like apply_to_page_range() on
-   434		 * this pre-allocated page table.
-   435		 *
-   436		 * We don't select ARCH_ENABLE_SPLIT_PMD_PTLOCK if pmd is
-   437		 * folded, and if so ptdesc_pte_dtor() becomes nop.
-   438		 */
-   439		if (shift == PAGE_SHIFT)
- > 440			BUG_ON(!ptdesc_pte_dtor(ptdesc));
-   441		else if (shift == PMD_SHIFT)
-   442			BUG_ON(!ptdesc_pte_dtor(ptdesc));
-   443	
-   444		return pa;
-   445	}
-   446	
+The pull request we've done:
+ - Remove CPU_TLB_SIZE config
+ - Prevent spurious page faults
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+----------------------------------------------------------------
+Guo Ren (1):
+      csky: mmu: Prevent spurious page faults
+
+Lukas Bulwahn (1):
+      csky: remove obsolete config CPU_TLB_SIZE
+
+ arch/csky/Kconfig            | 5 -----
+ arch/csky/abiv1/cacheflush.c | 3 +++
+ arch/csky/abiv2/cacheflush.c | 3 +++
+ 3 files changed, 6 insertions(+), 5 deletions(-)
