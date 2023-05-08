@@ -2,105 +2,102 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A95C6FB31C
-	for <lists+linux-csky@lfdr.de>; Mon,  8 May 2023 16:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAB76FB6DD
+	for <lists+linux-csky@lfdr.de>; Mon,  8 May 2023 21:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbjEHOmC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 8 May 2023 10:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S233108AbjEHTna (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 8 May 2023 15:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234362AbjEHOl7 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 8 May 2023 10:41:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78512769A;
-        Mon,  8 May 2023 07:41:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03DFF63FF4;
-        Mon,  8 May 2023 14:41:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5599DC433AF;
-        Mon,  8 May 2023 14:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683556916;
-        bh=GN50963fdkw5cucYPuN4xRaiQmxHDA0hrlxtEWYsvtQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=r64Dxi/fpFWqlTPgj0oa/IYTE2F52/0U4frXOQyj/T+tixhV8XgLG9eTZd0UTcV36
-         MThVa+dfb2c7qq/bN1MQ8+/nOc8Zmb/oMzz15aLEjcY3k7iXI8FgY1pc19ij96JWIV
-         p9dbdwXXuKSBbcyHFrtz6ZwA4PUDzbKgr0j7wVdl3YWaGX8HsjZh5pa2IYQUToSezH
-         E9CdNSf3PqfxLJyZIxE9T5n56CbdoDjfQLgg37E6Wjd320jmozml/4Ck793810C2gG
-         zwHDr3HymZCWssXv9EaO6SQ9YW4Hi3EpsX6/opGZlaru1Qz9BiS57573d/bVlpFpBc
-         4vD8grh8d6yuA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2C09CE26D2B;
-        Mon,  8 May 2023 14:41:56 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] libgcc: Add forward declarations for generic library routines
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168355691617.25692.18413165340491314933.git-patchwork-notify@kernel.org>
-Date:   Mon, 08 May 2023 14:41:56 +0000
-References: <5cdbe08296693dd53849f199c3933e16e97b33c1.1682088593.git.geert+renesas@glider.be>
-In-Reply-To: <5cdbe08296693dd53849f199c3933e16e97b33c1.1682088593.git.geert+renesas@glider.be>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-riscv@lists.infradead.org, akpm@linux-foundation.org,
-        arnd@arndb.de, linux-csky@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-sh@vger.kernel.org, chris@zankel.net, jcmvbkbc@gmail.com,
-        lkp@intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229560AbjEHTna (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 8 May 2023 15:43:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5754209;
+        Mon,  8 May 2023 12:43:29 -0700 (PDT)
+Message-ID: <20230508181633.089804905@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683575007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=cSONB8rAwM/DhP8pLyA+5ZPUbC2lOuuQwaVdJRn5WDM=;
+        b=TUKnHdyKCm2jhBxD5IlUGRPEG/QaxWUEEk5j+F5TiwGQh75MzfKnWvvga1ogV0FWpqsAk0
+        Z/VqPwKzVgozvsmFgeZHc6fKtgAWVGs7xGme4vq54PLJoTakzMDfDNVCbcO2rny0q4HnR6
+        qlFXb43Qt1L8lTxJDtVVOKBuzxeXABCLtAFoVNNIdEV1p8ow/ukbkpiR2uIVB/FYpjA6p3
+        h6hKX4cZFsqIirm+tNd9G+ACRA1lcKi+gtx7U3umktHuz9juvrtG2mgbwLKrM2SK5QyvS3
+        r9jvL2zUpq3y0guhjpTb2zQUgu9MH/0dN+oTlFfspWYXJjDrCu5rao9nchjzhw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683575007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=cSONB8rAwM/DhP8pLyA+5ZPUbC2lOuuQwaVdJRn5WDM=;
+        b=i5YP5va30wPZDaaNSG4+BZNoSkYS91jOjq0F96kx0dzX5lZgVd2tGOGcKaXMK8erIbX4td
+        IGoM8wVZMNo8tHAg==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: [patch v3 00/36] cpu/hotplug, x86: Reworked parallel CPU bringup
+Date:   Mon,  8 May 2023 21:43:26 +0200 (CEST)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello:
+Hi!
 
-This patch was applied to riscv/linux.git (fixes)
-by Andrew Morton <akpm@linux-foundation.org>:
+This is version 3 of the reworked parallel bringup series. Version 2 can be
+found here:
 
-On Fri, 21 Apr 2023 16:54:24 +0200 you wrote:
-> With W=1 on platforms that use the generic gcc library routines
-> (csky/loongarch/mips/riscv/sh/xtensa):
-> 
->     lib/ashldi3.c:9:19: warning: no previous prototype for '__ashldi3' [-Wmissing-prototypes]
-> 	9 | long long notrace __ashldi3(long long u, word_type b)
-> 	  |                   ^~~~~~~~~
->       CC      lib/ashrdi3.o
->     lib/ashrdi3.c:9:19: warning: no previous prototype for '__ashrdi3' [-Wmissing-prototypes]
-> 	9 | long long notrace __ashrdi3(long long u, word_type b)
-> 	  |                   ^~~~~~~~~
->       CC      lib/cmpdi2.o
->     lib/cmpdi2.c:9:19: warning: no previous prototype for '__cmpdi2' [-Wmissing-prototypes]
-> 	9 | word_type notrace __cmpdi2(long long a, long long b)
-> 	  |                   ^~~~~~~~
->       CC      lib/lshrdi3.o
->     lib/lshrdi3.c:9:19: warning: no previous prototype for '__lshrdi3' [-Wmissing-prototypes]
-> 	9 | long long notrace __lshrdi3(long long u, word_type b)
-> 	  |                   ^~~~~~~~~
->       CC      lib/muldi3.o
->     lib/muldi3.c:49:19: warning: no previous prototype for '__muldi3' [-Wmissing-prototypes]
->        49 | long long notrace __muldi3(long long u, long long v)
-> 	  |                   ^~~~~~~~
->       CC      lib/ucmpdi2.o
->     lib/ucmpdi2.c:8:19: warning: no previous prototype for '__ucmpdi2' [-Wmissing-prototypes]
-> 	8 | word_type notrace __ucmpdi2(unsigned long long a, unsigned long long b)
-> 	  |                   ^~~~~~~~~
-> 
-> [...]
+   https://lore.kernel.org/lkml/20230504185733.126511787@linutronix.de
 
-Here is the summary with links:
-  - libgcc: Add forward declarations for generic library routines
-    https://git.kernel.org/riscv/c/4f20b7471c57
+This is just a quick reiteration to address the following details:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  1) Drop the two extended topology leaf patches as they are not longer
+     relevant (Andrew Cooper)
+
+  2) Make the announce_cpu() fixup work for real (Micheal Kelley)
+
+Other than that there are no changes and the other details are all the same
+as in V2.
+
+Thanks,
+
+	tglx
+
+
+
 
 
