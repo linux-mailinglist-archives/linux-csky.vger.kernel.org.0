@@ -2,39 +2,42 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E666FC5FB
-	for <lists+linux-csky@lfdr.de>; Tue,  9 May 2023 14:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE7C6FC7B3
+	for <lists+linux-csky@lfdr.de>; Tue,  9 May 2023 15:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235601AbjEIMMQ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 9 May 2023 08:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S235490AbjEINPo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 9 May 2023 09:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235510AbjEIMMP (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 9 May 2023 08:12:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DCE3C25;
-        Tue,  9 May 2023 05:12:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683634332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OeDWxrG4XUYobVqWgAe3O2JPVJDj89o+5jrCfskGJg8=;
-        b=hl/TK4RBTejer0s1ss/VQWoTE3DJHIErNy5ObBMt3F35AuGijMu5SQIYqEXIyyWfguIJ74
-        IuVIsOwOjI+DOYpi1oyZvtSrA4xy0VqeURht3o6yDrYLZd0dCj9sQmFOFO0ByR3FGuzx1X
-        DX/4mqvZ8z2EcTfmL6YwZj0AheRNPYO2Sw/CFuIRodeNmQ9+fMov+UrbzmNB3mOPDT4LpP
-        XixRF4zedTnImudhtqeC8vGLPe0PN84sIltm+fYhikFa7xWpApb8aT+EKAws94oS5Kw77W
-        ZD3DPvNRfQa9kERCm1KsnYEOdLoCE866a9iJjH9pstUyHznEaCqcjcX+ulrAEw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683634332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OeDWxrG4XUYobVqWgAe3O2JPVJDj89o+5jrCfskGJg8=;
-        b=C/RxUkGIvC1trkLde7ELOcrRJTFX/YyTBVeqxDPOcpgYwMXYyUXrtmmSUhQ5qz65ax/jQH
-        CAvGiAfvhE+ZmGAQ==
-To:     Peter Zijlstra <peterz@infradead.org>
+        with ESMTP id S235487AbjEINPl (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 9 May 2023 09:15:41 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962135251;
+        Tue,  9 May 2023 06:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=khqr0MrXgdTVdwiWa8T0MGcDfR6bo4jGzZcTutjT+jQ=; b=AEUW7P6wHkheamaa+eBuAM5GlC
+        HfXe2ylLtWfcka1eSHoTdooMv0rHLwy/4UXXJfZaPtCYmRmGdjmuMt/FClhve6qLhrukTIXm+8N+x
+        nnGp+Vzv9Hegi36E8Rf/r4OzxVgdZvlwWMFCYnhPsYrrh5BHtNngH7k2UHSRocxMaqFkCSuUYHGyM
+        EsKfIzE5XcxVl6vZOctnKdun9FsIUQbYBW2M+Z1E/CAIBnpced8CJq1O4rRlwdi1xMIKktEKJ2RfE
+        L+hwPaIMMTATJdkHhod0l8xSQ9RsSKpUEP7+RkcJIh1jBJKJkRFGUcEM0nLnU4e2CbQIrer3yhEJm
+        rDt36aIw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pwNA0-00FGci-C9; Tue, 09 May 2023 13:13:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B23CD30026A;
+        Tue,  9 May 2023 15:13:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9497920B41FB2; Tue,  9 May 2023 15:13:40 +0200 (CEST)
+Date:   Tue, 9 May 2023 15:13:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
@@ -67,20 +70,20 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         linux-riscv@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: Re: [patch v3 18/36] [patch V2 18/38] cpu/hotplug: Add CPU state
- tracking and synchronization
-In-Reply-To: <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Subject: Re: [patch v3 34/36] x86/smpboot: Implement a bit spinlock to
+ protect the realmode stack
+Message-ID: <20230509131340.GA83892@hirez.programming.kicks-ass.net>
 References: <20230508181633.089804905@linutronix.de>
- <20230508185218.240871842@linutronix.de>
- <20230509110722.GZ83892@hirez.programming.kicks-ass.net>
-Date:   Tue, 09 May 2023 14:12:12 +0200
-Message-ID: <87bkit1z6r.ffs@tglx>
+ <20230508185219.123719053@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508185219.123719053@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,26 +91,57 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, May 09 2023 at 13:07, Peter Zijlstra wrote:
-> On Mon, May 08, 2023 at 09:43:55PM +0200, Thomas Gleixner wrote:
->
->> +static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
->> +{
->> +	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
->> +	int sync = atomic_read(st);
->> +
->> +	while (!atomic_try_cmpxchg(st, &sync, state));
->> +}
->
-> Why isn't:
->
-> 	atomic_set(st, state);
->
-> any good?
+On Mon, May 08, 2023 at 09:44:22PM +0200, Thomas Gleixner wrote:
 
-Good question. It's only the other side (control CPU) which needs to be
-careful.
+> @@ -252,6 +252,17 @@ SYM_INNER_LABEL(secondary_startup_64_no_
+>  	movq	TASK_threadsp(%rax), %rsp
+>  
+>  	/*
+> +	 * Now that this CPU is running on its own stack, drop the realmode
+> +	 * protection. For the boot CPU the pointer is NULL!
+> +	 */
+> +	movq	trampoline_lock(%rip), %rax
+	movl	$0, (%rax)
 
-Thanks,
+> +.Lsetup_gdt:
+> +	/*
+>  	 * We must switch to a new descriptor in kernel space for the GDT
+>  	 * because soon the kernel won't have access anymore to the userspace
+>  	 * addresses where we're currently running on. We have to do that here
 
-        tglx
+> --- a/arch/x86/realmode/rm/trampoline_64.S
+> +++ b/arch/x86/realmode/rm/trampoline_64.S
+> @@ -37,6 +37,24 @@
+>  	.text
+>  	.code16
+>  
+> +.macro LOAD_REALMODE_ESP
+> +	/*
+> +	 * Make sure only one CPU fiddles with the realmode stack
+> +	 */
+> +.Llock_rm\@:
+> +	btl	$0, tr_lock
+> +	jnc	2f
+> +	pause
+> +	jmp	.Llock_rm\@
+> +2:
+> +	lock
+> +	btsl	$0, tr_lock
+> +	jc	.Llock_rm\@
+
+Do we really care about performance here; or should we pick the simpler
+form? Also, 'lock' is a prefix, not an instruction.
+
+.Llock_rm\@:
+	lock btsl	$0, tr_lock;
+	jnc		2f
+	pause
+	jmp		.Llock_rm\@
+2:
+
+> +
+> +	# Setup stack
+> +	movl	$rm_stack_end, %esp
+> +.endm
+> +
+>  	.balign	PAGE_SIZE
