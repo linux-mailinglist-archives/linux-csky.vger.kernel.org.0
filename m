@@ -2,39 +2,26 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450676FB795
-	for <lists+linux-csky@lfdr.de>; Mon,  8 May 2023 21:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035D76FC29B
+	for <lists+linux-csky@lfdr.de>; Tue,  9 May 2023 11:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbjEHTr1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 8 May 2023 15:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
+        id S235086AbjEIJUs (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 9 May 2023 05:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbjEHTqr (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 8 May 2023 15:46:47 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BF67AA7;
-        Mon,  8 May 2023 12:45:07 -0700 (PDT)
-Message-ID: <20230508185219.230287961@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683575065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=3NBWNJYu3OFWIUCmAc5GXW8QVPdUswJXSMxcyKJq1tg=;
-        b=K6CA2AWS2i4RYcmGQF5izhhtRvEH4Lqy1zX4leSX1xCbJyu2fRUt2bE/H/K1KBaD4mhPbX
-        DXbEEuDfyoRsRnWOS+Az/SwmgLHy0tkGFwSi+d9yJ7tMxgkcQqSUw6UAeTo9FkUMHY3IUg
-        T/DcJN7g9UpndwKZO+NAaBwlV2ov/Q5kI7PbzfEk3wlLHqSoSVXJmbX27DqtE0LGcHeJ5/
-        uMD6H0ks6CuxavlZamlO82S2b8EL75FhHxK4jbfs4N8WF5LaIuaXPH1KPg0hu/77zltt9Q
-        FxeGNYCpIMpzLNNpAb0Z1xP21rZ/1pqRbky5sY5CgPzxIzrF2nbI5kpsiH2C4A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683575065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=3NBWNJYu3OFWIUCmAc5GXW8QVPdUswJXSMxcyKJq1tg=;
-        b=wmV5ftrL9XveDdj42u5NoraYPGMS4sHOk5l7sWwCFijJk9PW7V8wwmY2iynLMZfkCTudZu
-        C7051zfZnT0NNeAQ==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        with ESMTP id S234945AbjEIJUY (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 9 May 2023 05:20:24 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CCE100C0;
+        Tue,  9 May 2023 02:20:17 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.73.203) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 9 May 2023
+ 12:20:06 +0300
+Subject: Re: [patch v3 33/36] x86/apic: Save the APIC virtual base address
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <x86@kernel.org>, David Woodhouse <dwmw2@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
         Brian Gerst <brgerst@gmail.com>,
         Arjan van de Veen <arjan@linux.intel.com>,
@@ -49,260 +36,107 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Usama Arif <usama.arif@bytedance.com>,
         Juergen Gross <jgross@suse.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
+        <xen-devel@lists.xenproject.org>,
         Russell King <linux@armlinux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
+        <linux-arm-kernel@lists.infradead.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
+        <linux-csky@vger.kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
+        <linux-mips@vger.kernel.org>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Helge Deller <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
+        <linux-riscv@lists.infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Subject: [patch v3 36/36] x86/smpboot/64: Implement
- arch_cpuhp_init_parallel_bringup() and enable it
 References: <20230508181633.089804905@linutronix.de>
+ <20230508185219.070274100@linutronix.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <a6f48a7b-484c-31af-f568-cb1de0d766d4@omp.ru>
+Date:   Tue, 9 May 2023 12:20:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  8 May 2023 21:44:25 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230508185219.070274100@linutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.73.203]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 05/09/2023 08:58:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 177218 [May 07 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.203 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.203 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 178.176.73.203:7.4.1,7.7.3;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.203
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/09/2023 09:07:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 5/9/2023 6:00:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Hello!
 
-Implement the validation function which tells the core code whether
-parallel bringup is possible.
+On 5/8/23 10:44 PM, Thomas Gleixner wrote:
 
-The only condition for now is that the kernel does not run in an encrypted
-guest as these will trap the RDMSR via #VC, which cannot be handled at that
-point in early startup.
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> For parallel CPU brinugp it's required to read the APIC ID in the low level
+> startup code. The virtual APIC base address is a constant because its a
+> fix-mapped address. Exposing that constant which is composed via macros to
+> assembly code is non-trivial dues to header inclusion hell.
 
-There was an earlier variant for AMD-SEV which used the GHBC protocol for
-retrieving the APIC ID via CPUID, but there is no guarantee that the
-initial APIC ID in CPUID is the same as the real APIC ID. There is no
-enforcement from the secure firmware and the hypervisor can assign APIC IDs
-as it sees fit as long as the ACPI/MADT table is consistent with that
-assignment.
+   s/dues/due/?
 
-Unfortunately there is no RDMSR GHCB protocol at the moment, so enabling
-AMD-SEV guests for parallel startup needs some more thought.
+> Aside of that it's constant only because of the vsyscall ABI
+> requirement. Once vsyscall is out of the picture the fixmap can be placed
+> at runtime.
+> 
+> Avoid header hell, stay flexible and store the address in a variable which
+> can be exposed to the low level startup code.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Michael Kelley <mikelley@microsoft.com>
 
-Intel-TDX provides a secure RDMSR hypercall, but supporting that is outside
-the scope of this change.
+[...]
 
-Fixup announce_cpu() as e.g. on Hyper-V CPU1 is the secondary sibling of
-CPU0, which makes the @cpu == 1 logic in announce_cpu() fall apart.
-
-[ mikelley: Reported the announce_cpu() fallout
-
-Originally-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-
----
-V2: Fixup announce_cpu() - Michael Kelley
-V3: Fixup announce_cpu() for real - Michael Kelley
----
- arch/x86/Kconfig             |    3 -
- arch/x86/kernel/cpu/common.c |    6 --
- arch/x86/kernel/smpboot.c    |   87 +++++++++++++++++++++++++++++++++++--------
- 3 files changed, 75 insertions(+), 21 deletions(-)
----
-
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -274,8 +274,9 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HOTPLUG_PARALLEL			if SMP && X86_64
- 	select HOTPLUG_SMT			if SMP
--	select HOTPLUG_SPLIT_STARTUP		if SMP
-+	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2128,11 +2128,7 @@ static inline void setup_getcpu(int cpu)
- }
- 
- #ifdef CONFIG_X86_64
--static inline void ucode_cpu_init(int cpu)
--{
--	if (cpu)
--		load_ucode_ap();
--}
-+static inline void ucode_cpu_init(int cpu) { }
- 
- static inline void tss_setup_ist(struct tss_struct *tss)
- {
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -58,6 +58,7 @@
- #include <linux/overflow.h>
- #include <linux/stackprotector.h>
- #include <linux/cpuhotplug.h>
-+#include <linux/mc146818rtc.h>
- 
- #include <asm/acpi.h>
- #include <asm/cacheinfo.h>
-@@ -75,7 +76,7 @@
- #include <asm/fpu/api.h>
- #include <asm/setup.h>
- #include <asm/uv/uv.h>
--#include <linux/mc146818rtc.h>
-+#include <asm/microcode.h>
- #include <asm/i8259.h>
- #include <asm/misc.h>
- #include <asm/qspinlock.h>
-@@ -128,7 +129,6 @@ int arch_update_cpu_topology(void)
- 	return retval;
- }
- 
--
- static unsigned int smpboot_warm_reset_vector_count;
- 
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
-@@ -229,16 +229,43 @@ static void notrace start_secondary(void
- 	 */
- 	cr4_init();
- 
--#ifdef CONFIG_X86_32
--	/* switch away from the initial page table */
--	load_cr3(swapper_pg_dir);
--	__flush_tlb_all();
--#endif
-+	/*
-+	 * 32-bit specific. 64-bit reaches this code with the correct page
-+	 * table established. Yet another historical divergence.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32)) {
-+		/* switch away from the initial page table */
-+		load_cr3(swapper_pg_dir);
-+		__flush_tlb_all();
-+	}
-+
- 	cpu_init_exception_handling();
- 
- 	/*
--	 * Synchronization point with the hotplug core. Sets the
--	 * synchronization state to ALIVE and waits for the control CPU to
-+	 * 32-bit systems load the microcode from the ASM startup code for
-+	 * historical reasons.
-+	 *
-+	 * On 64-bit systems load it before reaching the AP alive
-+	 * synchronization point below so it is not part of the full per
-+	 * CPU serialized bringup part when "parallel" bringup is enabled.
-+	 *
-+	 * That's even safe when hyperthreading is enabled in the CPU as
-+	 * the core code starts the primary threads first and leaves the
-+	 * secondary threads waiting for SIPI. Loading microcode on
-+	 * physical cores concurrently is a safe operation.
-+	 *
-+	 * This covers both the Intel specific issue that concurrent
-+	 * microcode loading on SMT siblings must be prohibited and the
-+	 * vendor independent issue`that microcode loading which changes
-+	 * CPUID, MSRs etc. must be strictly serialized to maintain
-+	 * software state correctness.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_64))
-+		load_ucode_ap();
-+
-+	/*
-+	 * Synchronization point with the hotplug core. Sets this CPUs
-+	 * synchronization state to ALIVE and spin-waits for the control CPU to
- 	 * release this CPU for further bringup.
- 	 */
- 	cpuhp_ap_sync_alive();
-@@ -924,9 +951,9 @@ static int wakeup_secondary_cpu_via_init
- /* reduce the number of lines printed when booting a large cpu count system */
- static void announce_cpu(int cpu, int apicid)
- {
-+	static int width, node_width, first = 1;
- 	static int current_node = NUMA_NO_NODE;
- 	int node = early_cpu_to_node(cpu);
--	static int width, node_width;
- 
- 	if (!width)
- 		width = num_digits(num_possible_cpus()) + 1; /* + '#' sign */
-@@ -934,10 +961,10 @@ static void announce_cpu(int cpu, int ap
- 	if (!node_width)
- 		node_width = num_digits(num_possible_nodes()) + 1; /* + '#' */
- 
--	if (cpu == 1)
--		printk(KERN_INFO "x86: Booting SMP configuration:\n");
--
- 	if (system_state < SYSTEM_RUNNING) {
-+		if (first)
-+			pr_info("x86: Booting SMP configuration:\n");
-+
- 		if (node != current_node) {
- 			if (current_node > (-1))
- 				pr_cont("\n");
-@@ -948,11 +975,11 @@ static void announce_cpu(int cpu, int ap
- 		}
- 
- 		/* Add padding for the BSP */
--		if (cpu == 1)
-+		if (first)
- 			pr_cont("%*s", width + 1, " ");
-+		first = 0;
- 
- 		pr_cont("%*s#%d", width - num_digits(cpu), " ", cpu);
--
- 	} else
- 		pr_info("Booting Node %d Processor %d APIC 0x%x\n",
- 			node, cpu, apicid);
-@@ -1242,6 +1269,36 @@ void __init smp_prepare_cpus_common(void
- 	set_cpu_sibling_map(0);
- }
- 
-+#ifdef CONFIG_X86_64
-+/* Establish whether parallel bringup can be supported. */
-+bool __init arch_cpuhp_init_parallel_bringup(void)
-+{
-+	/*
-+	 * Encrypted guests require special handling. They enforce X2APIC
-+	 * mode but the RDMSR to read the APIC ID is intercepted and raises
-+	 * #VC or #VE which cannot be handled in the early startup code.
-+	 *
-+	 * AMD-SEV does not provide a RDMSR GHCB protocol so the early
-+	 * startup code cannot directly communicate with the secure
-+	 * firmware. The alternative solution to retrieve the APIC ID via
-+	 * CPUID(0xb), which is covered by the GHCB protocol, is not viable
-+	 * either because there is no enforcement of the CPUID(0xb)
-+	 * provided "initial" APIC ID to be the same as the real APIC ID.
-+	 *
-+	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-+	 * implemented seperately in the low level startup ASM code.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-+		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
-+		return false;
-+	}
-+
-+	smpboot_control = STARTUP_READ_APICID;
-+	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
-+	return true;
-+}
-+#endif
-+
- /*
-  * Prepare for SMP bootup.
-  * @max_cpus: configured maximum number of CPUs, It is a legacy parameter
-
+MBR, Sergey
