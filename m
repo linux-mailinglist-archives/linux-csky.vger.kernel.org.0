@@ -2,43 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9D16FC851
-	for <lists+linux-csky@lfdr.de>; Tue,  9 May 2023 15:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5926E6FCD1B
+	for <lists+linux-csky@lfdr.de>; Tue,  9 May 2023 19:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234758AbjEIN6q (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 9 May 2023 09:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S234704AbjEIR7k (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 9 May 2023 13:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjEIN6p (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 9 May 2023 09:58:45 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3B383;
-        Tue,  9 May 2023 06:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hI8/gqpI8woXdIossg1TLqD9QGRFHNBoUAZE5mW3mjQ=; b=GG2RnOQApmwDBLG6Gsm3njtVQf
-        QxqK9VGUrgp9oG3wZracPmQrcB+PBRcVxw73VjgtK1EMmZyecLmKDRZHvAfJpdPcc5RHZtTaq4xJD
-        Mbjqc7jH+sKLynVrQ64G6thUi4zwqh8rCYsg9Lp1iTW79Slo5Qe2L9QpI3n9DvhT3p7bA6TVmgAX9
-        8FkXE5EqF+OkD2XK8OFB/cQwLHDQ75opJ0AVpsGCIfoG/ikF4CYJw/Z3nYXvLfqJ6eD5BtnvJz2Bw
-        RLxcdIrVYS3ih1v97QwYZHxN2Pa2PpFaGa3IzYQuFTqIQDj8U8Z4tCDPnIp0p0jNTeEO6UhbNFTql
-        XWuyju0w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwNqk-0069ad-04;
-        Tue, 09 May 2023 13:57:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 51BE730026A;
-        Tue,  9 May 2023 15:57:49 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3402820B08835; Tue,  9 May 2023 15:57:49 +0200 (CEST)
-Date:   Tue, 9 May 2023 15:57:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
+        with ESMTP id S234738AbjEIR7g (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 9 May 2023 13:59:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEF240F4;
+        Tue,  9 May 2023 10:59:29 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683655167;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xum3/PoQhkj8+lZ0cf9sSFx6MXDYkjs5zNnUN+Pv1LU=;
+        b=Nkxxvef/gwwBJnsMEIx+ow4OwBi+0uHyp5RBmTf5nu2aiSk0OvZ3yifQpp8iu0sBDEUJcj
+        a1p/dXIoIW4cJOIsg3u9nq+3ZMGA79rnrh+h78apzOr+Woxv52xV94jRRDOLibuFSvjBwU
+        SUohqreBen1xyv3eEH/AIWmtrxMik/GCCKHEY26BeCG6MKFWZnPkyvuY6oXd/duWViLVW4
+        n9vlzd7qcknLzQIMlzIHP9a/aIzu+mUh7LOMVIovsp4Zig3bcOdy74WIwY4m1K8dtzitFX
+        d+4WVMFQBWUbsdvHH09vwdfFlTvUiShojFdmigWEUDG66lPt7MAObiHtgpD6iQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683655167;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xum3/PoQhkj8+lZ0cf9sSFx6MXDYkjs5zNnUN+Pv1LU=;
+        b=hLLA1dOtcFDkk6Slof++fN9bjbnwHItgF9jR7A+4LDWa4ZEHpxGnn+ndm2NGXZQsn8wojt
+        9d63Rl+ydABO0vAQ==
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
@@ -73,18 +69,20 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch v3 35/36] x86/smpboot: Support parallel startup of
- secondary CPUs
-Message-ID: <20230509135749.GB83892@hirez.programming.kicks-ass.net>
+Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
+ separate phases and document them
+In-Reply-To: <87pm791zev.ffs@tglx>
 References: <20230508181633.089804905@linutronix.de>
- <20230508185219.176824543@linutronix.de>
+ <20230508185217.671595388@linutronix.de>
+ <20230509100421.GU83892@hirez.programming.kicks-ass.net>
+ <87pm791zev.ffs@tglx>
+Date:   Tue, 09 May 2023 19:59:26 +0200
+Message-ID: <87o7mtz8qp.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508185219.176824543@linutronix.de>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,15 +90,59 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:44:23PM +0200, Thomas Gleixner wrote:
-> +	/*  APIC ID not found in the table. Drop the trampoline lock and bail. */
-> +	movq	trampoline_lock(%rip), %rax
+On Tue, May 09 2023 at 14:07, Thomas Gleixner wrote:
+> On Tue, May 09 2023 at 12:04, Peter Zijlstra wrote:
+>> On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
+>>> +	/*
+>>> +	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
+>>> +	 * but just sets the bit to let the controlling CPU (BSP) know that
+>>> +	 * it's got this far.
+>>> +	 */
+>>>  	smp_callin();
+>>>  
+>>> -	/* otherwise gcc will move up smp_processor_id before the cpu_init */
+>>> +	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
+>>>  	barrier();
+>>
+>> Not to the detriment of this patch, but this barrier() and it's comment
+>> seem weird vs smp_callin(). That function ends with an atomic bitop (it
+>> has to, at the very least it must not be weaker than store-release) but
+>> also has an explicit wmb() to order setup vs CPU_STARTING.
+>>
+>> (arguably that should be a full fence *AND* get a comment)
+>>
+>> There is no way the smp_processor_id() referred to in this comment can
+>> land before cpu_init() even without the barrier().
+>
+> Right. Let me clean that up.
 
-Again:
+So I went and tried to figure out where this comes from. It's from
+d8f19f2cac70 ("[PATCH] x86-64 merge") in the history tree. One of those
+well documented combo patches which change world and some more. The
+context back then was:
 
-	movl	$0, (%rax)
+	/*
+	 * Dont put anything before smp_callin(), SMP
+	 * booting is too fragile that we want to limit the
+	 * things done here to the most necessary things.
+	 */
+	cpu_init();
+	smp_callin();
 
-is sufficient for unlock.
+	Dprintk("cpu %d: waiting for commence\n", smp_processor_id()); 
 
-> +	lock
-> +	btrl	$0, (%rax)
+That still does not explain what the barrier is doing. I tried to
+harvest mailing list archives, but did not find anything. The back then
+list discuss@x86-64.org was never publicly archived... Boris gave me an
+tarball, but this 'barrier()' add on was nowhere discussed in public.
+
+As the barrier has no obvious value, I'm adding a patch upfront which
+removes it.
+
+Thanks,
+
+        tglx
+
+
+
+
