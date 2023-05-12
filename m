@@ -2,44 +2,37 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20A66FD9B3
-	for <lists+linux-csky@lfdr.de>; Wed, 10 May 2023 10:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991D6701013
+	for <lists+linux-csky@lfdr.de>; Fri, 12 May 2023 23:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236607AbjEJIla (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 10 May 2023 04:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S238803AbjELVHC (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 12 May 2023 17:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236600AbjEJIlX (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 10 May 2023 04:41:23 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3AC1BEA;
-        Wed, 10 May 2023 01:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kxXv2WqVS/N/AXpDGiSycxgzS2fMDzLbIFoszm9gQVI=; b=fruh6dMZerc8uTfAzuh9A7hIbP
-        VvgdR1RS3pjBRGcpa6fHyCQvCR0Aq9ej79UowH+YJhhpMQFyqHZlLAYo85qDixs7AYee0NKygZtCT
-        6hOzrcLL6lgbJ6CDMnHBTG+URFob7oahukW020DEiWDlSZvO3aCqWhyjd0R6lOQ+0xUt6NrsA7nY+
-        t53+xab78Blhuyo9AdcouXah9dFIKssJhlWxI1vvizbNnJh1T+Up3Djmr8Kx45ZXR0w42rN3xa+Wj
-        vQG7RFMGQeTTvgV6Pll4zRWoLGjolJBp4/QvccMTRYfaN+G127v+dF7n6q9sjrP5Au/LmGKAAaAB2
-        nqiPFvtw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pwfM6-00G6ee-Fz; Wed, 10 May 2023 08:39:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F365300338;
-        Wed, 10 May 2023 10:39:24 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2636720B04BA2; Wed, 10 May 2023 10:39:24 +0200 (CEST)
-Date:   Wed, 10 May 2023 10:39:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
+        with ESMTP id S238595AbjELVHB (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 12 May 2023 17:07:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9662CE;
+        Fri, 12 May 2023 14:06:59 -0700 (PDT)
+Message-ID: <20230512203426.452963764@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683925617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=gnTvflJCY17ngq7v3t1VaZ+udg1fVO8xaD7NmVGfdtM=;
+        b=hpItgE596OZsCHwd4RZltNwkaoUY+M4nxaNk5aijZSoKnJnX+Z1ftHJzFxXeLlwiR7CBVO
+        kAeU5V6ipd8kuvNmo2jUYlgeJQZcAoQ/B2gtcPpMbKBJ5Hdb19cpdNKmIFAdiRriVPQFBq
+        TB+mebv9nD57p/zwHVWvLj1xYW2llen6ecBlhNLpiB4mMX8ISxfhUt0cg8NuDkltKRGqwv
+        kwkihKVbLzgwH4zA3a4gu5TjBLy8knJzdeBq4mfGSlsG3QssoI+I+YLWMjEKtJyMnCZYCb
+        q0UpvbfNJvV5gxrJ96IhSco7wHR/BgKJzA+FPEk8wMxiA3axwjVqCn3rrplQeA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683925617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=gnTvflJCY17ngq7v3t1VaZ+udg1fVO8xaD7NmVGfdtM=;
+        b=MX4k3gwiR3uPG3aHdqZkMbzsCUhWKscxACmgEvdnthaN7mX9Y50PkiqEAK2jw11B2rBJ5s
+        0yIwakfLrEZSxWCw==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
         Brian Gerst <brgerst@gmail.com>,
         Arjan van de Veen <arjan@linux.intel.com>,
@@ -63,7 +56,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -71,21 +64,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch v3 08/36] x86/smpboot: Split up native_cpu_up() into
- separate phases and document them
-Message-ID: <20230510083924.GI4253@hirez.programming.kicks-ass.net>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185217.671595388@linutronix.de>
- <20230509100421.GU83892@hirez.programming.kicks-ass.net>
- <87fs85z2na.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fs85z2na.ffs@tglx>
+        Ross Philipson <ross.philipson@oracle.com>
+Subject: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+Date:   Fri, 12 May 2023 23:06:56 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,25 +77,195 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:11:05PM +0200, Thomas Gleixner wrote:
-> On Tue, May 09 2023 at 12:04, Peter Zijlstra wrote:
-> > On Mon, May 08, 2023 at 09:43:39PM +0200, Thomas Gleixner wrote:
-> > Not to the detriment of this patch, but this barrier() and it's comment
-> > seem weird vs smp_callin(). That function ends with an atomic bitop (it
-> > has to, at the very least it must not be weaker than store-release) but
-> > also has an explicit wmb() to order setup vs CPU_STARTING.
-> >
-> > (arguably that should be a full fence *AND* get a comment)
-> 
-> TBH: I'm grasping for something 'arguable': What's the point of this
-> wmb() or even a mb()?
-> 
-> Most of the [w]mb()'s in smpboot.c except those in mwait_play_dead()
-> have a very distinct voodoo programming smell.
+Hi!
 
-Oh fully agreed, esp. without a comment these things are hugely suspect.
-I could not immediately see purpose either.
+This is version 4 of the reworked parallel bringup series. Version 3 can be
+found here:
 
-My arguably argument was about IF it was needed at all, then it would
-make more sense to me to also constrain loads. But I'd be more than
-happy to see the whole thing go. But perhaps not in this series?
+   https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
+
+This is just a reiteration to address the following details:
+
+  1) Address review feedback (Peter Zijlstra)
+
+  2) Fix a MIPS related build problem (0day)
+
+Other than that there are no changes and the other details are all the same
+as in V3 and V2.
+
+It's also available from git:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
+
+Diff to V3 below.
+
+Thanks,
+
+	tglx
+---
+diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+index f5e0f4235746..90c71d800b59 100644
+--- a/arch/mips/kernel/smp.c
++++ b/arch/mips/kernel/smp.c
+@@ -690,7 +690,7 @@ void flush_tlb_one(unsigned long vaddr)
+ EXPORT_SYMBOL(flush_tlb_page);
+ EXPORT_SYMBOL(flush_tlb_one);
+ 
+-#ifdef CONFIG_HOTPLUG_CPU
++#ifdef CONFIG_HOTPLUG_CORE_SYNC_DEAD
+ void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
+ {
+ 	if (mp_ops->cleanup_dead_cpu)
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 0438802031c3..9cd77d319555 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -290,8 +290,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 
+ 	/*  APIC ID not found in the table. Drop the trampoline lock and bail. */
+ 	movq	trampoline_lock(%rip), %rax
+-	lock
+-	btrl	$0, (%rax)
++	movl	$0, (%rax)
+ 
+ 1:	cli
+ 	hlt
+@@ -320,8 +319,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	movq	trampoline_lock(%rip), %rax
+ 	testq	%rax, %rax
+ 	jz	.Lsetup_gdt
+-	lock
+-	btrl	$0, (%rax)
++	movl	$0, (%rax)
+ 
+ .Lsetup_gdt:
+ 	/*
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 5caf4897b507..660709e94823 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -161,31 +161,28 @@ static inline void smpboot_restore_warm_reset_vector(void)
+ 
+ }
+ 
+-/*
+- * Report back to the Boot Processor during boot time or to the caller processor
+- * during CPU online.
+- */
+-static void smp_callin(void)
++/* Run the next set of setup steps for the upcoming CPU */
++static void ap_starting(void)
+ {
+ 	int cpuid = smp_processor_id();
+ 
+ 	/*
+-	 * If waken up by an INIT in an 82489DX configuration the alive
+-	 * synchronization guarantees we don't get here before an
+-	 * INIT_deassert IPI reaches our local APIC, so it is now safe to
+-	 * touch our local APIC.
++	 * If woken up by an INIT in an 82489DX configuration the alive
++	 * synchronization guarantees that the CPU does not reach this
++	 * point before an INIT_deassert IPI reaches the local APIC, so it
++	 * is now safe to touch the local APIC.
+ 	 *
+ 	 * Set up this CPU, first the APIC, which is probably redundant on
+ 	 * most boards.
+ 	 */
+ 	apic_ap_setup();
+ 
+-	/* Save our processor parameters. */
++	/* Save the processor parameters. */
+ 	smp_store_cpu_info(cpuid);
+ 
+ 	/*
+ 	 * The topology information must be up to date before
+-	 * calibrate_delay() and notify_cpu_starting().
++	 * notify_cpu_starting().
+ 	 */
+ 	set_cpu_sibling_map(cpuid);
+ 
+@@ -197,7 +194,7 @@ static void smp_callin(void)
+ 
+ 	/*
+ 	 * This runs the AP through all the cpuhp states to its target
+-	 * state (CPUHP_ONLINE in the case of serial bringup).
++	 * state CPUHP_ONLINE.
+ 	 */
+ 	notify_cpu_starting(cpuid);
+ }
+@@ -274,10 +271,7 @@ static void notrace start_secondary(void *unused)
+ 	rcu_cpu_starting(raw_smp_processor_id());
+ 	x86_cpuinit.early_percpu_clock_init();
+ 
+-	smp_callin();
+-
+-	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
+-	barrier();
++	ap_starting();
+ 
+ 	/* Check TSC synchronization with the control CPU. */
+ 	check_tsc_sync_target();
+diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
+index 2dfb1c400167..c6de4deec746 100644
+--- a/arch/x86/realmode/rm/trampoline_64.S
++++ b/arch/x86/realmode/rm/trampoline_64.S
+@@ -40,17 +40,13 @@
+ .macro LOAD_REALMODE_ESP
+ 	/*
+ 	 * Make sure only one CPU fiddles with the realmode stack
+-	 */
++	*/
+ .Llock_rm\@:
+-	btl	$0, tr_lock
+-	jnc	2f
+-	pause
+-	jmp	.Llock_rm\@
++        lock btsl       $0, tr_lock
++        jnc             2f
++        pause
++        jmp             .Llock_rm\@
+ 2:
+-	lock
+-	btsl	$0, tr_lock
+-	jc	.Llock_rm\@
+-
+ 	# Setup stack
+ 	movl	$rm_stack_end, %esp
+ .endm
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 60b4093fae9e..005f863a3d2b 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -294,14 +294,14 @@ enum cpuhp_sync_state {
+  * cpuhp_ap_update_sync_state - Update synchronization state during bringup/teardown
+  * @state:	The synchronization state to set
+  *
+- * No synchronization point. Just update of the synchronization state.
++ * No synchronization point. Just update of the synchronization state, but implies
++ * a full barrier so that the AP changes are visible before the control CPU proceeds.
+  */
+ static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state state)
+ {
+ 	atomic_t *st = this_cpu_ptr(&cpuhp_state.ap_sync_state);
+-	int sync = atomic_read(st);
+ 
+-	while (!atomic_try_cmpxchg(st, &sync, state));
++	(void)atomic_xchg(st, state);
+ }
+ 
+ void __weak arch_cpuhp_sync_state_poll(void) { cpu_relax(); }
+@@ -829,7 +829,11 @@ static int bringup_cpu(unsigned int cpu)
+ 	/*
+ 	 * Some architectures have to walk the irq descriptors to
+ 	 * setup the vector space for the cpu which comes online.
+-	 * Prevent irq alloc/free across the bringup.
++	 *
++	 * Prevent irq alloc/free across the bringup by acquiring the
++	 * sparse irq lock. Hold it until the upcoming CPU completes the
++	 * startup in cpuhp_online_idle() which allows to avoid
++	 * intermediate synchronization points in the architecture code.
+ 	 */
+ 	irq_lock_sparse();
+ 
+
+
