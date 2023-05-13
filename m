@@ -2,36 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F17170194A
-	for <lists+linux-csky@lfdr.de>; Sat, 13 May 2023 20:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9949F7019F0
+	for <lists+linux-csky@lfdr.de>; Sat, 13 May 2023 23:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjEMSkO (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 13 May 2023 14:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
+        id S229473AbjEMVCe (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 13 May 2023 17:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjEMSkN (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 13 May 2023 14:40:13 -0400
-X-Greylist: delayed 448 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 13 May 2023 11:40:10 PDT
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB272139;
-        Sat, 13 May 2023 11:40:10 -0700 (PDT)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 3E98A130F201;
-        Sat, 13 May 2023 20:32:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1684002754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vRMdV3qzOVMwmQcnB02GoMJuuadMUEoFe1zlRRYP5Zw=;
-        b=BYkiLxOIWN8IVtlF+nUBPTMaSvVLLm07F0DHp73Z+Eb7fP5wfHLu6+z3tHtGudVAjPmDGo
-        cMZS4YuquHcnYJ9oS7feOQiSz26jdOO3YZzY3i1btzZDXY+EaLoZDj8CRG0dAnOPQirDG2
-        m5QBpNJvNrr34slkYe3VXn3/zoEgtxo=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+        with ESMTP id S231190AbjEMVCc (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 13 May 2023 17:02:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA1E30C4;
+        Sat, 13 May 2023 14:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684011649; i=deller@gmx.de;
+        bh=S8BdFQeWXnw0k7xb/Pd2AhJXn5drG2VSOAIP2nWf5C4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=mcUG47eX0Gn5veG6Ma/ul80RdUo6bsI8PVfZz0zKmUflnHrmh7e47BPa5vNQH5AE5
+         xN8t8csT87bACHCqA8OsuJ2hWYdHBaim0kPYxyJPyGV+wdFIZqdMZ2KWJkGpMA71P/
+         egT+C+AIP++kGZ4bJ4izMXA5xAwpUSXSFsk26PUoT8kKqTDoQAx1/dB+6F6qtKXT3r
+         GvfRk5+vnzNiG67CzR+x13ghBN34jZ4cPRgxhCtav+HMxKP6wiojHtau4ptA6nVxv6
+         cehya8971oTBpuL9wmCK7IO8pT5+JyFocI4nxvSEkGnCMrJGyPpXH1ZFrtHGaJENlu
+         oDzqQ+ljsk/Dw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.158.250]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1Ygz-1puuDq2TVb-0036k5; Sat, 13
+ May 2023 23:00:49 +0200
+Message-ID: <f918a8af-5a9b-1309-e19a-4f3f09ebab7f@gmx.de>
+Date:   Sat, 13 May 2023 23:00:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+Content-Language: en-US
 To:     LKML <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -58,262 +61,78 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org,
         "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         linux-riscv@lists.infradead.org,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>
-Subject: Re: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-Date:   Sat, 13 May 2023 20:32:31 +0200
-Message-ID: <12207466.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <20230512203426.452963764@linutronix.de>
+        Ross Philipson <ross.philipson@oracle.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
 References: <20230512203426.452963764@linutronix.de>
-MIME-Version: 1.0
+ <12207466.O9o76ZdvQC@natalenko.name>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <12207466.O9o76ZdvQC@natalenko.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:RpgEId2B9D5HBcL9fBRb+3JWwwhOteIZ1nytZcasaTAmfarvNwn
+ fMFgkrHHFQUTus1MzALvRPziABh8c3qvbp7zrAUgbDN6l4imCV7IS4gxdfOdNFI3zgs3XcO
+ 11oz6jBIU+1Ra6lyKd+YTydDGuvPMiAY0/gQGWH75WYI+9H8qnSK0e5rvRvnBk3gV+e2mh4
+ /Iype0ZePC7XiPoEhVRJQ==
+UI-OutboundReport: notjunk:1;M01:P0:ea8O6TsDxRo=;lqMJCETSNInGwiqOiM4sQMSPd/7
+ etoWsuDh2oxQRCTcOm6dNI+74udQOMfHHsm5ViBWq91/zE7BHjEibpBxtH5P3frWwqkILGDJY
+ 77TFvDyNXPxd7F47SPcZN1Y3tC0PxkAf8D2O4cXgxGzfXcqh6ZU5OdAWofsVnHmYksoaSdtQK
+ /sdWCcq3GNm8Op/iz5sawvt5qV1caIjxirPF8NcX0+HOQDWTmdrgC3KQzahSNe6sgpUYU6A0L
+ mj7+P2ZJAxwQSxuoPapXn3E9fK1sETKVzH5EkA2MRPR0BSWfZGm58+nvXtGRoh46V31D9fD3Q
+ NgyF0MBkq1h5MMqm1cehrsOqM2fbQUc0mMtImW91/3B0tJVWvww1nAEia9y/XTCE6oKIP/2gr
+ +84+DVNsM/OlplgxXAFgsPN0eCrTWdSERofcLepJeNo96NsytLDtOEC7en5zvPV0KkUQe00QS
+ 7rl6hFiJ2MYRqfAsgTAw+jmhG8FlpDZPBv8Qq+5EkCGTbFJhfELHNgSJGuuUlUFEGFIKg7jXn
+ TbfcaEF6rc4H+WtmaiTMOKNj/SAINwPT+rP+dvyLp2D+729pu0fnQ5k2EkmED+YwXds8vE225
+ wFJ3/ZTMghskjLsZVfA+2lbtPTtpXWJ2p2zBBziSEqo2Kk1sKdgS8zq+73wIqibIA4jML/dNg
+ OjnqB1D1UaKpKshMSbg63O+5KVXRw0oSgTABWdEzITLhLZrpla6aYa+4BT2wx4mVopNigTidP
+ 6HmdhUQpPsfRRdKs/r4DivnIBsaKGWFyGuHjs39P1LTXCnQY+bq7LDx/BcQ49EV022T0FmVHP
+ KfxdeSRzDf8VaI7h0Pu+Db96WH9ssPLUVoP+CljJisx2W/IBROPWWx2uhxuL/WIb5UkL14enC
+ X/qSeD3BduOA1I9b5VZJterCRzLCiAvjZkN8LbeJOzVdVWMV4EDWlFIivJLXJf7C5BFFtiTfU
+ ffX/dDZ8QuTU2qdmz3lPDMkbZx0=
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hello.
+Hi Thomas,
+> On p=C3=A1tek 12. kv=C4=9Btna 2023 23:06:56 CEST Thomas Gleixner wrote:
+>> This is version 4 of the reworked parallel bringup series. Version 3 ca=
+n be
+>> found here:
+>>
+>>     https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
+>> ...
+>>
+>> Other than that there are no changes and the other details are all the =
+same
+>> as in V3 and V2.
+>>
+>> It's also available from git:
+>>
+>>      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotpl=
+ug
 
-On p=C3=A1tek 12. kv=C4=9Btna 2023 23:06:56 CEST Thomas Gleixner wrote:
-> Hi!
->=20
-> This is version 4 of the reworked parallel bringup series. Version 3 can =
-be
-> found here:
->=20
->    https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
->=20
-> This is just a reiteration to address the following details:
->=20
->   1) Address review feedback (Peter Zijlstra)
->=20
->   2) Fix a MIPS related build problem (0day)
->=20
-> Other than that there are no changes and the other details are all the sa=
-me
-> as in V3 and V2.
->=20
-> It's also available from git:
->=20
->     git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotplug
->=20
-> Diff to V3 below.
->=20
-> Thanks,
->=20
-> 	tglx
+I tested your series on the parisc architecture just to make sure that it =
+still works
+with your patch applied.
+On parisc the CPU bringup happens later in the boot process (after the inv=
+entory),
+so your patch won't have an direct impact anyway.
+But at least everything still works, incl. manual CPU enable/disable.
 
-With this patchset:
+So, you may add
+Tested-by: Helge Deller <deller@gmx.de> # parisc
 
-```
-
-[    0.137719] smpboot: Allowing 32 CPUs, 0 hotplug CPUs
-[    0.777312] smpboot: CPU0: AMD Ryzen 9 5950X 16-Core Processor (family: =
-0x19, model: 0x21, stepping: 0x2)
-[    0.777896] smpboot: Parallel CPU startup enabled: 0x80000000
-```
-
-Seems to survive suspend/resume cycle too.
-
-Hence:
-
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-
-Thanks.
-
-> ---
-> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-> index f5e0f4235746..90c71d800b59 100644
-> --- a/arch/mips/kernel/smp.c
-> +++ b/arch/mips/kernel/smp.c
-> @@ -690,7 +690,7 @@ void flush_tlb_one(unsigned long vaddr)
->  EXPORT_SYMBOL(flush_tlb_page);
->  EXPORT_SYMBOL(flush_tlb_one);
-> =20
-> -#ifdef CONFIG_HOTPLUG_CPU
-> +#ifdef CONFIG_HOTPLUG_CORE_SYNC_DEAD
->  void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
->  {
->  	if (mp_ops->cleanup_dead_cpu)
-> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-> index 0438802031c3..9cd77d319555 100644
-> --- a/arch/x86/kernel/head_64.S
-> +++ b/arch/x86/kernel/head_64.S
-> @@ -290,8 +290,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L=
-_GLOBAL)
-> =20
->  	/*  APIC ID not found in the table. Drop the trampoline lock and bail. =
-*/
->  	movq	trampoline_lock(%rip), %rax
-> -	lock
-> -	btrl	$0, (%rax)
-> +	movl	$0, (%rax)
-> =20
->  1:	cli
->  	hlt
-> @@ -320,8 +319,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L=
-_GLOBAL)
->  	movq	trampoline_lock(%rip), %rax
->  	testq	%rax, %rax
->  	jz	.Lsetup_gdt
-> -	lock
-> -	btrl	$0, (%rax)
-> +	movl	$0, (%rax)
-> =20
->  .Lsetup_gdt:
->  	/*
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 5caf4897b507..660709e94823 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -161,31 +161,28 @@ static inline void smpboot_restore_warm_reset_vecto=
-r(void)
-> =20
->  }
-> =20
-> -/*
-> - * Report back to the Boot Processor during boot time or to the caller p=
-rocessor
-> - * during CPU online.
-> - */
-> -static void smp_callin(void)
-> +/* Run the next set of setup steps for the upcoming CPU */
-> +static void ap_starting(void)
->  {
->  	int cpuid =3D smp_processor_id();
-> =20
->  	/*
-> -	 * If waken up by an INIT in an 82489DX configuration the alive
-> -	 * synchronization guarantees we don't get here before an
-> -	 * INIT_deassert IPI reaches our local APIC, so it is now safe to
-> -	 * touch our local APIC.
-> +	 * If woken up by an INIT in an 82489DX configuration the alive
-> +	 * synchronization guarantees that the CPU does not reach this
-> +	 * point before an INIT_deassert IPI reaches the local APIC, so it
-> +	 * is now safe to touch the local APIC.
->  	 *
->  	 * Set up this CPU, first the APIC, which is probably redundant on
->  	 * most boards.
->  	 */
->  	apic_ap_setup();
-> =20
-> -	/* Save our processor parameters. */
-> +	/* Save the processor parameters. */
->  	smp_store_cpu_info(cpuid);
-> =20
->  	/*
->  	 * The topology information must be up to date before
-> -	 * calibrate_delay() and notify_cpu_starting().
-> +	 * notify_cpu_starting().
->  	 */
->  	set_cpu_sibling_map(cpuid);
-> =20
-> @@ -197,7 +194,7 @@ static void smp_callin(void)
-> =20
->  	/*
->  	 * This runs the AP through all the cpuhp states to its target
-> -	 * state (CPUHP_ONLINE in the case of serial bringup).
-> +	 * state CPUHP_ONLINE.
->  	 */
->  	notify_cpu_starting(cpuid);
->  }
-> @@ -274,10 +271,7 @@ static void notrace start_secondary(void *unused)
->  	rcu_cpu_starting(raw_smp_processor_id());
->  	x86_cpuinit.early_percpu_clock_init();
-> =20
-> -	smp_callin();
-> -
-> -	/* Otherwise gcc will move up smp_processor_id() before cpu_init() */
-> -	barrier();
-> +	ap_starting();
-> =20
->  	/* Check TSC synchronization with the control CPU. */
->  	check_tsc_sync_target();
-> diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/=
-trampoline_64.S
-> index 2dfb1c400167..c6de4deec746 100644
-> --- a/arch/x86/realmode/rm/trampoline_64.S
-> +++ b/arch/x86/realmode/rm/trampoline_64.S
-> @@ -40,17 +40,13 @@
->  .macro LOAD_REALMODE_ESP
->  	/*
->  	 * Make sure only one CPU fiddles with the realmode stack
-> -	 */
-> +	*/
->  .Llock_rm\@:
-> -	btl	$0, tr_lock
-> -	jnc	2f
-> -	pause
-> -	jmp	.Llock_rm\@
-> +        lock btsl       $0, tr_lock
-> +        jnc             2f
-> +        pause
-> +        jmp             .Llock_rm\@
->  2:
-> -	lock
-> -	btsl	$0, tr_lock
-> -	jc	.Llock_rm\@
-> -
->  	# Setup stack
->  	movl	$rm_stack_end, %esp
->  .endm
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 60b4093fae9e..005f863a3d2b 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -294,14 +294,14 @@ enum cpuhp_sync_state {
->   * cpuhp_ap_update_sync_state - Update synchronization state during brin=
-gup/teardown
->   * @state:	The synchronization state to set
->   *
-> - * No synchronization point. Just update of the synchronization state.
-> + * No synchronization point. Just update of the synchronization state, b=
-ut implies
-> + * a full barrier so that the AP changes are visible before the control =
-CPU proceeds.
->   */
->  static inline void cpuhp_ap_update_sync_state(enum cpuhp_sync_state stat=
-e)
->  {
->  	atomic_t *st =3D this_cpu_ptr(&cpuhp_state.ap_sync_state);
-> -	int sync =3D atomic_read(st);
-> =20
-> -	while (!atomic_try_cmpxchg(st, &sync, state));
-> +	(void)atomic_xchg(st, state);
->  }
-> =20
->  void __weak arch_cpuhp_sync_state_poll(void) { cpu_relax(); }
-> @@ -829,7 +829,11 @@ static int bringup_cpu(unsigned int cpu)
->  	/*
->  	 * Some architectures have to walk the irq descriptors to
->  	 * setup the vector space for the cpu which comes online.
-> -	 * Prevent irq alloc/free across the bringup.
-> +	 *
-> +	 * Prevent irq alloc/free across the bringup by acquiring the
-> +	 * sparse irq lock. Hold it until the upcoming CPU completes the
-> +	 * startup in cpuhp_online_idle() which allows to avoid
-> +	 * intermediate synchronization points in the architecture code.
->  	 */
->  	irq_lock_sparse();
-> =20
->=20
->=20
->=20
-
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
-
-
+Thanks!
+Helge
