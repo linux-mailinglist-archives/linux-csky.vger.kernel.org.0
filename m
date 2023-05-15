@@ -2,44 +2,45 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFB0702001
-	for <lists+linux-csky@lfdr.de>; Sun, 14 May 2023 23:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF15D702C36
+	for <lists+linux-csky@lfdr.de>; Mon, 15 May 2023 14:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjENVtZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 14 May 2023 17:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S241743AbjEOMDv (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 15 May 2023 08:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjENVtY (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 14 May 2023 17:49:24 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A8290;
-        Sun, 14 May 2023 14:49:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zygIhDyV8ht+xJs1lmqnA3sy7ZHDhj2x5W8U9MyDTpM=; b=AtfoJ+yRkuDm9gCWovg7bgbFzv
-        zvtG8omqD3Ee2e5vtlK1211bbhN7KzcG9ZOV/p9gXghTUS1HF9EaelwoM4SQo/b4sWNMb2wsJsVAh
-        ryLGjfB/dL5jQW5LWnI6h4gq4lKj2LKWt1eQxsKNKi4CYTHPi2D+7G5csc6so1Mr3IZqjzYXfvDre
-        Wa2IYRFjoBiG9xBoaM3MR/ceTkMFFWkX6SNnbTUn4IT7Xv2Ef1OD3QTBmf65tsdUdiBBhGBc7WMfJ
-        YjLmEKzf9bN3ap+iE91yCmvTRvaupsrf+ACH5S2PsgkJyDm/ZJKotc9YiiD6FM6FqFSv7z1nQGLn3
-        n3J6H6Qw==;
-Received: from [177.189.3.227] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1pyJaT-009SDU-MC; Sun, 14 May 2023 23:49:06 +0200
-Message-ID: <b4733705-7014-49c6-57ab-a67459954f28@igalia.com>
-Date:   Sun, 14 May 2023 18:48:50 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        with ESMTP id S241676AbjEOMD2 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 15 May 2023 08:03:28 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B95F19BA;
+        Mon, 15 May 2023 05:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5mEVtTPGjX5VUAK36tVkFbSuQO22AuGeDmAzn9epzuw=; b=AmiVyh00bk/IBxeKT1sJOhNhPw
+        sKnnSOF2uFizS5FDPwFE+Ot6Zv0LcoZ6HJF47h5sBYfsBjpiqyZyI5uuDK5u2MZ4g4WobyDMhkodb
+        fUSujxE1pqhBhDi+eUM0ht45DR2Y3i+nr1YT42g2zawDfvMwb295A0aq8ARQ+5Z4gi/pV9YXxQYVt
+        3wUGZYGDjBC3RzitLceq6j/qPs1owVcSfLpElN1Y8S30KXDX5uH0Odcz4RLnxHbc6f5jNYL4oL/bz
+        nTpSFPHQoB6BKp5r4Q6WAS69amz0yrUYHbuk51pYpxo8D3N1weBBW6mFoBFyYlJ+O4Y0A9ycf248d
+        MFethNqQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pyWsq-00BTBM-2z;
+        Mon, 15 May 2023 12:00:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D89B330003A;
+        Mon, 15 May 2023 14:00:51 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A377520AA5AEB; Mon, 15 May 2023 14:00:51 +0200 (CEST)
+Date:   Mon, 15 May 2023 14:00:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
         Brian Gerst <brgerst@gmail.com>,
         Arjan van de Veen <arjan@linux.intel.com>,
@@ -49,6 +50,7 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Sean Christopherson <seanjc@google.com>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
         Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Piotr Gorski <lucjan.lucjanov@gmail.com>,
         Usama Arif <usama.arif@bytedance.com>,
         Juergen Gross <jgross@suse.com>,
@@ -62,7 +64,7 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         linux-csky@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
         Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -71,14 +73,18 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Ross Philipson <ross.philipson@oracle.com>
+Subject: Re: [patch V4 37/37] x86/smpboot/64: Implement
+ arch_cpuhp_init_parallel_bringup() and enable it
+Message-ID: <20230515120051.GH83892@hirez.programming.kicks-ass.net>
 References: <20230512203426.452963764@linutronix.de>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20230512203426.452963764@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+ <20230512205257.467571745@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512205257.467571745@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,39 +92,37 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 12/05/2023 18:06, Thomas Gleixner wrote:
-> Hi!
+On Fri, May 12, 2023 at 11:07:56PM +0200, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
 > 
-> This is version 4 of the reworked parallel bringup series. Version 3 can be
-> found here:
+> Implement the validation function which tells the core code whether
+> parallel bringup is possible.
 > 
->    https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
+> The only condition for now is that the kernel does not run in an encrypted
+> guest as these will trap the RDMSR via #VC, which cannot be handled at that
+> point in early startup.
+> 
+> There was an earlier variant for AMD-SEV which used the GHBC protocol for
+> retrieving the APIC ID via CPUID, but there is no guarantee that the
+> initial APIC ID in CPUID is the same as the real APIC ID. There is no
+> enforcement from the secure firmware and the hypervisor can assign APIC IDs
+> as it sees fit as long as the ACPI/MADT table is consistent with that
+> assignment.
+> 
+> Unfortunately there is no RDMSR GHCB protocol at the moment, so enabling
+> AMD-SEV guests for parallel startup needs some more thought.
+
+One option, other than adding said protocol, would be to:
+
+ - use the APICID from CPUID -- with the expectation that it can be
+   wrong.
+ - (ab)use one of the high bits in cpuid_to_apicid[] as a test-and-set
+   trylock. This avoids two CPUs from using the same per-cpu base, if
+   CPUID is being malicious. Panic on fail.
+ - validate against MSR the moment we can and panic if not matching
+
+The trylock ensures the stacks/percpu state is not used by multiple
+CPUs, and should guarantee a coherent state to get far enough along to
+be able to do the #VE inducing RDMSR.
 
 
-Hi Thomas, thanks for series! I was able to test it on the Steam Deck
-(on top of 6.4-rc2), and everything is working fine; also tested S3
-suspend/resume, working as expected.
-
-Some logs from boot time:
-
-
-Parallel boot
-[    0.239764] smp: Bringing up secondary CPUs ...
-[...]
-[    0.253130] smp: Brought up 1 node, 8 CPUs
-
-
-Regular boot (with cpuhp.parallel=0)
-[    0.240093] smp: Bringing up secondary CPUs ...
-[...]
-[    0.253475] smp: Brought up 1 node, 8 CPUs
-
-
-Feel free to add (to the series):
-
-Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
-
-Cheers,
-
-
-Guilherme
