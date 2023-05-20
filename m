@@ -2,171 +2,180 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51EBB709E81
-	for <lists+linux-csky@lfdr.de>; Fri, 19 May 2023 19:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECB670A4B6
+	for <lists+linux-csky@lfdr.de>; Sat, 20 May 2023 04:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjESRqj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 19 May 2023 13:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S230415AbjETCzy (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 19 May 2023 22:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjESRqi (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 19 May 2023 13:46:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B38113D;
-        Fri, 19 May 2023 10:46:35 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JFMfDd012512;
-        Fri, 19 May 2023 17:45:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=eudHzY6WP7JinnfOr70AykPZvSkkpEMxuNg8hMfppYo=;
- b=DMV0U+nIXEVCY+aepXRfFYvdfBeVO+N4QF0je1NreoKWWMhdhmNCmkCFY69GHp3G1MUl
- W4uLhQQIfJlWzCmL2UlwpB67SLBLlnvd3eaMcPBXY3xpzTd4DPesNiwRSj6AMqZBspVo
- 08MDwx36HiK4jQA4XpyJQxV1CWo2sx0aEh71PEANzSjVcRsNE8URDp/9OH/+p2Kh4/Bd
- u8dY8/MWw20kSLCJ06My3a975QQQC9ySq7nhEqEvzzuIHXWUfJmJ+Gzj0a0CNBUiRPUE
- dcRr1k8AfSKrqIM3q0pDGScz3hGnOYsEF+bviVQ6TCuLFhAIK7GTUA+1LUQeisPdvBFr pg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp95v0w04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 17:45:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JHj1wR008027
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 17:45:01 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
- 2023 10:44:59 -0700
-Message-ID: <ebe36911-024a-839c-3b7e-05c99bfb0d66@quicinc.com>
-Date:   Fri, 19 May 2023 11:44:58 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [patch V4 36/37] x86/smpboot: Support parallel startup of
- secondary CPUs
-Content-Language: en-US
-To:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>
-CC:     <x86@kernel.org>, Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        <xen-devel@lists.xenproject.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        <linux-csky@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-mips@vger.kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
+        with ESMTP id S229497AbjETCzx (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 19 May 2023 22:55:53 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C43E42
+        for <linux-csky@vger.kernel.org>; Fri, 19 May 2023 19:55:52 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ae875bf125so7933425ad.1
+        for <linux-csky@vger.kernel.org>; Fri, 19 May 2023 19:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684551351; x=1687143351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jdSvKOAXL7sdlLkGjTnnuwOA/VbKrzGOIijIH+Tf82k=;
+        b=xE8Cw7jDANx3AqisU3EyAG8VrY1HFl5eTc84ib3IPvWx968QS3Aqj/Ee18o/QUglQP
+         UszG3vCgAkfxlpn24AYf27GDUNEpDUU405dBM4CRA3h8+FitTO/SBDzvJWZohdd9WMLY
+         LlB5bRSYIqKKW99Sh5peZrcLWc7wdoMhBI73p1LoJD0GczzjXTxjHq7j43K/Ucc7J07N
+         /T8M7u9SSX2dC1wxkylvNVAaEV21EFnFFUg9hVEp2dPyi2C4gmII2Na3uJhIeOhcvik+
+         suQheC48KkYjXO9ht32iBrWY5zMNStb7YZh7p6/TO3FsUr0JII5JTkg8mgpaglK/b+Av
+         Hpxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684551351; x=1687143351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jdSvKOAXL7sdlLkGjTnnuwOA/VbKrzGOIijIH+Tf82k=;
+        b=QncjONyyTk6PhBxNH+FPoCy3FcP5kFHl7TMqITYNYD3jWCI7+yO51bDpd/Fhz1v7TR
+         C0HmY/53Ik8bpObh0Jzlo2lCNW5i9Jh7matnVmy23BxuxMJ1kXvlaHJ4cwQVB7hLwRDS
+         kfBC+B1mZ1ro9DQtP6cw1D8ON70h1TGeLWm4KFohriH2T4UcKTn3qL2HvRnBEPktcMix
+         szTOoqkOAb5Nf1fm90tZx43gIJSLHkz2lQ7h4wCnFjD47KzUlsX7y+Ae5Aj7la1nPAwO
+         6WKCNeDC6xgLNUHhPp5YvQSCO10HcWOcuI8eGLsS5ePz2Nth4lEK/lYSj+h16J0O3ivn
+         Z/8A==
+X-Gm-Message-State: AC+VfDzWYF6z+atP0ciURYI76SfsAUBkvR6kFQtYlGecW2s+JgmY2JRr
+        ZQ1Aw/itgm06vwxN5FyF0XknQA==
+X-Google-Smtp-Source: ACHHUZ6RpF/8FxxuZkieXS5msDgwv84HNNcHwRibxyaBrbA0VudSU3lWns+f544SUGcVsGNFXYsn6Q==
+X-Received: by 2002:a17:903:18b:b0:1ac:8be5:8787 with SMTP id z11-20020a170903018b00b001ac8be58787mr4699376plg.21.1684551351025;
+        Fri, 19 May 2023 19:55:51 -0700 (PDT)
+Received: from leoy-yangtze.lan ([156.59.236.113])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170902d50600b001a95aef9728sm346100plg.19.2023.05.19.19.55.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 19:55:50 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Guo Ren <guoren@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        <linux-riscv@lists.infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-References: <20230512203426.452963764@linutronix.de>
- <20230512205257.411554373@linutronix.de>
- <16562305-3bc0-c69f-0cb5-1b9da1014f19@quicinc.com>
- <0cafbfcb-2430-6d90-ee77-4e5de08ee1da@citrix.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <0cafbfcb-2430-6d90-ee77-4e5de08ee1da@citrix.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Lin <eric.lin@sifive.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v1 0/5] perf parse-regs: Refactor arch related functions
+Date:   Sat, 20 May 2023 10:55:32 +0800
+Message-Id: <20230520025537.1811986-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: wzgfaxTFUND7jtAhGx51l9t9Ic-_fDjs
-X-Proofpoint-GUID: wzgfaxTFUND7jtAhGx51l9t9Ic-_fDjs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_12,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 phishscore=0 bulkscore=0 adultscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305190152
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 5/19/2023 10:57 AM, Andrew Cooper wrote:
-> On 19/05/2023 5:28 pm, Jeffrey Hugo wrote:
->>    DESCEND objtool
->>    INSTALL libsubcmd_headers
->>    CALL    scripts/checksyscalls.sh
->>    AS      arch/x86/kernel/head_64.o
->> arch/x86/kernel/head_64.S: Assembler messages:
->> arch/x86/kernel/head_64.S:261: Error: missing ')'
->> arch/x86/kernel/head_64.S:261: Error: junk `UL<<10)' after expression
->>    CC      arch/x86/kernel/head64.o
->>    CC      arch/x86/kernel/ebda.o
->>    CC      arch/x86/kernel/platform-quirks.o
->> scripts/Makefile.build:374: recipe for target
->> 'arch/x86/kernel/head_64.o' failed
->> make[3]: *** [arch/x86/kernel/head_64.o] Error 1
->> make[3]: *** Waiting for unfinished jobs....
->> scripts/Makefile.build:494: recipe for target 'arch/x86/kernel' failed
->> make[2]: *** [arch/x86/kernel] Error 2
->> scripts/Makefile.build:494: recipe for target 'arch/x86' failed
->> make[1]: *** [arch/x86] Error 2
->> make[1]: *** Waiting for unfinished jobs....
->> Makefile:2026: recipe for target '.' failed
->> make: *** [.] Error 2
->>
->> This is with GCC 5.4.0, if it matters.
->>
->> Reverting this change allows the build to move forward, although I
->> also need to revert "x86/smpboot/64: Implement
->> arch_cpuhp_init_parallel_bringup() and enable it" for the build to
->> fully succeed.
->>
->> I'm not familiar with this code, and nothing obvious stands out to me.
->> What can I do to help root cause this?
-> 
-> Can you try:
-> 
-> -#define XAPIC_ENABLE    (1UL << 11)
-> -#define X2APIC_ENABLE    (1UL << 10)
-> +#define XAPIC_ENABLE    BIT(11)
-> +#define X2APIC_ENABLE    BIT(10)
-> 
-> The UL suffix isn't understood by older binutils, and this patch adds
-> the first use of these constants in assembly.
+The register parsing have two levels: one level is under 'arch' folder,
+another level is under 'util' folder.  A good design is 'arch' folder
+handles architecture specific operations and provides APIs for upper
+layer, on the other hand, 'util' folder should be general and simply
+calls APIs to talk to arch layer.
 
-Ah, makes sense.
+The current code mixes these two layers, e.g. util/perf_regs.h includes
+architecture's perf_regs.h, so it implicitly couples with specific
+architecture during building time.  Furthermore, util/perf_regs.c
+includes all architectures' perf_regs.h, this is easily to cause conflict
+due to duplicated definitions from any two different archs.
 
-Your suggested change works for me.  No more compile error.
+So this patch series is to refactor arch related functions for register
+parsing:
 
-I assume you will be following up with a patch to address this.  Feel 
-free to add the following tags as you see fit:
+Firstly, it creates a new folder util/perf-regs-arch and uses dedicated
+source file for every arch, note, all of these source files will be
+built in tool to support cross analysis (e.g. we can run perf on x86
+machine for parsing aarch64's perf data file).
 
-Reported-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Secondly, rather than directly referring macros, we introduce new
+functions, these functions are provided by architecture and then will be
+invoked by perf common code.  At the end, we can generalize the register
+parsing in 'util' folder.
 
--Jeff
+This patch series has been compiled successfully on my Arm64 and x86
+machine.
+
+
+Leo Yan (5):
+  perf parse-regs: Refactor arch register parsing functions
+  perf parse-regs: Introduce functions arch__reg_{ip|sp}()
+  perf parse-regs: Remove unused macros PERF_REG_{IP|SP}
+  perf parse-regs: Remove PERF_REGS_{MAX|MASK} from common code
+  perf parse-regs: Move out arch specific header from util/perf_regs.h
+
+ tools/perf/arch/arm/include/perf_regs.h       |   3 -
+ tools/perf/arch/arm/util/perf_regs.c          |  21 +
+ tools/perf/arch/arm/util/unwind-libdw.c       |   1 +
+ tools/perf/arch/arm64/include/perf_regs.h     |   3 -
+ tools/perf/arch/arm64/util/machine.c          |   1 +
+ tools/perf/arch/arm64/util/perf_regs.c        |  16 +
+ tools/perf/arch/arm64/util/unwind-libdw.c     |   1 +
+ tools/perf/arch/csky/include/perf_regs.h      |   3 -
+ tools/perf/arch/csky/util/perf_regs.c         |  21 +
+ tools/perf/arch/csky/util/unwind-libdw.c      |   1 +
+ tools/perf/arch/mips/include/perf_regs.h      |   2 -
+ tools/perf/arch/mips/util/perf_regs.c         |  21 +
+ tools/perf/arch/powerpc/include/perf_regs.h   |   3 -
+ tools/perf/arch/powerpc/util/perf_regs.c      |  16 +
+ tools/perf/arch/powerpc/util/unwind-libdw.c   |   1 +
+ tools/perf/arch/riscv/include/perf_regs.h     |   3 -
+ tools/perf/arch/riscv/util/perf_regs.c        |  21 +
+ tools/perf/arch/riscv/util/unwind-libdw.c     |   1 +
+ tools/perf/arch/s390/include/perf_regs.h      |   3 -
+ tools/perf/arch/s390/util/perf_regs.c         |  21 +
+ tools/perf/arch/s390/util/unwind-libdw.c      |   1 +
+ tools/perf/arch/x86/include/perf_regs.h       |   2 -
+ tools/perf/arch/x86/util/perf_regs.c          |  16 +
+ tools/perf/arch/x86/util/unwind-libdw.c       |   1 +
+ tools/perf/util/Build                         |   1 +
+ tools/perf/util/evsel.c                       |   2 +-
+ tools/perf/util/perf-regs-arch/Build          |   8 +
+ .../util/perf-regs-arch/perf_regs_aarch64.c   |  86 +++
+ .../perf/util/perf-regs-arch/perf_regs_arm.c  |  50 ++
+ .../perf/util/perf-regs-arch/perf_regs_csky.c |  90 +++
+ .../perf/util/perf-regs-arch/perf_regs_mips.c |  77 +++
+ .../util/perf-regs-arch/perf_regs_powerpc.c   | 135 ++++
+ .../util/perf-regs-arch/perf_regs_riscv.c     |  82 +++
+ .../perf/util/perf-regs-arch/perf_regs_s390.c |  86 +++
+ .../perf/util/perf-regs-arch/perf_regs_x86.c  |  88 +++
+ tools/perf/util/perf_regs.c                   | 646 +-----------------
+ tools/perf/util/perf_regs.h                   |  18 +-
+ tools/perf/util/unwind-libdw.c                |   2 +-
+ tools/perf/util/unwind.h                      |   4 +-
+ 39 files changed, 887 insertions(+), 671 deletions(-)
+ create mode 100644 tools/perf/util/perf-regs-arch/Build
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_arm.c
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_csky.c
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_mips.c
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_riscv.c
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_s390.c
+ create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_x86.c
+
+-- 
+2.39.2
+
