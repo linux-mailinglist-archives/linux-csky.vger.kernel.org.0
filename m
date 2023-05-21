@@ -2,326 +2,211 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6E570A4C4
-	for <lists+linux-csky@lfdr.de>; Sat, 20 May 2023 04:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05E370AE93
+	for <lists+linux-csky@lfdr.de>; Sun, 21 May 2023 17:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjETC47 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 19 May 2023 22:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        id S229794AbjEUPaT (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 21 May 2023 11:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjETC46 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 19 May 2023 22:56:58 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918341723
-        for <linux-csky@vger.kernel.org>; Fri, 19 May 2023 19:56:27 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1ae4be0b1f3so28656775ad.0
-        for <linux-csky@vger.kernel.org>; Fri, 19 May 2023 19:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684551385; x=1687143385;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4I7s+qmJYBYI1fLm0w6VOesYnXvgxr3WYm7dFpfRIoU=;
-        b=GCAPdZ64C9vz5vLjvuX58OXtcTqkVp7vX2LVP76fRYGBO/USp71ZN11auaLU36sJ7D
-         +9LLOmiMn8Y959F+0BSy0/1mt6LWtr8yX/dsuOQ/lcwtz1FFfZj7W859vBKqYpVkSCOI
-         8+XyziEcN8cSDayn+wAAjqdSc1eWgUPgbQDYACljd7eX0XPt1fPzsisb5jwua8lhoMWR
-         GtH6XUPkDCWisAQ8PpFhVA4wuJNuwUS1dvtzl1RWdot/8ZyQrck3imUpJlfK1AxOWNFr
-         SdvuDz65YrxKJebJqcbEExPeqbJSeBppuKXvV+u22U6duOdxLE8X/H95etP3ffr8DuvQ
-         70Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684551385; x=1687143385;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4I7s+qmJYBYI1fLm0w6VOesYnXvgxr3WYm7dFpfRIoU=;
-        b=jEmwN3ebmWc9SK+Iy1ynnwrEw4qbdxHrkimrUwK4BOrXsJGm7MyiTPmjqXF2mVK0Sz
-         umU/7IZVDcNS0NhhJViYNdgNF2IGuFNmNxthf0h/CquZ21UcU+dXrHkrmQLkilhB6BrF
-         SqTbb4m1kziIdDHBDiWnv07qUQw6/EpC1fOBdah2b5jbMsLOQX0+Gg6XR8jW+7Wm1C8w
-         6bimSIHrVei6tohFs4RWXI3zw9X0bcCreJFYmfRNQisRMOqCc4B61SHpefvyiMfLf6kY
-         bd5Tu8XW5sS4LVr1qhbomzy/4niVPKdO/0JT98w9N1apJVseDvgnIh7F22lIzc1KTiVm
-         I+vw==
-X-Gm-Message-State: AC+VfDy5ceJU6mxsUrkQAAuM8yX0Zb33ACtdkxJ7Sg3kT1zfk5MVJmq2
-        qDhzalt/NOaxck1XdK76rwtg+A==
-X-Google-Smtp-Source: ACHHUZ4QDSj1/rLx/gOlwRttNzGb9xSN5ZInrcrrf5vrh7TbdtA881pKAdo5H+DQDVa7+Xrlnixa/A==
-X-Received: by 2002:a17:902:d34a:b0:1a9:f425:5409 with SMTP id l10-20020a170902d34a00b001a9f4255409mr3590297plk.49.1684551385369;
-        Fri, 19 May 2023 19:56:25 -0700 (PDT)
-Received: from leoy-yangtze.lan ([156.59.236.113])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170902d50600b001a95aef9728sm346100plg.19.2023.05.19.19.56.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 19:56:24 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Lin <eric.lin@sifive.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v1 5/5] perf parse-regs: Move out arch specific header from util/perf_regs.h
-Date:   Sat, 20 May 2023 10:55:37 +0800
-Message-Id: <20230520025537.1811986-6-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230520025537.1811986-1-leo.yan@linaro.org>
-References: <20230520025537.1811986-1-leo.yan@linaro.org>
+        with ESMTP id S229497AbjEUPaT (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 21 May 2023 11:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB91BD;
+        Sun, 21 May 2023 08:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A12FE61528;
+        Sun, 21 May 2023 15:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093F3C433B4;
+        Sun, 21 May 2023 15:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684683017;
+        bh=YPMM/8GlJbBOcfom5pOdN7LyjQ75t5SA5nQ04f6GwkY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mO11FJAL4r8D0kMZRd46uYx1Xli83ofHh+hlst3r2IWQiSr2efthW0UDDilhWb5J4
+         TBufuNw+KMqv+QWOWzbJ91HqLYirOZNhOeziKTs6mFvsBzbq4/Rh9998v7waFBKXQ/
+         LDbk8HCtZOCsm/0PLSC18CBVktLPbOVh97m5WGcA5U+rrFUILIedpBrHl5BiesvRc4
+         ILxWiKbrjOJ7k8qAHBkc0SyHuC7VcH23et+XIbb64kZ4A7dnDSFTgtwAkYOKmMPhv2
+         QZMGqUwsHNKxGVkiOZnxlSKNECbnQHk1HX/NCka1LKBxNnv49Q4LcGZR5nawIL91Yt
+         /lL358K44LExQ==
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-510ede0f20aso5371329a12.3;
+        Sun, 21 May 2023 08:30:16 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx4R9dgPEceHo7udNLdC4tYnrO+BRH3QCRQfShbs7C70+NF83LX
+        qvz71hw2VS6Vx/9AGxBPdG3oURW8AGMpsPQrPLY=
+X-Google-Smtp-Source: ACHHUZ7fC7VoTCmxVvgnj+XprmdOzTdADfx+p51AfUU2RX+IjuemmurGhjjXvb4ZOHMk5eyEyL8M50rHqnEzEEon25w=
+X-Received: by 2002:a17:907:8a20:b0:96a:861:a2ac with SMTP id
+ sc32-20020a1709078a2000b0096a0861a2acmr8333246ejc.0.1684683014948; Sun, 21
+ May 2023 08:30:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230516200341.553413-1-arnd@kernel.org>
+In-Reply-To: <20230516200341.553413-1-arnd@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 21 May 2023 23:30:03 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTqoE=Hty7q__m_4zvTOpC8cDpnK1ghEuFVZ+KrA7xmfA@mail.gmail.com>
+Message-ID: <CAJF2gTTqoE=Hty7q__m_4zvTOpC8cDpnK1ghEuFVZ+KrA7xmfA@mail.gmail.com>
+Subject: Re: [PATCH] irq_work: consolidate arch_irq_work_raise prototypes
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-util/perf_regs.h includes another perf_regs.h:
+On Wed, May 17, 2023 at 4:03=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The prototype was hidden on x86, which causes a warning:
+>
+> kernel/irq_work.c:72:13: error: no previous prototype for 'arch_irq_work_=
+raise' [-Werror=3Dmissing-prototypes]
+>
+> Fix this by providing it in only one place that is always visible.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/include/asm/irq_work.h     | 2 --
+>  arch/arm64/include/asm/irq_work.h   | 2 --
+>  arch/csky/include/asm/irq_work.h    | 2 +-
+>  arch/powerpc/include/asm/irq_work.h | 1 -
+>  arch/riscv/include/asm/irq_work.h   | 2 +-
+>  arch/s390/include/asm/irq_work.h    | 2 --
+>  arch/x86/include/asm/irq_work.h     | 1 -
+>  include/linux/irq_work.h            | 3 +++
+>  8 files changed, 5 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/arm/include/asm/irq_work.h b/arch/arm/include/asm/irq_w=
+ork.h
+> index 3149e4dc1b54..8895999834cc 100644
+> --- a/arch/arm/include/asm/irq_work.h
+> +++ b/arch/arm/include/asm/irq_work.h
+> @@ -9,6 +9,4 @@ static inline bool arch_irq_work_has_interrupt(void)
+>         return is_smp();
+>  }
+>
+> -extern void arch_irq_work_raise(void);
+> -
+>  #endif /* _ASM_ARM_IRQ_WORK_H */
+> diff --git a/arch/arm64/include/asm/irq_work.h b/arch/arm64/include/asm/i=
+rq_work.h
+> index 81bbfa3a035b..a1020285ea75 100644
+> --- a/arch/arm64/include/asm/irq_work.h
+> +++ b/arch/arm64/include/asm/irq_work.h
+> @@ -2,8 +2,6 @@
+>  #ifndef __ASM_IRQ_WORK_H
+>  #define __ASM_IRQ_WORK_H
+>
+> -extern void arch_irq_work_raise(void);
+> -
+>  static inline bool arch_irq_work_has_interrupt(void)
+>  {
+>         return true;
+> diff --git a/arch/csky/include/asm/irq_work.h b/arch/csky/include/asm/irq=
+_work.h
+> index 33aaf39d6f94..d39fcc1f5395 100644
+> --- a/arch/csky/include/asm/irq_work.h
+> +++ b/arch/csky/include/asm/irq_work.h
+> @@ -7,5 +7,5 @@ static inline bool arch_irq_work_has_interrupt(void)
+>  {
+>         return true;
+>  }
+> -extern void arch_irq_work_raise(void);
+> +
+Acked-by: Guo Ren <guoren@kernel.org>
 
-  #include <perf_regs.h>
+>  #endif /* __ASM_CSKY_IRQ_WORK_H */
+> diff --git a/arch/powerpc/include/asm/irq_work.h b/arch/powerpc/include/a=
+sm/irq_work.h
+> index b8b0be8f1a07..c6d3078bd8c3 100644
+> --- a/arch/powerpc/include/asm/irq_work.h
+> +++ b/arch/powerpc/include/asm/irq_work.h
+> @@ -6,6 +6,5 @@ static inline bool arch_irq_work_has_interrupt(void)
+>  {
+>         return true;
+>  }
+> -extern void arch_irq_work_raise(void);
+>
+>  #endif /* _ASM_POWERPC_IRQ_WORK_H */
+> diff --git a/arch/riscv/include/asm/irq_work.h b/arch/riscv/include/asm/i=
+rq_work.h
+> index b53891964ae0..b27a4d64fc6a 100644
+> --- a/arch/riscv/include/asm/irq_work.h
+> +++ b/arch/riscv/include/asm/irq_work.h
+> @@ -6,5 +6,5 @@ static inline bool arch_irq_work_has_interrupt(void)
+>  {
+>         return IS_ENABLED(CONFIG_SMP);
+>  }
+> -extern void arch_irq_work_raise(void);
+> +
+>  #endif /* _ASM_RISCV_IRQ_WORK_H */
+> diff --git a/arch/s390/include/asm/irq_work.h b/arch/s390/include/asm/irq=
+_work.h
+> index 603783766d0a..f00c9f610d5a 100644
+> --- a/arch/s390/include/asm/irq_work.h
+> +++ b/arch/s390/include/asm/irq_work.h
+> @@ -7,6 +7,4 @@ static inline bool arch_irq_work_has_interrupt(void)
+>         return true;
+>  }
+>
+> -void arch_irq_work_raise(void);
+> -
+>  #endif /* _ASM_S390_IRQ_WORK_H */
+> diff --git a/arch/x86/include/asm/irq_work.h b/arch/x86/include/asm/irq_w=
+ork.h
+> index 800ffce0db29..6b4d36c95165 100644
+> --- a/arch/x86/include/asm/irq_work.h
+> +++ b/arch/x86/include/asm/irq_work.h
+> @@ -9,7 +9,6 @@ static inline bool arch_irq_work_has_interrupt(void)
+>  {
+>         return boot_cpu_has(X86_FEATURE_APIC);
+>  }
+> -extern void arch_irq_work_raise(void);
+>  #else
+>  static inline bool arch_irq_work_has_interrupt(void)
+>  {
+> diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
+> index 8cd11a223260..136f2980cba3 100644
+> --- a/include/linux/irq_work.h
+> +++ b/include/linux/irq_work.h
+> @@ -66,6 +66,9 @@ void irq_work_sync(struct irq_work *work);
+>  void irq_work_run(void);
+>  bool irq_work_needs_cpu(void);
+>  void irq_work_single(void *arg);
+> +
+> +void arch_irq_work_raise(void);
+> +
+>  #else
+>  static inline bool irq_work_needs_cpu(void) { return false; }
+>  static inline void irq_work_run(void) { }
+> --
+> 2.39.2
+>
 
-Here it includes architecture specific header, for example, if we build
-arm64 target, the header tools/perf/arch/arm64/include/perf_regs.h is
-included.
 
-We use this implicit way to include architecture specific header, which
-is not directive; furthermore, util/perf_regs.c is coupled with the
-architecture specific definitions.
-
-This patch moves out arch specific header from util/perf_regs.h for
-generalizing the 'util' folder, as a result, the source files in 'arch'
-folder explicitly include architecture's perf_regs.h.
-
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/arch/arm/util/perf_regs.c        | 1 +
- tools/perf/arch/arm/util/unwind-libdw.c     | 1 +
- tools/perf/arch/arm64/util/machine.c        | 1 +
- tools/perf/arch/arm64/util/perf_regs.c      | 1 +
- tools/perf/arch/arm64/util/unwind-libdw.c   | 1 +
- tools/perf/arch/csky/util/perf_regs.c       | 1 +
- tools/perf/arch/csky/util/unwind-libdw.c    | 1 +
- tools/perf/arch/mips/util/perf_regs.c       | 1 +
- tools/perf/arch/powerpc/util/perf_regs.c    | 1 +
- tools/perf/arch/powerpc/util/unwind-libdw.c | 1 +
- tools/perf/arch/riscv/util/perf_regs.c      | 1 +
- tools/perf/arch/riscv/util/unwind-libdw.c   | 1 +
- tools/perf/arch/s390/util/perf_regs.c       | 1 +
- tools/perf/arch/s390/util/unwind-libdw.c    | 1 +
- tools/perf/arch/x86/util/perf_regs.c        | 1 +
- tools/perf/arch/x86/util/unwind-libdw.c     | 1 +
- tools/perf/util/perf_regs.h                 | 2 --
- 17 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/arch/arm/util/perf_regs.c b/tools/perf/arch/arm/util/perf_regs.c
-index 0d669dba08c4..244c1d0a46ac 100644
---- a/tools/perf/arch/arm/util/perf_regs.c
-+++ b/tools/perf/arch/arm/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/arm/util/unwind-libdw.c b/tools/perf/arch/arm/util/unwind-libdw.c
-index 1834a0cd9ce3..4e02cef461e3 100644
---- a/tools/perf/arch/arm/util/unwind-libdw.c
-+++ b/tools/perf/arch/arm/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/arm64/util/machine.c b/tools/perf/arch/arm64/util/machine.c
-index 235a0a1e1ec7..ba1144366e85 100644
---- a/tools/perf/arch/arm64/util/machine.c
-+++ b/tools/perf/arch/arm64/util/machine.c
-@@ -6,6 +6,7 @@
- #include "debug.h"
- #include "symbol.h"
- #include "callchain.h"
-+#include "perf_regs.h"
- #include "record.h"
- #include "util/perf_regs.h"
- 
-diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm64/util/perf_regs.c
-index 4490c1b5ea51..34d957c750f7 100644
---- a/tools/perf/arch/arm64/util/perf_regs.c
-+++ b/tools/perf/arch/arm64/util/perf_regs.c
-@@ -6,6 +6,7 @@
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../perf-sys.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
-diff --git a/tools/perf/arch/arm64/util/unwind-libdw.c b/tools/perf/arch/arm64/util/unwind-libdw.c
-index 09385081bb03..e056d50ab42e 100644
---- a/tools/perf/arch/arm64/util/unwind-libdw.c
-+++ b/tools/perf/arch/arm64/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/csky/util/perf_regs.c b/tools/perf/arch/csky/util/perf_regs.c
-index 35755811316e..053ecbbc7b2f 100644
---- a/tools/perf/arch/csky/util/perf_regs.c
-+++ b/tools/perf/arch/csky/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/csky/util/unwind-libdw.c b/tools/perf/arch/csky/util/unwind-libdw.c
-index 4bb4a06776e4..79df4374ab18 100644
---- a/tools/perf/arch/csky/util/unwind-libdw.c
-+++ b/tools/perf/arch/csky/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- // Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd.
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/event.h"
-diff --git a/tools/perf/arch/mips/util/perf_regs.c b/tools/perf/arch/mips/util/perf_regs.c
-index 2d2bfbb96182..751413b86ebf 100644
---- a/tools/perf/arch/mips/util/perf_regs.c
-+++ b/tools/perf/arch/mips/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/powerpc/util/perf_regs.c b/tools/perf/arch/powerpc/util/perf_regs.c
-index e48622d1bc59..3d0f7c238a33 100644
---- a/tools/perf/arch/powerpc/util/perf_regs.c
-+++ b/tools/perf/arch/powerpc/util/perf_regs.c
-@@ -4,6 +4,7 @@
- #include <regex.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/debug.h"
- #include "../../../util/event.h"
-diff --git a/tools/perf/arch/powerpc/util/unwind-libdw.c b/tools/perf/arch/powerpc/util/unwind-libdw.c
-index e616642c754c..e9a5a8bb67d9 100644
---- a/tools/perf/arch/powerpc/util/unwind-libdw.c
-+++ b/tools/perf/arch/powerpc/util/unwind-libdw.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
- #include <linux/kernel.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/sample.h"
-diff --git a/tools/perf/arch/riscv/util/perf_regs.c b/tools/perf/arch/riscv/util/perf_regs.c
-index a2aaa46ef741..7b8fafd0598a 100644
---- a/tools/perf/arch/riscv/util/perf_regs.c
-+++ b/tools/perf/arch/riscv/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/riscv/util/unwind-libdw.c b/tools/perf/arch/riscv/util/unwind-libdw.c
-index 54a198714eb8..5c98010d8b59 100644
---- a/tools/perf/arch/riscv/util/unwind-libdw.c
-+++ b/tools/perf/arch/riscv/util/unwind-libdw.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd. */
- 
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../util/unwind-libdw.h"
- #include "../../util/perf_regs.h"
- #include "../../util/sample.h"
-diff --git a/tools/perf/arch/s390/util/perf_regs.c b/tools/perf/arch/s390/util/perf_regs.c
-index 8d79f8c50f4c..0a6358cedb93 100644
---- a/tools/perf/arch/s390/util/perf_regs.c
-+++ b/tools/perf/arch/s390/util/perf_regs.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "perf_regs.h"
- #include "../../util/perf_regs.h"
- 
- const struct sample_reg sample_reg_masks[] = {
-diff --git a/tools/perf/arch/s390/util/unwind-libdw.c b/tools/perf/arch/s390/util/unwind-libdw.c
-index 7d92452d5287..f50fb6dbb35c 100644
---- a/tools/perf/arch/s390/util/unwind-libdw.c
-+++ b/tools/perf/arch/s390/util/unwind-libdw.c
-@@ -5,6 +5,7 @@
- #include "../../util/event.h"
- #include "../../util/sample.h"
- #include "dwarf-regs-table.h"
-+#include "perf_regs.h"
- 
- 
- bool libdw__arch_set_initial_registers(Dwfl_Thread *thread, void *arg)
-diff --git a/tools/perf/arch/x86/util/perf_regs.c b/tools/perf/arch/x86/util/perf_regs.c
-index a7e21f2a8964..aaf7f606606b 100644
---- a/tools/perf/arch/x86/util/perf_regs.c
-+++ b/tools/perf/arch/x86/util/perf_regs.c
-@@ -5,6 +5,7 @@
- #include <linux/kernel.h>
- #include <linux/zalloc.h>
- 
-+#include "perf_regs.h"
- #include "../../../perf-sys.h"
- #include "../../../util/perf_regs.h"
- #include "../../../util/debug.h"
-diff --git a/tools/perf/arch/x86/util/unwind-libdw.c b/tools/perf/arch/x86/util/unwind-libdw.c
-index ef71e8bf80bf..edb77e20e083 100644
---- a/tools/perf/arch/x86/util/unwind-libdw.c
-+++ b/tools/perf/arch/x86/util/unwind-libdw.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <elfutils/libdwfl.h>
-+#include "perf_regs.h"
- #include "../../../util/unwind-libdw.h"
- #include "../../../util/perf_regs.h"
- #include "util/sample.h"
-diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-index 43b5a6d40e58..894d527edebe 100644
---- a/tools/perf/util/perf_regs.h
-+++ b/tools/perf/util/perf_regs.h
-@@ -32,8 +32,6 @@ uint64_t arch__reg_sp(void);
- #ifdef HAVE_PERF_REGS_SUPPORT
- extern const struct sample_reg sample_reg_masks[];
- 
--#include <perf_regs.h>
--
- #define DWARF_MINIMAL_REGS ((1ULL << arch__reg_ip()) | (1ULL << arch__reg_sp()))
- 
- const char *perf_reg_name(int id, const char *arch);
--- 
-2.39.2
-
+--=20
+Best Regards
+ Guo Ren
