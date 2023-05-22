@@ -2,120 +2,153 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5208670B82F
-	for <lists+linux-csky@lfdr.de>; Mon, 22 May 2023 10:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFA370BB0F
+	for <lists+linux-csky@lfdr.de>; Mon, 22 May 2023 13:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjEVI6P (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 22 May 2023 04:58:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
+        id S232726AbjEVLEj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 22 May 2023 07:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjEVI5l (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 22 May 2023 04:57:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2F2518F;
-        Mon, 22 May 2023 01:57:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5796311FB;
-        Mon, 22 May 2023 01:58:18 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 559A53F6C4;
-        Mon, 22 May 2023 01:57:30 -0700 (PDT)
-Message-ID: <839836e8-9600-9249-dcdb-e29519335141@arm.com>
-Date:   Mon, 22 May 2023 09:57:25 +0100
+        with ESMTP id S232766AbjEVLES (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 22 May 2023 07:04:18 -0400
+Received: from esa2.hc3370-68.iphmx.com (esa2.hc3370-68.iphmx.com [216.71.145.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1057F49D5;
+        Mon, 22 May 2023 03:59:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1684753156;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=FtaOawtEIZcYR8kQ1ZUJu5ElatA0FpUwqecHrTU8yhQ=;
+  b=eKTQiG0GTHYqSwmmumMZmFo09jlkzvs+Ek+OLyeU0z9yKR25nIWDrnBG
+   q7sYB24xWwmYySdnw6rYxhs7kY+N4xsGwYqylkFLyfgHZ5gnllAL6bjIu
+   1r1pu/F9Tgjw1p9Y3iV0Omlp9MPVUxWrFoRUH4yd0bSkR2kLLcZ4utSjp
+   0=;
+Authentication-Results: esa2.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+X-SBRS: 4.0
+X-MesageID: 109791905
+X-Ironport-Server: esa2.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.156.123
+X-Policy: $RELAYED
+IronPort-Data: A9a23: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
+ zLJ
+IronPort-HdrOrdr: A9a23:09+17q/QTihma8HpfNRuk+DJI+orL9Y04lQ7vn2ZKCY5TiX8ra
+ vFoB11726WtN9vYgBDpTntAse9qBDnmaKdg7NwAV7KZmCPhILCFu5fBOXZogEIEheOk9Jg6Q
+ ==
+X-Talos-CUID: 9a23:2S2XfmxwRhoEaCNipankBgUFO984XnKB6k7AAFeEOVZZQuafEHyfrfY=
+X-Talos-MUID: =?us-ascii?q?9a23=3A0NkJAA8ep6I1nEDTNh1Sp+OQf+5K8YiPDmlUq8k?=
+ =?us-ascii?q?DhpOGNBReIzmy0SviFw=3D=3D?=
+X-IronPort-AV: E=Sophos;i="6.00,184,1681185600"; 
+   d="scan'208";a="109791905"
+From:   Andrew Cooper <andrew.cooper3@citrix.com>
+To:     <tglx@linutronix.de>
+CC:     <James.Bottomley@HansenPartnership.com>,
+        <andrew.cooper3@citrix.com>, <arjan@linux.intel.com>,
+        <arnd@arndb.de>, <boris.ostrovsky@oracle.com>, <brgerst@gmail.com>,
+        <catalin.marinas@arm.com>, <deller@gmx.de>, <dwmw2@infradead.org>,
+        <gpiccoli@igalia.com>, <guoren@kernel.org>, <jgross@suse.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-csky@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux@armlinux.org.uk>,
+        <lucjan.lucjanov@gmail.com>, <mark.rutland@arm.com>,
+        <mikelley@microsoft.com>, <oleksandr@natalenko.name>,
+        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
+        <paulmck@kernel.org>, <pbonzini@redhat.com>,
+        <pmenzel@molgen.mpg.de>, <ross.philipson@oracle.com>,
+        <sabrapan@amazon.com>, <seanjc@google.com>,
+        <thomas.lendacky@amd.com>, <tsbogend@alpha.franken.de>,
+        <usama.arif@bytedance.com>, <will@kernel.org>, <x86@kernel.org>,
+        <xen-devel@lists.xenproject.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+Subject: [PATCH] x86/apic: Fix use of X{,2}APIC_ENABLE in asm with older binutils
+Date:   Mon, 22 May 2023 11:57:38 +0100
+Message-ID: <20230522105738.2378364-1-andrew.cooper3@citrix.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230512203426.452963764@linutronix.de>
+References: <20230512203426.452963764@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 2/5] perf parse-regs: Introduce functions
- arch__reg_{ip|sp}()
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>
-References: <20230520025537.1811986-1-leo.yan@linaro.org>
- <20230520025537.1811986-3-leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Lin <eric.lin@sifive.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230520025537.1811986-3-leo.yan@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+"x86/smpboot: Support parallel startup of secondary CPUs" adds the first use
+of X2APIC_ENABLE in assembly, but older binutils don't tolerate the UL suffix.
 
+Switch to using BIT() instead.
 
-On 20/05/2023 03:55, Leo Yan wrote:
-> Ideally, we want util/perf_regs.c to be general enough and doesn't bind
-> with specific architecture.
-> 
-> But since util/perf_regs.c uses the macros PERF_REG_IP and PERF_REG_SP
-> which are defined by architecture, thus util/perf_regs.c is dependent on
-> architecture header (see util/perf_regs.h includes "<perf_regs.h>", here
-> perf_regs.h is architecture specific header).
-> 
-> As a step to generalize util/perf_regs.c, this commit introduces weak
-> functions arch__reg_ip() and arch__reg_sp() and every architecture can
-> define their own functions; thus, util/perf_regs.c doesn't need to use
-> PERF_REG_IP and PERF_REG_SP anymore.
-> 
-> This is a preparation to get rid of architecture specific header from
-> util/perf_regs.h.
-> 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
-[...]
->  
-> -#define DWARF_MINIMAL_REGS ((1ULL << PERF_REG_IP) | (1ULL << PERF_REG_SP))
-> +#define DWARF_MINIMAL_REGS ((1ULL << arch__reg_ip()) | (1ULL << arch__reg_sp()))
->  
->  const char *perf_reg_name(int id, const char *arch);
->  int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
-> diff --git a/tools/perf/util/unwind-libdw.c b/tools/perf/util/unwind-libdw.c
-> index bdccfc511b7e..f308f2ea512b 100644
-> --- a/tools/perf/util/unwind-libdw.c
-> +++ b/tools/perf/util/unwind-libdw.c
-> @@ -252,7 +252,7 @@ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
->  	if (!ui->dwfl)
->  		goto out;
->  
-> -	err = perf_reg_value(&ip, &data->user_regs, PERF_REG_IP);
-> +	err = perf_reg_value(&ip, &data->user_regs, arch__reg_ip());
+Fixes: 7e75178a0950 ("x86/smpboot: Support parallel startup of secondary CPUs")
+Reported-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
+---
+ arch/x86/include/asm/apicdef.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Shouldn't it be more like this, because the weak symbols are a compile
-time thing and it's supposed to support cross arch unwinding at runtime
-(assuming something containing the arch from the file is passed down,
-like we did with perf_reg_name()):
+diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
+index bf546dfb6e58..4b125e5b3187 100644
+--- a/arch/x86/include/asm/apicdef.h
++++ b/arch/x86/include/asm/apicdef.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_X86_APICDEF_H
+ #define _ASM_X86_APICDEF_H
+ 
++#include <linux/bits.h>
++
+ /*
+  * Constants for various Intel APICs. (local APIC, IOAPIC, etc.)
+  *
+@@ -140,8 +142,8 @@
+ #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
+ #define APIC_BASE_MSR		0x800
+ #define APIC_X2APIC_ID_MSR	0x802
+-#define XAPIC_ENABLE	(1UL << 11)
+-#define X2APIC_ENABLE	(1UL << 10)
++#define XAPIC_ENABLE		BIT(11)
++#define X2APIC_ENABLE		BIT(10)
+ 
+ #ifdef CONFIG_X86_32
+ # define MAX_IO_APICS 64
 
-  char *arch = perf_env__arch(evsel__env(evsel));
-  err = perf_reg_value(&ip, &data->user_regs, arch__reg_ip(arch));
-
-Now I'm wondering how cross unwinding ever worked because I see
-libunwind also has something hard coded too:
-
-  #define LIBUNWIND__ARCH_REG_SP PERF_REG_SP
+base-commit: 0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6
+-- 
+2.30.2
 
