@@ -2,192 +2,120 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B38D70B7FD
-	for <lists+linux-csky@lfdr.de>; Mon, 22 May 2023 10:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5208670B82F
+	for <lists+linux-csky@lfdr.de>; Mon, 22 May 2023 10:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjEVIsD (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 22 May 2023 04:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        id S232531AbjEVI6P (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 22 May 2023 04:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjEVIsC (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 22 May 2023 04:48:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5C7CD;
-        Mon, 22 May 2023 01:48:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4B2F61EEE;
-        Mon, 22 May 2023 08:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CFA8C4339C;
-        Mon, 22 May 2023 08:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684745280;
-        bh=dhkdseplp2rrgwJ8+a1C+wai/ckiWP/ufdoDWmarcBE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=j08MVD/ZML3gIaAMOu28RtCcr+8udcM/LreSdpZ9fKlSKWvGdlA3tRaE0bXfJVb8P
-         yVhb11VmZtOIQcXBEcjGq3/P6+KO7xi/aPdietUgUwM2l1MQ2KfVpTPe3mV3joTygH
-         a5f3X01rHjvyGCx0lDexQbx0vGtr4VRbGxNxOlMnkQbAbXa7XPIDMToQzs49nejwIV
-         YGue4tQdk9bdAc6XKJfRWHIPnntSdb5ZY8fOOxtead29y3pE1xQtpV1T+6sN3CpKZE
-         rUAbzp62g6N5jnjjk/V1EHk41+pbQ0LntOceSXgQgRdNfkDwgDWLvvg005XJ1qlj6b
-         JDE2tv0GuC7bQ==
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-510d967249aso9652477a12.1;
-        Mon, 22 May 2023 01:47:59 -0700 (PDT)
-X-Gm-Message-State: AC+VfDx/+vPFV59y68GyUwN2mo0RNX1PJ7s4z/zFD2lCp0H7930VXIav
-        ZCEMvPf55KcNs832+SyHRmJo12+E5V5XUbG+IRg=
-X-Google-Smtp-Source: ACHHUZ4N/bkRduc2PnEwH6IzxhGOPmnL3dIVGwcrnIbp2yQ/rkAEGxKtZpuuXJsIzKYsdt9rQzrVqL3VvejvU5M2JRw=
-X-Received: by 2002:aa7:c40b:0:b0:50b:d75d:5dca with SMTP id
- j11-20020aa7c40b000000b0050bd75d5dcamr8356986edq.42.1684745278235; Mon, 22
- May 2023 01:47:58 -0700 (PDT)
+        with ESMTP id S230362AbjEVI5l (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 22 May 2023 04:57:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2F2518F;
+        Mon, 22 May 2023 01:57:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5796311FB;
+        Mon, 22 May 2023 01:58:18 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 559A53F6C4;
+        Mon, 22 May 2023 01:57:30 -0700 (PDT)
+Message-ID: <839836e8-9600-9249-dcdb-e29519335141@arm.com>
+Date:   Mon, 22 May 2023 09:57:25 +0100
 MIME-Version: 1.0
-References: <20230517-genkey-v1-1-b887424da4a8@google.com> <202305181712.xjvv1fbD-lkp@intel.com>
- <CAKwvOd=hoKFMC40U-Pd=2dBJ4zT4P60OgJpHvNmH+zdGAd_J-Q@mail.gmail.com>
-In-Reply-To: <CAKwvOd=hoKFMC40U-Pd=2dBJ4zT4P60OgJpHvNmH+zdGAd_J-Q@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 22 May 2023 16:47:46 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTReoP+mFqf4TLjAgE0JJ2vvX8p7SnC2-sdjx+PMK-U+ig@mail.gmail.com>
-Message-ID: <CAJF2gTReoP+mFqf4TLjAgE0JJ2vvX8p7SnC2-sdjx+PMK-U+ig@mail.gmail.com>
-Subject: Re: [PATCH] certs: buffer stderr from openssl unless error
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Philip Li <philip.li@intel.com>, oe-kbuild-all@lists.linux.dev,
-        Ard Biesheuvel <ardb@kernel.org>, linux-csky@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        yunhai.syh@alibaba-inc.com,
-        Cooper Qu <cooper.qu@linux.alibaba.com>,
-        xlf194833@alibaba-inc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 2/5] perf parse-regs: Introduce functions
+ arch__reg_{ip|sp}()
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+References: <20230520025537.1811986-1-leo.yan@linaro.org>
+ <20230520025537.1811986-3-leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Lin <eric.lin@sifive.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20230520025537.1811986-3-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-F.Y.I., our compiler team, would put an eye on this.
-
-On Fri, May 19, 2023 at 6:37=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Thu, May 18, 2023 at 3:23=E2=80=AFAM kernel test robot <lkp@intel.com>=
- wrote:
-> >
-> > Hi,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/ndesaulniers-goo=
-gle-com/certs-buffer-stderr-from-openssl-unless-error/20230518-004753
-> > base:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
-> > patch link:    https://lore.kernel.org/r/20230517-genkey-v1-1-b887424da=
-4a8%40google.com
-> > patch subject: [PATCH] certs: buffer stderr from openssl unless error
-> > config: csky-randconfig-m041-20230517
-> > compiler: csky-linux-gcc (GCC) 12.1.0
-> > reproduce (this is a W=3D1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
->
-> ^ should encourage `mkdir ~/bin`; the debian docker container doesn't
-> have `~/bin`.
->
-> >         chmod +x ~/bin/make.cross
-> >         # https://github.com/intel-lab-lkp/linux/commit/0e437a41fdb41c8=
-4834de6776bf38951b197792a
-> >         git remote add linux-review https://github.com/intel-lab-lkp/li=
-nux
-> >         git fetch --no-tags linux-review ndesaulniers-google-com/certs-=
-buffer-stderr-from-openssl-unless-error/20230518-004753
->
-> ^ holy crap that takes forever. maybe recommend `b4 shazam <lore link>`?
->
-> >         git checkout 0e437a41fdb41c84834de6776bf38951b197792a
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.c=
-ross W=3D1 O=3Dbuild_dir ARCH=3Dcsky olddefconfig
->
-> ^ should use `~/bin/make.cross` since `~/bin` may not exist in $PATH.
->
-> >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.c=
-ross W=3D1 O=3Dbuild_dir ARCH=3Dcsky SHELL=3D/bin/bash
->
-> Hi Philip,
-> I've run into some issues with make.cross when trying to install the
-> csky toolchain. Maybe you can help?
->
-> ```
-> $ COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0
-> ~/bin/make.cross W=3D1 O=3Dbuild_dir ARCH=3Dcsky olddefconfig
-> Compiler will be installed in /root/0day
-> make: gcc: No such file or directory
-> lftpget -c https://download.01.org/0day-ci/cross-package/./gcc-12.1.0-nol=
-ibc/x86_64-gcc-12.1.0-nolibc_csky-linux.tar.xz
-> /linux
-> tar Jxf /root/0day/gcc-12.1.0-nolibc/x86_64-gcc-12.1.0-nolibc_csky-linux.=
-tar.xz
-> -C /root/0day
-> Please update: libc6 or glibc
-> ldd /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc
-> /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc:
-> /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found
-> (required by /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc)
-> /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc:
-> /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found
-> (required by /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc)
-> setup_crosstool failed
->
-> $ ldd -v /lib/x86_64-linux-gnu/libc.so.6
-> /lib64/ld-linux-x86-64.so.2 (0x00007f11f3478000)
-> linux-vdso.so.1 (0x00007ffcf45b2000)
->
-> Version information:
-> /lib/x86_64-linux-gnu/libc.so.6:
-> ld-linux-x86-64.so.2 (GLIBC_2.3) =3D> /lib64/ld-linux-x86-64.so.2
-> ld-linux-x86-64.so.2 (GLIBC_PRIVATE) =3D> /lib64/ld-linux-x86-64.so.2
->
-> $ cat /etc/debian_version
-> 11.6
-> ```
-> Perhaps I MUST update my debian container to 11.7?
->
-> Are the 0day toolchains not statically linked? Can they use the ones
-> from kernel.org which are?
-> https://mirrors.edge.kernel.org/pub/tools/crosstool/
->
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202305181712.xjvv1fbD-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    At main.c:152:
-> >    - SSL error:FFFFFFFF80000002:system library::No such file or directo=
-ry: ../crypto/bio/bss_file.c:67
-> >    - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_f=
-ile.c:75
-> > >> extract-cert: certs/signing_key.pem: No such file or directory
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
 
 
+On 20/05/2023 03:55, Leo Yan wrote:
+> Ideally, we want util/perf_regs.c to be general enough and doesn't bind
+> with specific architecture.
+> 
+> But since util/perf_regs.c uses the macros PERF_REG_IP and PERF_REG_SP
+> which are defined by architecture, thus util/perf_regs.c is dependent on
+> architecture header (see util/perf_regs.h includes "<perf_regs.h>", here
+> perf_regs.h is architecture specific header).
+> 
+> As a step to generalize util/perf_regs.c, this commit introduces weak
+> functions arch__reg_ip() and arch__reg_sp() and every architecture can
+> define their own functions; thus, util/perf_regs.c doesn't need to use
+> PERF_REG_IP and PERF_REG_SP anymore.
+> 
+> This is a preparation to get rid of architecture specific header from
+> util/perf_regs.h.
+> 
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+[...]
+>  
+> -#define DWARF_MINIMAL_REGS ((1ULL << PERF_REG_IP) | (1ULL << PERF_REG_SP))
+> +#define DWARF_MINIMAL_REGS ((1ULL << arch__reg_ip()) | (1ULL << arch__reg_sp()))
+>  
+>  const char *perf_reg_name(int id, const char *arch);
+>  int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
+> diff --git a/tools/perf/util/unwind-libdw.c b/tools/perf/util/unwind-libdw.c
+> index bdccfc511b7e..f308f2ea512b 100644
+> --- a/tools/perf/util/unwind-libdw.c
+> +++ b/tools/perf/util/unwind-libdw.c
+> @@ -252,7 +252,7 @@ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+>  	if (!ui->dwfl)
+>  		goto out;
+>  
+> -	err = perf_reg_value(&ip, &data->user_regs, PERF_REG_IP);
+> +	err = perf_reg_value(&ip, &data->user_regs, arch__reg_ip());
 
---=20
-Best Regards
- Guo Ren
+Shouldn't it be more like this, because the weak symbols are a compile
+time thing and it's supposed to support cross arch unwinding at runtime
+(assuming something containing the arch from the file is passed down,
+like we did with perf_reg_name()):
+
+  char *arch = perf_env__arch(evsel__env(evsel));
+  err = perf_reg_value(&ip, &data->user_regs, arch__reg_ip(arch));
+
+Now I'm wondering how cross unwinding ever worked because I see
+libunwind also has something hard coded too:
+
+  #define LIBUNWIND__ARCH_REG_SP PERF_REG_SP
+
