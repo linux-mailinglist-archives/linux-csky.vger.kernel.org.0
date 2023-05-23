@@ -2,137 +2,161 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE2270CE89
-	for <lists+linux-csky@lfdr.de>; Tue, 23 May 2023 01:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E109F70D44C
+	for <lists+linux-csky@lfdr.de>; Tue, 23 May 2023 08:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjEVXMb (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 22 May 2023 19:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S232561AbjEWGtU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 23 May 2023 02:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbjEVXMa (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 22 May 2023 19:12:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48408CD;
-        Mon, 22 May 2023 16:12:29 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684797146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C7TsK7GgGmkvmWTTcWM2ucSNGAZooIPJARpsVm1elw0=;
-        b=yrUtqJV10ki6ehHolL2hnu9DMcCIuWlud8kBCfHX2rWfH90kquusd5JROH50fXuSFSmQwU
-        PKNQy6H0pPg6Mk5OQdYPhKYbeQI1YUR9KMUd/a7Qt8XePk2e/SyRiHPAMSjuFqp7Gvl67j
-        jsYzQTS2roesS5yiUarkF8GfeI3DeGPf6Ebcoc4Ljc1KYqKx7NP63xqe3/V5tuO0wj3vfK
-        JFIGfRt4eOzIcmOGPkAafZCHGsIxOB41QQ0hviBcfX4KV8V6SP+E8PZS1myMMBnon3NhCD
-        iok8IPIaOi8QqOj9b+eAxWl9vgJ4JWbE94zRxWOk3/fV7mjhSGxDcyoSZunF8g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684797146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C7TsK7GgGmkvmWTTcWM2ucSNGAZooIPJARpsVm1elw0=;
-        b=LsHOhlHhAmIjOmv4OFf6rm8oVhRsGLXF3Ede/E4PfuqZRooT2DLrTIb9VMr4oD66YERTjE
-        beGkkZmQ8Ci6bkBQ==
-To:     Mark Brown <broonie@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        with ESMTP id S230474AbjEWGtT (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 23 May 2023 02:49:19 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A70119
+        for <linux-csky@vger.kernel.org>; Mon, 22 May 2023 23:49:17 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-25275edf6caso3199511a91.1
+        for <linux-csky@vger.kernel.org>; Mon, 22 May 2023 23:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684824557; x=1687416557;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/CIN3k3pgEX900re7PcWc+Ixgh9Bvf8RnAPTzy/Q9qA=;
+        b=cvzXNBZcONpo9ubWJ3RJzuhpxW2KbOHQ7DyYNvAc6zjsDwkoebi1Cb5OK1Si5f9EkR
+         7oTDI3fOalzwEfxtNnjihGdUMwDKSXZkE1HxrdBA6wmIpDrDdXEuHHx+k5U8WxTjUW6a
+         mu753zyCxef2tvJdD9aw9+fAS79oQq8BvweBwSgvtEh+sI7C8jHfILbMxxemelnlc3hv
+         TQ76LfGIYbtcp4Xin0+PZPpMPCazlIiSEf0zHBPlJ/lt04cX+mrF/dfXBXOD6CJSsLoI
+         4UXwZa6kWsBRXaq6cv37NKE/oQi4+8PAY+qFC8UB3Ei+yLADc6sD5PlY57Ui2VfaCgdA
+         FoFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684824557; x=1687416557;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/CIN3k3pgEX900re7PcWc+Ixgh9Bvf8RnAPTzy/Q9qA=;
+        b=Exi0Lc9Cve0jAo6aV80R56ltWL5S6KlzQKoKgSoTq/j0aCe0s75AXBPPeh2V6FT/WT
+         1wEcZxJxyopaEon52v35U/et81UeMOo6pINNSsKnCTJXdXm2/qKlNgWqP2x6nszSjK1v
+         YqQOpJMGK6Jqc5DPIirpAZuisCgTBoWqUH08BvNIWn+IqFz4fQ4Jc4ie4Wh0qENN2J9n
+         H9jW34j9Fz06Vjk93WpmvMShZiaYH6aYHdUHgZvmG/uGmlifk41EFbmTj3S3H05B3Q4R
+         4lqH4H5LFFtDHIoS29u0aImU4e5Yc/j/+cONkVzrlZ7kcg/0ZvsFyIV5SUH1GwH39UR4
+         04cg==
+X-Gm-Message-State: AC+VfDwH+H4zXYffT8o8VorbaMSX9Hhp1HIBAIH2GvH0ngcgHHCsfKMa
+        q6X9YxMOhLICKmaRyukqmDJ6Fw==
+X-Google-Smtp-Source: ACHHUZ7nNz4A5dl27YEbGjluXzF+Iu6AoPCKpNsPdYErA3ftUxN2fDxtCgclj2E7xLaUJ53OH6sH7g==
+X-Received: by 2002:a17:90a:984:b0:253:9548:91e1 with SMTP id 4-20020a17090a098400b00253954891e1mr12132128pjo.17.1684824556586;
+        Mon, 22 May 2023 23:49:16 -0700 (PDT)
+Received: from leoy-yangtze.lan ([107.151.177.126])
+        by smtp.gmail.com with ESMTPSA id w62-20020a17090a6bc400b00246774a9addsm7391986pjj.48.2023.05.22.23.49.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 23:49:16 -0700 (PDT)
+Date:   Tue, 23 May 2023 14:49:04 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Guo Ren <guoren@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch V4 33/37] cpu/hotplug: Allow "parallel" bringup up to
- CPUHP_BP_KICK_AP_STATE
-In-Reply-To: <2ed3ff77-c973-4e23-9e2f-f10776e432b7@sirena.org.uk>
-References: <20230512203426.452963764@linutronix.de>
- <20230512205257.240231377@linutronix.de>
- <4ca39e58-055f-432c-8124-7c747fa4e85b@sirena.org.uk> <87bkicw01a.ffs@tglx>
- <2ed3ff77-c973-4e23-9e2f-f10776e432b7@sirena.org.uk>
-Date:   Tue, 23 May 2023 01:12:26 +0200
-Message-ID: <87wn10ufj9.ffs@tglx>
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Eric Lin <eric.lin@sifive.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 2/5] perf parse-regs: Introduce functions
+ arch__reg_{ip|sp}()
+Message-ID: <20230523064904.GA1969788@leoy-yangtze.lan>
+References: <20230520025537.1811986-1-leo.yan@linaro.org>
+ <20230520025537.1811986-3-leo.yan@linaro.org>
+ <CAP-5=fU-+8Sdw0tfQNYN40tXanrzUgqv0=6jsHqGR9cgjkQa2A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fU-+8Sdw0tfQNYN40tXanrzUgqv0=6jsHqGR9cgjkQa2A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, May 22 2023 at 23:27, Mark Brown wrote:
-> On Mon, May 22, 2023 at 11:04:17PM +0200, Thomas Gleixner wrote:
->
->> That does not make any sense at all and my tired brain does not help
->> either.
->
->> Can you please apply the below debug patch and provide the output?
->
-> Here's the log, a quick glance says the 
->
-> 	if (!--ncpus)
-> 		break;
->
-> check is doing the wrong thing
+On Mon, May 22, 2023 at 11:08:12AM -0700, Ian Rogers wrote:
 
-Obviously.
+[...]
 
-Let me find a brown paperbag and go to sleep before I even try to
-compile the obvious fix.
+> > diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
+> > index 8720ec6cf147..334c9a2b785d 100644
+> > --- a/tools/perf/util/perf_regs.c
+> > +++ b/tools/perf/util/perf_regs.c
+> > @@ -20,6 +20,16 @@ uint64_t __weak arch__user_reg_mask(void)
+> >         return PERF_REGS_MASK;
+> >  }
+> >
+> > +uint64_t __weak arch__reg_ip(void)
+> > +{
+> > +       return 0;
+> > +}
+> > +
+> > +uint64_t __weak arch__reg_sp(void)
+> > +{
+> > +       return 0;
+> > +}
+> > +
+> 
+> Is there a need for the weak function if there is a definition for
+> every architecture?
 
----
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 005f863a3d2b..88a7ede322bd 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1770,9 +1770,6 @@ static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned int n
- 	for_each_cpu(cpu, mask) {
- 		struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
- 
--		if (!--ncpus)
--			break;
--
- 		if (cpu_up(cpu, target) && can_rollback_cpu(st)) {
- 			/*
- 			 * If this failed then cpu_up() might have only
-@@ -1781,6 +1778,9 @@ static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned int n
- 			 */
- 			WARN_ON(cpuhp_invoke_callback_range(false, cpu, st, CPUHP_OFFLINE));
- 		}
-+
-+		if (!--ncpus)
-+			break;
- 	}
- }
- 
+In current code, some archs don't support register parsing (e.g.
+arch/alpha, arch/parisc, arch/riscv64, etc), this is why I added weak
+functions to avoid building breakage for these archs.
+
+> A problem with weak definitions is that they are
+> not part of the C standard, so strange things can happen such as
+> inlining - although I think this code is safe.
+
+Good to know this info, thanks for sharing.
+
+> Not having the weak
+> functions means that if someone tries to bring up a new architecture
+> they will get linker failures until they add the definitions. Failing
+> to link seems better than silently succeeding but then having to track
+> down runtime failures because these functions are returning 0.
+
+I agreed that removing weak functions is better way to move forward.
+
+If removing the weak functions, we need to handle cases for below
+archs which don't support register parsing:
+
+  arch/alpha/
+  arch/arc/
+  arch/parisc/
+  arch/riscv64/
+  arch/sh/
+  arch/sparc/
+  arch/xtensa/
+
+As James pointed out perf fails to support cross unwinding, I will update
+this patch, the new version's arch__reg_ip() / arch__reg_sp() will return
+IP and SP registers based on the passed 'arch' parameter; for above
+unsupported archs, arch__reg_ip() / arch__reg_sp() will return error and
+architecture developers can extend register parsing in the future.
+
+In this way, we also can remove weak definitions, this can give us an
+extra benefit :)
+
+Thanks,
+Leo
