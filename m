@@ -2,85 +2,64 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5306471244C
-	for <lists+linux-csky@lfdr.de>; Fri, 26 May 2023 12:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D5B713416
+	for <lists+linux-csky@lfdr.de>; Sat, 27 May 2023 12:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjEZKO2 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 26 May 2023 06:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S231208AbjE0KmL (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sat, 27 May 2023 06:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjEZKO1 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 26 May 2023 06:14:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BDD10A;
-        Fri, 26 May 2023 03:14:24 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685096062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l0JCLWaWxAiVqnK2HID86lF3S13SCfgrB4rF/jITy/I=;
-        b=ip+IsKji95mPrphWLVAUcdYl0y7pMoo/0rzxXxKZorc2i1ogyDwgLlmNAyb0qqipND//Q9
-        mcdcjSKoJ1BmMv2yfve0Ih3RShF4W067n1L36VQOlRFjew11DbOIHP9BY3hPEmKWEMkYtF
-        3++Mlj3E1pedAPDLuSJp8O8yrjmKl61cO3sikLlCo0aFQA4sDzjqIug5Y2sHJzxAouulen
-        yWchVZzHYCyYvLl2IBhaE7LhZZ90HvEDnnYiIPfmZVnM5oPDhrPgISY7m926weiwqHfWOw
-        VMBPX/ASMwnX6UaU0XNMhsxdic6Oppo5GnIK5pHcSkZVNuJmv/nyAhmosdGW7Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685096062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l0JCLWaWxAiVqnK2HID86lF3S13SCfgrB4rF/jITy/I=;
-        b=mQPEsm7iwifOjyLdaiqWmBusXWewAsMMsfF7/82drVMMawEZjza+eT9dmICykmFbK9zGX6
-        K4OvjM1+WRhVDmDw==
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-In-Reply-To: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
-Date:   Fri, 26 May 2023 12:14:21 +0200
-Message-ID: <87y1lbl7r6.ffs@tglx>
+        with ESMTP id S229717AbjE0KmL (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sat, 27 May 2023 06:42:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF110A;
+        Sat, 27 May 2023 03:42:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EF3F60B67;
+        Sat, 27 May 2023 10:42:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE11AC433EF;
+        Sat, 27 May 2023 10:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685184129;
+        bh=Z4TeIapFpeS1e5WxOMUpOrDg87Rxe8ydQavxJsO0vug=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qtjpACU3i7FVjLT023Ddg5iX1Sm9mYGyR9BAcAldcZGtkGi1IgPSjR20Gkom5YVFi
+         9GqwWTqSe6aCGE+Jk6r1lk9ASI1BqwfpG0h2HSrQ1BaMlG84/DZwyIoKGVbNuFJs46
+         KM/CX4KgN01bs8ctMAmNzdH3P/7vJMOVtl/spQpp1NeNWLVBfmoG8tubTTHEz78nbM
+         Mi5TzSK4O/LtfJpDtvhI5QLWzSn68VROvh7bVsKVmfCA0L8DXw2EUj7uC78b19+5Rx
+         6iPjAV5tMRrgS7SBBOhhGo75UiSObo7waKqxJ5uuMYjPYcI7MRtTbdg+ba8TB9jNgs
+         b+IpYHQpsYW9A==
+Date:   Sat, 27 May 2023 13:41:44 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vishal Moola <vishal.moola@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 05/34] mm: add utility functions for ptdesc
+Message-ID: <20230527104144.GH4967@kernel.org>
+References: <20230501192829.17086-1-vishal.moola@gmail.com>
+ <20230501192829.17086-6-vishal.moola@gmail.com>
+ <20230525090956.GX4967@kernel.org>
+ <CAOzc2pxSH6GhBnAoSOjvYJk2VdMDFZi3H_1qGC5Cdyp3j4AzPQ@mail.gmail.com>
+ <20230525202537.GA4967@kernel.org>
+ <CAOzc2pxD21mxisy-M5b_SDUv0MYwNHqaVDJnJpARuDG_HjCbOg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOzc2pxD21mxisy-M5b_SDUv0MYwNHqaVDJnJpARuDG_HjCbOg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,58 +67,53 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, May 24 2023 at 23:48, Kirill A. Shutemov wrote:
-> On Mon, May 08, 2023 at 09:44:17PM +0200, Thomas Gleixner wrote:
->>  #ifdef CONFIG_SMP
->> -/**
->> - * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary thread
->> - * @apicid: APIC ID to check
->> - */
->> -bool apic_id_is_primary_thread(unsigned int apicid)
->> +static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
->>  {
->> -	u32 mask;
->> -
->> -	if (smp_num_siblings == 1)
->> -		return true;
->>  	/* Isolate the SMT bit(s) in the APICID and check for 0 */
->> -	mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
->> -	return !(apicid & mask);
->> +	u32 mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
->> +
->> +	if (smp_num_siblings == 1 || !(apicid & mask))
->> +		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
->>  }
->> +#else
->> +static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
->>  #endif
->>  
->>  /*
->
-> This patch causes boot regression on TDX guest. The guest crashes on SMP
-> bring up.
+On Thu, May 25, 2023 at 01:53:24PM -0700, Vishal Moola wrote:
+> On Thu, May 25, 2023 at 1:26 PM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > On Thu, May 25, 2023 at 11:04:28AM -0700, Vishal Moola wrote:
+> > > On Thu, May 25, 2023 at 2:10 AM Mike Rapoport <rppt@kernel.org> wrote:
+> > > > > +
+> > > > > +static inline struct ptdesc *ptdesc_alloc(gfp_t gfp, unsigned int order)
+> > > > > +{
+> > > > > +     struct page *page = alloc_pages(gfp | __GFP_COMP, order);
+> > > > > +
+> > > > > +     return page_ptdesc(page);
+> > > > > +}
+> > > > > +
+> > > > > +static inline void ptdesc_free(struct ptdesc *pt)
+> > > > > +{
+> > > > > +     struct page *page = ptdesc_page(pt);
+> > > > > +
+> > > > > +     __free_pages(page, compound_order(page));
+> > > > > +}
+> > > >
+> > > > The ptdesc_{alloc,free} API does not sound right to me. The name
+> > > > ptdesc_alloc() implies the allocation of the ptdesc itself, rather than
+> > > > allocation of page table page. The same goes for free.
+> > >
+> > > I'm not sure I see the difference. Could you elaborate?
+> >
+> > I read ptdesc_alloc() as "allocate a ptdesc" rather than as "allocate a
+> > page for page table and return ptdesc pointing to that page". Seems very
+> > confusing to me already and it will be even more confusion when we'll start
+> > allocating actual ptdescs.
+> 
+> Hmm, I see what you're saying. I'm envisioning this function evolving into
+> one that allocates a ptdesc later. I don't see why we would need to have both a
+> page table page AND ptdesc at any point, but that may be a lack of knowledge
+> from my part.
 
-I rather call it a security feature: It makes TDX unbreakably secure.
+Sorry if I wasn't clear, by "page table page" I meant the page (or memory
+for that matter) for actual page table rather than struct page describing
+that memory.
 
-> The change makes use of smp_num_siblings earlier than before: the mask get
-> constructed in acpi_boot_init() codepath. Later on smp_num_siblings gets
-> updated in detect_ht().
->
-> In my setup with 16 vCPUs, smp_num_siblings is 16 before detect_ht() and
-> set to 1 in detect_ht().
+So what we allocate here is the actual memory for the page tables and not
+the memory for the metadata. That's why I think the name ptdesc_alloc is
+confusing.
+ 
+> I was thinking later, if necessary, we could make another function
+> (only to be used internally) to allocate page table pages.
 
-  early_init_intel(c)
-    if (detect_extended_topology_early(c) < 0)
-       detect_ht_early(c);
-
-  acpi_boot_init()
-    ....
-
-  identify_boot_cpu(c)
-    detect_ht(c);
-
-Aaargh. That whole CPU identification code is a complete horrorshow.
-
-I'll have a look....
-
-
+-- 
+Sincerely yours,
+Mike.
