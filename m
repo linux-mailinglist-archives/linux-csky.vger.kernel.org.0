@@ -2,70 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78FB714218
-	for <lists+linux-csky@lfdr.de>; Mon, 29 May 2023 04:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A08714FB3
+	for <lists+linux-csky@lfdr.de>; Mon, 29 May 2023 21:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjE2Cj6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 28 May 2023 22:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S229540AbjE2T1S (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 29 May 2023 15:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjE2Cj4 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 28 May 2023 22:39:56 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97421A7;
-        Sun, 28 May 2023 19:39:50 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 68EBC320083A;
-        Sun, 28 May 2023 22:39:45 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 28 May 2023 22:39:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685327985; x=
-        1685414385; bh=CkLoqHnVGlymW7d8k4EFDgQjQ/Ry/XUh7kKzLI6+vlE=; b=W
-        7EccITdMZC0pSl/b1cfDKDyxZJGjSM57ZL2lxSNLgeqB4IerV8LFdI9zEG9Uv3G5
-        XelSpBSDuEiMFswqvgC+uqMSU41P+0pHnc0CfVm+/om40YXV8TBgy4FQ3uAnJ0sd
-        0leGMjl2uPikmG/RgzzVFUtdTyGqRV9PoTLcM/5fX1Q+VN3mISeO/SGfktGELjZZ
-        NdxDajeL23HVze7H5M+ZON2UH8rVcjxVZPc4eeORlBj44HD0strS02gomytli9s7
-        PBU0KbXi2fQ1wTum70GIBqTrZdwfVGFyVfYmU4ShoSq7JbcP7lXhTS7MnuWZ/MSP
-        q530uy7ak3gazTiZQa03w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685327985; x=1685414385; bh=CkLoqHnVGlymW
-        7d8k4EFDgQjQ/Ry/XUh7kKzLI6+vlE=; b=Ym18twRp4YDc99fHB93LquZJ0Z4zp
-        embehcemE/kKIw1lZWuqx1KLQozamaAeoJM8goXmgoaZW3VB8Dgu+XxcQIKA7hdr
-        ii4iswSCwWVizYzEQhscnjWq5UJr55hgxRG1klgsxQfGEpvQcFkllQ/IlrtZeuNd
-        IkgtrkaFdbgTtMVHe/1BaJAZgG5u4VOq3VGMrtOS9mrpBphl1Sv9YkU1wdeQ//ZD
-        7Iq1V0iH3LUN1FJ4cnVRQ7ifNB0s2ek3SVY9vbksOnEwoqh4M6UrCmTyI4hRZ4zX
-        H05f0ian4GSUghIm00k8vxuIOxyQfYMTfS1T0c/t3HVr9UH3nfIjwNYjw==
-X-ME-Sender: <xms:bhB0ZISkSebDoY7ePFrAHMDJbiQqzCSLtGQEC7GihGdfbUW05RzW4w>
-    <xme:bhB0ZFzAz6AVefd2szJo-ws8Uh2hNyL_zT_y1XDQB_wTeqEm_eppvzBm55tfHAdwY
-    NArb6jCfmWTz_8OPNI>
-X-ME-Received: <xmr:bhB0ZF3ndzPOosUupfAXA2uJY_qxBkSmJjfdBatmCRw5_Peevlwyk7NCarF_NFDe7DIgoQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekgedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:bhB0ZMB8itjXVeTPWF_K8Nmn0VUSqgIS-owqp_lG18bg5bU4EsSh7g>
-    <xmx:bhB0ZBhiT1zEB1GcRZ1uvkLgyLjitMFL8pFJUil6ufu20rCWUASJ9g>
-    <xmx:bhB0ZIrw9F7S8Wzi-Fm-LbfqbFWndpEyT87JM97uPNmv25HvJJw6bQ>
-    <xmx:cRB0ZEAbi-FwJdt75RNpPlGa_l7-Cjrsterd_z2tGu_lje6NiEeMZQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 28 May 2023 22:39:42 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id DC398109530; Mon, 29 May 2023 05:39:39 +0300 (+03)
-Date:   Mon, 29 May 2023 05:39:39 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Thomas Gleixner <tglx@linutronix.de>
+        with ESMTP id S229489AbjE2T1R (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 29 May 2023 15:27:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD98B0;
+        Mon, 29 May 2023 12:27:15 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685388433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kl0ODdCeKiDH/b09sXJZwrPwGLdocmdMEThYYertZKo=;
+        b=Vxb6resa0Cee8qKiX40iLmpLbizKny04GkH5PE3gewsxqPqAzhTPcwc8GkVpD7IYkBdOob
+        kldM9lYeqBeHeuVdf1n1uSRqpZ8thZOUUpxSgDMIWLmXNRAjjAYL9XB4nCkRJyP2BNBrgs
+        +LjDC7xzihRAukwVXXSnFrbgcjETfKlxcQ0f7eAmLBfEur7iq3CkzZd7Fv+C3xIIfX9Oqn
+        UDvSgGVwTUuYApQRu8CALqoBA3mLboEZWctl8SJ4zwTlaLr0WQyCLTztU3yg0BGhcD0i4q
+        r0GC5zQfvpRfIKFDunUCoMLmRn5jMSReNtV5bplMpx4cZ9Wq3FpYR24PpP9nqg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685388433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kl0ODdCeKiDH/b09sXJZwrPwGLdocmdMEThYYertZKo=;
+        b=2dl6kWdCmqa//U1xNID+wwwyKgUQy1Ux9vDUW+tt7QyZfM5CWCbMX54JcFWLtsOWsuy9ZI
+        CACTmSWLwHX7odAw==
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
         Andrew Cooper <andrew.cooper3@citrix.com>,
@@ -101,18 +70,17 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Dave Hansen <dave.hansen@linux.intel.com>
 Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-Message-ID: <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+In-Reply-To: <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
 References: <20230508181633.089804905@linutronix.de>
  <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
- <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+Date:   Mon, 29 May 2023 21:27:13 +0200
+Message-ID: <87bki3kkfi.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sfbhlwp9.ffs@tglx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -121,39 +89,81 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, May 27, 2023 at 03:40:02PM +0200, Thomas Gleixner wrote:
-> On Fri, May 26 2023 at 12:14, Thomas Gleixner wrote:
-> > On Wed, May 24 2023 at 23:48, Kirill A. Shutemov wrote:
-> >> This patch causes boot regression on TDX guest. The guest crashes on SMP
-> >> bring up.
-> 
-> The below should fix that. Sigh...
+On Mon, May 29 2023 at 05:39, Kirill A. Shutemov wrote:
+> On Sat, May 27, 2023 at 03:40:02PM +0200, Thomas Gleixner wrote:
+> But it gets broken again on "x86/smpboot: Implement a bit spinlock to
+> protect the realmode stack" with
+>
+> [    0.554079] .... node  #0, CPUs:        #1  #2
+> [    0.738071] Callback from call_rcu_tasks() invoked.
+> [   10.562065] CPU2 failed to report alive state
+> [   10.566337]   #3
+> [   20.570066] CPU3 failed to report alive state
+> [   20.574268]   #4
+> ...
+>
+> Notably CPU1 is missing from "failed to report" list. So CPU1 takes the
+> lock fine, but seems never unlocks it.
+>
+> Maybe trampoline_lock(%rip) in head_64.S somehow is not the same as
+> &tr_lock in trampoline_64.S. I donno.
 
-Okay, this gets me fixes the boot for TDX guest:
+It's definitely the same in the regular startup (16bit mode), but TDX
+starts up via:
 
-Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+trampoline_start64
+  trampoline_compat
+    LOAD_REALMODE_ESP <- lock
 
-But it gets broken again on "x86/smpboot: Implement a bit spinlock to
-protect the realmode stack" with
+That place cannot work with that LOAD_REALMODE_ESP macro. The untested
+below should cure it.
 
-[    0.554079] .... node  #0, CPUs:        #1  #2
-[    0.738071] Callback from call_rcu_tasks() invoked.
-[   10.562065] CPU2 failed to report alive state
-[   10.566337]   #3
-[   20.570066] CPU3 failed to report alive state
-[   20.574268]   #4
-...
+Thanks,
 
-Notably CPU1 is missing from "failed to report" list. So CPU1 takes the
-lock fine, but seems never unlocks it.
+        tglx
+---
+--- a/arch/x86/realmode/rm/trampoline_64.S
++++ b/arch/x86/realmode/rm/trampoline_64.S
+@@ -37,12 +37,12 @@
+ 	.text
+ 	.code16
+ 
+-.macro LOAD_REALMODE_ESP
++.macro LOAD_REALMODE_ESP lock:req
+ 	/*
+ 	 * Make sure only one CPU fiddles with the realmode stack
+ 	 */
+ .Llock_rm\@:
+-        lock btsl       $0, tr_lock
++        lock btsl       $0, \lock
+         jnc             2f
+         pause
+         jmp             .Llock_rm\@
+@@ -63,7 +63,7 @@ SYM_CODE_START(trampoline_start)
+ 	mov	%ax, %es
+ 	mov	%ax, %ss
+ 
+-	LOAD_REALMODE_ESP
++	LOAD_REALMODE_ESP tr_lock
+ 
+ 	call	verify_cpu		# Verify the cpu supports long mode
+ 	testl   %eax, %eax		# Check for return code
+@@ -106,7 +106,7 @@ SYM_CODE_START(sev_es_trampoline_start)
+ 	mov	%ax, %es
+ 	mov	%ax, %ss
+ 
+-	LOAD_REALMODE_ESP
++	LOAD_REALMODE_ESP tr_lock
+ 
+ 	jmp	.Lswitch_to_protected
+ SYM_CODE_END(sev_es_trampoline_start)
+@@ -189,7 +189,7 @@ SYM_CODE_START(pa_trampoline_compat)
+ 	 * In compatibility mode.  Prep ESP and DX for startup_32, then disable
+ 	 * paging and complete the switch to legacy 32-bit mode.
+ 	 */
+-	LOAD_REALMODE_ESP
++	LOAD_REALMODE_ESP pa_tr_lock
+ 	movw	$__KERNEL_DS, %dx
+ 
+ 	movl	$(CR0_STATE & ~X86_CR0_PG), %eax
 
-Maybe trampoline_lock(%rip) in head_64.S somehow is not the same as
-&tr_lock in trampoline_64.S. I donno.
-
-I haven't find the root cause yet. But bypassing locking in
-LOAD_REALMODE_ESP makes the issue go away.
-
-I will look more into it.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
