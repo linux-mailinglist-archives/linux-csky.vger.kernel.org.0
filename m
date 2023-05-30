@@ -2,70 +2,39 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC38F715F6F
-	for <lists+linux-csky@lfdr.de>; Tue, 30 May 2023 14:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F58B716864
+	for <lists+linux-csky@lfdr.de>; Tue, 30 May 2023 18:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjE3MaM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 30 May 2023 08:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S233092AbjE3QAw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 30 May 2023 12:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjE3MaA (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 30 May 2023 08:30:00 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A1ED9;
-        Tue, 30 May 2023 05:29:59 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0F49D5C0187;
-        Tue, 30 May 2023 08:29:56 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 30 May 2023 08:29:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685449796; x=
-        1685536196; bh=EEiwGlX0Rwp4JD9gZJQ2+HoBg+CT8hF4DrYL0banGb4=; b=J
-        hSWsjxiEcHNkhsyc3AMDUebr4x6d+5Z/IPmQcP3r3HEa2PV4iCNRm3rpXjqMalMw
-        /OE0m3uI6TqVPy5TXs2laPgrna5SS91VjYoT0EXhAxxqYtnfxHMo7QJ6Jnmck2VP
-        qm3TSO2CTWhnzg3XOjo+mkHnuk/QAm3oPsYysD8xP3lNHGWahS0Xzz2Vdy00xqfC
-        yAn6/IaCpooPjW/r5dFkd/NaFIY0S16nWFqTsAWzyPFXWDFJvzH1dM+PTmRZ6g7j
-        2o0X6GJUAtrKbuNWm0yrLAHjaZxrzujAqghJbB5Pgmh3apFHgN+WZcMp8TtzR5PN
-        UmtTiyLIs/YDkMAzAHUpw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685449796; x=1685536196; bh=EEiwGlX0Rwp4J
-        D9gZJQ2+HoBg+CT8hF4DrYL0banGb4=; b=O8gpcmbIa+lNB390LgDoxjyCM0VpN
-        DeUDIRCCkjdQ+WpdGdzcgnse0TwvjzKgs5YriXR9QomUEOgfslSoIJc3vkGujs74
-        VPkfaqeBhzNmKSfdheBPc28aFjtzgiElyb8XMQ0DCHEgvEKGVEHWluQY5NUAZeJE
-        0lhHFHNpkdZmPZZBdDmvBiTp7eiVYb6eCW3ZjMWdk153TSS6tRrEHYat++3ogA0G
-        Z8/iPnkXzgVKZDv3CCQVLAT94m9xNd1Y4sHfuu5+Nx2HBWBDzJVK/E2qPoDde2j0
-        6E+pDcEqROIFws3Einak7j/Pec39SrUOUvx1BCXKNueY+QbbjiTx3jhIA==
-X-ME-Sender: <xms:Qux1ZDpZHdZDdRqzuQ3oUtp4N6AbptLlyGyPf-zqztvLum_Wpk8xEg>
-    <xme:Qux1ZNo1F15jgz6IzDPB24Axf7HXd1_RtRQC-fw6kQbdty6wE8mBYqfLb7uXR-P_r
-    JVGo2mcRT2J7JcrdCo>
-X-ME-Received: <xmr:Qux1ZAMinJKpb7I-Q699cMCl5dTtv9S_hHYYcGI6fA9B46v2Q7yLRFaxadSo-LlFaSYPXQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:Qux1ZG6ZsOw6xeVtxhzYN2s1-Hwz6qJfUWen7z_-iQrz1HVXN1ijxA>
-    <xmx:Qux1ZC7stYJcdgzWQepJmmrvNf0MLSMCayxkwEJj9btY7h4-oM2Vrw>
-    <xmx:Qux1ZOh_9TgCy4k005YOTV8O1Ry7xm6HbvZqesWx4liI3OpUdnIllw>
-    <xmx:ROx1ZAaQz7AjEzvPi21kVUbjMxYAZy5wCX2Z0W4XoTeRn9P4Z4ohSw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 May 2023 08:29:54 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id EB5E1104992; Tue, 30 May 2023 15:29:51 +0300 (+03)
-Date:   Tue, 30 May 2023 15:29:51 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S233089AbjE3QAu (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 30 May 2023 12:00:50 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B074B2;
+        Tue, 30 May 2023 09:00:49 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685462447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m93yS995VjAenJm1Tq30bXHcCehNtX8a6hAD3sks2W4=;
+        b=AfBAWRGV89Mc653n/xLqy7vteib+6M5/l2mZj+wR8AGKO3PMoCQnprQPz2JjGFxvFh3npR
+        75LwJDM0EE4g+P7BnJV6fDBo0D5A2wsMq2qcoO+Epgc1++GT/hm/IsyZQlfl88sd3wNdLj
+        HacEZyX2iikiKMUlVpHMaBRfI2+ABpbUurQzM9ir/bGUnTaJbVHwLys+6ejBpuK/Ql2gfK
+        8t5edlP2m1H7BWSDdUEp+QUPxhedXZYO6JcbMtV5DS0rwT2VI36zKlSE9ot+0iGtjPkQ+7
+        L4moXOZFPonmdPVRaj68CTj/NyhRRfgqXsWZ04Esn64uoqL2rtpo8bp2DKqCyA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685462447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m93yS995VjAenJm1Tq30bXHcCehNtX8a6hAD3sks2W4=;
+        b=kHOcw6J0QHtLvp0yEL0d0xC3npNrA5vZH/XdZXuEI3If84/jq/yLIElk56Kjr2Nz9yF9mV
+        nI3pJZIHdR0bsSDw==
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
         Tom Lendacky <thomas.lendacky@amd.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
@@ -101,47 +70,50 @@ Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Dave Hansen <dave.hansen@linux.intel.com>
 Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
-Message-ID: <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
+In-Reply-To: <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
 References: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
- <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx>
+ <87y1lbl7r6.ffs@tglx> <87sfbhlwp9.ffs@tglx>
+ <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name> <87bki3kkfi.ffs@tglx>
  <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
- <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx>
- <87cz2ija1e.ffs@tglx>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
+ <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx>
+ <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
+Date:   Tue, 30 May 2023 18:00:46 +0200
+Message-ID: <87wn0pizbl.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87cz2ija1e.ffs@tglx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
-> The decision to allow parallel bringup of secondary CPUs checks
-> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
-> parallel bootup because accessing the local APIC is intercepted and raises
-> a #VC or #VE, which cannot be handled at that point.
-> 
-> The check works correctly, but only for AMD encrypted guests. TDX does not
-> set that flag.
-> 
-> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
-> definitely works for both AMD and Intel.
+On Tue, May 30 2023 at 15:29, Kirill A. Shutemov wrote:
+> On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
+>> The decision to allow parallel bringup of secondary CPUs checks
+>> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
+>> parallel bootup because accessing the local APIC is intercepted and raises
+>> a #VC or #VE, which cannot be handled at that point.
+>> 
+>> The check works correctly, but only for AMD encrypted guests. TDX does not
+>> set that flag.
+>> 
+>> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
+>> definitely works for both AMD and Intel.
+>
+> It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
+> report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
+> we want it.
 
-It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
-report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
-we want it.
+Right. Did not think about that.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+But the same way is CC_ATTR_GUEST_MEM_ENCRYPT overbroad for AMD. Only
+SEV-ES traps RDMSR if I'm understandig that maze correctly.
+
+Thanks,
+
+        tglx
