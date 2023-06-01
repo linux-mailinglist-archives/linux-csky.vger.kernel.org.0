@@ -2,53 +2,61 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E75719FCF
-	for <lists+linux-csky@lfdr.de>; Thu,  1 Jun 2023 16:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83CE71F40A
+	for <lists+linux-csky@lfdr.de>; Thu,  1 Jun 2023 22:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233876AbjFAOYk (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 1 Jun 2023 10:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S232596AbjFAUnf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 1 Jun 2023 16:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbjFAOYj (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 1 Jun 2023 10:24:39 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6161FC;
-        Thu,  1 Jun 2023 07:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685629478; x=1717165478;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BaD1zw6V2jf+wne8NUiF1WEc49QRybnZ2yKptn30Dmk=;
-  b=g1aybGChwSwwHLtrLrIonUYSm1lYhIMMZTtMV4TPym8PLnzuLenQ5iHe
-   nNMYHLT0quEiRdF1lKyNG/Aeql87GJVSx6MCsQcp0n7kBbC7emNU5gC4J
-   +VSQmF/A3I+2fbt8d9bSDTMPO8zDM25CUSFd1adPzKJc2iMVzwDoZXYns
-   N7siqRkUQVx0wb9SPPGZ1wZ8TdC3t8ywtN+XkPPVaxBJeT91jaoq0bLGr
-   T5G898YHxNqpz4HZIHhYF3CPl02VXWoIgOlTrxXPvL+2Qng0uJUX+3DT8
-   uc/qTX0VgID7snj30MS2pH9rK0Wk3HlIrJU6zPsXfkCvl6ou3yXMFpqtt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="419088767"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="419088767"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:19:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657813870"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="657813870"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2023 07:19:17 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4j92-0002Lp-1h;
-        Thu, 01 Jun 2023 14:19:16 +0000
-Date:   Thu, 1 Jun 2023 22:18:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
+        with ESMTP id S232572AbjFAUne (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 1 Jun 2023 16:43:34 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617FF189;
+        Thu,  1 Jun 2023 13:43:32 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565a63087e9so13253237b3.2;
+        Thu, 01 Jun 2023 13:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685652211; x=1688244211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F1D8lVOaAVBWbT9t2RmOD+26281abLHxtrNSt32Ap24=;
+        b=qLgbJbj5g8WGk9vr+h5GU3VAGYoZuUQfYy+Jk03a6BWdaBQStekzq99EEhSRb/apVE
+         r1wG5klq4xTuvlp4fzfvGwGvXsPOH5Z+EGzZ3xDm5VuokYBfnX2Z7EeXpvrNqoMOmFfA
+         JBLO6CGLz8pEI44d71tWawLxUIyiVrcZLnzOInnX4NDx0adjPFt4WqdjoFpvwTeJeP42
+         YdR8VtfFc5+TjUwWFHzsShyWmg/NGqDFZTc1nDT9EKaeGOrhYp9pTMhkn6c++xEXcw0Z
+         7/JenW6z+3FLVb69Ur5a6g5NHDXYEBFsl6KltuWvHl5pgiI7Ar5zj9KICtB4zwOfTiPP
+         PMcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685652211; x=1688244211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F1D8lVOaAVBWbT9t2RmOD+26281abLHxtrNSt32Ap24=;
+        b=GOowg9yn12Q6SQlCdXA40g08sLFst1a8mGzJYQc/D+ZC9Cv2U4KHw5O8JXgIdyIf6t
+         CkDgwYmWXjjIQLVN66g8S46iRGAxfgeuACOMOXb1rjo+Nk38gC9zvNnX8Mu6Mtn7rOCK
+         60f9rGemU06TnD/1OlFLxVftsIaKncCha4VSdmCCYFyn7Cr0LAXaFscluQveBYHF8+Qw
+         jV8yv5Gjekgy4HnL13fOiqaUFg4vhGAs4al+h7471Q1JJ+74hIQyZo4ofSMyl3D+Zkdz
+         8JvBwdKQbUVTivEbq50q6u9owP0DcP1eS0gnbqbQ2fVxAvU2zI50G7f+mhB6C5Lr/RAS
+         axEg==
+X-Gm-Message-State: AC+VfDxPOzX26sLB2wS6GTh3JDg9tVa9nUNjVyyIL/vXD17t+m+HgPcY
+        of+dXb9FtqMQ8lyQ6dtTMD1JbR2mgvDN2u0MMj8olTx8p5Y=
+X-Google-Smtp-Source: ACHHUZ5DfuhGus+PqmBDfDw3I8CUwiopOPmtEZnOXp6mFa4otjE0OnORW5aklQp2qVjtyKAx2ImFFxSDC1ok71Q6xew=
+X-Received: by 2002:a0d:e84b:0:b0:565:f045:18c3 with SMTP id
+ r72-20020a0de84b000000b00565f04518c3mr10614817ywe.20.1685652211220; Thu, 01
+ Jun 2023 13:43:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230531213032.25338-1-vishal.moola@gmail.com>
+ <20230531213032.25338-4-vishal.moola@gmail.com> <20230601151900.6f184e8c@thinkpad-T15>
+In-Reply-To: <20230601151900.6f184e8c@thinkpad-T15>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Thu, 1 Jun 2023 13:43:20 -0700
+Message-ID: <CAOzc2pyjLh_GV1PL7CPkkPGcASHULhir_rJgB+UhwzPgQZD8Bw@mail.gmail.com>
+Subject: Re: [PATCH v3 03/34] s390: Use pt_frag_refcount for pagetables
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
         loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
@@ -57,202 +65,73 @@ Cc:     oe-kbuild-all@lists.linux.dev,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
         xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v3 25/34] m68k: Convert various functions to use ptdescs
-Message-ID: <202306011704.i8xMWKPl-lkp@intel.com>
-References: <20230531213032.25338-26-vishal.moola@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531213032.25338-26-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hugh Dickins <hughd@google.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Hi Vishal,
+On Thu, Jun 1, 2023 at 6:19=E2=80=AFAM Gerald Schaefer
+<gerald.schaefer@linux.ibm.com> wrote:
+>
+>  On Wed, 31 May 2023 14:30:01 -0700
+> "Vishal Moola (Oracle)" <vishal.moola@gmail.com> wrote:
+>
+> > s390 currently uses _refcount to identify fragmented page tables.
+> > The page table struct already has a member pt_frag_refcount used by
+> > powerpc, so have s390 use that instead of the _refcount field as well.
+> > This improves the safety for _refcount and the page table tracking.
+> >
+> > This also allows us to simplify the tracking since we can once again us=
+e
+> > the lower byte of pt_frag_refcount instead of the upper byte of _refcou=
+nt.
+>
+> This would conflict with s390 impact of pte_free_defer() work from Hugh D=
+ickins
+> https://lore.kernel.org/lkml/35e983f5-7ed3-b310-d949-9ae8b130cdab@google.=
+com/
+> https://lore.kernel.org/lkml/6dd63b39-e71f-2e8b-7e0-83e02f3bcb39@google.c=
+om/
+>
+> There he uses pt_frag_refcount, or rather pt_mm in the same union, to sav=
+e
+> the mm_struct for deferred pte_free().
+>
+> I still need to look closer into both of your patch series, but so far it
+> seems that you have no hard functional requirement to switch from _refcou=
+nt
+> to pt_frag_refcount here, for s390.
+>
+> If this is correct, and you do not e.g. need this to make some other use
+> of _refcount, I would suggest to drop this patch.
 
-kernel test robot noticed the following build errors:
+The goal of this preparation patch is to consolidate s390's usage of
+struct page fields so that struct ptdesc can be smaller. Its not particular=
+ly
+mandatory; leaving _refcount in ptdesc only increases the struct by
+8 bytes and can always be changed later.
 
-[auto build test ERROR on next-20230531]
-[cannot apply to akpm-mm/mm-everything s390/features powerpc/next powerpc/fixes geert-m68k/for-next geert-m68k/for-linus linus/master v6.4-rc4 v6.4-rc3 v6.4-rc2 v6.4-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However it is a little annoying since s390 is the only architecture
+that egregiously uses space throughout struct page for their page
+tables, rather than just the page table struct. For example, s390
+gmap uses page->index which also aliases with pt_mm and
+pt_frag_refcount. I'm not sure if/how gmap page tables interact
+with s390 process page tables at all, but if it does that could
+potentially cause problems with Hugh's patch as well :(
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230601-053454
-base:   next-20230531
-patch link:    https://lore.kernel.org/r/20230531213032.25338-26-vishal.moola%40gmail.com
-patch subject: [PATCH v3 25/34] m68k: Convert various functions to use ptdescs
-config: m68k-randconfig-r002-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011704.i8xMWKPl-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/915ab62dc3315fe0a0544fccb4ee5f3ee32694b5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vishal-Moola-Oracle/mm-Add-PAGE_TYPE_OP-folio-functions/20230601-053454
-        git checkout 915ab62dc3315fe0a0544fccb4ee5f3ee32694b5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306011704.i8xMWKPl-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from arch/m68k/include/asm/pgalloc.h:12,
-                    from arch/m68k/mm/init.c:26:
-   arch/m68k/include/asm/mcf_pgalloc.h: In function 'pgd_alloc':
->> arch/m68k/include/asm/mcf_pgalloc.h:83:59: error: 'GFP_NOWARN' undeclared (first use in this function); did you mean 'GFP_NOWAIT'?
-      83 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
-         |                                                           ^~~~~~~~~~
-         |                                                           GFP_NOWAIT
-   arch/m68k/include/asm/mcf_pgalloc.h:83:59: note: each undeclared identifier is reported only once for each function it appears in
-   arch/m68k/include/asm/mcf_pgalloc.h: At top level:
->> arch/m68k/include/asm/mcf_pgalloc.h:22:27: warning: 'ptdesc_address' is static but used in inline function 'pte_alloc_one_kernel' which is not static
-      22 |         return (pte_t *) (ptdesc_address(ptdesc));
-         |                           ^~~~~~~~~~~~~~
->> arch/m68k/include/asm/mcf_pgalloc.h:17:33: warning: 'pagetable_alloc' is static but used in inline function 'pte_alloc_one_kernel' which is not static
-      17 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
-         |                                 ^~~~~~~~~~~~~~~
->> arch/m68k/include/asm/mcf_pgalloc.h:10:24: warning: 'virt_to_ptdesc' is static but used in inline function 'pte_free_kernel' which is not static
-      10 |         pagetable_free(virt_to_ptdesc(pte));
-         |                        ^~~~~~~~~~~~~~
->> arch/m68k/include/asm/mcf_pgalloc.h:10:9: warning: 'pagetable_free' is static but used in inline function 'pte_free_kernel' which is not static
-      10 |         pagetable_free(virt_to_ptdesc(pte));
-         |         ^~~~~~~~~~~~~~
---
-   In file included from arch/m68k/mm/mcfmmu.c:21:
-   arch/m68k/include/asm/mcf_pgalloc.h: In function 'pgd_alloc':
->> arch/m68k/include/asm/mcf_pgalloc.h:83:59: error: 'GFP_NOWARN' undeclared (first use in this function); did you mean 'GFP_NOWAIT'?
-      83 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
-         |                                                           ^~~~~~~~~~
-         |                                                           GFP_NOWAIT
-   arch/m68k/include/asm/mcf_pgalloc.h:83:59: note: each undeclared identifier is reported only once for each function it appears in
-   arch/m68k/mm/mcfmmu.c: At top level:
-   arch/m68k/mm/mcfmmu.c:36:13: warning: no previous prototype for 'paging_init' [-Wmissing-prototypes]
-      36 | void __init paging_init(void)
-         |             ^~~~~~~~~~~
-   arch/m68k/mm/mcfmmu.c: In function 'paging_init':
-   arch/m68k/mm/mcfmmu.c:41:37: warning: variable 'bootmem_end' set but not used [-Wunused-but-set-variable]
-      41 |         unsigned long next_pgtable, bootmem_end;
-         |                                     ^~~~~~~~~~~
-   arch/m68k/include/asm/mcf_pgalloc.h: At top level:
->> arch/m68k/include/asm/mcf_pgalloc.h:22:27: warning: 'ptdesc_address' is static but used in inline function 'pte_alloc_one_kernel' which is not static
-      22 |         return (pte_t *) (ptdesc_address(ptdesc));
-         |                           ^~~~~~~~~~~~~~
->> arch/m68k/include/asm/mcf_pgalloc.h:17:33: warning: 'pagetable_alloc' is static but used in inline function 'pte_alloc_one_kernel' which is not static
-      17 |         struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
-         |                                 ^~~~~~~~~~~~~~~
->> arch/m68k/include/asm/mcf_pgalloc.h:10:24: warning: 'virt_to_ptdesc' is static but used in inline function 'pte_free_kernel' which is not static
-      10 |         pagetable_free(virt_to_ptdesc(pte));
-         |                        ^~~~~~~~~~~~~~
->> arch/m68k/include/asm/mcf_pgalloc.h:10:9: warning: 'pagetable_free' is static but used in inline function 'pte_free_kernel' which is not static
-      10 |         pagetable_free(virt_to_ptdesc(pte));
-         |         ^~~~~~~~~~~~~~
-
-
-vim +83 arch/m68k/include/asm/mcf_pgalloc.h
-
-     7	
-     8	extern inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-     9	{
-  > 10		pagetable_free(virt_to_ptdesc(pte));
-    11	}
-    12	
-    13	extern const char bad_pmd_string[];
-    14	
-    15	extern inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
-    16	{
-  > 17		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | __GFP_ZERO, 0);
-    18	
-    19		if (!ptdesc)
-    20			return NULL;
-    21	
-  > 22		return (pte_t *) (ptdesc_address(ptdesc));
-    23	}
-    24	
-    25	extern inline pmd_t *pmd_alloc_kernel(pgd_t *pgd, unsigned long address)
-    26	{
-    27		return (pmd_t *) pgd;
-    28	}
-    29	
-    30	#define pmd_populate(mm, pmd, pte) (pmd_val(*pmd) = (unsigned long)(pte))
-    31	
-    32	#define pmd_populate_kernel pmd_populate
-    33	
-    34	static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pgtable,
-    35					  unsigned long address)
-    36	{
-    37		struct ptdesc *ptdesc = virt_to_ptdesc(pgtable);
-    38	
-    39		pagetable_pte_dtor(ptdesc);
-    40		pagetable_free(ptdesc);
-    41	}
-    42	
-    43	static inline pgtable_t pte_alloc_one(struct mm_struct *mm)
-    44	{
-    45		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA, 0);
-    46		pte_t *pte;
-    47	
-    48		if (!ptdesc)
-    49			return NULL;
-    50		if (!pagetable_pte_ctor(ptdesc)) {
-    51			pagetable_free(ptdesc);
-    52			return NULL;
-    53		}
-    54	
-    55		pte = ptdesc_address(ptdesc);
-    56		pagetable_clear(pte);
-    57	
-    58		return pte;
-    59	}
-    60	
-    61	static inline void pte_free(struct mm_struct *mm, pgtable_t pgtable)
-    62	{
-    63		struct ptdesc *ptdesc = virt_to_ptdesc(ptdesc);
-    64	
-    65		pagetable_pte_dtor(ptdesc);
-    66		pagetable_free(ptdesc);
-    67	}
-    68	
-    69	/*
-    70	 * In our implementation, each pgd entry contains 1 pmd that is never allocated
-    71	 * or freed.  pgd_present is always 1, so this should never be called. -NL
-    72	 */
-    73	#define pmd_free(mm, pmd) BUG()
-    74	
-    75	static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
-    76	{
-    77		pagetable_free(virt_to_ptdesc(pgd));
-    78	}
-    79	
-    80	static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-    81	{
-    82		pgd_t *new_pgd;
-  > 83		struct ptdesc *ptdesc = pagetable_alloc(GFP_DMA | GFP_NOWARN, 0);
-    84	
-    85		if (!ptdesc)
-    86			return NULL;
-    87		new_pgd = (pgd_t *) ptdesc_address(ptdesc);
-    88	
-    89		memcpy(new_pgd, swapper_pg_dir, PTRS_PER_PGD * sizeof(pgd_t));
-    90		memset(new_pgd, 0, PAGE_OFFSET >> PGDIR_SHIFT);
-    91		return new_pgd;
-    92	}
-    93	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I can add _refcount to ptdesc if we would like, but I still
+prefer if s390 could be simplified instead.
