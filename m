@@ -2,103 +2,67 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4549772EF00
-	for <lists+linux-csky@lfdr.de>; Wed, 14 Jun 2023 00:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AF172F789
+	for <lists+linux-csky@lfdr.de>; Wed, 14 Jun 2023 10:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbjFMWQ7 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 13 Jun 2023 18:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S238021AbjFNIPo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 14 Jun 2023 04:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjFMWQ5 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 13 Jun 2023 18:16:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86C3E3;
-        Tue, 13 Jun 2023 15:16:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A14AB62012;
-        Tue, 13 Jun 2023 22:16:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155E5C433C8;
-        Tue, 13 Jun 2023 22:16:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686694614;
-        bh=u1U2JS+u6wM6OBhkKijCKkdxF/PQ2U4e1EnjjkO0qgU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hQuqhvJn3yNLy2Olxjnd1xuxCkh0wfTthUElblk3SWD5APhbp2A8h/GrhfZUDe0CA
-         msAOI8lTM4SDCJH4Jw/egXw9kHffrgpSBDU2Lq/B7FL9Ncb4kZlGiVq95JuesT+7qf
-         YEh5WOURMYPSU7yAQJlo+F3GFXuLwUg0ZCA7ynIU6Zby2JiopTRsMlBw6pN58eDxfr
-         P7S7QpyZ+fotvuzUysUkJnW2doGlPUjxnxuveW2tzsGyBUdpBclirEyYiSIpPiSYAo
-         M8uN4PP8S1NMMmXoKD0EuORe3OhQDCHvxGL87kEJWcKBMzzECpxbOCX8TRFljoINsE
-         8Ubz3n0NLn6FQ==
-Message-ID: <e52c7a74-da68-08d2-54e2-f95a8c5b52e7@kernel.org>
-Date:   Tue, 13 Jun 2023 17:16:50 -0500
+        with ESMTP id S243245AbjFNIPm (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 14 Jun 2023 04:15:42 -0400
+Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DF91BC3
+        for <linux-csky@vger.kernel.org>; Wed, 14 Jun 2023 01:15:41 -0700 (PDT)
+Received: by mail.ettrick.pl (Postfix, from userid 1002)
+        id 24503AB34E; Wed, 14 Jun 2023 08:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
+        t=1686730296; bh=ZOVeXw1jXE9TbyZP9aLdRwM96AORcRfum8b+rry5JMw=;
+        h=Date:From:To:Subject:From;
+        b=S7ddEiMx8lElzaKXVi5Jba9fiPIo9Vrvr2g9cJfUhuccyYSIIJkOcOgCq272qFkpt
+         MgRMEw5mbOWas1COe7w4rAg2BRWiE2sXvQLZCLUpfjWD7BWD6LnP0KWdryk0OJcT5d
+         j3Jsm6RBuuY0X9TwFQMIHQ9Xf7A7gE2X7zUjAFquaqMxMsiK3Bn0A6HiucYh9vWNzG
+         uLrBWYWeLYHg5pGND4x2MMITBEuwug5hkmFTVZ3fyAEeMOwWrW6b5Z23Lt68tplNlU
+         iAJcm7X1RknHt/0osr9yKu5r782ViwsGnnJAqU/GmesEEaKUFFRh2V7sUXXP5x/BmY
+         9Eit/2h8uS9Lw==
+Received: by mail.ettrick.pl for <linux-csky@vger.kernel.org>; Wed, 14 Jun 2023 08:10:39 GMT
+Message-ID: <20230614064500-0.1.b7.4hjgi.0.8tfjgouq7v@ettrick.pl>
+Date:   Wed, 14 Jun 2023 08:10:39 GMT
+From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: Fotowoltaika- propozycja instalacji
+X-Mailer: mail.ettrick.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 27/34] nios2: Convert __pte_free_tlb() to use ptdescs
-Content-Language: en-US
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>
-References: <20230612210423.18611-1-vishal.moola@gmail.com>
- <20230612210423.18611-28-vishal.moola@gmail.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20230612210423.18611-28-vishal.moola@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_ABUSE_SURBL,URIBL_BLOCKED,
+        URIBL_CSS_A autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
+Dzie=C5=84 dobry,
+=20
+Czy rozwa=C5=BCali Pa=C5=84stwo monta=C5=BC systemu fotowoltaicznego?
+=20
+Instalacja fotowoltaiczna jest najlepszym sposobem na obni=C5=BCenie wyso=
+ko=C5=9Bci rachunk=C3=B3w za pr=C4=85d (pozostaj=C4=85 tylko op=C5=82aty =
+sta=C5=82e) i zabezpieczenie si=C4=99 przed rosn=C4=85cymi cenami energii=
+ elektrycznej. Jest to w pe=C5=82ni odnawialne i bezemisyjne =C5=BAr=C3=B3=
+d=C5=82o energii, dzi=C4=99ki czemu przyczyniamy si=C4=99 do ochrony =C5=9B=
+rodowiska naturalnego.
+=20
+Dzia=C5=82amy od wielu lat na rynku energetycznym. Przygotujemy projekt, =
+wycen=C4=99 oraz kompleksowo wykonamy i zg=C5=82osimy realizacj=C4=99 do =
+zak=C5=82adu energetycznego.=20
+=20
+Czy chc=C4=85 Pa=C5=84stwo pozna=C4=87 nasz=C4=85 propozycj=C4=99? =20
 
 
-On 6/12/23 16:04, Vishal Moola (Oracle) wrote:
-> Part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->   arch/nios2/include/asm/pgalloc.h | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/nios2/include/asm/pgalloc.h b/arch/nios2/include/asm/pgalloc.h
-> index ecd1657bb2ce..ce6bb8e74271 100644
-> --- a/arch/nios2/include/asm/pgalloc.h
-> +++ b/arch/nios2/include/asm/pgalloc.h
-> @@ -28,10 +28,10 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
->   
->   extern pgd_t *pgd_alloc(struct mm_struct *mm);
->   
-> -#define __pte_free_tlb(tlb, pte, addr)				\
-> -	do {							\
-> -		pgtable_pte_page_dtor(pte);			\
-> -		tlb_remove_page((tlb), (pte));			\
-> +#define __pte_free_tlb(tlb, pte, addr)					\
-> +	do {								\
-> +		pagetable_pte_dtor(page_ptdesc(pte));			\
-> +		tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));	\
->   	} while (0)
->   
->   #endif /* _ASM_NIOS2_PGALLOC_H */
-
-Applied!
-
-Thanks,
-Dinh
+Pozdrawiam,
+Norbert Karecki
