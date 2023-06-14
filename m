@@ -2,67 +2,124 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AF172F789
-	for <lists+linux-csky@lfdr.de>; Wed, 14 Jun 2023 10:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05BB72F93B
+	for <lists+linux-csky@lfdr.de>; Wed, 14 Jun 2023 11:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238021AbjFNIPo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 14 Jun 2023 04:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S244100AbjFNJap convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-csky@lfdr.de>); Wed, 14 Jun 2023 05:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243245AbjFNIPm (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 14 Jun 2023 04:15:42 -0400
-Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DF91BC3
-        for <linux-csky@vger.kernel.org>; Wed, 14 Jun 2023 01:15:41 -0700 (PDT)
-Received: by mail.ettrick.pl (Postfix, from userid 1002)
-        id 24503AB34E; Wed, 14 Jun 2023 08:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
-        t=1686730296; bh=ZOVeXw1jXE9TbyZP9aLdRwM96AORcRfum8b+rry5JMw=;
-        h=Date:From:To:Subject:From;
-        b=S7ddEiMx8lElzaKXVi5Jba9fiPIo9Vrvr2g9cJfUhuccyYSIIJkOcOgCq272qFkpt
-         MgRMEw5mbOWas1COe7w4rAg2BRWiE2sXvQLZCLUpfjWD7BWD6LnP0KWdryk0OJcT5d
-         j3Jsm6RBuuY0X9TwFQMIHQ9Xf7A7gE2X7zUjAFquaqMxMsiK3Bn0A6HiucYh9vWNzG
-         uLrBWYWeLYHg5pGND4x2MMITBEuwug5hkmFTVZ3fyAEeMOwWrW6b5Z23Lt68tplNlU
-         iAJcm7X1RknHt/0osr9yKu5r782ViwsGnnJAqU/GmesEEaKUFFRh2V7sUXXP5x/BmY
-         9Eit/2h8uS9Lw==
-Received: by mail.ettrick.pl for <linux-csky@vger.kernel.org>; Wed, 14 Jun 2023 08:10:39 GMT
-Message-ID: <20230614064500-0.1.b7.4hjgi.0.8tfjgouq7v@ettrick.pl>
-Date:   Wed, 14 Jun 2023 08:10:39 GMT
-From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Fotowoltaika- propozycja instalacji
-X-Mailer: mail.ettrick.pl
+        with ESMTP id S240486AbjFNJaU (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 14 Jun 2023 05:30:20 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219711FF0;
+        Wed, 14 Jun 2023 02:30:19 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-57001c0baddso5177207b3.2;
+        Wed, 14 Jun 2023 02:30:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686735018; x=1689327018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sUg4qrNPX3u1L7teHyX+L+B+2nv6pGpY1jj7jQmio6E=;
+        b=HLaZwbSHm2RAUuRjN/mLmJpriec5nmc+q8fBgtHGJ40vcMlDF8+MTWfoIhQhqjnHMO
+         Ckm91+jl1x7OHreSE7ETBeAqZagNZDTg1b3Zgch2N3y2FJcoyKkv0MvJAb+yFsaXw/hB
+         2Fu0w7Vd3uH68ichY92zSNgoi6iS3FHrQOBy6qpDOEtmjvm2DWy2lyAcgS+JPlBcHgvO
+         HUXi8XRtvUfIMDqOYW4gEppz5mrakbAFk6DSk+DDHZbceCO3+hc2gXVwa+SwuS/0AS8z
+         SgfHEIZ6qQOIe4OmKsY5GYMW9YUI59Nwpod/hqOA2JDX0rvWkWqekueBYcLkkKOaNlRl
+         iyww==
+X-Gm-Message-State: AC+VfDwK0yjybGgEgvktGtZXCQlnhPB1kaBKPT9Sx30og7gV/63Lf1jo
+        WmgxqFUZEHBbtVhHpbCpzeelL6Qwv1k42w==
+X-Google-Smtp-Source: ACHHUZ5BS+Ccv/S1DfqmwwsAY9Irz8IspsCd9IYZqxmz3HQslBY2kdJscpPFhVoRxVIQmCSGDkWvCA==
+X-Received: by 2002:a25:9248:0:b0:bb1:5628:59ee with SMTP id e8-20020a259248000000b00bb1562859eemr1357582ybo.28.1686735018147;
+        Wed, 14 Jun 2023 02:30:18 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id u18-20020a5b04d2000000b00bab9a67a4cesm3405967ybp.29.2023.06.14.02.30.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 02:30:17 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-bc4ed01b5d4so407378276.1;
+        Wed, 14 Jun 2023 02:30:17 -0700 (PDT)
+X-Received: by 2002:a25:6b47:0:b0:ba8:2009:ccbb with SMTP id
+ o7-20020a256b47000000b00ba82009ccbbmr1338474ybm.46.1686735017346; Wed, 14 Jun
+ 2023 02:30:17 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230612210423.18611-1-vishal.moola@gmail.com>
+ <20230612210423.18611-28-vishal.moola@gmail.com> <e52c7a74-da68-08d2-54e2-f95a8c5b52e7@kernel.org>
+In-Reply-To: <e52c7a74-da68-08d2-54e2-f95a8c5b52e7@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 14 Jun 2023 11:30:05 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXPASfLM8St_JZOW3Wke+ickJoo1oDr+orRbTERy=Zgwg@mail.gmail.com>
+Message-ID: <CAMuHMdXPASfLM8St_JZOW3Wke+ickJoo1oDr+orRbTERy=Zgwg@mail.gmail.com>
+Subject: Re: [PATCH v4 27/34] nios2: Convert __pte_free_tlb() to use ptdescs
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_ABUSE_SURBL,URIBL_BLOCKED,
-        URIBL_CSS_A autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
-=20
-Czy rozwa=C5=BCali Pa=C5=84stwo monta=C5=BC systemu fotowoltaicznego?
-=20
-Instalacja fotowoltaiczna jest najlepszym sposobem na obni=C5=BCenie wyso=
-ko=C5=9Bci rachunk=C3=B3w za pr=C4=85d (pozostaj=C4=85 tylko op=C5=82aty =
-sta=C5=82e) i zabezpieczenie si=C4=99 przed rosn=C4=85cymi cenami energii=
- elektrycznej. Jest to w pe=C5=82ni odnawialne i bezemisyjne =C5=BAr=C3=B3=
-d=C5=82o energii, dzi=C4=99ki czemu przyczyniamy si=C4=99 do ochrony =C5=9B=
-rodowiska naturalnego.
-=20
-Dzia=C5=82amy od wielu lat na rynku energetycznym. Przygotujemy projekt, =
-wycen=C4=99 oraz kompleksowo wykonamy i zg=C5=82osimy realizacj=C4=99 do =
-zak=C5=82adu energetycznego.=20
-=20
-Czy chc=C4=85 Pa=C5=84stwo pozna=C4=87 nasz=C4=85 propozycj=C4=99? =20
+Hi Dinh,
 
+On Wed, Jun 14, 2023 at 12:17 AM Dinh Nguyen <dinguyen@kernel.org> wrote:
+> On 6/12/23 16:04, Vishal Moola (Oracle) wrote:
+> > Part of the conversions to replace pgtable constructor/destructors with
+> > ptdesc equivalents.
+> >
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+> >   arch/nios2/include/asm/pgalloc.h | 8 ++++----
+> >   1 file changed, 4 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/nios2/include/asm/pgalloc.h b/arch/nios2/include/asm/pgalloc.h
+> > index ecd1657bb2ce..ce6bb8e74271 100644
+> > --- a/arch/nios2/include/asm/pgalloc.h
+> > +++ b/arch/nios2/include/asm/pgalloc.h
+> > @@ -28,10 +28,10 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
+> >
+> >   extern pgd_t *pgd_alloc(struct mm_struct *mm);
+> >
+> > -#define __pte_free_tlb(tlb, pte, addr)                               \
+> > -     do {                                                    \
+> > -             pgtable_pte_page_dtor(pte);                     \
+> > -             tlb_remove_page((tlb), (pte));                  \
+> > +#define __pte_free_tlb(tlb, pte, addr)                                       \
+> > +     do {                                                            \
+> > +             pagetable_pte_dtor(page_ptdesc(pte));                   \
+> > +             tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));      \
+> >       } while (0)
+> >
+> >   #endif /* _ASM_NIOS2_PGALLOC_H */
+>
+> Applied!
 
-Pozdrawiam,
-Norbert Karecki
+I don't think you can just apply this patch, as the new functions
+were only introduced in [PATCH v4 05/34] of this series.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
