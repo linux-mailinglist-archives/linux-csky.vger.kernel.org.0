@@ -2,59 +2,61 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8E3731CC5
-	for <lists+linux-csky@lfdr.de>; Thu, 15 Jun 2023 17:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D694731E8E
+	for <lists+linux-csky@lfdr.de>; Thu, 15 Jun 2023 18:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240831AbjFOPeG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 15 Jun 2023 11:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S229556AbjFOQ6U (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 15 Jun 2023 12:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241727AbjFOPeF (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 15 Jun 2023 11:34:05 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4AC626A2;
-        Thu, 15 Jun 2023 08:34:01 -0700 (PDT)
-Received: from loongson.cn (unknown [111.18.159.104])
-        by gateway (Coremail) with SMTP id _____8BxL_BlL4tklpoFAA--.12076S3;
-        Thu, 15 Jun 2023 23:33:57 +0800 (CST)
-Received: from [192.168.68.106] (unknown [111.18.159.104])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxVeRkL4tkEywcAA--.14766S3;
-        Thu, 15 Jun 2023 23:33:57 +0800 (CST)
-Message-ID: <93544487-4015-f89f-44cd-754670c354e5@loongson.cn>
-Date:   Thu, 15 Jun 2023 23:33:57 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-To:     oleg@redhat.com
+        with ESMTP id S229459AbjFOQ6T (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 15 Jun 2023 12:58:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B5A30D0
+        for <linux-csky@vger.kernel.org>; Thu, 15 Jun 2023 09:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686848231;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9S737sQ9sRxq82uGyw1/zuVwz0loLEFQPA2DfYVo7to=;
+        b=GucLvKHxSl5+5UEkzf25wikd6+OrWy77kN1MpeyBJ0b7WHOIEXMnuY6tiibHdyl5I5bg9a
+        Mo5Qquv7/lbvaDuA7pOurvUUMYYoz2o1KcF3Q71a+hnFP5D8L16jZ+wcTNKIu/YfxTNC4j
+        I2vJzAAKvq0UbFob+DL0pIEuxOjN5dw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-223-TarU5R_NO1qrzhorSc7J0A-1; Thu, 15 Jun 2023 12:57:07 -0400
+X-MC-Unique: TarU5R_NO1qrzhorSc7J0A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 40D25811E78;
+        Thu, 15 Jun 2023 16:57:07 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.19])
+        by smtp.corp.redhat.com (Postfix) with SMTP id E571348FB01;
+        Thu, 15 Jun 2023 16:57:03 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 15 Jun 2023 18:56:40 +0200 (CEST)
+Date:   Thu, 15 Jun 2023 18:56:36 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     guoren@kernel.org, linux-csky@vger.kernel.org,
         linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        srikar@linux.vnet.ibm.com, yangtiezhu@loongson.cn
-References: <20230424152815.GA32615@redhat.com>
+        srikar@linux.vnet.ibm.com
 Subject: Re: [PATCH] csky: uprobes: Restore thread.trap_no
-Content-Language: en-US
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-In-Reply-To: <20230424152815.GA32615@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxVeRkL4tkEywcAA--.14766S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
-        67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxAqzxv262kKe7AKxVWUXVWUAwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Message-ID: <20230615165636.GA3886@redhat.com>
+References: <20230424152815.GA32615@redhat.com>
+ <93544487-4015-f89f-44cd-754670c354e5@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93544487-4015-f89f-44cd-754670c354e5@loongson.cn>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,10 +64,17 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-ping, what is the status of this patch which has been received Acked-by:
+Hi Tiezhu,
 
-https://lore.kernel.org/linux-csky/1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn/
+I think you should ask arch/csky maintainers ;)
 
-Thanks,
-Tiezhu
+On 06/15, Tiezhu Yang wrote:
+>
+> ping, what is the status of this patch which has been received Acked-by:
+>
+> https://lore.kernel.org/linux-csky/1682213987-3708-1-git-send-email-yangtiezhu@loongson.cn/
+>
+> Thanks,
+> Tiezhu
+>
 
