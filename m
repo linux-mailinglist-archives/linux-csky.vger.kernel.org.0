@@ -2,67 +2,104 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E83873F5C6
-	for <lists+linux-csky@lfdr.de>; Tue, 27 Jun 2023 09:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5845174002F
+	for <lists+linux-csky@lfdr.de>; Tue, 27 Jun 2023 17:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjF0Hcm (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 27 Jun 2023 03:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
+        id S231984AbjF0P5c (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 27 Jun 2023 11:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjF0Hcc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 27 Jun 2023 03:32:32 -0400
-Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B861FC4
-        for <linux-csky@vger.kernel.org>; Tue, 27 Jun 2023 00:32:26 -0700 (PDT)
-Received: by mail.ettrick.pl (Postfix, from userid 1002)
-        id A3137A3DCB; Tue, 27 Jun 2023 07:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
-        t=1687851025; bh=ZOVeXw1jXE9TbyZP9aLdRwM96AORcRfum8b+rry5JMw=;
-        h=Date:From:To:Subject:From;
-        b=ld1W3Jv0LjFiDVPV5nzX5Cx3bYenLwxrpS0Yxv5UHJZXpEpCoDB0AxsmtWJr4d0B+
-         Gbl+OOYMCxX94OO+whuNkIKgiq4mmcpMcTdV92W1JlyN6f/6cWgzz6M3NgEWg1PAgz
-         GnzlfMq7kCm3tG9Ko2A+h5KZEqYMR/tPoUVeq267/lpJRBqoZ6QszEBn5+UFVj4bgz
-         YZBYKtO549yykTirMOxk06s7bOASh8qa6g/a74yfs4VwTLasUwoal6eihnFDdtF8lJ
-         i10OWq3KVgMKe/CAhu4NKkSp38ad+jZDx1SbLBJfDcZcUrh/zbvHy/Z2BMIbO9AO0R
-         T85rZVZ6xoO7g==
-Received: by mail.ettrick.pl for <linux-csky@vger.kernel.org>; Tue, 27 Jun 2023 07:30:16 GMT
-Message-ID: <20230627064500-0.1.bh.4naaq.0.p5o815l039@ettrick.pl>
-Date:   Tue, 27 Jun 2023 07:30:16 GMT
-From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: Fotowoltaika- propozycja instalacji
-X-Mailer: mail.ettrick.pl
+        with ESMTP id S231936AbjF0P5b (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 27 Jun 2023 11:57:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C532D64;
+        Tue, 27 Jun 2023 08:57:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=grdde8Xiu7qmn+xeWQjS6jhM9eMOIEx2FTKQKHA0qcE=; b=O4LgnaJa+96/pjOun/grMWRgf0
+        LntDzHo/Nz16KvqxiEr1HwXvA//H8Xwaltp+tupPUb4EjOFyVKwNxLm4bicLOTqp/7aKDRUtZ+Ti+
+        YkZNFYgufWM7VfJ37zBwafjppANl7Ov4YfJ/3SNrxho42WxRJ90YRkLRkEz9110OQT69JgyQix3bE
+        1UUN6JmWKzg8Bc5AERWCg8k1In+54bOFEIjoHmAhuJ48uTlyrsgS9ASEoWWfFX2oCx8vHeEKiHBK2
+        0ATl5M0lbW4dygkvrSWQNrInCol2nuI3Fn1fE8BBqWu2s6F5FIZzUwvO8Dgsb04PN8JGsMx2K7RYi
+        V5QQ1b6Q==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qEB4A-002rlX-EZ; Tue, 27 Jun 2023 15:57:18 +0000
+Date:   Tue, 27 Jun 2023 16:57:18 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v6 00/33] Split ptdesc from struct page
+Message-ID: <ZJsG3oMF+FaH0iMw@casper.infradead.org>
+References: <20230627031431.29653-1-vishal.moola@gmail.com>
+ <e8992eee-4140-427e-bacb-9449f346318@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_ABUSE_SURBL,URIBL_BLOCKED,
-        URIBL_CSS_A autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8992eee-4140-427e-bacb-9449f346318@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
-=20
-Czy rozwa=C5=BCali Pa=C5=84stwo monta=C5=BC systemu fotowoltaicznego?
-=20
-Instalacja fotowoltaiczna jest najlepszym sposobem na obni=C5=BCenie wyso=
-ko=C5=9Bci rachunk=C3=B3w za pr=C4=85d (pozostaj=C4=85 tylko op=C5=82aty =
-sta=C5=82e) i zabezpieczenie si=C4=99 przed rosn=C4=85cymi cenami energii=
- elektrycznej. Jest to w pe=C5=82ni odnawialne i bezemisyjne =C5=BAr=C3=B3=
-d=C5=82o energii, dzi=C4=99ki czemu przyczyniamy si=C4=99 do ochrony =C5=9B=
-rodowiska naturalnego.
-=20
-Dzia=C5=82amy od wielu lat na rynku energetycznym. Przygotujemy projekt, =
-wycen=C4=99 oraz kompleksowo wykonamy i zg=C5=82osimy realizacj=C4=99 do =
-zak=C5=82adu energetycznego.=20
-=20
-Czy chc=C4=85 Pa=C5=84stwo pozna=C4=87 nasz=C4=85 propozycj=C4=99? =20
+On Mon, Jun 26, 2023 at 09:44:08PM -0700, Hugh Dickins wrote:
+> On Mon, 26 Jun 2023, Vishal Moola (Oracle) wrote:
+> 
+> > The MM subsystem is trying to shrink struct page. This patchset
+> > introduces a memory descriptor for page table tracking - struct ptdesc.
+> ...
+> >  39 files changed, 686 insertions(+), 455 deletions(-)
+> 
+> I don't see the point of this patchset: to me it is just obfuscation of
+> the present-day tight relationship between page table and struct page.
+> 
+> Matthew already explained:
+> 
+> > The intent is to get ptdescs to be dynamically allocated at some point
+> > in the ~2-3 years out future when we have finished the folio project ...
+> 
+> So in a kindly mood, I'd say that this patchset is ahead of its time.
+> But I can certainly adapt to it, if everyone else sees some point to it.
 
+If you think this patchset is ahead of its time, we can certainly put
+it on hold.  We're certainly prepared to redo it to be merged after your
+current patch series.
 
-Pozdrawiam,
-Norbert Karecki
+I think you can see the advantage of the destination, so I don't think
+you're against that.  Are you opposed to the sequencing of the work to
+get us there?  I'd be happy to discuss another way to do it.
+
+For example, we could dynamically allocate ptdescs right now.  We'd get
+the benefit of having an arbitrary amount of space in the ptdesc,
+although not the benefit of a smaller memmap until everything else is
+also dynamically allocated.
