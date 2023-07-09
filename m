@@ -2,77 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E0174B3A1
-	for <lists+linux-csky@lfdr.de>; Fri,  7 Jul 2023 17:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70B474C530
+	for <lists+linux-csky@lfdr.de>; Sun,  9 Jul 2023 17:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbjGGPH1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 7 Jul 2023 11:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S233322AbjGIPOw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 9 Jul 2023 11:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjGGPH0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 7 Jul 2023 11:07:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF41AA;
-        Fri,  7 Jul 2023 08:07:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S233247AbjGIPOc (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 9 Jul 2023 11:14:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056BE1709;
+        Sun,  9 Jul 2023 08:14:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 17FEA22119;
-        Fri,  7 Jul 2023 15:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1688742444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0jBwtBpLbUYf3LM/NKeO7/tkOZqs6OnE7Weht0MWPrI=;
-        b=xluMGhDdEdmQeD+p/G424NqPsXOIlT+3mv1x6X1osGvJ3UtYv4eR8Z9hvEMK4sSu263i+g
-        jkks3cMZtj9usi/sIIKk20R8Z0rtbdVeDu3vNktGWsUrquU2KNkiCIRB4lzFDN0pSGHy0j
-        GTn/XAkEe+MEk8QAChmQrjEuByk2Yho=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1688742444;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0jBwtBpLbUYf3LM/NKeO7/tkOZqs6OnE7Weht0MWPrI=;
-        b=rEfCQ/agpsvog4ZlEopmxTzX/5gj+tQq+MPw6XcBUGsKTZBazGjAtwumTYwD/3VE44eS3j
-        HlhwcMHTkD3kOBBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BCA60139E0;
-        Fri,  7 Jul 2023 15:07:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Uff6LCsqqGTDCQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 07 Jul 2023 15:07:23 +0000
-Message-ID: <6a6baea8-c7ca-1399-97d8-b6cb8263829c@suse.de>
-Date:   Fri, 7 Jul 2023 17:07:22 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 319AD60BEC;
+        Sun,  9 Jul 2023 15:13:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F217BC433CC;
+        Sun,  9 Jul 2023 15:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688915635;
+        bh=S31snx7GFg/oaF6O2rW/pZcSVMfGR4uWJlfGvvQMfRo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=O+wYEfhAlHpEh97vQuJNUbVF8oRhVMlOiHYTD/f2YJ6KInTl0djT4CrqskOOJ3Xv1
+         nzhPL3r0wLYLiqBXq3zXXmBCAC1Uwjj1H1PI+hAlddQGdFLmeygqBUScG53NTwErMH
+         qovazDAXgdnKk18E9oZzIMXoOsAXCnSYV1sJGb4+Q4UwuGWngrh1cy59LqjDrk6fkb
+         q5ZNsywcyjCdiFhlXmgIqBpwi5xOeb4+ZsIS9c4Cb1zaSgDZR/LmhdxRwpPkj2qcmN
+         l9R32n3LWd4cRkxLNmZ/X/r/ivKZR9gfiHRwSCShfCt9sx+lTBjF17EZF6W7LqKTRO
+         bzBrqcviF8XCw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hao Chen <chenhao418@huawei.com>,
+        kernel test robot <lkp@intel.com>,
+        Hao Lan <lanhao@huawei.com>, Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, yisen.zhuang@huawei.com,
+        salil.mehta@huawei.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, guoren@kernel.org, huangguangbin2@huawei.com,
+        netdev@vger.kernel.org, linux-csky@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 26/26] net: hns3: fix strncpy() not using dest-buf length as length issue
+Date:   Sun,  9 Jul 2023 11:12:55 -0400
+Message-Id: <20230709151255.512931-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
+References: <20230709151255.512931-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/4] vgacon: rework Kconfig dependencies
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
-References: <20230707095415.1449376-1-arnd@kernel.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230707095415.1449376-1-arnd@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------c0jLEo3DrAkPUh5E8Wczlh0f"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,100 +62,138 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------c0jLEo3DrAkPUh5E8Wczlh0f
-Content-Type: multipart/mixed; boundary="------------9S6fOdJUZ2bMs72BaYhzIUVD";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: javierm@redhat.com, linux-fbdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
- dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
- Helge Deller <deller@gmx.de>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
- linux-csky@vger.kernel.org
-Message-ID: <6a6baea8-c7ca-1399-97d8-b6cb8263829c@suse.de>
-Subject: Re: [PATCH 1/4] vgacon: rework Kconfig dependencies
-References: <20230707095415.1449376-1-arnd@kernel.org>
-In-Reply-To: <20230707095415.1449376-1-arnd@kernel.org>
+From: Hao Chen <chenhao418@huawei.com>
 
---------------9S6fOdJUZ2bMs72BaYhzIUVD
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+[ Upstream commit 1cf3d5567f273a8746d1bade00633a93204f80f0 ]
 
-SGksDQoNCmZvciB0aGUgd2hvbGUgc2VyaWVzOg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFpp
-bW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFz
-DQoNCkFtIDA3LjA3LjIzIHVtIDExOjUyIHNjaHJpZWIgQXJuZCBCZXJnbWFubjoNCj4gRnJv
-bTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4gDQo+IFRoZSBsaXN0IG9mIGRl
-cGVuZGVuY2llcyBoZXJlIGlzIHBocmFzZWQgYXMgYW4gb3B0LW91dCwgYnV0IHRoaXMgaXMg
-bWlzc2luZw0KPiBhIGxvdCBvZiBhcmNoaXRlY3R1cmVzIHRoYXQgZG9uJ3QgYWN0dWFsbHkg
-c3VwcG9ydCBWR0EgY29uc29sZXMsIGFuZCBzb21lDQo+IG9mIHRoZSBlbnRyaWVzIGFyZSBz
-dGFsZToNCj4gDQo+ICAgLSBwb3dlcnBjIHVzZWQgdG8gc3VwcG9ydCBWR0EgY29uc29sZXMg
-aW4gdGhlIG9sZCBhcmNoL3BwYyBjb2RlYmFzZSwgYnV0DQo+ICAgICB0aGUgbWVyZ2VkIGFy
-Y2gvcG93ZXJwYyBuZXZlciBkaWQNCj4gDQo+ICAgLSBhcm0gbGlzdHMgZm9vdGJyaWRnZSwg
-aW50ZWdyYXRvciBhbmQgbmV0d2luZGVyLCBidXQgbmV0d2luZGVyIGlzIGFjdHVhbGx5DQo+
-ICAgICBwYXJ0IG9mIGZvb3RicmlkZ2UsIGFuZCBpbnRlZ3JhdG9yIGRvZXMgbm90IGFwcGVh
-ciB0byBoYXZlIGFuIGFjdHVhbA0KPiAgICAgVkdBIGhhcmR3YXJlLCBvciBsaXN0IGl0IGlu
-IGl0cyBBVEFHIG9yIERULg0KPiANCj4gICAtIG1pcHMgaGFzIGEgZmV3IHBsYXRmb3JtcyAo
-amF6eiwgc2lieXRlLCBhbmQgc25pKSB0aGF0IGluaXRpYWxpemUNCj4gICAgIHNjcmVlbl9p
-bmZvLCBvbiBldmVyeXRoaW5nIGVsc2UgdGhlIGNvbnNvbGUgaXMgc2VsZWN0ZWQgYnV0IGNh
-bm5vdA0KPiAgICAgYWN0dWFsbHkgd29yay4NCj4gDQo+ICAgLSBjc2t5LCBoZXhnYWdvbiwg
-bG9vbmdhcmNoLCBuaW9zMiwgcmlzY3YgYW5kIHh0ZW5zYSBhcmUgbm90IGxpc3RlZA0KPiAg
-ICAgaW4gdGhlIG9wdC1vdXQgdGFibGUgYW5kIGRlY2xhcmUgYSBzY3JlZW5faW5mbyB0byBh
-bGxvdyBidWlsZGluZw0KPiAgICAgdmdhX2NvbiwgYnV0IHRoaXMgY2Fubm90IHdvcmsgYmVj
-YXVzZSB0aGUgY29uc29sZSBpcyBuZXZlciBzZWxlY3RlZC4NCj4gDQo+IFJlcGxhY2UgdGhp
-cyB3aXRoIGFuIG9wdC1pbiB0YWJsZSB0aGF0IGxpc3RzIG9ubHkgdGhlIHBsYXRmb3JtcyB0
-aGF0DQo+IHJlbWFpbi4gVGhpcyBpcyBlZmZlY3RpdmVseSB4ODYsIHBsdXMgYSBjb3VwbGUg
-b2YgaGlzdG9yaWMgd29ya3N0YXRpb24NCj4gYW5kIHNlcnZlciBtYWNoaW5lcyB0aGF0IHJl
-dXNlZCBwYXJ0cyBvZiB0aGUgeDg2IHN5c3RlbSBhcmNoaXRlY3R1cmUuDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiAtLS0NCj4gICBk
-cml2ZXJzL3ZpZGVvL2NvbnNvbGUvS2NvbmZpZyB8IDYgKysrLS0tDQo+ICAgMSBmaWxlIGNo
-YW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3ZpZGVvL2NvbnNvbGUvS2NvbmZpZyBiL2RyaXZlcnMvdmlkZW8vY29u
-c29sZS9LY29uZmlnDQo+IGluZGV4IGEyYTg4ZDQyZWRmMGMuLjQ3YzQ5OGRlZmMyMTEgMTAw
-NjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmlkZW8vY29uc29sZS9LY29uZmlnDQo+ICsrKyBiL2Ry
-aXZlcnMvdmlkZW8vY29uc29sZS9LY29uZmlnDQo+IEBAIC03LDkgKzcsOSBAQCBtZW51ICJD
-b25zb2xlIGRpc3BsYXkgZHJpdmVyIHN1cHBvcnQiDQo+ICAgDQo+ICAgY29uZmlnIFZHQV9D
-T05TT0xFDQo+ICAgCWJvb2wgIlZHQSB0ZXh0IGNvbnNvbGUiIGlmIEVYUEVSVCB8fCAhWDg2
-DQo+IC0JZGVwZW5kcyBvbiAhNHh4ICYmICFQUENfOHh4ICYmICFTUEFSQyAmJiAhTTY4SyAm
-JiAhUEFSSVNDICYmICAhU1VQRVJIICYmIFwNCj4gLQkJKCFBUk0gfHwgQVJDSF9GT09UQlJJ
-REdFIHx8IEFSQ0hfSU5URUdSQVRPUiB8fCBBUkNIX05FVFdJTkRFUikgJiYgXA0KPiAtCQkh
-QVJNNjQgJiYgIUFSQyAmJiAhTUlDUk9CTEFaRSAmJiAhT1BFTlJJU0MgJiYgIVMzOTAgJiYg
-IVVNTA0KPiArCWRlcGVuZHMgb24gQUxQSEEgfHwgSUE2NCB8fCBYODYgfHwgXA0KPiArCQko
-QVJNICYmIEFSQ0hfRk9PVEJSSURHRSkgfHwgXA0KPiArCQkoTUlQUyAmJiAoTUlQU19NQUxU
-QSB8fCBTSUJZVEVfQkNNMTEyWCB8fCBTSUJZVEVfU0IxMjUwIHx8IFNJQllURV9CQ00xeDgw
-IHx8IFNOSV9STSkpDQo+ICAgCXNlbGVjdCBBUEVSVFVSRV9IRUxQRVJTIGlmIChEUk0gfHwg
-RkIgfHwgVkZJT19QQ0lfQ09SRSkNCj4gICAJZGVmYXVsdCB5DQo+ICAgCWhlbHANCg0KLS0g
-DQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBT
-b2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkw
-NDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBB
-bmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJl
-cmcpDQo=
+Now, strncpy() in hns3_dbg_fill_content() use src-length as copy-length,
+it may result in dest-buf overflow.
 
---------------9S6fOdJUZ2bMs72BaYhzIUVD--
+This patch is to fix intel compile warning for csky-linux-gcc (GCC) 12.1.0
+compiler.
 
---------------c0jLEo3DrAkPUh5E8Wczlh0f
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+The warning reports as below:
 
------BEGIN PGP SIGNATURE-----
+hclge_debugfs.c:92:25: warning: 'strncpy' specified bound depends on
+the length of the source argument [-Wstringop-truncation]
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSoKioFAwAAAAAACgkQlh/E3EQov+Av
-JA//QnTJ1dwQAnEXlldiURfrGPorNI75lYqV20fxNajAJDwvWnl6pHkB0LPysSaQYiJEf5nAwcjm
-2OX8nkHJUQSvTGlaeaBElhEXluMbxzFiMLP9zoWfPh0AiyXG7NB8HunNlEB7fCIdlBvStTXz5Pfs
-KaA+GshCKd7cOvp0LMOTZzY5kERZAq7uyc4E9AIrj4FSQHdaTeASdsiThgni7135x3hJ01/JS8qo
-nHlDFNEbWSpGf7Oz+0TKqwEMRa4zL9najM/OllMTRQMKWirHthfNTgY//JVTh1HADoKBkUtmjGSc
-oybH3jzaGjTvnNk+NbMpefoth5DDDrLAjzkF6PAzVnZVPIE0b674sdlA5Z99lEWA8uDsR96dWScf
-SFzxZxITrYahaiJ3feSci43aeZDyOn/DSFwgo4+cPKdPd1DDAQ2pbpUkeB8tHVfZH7FZoWRcX+5J
-zT2xzoXSVOuE19KfVW/AVGwTYgPgdlFOH77PwNlfVAqwGVQQXfwhDQQ7uURtV6OjavOi3EcAqOFr
-JJBTH2xUn5zgyuLw9IFwssw6gIdafn0nuaWsYOmJUjPsfiXRiMKZG96t6AJtNwcxYQh/mcUPF1FG
-RmOE423rFG9clEQIAR2NcOaI+vcjMJ4kUAnUzIFCoisTkmUAT9YZAEN+5K1f9NbXnPhpgQgKcQt4
-EDg=
-=YXVc
------END PGP SIGNATURE-----
+strncpy(pos, items[i].name, strlen(items[i].name));
 
---------------c0jLEo3DrAkPUh5E8Wczlh0f--
+hclge_debugfs.c:90:25: warning: 'strncpy' output truncated before
+terminating nul copying as many bytes from a string as its length
+[-Wstringop-truncation]
+
+strncpy(pos, result[i], strlen(result[i]));
+
+strncpy() use src-length as copy-length, it may result in
+dest-buf overflow.
+
+So,this patch add some values check to avoid this issue.
+
+Signed-off-by: Hao Chen <chenhao418@huawei.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/lkml/202207170606.7WtHs9yS-lkp@intel.com/T/
+Signed-off-by: Hao Lan <lanhao@huawei.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../ethernet/hisilicon/hns3/hns3_debugfs.c    | 31 ++++++++++++++-----
+ .../hisilicon/hns3/hns3pf/hclge_debugfs.c     | 29 ++++++++++++++---
+ 2 files changed, 48 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
+index d385ffc218766..32bb14303473b 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
+@@ -438,19 +438,36 @@ static void hns3_dbg_fill_content(char *content, u16 len,
+ 				  const struct hns3_dbg_item *items,
+ 				  const char **result, u16 size)
+ {
++#define HNS3_DBG_LINE_END_LEN	2
+ 	char *pos = content;
++	u16 item_len;
+ 	u16 i;
+ 
++	if (!len) {
++		return;
++	} else if (len <= HNS3_DBG_LINE_END_LEN) {
++		*pos++ = '\0';
++		return;
++	}
++
+ 	memset(content, ' ', len);
+-	for (i = 0; i < size; i++) {
+-		if (result)
+-			strncpy(pos, result[i], strlen(result[i]));
+-		else
+-			strncpy(pos, items[i].name, strlen(items[i].name));
++	len -= HNS3_DBG_LINE_END_LEN;
+ 
+-		pos += strlen(items[i].name) + items[i].interval;
++	for (i = 0; i < size; i++) {
++		item_len = strlen(items[i].name) + items[i].interval;
++		if (len < item_len)
++			break;
++
++		if (result) {
++			if (item_len < strlen(result[i]))
++				break;
++			strscpy(pos, result[i], strlen(result[i]));
++		} else {
++			strscpy(pos, items[i].name, strlen(items[i].name));
++		}
++		pos += item_len;
++		len -= item_len;
+ 	}
+-
+ 	*pos++ = '\n';
+ 	*pos++ = '\0';
+ }
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
+index a0b46e7d863eb..233c132dc513e 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_debugfs.c
+@@ -88,16 +88,35 @@ static void hclge_dbg_fill_content(char *content, u16 len,
+ 				   const struct hclge_dbg_item *items,
+ 				   const char **result, u16 size)
+ {
++#define HCLGE_DBG_LINE_END_LEN	2
+ 	char *pos = content;
++	u16 item_len;
+ 	u16 i;
+ 
++	if (!len) {
++		return;
++	} else if (len <= HCLGE_DBG_LINE_END_LEN) {
++		*pos++ = '\0';
++		return;
++	}
++
+ 	memset(content, ' ', len);
++	len -= HCLGE_DBG_LINE_END_LEN;
++
+ 	for (i = 0; i < size; i++) {
+-		if (result)
+-			strncpy(pos, result[i], strlen(result[i]));
+-		else
+-			strncpy(pos, items[i].name, strlen(items[i].name));
+-		pos += strlen(items[i].name) + items[i].interval;
++		item_len = strlen(items[i].name) + items[i].interval;
++		if (len < item_len)
++			break;
++
++		if (result) {
++			if (item_len < strlen(result[i]))
++				break;
++			strscpy(pos, result[i], strlen(result[i]));
++		} else {
++			strscpy(pos, items[i].name, strlen(items[i].name));
++		}
++		pos += item_len;
++		len -= item_len;
+ 	}
+ 	*pos++ = '\n';
+ 	*pos++ = '\0';
+-- 
+2.39.2
+
