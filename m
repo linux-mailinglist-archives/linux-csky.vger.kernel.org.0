@@ -2,36 +2,36 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70B474C530
-	for <lists+linux-csky@lfdr.de>; Sun,  9 Jul 2023 17:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFFE74C566
+	for <lists+linux-csky@lfdr.de>; Sun,  9 Jul 2023 17:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbjGIPOw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sun, 9 Jul 2023 11:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S233534AbjGIPQG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Sun, 9 Jul 2023 11:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233247AbjGIPOc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sun, 9 Jul 2023 11:14:32 -0400
+        with ESMTP id S233423AbjGIPP1 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Sun, 9 Jul 2023 11:15:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056BE1709;
-        Sun,  9 Jul 2023 08:14:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95453126;
+        Sun,  9 Jul 2023 08:14:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 319AD60BEC;
-        Sun,  9 Jul 2023 15:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F217BC433CC;
-        Sun,  9 Jul 2023 15:13:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7401260C27;
+        Sun,  9 Jul 2023 15:14:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23D4FC433CB;
+        Sun,  9 Jul 2023 15:14:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688915635;
-        bh=S31snx7GFg/oaF6O2rW/pZcSVMfGR4uWJlfGvvQMfRo=;
+        s=k20201202; t=1688915685;
+        bh=l3M82zQLezOgHHDn40Ur4WQe2kOsh1xSxkS/hv7wQ5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O+wYEfhAlHpEh97vQuJNUbVF8oRhVMlOiHYTD/f2YJ6KInTl0djT4CrqskOOJ3Xv1
-         nzhPL3r0wLYLiqBXq3zXXmBCAC1Uwjj1H1PI+hAlddQGdFLmeygqBUScG53NTwErMH
-         qovazDAXgdnKk18E9oZzIMXoOsAXCnSYV1sJGb4+Q4UwuGWngrh1cy59LqjDrk6fkb
-         q5ZNsywcyjCdiFhlXmgIqBpwi5xOeb4+ZsIS9c4Cb1zaSgDZR/LmhdxRwpPkj2qcmN
-         l9R32n3LWd4cRkxLNmZ/X/r/ivKZR9gfiHRwSCShfCt9sx+lTBjF17EZF6W7LqKTRO
-         bzBrqcviF8XCw==
+        b=jUDsxxKGwB8LOZZkkYA9GZ8aW/9KflqQ7sjVtd20goaE5dxHNshLIruk5FXKZJR2+
+         n3cRjsLfCN6b4WbsRIdEw+B8QfhuQ1O8rXsYdDB2dd+2R+nFeKn90Dv7oVkwcYnUT3
+         yX/2sgUg1pgV6E1dZumhvinHCtPJ+iMrCz0RIeKK6PyexVK95BLCTOW8eTMFx3D+C3
+         FDDoasaKTX2+jwVzyJssQhN8gll86RGHVl71Wjyt2dgZhUekd3/KBT/47zHzmvsyNX
+         fqrZnuK7jS/lFCKFBZr3Ku8PIx7j9SO2TOvLn4MEZH8VskgJSSicRpdmPsU1Bvc3DL
+         Aykvdx8k86SIA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hao Chen <chenhao418@huawei.com>,
@@ -41,16 +41,16 @@ Cc:     Hao Chen <chenhao418@huawei.com>,
         salil.mehta@huawei.com, davem@davemloft.net, edumazet@google.com,
         kuba@kernel.org, guoren@kernel.org, huangguangbin2@huawei.com,
         netdev@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 26/26] net: hns3: fix strncpy() not using dest-buf length as length issue
-Date:   Sun,  9 Jul 2023 11:12:55 -0400
-Message-Id: <20230709151255.512931-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3 22/22] net: hns3: fix strncpy() not using dest-buf length as length issue
+Date:   Sun,  9 Jul 2023 11:13:56 -0400
+Message-Id: <20230709151356.513279-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230709151255.512931-1-sashal@kernel.org>
-References: <20230709151255.512931-1-sashal@kernel.org>
+In-Reply-To: <20230709151356.513279-1-sashal@kernel.org>
+References: <20230709151356.513279-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.2
+X-stable-base: Linux 6.3.12
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -102,10 +102,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 48 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-index d385ffc218766..32bb14303473b 100644
+index bcccd82a2620f..f6ededec5a4fa 100644
 --- a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
 +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-@@ -438,19 +438,36 @@ static void hns3_dbg_fill_content(char *content, u16 len,
+@@ -435,19 +435,36 @@ static void hns3_dbg_fill_content(char *content, u16 len,
  				  const struct hns3_dbg_item *items,
  				  const char **result, u16 size)
  {
