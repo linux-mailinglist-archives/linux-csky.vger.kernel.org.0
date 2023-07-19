@@ -2,90 +2,225 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC4F7591BE
-	for <lists+linux-csky@lfdr.de>; Wed, 19 Jul 2023 11:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9F4759547
+	for <lists+linux-csky@lfdr.de>; Wed, 19 Jul 2023 14:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjGSJgf (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 19 Jul 2023 05:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S230259AbjGSMkI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 19 Jul 2023 08:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjGSJge (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 19 Jul 2023 05:36:34 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01758186
-        for <linux-csky@vger.kernel.org>; Wed, 19 Jul 2023 02:36:31 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R5W0r4hHTzBR5lV
-        for <linux-csky@vger.kernel.org>; Wed, 19 Jul 2023 17:36:28 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689759388; x=1692351389; bh=eCH2V3ntIvzfeHaDHWorbP5NXrR
-        Bd6933jWIixZYE1w=; b=XMNVOtWDkMUJiO+PMZpcwHfvBybAtpvmWEth0tDScM9
-        ZU9qMv/xMTT31Cl5Ym2Yrnb8eVjFZrzhQnr28nCaA/CikkX+SsL2l3miweypPxSR
-        wu0UjIU8zYwIRKu9No+WC63f4JYQivT3thr1EDWTZvH+LA05BTGsKQ90pIwOSme4
-        N3rt8+eiKr6gjF5J2bVYn0T7QFM37LJINbfSMK4WmoAib1+kTWKXya5cqWr/thN5
-        jhgPHMHduplwZrcwU1vR1mTxEN3Cn6WHPcEEjk5d1BBVaWfZzNV0BOVXLYH2fhVy
-        zilHit6sPfUZQ6SKiIpKL+qukvI4AnN331gv5WfWk+A==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id P2ZyXL-CfckG for <linux-csky@vger.kernel.org>;
-        Wed, 19 Jul 2023 17:36:28 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R5W0r2cxvzBR1PC;
-        Wed, 19 Jul 2023 17:36:28 +0800 (CST)
+        with ESMTP id S229563AbjGSMkH (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 19 Jul 2023 08:40:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DBEE0;
+        Wed, 19 Jul 2023 05:40:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD2A6615C3;
+        Wed, 19 Jul 2023 12:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE75DC433C8;
+        Wed, 19 Jul 2023 12:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689770405;
+        bh=DIdJB1tKscR1rR3ujrBSJpnHyT/V+Wqlv5mxqgqFyfo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JrzZEGAAyAH1UDXHME4ojHdWqSujNUNi7s/2QLjU4KPdJmC4YzkCnfpLJWsy1giIi
+         4GfKf/YtkVIiRQh3ABlUkf77h0sv4JdaKf/Vl1FPgqFZ7Q9AP+FJHMyVanaiYlHRyn
+         XhjbT1VbweWLETJajH46boExznIVXhvkYxrEgo9zFKUJiFKlNAz6apD8S1DPsT367D
+         TDWhXjATRbaPWUN7/4LHlap/dNyW9Fz5CEvycj2DQjpc0EtPyXvbYt5ePy6xhhwmbd
+         /BIf4DyZD3QTQDe2SgMuY/ua/2MJlpwAR6VLqGrW9QwblGXER1IPEh6DejVsQa5tGr
+         UD0g9QPf5fqPw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Deepak Rawat <drawat.floss@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guo Ren <guoren@kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        WANG Xuerui <kernel@xen0n.name>, Wei Liu <wei.liu@kernel.org>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 0/9] video: screen_info cleanups
+Date:   Wed, 19 Jul 2023 14:39:35 +0200
+Message-Id: <20230719123944.3438363-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Date:   Wed, 19 Jul 2023 17:36:28 +0800
-From:   hanyu001@208suo.com
-To:     guoren@kernel.org
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] abiv2: inc: abi: add require space around ':'
-In-Reply-To: <tencent_80CE010520AAD72B85C65189CC69B56AC709@qq.com>
-References: <tencent_80CE010520AAD72B85C65189CC69B56AC709@qq.com>
-User-Agent: Roundcube Webmail
-Message-ID: <07397261f87f410076689e4a0cd0913f@208suo.com>
-X-Sender: hanyu001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Fix below checkpatch errors:
+From: Arnd Bergmann <arnd@arndb.de>
 
-/csky/abiv2/inc/abi/ckmmu.h:131: ERROR: spaces required around that ':' 
-(ctx:ExV)
-/csky/abiv2/inc/abi/ckmmu.h:132: ERROR: spaces required around that ':' 
-(ctx:ExV)
+I refreshed the first four patches that I sent before with very minor
+updates, and then added some more to further disaggregate the use
+of screen_info:
 
-Signed-off-by: Yu Han <hanyu001@208suo.com>
----
-  arch/csky/abiv2/inc/abi/ckmmu.h | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
+ - I found that powerpc wasn't using vga16fb any more
 
-diff --git a/arch/csky/abiv2/inc/abi/ckmmu.h 
-b/arch/csky/abiv2/inc/abi/ckmmu.h
-index 64215f2380f1..b5cac07c4411 100644
---- a/arch/csky/abiv2/inc/abi/ckmmu.h
-+++ b/arch/csky/abiv2/inc/abi/ckmmu.h
-@@ -128,8 +128,8 @@ static inline void setup_pgd(pgd_t *pgd, int asid)
-          NOP32
-          ".endr            \n"
-          :
--        :"r"(asid), "r"(__pa(pgd) | BIT(0))
--        :"memory");
-+        : "r"(asid), "r"(__pa(pgd) | BIT(0))
-+        : "memory");
-  }
+ - vgacon can be almost entirely separated from the global
+   screen_info, except on x86
 
-  static inline pgd_t *get_pgd(void)
+ - similarly, the EFI framebuffer initialization can be
+   kept separate, except on x86.
+
+I did extensive build testing on arm/arm64/x86 and the normal built bot
+testing for the other architectures.
+
+Which tree should this get merged through?
+
+Link: https://lore.kernel.org/lkml/20230707095415.1449376-1-arnd@kernel.org/
+
+Arnd Bergmann (9):
+  vgacon: rework Kconfig dependencies
+  vgacon: rework screen_info #ifdef checks
+  dummycon: limit Arm console size hack to footbridge
+  vgacon, arch/*: remove unused screen_info definitions
+  vgacon: remove screen_info dependency
+  vgacon: clean up global screen_info instances
+  vga16fb: drop powerpc support
+  hyperv: avoid dependency on screen_info
+  efi: move screen_info into efi init code
+
+ arch/alpha/kernel/proto.h                     |  2 +
+ arch/alpha/kernel/setup.c                     |  8 +--
+ arch/alpha/kernel/sys_sio.c                   |  8 ++-
+ arch/arm/include/asm/setup.h                  |  5 ++
+ arch/arm/kernel/atags_parse.c                 | 20 +++---
+ arch/arm/kernel/efi.c                         |  6 --
+ arch/arm/kernel/setup.c                       |  7 +-
+ arch/arm64/kernel/efi.c                       |  4 --
+ arch/arm64/kernel/image-vars.h                |  2 +
+ arch/csky/kernel/setup.c                      | 12 ----
+ arch/hexagon/kernel/Makefile                  |  2 -
+ arch/hexagon/kernel/screen_info.c             |  3 -
+ arch/ia64/kernel/setup.c                      | 51 +++++++-------
+ arch/loongarch/kernel/efi.c                   |  3 +-
+ arch/loongarch/kernel/image-vars.h            |  2 +
+ arch/loongarch/kernel/setup.c                 |  3 -
+ arch/mips/jazz/setup.c                        |  9 ---
+ arch/mips/kernel/setup.c                      | 11 ---
+ arch/mips/mti-malta/malta-setup.c             |  4 +-
+ arch/mips/sibyte/swarm/setup.c                | 26 ++++---
+ arch/mips/sni/setup.c                         | 18 ++---
+ arch/nios2/kernel/setup.c                     |  5 --
+ arch/powerpc/kernel/setup-common.c            | 16 -----
+ arch/riscv/kernel/setup.c                     | 12 ----
+ arch/sh/kernel/setup.c                        |  5 --
+ arch/sparc/kernel/setup_32.c                  | 13 ----
+ arch/sparc/kernel/setup_64.c                  | 13 ----
+ arch/x86/kernel/setup.c                       |  2 +-
+ arch/xtensa/kernel/setup.c                    | 12 ----
+ drivers/firmware/efi/efi-init.c               | 14 +++-
+ drivers/firmware/efi/libstub/efi-stub-entry.c |  8 ++-
+ drivers/firmware/pcdp.c                       |  1 -
+ drivers/gpu/drm/hyperv/hyperv_drm_drv.c       |  7 +-
+ drivers/hv/vmbus_drv.c                        |  6 +-
+ drivers/video/console/Kconfig                 | 11 +--
+ drivers/video/console/dummycon.c              |  2 +-
+ drivers/video/console/vgacon.c                | 68 +++++++++++--------
+ drivers/video/fbdev/Kconfig                   |  2 +-
+ drivers/video/fbdev/hyperv_fb.c               |  8 +--
+ drivers/video/fbdev/vga16fb.c                 |  9 +--
+ include/linux/console.h                       |  7 ++
+ 41 files changed, 178 insertions(+), 249 deletions(-)
+ delete mode 100644 arch/hexagon/kernel/screen_info.c
+
+-- 
+2.39.2
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Deepak Rawat <drawat.floss@gmail.com>
+Cc: Dexuan Cui <decui@microsoft.com>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Haiyang Zhang <haiyangz@microsoft.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Javier Martinez Canillas <javierm@redhat.com>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Khalid Aziz <khalid@gonehiking.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: x86@kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-efi@vger.kernel.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-hyperv@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-fbdev@vger.kernel.org
+
