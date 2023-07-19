@@ -2,57 +2,57 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D05759801
-	for <lists+linux-csky@lfdr.de>; Wed, 19 Jul 2023 16:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A8B759838
+	for <lists+linux-csky@lfdr.de>; Wed, 19 Jul 2023 16:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbjGSOTJ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 19 Jul 2023 10:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S231608AbjGSOZ0 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 19 Jul 2023 10:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbjGSOSq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 19 Jul 2023 10:18:46 -0400
+        with ESMTP id S231582AbjGSOZJ (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 19 Jul 2023 10:25:09 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233A71982
-        for <linux-csky@vger.kernel.org>; Wed, 19 Jul 2023 07:17:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482E6268D
+        for <linux-csky@vger.kernel.org>; Wed, 19 Jul 2023 07:24:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689776231;
+        s=mimecast20190719; t=1689776638;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=YjdFQRNR08a24eSSE2jcx3RnjwPdI3D1UG9L8u3hsoE=;
-        b=FWguGfwOO+rfjs0fvFjrSrzQ32kjEPT8o8EekxSSjdUeLTnsXWYM0nd6YMEMHuPUN0EVYE
-        lFM0Qbd2QSn5B7CaU296PsZiorG6xTgOmjiO8mppIyDzasutEqBcqNNcUaB86UlJEEIAq5
-        LWw7EaryBsiA4dajwANVCpkbAmntw5s=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=AYL0WxfELPHjwx6ZiDqavEiQQIijrcopNRfhrvLV03A=;
+        b=Fy8i5nOuJc9vT64qGI1h402ACgpl6AB64fP+pSezsKXU7oX0ASaTIrY6cxryrL9cV8OvNU
+        v0sIZeURGjZ3itQ6NPF0MFxRumgHZwjZfMTfec/c/ZD6nxw8e6l3CXc8VJBtqU8rK9ljTf
+        QgQvU5p0Ucau8pjJq5qE+94Kp1SQ6E8=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-286-bBcm_UyGNgelwDPEaA6iUg-1; Wed, 19 Jul 2023 10:17:10 -0400
-X-MC-Unique: bBcm_UyGNgelwDPEaA6iUg-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3fb416d7731so39412395e9.2
-        for <linux-csky@vger.kernel.org>; Wed, 19 Jul 2023 07:17:09 -0700 (PDT)
+ us-mta-434-AXwhDeu4P2O3U_64fsbleQ-1; Wed, 19 Jul 2023 10:23:56 -0400
+X-MC-Unique: AXwhDeu4P2O3U_64fsbleQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-31701b27d19so394996f8f.1
+        for <linux-csky@vger.kernel.org>; Wed, 19 Jul 2023 07:23:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689776229; x=1690381029;
+        d=1e100.net; s=20221208; t=1689776635; x=1690381435;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YjdFQRNR08a24eSSE2jcx3RnjwPdI3D1UG9L8u3hsoE=;
-        b=Ftl+B8PBh+Dj/6kQSNKE4cN7tjPlkCqQBQP3wAyhdjDJi+d2QIQ+7hKtscbrD5Jr+O
-         0MEhaiMxOLfzgyjOCRz4RtLSN4rHZ1w96pCFGFo1RPaCuVHBlqznG38wIXkBMWtrR4oe
-         JEHpbel4AWN8DiBuyylLul4dUYO1xvyuLh2cJWx13AGnJJpZh9nuetUZMGxz3qtlBdnI
-         +lgr7aCT+kNwWqZjjHbMkNbix8w+Nhh6WFW1sDiX9Np9ZE3s+dY9ZKly/X1G8PJyoP7W
-         EnuLHaT/s+kkn9Lebag7TrKgMFIA/8Uv7iAhvkas1i2ifEBb2cBOwSRqYf6V+0YJ39nm
-         KTRA==
-X-Gm-Message-State: ABy/qLbrr1NNreqUxkv72NeDFiVIgi6MGbUrH7c6Ymee2Txz8pmGPg2L
-        RZkoBu3YCVIiR7fYM/u8t5y/sCv2VOb3+w3JlBBVk20SKoyY8oEEsifO/UJ8tLXhXuMl1VI1bvu
-        dB6QEfF+X8rY86QAKoWKO5A==
-X-Received: by 2002:a05:600c:3651:b0:3fc:627:ea31 with SMTP id y17-20020a05600c365100b003fc0627ea31mr2123094wmq.38.1689776229116;
-        Wed, 19 Jul 2023 07:17:09 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHY6b0TgUW8MDG3POksnXdAxeQBRH+KD9U9aN090eyMWJPzhTreLBf0F2Av+qSumHgaL9gGUQ==
-X-Received: by 2002:a05:600c:3651:b0:3fc:627:ea31 with SMTP id y17-20020a05600c365100b003fc0627ea31mr2123053wmq.38.1689776228833;
-        Wed, 19 Jul 2023 07:17:08 -0700 (PDT)
+        bh=AYL0WxfELPHjwx6ZiDqavEiQQIijrcopNRfhrvLV03A=;
+        b=H9Usbe2CR8b+pEu4FB1wRV3dHhUt77HJSfXMtDrqZZkWQHmBEurAo3p3E9bmMwZrSE
+         ojdvxDuZ7C/W9rWUlV0oSEcOeaWx5VPCJN1D090QeWvmgQ2CGIXrl7WgPscsrAehR+kX
+         iR6aHU11k18DHjANzI/8dup1oy4MbmiwxgmaY9pnVL8sFH+FQkXXlu1HbLSkt3Kxak62
+         wgg8iyb0Ahrp3Dwss+n6DB4EFyOdcFqZfaBC4JT1aItosnP2wI8C/movQPb/ylrqQfAK
+         ZYfyo2TdHOb45tPpbh8M8CiVFjQeL6VbMAOfNvG+TBrQ4tqGb2d/OCuDOzNHtdz9dkej
+         RWKg==
+X-Gm-Message-State: ABy/qLb6ENNLmp5CnfUWx/XuZv8HmuV9ac/If5EE5lMEX+/7P5V2whcy
+        /hW3X0R6E+EenfJ2oylck4PNN3u6C2JDR6dAPh9mo8cAUllYZ6lJDzX/4T1FLSLw5d32OCP1zF2
+        QOYvz4qsDVY2PZkaY4XnCuQ==
+X-Received: by 2002:adf:f406:0:b0:317:15f5:a1cc with SMTP id g6-20020adff406000000b0031715f5a1ccmr41772wro.22.1689776635694;
+        Wed, 19 Jul 2023 07:23:55 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHAuWaDn4wkaE25f0gFYugdobiggD0h46Z8p4U2s3LOHj24u3Bx+1zUs1XU1djJ3aSjiu0SQg==
+X-Received: by 2002:adf:f406:0:b0:317:15f5:a1cc with SMTP id g6-20020adff406000000b0031715f5a1ccmr41757wro.22.1689776635405;
+        Wed, 19 Jul 2023 07:23:55 -0700 (PDT)
 Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h21-20020a1ccc15000000b003fbacc853ccsm1833816wmb.18.2023.07.19.07.17.08
+        by smtp.gmail.com with ESMTPSA id q19-20020a056000137300b003143d80d11dsm5429196wrz.112.2023.07.19.07.23.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 07:17:08 -0700 (PDT)
+        Wed, 19 Jul 2023 07:23:54 -0700 (PDT)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     Arnd Bergmann <arnd@kernel.org>, linux-fbdev@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
@@ -96,12 +96,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-hyperv@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 6/9] vgacon: clean up global screen_info instances
-In-Reply-To: <20230719123944.3438363-7-arnd@kernel.org>
+Subject: Re: [PATCH v2 7/9] vga16fb: drop powerpc support
+In-Reply-To: <20230719123944.3438363-8-arnd@kernel.org>
 References: <20230719123944.3438363-1-arnd@kernel.org>
- <20230719123944.3438363-7-arnd@kernel.org>
-Date:   Wed, 19 Jul 2023 16:17:07 +0200
-Message-ID: <87cz0ohtp8.fsf@minerva.mail-host-address-is-not-set>
+ <20230719123944.3438363-8-arnd@kernel.org>
+Date:   Wed, 19 Jul 2023 16:23:53 +0200
+Message-ID: <87a5vshtdy.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -119,35 +119,25 @@ Arnd Bergmann <arnd@kernel.org> writes:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> To prepare for completely separating the VGA console screen_info from
-> the one used in EFI/sysfb, rename the vgacon instances and make them
-> local as much as possible.
+> I noticed that commit 0db5b61e0dc07 ("fbdev/vga16fb: Create
+> EGA/VGA devices in sysfb code") broke vga16fb on non-x86 platforms,
+> because the sysfb code never creates a vga-framebuffer device when
+> screen_info.orig_video_isVGA is set to '1' instead of VIDEO_TYPE_VGAC.
 >
-> ia64 and arm both have confurations with vgacon and efi, but the contents
-
-is this a typo for configurations ?
-
-> never overlaps because ia64 has no EFI framebuffer, and arm only has
-> vga console on legacy platforms without EFI. Renaming these is required
-> before the EFI screen_info can be moved into drivers/firmware.
+> However, it turns out that the only architecture that has allowed
+> building vga16fb in the past 20 years is powerpc, and this only worked
+> on two 32-bit platforms and never on 64-bit powerpc. The last machine
+> that actually used this was removed in linux-3.10, so this is all dead
+> code and can be removed.
 >
-> The ia64 vga console is actually registered in two places from
-> setup_arch(), but one of them is wrong, so drop the one in pcdp.c and
-> the fix the one in setup.c to use the correct conditional.
+> The big-endian support in vga16fb.c could also be removed, but I'd just
+> leave this in place.
 >
-
-s/the fix the/fix the
-
-> x86 has to keep them together, as the boot protocol is used to switch
-> between VGA text console and framebuffer through the screen_info data.
->
+> Fixes: 933ee7119fb14 ("powerpc: remove PReP platform")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
 
-Patch looks good to me, but I'm not that familiar with some of the arches
-to give a proper reviewed-by.
-
-Acked-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
 -- 
 Best regards,
