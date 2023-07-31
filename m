@@ -2,133 +2,192 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1287682B1
-	for <lists+linux-csky@lfdr.de>; Sun, 30 Jul 2023 01:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F24769DAB
+	for <lists+linux-csky@lfdr.de>; Mon, 31 Jul 2023 19:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbjG2XTc (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Sat, 29 Jul 2023 19:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S233868AbjGaREG (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 31 Jul 2023 13:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjG2XTb (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Sat, 29 Jul 2023 19:19:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBE030D4;
-        Sat, 29 Jul 2023 16:19:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B716560B7C;
-        Sat, 29 Jul 2023 23:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26592C433BB;
-        Sat, 29 Jul 2023 23:19:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690672766;
-        bh=hkedZRP0pmJPvtoATmQv5DhWWG14hr7Dzkcd8VtvSdY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VTVaq1MS3kAgtvomLvRNgm9yl1ruw3l2kbXIsMdISRaLMJ2XhwlcSfzCTTkLcLnef
-         9vMBC9mh54LmVVCHNycZDH5q5XKvA6VTlg1SSgga7BhaPNYoWtpE8o6l5pi3+lLHAe
-         i4BD7qK4VXgdJEZtdh8EmuI96xwq6tNL/el7RIGLv2B4nc3lrmBRslTQsOkBhXbmgw
-         T/7/MuDF2Ys3mLBm/Vnd7e4aGURbwKEWUl65ZilZkvQOx8FwXjKRzkY7IwYSfoJ3qN
-         oDqCNAn5LXPwvBrfA/Kq8KKBP6nVEo/CKNJpzuvFKB4oG/rNGOahoPtAPJ6OrqxIpG
-         Ru2pVWUIunvYQ==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5227e5d9d96so4285024a12.2;
-        Sat, 29 Jul 2023 16:19:26 -0700 (PDT)
-X-Gm-Message-State: ABy/qLYTKVeYua9vfCv0nzDDvWP4HD/ch69ZTuxGY4Dv8nWV8csxOIE6
-        nJZ0jw7U4w8zXpvIapXXXTfSl/TNyF+16TEBchw=
-X-Google-Smtp-Source: APBJJlEDXcWd/g3fqIl5w0SvDZiLHM9JOWKvqOsdKPwj6gGSH+Rhs68Y932KO/wlq+iOvGuSNMsrzS7GTmUO5H4w6zk=
-X-Received: by 2002:a17:907:2ccf:b0:993:e9b8:90f5 with SMTP id
- hg15-20020a1709072ccf00b00993e9b890f5mr2784182ejc.8.1690672764357; Sat, 29
- Jul 2023 16:19:24 -0700 (PDT)
+        with ESMTP id S233750AbjGaRDr (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 31 Jul 2023 13:03:47 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F5219B2;
+        Mon, 31 Jul 2023 10:03:38 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d299ed34bacso3970037276.1;
+        Mon, 31 Jul 2023 10:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690823018; x=1691427818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ryTLkHDnIGhrwoqJrwF4w+CKAk7Or3iQY3ycYEnzI1s=;
+        b=FItEz4g6fK8MUe9in0y5zvq54vvv6vRus4MvaXB5z0kFF5Wd4GxyLG45TIMFtswPBZ
+         o5hWJRASIfXbLHcyuajDu2shNzEC3fqz1lq+2UGzWjNRBxNrOGPJc7+FeZHb270T76uP
+         DVP8E3UCWoa73Cj1cemt4q3bHNezkBDrcXpoGHgWYyrjCA03wHK6cuEEIp3IlP9F3vH7
+         B0WVEfhX/KMZdz2qP55P02W/l5cO6EeJ2/dVRRpuTUrHoGO/LbskVtPeDS55S32mzgKs
+         4t8PJ/VzqvancbDUNXdKozgYa+ZBjOr6Csg18HLyiAYJhBTxnGsnAH6C4GyD3p+69e1s
+         v6hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690823018; x=1691427818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ryTLkHDnIGhrwoqJrwF4w+CKAk7Or3iQY3ycYEnzI1s=;
+        b=gzhVoyvYDJs9gKmo5xuqZJNf1xG3zrd6wIMa985SDjbJiiTBODFNJsfGhqt41Qlhmv
+         q+xcOntZlYdapLx7Bniw1u6Km0cLB9W1wXWOCu/NqlfIZaC2V9AhFXhfhSyjj+BpdKF3
+         +zO7lBn7U3diDytMHOMygX7e+3ODBeNC0G1Fr8PAJqTR2Kj6cUGFlXTWVeEGJ4QdECes
+         VoPxgcc+0R2d8HgQBFyT1nlLsb1/3+69mKrS71kT/WKA4MFQv2p0Qy/btC5MvCRJP4I/
+         8BikIrVNr3wy+ASlevkZ4qjDrt6hFtY5+Rs8IBwN/hOiJCw3j3PFi70S6mPzjDUSKWI/
+         UN4g==
+X-Gm-Message-State: ABy/qLbeR2hEQZ8OEzY9oaVv54CV5ydNtMnJ3vCzwokplZGYbZFL8vfb
+        6mXw5GLuEhJBDCUlEdDBMeY=
+X-Google-Smtp-Source: APBJJlF+dh42RzdYn0EXh+W1YGBDbhVTCkZUXnYcADIxILBW8gkVGvh5Vx2rhlYPGGopBifzCd0Ntg==
+X-Received: by 2002:a25:d1d0:0:b0:d1c:5a9a:48d2 with SMTP id i199-20020a25d1d0000000b00d1c5a9a48d2mr11161535ybg.19.1690823017725;
+        Mon, 31 Jul 2023 10:03:37 -0700 (PDT)
+Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
+        by smtp.googlemail.com with ESMTPSA id x31-20020a25ac9f000000b00c832ad2e2eesm2511833ybi.60.2023.07.31.10.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 10:03:37 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH mm-unstable v8 00/31] Split ptdesc from struct page
+Date:   Mon, 31 Jul 2023 10:03:01 -0700
+Message-Id: <20230731170332.69404-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230726145740.1765323-1-arnd@kernel.org> <CAJF2gTTC0BTOyWH4Zod1oRQaUpS9dE-6=otfpGOPcCcffrHohQ@mail.gmail.com>
- <ef413a40-ddc4-4d23-bc56-23b7095ffc83@app.fastmail.com> <fc2b139b-909b-46d7-abbc-7ab287c9d06d@app.fastmail.com>
-In-Reply-To: <fc2b139b-909b-46d7-abbc-7ab287c9d06d@app.fastmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 29 Jul 2023 19:19:12 -0400
-X-Gmail-Original-Message-ID: <CAJF2gTRMZkT=CE0=g25Hfe7v9_GE8UmqhKBP1vsXd06w+9NBiQ@mail.gmail.com>
-Message-ID: <CAJF2gTRMZkT=CE0=g25Hfe7v9_GE8UmqhKBP1vsXd06w+9NBiQ@mail.gmail.com>
-Subject: Re: [PATCH] csky: fix old style declaration in module.c
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Jul 29, 2023 at 4:05=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> On Sat, Jul 29, 2023, at 09:06, Arnd Bergmann wrote:
-> > On Sat, Jul 29, 2023, at 06:59, Guo Ren wrote:
->
-> > I'd like to enable a few warning options (-Wextra, -Wrestrict,
-> > -Wmissing-prototypes, ...) in the Kbuild for 6.6, but the Makefile
-> > changes will probably go through the Kbuild tree or linux-mm,
-> > and the fixes for existing warnings can just take their normal way.
->
-> I just checked my log files again and I now see that there
-> are actually a number of -Wcc warnings as well:
->
-> csky/kernel/signal.c:255:17: error: no previous prototype for 'do_notify_=
-resume' [-Werror=3Dmissing-prototypes]
-> csky/mm/fault.c:187:17: error: no previous prototype for 'do_page_fault' =
-[-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:57:13: error: no previous prototype for 'trap_init' [=
--Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:150:15: error: no previous prototype for 'do_trap_unk=
-nown' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:152:15: error: no previous prototype for 'do_trap_zdi=
-v' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:154:15: error: no previous prototype for 'do_trap_bus=
-err' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:157:17: error: no previous prototype for 'do_trap_mis=
-aligned' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:168:17: error: no previous prototype for 'do_trap_bkp=
-t' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:187:17: error: no previous prototype for 'do_trap_ill=
-insn' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:210:17: error: no previous prototype for 'do_trap_fpe=
-' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:220:17: error: no previous prototype for 'do_trap_pri=
-v' [-Werror=3Dmissing-prototypes]
-> csky/kernel/traps.c:230:17: error: no previous prototype for 'trap_c' [-W=
-error=3Dmissing-prototypes]
-> csky/kernel/vdso/vgettimeofday.c:6:5: error: no previous prototype for '_=
-_vdso_clock_gettime' [-Werror=3Dmissing-prototypes]
-> csky/kernel/vdso/vgettimeofday.c:12:5: error: no previous prototype for '=
-__vdso_clock_gettime64' [-Werror=3Dmissing-prototypes]
-> csky/kernel/vdso/vgettimeofday.c:18:5: error: no previous prototype for '=
-__vdso_gettimeofday' [-Werror=3Dmissing-prototypes]
-> csky/kernel/vdso/vgettimeofday.c:24:5: error: no previous prototype for '=
-__vdso_clock_getres' [-Werror=3Dmissing-prototypes]
-> csky/kernel/setup.c:104:34: error: no previous prototype for 'csky_start'=
- [-Werror=3Dmissing-prototypes]
-> csky/kernel/ptrace.c:320:16: error: no previous prototype for 'syscall_tr=
-ace_enter' [-Werror=3Dmissing-prototypes]
-> csky/kernel/ptrace.c:336:17: error: no previous prototype for 'syscall_tr=
-ace_exit' [-Werror=3Dmissing-prototypes]
->
-> I missed these as I was first looking at everything except
-> -Wmissing-prototypes that I want to enable. Can you perhaps
-> help out and create a fix for these yourself?
-Okay, I'll check
+The MM subsystem is trying to shrink struct page. This patchset
+introduces a memory descriptor for page table tracking - struct ptdesc.
 
+This patchset introduces ptdesc, splits ptdesc from struct page, and
+converts many callers of page table constructor/destructors to use ptdescs.
 
->
->        Arnd
+Ptdesc is a foundation to further standardize page tables, and eventually
+allow for dynamic allocation of page tables independent of struct page.
+However, the use of pages for page table tracking is quite deeply
+ingrained and varied across archictectures, so there is still a lot of
+work to be done before that can happen.
 
+This is rebased on mm-unstable.
 
+v8:
+  Fix some compiler issues
 
---=20
-Best Regards
- Guo Ren
+v7:
+  Drop s390 gmap ptdesc conversions - gmap is unecessary complication
+    that can be dealt with later
+  Be more thorough with ptdesc struct sanity checks and comments
+  Rebase onto mm-unstable
+
+Vishal Moola (Oracle) (31):
+  mm: Add PAGE_TYPE_OP folio functions
+  pgtable: Create struct ptdesc
+  mm: add utility functions for ptdesc
+  mm: Convert pmd_pgtable_page() callers to use pmd_ptdesc()
+  mm: Convert ptlock_alloc() to use ptdescs
+  mm: Convert ptlock_ptr() to use ptdescs
+  mm: Convert pmd_ptlock_init() to use ptdescs
+  mm: Convert ptlock_init() to use ptdescs
+  mm: Convert pmd_ptlock_free() to use ptdescs
+  mm: Convert ptlock_free() to use ptdescs
+  mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+  powerpc: Convert various functions to use ptdescs
+  x86: Convert various functions to use ptdescs
+  s390: Convert various pgalloc functions to use ptdescs
+  mm: Remove page table members from struct page
+  pgalloc: Convert various functions to use ptdescs
+  arm: Convert various functions to use ptdescs
+  arm64: Convert various functions to use ptdescs
+  csky: Convert __pte_free_tlb() to use ptdescs
+  hexagon: Convert __pte_free_tlb() to use ptdescs
+  loongarch: Convert various functions to use ptdescs
+  m68k: Convert various functions to use ptdescs
+  mips: Convert various functions to use ptdescs
+  nios2: Convert __pte_free_tlb() to use ptdescs
+  openrisc: Convert __pte_free_tlb() to use ptdescs
+  riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+  sh: Convert pte_free_tlb() to use ptdescs
+  sparc64: Convert various functions to use ptdescs
+  sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+  um: Convert {pmd, pte}_free_tlb() to use ptdescs
+  mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
+
+ Documentation/mm/split_page_table_lock.rst    |  12 +-
+ .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+ arch/arm/include/asm/tlb.h                    |  12 +-
+ arch/arm/mm/mmu.c                             |   7 +-
+ arch/arm64/include/asm/tlb.h                  |  14 +-
+ arch/arm64/mm/mmu.c                           |   7 +-
+ arch/csky/include/asm/pgalloc.h               |   4 +-
+ arch/hexagon/include/asm/pgalloc.h            |   8 +-
+ arch/loongarch/include/asm/pgalloc.h          |  27 ++--
+ arch/loongarch/mm/pgtable.c                   |   7 +-
+ arch/m68k/include/asm/mcf_pgalloc.h           |  47 +++---
+ arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+ arch/m68k/mm/motorola.c                       |   4 +-
+ arch/mips/include/asm/pgalloc.h               |  32 ++--
+ arch/mips/mm/pgtable.c                        |   8 +-
+ arch/nios2/include/asm/pgalloc.h              |   8 +-
+ arch/openrisc/include/asm/pgalloc.h           |   8 +-
+ arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |  32 ++--
+ arch/powerpc/mm/pgtable-frag.c                |  58 +++----
+ arch/riscv/include/asm/pgalloc.h              |   8 +-
+ arch/riscv/mm/init.c                          |  16 +-
+ arch/s390/include/asm/pgalloc.h               |   4 +-
+ arch/s390/include/asm/tlb.h                   |   4 +-
+ arch/s390/mm/pgalloc.c                        | 128 +++++++--------
+ arch/sh/include/asm/pgalloc.h                 |   9 +-
+ arch/sparc/mm/init_64.c                       |  17 +-
+ arch/sparc/mm/srmmu.c                         |   5 +-
+ arch/um/include/asm/pgalloc.h                 |  18 +--
+ arch/x86/mm/pgtable.c                         |  47 +++---
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ include/asm-generic/pgalloc.h                 |  88 +++++-----
+ include/asm-generic/tlb.h                     |  11 ++
+ include/linux/mm.h                            | 151 +++++++++++++-----
+ include/linux/mm_types.h                      |  18 ---
+ include/linux/page-flags.h                    |  30 +++-
+ include/linux/pgtable.h                       |  80 ++++++++++
+ mm/memory.c                                   |   8 +-
+ 38 files changed, 586 insertions(+), 385 deletions(-)
+
+-- 
+2.40.1
+
