@@ -2,68 +2,176 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC6476AD36
-	for <lists+linux-csky@lfdr.de>; Tue,  1 Aug 2023 11:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E35376BA1B
+	for <lists+linux-csky@lfdr.de>; Tue,  1 Aug 2023 18:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjHAJ1Y (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 1 Aug 2023 05:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S231270AbjHAQz4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 1 Aug 2023 12:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbjHAJ07 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 1 Aug 2023 05:26:59 -0400
-X-Greylist: delayed 86702 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Aug 2023 02:25:57 PDT
-Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CE21FD2
-        for <linux-csky@vger.kernel.org>; Tue,  1 Aug 2023 02:25:57 -0700 (PDT)
-Received: by mail.cothiafon.pl (Postfix, from userid 1002)
-        id DF245835EF; Mon, 31 Jul 2023 10:36:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
-        t=1690792586; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
-        h=Date:From:To:Subject:From;
-        b=he6Mnex8WZ+6q43g2PH2k/81F7OSZKunjpUorVl2FxzHms3EIsb3mDDNuB9v+oIuZ
-         fMhiOabRMnWk0RIlCnaOhisPt9t/xaqIaZbZ8/cRtEI+7c2Qe4/jubVglhM0ic79Ha
-         CXRPrOPB4w2gr/ubLZMIOG4f6QSqFjnXTAnvyae162TVoqv+k5g/rNFvFQ+5yAmIUT
-         rzxXugdOu7mBJmHx+c+n16uUQq8yUKxG4q5FAi8oe2rJHYubybb63XU9N+ZDwmSxxq
-         677EX37KK4Vxt7UP7NEPxfe3Dyo3glY0tMuXom21ZjL5FeHY6mFujNUdhUGEJsqj2y
-         fSyHIJ70N0udg==
-Received: by mail.cothiafon.pl for <linux-csky@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
-Message-ID: <20230731095940-0.1.28.oms0.0.0nmb4zm0qs@cothiafon.pl>
-Date:   Mon, 31 Jul 2023 08:35:48 GMT
-From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
-        <radoslaw.grabowski@cothiafon.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: W sprawie samochodu
-X-Mailer: mail.cothiafon.pl
+        with ESMTP id S233270AbjHAQz4 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 1 Aug 2023 12:55:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53632115;
+        Tue,  1 Aug 2023 09:55:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 675E321C5A;
+        Tue,  1 Aug 2023 16:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1690908943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2wJGrCodiFacIQZflH9R6dQqAyomHz+cFLPpNk0lajQ=;
+        b=TDZ9lKQMhrHc1AR1LuAXp5Tf9AguCo8xpgKK+zjT39q4efiYfn94Cm/Ko5k4J2u1h4VRFR
+        w3vB8r/E1dpFLL4dNofINx/9Six8SvZLoppUT2y29YjHdEMfDage5T1VBrtxL0OLlg1drC
+        AcBJLYMaXgik1cwS5siI8RxGNGcxHuc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1690908943;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2wJGrCodiFacIQZflH9R6dQqAyomHz+cFLPpNk0lajQ=;
+        b=U97WmX2iRrPFW29Xxax7UDZILg2veMmwjNvB+tnpBQcLv54/EakR9Ow1Xd6dAkdUZYAXxU
+        B3eRzcWwi/4EuzBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1862D139BD;
+        Tue,  1 Aug 2023 16:55:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rIn0BA85yWTiMAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 01 Aug 2023 16:55:43 +0000
+Message-ID: <70690ae5-c2eb-6f8e-8335-e5052db5204b@suse.de>
+Date:   Tue, 1 Aug 2023 18:55:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: [PATCH 1/4] vgacon: rework Kconfig dependencies
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     javierm@redhat.com, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
+        Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+References: <20230707095415.1449376-1-arnd@kernel.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230707095415.1449376-1-arnd@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------V2Kx07z5UT1mt9SnMBadeWbI"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------V2Kx07z5UT1mt9SnMBadeWbI
+Content-Type: multipart/mixed; boundary="------------2bQgjjzopkAYok3GbchMEycT";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: javierm@redhat.com, linux-fbdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+ dri-devel@lists.freedesktop.org, Ard Biesheuvel <ardb@kernel.org>,
+ Helge Deller <deller@gmx.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
+ linux-csky@vger.kernel.org
+Message-ID: <70690ae5-c2eb-6f8e-8335-e5052db5204b@suse.de>
+Subject: Re: [PATCH 1/4] vgacon: rework Kconfig dependencies
+References: <20230707095415.1449376-1-arnd@kernel.org>
+In-Reply-To: <20230707095415.1449376-1-arnd@kernel.org>
 
-chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
-, je=C5=9Bli chodzi o system monitoringu GPS.
+--------------2bQgjjzopkAYok3GbchMEycT
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
-e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
-a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
+cGluZyEgV2hhdCdzIHRoZSBzdGF0dXMgb2YgdGhpcyBwYXRjaHNldD8NCg0KQW0gMDcuMDcu
+MjMgdW0gMTE6NTIgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBGcm9tOiBBcm5kIEJlcmdt
+YW5uIDxhcm5kQGFybmRiLmRlPg0KPiANCj4gVGhlIGxpc3Qgb2YgZGVwZW5kZW5jaWVzIGhl
+cmUgaXMgcGhyYXNlZCBhcyBhbiBvcHQtb3V0LCBidXQgdGhpcyBpcyBtaXNzaW5nDQo+IGEg
+bG90IG9mIGFyY2hpdGVjdHVyZXMgdGhhdCBkb24ndCBhY3R1YWxseSBzdXBwb3J0IFZHQSBj
+b25zb2xlcywgYW5kIHNvbWUNCj4gb2YgdGhlIGVudHJpZXMgYXJlIHN0YWxlOg0KPiANCj4g
+ICAtIHBvd2VycGMgdXNlZCB0byBzdXBwb3J0IFZHQSBjb25zb2xlcyBpbiB0aGUgb2xkIGFy
+Y2gvcHBjIGNvZGViYXNlLCBidXQNCj4gICAgIHRoZSBtZXJnZWQgYXJjaC9wb3dlcnBjIG5l
+dmVyIGRpZA0KPiANCj4gICAtIGFybSBsaXN0cyBmb290YnJpZGdlLCBpbnRlZ3JhdG9yIGFu
+ZCBuZXR3aW5kZXIsIGJ1dCBuZXR3aW5kZXIgaXMgYWN0dWFsbHkNCj4gICAgIHBhcnQgb2Yg
+Zm9vdGJyaWRnZSwgYW5kIGludGVncmF0b3IgZG9lcyBub3QgYXBwZWFyIHRvIGhhdmUgYW4g
+YWN0dWFsDQo+ICAgICBWR0EgaGFyZHdhcmUsIG9yIGxpc3QgaXQgaW4gaXRzIEFUQUcgb3Ig
+RFQuDQo+IA0KPiAgIC0gbWlwcyBoYXMgYSBmZXcgcGxhdGZvcm1zIChqYXp6LCBzaWJ5dGUs
+IGFuZCBzbmkpIHRoYXQgaW5pdGlhbGl6ZQ0KPiAgICAgc2NyZWVuX2luZm8sIG9uIGV2ZXJ5
+dGhpbmcgZWxzZSB0aGUgY29uc29sZSBpcyBzZWxlY3RlZCBidXQgY2Fubm90DQo+ICAgICBh
+Y3R1YWxseSB3b3JrLg0KPiANCj4gICAtIGNza3ksIGhleGdhZ29uLCBsb29uZ2FyY2gsIG5p
+b3MyLCByaXNjdiBhbmQgeHRlbnNhIGFyZSBub3QgbGlzdGVkDQo+ICAgICBpbiB0aGUgb3B0
+LW91dCB0YWJsZSBhbmQgZGVjbGFyZSBhIHNjcmVlbl9pbmZvIHRvIGFsbG93IGJ1aWxkaW5n
+DQo+ICAgICB2Z2FfY29uLCBidXQgdGhpcyBjYW5ub3Qgd29yayBiZWNhdXNlIHRoZSBjb25z
+b2xlIGlzIG5ldmVyIHNlbGVjdGVkLg0KPiANCj4gUmVwbGFjZSB0aGlzIHdpdGggYW4gb3B0
+LWluIHRhYmxlIHRoYXQgbGlzdHMgb25seSB0aGUgcGxhdGZvcm1zIHRoYXQNCj4gcmVtYWlu
+LiBUaGlzIGlzIGVmZmVjdGl2ZWx5IHg4NiwgcGx1cyBhIGNvdXBsZSBvZiBoaXN0b3JpYyB3
+b3Jrc3RhdGlvbg0KPiBhbmQgc2VydmVyIG1hY2hpbmVzIHRoYXQgcmV1c2VkIHBhcnRzIG9m
+IHRoZSB4ODYgc3lzdGVtIGFyY2hpdGVjdHVyZS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEFy
+bmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvdmlkZW8v
+Y29uc29sZS9LY29uZmlnIHwgNiArKystLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNl
+cnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+dmlkZW8vY29uc29sZS9LY29uZmlnIGIvZHJpdmVycy92aWRlby9jb25zb2xlL0tjb25maWcN
+Cj4gaW5kZXggYTJhODhkNDJlZGYwYy4uNDdjNDk4ZGVmYzIxMSAxMDA2NDQNCj4gLS0tIGEv
+ZHJpdmVycy92aWRlby9jb25zb2xlL0tjb25maWcNCj4gKysrIGIvZHJpdmVycy92aWRlby9j
+b25zb2xlL0tjb25maWcNCj4gQEAgLTcsOSArNyw5IEBAIG1lbnUgIkNvbnNvbGUgZGlzcGxh
+eSBkcml2ZXIgc3VwcG9ydCINCj4gICANCj4gICBjb25maWcgVkdBX0NPTlNPTEUNCj4gICAJ
+Ym9vbCAiVkdBIHRleHQgY29uc29sZSIgaWYgRVhQRVJUIHx8ICFYODYNCj4gLQlkZXBlbmRz
+IG9uICE0eHggJiYgIVBQQ184eHggJiYgIVNQQVJDICYmICFNNjhLICYmICFQQVJJU0MgJiYg
+ICFTVVBFUkggJiYgXA0KPiAtCQkoIUFSTSB8fCBBUkNIX0ZPT1RCUklER0UgfHwgQVJDSF9J
+TlRFR1JBVE9SIHx8IEFSQ0hfTkVUV0lOREVSKSAmJiBcDQo+IC0JCSFBUk02NCAmJiAhQVJD
+ICYmICFNSUNST0JMQVpFICYmICFPUEVOUklTQyAmJiAhUzM5MCAmJiAhVU1MDQo+ICsJZGVw
+ZW5kcyBvbiBBTFBIQSB8fCBJQTY0IHx8IFg4NiB8fCBcDQo+ICsJCShBUk0gJiYgQVJDSF9G
+T09UQlJJREdFKSB8fCBcDQo+ICsJCShNSVBTICYmIChNSVBTX01BTFRBIHx8IFNJQllURV9C
+Q00xMTJYIHx8IFNJQllURV9TQjEyNTAgfHwgU0lCWVRFX0JDTTF4ODAgfHwgU05JX1JNKSkN
+Cj4gICAJc2VsZWN0IEFQRVJUVVJFX0hFTFBFUlMgaWYgKERSTSB8fCBGQiB8fCBWRklPX1BD
+SV9DT1JFKQ0KPiAgIAlkZWZhdWx0IHkNCj4gICAJaGVscA0KDQotLSANClRob21hcyBaaW1t
+ZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0
+aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJn
+LCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFs
+ZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
 
-Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
-dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
-szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
-mne znaczenie.
+--------------2bQgjjzopkAYok3GbchMEycT--
 
-Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
-b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
+--------------V2Kx07z5UT1mt9SnMBadeWbI
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
 
-Pozdrawiam
-Rados=C5=82aw Grabowski
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmTJOQ4FAwAAAAAACgkQlh/E3EQov+C8
+AA/+KnRDuYQRR/mF98DBfmrHT5Ia6xQSG3uvFuQDrbaKBsjqD2QXy1PNFOGyjSmDdFvEkQgLUEF0
+pU8EoGE0mG7m//BybV/hRDjLmylbBIjgjv4uzYT6sQQ2HFgJe5bhU+lTUJ7ou5S72bFvVbrsU2ed
+7ZJth7Gg/0ISIuQ+YvMlNOubgolEVWpb3vv4iFOMwf/Z8OtmWhXe0hae/PhUtJgtGGpDA22NQMWw
+C8Xgy4sj+oDLHOGKljPDTYphn2wnbBHbniQB6+16mkaCbC0jj83h0aglF3doR5+VtsqJlulUGw2L
+o1Da2b1fj6gNd4j+nUCihbmBjEoyW6Z92ObBaIRPJ6mXGHPylW1ilH9TFvvRqzlgngckgNPN2b5y
+P+mLTquYg1QI2DOue03EH+hs4ENNC8UeIJsAAtk8qtN9U/SsKfRgKn04/PG2zkT1NvB68nfm34g4
+B30CeLIVUSrAPt9s3veG6GovLraSTf4jznRAVXrXwB9AxqRexyVN02g7hXqsBgK/OIyyjd81rvyj
+lzzyMjwCnSnHktiLvoS3Chej5vW3kCLbayrLgkGMbztNuD8bbQgaFYtzqMJ+cBF7xKWNq5Ebx3zc
+SQb+HvTRbdT/2HsCEwaJILuWF9xcbkMMk2yJykvBFCmd9JfOZT55CMp27lyUlKqsMy8nYyV+HyZH
+HMA=
+=PJsE
+-----END PGP SIGNATURE-----
+
+--------------V2Kx07z5UT1mt9SnMBadeWbI--
