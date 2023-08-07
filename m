@@ -2,276 +2,189 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C82177196F
-	for <lists+linux-csky@lfdr.de>; Mon,  7 Aug 2023 07:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D55773369
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Aug 2023 01:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjHGFYF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 7 Aug 2023 01:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S229571AbjHGXGM (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 7 Aug 2023 19:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjHGFYE (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Aug 2023 01:24:04 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84363113;
-        Sun,  6 Aug 2023 22:24:01 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 12A4A320090C;
-        Mon,  7 Aug 2023 01:23:57 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute1.internal (MEProxy); Mon, 07 Aug 2023 01:24:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1691385837; x=1691472237; bh=x5
-        qNGeXXt3ERHXs7RLt7yAgmwQ1o1sx5LtjKah3J7y8=; b=MDiVnkj16mwLH6ukoz
-        vMS5bOVlCaCqEFlHHvaym8PoDAwodNR3fkGUBFrr5zd2PC7YRHC3xE2IECdpxT3r
-        ZmTzpB+xK8wD/Tq7WY/gLJUEovyz70AG58TtfulE/zdqDeNuAjhpnN0Ct++bVyoR
-        M4I0aII+nbVFxfVCg/d8z8ttHZe3T8Vd4WEoZWDglyIssXySbFizDiQiWoJSkLhC
-        hu5cyu+HA3+SFGL1DzrxW34MGBxy8YDTczMlWBiqmtHzi3FiiZA4nu0AjhTEE6tM
-        GUraRMtCBnf6yPoaigs28r2+PhRJcig80qk99/TdDeULIJUcRPrgKOS+oCrdlqlK
-        O33Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691385837; x=1691472237; bh=x5qNGeXXt3ERH
-        Xs7RLt7yAgmwQ1o1sx5LtjKah3J7y8=; b=cFrk0/+YVO09szURCvFez9RcbRDkJ
-        W1LdYGvBt0RHCTuQ8LAG+AcUbH2b4XDCUDOV4qVpMzavyWXMifXAvcMs/mmpT311
-        XEQQIxTL0Bps5TS1hjXCAOZ16cvH6LBDGSWwHszmKU3nCNhj1jRlacxs4xDeusPY
-        9k8jLM6CiQLMMI/0Az5Wi3fenpY8r0UI41arpEIrvYk/aNsFH9Dn/pCjUmlWfGSm
-        o2Zgbd0pe8Wixfx5NJyO4mE+mInfLPrE0czOtO9g+jFCitxBD3+OsaYEZ0LzXpcI
-        uDUG8UQbxFpZLsZ2eyFNKbg5hrovf6+1CH6webb5tCCtw2NtrpKg+CjuA==
-X-ME-Sender: <xms:6n_QZBhIM_o7WJErxnO3ZgYA6c-WTYgLOn-kUqs-H5iRzp-DHhDf1g>
-    <xme:6n_QZGBesSgwGOzTPzVD7PcCEJEkje3Ks9FyA9Q-c0LevH2jEPokojPLex354PD6V
-    IPPnO4RBaB5hfquIg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkeelgdelgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuthgv
-    fhgrnhcuqfdktfgvrghrfdcuoehsohhrvggrrhesfhgrshhtmhgrihhlrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeejueehgedtueetgefhheejjeeigffhieefjeehuddvueegtdfh
-    heevgfeggfektdenucffohhmrghinhepihhnfhhrrgguvggrugdrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsohhrvggrrhesfhgr
-    shhtmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:6n_QZBHHL-ZOlYctLzv3WollQNvKcNjfKZa_akHiW3mjXwNQhzUYEA>
-    <xmx:6n_QZGR0wHWCHc1KuEDJpIx5R3iNXNReyB-pS7ahPvuXnCGY-gBzTA>
-    <xmx:6n_QZOwq90uK7dj8SBKnjSST29F-FuwgeyW0_roJz17ZMe_whaM0HQ>
-    <xmx:7X_QZGdWP5hvG2ufh70_oX0vRGWGHXdNHCwGDwPtsfM0cx2kQ5v2Tw>
-Feedback-ID: i84414492:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9BE931700089; Mon,  7 Aug 2023 01:23:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
-In-Reply-To: <20230802164701.192791-8-guoren@kernel.org>
-References: <20230802164701.192791-1-guoren@kernel.org>
- <20230802164701.192791-8-guoren@kernel.org>
-Date:   Mon, 07 Aug 2023 01:23:34 -0400
-From:   "Stefan O'Rear" <sorear@fastmail.com>
-To:     guoren <guoren@kernel.org>, paul.walmsley@sifive.com,
-        "Anup Patel" <anup@brainfault.org>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org,
-        "Palmer Dabbelt" <palmer@rivosinc.com>, longman@redhat.com,
-        boqun.feng@gmail.com, tglx@linutronix.de, paulmck@kernel.org,
-        rostedt@goodmis.org, rdunlap@infradead.org,
-        catalin.marinas@arm.com,
-        "Conor Dooley" <conor.dooley@microchip.com>,
-        xiaoguang.xing@sophgo.com,
-        =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>,
-        alexghiti@rivosinc.com, "Kees Cook" <keescook@chromium.org>,
-        greentime.hu@sifive.com, "Andrew Jones" <ajones@ventanamicro.com>,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn
-Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, "Guo Ren" <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce
- ERRATA_THEAD_QSPINLOCK
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        with ESMTP id S229461AbjHGXGL (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Aug 2023 19:06:11 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498FD10F3;
+        Mon,  7 Aug 2023 16:05:40 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a3efebcc24so3747925b6e.1;
+        Mon, 07 Aug 2023 16:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691449518; x=1692054318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BgGe0Il0C7dlkrriaFCN0meYItalZZUDKy884yxXSME=;
+        b=kkOLGueMrzxHvvdT5O8JIC8nC89W6/6UqoBnx7sB0VLAWpoO0/QHm5tLARAi96zyvU
+         EAiiieHkpJTC9s5qvXPj39j6R2OQuCyqiEOwPTIq50/LHvV7fjReDxpsCX5Ya8M70FRF
+         Bv+KZVFj7Mytss2brk2EH7Z9tHAP9yxEVCzntaEZzdSmQz9vPa1mUTDeJlBFV79lhO4m
+         YdB4aoA79x9pkxJ/XBt7ZG1CR58HGrAi0v/zgewNhzm8aq6TJsefwLnAAAHjOqkPytFk
+         EiZRzEbAgPBMpklpMOtlFM2muNSx1qBww2MBrDwGN8Akv7FqeHgJ4R5d3wn1SAH6io9W
+         CEdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691449518; x=1692054318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BgGe0Il0C7dlkrriaFCN0meYItalZZUDKy884yxXSME=;
+        b=fIDuZv3tAp8BkQCSzCs9DrJ7Cj83LwaOZnx/jKasUOS4ZNYMNEBeCBuJXq5GT9H3K2
+         meF8idZw92d81GvGRZg9/FVza8vF/3a06fZC08/8tyoR8anuJsgFG78ZUmZLZE+l9WwT
+         PAebfF5UYf28r5krSpTUO6i2HfuhwNOEUKX2POybJvJRKrPgltNNgGwsW2XdNqpKTHGx
+         0Zk4xYQv+qrUEXSjvntWBaVZ4xpGcm3j/xtcoiT7EXf5AKix+rFAV2lYF6dEXKDZCpwX
+         /ZnGYFi99A5MJI4kpZwUaSPQt6+CdedtQVMrTrjGkaQDcFTlIS+yBjEwDkAJz8ZAmDw5
+         12XA==
+X-Gm-Message-State: AOJu0Yx6ctNO7dgf5oQcbLDTvvZ1PW6p+o6fxQlykKmD0Z+ADt4GWveO
+        capb8AZwVIr5ac+u9eHId4YCbzUhizVuFQ==
+X-Google-Smtp-Source: AGHT+IHI1CCxgU6LoWPuJYJEyHtYip1YJBCUFIlnO8SlV49xsFZp+VSY6a51skH1ZTqS0RRAJqit6Q==
+X-Received: by 2002:aca:d12:0:b0:3a1:f237:ec62 with SMTP id 18-20020aca0d12000000b003a1f237ec62mr10346742oin.48.1691449518360;
+        Mon, 07 Aug 2023 16:05:18 -0700 (PDT)
+Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
+        by smtp.googlemail.com with ESMTPSA id d190-20020a25cdc7000000b00d3596aca5bcsm2545203ybf.34.2023.08.07.16.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 16:05:17 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH mm-unstable v9 00/31] Split ptdesc from struct page
+Date:   Mon,  7 Aug 2023 16:04:42 -0700
+Message-Id: <20230807230513.102486-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Aug 2, 2023, at 12:46 PM, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> According to qspinlock requirements, RISC-V gives out a weak LR/SC
-> forward progress guarantee which does not satisfy qspinlock. But
-> many vendors could produce stronger forward guarantee LR/SC to
-> ensure the xchg_tail could be finished in time on any kind of
-> hart. T-HEAD is the vendor which implements strong forward
-> guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
-> with errata help.
->
-> T-HEAD early version of processors has the merge buffer delay
-> problem, so we need ERRATA_WRITEONCE to support qspinlock.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> ---
->  arch/riscv/Kconfig.errata              | 13 +++++++++++++
->  arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
->  arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
->  arch/riscv/include/asm/vendorid_list.h |  3 ++-
->  arch/riscv/kernel/cpufeature.c         |  3 ++-
->  5 files changed, 61 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
-> index 4745a5c57e7c..eb43677b13cc 100644
-> --- a/arch/riscv/Kconfig.errata
-> +++ b/arch/riscv/Kconfig.errata
-> @@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
-> 
->  	  If you don't know what to do here, say "Y".
-> 
-> +config ERRATA_THEAD_QSPINLOCK
-> +	bool "Apply T-Head queued spinlock errata"
-> +	depends on ERRATA_THEAD
-> +	default y
-> +	help
-> +	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
-> +	  match the xchg_tail requirement of qspinlock.
-> +
-> +	  This will apply the QSPINLOCK errata to handle the non-standard
-> +	  behavior via using qspinlock instead of ticket_lock.
-> +
-> +	  If you don't know what to do here, say "Y".
+The MM subsystem is trying to shrink struct page. This patchset
+introduces a memory descriptor for page table tracking - struct ptdesc.
 
-If this is to be applied, I would like to see a detailed explanation somewhere,
-preferably with citations, of:
+This patchset introduces ptdesc, splits ptdesc from struct page, and
+converts many callers of page table constructor/destructors to use ptdescs.
 
-(a) The memory model requirements for qspinlock
-(b) Why, with arguments, RISC-V does not architecturally meet (a)
-(c) Why, with arguments, T-HEAD C9xx meets (a)
-(d) Why at least one other architecture which defines ARCH_USE_QUEUED_SPINLOCKS
-    meets (a)
+Ptdesc is a foundation to further standardize page tables, and eventually
+allow for dynamic allocation of page tables independent of struct page.
+However, the use of pages for page table tracking is quite deeply
+ingrained and varied across archictectures, so there is still a lot of
+work to be done before that can happen.
 
-As far as I can tell, the RISC-V guarantees concerning constrained LR/SC loops
-(livelock freedom but no starvation freedom) are exactly the same as those in
-Armv8 (as of 0487F.c) for equivalent loops, and xchg_tail compiles to a
-constrained LR/SC loop with guaranteed eventual success (with -O1).  Clearly you
-disagree; I would like to see your perspective.
+This applies cleanly onto the current unstable after dropping v8 of this
+series.
 
--s
+v9:
+  Fix build errors for NOMMU configs - trying to define ptdesc before
+spinlock_t and struct page were defined.
+  Moved definition of struct ptdesc to include/linux/mm_types.h instead
+include/linux/pgtable.h
 
-> +
->  endmenu # "CPU errata selection"
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index 881729746d2e..d560dc45c0e7 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -86,6 +86,27 @@ static bool errata_probe_write_once(unsigned int stage,
->  	return false;
->  }
-> 
-> +static bool errata_probe_qspinlock(unsigned int stage,
-> +				   unsigned long arch_id, unsigned long impid)
-> +{
-> +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_QSPINLOCK))
-> +		return false;
-> +
-> +	/*
-> +	 * The queued_spinlock torture would get in livelock without
-> +	 * ERRATA_THEAD_WRITE_ONCE fixup for the early versions of T-HEAD
-> +	 * processors.
-> +	 */
-> +	if (arch_id == 0 && impid == 0 &&
-> +	    !IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
-> +		return false;
-> +
-> +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->  static u32 thead_errata_probe(unsigned int stage,
->  			      unsigned long archid, unsigned long impid)
->  {
-> @@ -103,6 +124,9 @@ static u32 thead_errata_probe(unsigned int stage,
->  	if (errata_probe_write_once(stage, archid, impid))
->  		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
-> 
-> +	if (errata_probe_qspinlock(stage, archid, impid))
-> +		cpu_req_errata |= BIT(ERRATA_THEAD_QSPINLOCK);
-> +
->  	return cpu_req_errata;
->  }
-> 
-> diff --git a/arch/riscv/include/asm/errata_list.h 
-> b/arch/riscv/include/asm/errata_list.h
-> index fbb2b8d39321..a696d18d1b0d 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -141,6 +141,26 @@ asm volatile(ALTERNATIVE(						\
->  	: "=r" (__ovl) :						\
->  	: "memory")
-> 
-> +static __always_inline bool
-> +riscv_has_errata_thead_qspinlock(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
-> +		asm_volatile_goto(
-> +		ALTERNATIVE(
-> +		"j	%l[l_no]", "nop",
-> +		THEAD_VENDOR_ID,
-> +		ERRATA_THEAD_QSPINLOCK,
-> +		CONFIG_ERRATA_THEAD_QSPINLOCK)
-> +		: : : : l_no);
-> +	} else {
-> +		goto l_no;
-> +	}
-> +
-> +	return true;
-> +l_no:
-> +	return false;
-> +}
-> +
->  #endif /* __ASSEMBLY__ */
-> 
->  #endif
-> diff --git a/arch/riscv/include/asm/vendorid_list.h 
-> b/arch/riscv/include/asm/vendorid_list.h
-> index 73078cfe4029..1f1d03877f5f 100644
-> --- a/arch/riscv/include/asm/vendorid_list.h
-> +++ b/arch/riscv/include/asm/vendorid_list.h
-> @@ -19,7 +19,8 @@
->  #define	ERRATA_THEAD_CMO 1
->  #define	ERRATA_THEAD_PMU 2
->  #define	ERRATA_THEAD_WRITE_ONCE 3
-> -#define	ERRATA_THEAD_NUMBER 4
-> +#define	ERRATA_THEAD_QSPINLOCK 4
-> +#define	ERRATA_THEAD_NUMBER 5
->  #endif
-> 
->  #endif
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index f8dbbe1bbd34..d9694fe40a9a 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
->  		 * spinlock value, the only way is to change from queued_spinlock to
->  		 * ticket_spinlock, but can not be vice.
->  		 */
-> -		if (!force_qspinlock) {
-> +		if (!force_qspinlock &&
-> +		    !riscv_has_errata_thead_qspinlock()) {
->  			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
->  		}
->  #endif
-> -- 
-> 2.36.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Vishal Moola (Oracle) (31):
+  mm: Add PAGE_TYPE_OP folio functions
+  pgtable: create struct ptdesc
+  mm: add utility functions for ptdesc
+  mm: Convert pmd_pgtable_page() callers to use pmd_ptdesc()
+  mm: Convert ptlock_alloc() to use ptdescs
+  mm: Convert ptlock_ptr() to use ptdescs
+  mm: Convert pmd_ptlock_init() to use ptdescs
+  mm: Convert ptlock_init() to use ptdescs
+  mm: Convert pmd_ptlock_free() to use ptdescs
+  mm: Convert ptlock_free() to use ptdescs
+  mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+  powerpc: Convert various functions to use ptdescs
+  x86: Convert various functions to use ptdescs
+  s390: Convert various pgalloc functions to use ptdescs
+  mm: remove page table members from struct page
+  pgalloc: Convert various functions to use ptdescs
+  arm: Convert various functions to use ptdescs
+  arm64: Convert various functions to use ptdescs
+  csky: Convert __pte_free_tlb() to use ptdescs
+  hexagon: Convert __pte_free_tlb() to use ptdescs
+  loongarch: Convert various functions to use ptdescs
+  m68k: Convert various functions to use ptdescs
+  mips: Convert various functions to use ptdescs
+  nios2: Convert __pte_free_tlb() to use ptdescs
+  openrisc: Convert __pte_free_tlb() to use ptdescs
+  riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+  sh: Convert pte_free_tlb() to use ptdescs
+  sparc64: Convert various functions to use ptdescs
+  sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+  um: Convert {pmd, pte}_free_tlb() to use ptdescs
+  mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
+
+ Documentation/mm/split_page_table_lock.rst    |  12 +-
+ .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+ arch/arm/include/asm/tlb.h                    |  12 +-
+ arch/arm/mm/mmu.c                             |   7 +-
+ arch/arm64/include/asm/tlb.h                  |  14 +-
+ arch/arm64/mm/mmu.c                           |   7 +-
+ arch/csky/include/asm/pgalloc.h               |   4 +-
+ arch/hexagon/include/asm/pgalloc.h            |   8 +-
+ arch/loongarch/include/asm/pgalloc.h          |  27 ++--
+ arch/loongarch/mm/pgtable.c                   |   7 +-
+ arch/m68k/include/asm/mcf_pgalloc.h           |  47 +++---
+ arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+ arch/m68k/mm/motorola.c                       |   4 +-
+ arch/mips/include/asm/pgalloc.h               |  32 ++--
+ arch/mips/mm/pgtable.c                        |   8 +-
+ arch/nios2/include/asm/pgalloc.h              |   8 +-
+ arch/openrisc/include/asm/pgalloc.h           |   8 +-
+ arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |  32 ++--
+ arch/powerpc/mm/pgtable-frag.c                |  58 +++----
+ arch/riscv/include/asm/pgalloc.h              |   8 +-
+ arch/riscv/mm/init.c                          |  16 +-
+ arch/s390/include/asm/pgalloc.h               |   4 +-
+ arch/s390/include/asm/tlb.h                   |   4 +-
+ arch/s390/mm/pgalloc.c                        | 128 +++++++--------
+ arch/sh/include/asm/pgalloc.h                 |   9 +-
+ arch/sparc/mm/init_64.c                       |  17 +-
+ arch/sparc/mm/srmmu.c                         |   5 +-
+ arch/um/include/asm/pgalloc.h                 |  18 +--
+ arch/x86/mm/pgtable.c                         |  47 +++---
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ include/asm-generic/pgalloc.h                 |  88 +++++-----
+ include/asm-generic/tlb.h                     |  11 ++
+ include/linux/mm.h                            | 151 +++++++++++++-----
+ include/linux/mm_types.h                      |  97 ++++++++---
+ include/linux/page-flags.h                    |  30 +++-
+ mm/memory.c                                   |   8 +-
+ 37 files changed, 585 insertions(+), 385 deletions(-)
+
+-- 
+2.40.1
+
