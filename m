@@ -2,236 +2,291 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C00773428
-	for <lists+linux-csky@lfdr.de>; Tue,  8 Aug 2023 01:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D8277365C
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Aug 2023 04:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjHGXIe (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 7 Aug 2023 19:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
+        id S230376AbjHHCMe (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 7 Aug 2023 22:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjHGXHc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Aug 2023 19:07:32 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C572199D;
-        Mon,  7 Aug 2023 16:06:29 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d4789fd9317so2925409276.1;
-        Mon, 07 Aug 2023 16:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691449583; x=1692054383;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gIX4EtUZRQHbbGVDBj/rJyP4ZKSCaTL9vvlgteJwLjg=;
-        b=ny/PO9Rzwz4wKD05c8Oj8x01t9rfWUwF+DPBSi6xhAQ1t3uiUBYZ7YUUbf8WtD6fas
-         a2dGGpvFO2SYjUkztwf/JpnNv7QhJL+Goto2OWRpxKnsAjXenC9v6P3rISzqLv6y4LVV
-         4Qzw+SXgVTszZ9R94kkJTKmg5SvkJhFFe8ZHJiGz98l2xVrWZH/L4O6QNYM4Ix9oN6dK
-         IfbxHi4LcKxjr+5M4cvO0MwysEIi/pmb6eegOI2VGQmX9xJr0pTMWjXflu5Ws+wnG+9V
-         BkJIEDxKgjBTQlry6d49f1/eWCkgGXBEpt1ui7ZKc/08IVlfaQd/C3Y9s9851HPExZOi
-         t/gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691449583; x=1692054383;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gIX4EtUZRQHbbGVDBj/rJyP4ZKSCaTL9vvlgteJwLjg=;
-        b=MyubxoSv2dPzI+gnTZeRE/Y5bXYDjZTJ3Q8LGa7uri2b96lr2Kxjtli6LKXIIlrcqg
-         amIdLYh/RbXjijAySm2xVl0lLyQIaK2FB+b+0NKwZW+kaUsQzpHC5ataNM0Lg+unN5eP
-         or49+zi87uks4nGislg/AYlbse2nZARq0TTVHZhXQJgfmLLqjJdGC32K7W2hUAfYSa4U
-         zk17rIgRQsOeXqetHne7MynTRtga/d65lEbwylhzX+hvofWaIfEVDRiAz0ym3nbIqP0z
-         KxLsU5UDcpJqZUs4rYBuk9Ioe0KfRsXiT79Xpj7HGrs/qWLVGnqriaI6oCXD3WgoxEhY
-         VmEQ==
-X-Gm-Message-State: AOJu0Yxu1jd0lmCHI6nOEm5Z1A6IzKcGkLeeedcIzIUpPIEAAY7PJ9B9
-        ZxqELVDkdVxKoAk5qtEPnvY=
-X-Google-Smtp-Source: AGHT+IHSz7sLxFa/9tcB1BFEAx77xsw7IyoQHCgeHupxbvTa93/qmodby26m2eSPWXo4FijMYi73DQ==
-X-Received: by 2002:a25:e708:0:b0:d53:f88a:dc09 with SMTP id e8-20020a25e708000000b00d53f88adc09mr3953501ybh.2.1691449582662;
-        Mon, 07 Aug 2023 16:06:22 -0700 (PDT)
-Received: from unknowna0e70b2ca394.attlocal.net ([2600:1700:2f7d:1800::16])
-        by smtp.googlemail.com with ESMTPSA id d190-20020a25cdc7000000b00d3596aca5bcsm2545203ybf.34.2023.08.07.16.06.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 16:06:22 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH mm-unstable v9 31/31] mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
-Date:   Mon,  7 Aug 2023 16:05:13 -0700
-Message-Id: <20230807230513.102486-32-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230807230513.102486-1-vishal.moola@gmail.com>
-References: <20230807230513.102486-1-vishal.moola@gmail.com>
+        with ESMTP id S229621AbjHHCMd (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 7 Aug 2023 22:12:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE91711;
+        Mon,  7 Aug 2023 19:12:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E3AC62377;
+        Tue,  8 Aug 2023 02:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A6CC433C9;
+        Tue,  8 Aug 2023 02:12:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691460748;
+        bh=VRkYha2WcYiFCfW1jnh2VzYnyzSI0BELp4Vbm5rvuJ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kIDPQ2tkRoESMxlHw70sgk7jaT2faK4xi7GqlRBnpsnrfAGVWf56MAMy5koAx3fEu
+         rc8orB5Jl57n/+LS4Q+M8wXPJlijTHZ/Mf+BbCq7fRz0uH9WVui1WSDJbW/sdv74h6
+         hpcz6wB9Nf+Kae77HrB87LBryEUzWLuy8NCpFfX9qOy/CmCuFW+WeZJHruny88kTUU
+         g+w7Yzys9y9TwUPJEJ4M+eT+sn+F/H3G+VIWsU/UsSfzSpmjECNB4p90XnDdXv0hcn
+         A0ZPCj9ITwAzmSiKqhaCLUy9pW4lcrGn647Zu7X+t/8052h+2ejyG/w7z2f/x1Cre8
+         vHXMHucz3xXmA==
+Date:   Mon, 7 Aug 2023 22:12:15 -0400
+From:   Guo Ren <guoren@kernel.org>
+To:     Stefan O'Rear <sorear@fastmail.com>
+Cc:     paul.walmsley@sifive.com, Anup Patel <anup@brainfault.org>,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>, longman@redhat.com,
+        boqun.feng@gmail.com, tglx@linutronix.de, paulmck@kernel.org,
+        rostedt@goodmis.org, rdunlap@infradead.org,
+        catalin.marinas@arm.com, Conor Dooley <conor.dooley@microchip.com>,
+        xiaoguang.xing@sophgo.com,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        alexghiti@rivosinc.com, Kees Cook <keescook@chromium.org>,
+        greentime.hu@sifive.com, Andrew Jones <ajones@ventanamicro.com>,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        guoren@kernel.org
+Subject: Re: [PATCH V10 07/19] riscv: qspinlock: errata: Introduce
+ ERRATA_THEAD_QSPINLOCK
+Message-ID: <ZNGkf88lhPt7fdhH@gmail.com>
+References: <20230802164701.192791-1-guoren@kernel.org>
+ <20230802164701.192791-8-guoren@kernel.org>
+ <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae320af5-6cca-4689-aa66-9d0193713d40@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-These functions are no longer necessary. Remove them and cleanup
-Documentation referencing them.
+On Mon, Aug 07, 2023 at 01:23:34AM -0400, Stefan O'Rear wrote:
+> On Wed, Aug 2, 2023, at 12:46 PM, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > According to qspinlock requirements, RISC-V gives out a weak LR/SC
+> > forward progress guarantee which does not satisfy qspinlock. But
+> > many vendors could produce stronger forward guarantee LR/SC to
+> > ensure the xchg_tail could be finished in time on any kind of
+> > hart. T-HEAD is the vendor which implements strong forward
+> > guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
+> > with errata help.
+> >
+> > T-HEAD early version of processors has the merge buffer delay
+> > problem, so we need ERRATA_WRITEONCE to support qspinlock.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/Kconfig.errata              | 13 +++++++++++++
+> >  arch/riscv/errata/thead/errata.c       | 24 ++++++++++++++++++++++++
+> >  arch/riscv/include/asm/errata_list.h   | 20 ++++++++++++++++++++
+> >  arch/riscv/include/asm/vendorid_list.h |  3 ++-
+> >  arch/riscv/kernel/cpufeature.c         |  3 ++-
+> >  5 files changed, 61 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
+> > index 4745a5c57e7c..eb43677b13cc 100644
+> > --- a/arch/riscv/Kconfig.errata
+> > +++ b/arch/riscv/Kconfig.errata
+> > @@ -96,4 +96,17 @@ config ERRATA_THEAD_WRITE_ONCE
+> > 
+> >  	  If you don't know what to do here, say "Y".
+> > 
+> > +config ERRATA_THEAD_QSPINLOCK
+> > +	bool "Apply T-Head queued spinlock errata"
+> > +	depends on ERRATA_THEAD
+> > +	default y
+> > +	help
+> > +	  The T-HEAD C9xx processors implement strong fwd guarantee LR/SC to
+> > +	  match the xchg_tail requirement of qspinlock.
+> > +
+> > +	  This will apply the QSPINLOCK errata to handle the non-standard
+> > +	  behavior via using qspinlock instead of ticket_lock.
+> > +
+> > +	  If you don't know what to do here, say "Y".
+> 
+> If this is to be applied, I would like to see a detailed explanation somewhere,
+> preferably with citations, of:
+> 
+> (a) The memory model requirements for qspinlock
+These were written in commit: a8ad07e5240 ("asm-generic: qspinlock: Indicate the use of
+mixed-size atomics"). For riscv, the most controversial point is xchg_tail()
+implementation for native queued spinlock.
 
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- Documentation/mm/split_page_table_lock.rst    | 12 +++++------
- .../zh_CN/mm/split_page_table_lock.rst        | 14 ++++++-------
- include/linux/mm.h                            | 20 -------------------
- 3 files changed, 13 insertions(+), 33 deletions(-)
+> (b) Why, with arguments, RISC-V does not architecturally meet (a)
+In the spec "Eventual Success of Store-Conditional Instructions":
+"By contrast, if other harts or devices continue to write to that reservation set, it is
+not guaranteed that any hart will exit its LR/SC loop."
 
-diff --git a/Documentation/mm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
-index a834fad9de12..e4f6972eb6c0 100644
---- a/Documentation/mm/split_page_table_lock.rst
-+++ b/Documentation/mm/split_page_table_lock.rst
-@@ -58,7 +58,7 @@ Support of split page table lock by an architecture
- ===================================================
- 
- There's no need in special enabling of PTE split page table lock: everything
--required is done by pgtable_pte_page_ctor() and pgtable_pte_page_dtor(), which
-+required is done by pagetable_pte_ctor() and pagetable_pte_dtor(), which
- must be called on PTE table allocation / freeing.
- 
- Make sure the architecture doesn't use slab allocator for page table
-@@ -68,8 +68,8 @@ This field shares storage with page->ptl.
- PMD split lock only makes sense if you have more than two page table
- levels.
- 
--PMD split lock enabling requires pgtable_pmd_page_ctor() call on PMD table
--allocation and pgtable_pmd_page_dtor() on freeing.
-+PMD split lock enabling requires pagetable_pmd_ctor() call on PMD table
-+allocation and pagetable_pmd_dtor() on freeing.
- 
- Allocation usually happens in pmd_alloc_one(), freeing in pmd_free() and
- pmd_free_tlb(), but make sure you cover all PMD table allocation / freeing
-@@ -77,7 +77,7 @@ paths: i.e X86_PAE preallocate few PMDs on pgd_alloc().
- 
- With everything in place you can set CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK.
- 
--NOTE: pgtable_pte_page_ctor() and pgtable_pmd_page_ctor() can fail -- it must
-+NOTE: pagetable_pte_ctor() and pagetable_pmd_ctor() can fail -- it must
- be handled properly.
- 
- page->ptl
-@@ -97,7 +97,7 @@ trick:
-    split lock with enabled DEBUG_SPINLOCK or DEBUG_LOCK_ALLOC, but costs
-    one more cache line for indirect access;
- 
--The spinlock_t allocated in pgtable_pte_page_ctor() for PTE table and in
--pgtable_pmd_page_ctor() for PMD table.
-+The spinlock_t allocated in pagetable_pte_ctor() for PTE table and in
-+pagetable_pmd_ctor() for PMD table.
- 
- Please, never access page->ptl directly -- use appropriate helper.
-diff --git a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-index 4fb7aa666037..a2c288670a24 100644
---- a/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-+++ b/Documentation/translations/zh_CN/mm/split_page_table_lock.rst
-@@ -56,16 +56,16 @@ Hugetlb特定的辅助函数:
- 架构对分页表锁的支持
- ====================
- 
--没有必要特别启用PTE分页表锁：所有需要的东西都由pgtable_pte_page_ctor()
--和pgtable_pte_page_dtor()完成，它们必须在PTE表分配/释放时被调用。
-+没有必要特别启用PTE分页表锁：所有需要的东西都由pagetable_pte_ctor()
-+和pagetable_pte_dtor()完成，它们必须在PTE表分配/释放时被调用。
- 
- 确保架构不使用slab分配器来分配页表：slab使用page->slab_cache来分配其页
- 面。这个区域与page->ptl共享存储。
- 
- PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
--启用PMD分页锁需要在PMD表分配时调用pgtable_pmd_page_ctor()，在释放时调
--用pgtable_pmd_page_dtor()。
-+启用PMD分页锁需要在PMD表分配时调用pagetable_pmd_ctor()，在释放时调
-+用pagetable_pmd_dtor()。
- 
- 分配通常发生在pmd_alloc_one()中，释放发生在pmd_free()和pmd_free_tlb()
- 中，但要确保覆盖所有的PMD表分配/释放路径：即X86_PAE在pgd_alloc()中预先
-@@ -73,7 +73,7 @@ PMD分页锁只有在你有两个以上的页表级别时才有意义。
- 
- 一切就绪后，你可以设置CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK。
- 
--注意：pgtable_pte_page_ctor()和pgtable_pmd_page_ctor()可能失败--必
-+注意：pagetable_pte_ctor()和pagetable_pmd_ctor()可能失败--必
- 须正确处理。
- 
- page->ptl
-@@ -90,7 +90,7 @@ page->ptl用于访问分割页表锁，其中'page'是包含该表的页面struc
-    的指针并动态分配它。这允许在启用DEBUG_SPINLOCK或DEBUG_LOCK_ALLOC的
-    情况下使用分页锁，但由于间接访问而多花了一个缓存行。
- 
--PTE表的spinlock_t分配在pgtable_pte_page_ctor()中，PMD表的spinlock_t
--分配在pgtable_pmd_page_ctor()中。
-+PTE表的spinlock_t分配在pagetable_pte_ctor()中，PMD表的spinlock_t
-+分配在pagetable_pmd_ctor()中。
- 
- 请不要直接访问page->ptl - -使用适当的辅助函数。
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 6310e0c59efe..6a95dfed4957 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2932,11 +2932,6 @@ static inline bool pagetable_pte_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pte_page_ctor(struct page *page)
--{
--	return pagetable_pte_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -2946,11 +2941,6 @@ static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pte_page_dtor(struct page *page)
--{
--	pagetable_pte_dtor(page_ptdesc(page));
--}
--
- pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
- static inline pte_t *pte_offset_map(pmd_t *pmd, unsigned long addr)
- {
-@@ -3057,11 +3047,6 @@ static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
- 	return true;
- }
- 
--static inline bool pgtable_pmd_page_ctor(struct page *page)
--{
--	return pagetable_pmd_ctor(page_ptdesc(page));
--}
--
- static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -3071,11 +3056,6 @@ static inline void pagetable_pmd_dtor(struct ptdesc *ptdesc)
- 	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
- }
- 
--static inline void pgtable_pmd_page_dtor(struct page *page)
--{
--	pagetable_pmd_dtor(page_ptdesc(page));
--}
--
- /*
-  * No scalability reason to split PUD locks yet, but follow the same pattern
-  * as the PMD locks to make it easier if we decide to.  The VM should not be
--- 
-2.40.1
+1. The arch_spinlock_t is 32-bit width, and it contains LOCK_PENDING
+   part and IDX_TAIL part.
+    - LOCK:     lock holder
+    - PENDING:  next waiter (Only once per contended situation)
+    - IDX:      nested context (normal, hwirq, softirq, nmi)
+    - TAIL:     last contended cpu
+   The xchg_tail operate on IDX_TAIL part, so there is no guarantee on "NO"
+   "other harts or devices continue to write to that reservation set".
 
+2. When you do lock torture test, you may see a long contended ring queue:
+                                                                xchg_tail
+                                                                    +-----> CPU4 (big core)
+                                                                    |
+   CPU3 (lock holder) -> CPU1 (mcs queued) -> CPU2 (mcs queued) ----+-----> CPU0 (little core)
+    |                                                               |
+    |                                                               +-----> CPU5 (big core)
+    |                                                               |
+    +--locktorture release lock (spin_unlock) and spin_lock again --+-----> CPU3 (big core)
+
+    If CPU0 doesn't have a strong fwd guarantee, xhg_tail is consistently failed.
+
+> (c) Why, with arguments, T-HEAD C9xx meets (a)
+> (d) Why at least one other architecture which defines ARCH_USE_QUEUED_SPINLOCKS
+>     meets (a)
+I can't give the C9xx microarch implementation detail. But many
+open-source riscv cores have provided strong forward progress guarantee
+LR/SC implementation [1] [2]. But I would say these implementations are
+too rude, which makes LR send a cacheline unique interconnect request.
+It satisfies xchg_tail but not cmpxchg & cond_load. CPU vendors should
+carefully consider your LR/SC fwd guarantee implementation.
+
+[1]: https://github.com/riscv-boom/riscv-boom/blob/v3.0.0/src/main/scala/lsu/dcache.scala#L650
+[2]: https://github.com/OpenXiangShan/XiangShan/blob/v1.0/src/main/scala/xiangshan/cache/MainPipe.scala#L470
+
+> 
+> As far as I can tell, the RISC-V guarantees concerning constrained LR/SC loops
+> (livelock freedom but no starvation freedom) are exactly the same as those in
+> Armv8 (as of 0487F.c) for equivalent loops, and xchg_tail compiles to a
+> constrained LR/SC loop with guaranteed eventual success (with -O1).  Clearly you
+> disagree; I would like to see your perspective.
+For Armv8, I would use LSE for the lock-contended scenario. Ref this
+commit 0ea366f5e1b6: ("arm64: atomics: prefetch the destination word for
+write prior to stxr").
+
+> 
+> -s
+> 
+> > +
+> >  endmenu # "CPU errata selection"
+> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> > index 881729746d2e..d560dc45c0e7 100644
+> > --- a/arch/riscv/errata/thead/errata.c
+> > +++ b/arch/riscv/errata/thead/errata.c
+> > @@ -86,6 +86,27 @@ static bool errata_probe_write_once(unsigned int stage,
+> >  	return false;
+> >  }
+> > 
+> > +static bool errata_probe_qspinlock(unsigned int stage,
+> > +				   unsigned long arch_id, unsigned long impid)
+> > +{
+> > +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_QSPINLOCK))
+> > +		return false;
+> > +
+> > +	/*
+> > +	 * The queued_spinlock torture would get in livelock without
+> > +	 * ERRATA_THEAD_WRITE_ONCE fixup for the early versions of T-HEAD
+> > +	 * processors.
+> > +	 */
+> > +	if (arch_id == 0 && impid == 0 &&
+> > +	    !IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
+> > +		return false;
+> > +
+> > +	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> > +		return true;
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  static u32 thead_errata_probe(unsigned int stage,
+> >  			      unsigned long archid, unsigned long impid)
+> >  {
+> > @@ -103,6 +124,9 @@ static u32 thead_errata_probe(unsigned int stage,
+> >  	if (errata_probe_write_once(stage, archid, impid))
+> >  		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
+> > 
+> > +	if (errata_probe_qspinlock(stage, archid, impid))
+> > +		cpu_req_errata |= BIT(ERRATA_THEAD_QSPINLOCK);
+> > +
+> >  	return cpu_req_errata;
+> >  }
+> > 
+> > diff --git a/arch/riscv/include/asm/errata_list.h 
+> > b/arch/riscv/include/asm/errata_list.h
+> > index fbb2b8d39321..a696d18d1b0d 100644
+> > --- a/arch/riscv/include/asm/errata_list.h
+> > +++ b/arch/riscv/include/asm/errata_list.h
+> > @@ -141,6 +141,26 @@ asm volatile(ALTERNATIVE(						\
+> >  	: "=r" (__ovl) :						\
+> >  	: "memory")
+> > 
+> > +static __always_inline bool
+> > +riscv_has_errata_thead_qspinlock(void)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_RISCV_ALTERNATIVE)) {
+> > +		asm_volatile_goto(
+> > +		ALTERNATIVE(
+> > +		"j	%l[l_no]", "nop",
+> > +		THEAD_VENDOR_ID,
+> > +		ERRATA_THEAD_QSPINLOCK,
+> > +		CONFIG_ERRATA_THEAD_QSPINLOCK)
+> > +		: : : : l_no);
+> > +	} else {
+> > +		goto l_no;
+> > +	}
+> > +
+> > +	return true;
+> > +l_no:
+> > +	return false;
+> > +}
+> > +
+> >  #endif /* __ASSEMBLY__ */
+> > 
+> >  #endif
+> > diff --git a/arch/riscv/include/asm/vendorid_list.h 
+> > b/arch/riscv/include/asm/vendorid_list.h
+> > index 73078cfe4029..1f1d03877f5f 100644
+> > --- a/arch/riscv/include/asm/vendorid_list.h
+> > +++ b/arch/riscv/include/asm/vendorid_list.h
+> > @@ -19,7 +19,8 @@
+> >  #define	ERRATA_THEAD_CMO 1
+> >  #define	ERRATA_THEAD_PMU 2
+> >  #define	ERRATA_THEAD_WRITE_ONCE 3
+> > -#define	ERRATA_THEAD_NUMBER 4
+> > +#define	ERRATA_THEAD_QSPINLOCK 4
+> > +#define	ERRATA_THEAD_NUMBER 5
+> >  #endif
+> > 
+> >  #endif
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index f8dbbe1bbd34..d9694fe40a9a 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -342,7 +342,8 @@ void __init riscv_fill_hwcap(void)
+> >  		 * spinlock value, the only way is to change from queued_spinlock to
+> >  		 * ticket_spinlock, but can not be vice.
+> >  		 */
+> > -		if (!force_qspinlock) {
+> > +		if (!force_qspinlock &&
+> > +		    !riscv_has_errata_thead_qspinlock()) {
+> >  			set_bit(RISCV_ISA_EXT_XTICKETLOCK, isainfo->isa);
+> >  		}
+> >  #endif
+> > -- 
+> > 2.36.1
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
