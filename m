@@ -2,95 +2,98 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D529774FBB
-	for <lists+linux-csky@lfdr.de>; Wed,  9 Aug 2023 02:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24014774FC8
+	for <lists+linux-csky@lfdr.de>; Wed,  9 Aug 2023 02:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjHIAPr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 8 Aug 2023 20:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S229781AbjHIA1T (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 8 Aug 2023 20:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjHIAPq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 8 Aug 2023 20:15:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4C81996;
-        Tue,  8 Aug 2023 17:15:43 -0700 (PDT)
+        with ESMTP id S229464AbjHIA1T (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 8 Aug 2023 20:27:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739CE10C8;
+        Tue,  8 Aug 2023 17:27:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF15D62E5B;
-        Wed,  9 Aug 2023 00:15:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EEB9C433C7;
-        Wed,  9 Aug 2023 00:15:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E401F62872;
+        Wed,  9 Aug 2023 00:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82209C433C8;
+        Wed,  9 Aug 2023 00:27:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691540142;
-        bh=Z/PzABt4yt6pB7W6zcNJyZg9QLMe8RQXoLL9jioMaLo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JgAwzxI3HMQmgfnxNA6oQck5CYyBENOfzYqBCGCzf80RKP8dYRnV2Rnq5twL6cWoW
-         Oqg87XbROkHnYNTE02odPJKBjYYym1CwcOlMg+xOIInOfACVjLMGmAiLt4Fm8KUGqc
-         31p530ZuBdh2ZbHBRsyo4AItz3TklpspwKSzppaJQbYrUyhuzbo7g18CpzBNg08fVu
-         Iexigjzin9wr4LM0P9jSIAZsJJM/GzXU3VmnS0n3ATXQdGSiy+R7pPSHj+e9CRctoJ
-         /BFZIFLz/ioMlNWucqXxvF5OT3TkE1PJtsxLiN0/90P6EBQyrTVv9ck/9d6h8FDUnR
-         PtIsUIDyrUX+w==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2b9a2033978so96690781fa.0;
-        Tue, 08 Aug 2023 17:15:42 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxHhEofRqw7Rub+wocMRusWHV15YlhfMpYrlRYvGCxSgTTCVfMP
-        HPHrh7cbgaJkXydAnp2NRQWtbwrnuJQg8wmlqw0=
-X-Google-Smtp-Source: AGHT+IFRENO8L5910xSKB4YBZKHrFeiO4P731S9dDkQX5Tj3Roeili0J2IZROdoUlzfJiaySP9X2B+lj60fK00xb0Nk=
-X-Received: by 2002:a05:651c:214:b0:2b6:de52:34f with SMTP id
- y20-20020a05651c021400b002b6de52034fmr728417ljn.24.1691540140217; Tue, 08 Aug
- 2023 17:15:40 -0700 (PDT)
+        s=k20201202; t=1691540837;
+        bh=S9A8lsMPD5vafBC3exul64JZFYrfYwASuWTO2d/SczI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=prZMMinNj84sV1SosgrzU6L4y95I4VW73g2owfDDcTnql7djpQD50G0OvSMQ/i3tv
+         6BcPAWeyKwP+2kppZFYRUkioPsiEj758yt8PIcLt/miPHMzbnHMfX3eF0IGAZMsCS3
+         1ue3/vL8OMMGUYoYW1yvZ3jEnoTvIvKsek6+17jucPinvgq7dsApK1vcw05RCE8qPd
+         BRk31vQ6EoH3RWdtJGwnuTwGiS6MrsDHF6m/q4MEIRnZZxvFVLGain5vcRJ9G3Ej+o
+         vl+9NnpJA2MRnKbE0+QiRfMxKoGdyg7WSASokdrqxJuzKCQ8g6PQ7WWiQYGo4sXCId
+         Fhsu1Vv8+0gBw==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: pgtable: Invalidate stale I-cache lines in update_mmu_cache
+Date:   Tue,  8 Aug 2023 20:27:07 -0400
+Message-Id: <20230809002707.1190435-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20230808-csky-virt-to-phys-v1-0-ac727f8def2f@linaro.org>
-In-Reply-To: <20230808-csky-virt-to-phys-v1-0-ac727f8def2f@linaro.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 9 Aug 2023 08:15:28 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS3xmn7YFzBLfOEJ-WX5FRth=_Q5YDwzXrK0dJBOECBvw@mail.gmail.com>
-Message-ID: <CAJF2gTS3xmn7YFzBLfOEJ-WX5FRth=_Q5YDwzXrK0dJBOECBvw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] csky: Convert memory accessors to static inlines
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Aug 8, 2023 at 4:26=E2=80=AFPM Linus Walleij <linus.walleij@linaro.=
-org> wrote:
->
-> This converts the virt_to_pfn and pfn_to_virt macros
-> into static inlines so we get proper type checking on
-> the pointers passed in.
->
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> Linus Walleij (2):
->       csky: Cast argument to virt_to_pfn() to (void *)
->       csky: Make pfn accessors static inlines
->
->  arch/arc/include/asm/page.h  |  2 +-
->  arch/csky/include/asm/page.h | 13 ++++++++++---
->  2 files changed, 11 insertions(+), 4 deletions(-)
-> ---
-> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-> change-id: 20230808-csky-virt-to-phys-3d80c17211f9
->
-> Best regards,
-> --
-> Linus Walleij <linus.walleij@linaro.org>
->
-Thx, Approved.
+From: Guo Ren <guoren@linux.alibaba.com>
 
+The final icache_flush was in the update_mmu_cache, and update_mmu_cache
+is after the set_pte_at. Thus, when CPU0 sets the pte,  the other CPU
+would see it before the icache_flush broadcast happens, and their
+icaches may have cached stale VIPT cache lines in their I-caches. When
+address translation was ready for the new cache line, they will use the
+stale data of icache, not the fresh one of the dcache.
 
---=20
-Best Regards
- Guo Ren
+The csky instruction cache is VIPT, and it needs an origin virtual
+address to invalidate the virtual address index entries of cache ways.
+The current implementation uses a temporary mapping mechanism -
+kmap_atomic, which returns a new virtual address for invalidation. But,
+the original virtual address cache line may still in the I-cache.
+
+So force invalidation I-cache in update_mmu_cache, and prevent
+flush_dcache when there is an EXEC page. This bug was detected in the
+4*c860 SMP system, and this patch could pass the stress test.
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+ arch/csky/abiv2/cacheflush.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
+index 9923cd24db58..500eb8f69397 100644
+--- a/arch/csky/abiv2/cacheflush.c
++++ b/arch/csky/abiv2/cacheflush.c
+@@ -27,11 +27,9 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+ 
+ 	addr = (unsigned long) kmap_atomic(page);
+ 
++	icache_inv_range(address, address + PAGE_SIZE);
+ 	dcache_wb_range(addr, addr + PAGE_SIZE);
+ 
+-	if (vma->vm_flags & VM_EXEC)
+-		icache_inv_range(addr, addr + PAGE_SIZE);
+-
+ 	kunmap_atomic((void *) addr);
+ }
+ 
+-- 
+2.36.1
+
