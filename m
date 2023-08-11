@@ -2,92 +2,129 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587937798B2
-	for <lists+linux-csky@lfdr.de>; Fri, 11 Aug 2023 22:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC447779A72
+	for <lists+linux-csky@lfdr.de>; Sat, 12 Aug 2023 00:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbjHKUnK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 11 Aug 2023 16:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S230175AbjHKWK5 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 11 Aug 2023 18:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236466AbjHKUnJ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 11 Aug 2023 16:43:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D54FD
-        for <linux-csky@vger.kernel.org>; Fri, 11 Aug 2023 13:42:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691786541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QYsuYB/f15MU2xfH+EM7bqeXLDjg5PV6c8YrC96T5p8=;
-        b=PRWBo29MaXVGpU8wvivduacBWq8wYWKhuZTyKAxL2VXJpgA+OHxy/sD6WnS+jYV34iycIh
-        MnSGdmUglERbXTGsYELG/QRAHGaR2NbCqnrrfhRkZbinwuYGZzXPC70SU92atvD8YupoEz
-        s2PNtBsAc7ewIODitXlWMuET3hBO6BQ=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-RkKW7mn5MiCC7qNnb5xmEg-1; Fri, 11 Aug 2023 16:42:16 -0400
-X-MC-Unique: RkKW7mn5MiCC7qNnb5xmEg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229479AbjHKWK4 (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 11 Aug 2023 18:10:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AE81716;
+        Fri, 11 Aug 2023 15:10:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6B4838008C0;
-        Fri, 11 Aug 2023 20:42:14 +0000 (UTC)
-Received: from [10.22.17.82] (unknown [10.22.17.82])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E581D2026D4B;
-        Fri, 11 Aug 2023 20:42:12 +0000 (UTC)
-Message-ID: <5cf1117c-d537-703c-cdcf-f43c5bd9ed1b@redhat.com>
-Date:   Fri, 11 Aug 2023 16:42:12 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAC5E64B4A;
+        Fri, 11 Aug 2023 22:10:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188D1C4339A;
+        Fri, 11 Aug 2023 22:10:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691791853;
+        bh=N8lpigPkvlxlig325fbyaTImOPZkDbDukkfY6bibi4k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oiLmKr3SBSdDL3sDxTS6aPUrfhjRbHMUZF5t1SOUvaq+3+t1wq0XHtVHW/E9gzGoy
+         rr6E7qE7ej6FIjvDztI8eibsfJ/e4IJEo/bAZpvDoKnMxs8T4POFrJXLjAtwLLav/M
+         LbuMYV7E3cEB5FJj10iucd1IemgC65zFpBITHVWb+j2peLQRZBCtBwpC73rJIUDt6D
+         tSQVCOLWtq5PiDcILdill9IG1vcqHT1s0BUEkZTCmO8u3vu75xaEtApoTAiQ6pRZlE
+         X252IHBujsr63ckTzbkt2EqYaHLH2N1MSmSiQ/UaoczmaJxm9DaXlIiw5zWSOtOc3a
+         +y86OpqD+SI0g==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-56ced49d51aso1572357eaf.1;
+        Fri, 11 Aug 2023 15:10:53 -0700 (PDT)
+X-Gm-Message-State: AOJu0YxGlZvxqDx+fxbWD8T4FW77USEwTrY5Ae94Xd+81BeeGBzlqyHj
+        HPhKvs//saCchXv/eK986uE5enknbmOHcHs6vxE=
+X-Google-Smtp-Source: AGHT+IGn1gQn4CG7x4Y66qfsYEz2RYlI/GdSoTxRIWymQmm7uMPiGClKZum+y67wV7ik5jOQYxKVmHuCQntmPwL9x1A=
+X-Received: by 2002:a4a:240c:0:b0:564:e465:5d5c with SMTP id
+ m12-20020a4a240c000000b00564e4655d5cmr2107496oof.2.1691791852125; Fri, 11 Aug
+ 2023 15:10:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V10 18/19] locking/qspinlock: Move pv_ops into x86
- directory
-Content-Language: en-US
-To:     guoren@kernel.org, paul.walmsley@sifive.com, anup@brainfault.org,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, boqun.feng@gmail.com, tglx@linutronix.de,
-        paulmck@kernel.org, rostedt@goodmis.org, rdunlap@infradead.org,
-        catalin.marinas@arm.com, conor.dooley@microchip.com,
-        xiaoguang.xing@sophgo.com, bjorn@rivosinc.com,
-        alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn
-Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-References: <20230802164701.192791-1-guoren@kernel.org>
- <20230802164701.192791-19-guoren@kernel.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230802164701.192791-19-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230810141947.1236730-1-arnd@kernel.org> <20230810141947.1236730-3-arnd@kernel.org>
+In-Reply-To: <20230810141947.1236730-3-arnd@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 12 Aug 2023 07:10:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQo5hri-9JmS_kot1mQ6WHCWAeu+SnW19daWMC1YK5BWA@mail.gmail.com>
+Message-ID: <CAK7LNAQo5hri-9JmS_kot1mQ6WHCWAeu+SnW19daWMC1YK5BWA@mail.gmail.com>
+Subject: Re: [PATCH 02/17] [RESEND] irq_work: consolidate arch_irq_work_raise prototypes
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Guo Ren <guoren@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On 8/2/23 12:47, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Fri, Aug 11, 2023 at 10:00=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
+ote:
 >
-> The pv_ops belongs to x86 custom infrastructure and cleans up the
-> cna_configure_spin_lock_slowpath() with standard code. This is
-> preparation for riscv support CNA qspoinlock.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The prototype was hidden on x86, which causes a warning:
 
-CNA qspinlock has not been merged into mainline yet. I will suggest you 
-drop the last 2 patches for now. Of course, you can provide benchmark 
-data to boost the case for the inclusion of the CNA qspinlock patch into 
-the mainline.
 
-Cheers,
-Longman
+What do you mean by "hidden on x86"?
 
+arch_irq_work_raise() was declared on 7 architectures,
+including x86.
+
+
+
+
+>
+> kernel/irq_work.c:72:13: error: no previous prototype for 'arch_irq_work_=
+raise' [-Werror=3Dmissing-prototypes]
+>
+> Fix this by providing it in only one place that is always visible.
+>
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/include/asm/irq_work.h     | 2 --
+>  arch/arm64/include/asm/irq_work.h   | 2 --
+>  arch/csky/include/asm/irq_work.h    | 2 +-
+>  arch/powerpc/include/asm/irq_work.h | 1 -
+>  arch/riscv/include/asm/irq_work.h   | 2 +-
+>  arch/s390/include/asm/irq_work.h    | 2 --
+>  arch/x86/include/asm/irq_work.h     | 1 -
+>  include/linux/irq_work.h            | 3 +++
+>  8 files changed, 5 insertions(+), 10 deletions(-)
+>
+
+
+--
+Best Regards
+Masahiro Yamada
