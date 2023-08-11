@@ -2,115 +2,74 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0869D77970C
-	for <lists+linux-csky@lfdr.de>; Fri, 11 Aug 2023 20:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B639E7797D3
+	for <lists+linux-csky@lfdr.de>; Fri, 11 Aug 2023 21:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbjHKSZo (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 11 Aug 2023 14:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S235333AbjHKTfP (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 11 Aug 2023 15:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbjHKSZn (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 11 Aug 2023 14:25:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A679F30DC;
-        Fri, 11 Aug 2023 11:25:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S229552AbjHKTfO (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 11 Aug 2023 15:35:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D4930F0
+        for <linux-csky@vger.kernel.org>; Fri, 11 Aug 2023 12:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1691782475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U4ViBLckjSjhNPhrCupJ24JN3joY3lkNEYQ4wLCKCu0=;
+        b=Zq3NimUceEEtDBKz+FAD6OfFy7Jm3vGJebq3uJY8Q3E5k5oNW1MK4D6P0+YJEzuW6LaHBl
+        7kNi1BYMDR5lQf/9Xi8iLp0IhP3GdjIL0/jYZAT7T/+kMMES/OM0IZt2rVGtEugt0BWgHA
+        OAoQQzPEyonh+DNCvYcpY8ElN2HqRuQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-54-Rl9t6dKwP9qAeaYIUQeYSA-1; Fri, 11 Aug 2023 15:34:28 -0400
+X-MC-Unique: Rl9t6dKwP9qAeaYIUQeYSA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA7AD660ED;
-        Fri, 11 Aug 2023 18:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53BC4C433C8;
-        Fri, 11 Aug 2023 18:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691778341;
-        bh=J5jMJWNe5mxefsfwYpjk94ucCqvKpHDhJ2RLFLWPzvE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Gz052yUM1XxLU/RgjOg34wukKcdr6mu92lg4kRvftL4t+JLmQb8r1u1actRxxcApf
-         PjHlYbsUsWZ+bKIaVoc7rK52krQ4OWPLnEH93QFvpXRAbigb2wSUKLi45TU/nHEb+C
-         Jwl9WfjJwBcQjOTRkBTLUH9d7syGI0QxxJS6cM+B4sNpqdMSIJVnJTbcdGoGTSTSlZ
-         PeS+VwcMkTke4e6X7PE/F46DP+6t406NKl/ODdSSnHdrM9/eHvIbao7c9+sM5I0D9t
-         oKICESQTk0FrGQu3zXtHyOu/DayhYLn0OVumhMRyOLFfjSFrRZmIStkSQKluPFVJ8K
-         zZHStULYsZlMQ==
-Message-ID: <2cb4c584-fb4a-5781-f74d-902416749ed4@kernel.org>
-Date:   Fri, 11 Aug 2023 11:25:37 -0700
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E3FF685C6F4;
+        Fri, 11 Aug 2023 19:34:23 +0000 (UTC)
+Received: from [10.22.17.82] (unknown [10.22.17.82])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4ACD11121314;
+        Fri, 11 Aug 2023 19:34:20 +0000 (UTC)
+Message-ID: <ec070d3b-80fb-b625-cde1-80ead49c6227@redhat.com>
+Date:   Fri, 11 Aug 2023 15:34:19 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 16/17] [RFC] arch: turn -Wmissing-prototypes off
- conditionally
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V10 04/19] riscv: qspinlock: Add basic queued_spinlock
+ support
 Content-Language: en-US
-To:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        x86@kernel.org, Borislav Petkov <bp@alien8.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        sparclinux@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Xin Li <xin3.li@intel.com>, Nhat Pham <nphamcs@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Marc_Aur=c3=a8le_La_France?= <tsi@tuyoix.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20230810141947.1236730-1-arnd@kernel.org>
- <20230810141947.1236730-17-arnd@kernel.org>
- <CAJF2gTRdbXOEBNPN14y_ZUwBJ15qBG929BDspk0sqPo2sn=L-Q@mail.gmail.com>
-From:   Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <CAJF2gTRdbXOEBNPN14y_ZUwBJ15qBG929BDspk0sqPo2sn=L-Q@mail.gmail.com>
+To:     guoren@kernel.org, paul.walmsley@sifive.com, anup@brainfault.org,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        palmer@rivosinc.com, boqun.feng@gmail.com, tglx@linutronix.de,
+        paulmck@kernel.org, rostedt@goodmis.org, rdunlap@infradead.org,
+        catalin.marinas@arm.com, conor.dooley@microchip.com,
+        xiaoguang.xing@sophgo.com, bjorn@rivosinc.com,
+        alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn
+Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230802164701.192791-1-guoren@kernel.org>
+ <20230802164701.192791-5-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230802164701.192791-5-guoren@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -118,12 +77,36 @@ List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 
-On 8/10/23 19:33, Guo Ren wrote:
-> Thx, Arnd, I will clean them up for the csky part.
+On 8/2/23 12:46, guoren@kernel.org wrote:
+> 	\
+> diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
+> new file mode 100644
+> index 000000000000..c644a92d4548
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/spinlock.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef __ASM_RISCV_SPINLOCK_H
+> +#define __ASM_RISCV_SPINLOCK_H
+> +
+> +#ifdef CONFIG_QUEUED_SPINLOCKS
+> +#define _Q_PENDING_LOOPS	(1 << 9)
+> +#endif
+> +
+> +#ifdef CONFIG_QUEUED_SPINLOCKS
 
-Likewise, I'll clean up ARC errors this weekend !
-It seems most of therm are in the category you mentioned. Non static but 
-only used by asm code.
+You can merge the two "#ifdef CONFIG_QUEUED_SPINLOCKS" into single one 
+to avoid the duplication.
 
-Thx,
--Vineet
+Cheers,
+Longman
+
+> +#include <asm/qspinlock.h>
+> +#include <asm/qrwlock.h>
+> +#else
+> +#include <asm-generic/spinlock.h>
+> +#endif
+> +
+> +#endif /* __ASM_RISCV_SPINLOCK_H */
+
