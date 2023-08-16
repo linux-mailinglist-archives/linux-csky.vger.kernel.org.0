@@ -2,228 +2,204 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773B877E0C2
-	for <lists+linux-csky@lfdr.de>; Wed, 16 Aug 2023 13:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF2177E3D4
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Aug 2023 16:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242848AbjHPLs6 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 16 Aug 2023 07:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S1343733AbjHPOjt (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 16 Aug 2023 10:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244774AbjHPLsg (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 16 Aug 2023 07:48:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3B3E68;
-        Wed, 16 Aug 2023 04:48:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D9C666EE;
-        Wed, 16 Aug 2023 11:48:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4427C433C8;
-        Wed, 16 Aug 2023 11:48:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692186514;
-        bh=v2m2BK3GGd11X74j40insUcmDxokoIf6Czvuxm4GLe0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kIQ+3GZqZqX0YR2G3PxIKU4z7PLWBtwM1cFVVGQ7TYpvNN9lOIKya5TYcEllvV5/r
-         +W8yXiXqVRP/pyu1E7I1vsZS3Jmp1oPKegOA3D++BcgVc2hV56aJ/5pykDa8EoW5RM
-         pn1sIBsV+LvX31A82MRtST79dD+bQ4uCQ6zuHoF9bLeJWYVhMYnHiEsAM3ZE+A5xhP
-         OlEOpJtaeMdzzlm7S5bBj8a/ri7rIyXml8SPM1N3iPUt7Pr4hNL9zEtmTp2QT6Jsj7
-         o/nDUGMASQ/yVc/jLwynWG2VYzo1rluHDyXfJ0BrGMmMW0oFDUNL9ETcMIMJlZfEuF
-         sn8f0KkVIYj8A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 00D32404DF; Wed, 16 Aug 2023 08:48:30 -0300 (-03)
-Date:   Wed, 16 Aug 2023 08:48:30 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ming Wang <wangming01@loongson.cn>,
-        Eric Lin <eric.lin@sifive.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 0/6] perf parse-regs: Refactor architecture functions
-Message-ID: <ZNy3jg7xxBp4161E@kernel.org>
-References: <20230606014559.21783-1-leo.yan@linaro.org>
- <CAP-5=fV1m440mKc0R=m5C4N2NtoiixchtnpX2eR3PA_5hXbqEQ@mail.gmail.com>
- <ZNvCxM/ULdUfzHtR@kernel.org>
- <ZNvHx+KxIL6JzEl/@kernel.org>
- <ZNvJdsVmmAWLmfH6@kernel.org>
- <ZNvKjeFkXY8ezf9e@kernel.org>
- <20230816020715.GA135657@leoy-huanghe.lan>
- <ZNy3D6DV3Q9YjxKd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        with ESMTP id S229600AbjHPOjU (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 16 Aug 2023 10:39:20 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFA1272D
+        for <linux-csky@vger.kernel.org>; Wed, 16 Aug 2023 07:38:51 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-26b2884bec8so3631726a91.0
+        for <linux-csky@vger.kernel.org>; Wed, 16 Aug 2023 07:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1692196728; x=1692801528;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z7kyCuHl1t/gCCGpNTbA3hwFj/lf6SuaKvtbsxGuDBs=;
+        b=dZxL0Ptmo/RfqSZAnaNdMqEON3wvqTtz9rCCZbGwRlxrXd7njXeZ9MC0HoDMQnzbMm
+         Mbp7gkbEr8As7DndYa19Nv36eYd2hToSSCFzF826MiTxJFQPanB3TDkisU5ug1n2xO0x
+         lqvfBU8gjYGcjvzm7z1KhnYi76zAKQMvLjSkKN8VKcgO7yrfcLxnnczFGmL7s8fYvGKe
+         iupXY/7su7eB4Qp8Ot15WegMitq0aXkC7C2B4amBqtpQq9iCTqbSvz7oVYvokSqAF4SL
+         qE7Cmnt2iThlim9z5xca3mEZ27llu2nfrUpa7hwX8WY7UkN0OSfjH/LjoRTW/fMpY9+M
+         GNdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692196728; x=1692801528;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z7kyCuHl1t/gCCGpNTbA3hwFj/lf6SuaKvtbsxGuDBs=;
+        b=RVK5cakrt/yefsOZJC1dkTnzepkxeFyxRiCVaX6NxDqBAUQ1NuDKKnDvo0vf/zbNl0
+         IgGNckWVVC3Hspnx9ce8D872jZM8oup6q55ej+BszmDNHxYv6iifSqO+yPl/TTKWgMty
+         Z2VM+NSmBm2MV6OaDiBttpJ9maptC6tbX40NGWs86BVQ/3KOY6S6zwEV3Fio9ejV4c8z
+         eCi9bj8zOUQOkMWjByds5u0AoFWwWocIkCMOvhFGWC+XAk+A/tHAhKTBBy/oEVtJtZgJ
+         h9XClCMqGX7BNtM5L3Tb5R/UZn7eXgevUToVM1R9bobvgnMWUQOSF9h2/Djwmz61X9hj
+         MhYw==
+X-Gm-Message-State: AOJu0Yz4Q3zjlFTbBB4LC/GC0J7RlCzRGbU4TuDf5w90tS5PtHHYZzsy
+        F8KX51WOxNJZBLefyLHZbnfNlw==
+X-Google-Smtp-Source: AGHT+IG9lm23RRLom/xb7C80klG2aDXB0ZwUgcZV4fsV/hyXYHdBd19S4I3YH9SwHqrCXPj4TdemSQ==
+X-Received: by 2002:a17:90a:f982:b0:26b:4e59:57e7 with SMTP id cq2-20020a17090af98200b0026b4e5957e7mr1730234pjb.43.1692196727793;
+        Wed, 16 Aug 2023 07:38:47 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id gi23-20020a17090b111700b0025645ce761dsm13120399pjb.35.2023.08.16.07.38.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 07:38:47 -0700 (PDT)
+Date:   Wed, 16 Aug 2023 07:38:47 -0700 (PDT)
+X-Google-Original-Date: Wed, 16 Aug 2023 07:38:45 PDT (-0700)
+Subject:     Re: [PATCH 00/17] -Wmissing-prototype warning fixes
+In-Reply-To: <20230810141947.1236730-1-arnd@kernel.org>
+CC:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, guoren@kernel.org,
+        bcain@quicinc.com, chenhuacai@kernel.org, kernel@xen0n.name,
+        geert@linux-m68k.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
+        glaubitz@physik.fu-berlin.de, x86@kernel.org, bp@alien8.de,
+        jcmvbkbc@gmail.com, axboe@kernel.dk, sudipm.mukherjee@gmail.com,
+        martin.petersen@oracle.com, richard@nod.at, bhelgaas@google.com,
+        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        linux@roeck-us.net, Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-next@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kbuild@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     arnd@kernel.org
+Message-ID: <mhng-ce493a2d-71e9-440f-84d0-522a4f694bbe@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZNy3D6DV3Q9YjxKd@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Em Wed, Aug 16, 2023 at 08:46:23AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Aug 16, 2023 at 10:07:15AM +0800, Leo Yan escreveu:
-> > On Tue, Aug 15, 2023 at 03:57:17PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > Em Tue, Aug 15, 2023 at 03:52:38PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > Em Tue, Aug 15, 2023 at 03:45:27PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > > > Agreed, applied to perf-tools-next, sorry for the delay.
-> > > > > 
-> > > > > Had to add this to make 'perf test python' to work. Please run 'perf
-> > > > > test' before sending patches.
-> > > > 
-> > > > One more, please also do a 'make -C tools/perf build-test', with it I
-> > > > caught this:
-> > > > 
-> > > >          make_no_libunwind_O: cd . && make NO_LIBUNWIND=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.yeEGyQq2HR DESTDIR=/tmp/tmp.ITgoO16jjH
-> > > > cd . && make NO_LIBUNWIND=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.yeEGyQq2HR DESTDIR=/tmp/tmp.ITgoO16jjH
-> > > 
-> > > +#include "util/env.h"
-> > > 
-> > > As now we need it for perf_env__arch(ui->machine->env)
-> > 
-> > Sorry for inconvenience.
-> > 
-> > I saw this patch series has been picked into the branch:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=tmp.perf-tools-next
-> > 
-> > If want me to follow up, let me know.  Thank you!
-> 
-> Right, I'll fix this ones:
-> 
-> [perfbuilder@five ~]$ grep "unused variable" dm.log/*:*
-> dm.log/ubuntu:18.04-x-m68k:util/evsel.c:848:14: error: unused variable 'arch' [-Werror=unused-variable]
-> dm.log/ubuntu:18.04-x-riscv64:util/evsel.c:848:14: error: unused variable 'arch' [-Werror=unused-variable]
-> dm.log/ubuntu:18.04-x-sh4:util/evsel.c:848:14: error: unused variable 'arch' [-Werror=unused-variable]
-> dm.log/ubuntu:18.04-x-sparc64:util/evsel.c:848:14: error: unused variable 'arch' [-Werror=unused-variable]
-> [perfbuilder@five ~]$
-> 
-> And move that to perf-tools-next, we can go on from there.
-> 
-> The above is because we don't define CONFIG_PERF_REGS for these
-> architectures and thus that variable ends up not being used, so I'm
-> fixing up like below, in the cset where you made DWARF_MINIMAL_REGS
-> receive the arch parameter.
+On Thu, 10 Aug 2023 07:19:18 PDT (-0700), arnd@kernel.org wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Most of the patches I sent so far for the -Wmissing-prototype warnings
+> have made it into linux-next now. There are a few that I'm resending
+> now as nobody has picked them up, and then a number of fixes that I
+> found while test-building across all architectures rather than just the
+> ones I usually test.
+>
+> The first 15 patches in this series should be uncontroversial, so
+> I expect that either a subsystem maintainer or Andrew Morton can
+> apply these directly.
+>
+> For the last two patches, these might still need some debate about how
+> to handle them. I added a Kconfig option to turn off most of the missing
+> prototype warnings in the architectures that nobody has fixed yet,
+> see patch 16 for those. The last patch does cause some known warnings
+> and likely unknown ones for architectures other than x86 and arm,
+> so applying it now will bring new problems, but not applying it also
+> means that new warnings creep in, so I think this is mainly a question
+> of what the best timing is for having this in linux-next.
+>
+> Arnd Bergmann (17):
+>   [RESEND] jffs2: mark __jffs2_dbg_superblock_counts() static
+>   [RESEND] irq_work: consolidate arch_irq_work_raise prototypes
+>   [RESEND] ida: make 'ida_dump' static
+>   pci: sysfs: move declarations to linux/pci.h
+>   swim3: mark swim3_init() static
+>   macintosh/ams: mark ams_init() static
+>   scsi: qlogicpti: mark qlogicpti_info() static
+>   microblaze: mark flush_dcache_folio() inline
+>   parport: gsc: mark init function static
+>   zorro: include zorro.h in names.c
+>   scsi: gvp11: remove unused gvp11_setup() function
+>   time: make sysfs_get_uname() function visible in header
+>   stackleak: add declarations for global functions
+>   kprobes: unify kprobes_exceptions_nofify() prototypes
+>   arch: fix asm-offsets.c building with -Wmissing-prototypes
+>   [RFC] arch: turn -Wmissing-prototypes off conditionally
+>   [RFC] Makefile.extrawarn: turn on missing-prototypes again
+>
+>  arch/alpha/Kbuild                        |  2 ++
+>  arch/alpha/include/asm/pci.h             |  3 ---
+>  arch/alpha/kernel/asm-offsets.c          |  2 +-
+>  arch/alpha/lib/Makefile                  |  1 +
+>  arch/arc/Kbuild                          |  2 ++
+>  arch/arc/include/asm/kprobes.h           |  3 ---
+>  arch/arm/include/asm/irq_work.h          |  2 --
+>  arch/arm/include/asm/kprobes.h           |  2 --
+>  arch/arm64/include/asm/irq_work.h        |  2 --
+>  arch/arm64/include/asm/kprobes.h         |  2 --
+>  arch/csky/Kbuild                         |  2 ++
+>  arch/csky/include/asm/irq_work.h         |  2 +-
+>  arch/hexagon/Kbuild                      |  2 ++
+>  arch/ia64/Kbuild                         |  2 ++
+>  arch/ia64/include/asm/kprobes.h          |  2 --
+>  arch/ia64/kernel/asm-offsets.c           |  2 +-
+>  arch/ia64/lib/Makefile                   |  1 +
+>  arch/loongarch/Kbuild                    |  2 ++
+>  arch/loongarch/kernel/asm-offsets.c      | 12 ++++++++++++
+>  arch/m68k/Kbuild                         |  2 ++
+>  arch/m68k/lib/Makefile                   |  1 +
+>  arch/microblaze/Kbuild                   |  2 ++
+>  arch/microblaze/include/asm/cacheflush.h |  2 +-
+>  arch/mips/Kbuild                         |  2 ++
+>  arch/mips/boot/compressed/Makefile       |  3 ++-
+>  arch/mips/include/asm/kprobes.h          |  2 --
+>  arch/nios2/Kbuild                        |  2 ++
+>  arch/nios2/lib/Makefile                  |  1 +
+>  arch/openrisc/Kbuild                     |  2 ++
+>  arch/parisc/Kbuild                       |  2 ++
+>  arch/parisc/lib/Makefile                 |  1 +
+>  arch/powerpc/include/asm/irq_work.h      |  1 -
+>  arch/powerpc/include/asm/kprobes.h       |  2 --
+>  arch/riscv/include/asm/irq_work.h        |  2 +-
+>  arch/s390/include/asm/irq_work.h         |  2 --
+>  arch/s390/include/asm/kprobes.h          |  2 --
+>  arch/sh/Kbuild                           |  2 ++
+>  arch/sh/boot/compressed/Makefile         |  1 +
+>  arch/sh/include/asm/kprobes.h            |  2 --
+>  arch/sparc/Kbuild                        |  2 ++
+>  arch/sparc/include/asm/kprobes.h         |  2 --
+>  arch/sparc/kernel/asm-offsets.c          | 13 ++-----------
+>  arch/sparc/lib/Makefile                  |  1 +
+>  arch/sparc/prom/Makefile                 |  1 +
+>  arch/x86/include/asm/irq_work.h          |  1 -
+>  arch/x86/include/asm/kprobes.h           |  2 --
+>  arch/xtensa/Kbuild                       |  2 ++
+>  arch/xtensa/boot/lib/Makefile            |  2 ++
+>  drivers/block/swim3.c                    |  2 +-
+>  drivers/macintosh/ams/ams-core.c         |  2 +-
+>  drivers/parport/parport_gsc.c            |  2 +-
+>  drivers/scsi/gvp11.c                     |  5 -----
+>  drivers/scsi/qlogicpti.c                 |  2 +-
+>  drivers/zorro/names.c                    |  1 +
+>  fs/jffs2/debug.c                         |  2 +-
+>  include/linux/irq_work.h                 |  3 +++
+>  include/linux/kprobes.h                  |  4 ++++
+>  include/linux/pci.h                      |  5 +++++
+>  include/linux/stackleak.h                |  6 ++++++
+>  init/Kconfig                             | 10 ++++++++++
+>  kernel/time/tick-internal.h              |  3 ++-
+>  lib/test_ida.c                           |  2 +-
+>  scripts/Makefile.extrawarn               |  5 +++--
+>  63 files changed, 101 insertions(+), 63 deletions(-)
 
-I added this to the cset commit message:
-
-Committer notes:
-
-Make DWARF_MINIMAL_REGS() an inline function, so that we can use the
-__maybe_unused attribute for the 'arch' parameter, as this will avoid a
-build failure when that variable is unused in the callers. That happens
-when building on unsupported architectures, the ones without
-HAVE_PERF_REGS_SUPPORT defined.
-
- 
-> Also I haven't checked how gracefully we react when processing a
-> perf.data collected in one of those unsupported arches, can you please
-> check?
-> 
-> - Arnaldo
-> 
-> diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-> index 790c1a26bbfe9b4b..de1673057e502de9 100644
-> --- a/tools/perf/util/perf_regs.h
-> +++ b/tools/perf/util/perf_regs.h
-> @@ -32,9 +32,6 @@ extern const struct sample_reg sample_reg_masks[];
->  
->  #include <perf_regs.h>
->  
-> -#define DWARF_MINIMAL_REGS(arch)	\
-> -	((1ULL << perf_arch_reg_ip(arch)) | (1ULL << perf_arch_reg_sp(arch)))
-> -
->  const char *perf_reg_name(int id, const char *arch);
->  int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
->  uint64_t perf_arch_reg_ip(const char *arch);
-> @@ -67,11 +64,19 @@ const char *__perf_reg_name_x86(int id);
->  uint64_t __perf_reg_ip_x86(void);
->  uint64_t __perf_reg_sp_x86(void);
->  
-> +static inline uint64_t DWARF_MINIMAL_REGS(const char *arch)
-> +{
-> +	return (1ULL << perf_arch_reg_ip(arch)) | (1ULL << perf_arch_reg_sp(arch));
-> +}
-> +
->  #else
->  #define PERF_REGS_MASK	0
->  #define PERF_REGS_MAX	0
->  
-> -#define DWARF_MINIMAL_REGS(arch)	PERF_REGS_MASK
-> +static inline uint64_t DWARF_MINIMAL_REGS(const char *arch __maybe_unused)
-> +{
-> +	return PERF_REGS_MASK;
-> +}
->  
->  static inline const char *perf_reg_name(int id __maybe_unused, const char *arch __maybe_unused)
->  {
->  
-> > > >   CC      /tmp/tmp.yeEGyQq2HR/util/expr-flex.o
-> > > > util/unwind-libdw.c: In function ‘memory_read’:
-> > > > util/unwind-libdw.c:173:28: error: implicit declaration of function ‘perf_env__arch’ [-Werror=implicit-function-declaration]
-> > > >   173 |         const char *arch = perf_env__arch(ui->machine->env);
-> > > >       |                            ^~~~~~~~~~~~~~
-> > > > util/unwind-libdw.c:173:28: error: initialization of ‘const char *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
-> > > > util/unwind-libdw.c: In function ‘unwind__get_entries’:
-> > > > util/unwind-libdw.c:258:28: error: initialization of ‘const char *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
-> > > >   258 |         const char *arch = perf_env__arch(ui_buf.machine->env);
-> > > >       |                            ^~~~~~~~~~~~~~
-> > > > cc1: all warnings being treated as errors
-> > > > make[6]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:98: /tmp/tmp.yeEGyQq2HR/util/unwind-libdw.o] Error 1
-> > > > make[6]: *** Waiting for unfinished jobs....
-> > > > make[5]: *** [/var/home/acme/git/perf-tools-next/tools/build/Makefile.build:150: util] Error 2
-> > > > make[4]: *** [Makefile.perf:662: /tmp/tmp.yeEGyQq2HR/perf-in.o] Error 2
-> > > > make[4]: *** Waiting for unfinished jobs....
-> > > >   CC      /tmp/tmp.yeEGyQq2HR/pmu-events/pmu-events.o
-> > > >   LD      /tmp/tmp.yeEGyQq2HR/pmu-events/pmu-events-in.o
-> > > > make[3]: *** [Makefile.perf:238: sub-make] Error 2
-> > > > make[2]: *** [Makefile:70: all] Error 2
-> > > > make[1]: *** [tests/make:337: make_no_libunwind_O] Error 1
-> > > > make: *** [Makefile:103: build-test] Error 2
-> > > > make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
-> > > > 
-> > > > real	1m29.784s
-> > > > user	10m41.597s
-> > > > sys	2m55.948s
-> > > > ⬢[acme@toolbox perf-tools-next]$
-> > > > 
-> > > > I'm trying to fix
-> > > 
-> > > -- 
-> > > 
-> > > - Arnaldo
-> 
-> -- 
-> 
-> - Arnaldo
-
--- 
-
-- Arnaldo
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
