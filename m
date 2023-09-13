@@ -2,184 +2,285 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9263479E2BA
-	for <lists+linux-csky@lfdr.de>; Wed, 13 Sep 2023 10:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D308A79E312
+	for <lists+linux-csky@lfdr.de>; Wed, 13 Sep 2023 11:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239127AbjIMI4X (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 13 Sep 2023 04:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
+        id S239278AbjIMJLr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 13 Sep 2023 05:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239147AbjIMI4S (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 04:56:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E43691997
-        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694595329;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7IDrq/ZjwAliy/cuqJYdam/hL0PUOvTA7Mi9bsbloig=;
-        b=JKs3WTmSXcBe/bxOKMjbp9YPNMsqlNzAG7DscGuV1j7H+ISud821T1S5zuj1ZtzLuldzg1
-        V1lw9spRuP+jJKdIKt3F3KvZwxHt5rDBld3DMZxb8q2ubVDov1xMyEsv5DY7Xrm1fKJ7Ul
-        vkEc56H4lAhZeSC0GiiJTdrLKlH4Dv0=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-504-_yZJ1932P_qEe5DeSMyvGg-1; Wed, 13 Sep 2023 04:55:27 -0400
-X-MC-Unique: _yZJ1932P_qEe5DeSMyvGg-1
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a741f4790fso7723587b6e.0
-        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:55:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694595326; x=1695200126;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7IDrq/ZjwAliy/cuqJYdam/hL0PUOvTA7Mi9bsbloig=;
-        b=w5hGUff223OskDTrY4qHvlrsizqFTb9ablqh5S+d+P/afc1TO3cViH9iJQ2qn5WVMx
-         jpihMb0EFMoxDF3cX16Spi+eD2pwhCdyM43k2UnzYIOEQeCplTPAneLYoHPi7ecDTOpK
-         Eie1IHQxKSD6sM7tdnlUJ/yjkHC1vcdRZoTKm25Vp2l0NXl3923bAujZJfkmb1eeE7gH
-         HpgGpTZd8/E5Y8Mrvm8D5gbCdEkePsgOxO1CIEjnYZxJtQVBaD9UdnVs1iKxBxUbVpLi
-         YHOj4Wsi8+mRJt8hngaOcyM7HeWY+ppu6XLlViB4QRsvsA4AbWhosaZcpB/cOXmYEqH7
-         Z+vA==
-X-Gm-Message-State: AOJu0Yz/Xh9IhbpL4Ghq7ciBYT8fKKymT7dYfs0gO77F1gHfXTvQzpii
-        9ByDLEqM8PY+dsY8IBZcanjrw96WjgSD4/Aq4rcpj9MSKDwk1Tej0kjZL79NigPyIfDEl7apy2v
-        Zio4KhFHXyF/OBFJ/fCOWmg==
-X-Received: by 2002:a05:6808:616:b0:3a8:83df:d5a4 with SMTP id y22-20020a056808061600b003a883dfd5a4mr1851061oih.59.1694595326802;
-        Wed, 13 Sep 2023 01:55:26 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGKPVssIlImig5nXmhpkcsDQ7KpqCHiahCisjz+0XwI28OTqJEh/HnL6zXhYAXW7+m311Y1Pw==
-X-Received: by 2002:a05:6808:616:b0:3a8:83df:d5a4 with SMTP id y22-20020a056808061600b003a883dfd5a4mr1851051oih.59.1694595326594;
-        Wed, 13 Sep 2023 01:55:26 -0700 (PDT)
-Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id az19-20020a056830459300b006c21f11dcecsm647356otb.49.2023.09.13.01.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 01:55:26 -0700 (PDT)
-Date:   Wed, 13 Sep 2023 05:55:16 -0300
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>, paul.walmsley@sifive.com,
-        anup@brainfault.org, peterz@infradead.org, mingo@redhat.com,
-        will@kernel.org, palmer@rivosinc.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 04/17] locking/qspinlock: Improve xchg_tail for
- number of cpus >= 16k
-Message-ID: <ZQF49GIZoFceUGYH@redhat.com>
-References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-5-guoren@kernel.org>
- <f091ead0-99b9-b30a-a295-730ce321ac60@redhat.com>
- <CAJF2gTSbUUdLhN8PFdFzQd0M1T2MVOL1cdZn46WKq1S8MuQYHw@mail.gmail.com>
- <06714da1-d566-766f-7a13-a3c93b5953c4@redhat.com>
- <CAJF2gTQ3Q7f+FGorVTR66c6TGWsSeeKVvLF+LH1_m3kSHrm0yA@mail.gmail.com>
+        with ESMTP id S239294AbjIMJLe (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 05:11:34 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD2B19B3;
+        Wed, 13 Sep 2023 02:11:30 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 823C4C433C7;
+        Wed, 13 Sep 2023 09:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694596290;
+        bh=IF6j2/SpYlg2pfwUX2eh+AoPnu93Roh0uk49wRv/q+Y=;
+        h=From:Subject:Date:To:Cc:Reply-To:From;
+        b=o3v1Q0AfOS98gJRgbnbYgSFhJATKnAvbBJjBxbwn9AC7FIEBGLlRtFYi99uY7nV4M
+         JOrf5t82biXrDRr5EtdvK+2PcQaxHhjxkGalXZv2hecWcXdCDwFhL87diGF2fVkeet
+         hjTXvYIbY+7pJUzqsIqnJvSsGclXxVeTaR8f6C0Yk8gK9U+4jKKLuglOz2AzNyuXSs
+         e/lLStT/8DRe6NSajTHgAS0KheQv7Tjs5EtrJFsypzCdY6XXee66vdGFDGY7SAr/J5
+         jzK7lIj5Ba8XNKS7W/DjrohUJqxf7pVpNo4bANYheFqqLnDB74eVT/Lh4JDaSsNWqg
+         V8eya7i54N8NA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 5E9D1CA5518;
+        Wed, 13 Sep 2023 09:11:30 +0000 (UTC)
+From:   Joel Granados via B4 Relay 
+        <devnull+j.granados.samsung.com@kernel.org>
+Subject: [PATCH v2 0/8] sysctl: Remove sentinel elements from arch
+Date:   Wed, 13 Sep 2023 11:10:54 +0200
+Message-Id: <20230913-jag-sysctl_remove_empty_elem_arch-v2-0-d1bd13a29bae@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTQ3Q7f+FGorVTR66c6TGWsSeeKVvLF+LH1_m3kSHrm0yA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ58AWUC/42NQQ6CMBAAv0L2bE0phYAn/2FIU8sKNZSSLjYSw
+ t+tJN49zhxmNiAMFgku2QYBoyXrpwTilIEZ9NQjs11iEFwUvOGSPXXPaCWzjCqg8xEVunlZFY7
+ olA5mYHXe3bmusDJGQurMAR/2fTxubeLB0uLDeixj/rW/evVHPeaMs6Ipyk7WpRSyvpJ29Jr6s
+ /EO2n3fPyJm99bUAAAA
+To:     Luis Chamberlain <mcgrof@kernel.org>, willy@infradead.org,
+        josh@joshtriplett.org, Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Guo Ren <guoren@kernel.org>, Alexey Gladkov <legion@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-csky@vger.kernel.org,
+        Joel Granados <j.granados@samsung.com>,
+        Ingo Molnar <mingo@kernel.org>
+X-Mailer: b4 0.13-dev-86aa5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8698;
+ i=j.granados@samsung.com; h=from:subject:message-id;
+ bh=KIqswrAVMdhaWb/JbcZcIzXf/NYrgSb7sP/BTqWOdYY=;
+ b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBlAXy963a+0HLyfnoYmbG27az0WEoNmgVTomdUX
+ Hr6xAbPgcuJAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZQF8vQAKCRC6l81St5ZB
+ T8o4C/0Zq95HrASlp0txb2/xovzLqmJ9WEKkTKx2USnCrRDjlxRQmgR5U7DmMUuohQFIV+0KR9S
+ vyHAWw53ehtrNqeX++6LB6slyNaFUJeY4mDs/l3MjRAzWhYJ7yWZV51U77MLeFn1YuiScWaHIo2
+ xXk6mQ8R6ZUUpXKkYIhsfH5ozGwLJYGChNF6/1UhfehOaYd5mUAhzy4RMsHC97fAlUTQtfxW1NT
+ dUPcHF6ZSfLHD2MDKITxxbWh+qZgAXSgibDGmOaM8Tmo1axwGvXqJxSez/zax7kUPjPJ3WT6hb4
+ rbWXkzRkT7XJg9dGYAhWhjGHDk1bqcDMOCLkLDw+PfhYXUKSpBDtmoRrKD6kThbn+IelfgDr9Yt
+ RISkf0KOqi8SKPATEEMtz/SScWjBavkqQvxZe3tIOoEb+ezASWYTlcBKSbiHSOTFjxLXc+Gp29Y
+ jdNYL0jmq2y5Y6G4u+FXOrVCfHlFsP/QKZ14pwBmq9CpPV3G5eg2foyffZMFJXmfqiwS4=
+X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
+ fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
+X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with auth_id=70
+X-Original-From: Joel Granados <j.granados@samsung.com>
+Reply-To: <j.granados@samsung.com>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 09:10:08AM +0800, Guo Ren wrote:
-> On Mon, Sep 11, 2023 at 9:03 PM Waiman Long <longman@redhat.com> wrote:
-> >
-> > On 9/10/23 23:09, Guo Ren wrote:
-> > > On Mon, Sep 11, 2023 at 10:35 AM Waiman Long <longman@redhat.com> wrote:
-> > >>
-> > >> On 9/10/23 04:28, guoren@kernel.org wrote:
-> > >>> From: Guo Ren <guoren@linux.alibaba.com>
-> > >>>
-> > >>> The target of xchg_tail is to write the tail to the lock value, so
-> > >>> adding prefetchw could help the next cmpxchg step, which may
-> > >>> decrease the cmpxchg retry loops of xchg_tail. Some processors may
-> > >>> utilize this feature to give a forward guarantee, e.g., RISC-V
-> > >>> XuanTie processors would block the snoop channel & irq for several
-> > >>> cycles when prefetch.w instruction (from Zicbop extension) retired,
-> > >>> which guarantees the next cmpxchg succeeds.
-> > >>>
-> > >>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > >>> Signed-off-by: Guo Ren <guoren@kernel.org>
-> > >>> ---
-> > >>>    kernel/locking/qspinlock.c | 5 ++++-
-> > >>>    1 file changed, 4 insertions(+), 1 deletion(-)
-> > >>>
-> > >>> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-> > >>> index d3f99060b60f..96b54e2ade86 100644
-> > >>> --- a/kernel/locking/qspinlock.c
-> > >>> +++ b/kernel/locking/qspinlock.c
-> > >>> @@ -223,7 +223,10 @@ static __always_inline void clear_pending_set_locked(struct qspinlock *lock)
-> > >>>     */
-> > >>>    static __always_inline u32 xchg_tail(struct qspinlock *lock, u32 tail)
-> > >>>    {
-> > >>> -     u32 old, new, val = atomic_read(&lock->val);
-> > >>> +     u32 old, new, val;
-> > >>> +
-> > >>> +     prefetchw(&lock->val);
-> > >>> +     val = atomic_read(&lock->val);
-> > >>>
-> > >>>        for (;;) {
-> > >>>                new = (val & _Q_LOCKED_PENDING_MASK) | tail;
-> > >> That looks a bit weird. You pre-fetch and then immediately read it. How
-> > >> much performance gain you get by this change alone?
-> > >>
-> > >> Maybe you can define an arch specific primitive that default back to
-> > >> atomic_read() if not defined.
-> > > Thx for the reply. This is a generic optimization point I would like
-> > > to talk about with you.
-> > >
-> > > First, prefetchw() makes cacheline an exclusive state and serves for
-> > > the next cmpxchg loop semantic, which writes the idx_tail part of
-> > > arch_spin_lock. The atomic_read only makes cacheline in the shared
-> > > state, which couldn't give any guarantee for the next cmpxchg loop
-> > > semantic. Micro-architecture could utilize prefetchw() to provide a
-> > > strong forward progress guarantee for the xchg_tail, e.g., the T-HEAD
-> > > XuanTie processor would hold the exclusive cacheline state until the
-> > > next cmpxchg write success.
-> > >
-> > > In the end, Let's go back to the principle: the xchg_tail is an atomic
-> > > swap operation that contains write eventually, so giving a prefetchw()
-> > > at the beginning is acceptable for all architectures..
-> > > ••••••••••••
-> >
-> > I did realize afterward that prefetchw gets the cacheline in exclusive
-> > state. I will suggest you mention that in your commit log as well as
-> > adding a comment about its purpose in the code.
-> Okay, I would do that in v12, thx.
+From: Joel Granados <j.granados@samsung.com>
 
-I would suggest adding a snippet from the ISA Extenstion doc:
+What?
+These commits remove the sentinel element (last empty element) from the
+sysctl arrays of all the files under the "arch/" directory that use a
+sysctl array for registration. The merging of the preparation patches
+(in https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
+to mainline allows us to just remove sentinel elements without changing
+behavior. This is now safe because the sysctl registration code
+(register_sysctl() and friends) use the array size in addition to
+checking for a sentinel ([1] for more info).
 
-"A prefetch.w instruction indicates to hardware that the cache block whose 
-effective address is the sum of the base address specified in rs1 and the  
-sign-extended offset encoded in imm[11:0], where imm[4:0] equals 0b00000, 
-is likely to be accessed by a data write (i.e. store) in the near future."
+These commits are part of a bigger set (bigger patchset here
+https://github.com/Joelgranados/linux/tree/tag/sysctl_remove_empty_elem_V4)
+that remove the ctl_table sentinel. The idea is to make the review
+process easier by chunking the 52 commits into manageable pieces. By
+sending out one chunk at a time, they can be reviewed separately without
+noise from parallel sets. After the "arch/" commits in this set are
+reviewed, I will continue with drivers/*, fs/*, kernel/*, net/* and
+miscellaneous. The final set will remove the unneeded check for
+->procname == NULL.
 
-Other than that,
-Reviewed-by: Leonardo Bras <leobras@redhat.com>
+Why?
+By removing the sysctl sentinel elements we avoid kernel bloat as
+ctl_table arrays get moved out of kernel/sysctl.c into their own
+respective subsystems. This move was started long ago to avoid merge
+conflicts; the sentinel removal bit came after Mathew Wilcox suggested
+it to avoid bloating the kernel by one element as arrays moved out. This
+patchset will reduce the overall build time size of the kernel and run
+time memory bloat by about ~64 bytes per declared ctl_table array. I
+have consolidated some links that shed light on the history of this
+effort [2].
 
+V2:
+* Added clarification both in the commit messages and the coverletter as
+  to why this patch is safe to apply.
+* Added {Acked,Reviewed,Tested}-by from list
+* Link to v1: https://lore.kernel.org/r/20230906-jag-sysctl_remove_empty_elem_arch-v1-0-3935d4854248@samsung.com
 
-> 
-> >
-> > Thanks,
-> > Longman
-> >
-> > >> Cheers,
-> > >> Longman
-> > >>
-> > >
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
+Testing:
+* Ran sysctl selftests (./tools/testing/selftests/sysctl/sysctl.sh)
+* Ran this through 0-day with no errors or warnings
+
+Size saving after removing all sentinels:
+  A consequence of eventually removing all the sentinels (64 bytes per
+  sentinel) is the bytes we save. These are *not* numbers that we will
+  get after this patch set; these are the numbers that we will get after
+  removing all the sentinels. I included them here because they are
+  relevant and to get an idea of just how much memory we are talking
+  about.
+    * bloat-o-meter:
+        - The "yesall" configuration results save 9158 bytes (bloat-o-meter output here
+          https://lore.kernel.org/all/20230621091000.424843-1-j.granados@samsung.com/)
+        - The "tiny" config + CONFIG_SYSCTL save 1215 bytes (bloat-o-meter output here
+          https://lore.kernel.org/all/20230809105006.1198165-1-j.granados@samsung.com/)
+    * memory usage:
+        we save some bytes in main memory as well. In my testing kernel
+        I measured a difference of 7296 bytes. I include the way to
+        measure in [3]
+
+Size saving after this patchset:
+  Here I give the values that I measured for the architecture that I'm
+  running (x86_64). This can give an approximation of how many bytes are
+  saved for each arch. I won't publish for all the archs because I don't
+  have access to all of them.
+    * bloat-o-meter
+        - The "yesall" config saves 192 bytes (bloat-o-meter output [4])
+        - The "tiny" config saves 64 bytes (bloat-o-meter output [5])
+    * memory usage:
+        In this case there were no bytes saved. To measure it comment the
+        printk in `new_dir` and uncomment the if conditional in `new_links`
+        [3].
+
+Comments/feedback greatly appreciated
+
+Best
+Joel
+
+[1]
+https://lore.kernel.org/all/20230809105006.1198165-1-j.granados@samsung.com/
+
+[2]
+Links Related to the ctl_table sentinel removal:
+* Good summary from Luis sent with the "pull request" for the
+  preparation patches.
+  https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/
+* Another very good summary from Luis.
+  https://lore.kernel.org/all/ZMFizKFkVxUFtSqa@bombadil.infradead.org/
+* This is a patch set that replaces register_sysctl_table with register_sysctl
+  https://lore.kernel.org/all/20230302204612.782387-1-mcgrof@kernel.org/
+* Patch set to deprecate register_sysctl_paths()
+  https://lore.kernel.org/all/20230302202826.776286-1-mcgrof@kernel.org/
+* Here there is an explicit expectation for the removal of the sentinel element.
+  https://lore.kernel.org/all/20230321130908.6972-1-frank.li@vivo.com
+* The "ARRAY_SIZE" approach was mentioned (proposed?) in this thread
+  https://lore.kernel.org/all/20220220060626.15885-1-tangmeng@uniontech.com
+
+[3]
+To measure the in memory savings apply this on top of this patchset.
+
+"
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index c88854df0b62..e0073a627bac 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -976,6 +976,8 @@ static struct ctl_dir *new_dir(struct ctl_table_set *set,
+        table[0].procname = new_name;
+        table[0].mode = S_IFDIR|S_IRUGO|S_IXUGO;
+        init_header(&new->header, set->dir.header.root, set, node, table, 1);
++       // Counts additional sentinel used for each new dir.
++       printk("%ld sysctl saved mem kzalloc \n", sizeof(struct ctl_table));
+
+        return new;
+ }
+@@ -1199,6 +1201,9 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table_
+                link_name += len;
+                link++;
+        }
++       // Counts additional sentinel used for each new registration
++       //if ((head->ctl_table + head->ctl_table_size)->procname)
++               printk("%ld sysctl saved mem kzalloc \n", sizeof(struct ctl_table));
+        init_header(links, dir->header.root, dir->header.set, node, link_table,
+                    head->ctl_table_size);
+        links->nreg = nr_entries;
+"
+and then run the following bash script in the kernel:
+
+accum=0
+for n in $(dmesg | grep kzalloc | awk '{print $3}') ; do
+    echo $n
+    accum=$(calc "$accum + $n")
+done
+echo $accum
+
+[4]
+add/remove: 0/0 grow/shrink: 0/3 up/down: 0/-192 (-192)
+Function                                     old     new   delta
+sld_sysctls                                  128      64     -64
+itmt_kern_table                              128      64     -64
+abi_table2                                   128      64     -64
+Total: Before=429173594, After=429173402, chg -0.00%
+
+[5]
+add/remove: 0/0 grow/shrink: 1/0 up/down: 64/0 (64)
+Function                                     old     new   delta
+sld_sysctls                                   64     128     +64
+Total: Before=1886119, After=1886183, chg +0.00%
+
+Signed-off-by: Joel Granados <j.granados@samsung.com>
+
+---
+
+---
+Joel Granados (8):
+      S390: Remove now superfluous sentinel elem from ctl_table arrays
+      arm: Remove now superfluous sentinel elem from ctl_table arrays
+      arch/x86: Remove now superfluous sentinel elem from ctl_table arrays
+      x86/vdso: Remove now superfluous sentinel element from ctl_table array
+      riscv: Remove now superfluous sentinel element from ctl_table array
+      powerpc: Remove now superfluous sentinel element from ctl_table arrays
+      ia64: Remove now superfluous sentinel element from ctl_table array
+      c-sky: Remove now superfluous sentinel element from ctl_talbe array
+
+ arch/arm/kernel/isa.c                     | 4 ++--
+ arch/arm64/kernel/armv8_deprecated.c      | 8 +++-----
+ arch/arm64/kernel/fpsimd.c                | 6 ++----
+ arch/arm64/kernel/process.c               | 3 +--
+ arch/csky/abiv1/alignment.c               | 3 +--
+ arch/ia64/kernel/crash.c                  | 3 +--
+ arch/powerpc/kernel/idle.c                | 3 +--
+ arch/powerpc/platforms/pseries/mobility.c | 3 +--
+ arch/riscv/kernel/vector.c                | 3 +--
+ arch/s390/appldata/appldata_base.c        | 6 ++----
+ arch/s390/kernel/debug.c                  | 3 +--
+ arch/s390/kernel/topology.c               | 3 +--
+ arch/s390/mm/cmm.c                        | 3 +--
+ arch/s390/mm/pgalloc.c                    | 3 +--
+ arch/x86/entry/vdso/vdso32-setup.c        | 3 +--
+ arch/x86/kernel/cpu/intel.c               | 3 +--
+ arch/x86/kernel/itmt.c                    | 3 +--
+ drivers/perf/arm_pmuv3.c                  | 3 +--
+ 18 files changed, 23 insertions(+), 43 deletions(-)
+---
+base-commit: 708283abf896dd4853e673cc8cba70acaf9bf4ea
+change-id: 20230904-jag-sysctl_remove_empty_elem_arch-81db0a6e6cc4
+
+Best regards,
+-- 
+Joel Granados <j.granados@samsung.com>
 
