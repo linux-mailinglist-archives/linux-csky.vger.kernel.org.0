@@ -2,129 +2,192 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469C579E325
-	for <lists+linux-csky@lfdr.de>; Wed, 13 Sep 2023 11:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA7679E85E
+	for <lists+linux-csky@lfdr.de>; Wed, 13 Sep 2023 14:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239256AbjIMJLw (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 13 Sep 2023 05:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S240801AbjIMMwx (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 13 Sep 2023 08:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239301AbjIMJLf (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 05:11:35 -0400
+        with ESMTP id S240805AbjIMMwj (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 08:52:39 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CC51BC2;
-        Wed, 13 Sep 2023 02:11:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 57508C433C7;
-        Wed, 13 Sep 2023 09:11:31 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7842211C;
+        Wed, 13 Sep 2023 05:52:31 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E4D5C433AB;
+        Wed, 13 Sep 2023 12:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694596291;
-        bh=bOZkXiICk5VZpusCoN35GJ6eTXBzdL14nNNGQMgELT4=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=RlASjPY2GnbaWVrb8C1c2XTqKSCQcR3wM+WD0rWbAqNQa0hrvj4juZxzK7y8tQpjE
-         iGk8MKGIbzVS/F3WrvRjSyh/L8hsZnZZ4p+KlgFQZ8Hwo4whrYU/pKszEWl6fY64OU
-         4YMZekgvBNU/bvXB6Im6rGmLV6zOldi94zZoM4HClQ2UIn2J7jCjctainlXCFSR8XR
-         JHvatfKnc3gPYFDgz+fjr9E6exVWiTEk5a9gWlai7ZAFRWpLMOh/HRCHFfBPtQTm+A
-         c2L6bZwUJmhK5Nk6cWH5Sqo3hwPWlFELEnKgyrHhaD9LzXOx58u8mso+VE6DVKGytv
-         t/hY6M/RQ9j1Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 3E680CA5512;
-        Wed, 13 Sep 2023 09:11:31 +0000 (UTC)
-From:   Joel Granados via B4 Relay 
-        <devnull+j.granados.samsung.com@kernel.org>
-Date:   Wed, 13 Sep 2023 11:11:02 +0200
-Subject: [PATCH v2 8/8] c-sky: Remove now superfluous sentinel element from
- ctl_talbe array
+        s=k20201202; t=1694609551;
+        bh=D2yTmI5mmzTW+iHmuYtFAVHVgFprFMquzoJG0XHk9mY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jLbYg9+lvwvF9g6Gzkp32rLzFct1AYEvyFblrgfdogy3rFxqbyRNys4dniNEV2uY5
+         nOe5Uz3nolhE3FN39BV/UqGkWDbU4ziXFzFWK6u3xLWpElf/wkqfKZg75txI3/Xdl1
+         u2aVr3lYI5QcjC8PEEAnMVH/i2l25qtLPa5KssBR/umBr395+GeU1u7dgSHF4+nMld
+         Jc6iurwNwapx7fV0M4ByfPLNdLGNpswYYe8Gol96hkHCT7wu3X1mV56n9E+C+hEXq0
+         0BYlIzcAxZJt0l8+Urs6wHHPXm5OAVzYdAoC9xpvcxlU1+jpgItMkzmY7R7ICI6TC/
+         9rSlusN9Qdzag==
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2bf66a32f25so89752011fa.2;
+        Wed, 13 Sep 2023 05:52:31 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yzvmi0iv4E+6Vd/CXrdkB8xadPCfdxypGYDXoPMgMJkiNPhcJAM
+        OAE3YXDyhKd/+gskXs8bUMp43KP49DCWyvPGjZ0=
+X-Google-Smtp-Source: AGHT+IGLa36Mv9VZMwcFAm7pr5KGpJYN8bFmsK6RHp2UXPGlGeRTY2NMaKQac0gjfg8fITbp0O+QfICTV/S409jzbrQ=
+X-Received: by 2002:a2e:9f06:0:b0:2bd:beb:4aca with SMTP id
+ u6-20020a2e9f06000000b002bd0beb4acamr2237707ljk.13.1694609549439; Wed, 13 Sep
+ 2023 05:52:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230913-jag-sysctl_remove_empty_elem_arch-v2-8-d1bd13a29bae@samsung.com>
-References: <20230913-jag-sysctl_remove_empty_elem_arch-v2-0-d1bd13a29bae@samsung.com>
-In-Reply-To: <20230913-jag-sysctl_remove_empty_elem_arch-v2-0-d1bd13a29bae@samsung.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>, willy@infradead.org,
-        josh@joshtriplett.org, Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Guo Ren <guoren@kernel.org>, Alexey Gladkov <legion@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-csky@vger.kernel.org,
-        Joel Granados <j.granados@samsung.com>
-X-Mailer: b4 0.13-dev-86aa5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1142;
- i=j.granados@samsung.com; h=from:subject:message-id;
- bh=wn/rmW3LIVUgnMCXZeG4YCvpOL/L6xf4mRBtbNQZAbw=;
- b=owEB7QES/pANAwAKAbqXzVK3lkFPAcsmYgBlAXzA5GlVzE7/rd8wut1u+0NMuuB0vDP4Kt9LJ
- CObib6trt2JAbMEAAEKAB0WIQSuRwlXJeYxJc7LJ5C6l81St5ZBTwUCZQF8wAAKCRC6l81St5ZB
- T7gBC/0fKA9pIG80ye+KDiog5k/fFGEVpxa0scNjVDBIe34baOOBslhh9jCq5CeB6uS1kVSU8Zn
- sjCTPhX7uROr2GobSknXdT2qiVTrWtW8NdWR3znWuML6pp2goXpp7VQ5PfPQPNQAIs2ngYHlj9p
- 7FW8hAkzcNwT6mqabdmRJMooE0YrdZsCrd5jPmeEL/99JURiW3raS0VU83iQqdBU57HKiKeaBUy
- 65feFTdijevoe0tiAIAR1yLbNxCRQaIhP5bm9HKReoJ6SafGlqLSgEnuK+DF219m74LC1P8STid
- 2dL95GtrdfAHhnwsPbDzH8tDtS75AInDIQRDRmWXXhDhz1F933gR4hoM5ZuukuU9+Vm0Us46tPN
- oSUTy1W85exYjVAmyyJ+md1EciwwRIgs5r9SReWyR/ztn/tCLNJX4MXiSPVX7P7Ld8m/XPeGx6W
- XvmwG5dS4Rv/dkz7R3snlRwS/qIsk0Cy7ohma1e73jaGvq0kBmcvxntJQTS6I/eu84yrw=
-X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with auth_id=70
-X-Original-From: Joel Granados <j.granados@samsung.com>
-Reply-To: <j.granados@samsung.com>
+References: <20230910082911.3378782-1-guoren@kernel.org> <20230910082911.3378782-5-guoren@kernel.org>
+ <f091ead0-99b9-b30a-a295-730ce321ac60@redhat.com> <CAJF2gTSbUUdLhN8PFdFzQd0M1T2MVOL1cdZn46WKq1S8MuQYHw@mail.gmail.com>
+ <06714da1-d566-766f-7a13-a3c93b5953c4@redhat.com> <CAJF2gTQ3Q7f+FGorVTR66c6TGWsSeeKVvLF+LH1_m3kSHrm0yA@mail.gmail.com>
+ <ZQF49GIZoFceUGYH@redhat.com>
+In-Reply-To: <ZQF49GIZoFceUGYH@redhat.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 13 Sep 2023 20:52:16 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTHdCr-FQVSGUc+LapkJPmDiEYYa_1P6T86uCjRujgnTg@mail.gmail.com>
+Message-ID: <CAJF2gTTHdCr-FQVSGUc+LapkJPmDiEYYa_1P6T86uCjRujgnTg@mail.gmail.com>
+Subject: Re: [PATCH V11 04/17] locking/qspinlock: Improve xchg_tail for number
+ of cpus >= 16k
+To:     Leonardo Bras <leobras@redhat.com>
+Cc:     Waiman Long <longman@redhat.com>, paul.walmsley@sifive.com,
+        anup@brainfault.org, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, palmer@rivosinc.com, boqun.feng@gmail.com,
+        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
+        rdunlap@infradead.org, catalin.marinas@arm.com,
+        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
+        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-From: Joel Granados <j.granados@samsung.com>
+On Wed, Sep 13, 2023 at 4:55=E2=80=AFPM Leonardo Bras <leobras@redhat.com> =
+wrote:
+>
+> On Tue, Sep 12, 2023 at 09:10:08AM +0800, Guo Ren wrote:
+> > On Mon, Sep 11, 2023 at 9:03=E2=80=AFPM Waiman Long <longman@redhat.com=
+> wrote:
+> > >
+> > > On 9/10/23 23:09, Guo Ren wrote:
+> > > > On Mon, Sep 11, 2023 at 10:35=E2=80=AFAM Waiman Long <longman@redha=
+t.com> wrote:
+> > > >>
+> > > >> On 9/10/23 04:28, guoren@kernel.org wrote:
+> > > >>> From: Guo Ren <guoren@linux.alibaba.com>
+> > > >>>
+> > > >>> The target of xchg_tail is to write the tail to the lock value, s=
+o
+> > > >>> adding prefetchw could help the next cmpxchg step, which may
+> > > >>> decrease the cmpxchg retry loops of xchg_tail. Some processors ma=
+y
+> > > >>> utilize this feature to give a forward guarantee, e.g., RISC-V
+> > > >>> XuanTie processors would block the snoop channel & irq for severa=
+l
+> > > >>> cycles when prefetch.w instruction (from Zicbop extension) retire=
+d,
+> > > >>> which guarantees the next cmpxchg succeeds.
+> > > >>>
+> > > >>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > >>> Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > >>> ---
+> > > >>>    kernel/locking/qspinlock.c | 5 ++++-
+> > > >>>    1 file changed, 4 insertions(+), 1 deletion(-)
+> > > >>>
+> > > >>> diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinloc=
+k.c
+> > > >>> index d3f99060b60f..96b54e2ade86 100644
+> > > >>> --- a/kernel/locking/qspinlock.c
+> > > >>> +++ b/kernel/locking/qspinlock.c
+> > > >>> @@ -223,7 +223,10 @@ static __always_inline void clear_pending_se=
+t_locked(struct qspinlock *lock)
+> > > >>>     */
+> > > >>>    static __always_inline u32 xchg_tail(struct qspinlock *lock, u=
+32 tail)
+> > > >>>    {
+> > > >>> -     u32 old, new, val =3D atomic_read(&lock->val);
+> > > >>> +     u32 old, new, val;
+> > > >>> +
+> > > >>> +     prefetchw(&lock->val);
+> > > >>> +     val =3D atomic_read(&lock->val);
+> > > >>>
+> > > >>>        for (;;) {
+> > > >>>                new =3D (val & _Q_LOCKED_PENDING_MASK) | tail;
+> > > >> That looks a bit weird. You pre-fetch and then immediately read it=
+. How
+> > > >> much performance gain you get by this change alone?
+> > > >>
+> > > >> Maybe you can define an arch specific primitive that default back =
+to
+> > > >> atomic_read() if not defined.
+> > > > Thx for the reply. This is a generic optimization point I would lik=
+e
+> > > > to talk about with you.
+> > > >
+> > > > First, prefetchw() makes cacheline an exclusive state and serves fo=
+r
+> > > > the next cmpxchg loop semantic, which writes the idx_tail part of
+> > > > arch_spin_lock. The atomic_read only makes cacheline in the shared
+> > > > state, which couldn't give any guarantee for the next cmpxchg loop
+> > > > semantic. Micro-architecture could utilize prefetchw() to provide a
+> > > > strong forward progress guarantee for the xchg_tail, e.g., the T-HE=
+AD
+> > > > XuanTie processor would hold the exclusive cacheline state until th=
+e
+> > > > next cmpxchg write success.
+> > > >
+> > > > In the end, Let's go back to the principle: the xchg_tail is an ato=
+mic
+> > > > swap operation that contains write eventually, so giving a prefetch=
+w()
+> > > > at the beginning is acceptable for all architectures..
+> > > > =E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2=E2=
+=80=A2=E2=80=A2=E2=80=A2=E2=80=A2=E2=80=A2
+> > >
+> > > I did realize afterward that prefetchw gets the cacheline in exclusiv=
+e
+> > > state. I will suggest you mention that in your commit log as well as
+> > > adding a comment about its purpose in the code.
+> > Okay, I would do that in v12, thx.
+>
+> I would suggest adding a snippet from the ISA Extenstion doc:
+>
+> "A prefetch.w instruction indicates to hardware that the cache block whos=
+e
+> effective address is the sum of the base address specified in rs1 and the
+> sign-extended offset encoded in imm[11:0], where imm[4:0] equals 0b00000,
+> is likely to be accessed by a data write (i.e. store) in the near future.=
+"
+Good point, thx.
 
-This commit comes at the tail end of a greater effort to remove the
-empty elements at the end of the ctl_table arrays (sentinels) which
-will reduce the overall build time size of the kernel and run time
-memory bloat by ~64 bytes per sentinel (further information Link :
-https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
+>
+> Other than that,
+> Reviewed-by: Leonardo Bras <leobras@redhat.com>
+>
+>
+> >
+> > >
+> > > Thanks,
+> > > Longman
+> > >
+> > > >> Cheers,
+> > > >> Longman
+> > > >>
+> > > >
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+> >
+>
 
-Remove sentinel from alignment_tbl ctl_table array. This removal is safe
-because register_sysctl_init implicitly uses ARRAY_SIZE() in addition to
-checking for the sentinel.
 
-Acked-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Joel Granados <j.granados@samsung.com>
----
- arch/csky/abiv1/alignment.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
-index b60259daed1b..0d75ce7b0328 100644
---- a/arch/csky/abiv1/alignment.c
-+++ b/arch/csky/abiv1/alignment.c
-@@ -328,8 +328,7 @@ static struct ctl_table alignment_tbl[5] = {
- 		.maxlen = sizeof(align_usr_count),
- 		.mode = 0666,
- 		.proc_handler = &proc_dointvec
--	},
--	{}
-+	}
- };
- 
- static int __init csky_alignment_init(void)
-
--- 
-2.30.2
-
+--=20
+Best Regards
+ Guo Ren
