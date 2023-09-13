@@ -2,59 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB6E79E1C6
-	for <lists+linux-csky@lfdr.de>; Wed, 13 Sep 2023 10:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E0579E295
+	for <lists+linux-csky@lfdr.de>; Wed, 13 Sep 2023 10:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238834AbjIMIQ4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 13 Sep 2023 04:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S234532AbjIMIur (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 13 Sep 2023 04:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234999AbjIMIQw (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 04:16:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA9C2199A
-        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:16:03 -0700 (PDT)
+        with ESMTP id S239096AbjIMIur (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 13 Sep 2023 04:50:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 022911996
+        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:49:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694592962;
+        s=mimecast20190719; t=1694594998;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=jC7cBaRtwiLtOqIw5mLAFy7L+zLW4t61GX8cvLgSZ6Q=;
-        b=YHfG4FnNQo8zV27yca7XWFH6SPkd97VKHap7P4koFKINiAHwfbOTY2gqKhomYxehOGm2Rn
-        gMGpMhRTI5ypZn7msTuuNUFbZmhaMXIwu/wGf3wL8DBov8uQND47atHfvX26kwN2ubqzfV
-        8yScGrz5OwejSplGcy+BIb4XqPoS6TA=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=CEEbRM+L5SAUMWcCbxhNrqKQfIPsl4YV6xdR61UZGBA=;
+        b=JfrhzYw69RA4utN4l8KiP2dZFeW3JT53tPaSYbIPw1AIhIHcYi8g+ixBQ3i0llHEDRAaFu
+        h7pJOvfLHo+hGqkiS+kA7pzsryLSW1f9Pfa56Q76/6cKhrhgv4aY3jefPwd95iD/wrnAE4
+        QBIwpDZ6mtai/Q2bN/kFrYj0pzxkhcE=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-507-d3Ryc6k0P6uyjE6PMPpFTw-1; Wed, 13 Sep 2023 04:16:01 -0400
-X-MC-Unique: d3Ryc6k0P6uyjE6PMPpFTw-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1cc7407e507so8264991fac.3
-        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:16:01 -0700 (PDT)
+ us-mta-290-kG3WCoimN7ykAzLEI3BOmQ-1; Wed, 13 Sep 2023 04:49:56 -0400
+X-MC-Unique: kG3WCoimN7ykAzLEI3BOmQ-1
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b9efedaeebso7337697a34.2
+        for <linux-csky@vger.kernel.org>; Wed, 13 Sep 2023 01:49:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694592961; x=1695197761;
+        d=1e100.net; s=20230601; t=1694594996; x=1695199796;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jC7cBaRtwiLtOqIw5mLAFy7L+zLW4t61GX8cvLgSZ6Q=;
-        b=mO4YFwv9OSbbWdGp/aU73te6sNxzYER/XYEV2gSDfpda4dumtp/0TmyK956j9Y4N6w
-         fdY3upW5v1LfFvvX1WK5gG3YV1Ir96PunaZpxtO4pPY5TQ0moP6RFzJMbAEE2fBeYjPl
-         +f6XOmjH2/XZ3b6hVc1abuKNx8bTiOWN+wBJSLxcRPvQIQQZSWNftA4h/ixZwJqoUkWB
-         9TuvZppKgSux9/utnmoM/9Q+FXB7UYBi/FLMv7Z1DAPq9fV9+5WWWVyQUwFaQr7VDLt8
-         miewgDVT1PR7nrM1AxQATRKQbu2g37j0wlWCW4RCohb7BMUvXwKFSbIs+xbufKQwXTwE
-         rTNg==
-X-Gm-Message-State: AOJu0YxBhzmcENNJELigONFtxotzfvN2Fn4+LnuB1nDDTknP9eqx0sdf
-        X1BnOUFVo2HHjB9Bmz6vAidZPPWCplhEgBBuwxDBJt2/U6oi+crfKJ5e/GKsKWi67IxNR4/eBHx
-        3bD6+Ft2h2YgRevc6sQiPlQ==
-X-Received: by 2002:a05:6870:8a29:b0:1bb:ac7:2e34 with SMTP id p41-20020a0568708a2900b001bb0ac72e34mr2086715oaq.40.1694592960763;
-        Wed, 13 Sep 2023 01:16:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFOZaoTn/FO9XWZIjXe4DzC8fn4zXFZUBlh/tx8ipyh0Rk/Pu3d+gYYuWAYZlcTSDNBgzo2Hg==
-X-Received: by 2002:a05:6870:8a29:b0:1bb:ac7:2e34 with SMTP id p41-20020a0568708a2900b001bb0ac72e34mr2086683oaq.40.1694592960455;
-        Wed, 13 Sep 2023 01:16:00 -0700 (PDT)
+        bh=CEEbRM+L5SAUMWcCbxhNrqKQfIPsl4YV6xdR61UZGBA=;
+        b=oEOcZP0eO3h4CzZ0GtM+mDefkW2f/FCvDBRalcXH3RvRdj2LpkuIZ+sVni4BsITYGd
+         ggCquTl/aMGcS8UtxiUXpLK05pUnYAbJMZc788CfB2YZJDFlbDyklqFkAaTGMFMkvz3L
+         6g/Dq2Nl3tl+63dpihPdh18necinTTgCROkQlZber9O12H8VT5OvUfMEeuHxRAasvUBV
+         px2khQRz+v1HdufAcdvJvnjUXvJq/syG8Am7NmHBK8LlZ+D84M4tlO4+P1UfGaIbsj9V
+         cLk0fFdJnmOLjMbWbt+KUXeAe2ScjSd3/JfavBraqK94G2ItGRSyfWlyC5MAEQsV6IKN
+         MOyw==
+X-Gm-Message-State: AOJu0YxxrNMQ3KDPHJzfC8/PkOKkD8M0yi7yGVIyqdb8krOcclBJWaBc
+        wsB7mPjQT07R6dn6emH5MdUN9pYCAPznp60Q7fIk5GJm/lo0Qm6pisSb4gVKxVwdEYu3yNth8Uz
+        70WiIpQd4yu3hl9D5SW86PA==
+X-Received: by 2002:a05:6830:42:b0:6bd:1059:8212 with SMTP id d2-20020a056830004200b006bd10598212mr2442859otp.26.1694594996253;
+        Wed, 13 Sep 2023 01:49:56 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGbL4AK6cS8gntncrHkfFRvxragh1Vk4rkFly+C/wOw+cgMI41aIbdMzJtL31SZ/Ari+MYAwA==
+X-Received: by 2002:a05:6830:42:b0:6bd:1059:8212 with SMTP id d2-20020a056830004200b006bd10598212mr2442845otp.26.1694594996010;
+        Wed, 13 Sep 2023 01:49:56 -0700 (PDT)
 Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id e2-20020a056870944200b001d533004669sm6032266oal.32.2023.09.13.01.15.53
+        by smtp.gmail.com with ESMTPSA id f18-20020a4ada52000000b00578a0824ff6sm1312546oou.20.2023.09.13.01.49.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 01:16:00 -0700 (PDT)
-Date:   Wed, 13 Sep 2023 05:15:51 -0300
+        Wed, 13 Sep 2023 01:49:55 -0700 (PDT)
+Date:   Wed, 13 Sep 2023 05:49:45 -0300
 From:   Leonardo Bras <leobras@redhat.com>
 To:     guoren@kernel.org
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
@@ -70,265 +70,193 @@ Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 02/17] asm-generic: ticket-lock: Move into
- ticket_spinlock.h
-Message-ID: <ZQFvt2nW4IwpdDo3@redhat.com>
+Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
+Message-ID: <ZQF3qS1KRYAt3coC@redhat.com>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-3-guoren@kernel.org>
+ <20230910082911.3378782-4-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230910082911.3378782-3-guoren@kernel.org>
+In-Reply-To: <20230910082911.3378782-4-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Sep 10, 2023 at 04:28:56AM -0400, guoren@kernel.org wrote:
+On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
 > From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> Move ticket-lock definition into an independent file. This is the
-> preparation for the next combo spinlock of riscv.
+> Cache-block prefetch instructions are HINTs to the hardware to
+> indicate that software intends to perform a particular type of
+> memory access in the near future. Enable ARCH_HAS_PREFETCHW and
+> improve the arch_xchg for qspinlock xchg_tail.
 > 
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > Signed-off-by: Guo Ren <guoren@kernel.org>
 > ---
->  include/asm-generic/spinlock.h        |  87 +---------------------
->  include/asm-generic/ticket_spinlock.h | 103 ++++++++++++++++++++++++++
->  2 files changed, 104 insertions(+), 86 deletions(-)
->  create mode 100644 include/asm-generic/ticket_spinlock.h
+>  arch/riscv/Kconfig                 | 15 +++++++++++++++
+>  arch/riscv/include/asm/cmpxchg.h   |  4 +++-
+>  arch/riscv/include/asm/hwcap.h     |  1 +
+>  arch/riscv/include/asm/insn-def.h  |  5 +++++
+>  arch/riscv/include/asm/processor.h | 13 +++++++++++++
+>  arch/riscv/kernel/cpufeature.c     |  1 +
+>  6 files changed, 38 insertions(+), 1 deletion(-)
 > 
-> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-> index 4773334ee638..970590baf61b 100644
-> --- a/include/asm-generic/spinlock.h
-> +++ b/include/asm-generic/spinlock.h
-> @@ -1,94 +1,9 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index e9ae6fa232c3..2c346fe169c1 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -617,6 +617,21 @@ config RISCV_ISA_ZICBOZ
 >  
-> -/*
-> - * 'Generic' ticket-lock implementation.
-> - *
-> - * It relies on atomic_fetch_add() having well defined forward progress
-> - * guarantees under contention. If your architecture cannot provide this, stick
-> - * to a test-and-set lock.
-> - *
-> - * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
-> - * sub-word of the value. This is generally true for anything LL/SC although
-> - * you'd be hard pressed to find anything useful in architecture specifications
-> - * about this. If your architecture cannot do this you might be better off with
-> - * a test-and-set.
-> - *
-> - * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
-> - * uses atomic_fetch_add() which is RCsc to create an RCsc hot path, along with
-> - * a full fence after the spin to upgrade the otherwise-RCpc
-> - * atomic_cond_read_acquire().
-> - *
-> - * The implementation uses smp_cond_load_acquire() to spin, so if the
-> - * architecture has WFE like instructions to sleep instead of poll for word
-> - * modifications be sure to implement that (see ARM64 for example).
-> - *
-> - */
-> -
->  #ifndef __ASM_GENERIC_SPINLOCK_H
->  #define __ASM_GENERIC_SPINLOCK_H
+>  	   If you don't know what to do here, say Y.
 >  
-> -#include <linux/atomic.h>
-> -#include <asm-generic/spinlock_types.h>
-> -
-> -static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
-> -{
-> -	u32 val = atomic_fetch_add(1<<16, &lock->val);
-> -	u16 ticket = val >> 16;
-> -
-> -	if (ticket == (u16)val)
-> -		return;
-> -
-> -	/*
-> -	 * atomic_cond_read_acquire() is RCpc, but rather than defining a
-> -	 * custom cond_read_rcsc() here we just emit a full fence.  We only
-> -	 * need the prior reads before subsequent writes ordering from
-> -	 * smb_mb(), but as atomic_cond_read_acquire() just emits reads and we
-> -	 * have no outstanding writes due to the atomic_fetch_add() the extra
-> -	 * orderings are free.
-> -	 */
-> -	atomic_cond_read_acquire(&lock->val, ticket == (u16)VAL);
-> -	smp_mb();
-> -}
-> -
-> -static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
-> -{
-> -	u32 old = atomic_read(&lock->val);
-> -
-> -	if ((old >> 16) != (old & 0xffff))
-> -		return false;
-> -
-> -	return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC, for RCsc */
-> -}
-> -
-> -static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
-> -{
-> -	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-> -	u32 val = atomic_read(&lock->val);
-> -
-> -	smp_store_release(ptr, (u16)val + 1);
-> -}
-> -
-> -static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-> -{
-> -	u32 val = lock.val.counter;
-> -
-> -	return ((val >> 16) == (val & 0xffff));
-> -}
-> -
-> -static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
-> -{
-> -	arch_spinlock_t val = READ_ONCE(*lock);
-> -
-> -	return !arch_spin_value_unlocked(val);
-> -}
-> -
-> -static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
-> -{
-> -	u32 val = atomic_read(&lock->val);
-> -
-> -	return (s16)((val >> 16) - (val & 0xffff)) > 1;
-> -}
-> -
-> +#include <asm-generic/ticket_spinlock.h>
->  #include <asm/qrwlock.h>
+> +config RISCV_ISA_ZICBOP
+> +	bool "Zicbop extension support for cache block prefetch"
+> +	depends on MMU
+> +	depends on RISCV_ALTERNATIVE
+> +	default y
+> +	help
+> +	   Adds support to dynamically detect the presence of the ZICBOP
+> +	   extension (Cache Block Prefetch Operations) and enable its
+> +	   usage.
+> +
+> +	   The Zicbop extension can be used to prefetch cache block for
+> +	   read/write/instruction fetch.
+> +
+> +	   If you don't know what to do here, say Y.
+> +
+>  config TOOLCHAIN_HAS_ZIHINTPAUSE
+>  	bool
+>  	default y
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index 702725727671..56eff7a9d2d2 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -11,6 +11,7 @@
 >  
->  #endif /* __ASM_GENERIC_SPINLOCK_H */
-> diff --git a/include/asm-generic/ticket_spinlock.h b/include/asm-generic/ticket_spinlock.h
-> new file mode 100644
-> index 000000000000..cfcff22b37b3
-> --- /dev/null
-> +++ b/include/asm-generic/ticket_spinlock.h
-> @@ -0,0 +1,103 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+>  #include <asm/barrier.h>
+>  #include <asm/fence.h>
+> +#include <asm/processor.h>
+>  
+>  #define __arch_xchg_masked(prepend, append, r, p, n)			\
+>  ({									\
+> @@ -25,6 +26,7 @@
+>  									\
+>  	__asm__ __volatile__ (						\
+>  	       prepend							\
+> +	       PREFETCHW_ASM(%5)					\
+>  	       "0:	lr.w %0, %2\n"					\
+>  	       "	and  %1, %0, %z4\n"				\
+>  	       "	or   %1, %1, %z3\n"				\
+> @@ -32,7 +34,7 @@
+>  	       "	bnez %1, 0b\n"					\
+>  	       append							\
+>  	       : "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))	\
+> -	       : "rJ" (__newx), "rJ" (~__mask)				\
+> +	       : "rJ" (__newx), "rJ" (~__mask), "rJ" (__ptr32b)		\
+>  	       : "memory");						\
+>  									\
+>  	r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index b7b58258f6c7..78b7b8b53778 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -58,6 +58,7 @@
+>  #define RISCV_ISA_EXT_ZICSR		40
+>  #define RISCV_ISA_EXT_ZIFENCEI		41
+>  #define RISCV_ISA_EXT_ZIHPM		42
+> +#define RISCV_ISA_EXT_ZICBOP		43
+>  
+>  #define RISCV_ISA_EXT_MAX		64
+>  
+> diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/insn-def.h
+> index 6960beb75f32..dc590d331894 100644
+> --- a/arch/riscv/include/asm/insn-def.h
+> +++ b/arch/riscv/include/asm/insn-def.h
+> @@ -134,6 +134,7 @@
+>  
+>  #define RV_OPCODE_MISC_MEM	RV_OPCODE(15)
+>  #define RV_OPCODE_SYSTEM	RV_OPCODE(115)
+> +#define RV_OPCODE_PREFETCH	RV_OPCODE(19)
+>  
+>  #define HFENCE_VVMA(vaddr, asid)				\
+>  	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(17),		\
+> @@ -196,4 +197,8 @@
+>  	INSN_I(OPCODE_MISC_MEM, FUNC3(2), __RD(0),		\
+>  	       RS1(base), SIMM12(4))
+>  
+> +#define CBO_prefetchw(base)					\
+> +	INSN_R(OPCODE_PREFETCH, FUNC3(6), FUNC7(0),		\
+> +	       RD(x0), RS1(base), RS2(x0))
 > +
-> +/*
-> + * 'Generic' ticket-lock implementation.
-> + *
-> + * It relies on atomic_fetch_add() having well defined forward progress
-> + * guarantees under contention. If your architecture cannot provide this, stick
-> + * to a test-and-set lock.
-> + *
-> + * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
-> + * sub-word of the value. This is generally true for anything LL/SC although
-> + * you'd be hard pressed to find anything useful in architecture specifications
-> + * about this. If your architecture cannot do this you might be better off with
-> + * a test-and-set.
-> + *
-> + * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
-> + * uses atomic_fetch_add() which is RCsc to create an RCsc hot path, along with
-> + * a full fence after the spin to upgrade the otherwise-RCpc
-> + * atomic_cond_read_acquire().
-> + *
-> + * The implementation uses smp_cond_load_acquire() to spin, so if the
-> + * architecture has WFE like instructions to sleep instead of poll for word
-> + * modifications be sure to implement that (see ARM64 for example).
-> + *
-> + */
-> +
-> +#ifndef __ASM_GENERIC_TICKET_SPINLOCK_H
-> +#define __ASM_GENERIC_TICKET_SPINLOCK_H
-> +
-> +#include <linux/atomic.h>
-> +#include <asm-generic/spinlock_types.h>
-> +
-> +static __always_inline void ticket_spin_lock(arch_spinlock_t *lock)
+
+I understand that here you create the instruction via bitfield, following 
+the ISA, and this enables using instructions not available on the 
+toolchain.
+
+It took me some time to find the document with this instruction, so please 
+add this to the commit msg:
+
+https://github.com/riscv/riscv-CMOs/blob/master/specifications/cmobase-v1.0.pdf
+Page 23.
+
+IIUC, the instruction is "prefetch.w".
+
+Maybe I am missing something, but in the document the rs2 field 
+(PREFETCH.W) contains a 0x3, while the above looks to have a 0 instead.
+
+rs2 field = 0x0 would be a prefetch.i (instruction prefetch) instead.
+
+Is the above correct, or am I missing something?
+
+
+Thanks!
+Leo
+
+>  #endif /* __ASM_INSN_DEF_H */
+> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> index de9da852f78d..7ad3a24212e8 100644
+> --- a/arch/riscv/include/asm/processor.h
+> +++ b/arch/riscv/include/asm/processor.h
+> @@ -12,6 +12,8 @@
+>  #include <vdso/processor.h>
+>  
+>  #include <asm/ptrace.h>
+> +#include <asm/insn-def.h>
+> +#include <asm/hwcap.h>
+>  
+>  #ifdef CONFIG_64BIT
+>  #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
+> @@ -103,6 +105,17 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+>  #define KSTK_EIP(tsk)		(ulong)(task_pt_regs(tsk)->epc)
+>  #define KSTK_ESP(tsk)		(ulong)(task_pt_regs(tsk)->sp)
+>  
+> +#define ARCH_HAS_PREFETCHW
+> +#define PREFETCHW_ASM(base)	ALTERNATIVE(__nops(1), \
+> +					    CBO_prefetchw(base), \
+> +					    0, \
+> +					    RISCV_ISA_EXT_ZICBOP, \
+> +					    CONFIG_RISCV_ISA_ZICBOP)
+> +static inline void prefetchw(const void *ptr)
 > +{
-> +	u32 val = atomic_fetch_add(1<<16, &lock->val);
-> +	u16 ticket = val >> 16;
-> +
-> +	if (ticket == (u16)val)
-> +		return;
-> +
-> +	/*
-> +	 * atomic_cond_read_acquire() is RCpc, but rather than defining a
-> +	 * custom cond_read_rcsc() here we just emit a full fence.  We only
-> +	 * need the prior reads before subsequent writes ordering from
-> +	 * smb_mb(), but as atomic_cond_read_acquire() just emits reads and we
-> +	 * have no outstanding writes due to the atomic_fetch_add() the extra
-> +	 * orderings are free.
-> +	 */
-> +	atomic_cond_read_acquire(&lock->val, ticket == (u16)VAL);
-> +	smp_mb();
+> +	asm volatile(PREFETCHW_ASM(%0)
+> +		: : "r" (ptr) : "memory");
 > +}
-> +
-> +static __always_inline bool ticket_spin_trylock(arch_spinlock_t *lock)
-> +{
-> +	u32 old = atomic_read(&lock->val);
-> +
-> +	if ((old >> 16) != (old & 0xffff))
-> +		return false;
-> +
-> +	return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC, for RCsc */
-> +}
-> +
-> +static __always_inline void ticket_spin_unlock(arch_spinlock_t *lock)
-> +{
-> +	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-> +	u32 val = atomic_read(&lock->val);
-> +
-> +	smp_store_release(ptr, (u16)val + 1);
-> +}
-> +
-> +static __always_inline int ticket_spin_value_unlocked(arch_spinlock_t lock)
-> +{
-> +	u32 val = lock.val.counter;
-> +
-> +	return ((val >> 16) == (val & 0xffff));
-> +}
-> +
-> +static __always_inline int ticket_spin_is_locked(arch_spinlock_t *lock)
-> +{
-> +	arch_spinlock_t val = READ_ONCE(*lock);
-> +
-> +	return !ticket_spin_value_unlocked(val);
-> +}
-> +
-> +static __always_inline int ticket_spin_is_contended(arch_spinlock_t *lock)
-> +{
-> +	u32 val = atomic_read(&lock->val);
-> +
-> +	return (s16)((val >> 16) - (val & 0xffff)) > 1;
-> +}
-> +
-> +/*
-> + * Remapping spinlock architecture specific functions to the corresponding
-> + * ticket spinlock functions.
-> + */
-> +#define arch_spin_is_locked(l)		ticket_spin_is_locked(l)
-> +#define arch_spin_is_contended(l)	ticket_spin_is_contended(l)
-> +#define arch_spin_value_unlocked(l)	ticket_spin_value_unlocked(l)
-> +#define arch_spin_lock(l)		ticket_spin_lock(l)
-> +#define arch_spin_trylock(l)		ticket_spin_trylock(l)
-> +#define arch_spin_unlock(l)		ticket_spin_unlock(l)
-> +
-> +#endif /* __ASM_GENERIC_TICKET_SPINLOCK_H */
-
-IIUC here most of the file was moved, and the above defines are introduced.
-
-I understand this pattern of creating the defines at the end of the file is 
-the same used in "asm-generic/qspinlock.h" but I don't actually think this
-is a good way of doing this.
-
-Instead of having those defines here (and similarly on 
-"asm-generic/qspinlock.h", I think it would be better to have those defines 
-in the arch-specific header including them, which would allow the arch to 
-include multiple spinlock versions and decide (compile-time, even run-time)
-which version to use. It gives decision power to the arch code.
-
-(And it would remove the need of undefining them on a later patch)
-
-There are only 3 archs which use this arch-generic qspinlock, so should 
-not be a huge deal to have the defines copied there:
-
-# git grep asm-generic/qspinlock.h
-arch/loongarch/include/asm/qspinlock.h:16:#include <asm-generic/qspinlock.h>
-arch/sparc/include/asm/qspinlock.h:6:#include <asm-generic/qspinlock.h>
-arch/x86/include/asm/qspinlock.h:107:#include <asm-generic/qspinlock.h>
-
-Other than that:
-Reviewed-by: Leonardo Bras <leobras@redhat.com>
+>  
+>  /* Do necessary setup to start up a newly executed thread. */
+>  extern void start_thread(struct pt_regs *regs,
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index ef7b4fd9e876..e0b897db0b97 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -159,6 +159,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>  	__RISCV_ISA_EXT_DATA(h, RISCV_ISA_EXT_h),
+>  	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+>  	__RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
+> +	__RISCV_ISA_EXT_DATA(zicbop, RISCV_ISA_EXT_ZICBOP),
+>  	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
+>  	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
+>  	__RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
+> -- 
+> 2.36.1
+> 
 
