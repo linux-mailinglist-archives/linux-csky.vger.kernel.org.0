@@ -2,53 +2,53 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877A07A065E
-	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 15:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6410A7A073A
+	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 16:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239118AbjINNsN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 14 Sep 2023 09:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S239984AbjINO0G (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 14 Sep 2023 10:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239031AbjINNsM (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 09:48:12 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E051BE
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 06:48:08 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-403012f27e3so10941725e9.3
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 06:48:08 -0700 (PDT)
+        with ESMTP id S239899AbjINO0G (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 10:26:06 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B5D1AD
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 07:26:01 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-403012f276dso10950335e9.0
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 07:26:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1694699286; x=1695304086; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1694701560; x=1695306360; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NpRZDPmcHDBEDq/PN5VoK+B/Io2/pklU+DrUKVj/Uk=;
-        b=WFdrX/nmC3pAZx8nGdgY4DHxSy424LSJqU37nUa7W5HxpsXBY+pKkdzxwUjtrKPgZ8
-         GRvHkeyg5LaA+uTM8dm1Q7Ys3Ggr1kFPqahLghMEHowrp3kwyZk92+1tXo+83Hjxpqiw
-         NiXVukpxkNiROreKn2sgCW3pDBA4JpdANf244HkGANjb5142Lh0fmMUDxi/70dywpX2h
-         uVZWi9hkbDlIE0mkQDx2QqMd1XgS/8Qf3EJg9ck+uIGccaJBOUdSqoRJOHvcMRzQnk2m
-         GEEvWVCqvlS4p15dsu6tELeCgVJ905uo0JBmGieU4CCL05dOfLZ86z7s7PAVX7iztRYU
-         SUog==
+        bh=YG4jj4GnceKWHFc9CDsOyyvWCOlMS/zle7Y09KSgtKI=;
+        b=g9aO+D0A7Vn87/QKbx6OjNyzvS41oJJljAbyt1gOMP0HFE/p0xVhJfDJyruCGJezsL
+         0Xp8U7T7SpVCoNljpptT6C8MQ3S8eOsCAMOBtX1wFniGrHDubaDjs++2PM9seSsFmVRv
+         i6pcY7ZcBzDbA+T4cOZtjvJYJPtWouq5DCINtoEMPlJYoUYS/7JstacfGZVNa56xbnxY
+         x9YkPFKN26qHx9kqXWnJ4aq4rvwAbRCYuKu3warY8gcutISNPKUNITeesF+LbvuReeVl
+         CA6RDVqiLMVMZaDVFD66wIuI5kGF2FlxSL1GXMa4JshALqWLyijVeJp3axBBWcHyd9kP
+         urcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694699286; x=1695304086;
+        d=1e100.net; s=20230601; t=1694701560; x=1695306360;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0NpRZDPmcHDBEDq/PN5VoK+B/Io2/pklU+DrUKVj/Uk=;
-        b=dv9DuZUYd+OstU6A9/ll8cGO+MLtYwzeVl9tN6BfFIiwDDCcisAu4WeuUNY22R7QgS
-         sDAmPPX7ARiDxFQbA6eF1ZFT0HZs/xp6bX6WmWiGH9htf65HVo4mdcK7iCdMsTeCUQhU
-         oQr9c9BmL018TDGwXmDiHOOdSfmAzgFKuckdVL+kvrGvOFqrzDUf3X4WEIY3Tdi22To+
-         UVjRWf4U0Ev3vn7gHuWD1md6DmwqjUPzG8tzbJhDqvWOey/36kM/A04Wjj0w53c2/0Hl
-         klcT1BetdZcSaVyKJlSJ4dTyYC0Sc07OOMoID9GfWPCcI8FUPHF4vqqy/hz+75pPQ9fa
-         ZaBg==
-X-Gm-Message-State: AOJu0YzESWuGSF/kDa9hOOt/oH/dFOLckCAZfGVfhhtvyYHzT+uPg7uW
-        8uctliSi/FTrt/s0t5aH4cyE5A==
-X-Google-Smtp-Source: AGHT+IFwoMiGuvOYU6N8bNee+qhZal97C+SbTYI2CWIdEfiJfY+KPo0K14ss0u/3IPRnH7VdRnRmEg==
-X-Received: by 2002:a1c:4b16:0:b0:402:ff8d:609b with SMTP id y22-20020a1c4b16000000b00402ff8d609bmr4491570wma.33.1694699285794;
-        Thu, 14 Sep 2023 06:48:05 -0700 (PDT)
+        bh=YG4jj4GnceKWHFc9CDsOyyvWCOlMS/zle7Y09KSgtKI=;
+        b=Kq8gLe1FKJlU/Ehjm8ZsV9kK1f/AHWIi32L0X71K0jEFPHr7gU1XNDhGPFJSuBi8AR
+         ul6NsFfTzjVbI1TKs437LiSqRfuPltN8yTI7imKa1o7rGGI7yISgz04A2tq+3FyQKdZL
+         fPX/8C09TyVH6FkAxA4TUMV8fRF+r1pwWh+7LZb4XHqXlVPP+Paxb2VaXijsdKgSUtPq
+         dLfj+3t7BCEVdVJJQk6n81G5yLQz5d2DbR3U8t1pJ5FIJEWzXbzMTi52fCVh+CRkBnYN
+         d72HcY+NIs7w95GQjLYXKctb1ODpeoGWd2hEt2oHEREKuVr345RuxcNJVq0fTW3eyiqh
+         ea4g==
+X-Gm-Message-State: AOJu0Yx5I9zOq8Y1+xlHj3X430b+9YyooBnAqhQ+iKEz1o1cGtvT5Rgj
+        B2Ra1YpAZLbcpmsMrJQw3WC0Nw==
+X-Google-Smtp-Source: AGHT+IFWc50omqudDyR0Nh+pUUfbse+nkODV23h/mlFUP8m4u/vojRIjASaeifFA7VSOhcKfy6pcrw==
+X-Received: by 2002:a05:600c:c8:b0:402:f5c2:c6d9 with SMTP id u8-20020a05600c00c800b00402f5c2c6d9mr5110748wmm.37.1694701559948;
+        Thu, 14 Sep 2023 07:25:59 -0700 (PDT)
 Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id p14-20020a1c740e000000b003fe407ca05bsm4953494wmc.37.2023.09.14.06.48.04
+        by smtp.gmail.com with ESMTPSA id f7-20020adff987000000b0031c8a43712asm1914525wrr.69.2023.09.14.07.25.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 06:48:05 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 15:47:59 +0200
+        Thu, 14 Sep 2023 07:25:59 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 16:25:53 +0200
 From:   Andrew Jones <ajones@ventanamicro.com>
 To:     guoren@kernel.org
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
@@ -65,7 +65,7 @@ Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
 Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
-Message-ID: <20230914-1ce4f391a14e56b456d88188@orel>
+Message-ID: <20230914-892327a75b4b86badac5de02@orel>
 References: <20230910082911.3378782-1-guoren@kernel.org>
  <20230910082911.3378782-4-guoren@kernel.org>
 MIME-Version: 1.0
@@ -104,155 +104,14 @@ On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
 >  	   If you don't know what to do here, say Y.
 >  
 > +config RISCV_ISA_ZICBOP
-> +	bool "Zicbop extension support for cache block prefetch"
-> +	depends on MMU
-> +	depends on RISCV_ALTERNATIVE
-> +	default y
-> +	help
-> +	   Adds support to dynamically detect the presence of the ZICBOP
-> +	   extension (Cache Block Prefetch Operations) and enable its
-> +	   usage.
-> +
-> +	   The Zicbop extension can be used to prefetch cache block for
-> +	   read/write/instruction fetch.
-> +
-> +	   If you don't know what to do here, say Y.
-> +
->  config TOOLCHAIN_HAS_ZIHINTPAUSE
->  	bool
->  	default y
-> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-> index 702725727671..56eff7a9d2d2 100644
-> --- a/arch/riscv/include/asm/cmpxchg.h
-> +++ b/arch/riscv/include/asm/cmpxchg.h
-> @@ -11,6 +11,7 @@
->  
->  #include <asm/barrier.h>
->  #include <asm/fence.h>
-> +#include <asm/processor.h>
->  
->  #define __arch_xchg_masked(prepend, append, r, p, n)			\
->  ({									\
-> @@ -25,6 +26,7 @@
->  									\
->  	__asm__ __volatile__ (						\
->  	       prepend							\
-> +	       PREFETCHW_ASM(%5)					\
->  	       "0:	lr.w %0, %2\n"					\
->  	       "	and  %1, %0, %z4\n"				\
->  	       "	or   %1, %1, %z3\n"				\
-> @@ -32,7 +34,7 @@
->  	       "	bnez %1, 0b\n"					\
->  	       append							\
->  	       : "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))	\
-> -	       : "rJ" (__newx), "rJ" (~__mask)				\
-> +	       : "rJ" (__newx), "rJ" (~__mask), "rJ" (__ptr32b)		\
->  	       : "memory");						\
->  									\
->  	r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index b7b58258f6c7..78b7b8b53778 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -58,6 +58,7 @@
->  #define RISCV_ISA_EXT_ZICSR		40
->  #define RISCV_ISA_EXT_ZIFENCEI		41
->  #define RISCV_ISA_EXT_ZIHPM		42
-> +#define RISCV_ISA_EXT_ZICBOP		43
->  
->  #define RISCV_ISA_EXT_MAX		64
->  
-> diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/insn-def.h
-> index 6960beb75f32..dc590d331894 100644
-> --- a/arch/riscv/include/asm/insn-def.h
-> +++ b/arch/riscv/include/asm/insn-def.h
-> @@ -134,6 +134,7 @@
->  
->  #define RV_OPCODE_MISC_MEM	RV_OPCODE(15)
->  #define RV_OPCODE_SYSTEM	RV_OPCODE(115)
-> +#define RV_OPCODE_PREFETCH	RV_OPCODE(19)
 
-This should be named RV_OPCODE_OP_IMM and be placed in
-numerical order with the others, i.e. above SYSTEM.
-
->  
->  #define HFENCE_VVMA(vaddr, asid)				\
->  	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(17),		\
-> @@ -196,4 +197,8 @@
->  	INSN_I(OPCODE_MISC_MEM, FUNC3(2), __RD(0),		\
->  	       RS1(base), SIMM12(4))
->  
-> +#define CBO_prefetchw(base)					\
-
-Please name this 'PREFETCH_w' and it should take an immediate parameter,
-even if we intend to pass 0 for it.
-
-> +	INSN_R(OPCODE_PREFETCH, FUNC3(6), FUNC7(0),		\
-> +	       RD(x0), RS1(base), RS2(x0))
-
-prefetch.w is not an R-type instruction, it's an S-type. While the bit
-shifts are the same, the names are different. We need to add S-type
-names while defining this instruction. Then, this define would be
-
- #define PREFETCH_w(base, imm) \
-     INSN_S(OPCODE_OP_IMM, FUNC3(6), IMM_11_5(imm), __IMM_4_0(0), \
-            RS1(base), __RS2(3))
-
-When the assembler as insn_r I hope it will validate that
-(imm & 0xfe0) == imm
-
-> +
->  #endif /* __ASM_INSN_DEF_H */
-> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
-> index de9da852f78d..7ad3a24212e8 100644
-> --- a/arch/riscv/include/asm/processor.h
-> +++ b/arch/riscv/include/asm/processor.h
-> @@ -12,6 +12,8 @@
->  #include <vdso/processor.h>
->  
->  #include <asm/ptrace.h>
-> +#include <asm/insn-def.h>
-> +#include <asm/hwcap.h>
->  
->  #ifdef CONFIG_64BIT
->  #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
-> @@ -103,6 +105,17 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
->  #define KSTK_EIP(tsk)		(ulong)(task_pt_regs(tsk)->epc)
->  #define KSTK_ESP(tsk)		(ulong)(task_pt_regs(tsk)->sp)
->  
-> +#define ARCH_HAS_PREFETCHW
-> +#define PREFETCHW_ASM(base)	ALTERNATIVE(__nops(1), \
-> +					    CBO_prefetchw(base), \
-> +					    0, \
-> +					    RISCV_ISA_EXT_ZICBOP, \
-> +					    CONFIG_RISCV_ISA_ZICBOP)
-> +static inline void prefetchw(const void *ptr)
-> +{
-> +	asm volatile(PREFETCHW_ASM(%0)
-> +		: : "r" (ptr) : "memory");
-> +}
->  
->  /* Do necessary setup to start up a newly executed thread. */
->  extern void start_thread(struct pt_regs *regs,
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index ef7b4fd9e876..e0b897db0b97 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -159,6 +159,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->  	__RISCV_ISA_EXT_DATA(h, RISCV_ISA_EXT_h),
->  	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
->  	__RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
-> +	__RISCV_ISA_EXT_DATA(zicbop, RISCV_ISA_EXT_ZICBOP),
-
-zicbop should be above zicboz (extensions alphabetical within their
-category).
-
->  	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
->  	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
->  	__RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
-> -- 
-> 2.36.1
->
+Even if we're not concerned with looping over blocks yet, I think we
+should introduce zicbop block size DT parsing at the same time we bring
+zicbop support to the kernel (it's just more copy+paste from zicbom and
+zicboz). It's a bit annoying that the CMO spec doesn't state that block
+sizes should be the same for m/z/p. And, the fact that m/z/p are all
+separate extensions leads us to needing to parse block sizes for all
+three, despite the fact that in practice they'll probably be the same.
 
 Thanks,
 drew
