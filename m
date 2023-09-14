@@ -2,140 +2,135 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA157A07AB
-	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 16:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCDD7A0BAF
+	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 19:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240319AbjINOr1 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 14 Sep 2023 10:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
+        id S241736AbjINR01 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 14 Sep 2023 13:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240293AbjINOr0 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 10:47:26 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306AE1FC8
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 07:47:22 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-4018af103bcso7418515e9.1
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 07:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1694702840; x=1695307640; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vHpWmHejf9EicOnbuTpXQSbFe9gmT4JUPIXQ/pQhLLs=;
-        b=OICqe2J+pAU/Tw1th392fVmAUa+8T60710r04130hvuY9Irz3uPklqPCNYiKH4N5tp
-         xaJWWXHhj5/wE040hJ9kSMtiEtj3yLpwmlXy4G9+5zTfiBd10Qt5CSsICqywQijxFcRW
-         je8Xf8KvgNIImwjEAQuKAwCKVvicotgOFQeKFpUVHsE58ly20i+nAxdQOyxX1bckKLXK
-         U0mVstkxeoV8WKZulfztUojq62+BLhyKlN2vYfkEjX2I+ieKe6sjku4C6BOEivTOZvc4
-         YWItytRxlm2VXgACWpOT9Y1q0CcvybbeOAxnvdP4ERRnggf+1Efu6xg17KaLkV8nSEM8
-         Kp1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694702840; x=1695307640;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vHpWmHejf9EicOnbuTpXQSbFe9gmT4JUPIXQ/pQhLLs=;
-        b=tw65IqCbcgpc3xRLnzw+vTQfMzgmf09ww/NHEDm22e33MHI8GcJ+BftszYaO8mAbeg
-         MrqH/2RCQObARkoPwU3cfEG7SzdaBPS4mvRzBZL7xPLXG7BIZfVm4/mWbIrpyhFCRe4r
-         VXhrvFofEcn9gKWrbmZYMfc0Y3zkA3R3zowIQsnLWv7PgsxJ5AEsF9VkZAhZ+xOWjAaq
-         r1+TGZPDpI5bmx6II6h/e9tuu4H4cYaHI3vTY5D2lvH90e/n6OeBqBNazS2XUFy8q2Bl
-         4UcnI4UW2WSMi+XQpNpl/gJG32pXPG63Iet8vk77PWD7h+KrLE8+nAs8i/aleftcmZxu
-         ewbQ==
-X-Gm-Message-State: AOJu0YwbpzBTw9jQ9iilLNU4c1DBShMytAaAEgRjusRcezV7qxLRgFDe
-        0DuGLPYxjJb2S2u907I0wyJFjQ==
-X-Google-Smtp-Source: AGHT+IE4vnDXBqfwShidPjq/u140Nh9Lf+YfW3WjJy+bEdPvCUxsYsEPIWnZNVPkTVSDMOA9EX84Jw==
-X-Received: by 2002:a05:600c:895:b0:401:b393:da18 with SMTP id l21-20020a05600c089500b00401b393da18mr1795468wmp.6.1694702840548;
-        Thu, 14 Sep 2023 07:47:20 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id n7-20020a7bcbc7000000b003fef3180e7asm4996897wmi.44.2023.09.14.07.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 07:47:19 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 16:47:18 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     guoren@kernel.org
+        with ESMTP id S240857AbjINR0B (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 13:26:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75A4D30E9
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 10:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694712245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N0ikbkJVQghcPjJgsQrA+sUTUrPSvE6Jh+YB8KXgR/g=;
+        b=LxL+JCMoq+wsN2L8GhWUCwWLcS7s4cupfTunPzkyk3Iz8u5lQsG1HxGSOVBRHZLQq/s5XL
+        Ivm71M2V8OaiAI3GtEHehjN5h0CmUrG0MSNqYteTiuF4/Ff6M7FNZts6OPnO6Sh8keg+zU
+        i4+u6NFdjV17sbVESFblka4Htvr1ej8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-41-mt1uKXGTNm6m770irEEv9Q-1; Thu, 14 Sep 2023 13:24:02 -0400
+X-MC-Unique: mt1uKXGTNm6m770irEEv9Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1F4684ACAA;
+        Thu, 14 Sep 2023 17:24:00 +0000 (UTC)
+Received: from [10.22.34.133] (unknown [10.22.34.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5003640C2070;
+        Thu, 14 Sep 2023 17:23:57 +0000 (UTC)
+Message-ID: <fb7d6e67-f396-dfe7-1461-8790bdeaad01@redhat.com>
+Date:   Thu, 14 Sep 2023 13:23:57 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH V11 07/17] riscv: qspinlock: Introduce qspinlock param for
+ command line
+Content-Language: en-US
+To:     Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
-        tglx@linutronix.de, paulmck@kernel.org, rostedt@goodmis.org,
-        rdunlap@infradead.org, catalin.marinas@arm.com,
-        conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
-        bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, jszhang@kernel.org, wefu@redhat.com,
-        wuwei2016@iscas.ac.cn, leobras@redhat.com,
+        palmer@rivosinc.com, boqun.feng@gmail.com, tglx@linutronix.de,
+        paulmck@kernel.org, rostedt@goodmis.org, rdunlap@infradead.org,
+        catalin.marinas@arm.com, conor.dooley@microchip.com,
+        xiaoguang.xing@sophgo.com, bjorn@rivosinc.com,
+        alexghiti@rivosinc.com, keescook@chromium.org,
+        greentime.hu@sifive.com, ajones@ventanamicro.com,
+        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
         linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
-Message-ID: <20230914-74d0cf00633c199758ee3450@orel>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-4-guoren@kernel.org>
- <20230914-892327a75b4b86badac5de02@orel>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914-892327a75b4b86badac5de02@orel>
+ <20230910082911.3378782-8-guoren@kernel.org>
+ <5ba0b8f3-f8f5-3a25-e9b7-f29a1abe654a@redhat.com>
+ <CAJF2gTT2hRxgnQt+WJ9P0YBWnUaZJ1-9g3ZE9tOz_MiLSsUjwQ@mail.gmail.com>
+ <ZQK2-CIL9U_QdMjh@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZQK2-CIL9U_QdMjh@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 04:25:53PM +0200, Andrew Jones wrote:
-> On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> > 
-> > Cache-block prefetch instructions are HINTs to the hardware to
-> > indicate that software intends to perform a particular type of
-> > memory access in the near future. Enable ARCH_HAS_PREFETCHW and
-> > improve the arch_xchg for qspinlock xchg_tail.
-> > 
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/Kconfig                 | 15 +++++++++++++++
-> >  arch/riscv/include/asm/cmpxchg.h   |  4 +++-
-> >  arch/riscv/include/asm/hwcap.h     |  1 +
-> >  arch/riscv/include/asm/insn-def.h  |  5 +++++
-> >  arch/riscv/include/asm/processor.h | 13 +++++++++++++
-> >  arch/riscv/kernel/cpufeature.c     |  1 +
-> >  6 files changed, 38 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index e9ae6fa232c3..2c346fe169c1 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -617,6 +617,21 @@ config RISCV_ISA_ZICBOZ
-> >  
-> >  	   If you don't know what to do here, say Y.
-> >  
-> > +config RISCV_ISA_ZICBOP
-> 
-> Even if we're not concerned with looping over blocks yet, I think we
-> should introduce zicbop block size DT parsing at the same time we bring
-> zicbop support to the kernel (it's just more copy+paste from zicbom and
-> zicboz). It's a bit annoying that the CMO spec doesn't state that block
-> sizes should be the same for m/z/p. And, the fact that m/z/p are all
-> separate extensions leads us to needing to parse block sizes for all
-> three, despite the fact that in practice they'll probably be the same.
+On 9/14/23 03:32, Leonardo Bras wrote:
+> On Tue, Sep 12, 2023 at 09:08:34AM +0800, Guo Ren wrote:
+>> On Mon, Sep 11, 2023 at 11:34 PM Waiman Long <longman@redhat.com> wrote:
+>>> On 9/10/23 04:29, guoren@kernel.org wrote:
+>>>> From: Guo Ren <guoren@linux.alibaba.com>
+>>>>
+>>>> Allow cmdline to force the kernel to use queued_spinlock when
+>>>> CONFIG_RISCV_COMBO_SPINLOCKS=y.
+>>>>
+>>>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>>>> ---
+>>>>    Documentation/admin-guide/kernel-parameters.txt |  2 ++
+>>>>    arch/riscv/kernel/setup.c                       | 16 +++++++++++++++-
+>>>>    2 files changed, 17 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>>>> index 7dfb540c4f6c..61cacb8dfd0e 100644
+>>>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>>>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>>>> @@ -4693,6 +4693,8 @@
+>>>>                        [KNL] Number of legacy pty's. Overwrites compiled-in
+>>>>                        default number.
+>>>>
+>>>> +     qspinlock       [RISCV] Force to use qspinlock or auto-detect spinlock.
+>>>> +
+>>>>        qspinlock.numa_spinlock_threshold_ns=   [NUMA, PV_OPS]
+>>>>                        Set the time threshold in nanoseconds for the
+>>>>                        number of intra-node lock hand-offs before the
+>>>> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+>>>> index a447cf360a18..0f084f037651 100644
+>>>> --- a/arch/riscv/kernel/setup.c
+>>>> +++ b/arch/riscv/kernel/setup.c
+>>>> @@ -270,6 +270,15 @@ static void __init parse_dtb(void)
+>>>>    }
+>>>>
+>>>>    #ifdef CONFIG_RISCV_COMBO_SPINLOCKS
+>>>> +bool enable_qspinlock_key = false;
+>>> You can use __ro_after_init qualifier for enable_qspinlock_key. BTW,
+>>> this is not a static key, just a simple flag. So what is the point of
+>>> the _key suffix?
+>> Okay, I would change it to:
+>> bool enable_qspinlock_flag __ro_after_init = false;
+> IIUC, this bool / flag is used in a single file, so it makes sense for it
+> to be static. Being static means it does not need to be initialized to
+> false, as it's standard to zero-fill this areas.
+>
+> Also, since it's a bool, it does not need to be called _flag.
+>
+> I would go with:
+>
+> static bool enable_qspinlock __ro_after_init;
 
-Although, I saw on a different mailing list that Andrei Warkentin
-interpreted section 2.7 "Software Discovery" of the spec, which states
+I actually was thinking about the same suggestion to add static. Then I 
+realized that the flag was also used in another file in a later patch. 
+Of course, if it turns out that this flag is no longer needed outside of 
+this file, it should be static.
 
-"""
-The initial set of CMO extensions requires the following information to be
-discovered by software:
+Cheers,
+Longman
 
-* The size of the cache block for management and prefetch instructions
-* The size of the cache block for zero instructions
-* CBIE support at each privilege level
-
-Other general cache characteristics may also be specified in the discovery
-mechanism.
-"""
-
-as management and prefetch having the same block size and only zero
-potentially having a different size. That looks like a reasonable
-interpretation to me, too. So, we could maybe proceed with assuming we
-can use zicbom_block_size for prefetch, for now. If a platform comes along
-that interpreted the spec differently, requiring prefetch block size to
-be specified separately, then we'll cross that bridge when we get there.
-
-Thanks,
-drew
