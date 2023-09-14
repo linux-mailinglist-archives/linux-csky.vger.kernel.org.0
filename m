@@ -2,59 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4E579FE7D
-	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 10:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C437A0043
+	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 11:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236359AbjINIdr (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 14 Sep 2023 04:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S237134AbjINJh4 (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 14 Sep 2023 05:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236421AbjINIdq (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 04:33:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1979A1FC2
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 01:32:53 -0700 (PDT)
+        with ESMTP id S237096AbjINJhy (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 05:37:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8EA81BFF
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 02:37:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694680372;
+        s=mimecast20190719; t=1694684222;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/v5LVGgI1bCh7IZ5F5HTHb9gqgvRzQ+J2np7/S42Q3I=;
-        b=P0C9IWfNUXHy4UOL33TYP4hvbjVD+wgMQ77xOuDZrF6uHa7nmPlSz/qrgXecYZPGJiMFye
-        47r9Rrf6Gkcls9SC6u0/4r1Krs84I/zd7Yef+CZ/jmwNJMq/+qmHrAmZ8sP/wd0FkvWcMc
-        OYFJIUND9j00vu89G+RLvoF9uoRLkM0=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=8vQlQADn2LNqOGAlsXmaezeqHZMFdsyRwPKTLWRd854=;
+        b=iwh8AcsFFAWAM7vPuTOBygpwDPWqjO8YVdOhkwkgRdhfH2xwkEYJ/Fmz6BTj1HEg2Zsu4w
+        KMx7IL32s/lcF7+R1N9Aq6VEu4QBN5f+QXel7dmhkfmyCtvHkg9FnJ4JUzWSfCcyKGpdLV
+        uGDrif9w7OSlLfncVIRaALjXvzabUww=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-631-vQ9xBiYXO6amWsVWeahIfg-1; Thu, 14 Sep 2023 04:32:50 -0400
-X-MC-Unique: vQ9xBiYXO6amWsVWeahIfg-1
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-57116decad8so965629eaf.2
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 01:32:50 -0700 (PDT)
+ us-mta-256-9O-J9wqJOaGm8qF7uU6lsA-1; Thu, 14 Sep 2023 05:37:00 -0400
+X-MC-Unique: 9O-J9wqJOaGm8qF7uU6lsA-1
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3aa1254fb00so1059310b6e.1
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 02:37:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694680369; x=1695285169;
+        d=1e100.net; s=20230601; t=1694684219; x=1695289019;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/v5LVGgI1bCh7IZ5F5HTHb9gqgvRzQ+J2np7/S42Q3I=;
-        b=q9xc2y/Z2lHnUWFyMttu8JdSmEkfrtyMDFB+tUGX5eRDBTIuNxvw66TLtKi63WrtZ5
-         O+zAEQRsUZoh/b+vTPV66em8Pl+XEHCcP3RHH4J0OL4DslqlHOF9D3FGp7bSwtESkLdl
-         L4jE4KZWSmCUM+dRqgvSvuITsqLn6ZADwiwe0Rhry8NJN1DCvII3+KUp1PtVQ+CfWYn5
-         s+Q7TenQM1pMx5dxtv8Ukce6i6wQ5eitFSb6WrIrkxXOZ9lIjnAWtprYBQZDxvy1JfuK
-         ddJM+Z+QqXfZ3k/AovgljAUQwmMC2gCt60RQJLdm+JUCIpxSB3sUJQIumTLyoyg3w5p6
-         ckEg==
-X-Gm-Message-State: AOJu0YxXJUJbO/pLCbhE95+oFhpUH46jcF43GHhE+GMtl7sZCiqDaXfj
-        hZ06ZCAGo1bXTn9Rofw5Dcxjm3TZe+rWNR3dzxWqGwvWdQ4maghBBuq6uFoVgZbMgHAe0M0nNiJ
-        ldam8Duhvpn3gTiSlW+Atqw==
-X-Received: by 2002:a05:6870:5608:b0:1b0:2f63:4ff6 with SMTP id m8-20020a056870560800b001b02f634ff6mr5153862oao.1.1694680369741;
-        Thu, 14 Sep 2023 01:32:49 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IETspTdZzZYvBIau8sxRS9qB0qJSQdMZkzC5B1Noxo923sXXDhRBNsu3bJAqLvOXStAslAzvg==
-X-Received: by 2002:a05:6870:5608:b0:1b0:2f63:4ff6 with SMTP id m8-20020a056870560800b001b02f634ff6mr5153842oao.1.1694680369455;
-        Thu, 14 Sep 2023 01:32:49 -0700 (PDT)
+        bh=8vQlQADn2LNqOGAlsXmaezeqHZMFdsyRwPKTLWRd854=;
+        b=YsTAPfFZEZEc1Bi6Y15RmcJNeX4+1kNJffNXSXaSW8h5wpw4tC+gMuaLEPwY/HX7zI
+         sWngANETnCW64cSXFqpHLk7SMFuGheD9XKFGAo9qF8Nx5g0qA7OyUTO1Y+DonKI2TRyd
+         8nsCGv0qkbwB30Qhgc72Wmk/ZhnKHvlca99UFGaY3428f6M/AU4H2Ks37YnVUNaxlZkP
+         cuhMFoLTONuXG4WLmbxuOYptF/b8FVTBYAdYiZl6z0VLm0mfIhSprJILWgO+NX2XW7Ml
+         ZA1LLtJZSX34ik6BIOqSaonZc4Y5xfgffuGdJZFsrvnJzkvDEDrznbAs87fXBIkONwPi
+         wMEw==
+X-Gm-Message-State: AOJu0YxQoS0rZ4fjQkhsePIGzACxjpKkM0fPI3qZvFufWlzp/TdAanev
+        Faxm6omFPeKtNas2noeArssJjkwGuXelkNpDoWroS2epbWOAPqxj6kchMLFkwFpObBvDkCBN823
+        xYUXlfntbevy13MJ9HMKJhg==
+X-Received: by 2002:a05:6808:bd4:b0:3a3:7a28:f841 with SMTP id o20-20020a0568080bd400b003a37a28f841mr6256011oik.41.1694684219286;
+        Thu, 14 Sep 2023 02:36:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEOYB9XBC6PVpc7f+a0f60gNl1NFed8atTc8/uEab+FTz4RvHJ//hpWsS4nDqiqEtsGdQd5ag==
+X-Received: by 2002:a05:6808:bd4:b0:3a3:7a28:f841 with SMTP id o20-20020a0568080bd400b003a37a28f841mr6255987oik.41.1694684219072;
+        Thu, 14 Sep 2023 02:36:59 -0700 (PDT)
 Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id sf23-20020a056871231700b001d4fe4293efsm535197oab.36.2023.09.14.01.32.41
+        by smtp.gmail.com with ESMTPSA id n11-20020a9d4d0b000000b006b96a4287d4sm495055otf.5.2023.09.14.02.36.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 01:32:48 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 05:32:39 -0300
+        Thu, 14 Sep 2023 02:36:58 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 06:36:49 -0300
 From:   Leonardo Bras <leobras@redhat.com>
 To:     guoren@kernel.org
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
@@ -70,257 +70,77 @@ Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 09/17] riscv: qspinlock: errata: Add
- ERRATA_THEAD_WRITE_ONCE fixup
-Message-ID: <ZQLFJ1cmQ8PAoMHm@redhat.com>
+Subject: Re: [PATCH V11 10/17] riscv: qspinlock: errata: Enable qspinlock for
+ T-HEAD processors
+Message-ID: <ZQLUMbDKMgDzptPw@redhat.com>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-10-guoren@kernel.org>
+ <20230910082911.3378782-11-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230910082911.3378782-10-guoren@kernel.org>
+In-Reply-To: <20230910082911.3378782-11-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Sep 10, 2023 at 04:29:03AM -0400, guoren@kernel.org wrote:
+On Sun, Sep 10, 2023 at 04:29:04AM -0400, guoren@kernel.org wrote:
 > From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> The early version of T-Head C9xx cores has a store merge buffer
-> delay problem. The store merge buffer could improve the store queue
-> performance by merging multi-store requests, but when there are not
-> continued store requests, the prior single store request would be
-> waiting in the store queue for a long time. That would cause
-> significant problems for communication between multi-cores. This
-> problem was found on sg2042 & th1520 platforms with the qspinlock
-> lock torture test.
-> 
-> So appending a fence w.o could immediately flush the store merge
-> buffer and let other cores see the write result.
-> 
-> This will apply the WRITE_ONCE errata to handle the non-standard
-> behavior via appending a fence w.o instruction for WRITE_ONCE().
+> According to qspinlock requirements, RISC-V gives out a weak LR/SC
+> forward progress guarantee which does not satisfy qspinlock. But
+> many vendors could produce stronger forward guarantee LR/SC to
+> ensure the xchg_tail could be finished in time on any kind of
+> hart. T-HEAD is the vendor
+
+nit: "a vendor"
+
+> which implements strong forward
+> guarantee LR/SC instruction pairs, so enable qspinlock for T-HEAD
+> with errata init help.
 > 
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > Signed-off-by: Guo Ren <guoren@kernel.org>
 > ---
->  arch/riscv/Kconfig.errata              | 19 +++++++++++++++++++
->  arch/riscv/errata/thead/errata.c       | 20 ++++++++++++++++++++
->  arch/riscv/include/asm/errata_list.h   | 13 -------------
->  arch/riscv/include/asm/rwonce.h        | 24 ++++++++++++++++++++++++
->  arch/riscv/include/asm/vendorid_list.h | 14 ++++++++++++++
->  include/asm-generic/rwonce.h           |  2 ++
->  6 files changed, 79 insertions(+), 13 deletions(-)
->  create mode 100644 arch/riscv/include/asm/rwonce.h
+>  arch/riscv/errata/thead/errata.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
-> index 1aa85a427ff3..c919cc3f1a3a 100644
-> --- a/arch/riscv/Kconfig.errata
-> +++ b/arch/riscv/Kconfig.errata
-> @@ -77,4 +77,23 @@ config ERRATA_THEAD_PMU
->  
->  	  If you don't know what to do here, say "Y".
->  
-> +config ERRATA_THEAD_WRITE_ONCE
-> +	bool "Apply T-Head WRITE_ONCE errata"
-> +	depends on ERRATA_THEAD
-> +	default y
-> +	help
-> +	  The early version of T-Head C9xx cores has a store merge buffer
-> +	  delay problem. The store merge buffer could improve the store queue
-> +	  performance by merging multi-store requests, but when there are no
-> +	  continued store requests, the prior single store request would be
-> +	  waiting in the store queue for a long time. That would cause
-> +	  significant problems for communication between multi-cores. Appending
-> +	  a fence w.o could immediately flush the store merge buffer and let
-> +	  other cores see the write result.
-> +
-> +	  This will apply the WRITE_ONCE errata to handle the non-standard
-> +	  behavior via appending a fence w.o instruction for WRITE_ONCE().
-> +
-> +	  If you don't know what to do here, say "Y".
-> +
->  endmenu # "CPU errata selection"
 > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index be84b14f0118..751eb5a7f614 100644
+> index 751eb5a7f614..0df6a67302c0 100644
 > --- a/arch/riscv/errata/thead/errata.c
 > +++ b/arch/riscv/errata/thead/errata.c
-> @@ -69,6 +69,23 @@ static bool errata_probe_pmu(unsigned int stage,
->  	return true;
+> @@ -86,6 +86,13 @@ static bool errata_probe_write_once(unsigned int stage,
+>  	return false;
 >  }
 >  
-> +static bool errata_probe_write_once(unsigned int stage,
-> +				    unsigned long arch_id, unsigned long impid)
+> +extern bool enable_qspinlock_key;
+
+Oh, now I understand why it was not static before. :)
+
+
+> +static void errata_probe_qspinlock(unsigned int stage)
 > +{
-> +	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_WRITE_ONCE))
-> +		return false;
-> +
-> +	/* target-c9xx cores report arch_id and impid as 0 */
-> +	if (arch_id != 0 || impid != 0)
-> +		return false;
-> +
-> +	if (stage == RISCV_ALTERNATIVES_BOOT ||
-> +	    stage == RISCV_ALTERNATIVES_MODULE)
-> +		return true;
-> +
-> +	return false;
+> +	if (stage == RISCV_ALTERNATIVES_BOOT)
+> +		enable_qspinlock_key = true;
 > +}
 > +
 >  static u32 thead_errata_probe(unsigned int stage,
 >  			      unsigned long archid, unsigned long impid)
 >  {
-> @@ -83,6 +100,9 @@ static u32 thead_errata_probe(unsigned int stage,
->  	if (errata_probe_pmu(stage, archid, impid))
->  		cpu_req_errata |= BIT(ERRATA_THEAD_PMU);
+> @@ -103,6 +110,8 @@ static u32 thead_errata_probe(unsigned int stage,
+>  	if (errata_probe_write_once(stage, archid, impid))
+>  		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
 >  
-> +	if (errata_probe_write_once(stage, archid, impid))
-> +		cpu_req_errata |= BIT(ERRATA_THEAD_WRITE_ONCE);
+> +	errata_probe_qspinlock(stage);
 > +
 >  	return cpu_req_errata;
 >  }
 >  
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index 712cab7adffe..fbb2b8d39321 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -11,19 +11,6 @@
->  #include <asm/hwcap.h>
->  #include <asm/vendorid_list.h>
->  
-> -#ifdef CONFIG_ERRATA_SIFIVE
-> -#define	ERRATA_SIFIVE_CIP_453 0
-> -#define	ERRATA_SIFIVE_CIP_1200 1
-> -#define	ERRATA_SIFIVE_NUMBER 2
-> -#endif
-> -
-> -#ifdef CONFIG_ERRATA_THEAD
-> -#define	ERRATA_THEAD_PBMT 0
-> -#define	ERRATA_THEAD_CMO 1
-> -#define	ERRATA_THEAD_PMU 2
-> -#define	ERRATA_THEAD_NUMBER 3
-> -#endif
-> -
 
-Here I understand you are moving stuff from errata_list.h to 
-vendorid_list.h. Wouldn't it be better to do this on a separated patch 
-before this one?
+So, if THEAD then enable qspinlock().
 
-I understand this is used here, but it looks like it's unrelated.
+LGTM:
+Reviewed-by: Leonardo Bras <leobras@redhat.com>
 
->  #ifdef __ASSEMBLY__
->  
->  #define ALT_INSN_FAULT(x)						\
-> diff --git a/arch/riscv/include/asm/rwonce.h b/arch/riscv/include/asm/rwonce.h
-> new file mode 100644
-> index 000000000000..be0b8864969d
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/rwonce.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef __ASM_RWONCE_H
-> +#define __ASM_RWONCE_H
-> +
-> +#include <linux/compiler_types.h>
-> +#include <asm/alternative-macros.h>
-> +#include <asm/vendorid_list.h>
-> +
-> +#define __WRITE_ONCE(x, val)				\
-> +do {							\
-> +	*(volatile typeof(x) *)&(x) = (val);		\
-> +	asm volatile(ALTERNATIVE(			\
-> +		__nops(1),				\
-> +		"fence w, o\n\t",			\
-> +		THEAD_VENDOR_ID,			\
-> +		ERRATA_THEAD_WRITE_ONCE,		\
-> +		CONFIG_ERRATA_THEAD_WRITE_ONCE)		\
-> +		: : : "memory");			\
-> +} while (0)
-> +
-> +#include <asm-generic/rwonce.h>
-> +
-> +#endif	/* __ASM_RWONCE_H */
-
-IIUC the idea here is to have an alternative __WRITE_ONCE that replaces the 
-asm-generic one.
-
-Honestly, this asm alternative here seems too much information, and too 
-cryptic. I mean, yeah in the patch it all makes sense, but I imagine myself
-in the future looking at all this and trying to understand what is going 
-on.
-
-Wouldn't it look better to have something like:
-
-#####
-
-/* Some explanation like the one on Kconfig */
-
-#define write_once_flush()			\
-do {						\
-	asm volatile(ALTERNATIVE(			\
-		__nops(1),			\
-		"fence w, o\n\t",		\
-		THEAD_VENDOR_ID,		\
-		ERRATA_THEAD_WRITE_ONCE,	\
-		CONFIG_ERRATA_THEAD_WRITE_ONCE)	\
-		: : : "memory");		\
-} while(0)
-
-
-#define __WRITE_ONCE(x, val)			\
-do {						\
-     	*(volatile typeof(x) *)&(x) = (val);	\
-	write_once_flush();			\
-} while(0)
-
-#####
-
-	
-This way I could quickly see there is a flush after the writting of 
-WRITE_ONCE(), and this flush is the above "complicated" asm.
-
-What do you think?
-
-> diff --git a/arch/riscv/include/asm/vendorid_list.h b/arch/riscv/include/asm/vendorid_list.h
-> index cb89af3f0704..73078cfe4029 100644
-> --- a/arch/riscv/include/asm/vendorid_list.h
-> +++ b/arch/riscv/include/asm/vendorid_list.h
-> @@ -8,4 +8,18 @@
->  #define SIFIVE_VENDOR_ID	0x489
->  #define THEAD_VENDOR_ID		0x5b7
->  
-> +#ifdef CONFIG_ERRATA_SIFIVE
-> +#define	ERRATA_SIFIVE_CIP_453 0
-> +#define	ERRATA_SIFIVE_CIP_1200 1
-> +#define	ERRATA_SIFIVE_NUMBER 2
-> +#endif
-> +
-> +#ifdef CONFIG_ERRATA_THEAD
-> +#define	ERRATA_THEAD_PBMT 0
-> +#define	ERRATA_THEAD_CMO 1
-> +#define	ERRATA_THEAD_PMU 2
-> +#define	ERRATA_THEAD_WRITE_ONCE 3
-> +#define	ERRATA_THEAD_NUMBER 4
-> +#endif
-> +
->  #endif
-> diff --git a/include/asm-generic/rwonce.h b/include/asm-generic/rwonce.h
-> index 8d0a6280e982..fb07fe8c6e45 100644
-> --- a/include/asm-generic/rwonce.h
-> +++ b/include/asm-generic/rwonce.h
-> @@ -50,10 +50,12 @@
->  	__READ_ONCE(x);							\
->  })
->  
-> +#ifndef __WRITE_ONCE
->  #define __WRITE_ONCE(x, val)						\
->  do {									\
->  	*(volatile typeof(x) *)&(x) = (val);				\
->  } while (0)
-> +#endif
->  
->  #define WRITE_ONCE(x, val)						\
->  do {									\
 > -- 
 > 2.36.1
 > 
