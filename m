@@ -2,62 +2,55 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB287A0098
-	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 11:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877A07A065E
+	for <lists+linux-csky@lfdr.de>; Thu, 14 Sep 2023 15:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjINJpI (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Thu, 14 Sep 2023 05:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S239118AbjINNsN (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 14 Sep 2023 09:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237276AbjINJpH (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 05:45:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 717D22727
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 02:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694684598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DbbV7zUbHyFOQqG5sX6JcaC8bYUMhWeBa5xwVhmrkEQ=;
-        b=LpWzndZUvIzeCPs4X5Vu634TWKVOiOFE2IGMrWqYD23v4pBykAsbU9twX6ScmW7vapQkRL
-        4L+zK3Ah7xgulckbMH7WwN63bhiCsU0d4PAb63Ls9o0tZxP7W7WkRasKWRsa+OtA7JV8Xp
-        f6hqY6QbBx18HsjP/1bYuykCvU24DXo=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-213-wk_YhONBOG-CX7OpZbpaew-1; Thu, 14 Sep 2023 05:43:17 -0400
-X-MC-Unique: wk_YhONBOG-CX7OpZbpaew-1
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6bc7afd0498so890452a34.0
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 02:43:17 -0700 (PDT)
+        with ESMTP id S239031AbjINNsM (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 14 Sep 2023 09:48:12 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E051BE
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 06:48:08 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-403012f27e3so10941725e9.3
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 06:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1694699286; x=1695304086; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0NpRZDPmcHDBEDq/PN5VoK+B/Io2/pklU+DrUKVj/Uk=;
+        b=WFdrX/nmC3pAZx8nGdgY4DHxSy424LSJqU37nUa7W5HxpsXBY+pKkdzxwUjtrKPgZ8
+         GRvHkeyg5LaA+uTM8dm1Q7Ys3Ggr1kFPqahLghMEHowrp3kwyZk92+1tXo+83Hjxpqiw
+         NiXVukpxkNiROreKn2sgCW3pDBA4JpdANf244HkGANjb5142Lh0fmMUDxi/70dywpX2h
+         uVZWi9hkbDlIE0mkQDx2QqMd1XgS/8Qf3EJg9ck+uIGccaJBOUdSqoRJOHvcMRzQnk2m
+         GEEvWVCqvlS4p15dsu6tELeCgVJ905uo0JBmGieU4CCL05dOfLZ86z7s7PAVX7iztRYU
+         SUog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694684596; x=1695289396;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DbbV7zUbHyFOQqG5sX6JcaC8bYUMhWeBa5xwVhmrkEQ=;
-        b=UeOQ8GdgV1Cf13hxzGj+WrBd9i1XHRofeWfOk0CcnWYaQ8IKSJkXCdcLuPJ0dEpmlh
-         WYmohAnOGiX5g2VhjCw8DkE2eWhwBcQId9K68e1DOTRzEHN4V5RaQvG3EdxjhOEOZYxA
-         xLtTfXwt5goNYIkbFV93wRQJOBgiRGm55/y92/l1PecNPsrGuAjepqN8hFncGIkWfZ8t
-         qAhji9ftxf9p9NMQUngmgGq9CUgNWKduvfsyS8oucUaSJaolYrxpmvw/9FEA0fYg62/6
-         IcyODBkZAJjFFYPMx6nS3STxK03xDgvFVHgOZbkg+syjLsmN4766/mjIH+sS/SDdb8zd
-         aKfg==
-X-Gm-Message-State: AOJu0YwQgKz5WAq30GmDqaLuN+fB8QOh8+6p34tSeyhiB14XOv/Pg0S9
-        KpdpQiaxponfpBnpaE4CG4Pd5mgaN6VFIyo6ipsre6z1O0oEjxaRFZSHWxpuxM+Xptv7zHQqK9+
-        uCLnCdmMkwTWNynuVJVs7Bw==
-X-Received: by 2002:a9d:6d8e:0:b0:6b9:b0f6:eab8 with SMTP id x14-20020a9d6d8e000000b006b9b0f6eab8mr6134278otp.5.1694684596500;
-        Thu, 14 Sep 2023 02:43:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE3QnDlKzJBDRQlqNhyCyRRuZPKH26ygpP6UVo5h9yyQNDkmSeGchz3nt5E9QfIuxm29/peHg==
-X-Received: by 2002:a9d:6d8e:0:b0:6b9:b0f6:eab8 with SMTP id x14-20020a9d6d8e000000b006b9b0f6eab8mr6134245otp.5.1694684596151;
-        Thu, 14 Sep 2023 02:43:16 -0700 (PDT)
-Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id v22-20020a05683018d600b006b87f593877sm499860ote.37.2023.09.14.02.43.08
+        d=1e100.net; s=20230601; t=1694699286; x=1695304086;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0NpRZDPmcHDBEDq/PN5VoK+B/Io2/pklU+DrUKVj/Uk=;
+        b=dv9DuZUYd+OstU6A9/ll8cGO+MLtYwzeVl9tN6BfFIiwDDCcisAu4WeuUNY22R7QgS
+         sDAmPPX7ARiDxFQbA6eF1ZFT0HZs/xp6bX6WmWiGH9htf65HVo4mdcK7iCdMsTeCUQhU
+         oQr9c9BmL018TDGwXmDiHOOdSfmAzgFKuckdVL+kvrGvOFqrzDUf3X4WEIY3Tdi22To+
+         UVjRWf4U0Ev3vn7gHuWD1md6DmwqjUPzG8tzbJhDqvWOey/36kM/A04Wjj0w53c2/0Hl
+         klcT1BetdZcSaVyKJlSJ4dTyYC0Sc07OOMoID9GfWPCcI8FUPHF4vqqy/hz+75pPQ9fa
+         ZaBg==
+X-Gm-Message-State: AOJu0YzESWuGSF/kDa9hOOt/oH/dFOLckCAZfGVfhhtvyYHzT+uPg7uW
+        8uctliSi/FTrt/s0t5aH4cyE5A==
+X-Google-Smtp-Source: AGHT+IFwoMiGuvOYU6N8bNee+qhZal97C+SbTYI2CWIdEfiJfY+KPo0K14ss0u/3IPRnH7VdRnRmEg==
+X-Received: by 2002:a1c:4b16:0:b0:402:ff8d:609b with SMTP id y22-20020a1c4b16000000b00402ff8d609bmr4491570wma.33.1694699285794;
+        Thu, 14 Sep 2023 06:48:05 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id p14-20020a1c740e000000b003fe407ca05bsm4953494wmc.37.2023.09.14.06.48.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 02:43:15 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 06:43:06 -0300
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Guo Ren <guoren@kernel.org>
+        Thu, 14 Sep 2023 06:48:05 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 15:47:59 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     guoren@kernel.org
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         peterz@infradead.org, mingo@redhat.com, will@kernel.org,
         palmer@rivosinc.com, longman@redhat.com, boqun.feng@gmail.com,
@@ -65,235 +58,201 @@ Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         rdunlap@infradead.org, catalin.marinas@arm.com,
         conor.dooley@microchip.com, xiaoguang.xing@sophgo.com,
         bjorn@rivosinc.com, alexghiti@rivosinc.com, keescook@chromium.org,
-        greentime.hu@sifive.com, ajones@ventanamicro.com,
-        jszhang@kernel.org, wefu@redhat.com, wuwei2016@iscas.ac.cn,
+        greentime.hu@sifive.com, jszhang@kernel.org, wefu@redhat.com,
+        wuwei2016@iscas.ac.cn, leobras@redhat.com,
         linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 05/17] riscv: qspinlock: Add basic queued_spinlock
- support
-Message-ID: <ZQLVqoCGJ1ExMU3e@redhat.com>
+Subject: Re: [PATCH V11 03/17] riscv: Use Zicbop in arch_xchg when available
+Message-ID: <20230914-1ce4f391a14e56b456d88188@orel>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-6-guoren@kernel.org>
- <ZQIbejhIev5tx6vl@redhat.com>
- <CAJF2gTSdjgUaUqhkfTPmJg6Mph+8Ej4j8MeDmfBOmFY5gkTpBQ@mail.gmail.com>
+ <20230910082911.3378782-4-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTSdjgUaUqhkfTPmJg6Mph+8Ej4j8MeDmfBOmFY5gkTpBQ@mail.gmail.com>
+In-Reply-To: <20230910082911.3378782-4-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 12:46:56PM +0800, Guo Ren wrote:
-> On Thu, Sep 14, 2023 at 4:29 AM Leonardo Bras <leobras@redhat.com> wrote:
-> >
-> > On Sun, Sep 10, 2023 at 04:28:59AM -0400, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > The requirements of qspinlock have been documented by commit:
-> > > a8ad07e5240c ("asm-generic: qspinlock: Indicate the use of mixed-size
-> > > atomics").
-> > >
-> > > Although RISC-V ISA gives out a weaker forward guarantee LR/SC, which
-> > > doesn't satisfy the requirements of qspinlock above, it won't prevent
-> > > some riscv vendors from implementing a strong fwd guarantee LR/SC in
-> > > microarchitecture to match xchg_tail requirement. T-HEAD C9xx processor
-> > > is the one.
-> > >
-> > > We've tested the patch on SOPHGO sg2042 & th1520 and passed the stress
-> > > test on Fedora & Ubuntu & OpenEuler ... Here is the performance
-> > > comparison between qspinlock and ticket_lock on sg2042 (64 cores):
-> > >
-> > > sysbench test=threads threads=32 yields=100 lock=8 (+13.8%):
-> > >   queued_spinlock 0.5109/0.00
-> > >   ticket_spinlock 0.5814/0.00
-> > >
-> > > perf futex/hash (+6.7%):
-> > >   queued_spinlock 1444393 operations/sec (+- 0.09%)
-> > >   ticket_spinlock 1353215 operations/sec (+- 0.15%)
-> > >
-> > > perf futex/wake-parallel (+8.6%):
-> > >   queued_spinlock (waking 1/64 threads) in 0.0253 ms (+-2.90%)
-> > >   ticket_spinlock (waking 1/64 threads) in 0.0275 ms (+-3.12%)
-> > >
-> > > perf futex/requeue (+4.2%):
-> > >   queued_spinlock Requeued 64 of 64 threads in 0.0785 ms (+-0.55%)
-> > >   ticket_spinlock Requeued 64 of 64 threads in 0.0818 ms (+-4.12%)
-> > >
-> > > System Benchmarks (+6.4%)
-> > >   queued_spinlock:
-> > >     System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> > >     Dhrystone 2 using register variables         116700.0  628613745.4  53865.8
-> > >     Double-Precision Whetstone                       55.0     182422.8  33167.8
-> > >     Execl Throughput                                 43.0      13116.6   3050.4
-> > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    7762306.2  19601.8
-> > >     File Copy 256 bufsize 500 maxblocks            1655.0    3417556.8  20649.9
-> > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    7427995.7  12806.9
-> > >     Pipe Throughput                               12440.0   23058600.5  18535.9
-> > >     Pipe-based Context Switching                   4000.0    2835617.7   7089.0
-> > >     Process Creation                                126.0      12537.3    995.0
-> > >     Shell Scripts (1 concurrent)                     42.4      57057.4  13456.9
-> > >     Shell Scripts (8 concurrent)                      6.0       7367.1  12278.5
-> > >     System Call Overhead                          15000.0   33308301.3  22205.5
-> > >                                                                        ========
-> > >     System Benchmarks Index Score                                       12426.1
-> > >
-> > >   ticket_spinlock:
-> > >     System Benchmarks Index Values               BASELINE       RESULT    INDEX
-> > >     Dhrystone 2 using register variables         116700.0  626541701.9  53688.2
-> > >     Double-Precision Whetstone                       55.0     181921.0  33076.5
-> > >     Execl Throughput                                 43.0      12625.1   2936.1
-> > >     File Copy 1024 bufsize 2000 maxblocks          3960.0    6553792.9  16550.0
-> > >     File Copy 256 bufsize 500 maxblocks            1655.0    3189231.6  19270.3
-> > >     File Copy 4096 bufsize 8000 maxblocks          5800.0    7221277.0  12450.5
-> > >     Pipe Throughput                               12440.0   20594018.7  16554.7
-> > >     Pipe-based Context Switching                   4000.0    2571117.7   6427.8
-> > >     Process Creation                                126.0      10798.4    857.0
-> > >     Shell Scripts (1 concurrent)                     42.4      57227.5  13497.1
-> > >     Shell Scripts (8 concurrent)                      6.0       7329.2  12215.3
-> > >     System Call Overhead                          15000.0   30766778.4  20511.2
-> > >                                                                        ========
-> > >     System Benchmarks Index Score                                       11670.7
-> > >
-> > > The qspinlock has a significant improvement on SOPHGO SG2042 64
-> > > cores platform than the ticket_lock.
-> > >
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > ---
-> > >  arch/riscv/Kconfig                | 16 ++++++++++++++++
-> > >  arch/riscv/include/asm/Kbuild     |  3 ++-
-> > >  arch/riscv/include/asm/spinlock.h | 17 +++++++++++++++++
-> > >  3 files changed, 35 insertions(+), 1 deletion(-)
-> > >  create mode 100644 arch/riscv/include/asm/spinlock.h
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index 2c346fe169c1..7f39bfc75744 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -471,6 +471,22 @@ config NODES_SHIFT
-> > >         Specify the maximum number of NUMA Nodes available on the target
-> > >         system.  Increases memory reserved to accommodate various tables.
-> > >
-> > > +choice
-> > > +     prompt "RISC-V spinlock type"
-> > > +     default RISCV_TICKET_SPINLOCKS
-> > > +
-> > > +config RISCV_TICKET_SPINLOCKS
-> > > +     bool "Using ticket spinlock"
-> > > +
-> > > +config RISCV_QUEUED_SPINLOCKS
-> > > +     bool "Using queued spinlock"
-> > > +     depends on SMP && MMU
-> > > +     select ARCH_USE_QUEUED_SPINLOCKS
-> > > +     help
-> > > +       Make sure your micro arch LL/SC has a strong forward progress guarantee.
-> > > +       Otherwise, stay at ticket-lock.
-> > > +endchoice
-> > > +
-> > >  config RISCV_ALTERNATIVE
-> > >       bool
-> > >       depends on !XIP_KERNEL
-> > > diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-> > > index 504f8b7e72d4..a0dc85e4a754 100644
-> > > --- a/arch/riscv/include/asm/Kbuild
-> > > +++ b/arch/riscv/include/asm/Kbuild
-> > > @@ -2,10 +2,11 @@
-> > >  generic-y += early_ioremap.h
-> > >  generic-y += flat.h
-> > >  generic-y += kvm_para.h
-> > > +generic-y += mcs_spinlock.h
-> > >  generic-y += parport.h
-> > > -generic-y += spinlock.h
-> >
-> > IIUC here you take the asm-generic/spinlock.h (which defines arch_spin_*())
-> > and include the asm-generic headers of mcs_spinlock and qspinlock.
-> >
-> > In this case, the qspinlock.h will provide the arch_spin_*() interfaces,
-> > which seems the oposite of the above description (ticket spinlocks being
-> > the standard).
-> >
-> > Shouldn't ticket-spinlock.h also get included here?
-> > (Also, I am probably missing something, as I dont' see the use of
-> > mcs_spinlock here.)
-> No, because asm-generic/spinlock.h:
-> ...
-> #include <asm-generic/ticket_spinlock.h>
-> ...
+On Sun, Sep 10, 2023 at 04:28:57AM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
+> Cache-block prefetch instructions are HINTs to the hardware to
+> indicate that software intends to perform a particular type of
+> memory access in the near future. Enable ARCH_HAS_PREFETCHW and
+> improve the arch_xchg for qspinlock xchg_tail.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/Kconfig                 | 15 +++++++++++++++
+>  arch/riscv/include/asm/cmpxchg.h   |  4 +++-
+>  arch/riscv/include/asm/hwcap.h     |  1 +
+>  arch/riscv/include/asm/insn-def.h  |  5 +++++
+>  arch/riscv/include/asm/processor.h | 13 +++++++++++++
+>  arch/riscv/kernel/cpufeature.c     |  1 +
+>  6 files changed, 38 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index e9ae6fa232c3..2c346fe169c1 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -617,6 +617,21 @@ config RISCV_ISA_ZICBOZ
+>  
+>  	   If you don't know what to do here, say Y.
+>  
+> +config RISCV_ISA_ZICBOP
+> +	bool "Zicbop extension support for cache block prefetch"
+> +	depends on MMU
+> +	depends on RISCV_ALTERNATIVE
+> +	default y
+> +	help
+> +	   Adds support to dynamically detect the presence of the ZICBOP
+> +	   extension (Cache Block Prefetch Operations) and enable its
+> +	   usage.
+> +
+> +	   The Zicbop extension can be used to prefetch cache block for
+> +	   read/write/instruction fetch.
+> +
+> +	   If you don't know what to do here, say Y.
+> +
+>  config TOOLCHAIN_HAS_ZIHINTPAUSE
+>  	bool
+>  	default y
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index 702725727671..56eff7a9d2d2 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -11,6 +11,7 @@
+>  
+>  #include <asm/barrier.h>
+>  #include <asm/fence.h>
+> +#include <asm/processor.h>
+>  
+>  #define __arch_xchg_masked(prepend, append, r, p, n)			\
+>  ({									\
+> @@ -25,6 +26,7 @@
+>  									\
+>  	__asm__ __volatile__ (						\
+>  	       prepend							\
+> +	       PREFETCHW_ASM(%5)					\
+>  	       "0:	lr.w %0, %2\n"					\
+>  	       "	and  %1, %0, %z4\n"				\
+>  	       "	or   %1, %1, %z3\n"				\
+> @@ -32,7 +34,7 @@
+>  	       "	bnez %1, 0b\n"					\
+>  	       append							\
+>  	       : "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))	\
+> -	       : "rJ" (__newx), "rJ" (~__mask)				\
+> +	       : "rJ" (__newx), "rJ" (~__mask), "rJ" (__ptr32b)		\
+>  	       : "memory");						\
+>  									\
+>  	r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index b7b58258f6c7..78b7b8b53778 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -58,6 +58,7 @@
+>  #define RISCV_ISA_EXT_ZICSR		40
+>  #define RISCV_ISA_EXT_ZIFENCEI		41
+>  #define RISCV_ISA_EXT_ZIHPM		42
+> +#define RISCV_ISA_EXT_ZICBOP		43
+>  
+>  #define RISCV_ISA_EXT_MAX		64
+>  
+> diff --git a/arch/riscv/include/asm/insn-def.h b/arch/riscv/include/asm/insn-def.h
+> index 6960beb75f32..dc590d331894 100644
+> --- a/arch/riscv/include/asm/insn-def.h
+> +++ b/arch/riscv/include/asm/insn-def.h
+> @@ -134,6 +134,7 @@
+>  
+>  #define RV_OPCODE_MISC_MEM	RV_OPCODE(15)
+>  #define RV_OPCODE_SYSTEM	RV_OPCODE(115)
+> +#define RV_OPCODE_PREFETCH	RV_OPCODE(19)
 
-But aren't you removing asm-generic/spinlock.h below ?
--generic-y += spinlock.h
+This should be named RV_OPCODE_OP_IMM and be placed in
+numerical order with the others, i.e. above SYSTEM.
 
-> >
-> > >  generic-y += spinlock_types.h
-> > >  generic-y += qrwlock.h
-> > >  generic-y += qrwlock_types.h
-> > > +generic-y += qspinlock.h
-> > >  generic-y += user.h
-> > >  generic-y += vmlinux.lds.h
-> > > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-> > > new file mode 100644
-> > > index 000000000000..c644a92d4548
-> > > --- /dev/null
-> > > +++ b/arch/riscv/include/asm/spinlock.h
-> > > @@ -0,0 +1,17 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +
-> > > +#ifndef __ASM_RISCV_SPINLOCK_H
-> > > +#define __ASM_RISCV_SPINLOCK_H
-> > > +
-> > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > +#define _Q_PENDING_LOOPS     (1 << 9)
-> > > +#endif
-> >
-> > Any reason the above define couldn't be merged on the ifdef below?
-> Easy for the next patch to modify. See Waiman's comment:
-> 
-> https://lore.kernel.org/linux-riscv/4cc7113a-0e4e-763a-cba2-7963bcd26c7a@redhat.com/
-> 
-> > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
-> > index c644a92d4548..9eb3ad31e564 100644
-> > --- a/arch/riscv/include/asm/spinlock.h
-> > +++ b/arch/riscv/include/asm/spinlock.h
-> > @@ -7,11 +7,94 @@
-> >   #define _Q_PENDING_LOOPS (1 << 9)
-> >   #endif
-> >
-> 
-> I see why you separated the _Q_PENDING_LOOPS out.
-> 
+>  
+>  #define HFENCE_VVMA(vaddr, asid)				\
+>  	INSN_R(OPCODE_SYSTEM, FUNC3(0), FUNC7(17),		\
+> @@ -196,4 +197,8 @@
+>  	INSN_I(OPCODE_MISC_MEM, FUNC3(2), __RD(0),		\
+>  	       RS1(base), SIMM12(4))
+>  
+> +#define CBO_prefetchw(base)					\
 
-I see, should be fine then.
+Please name this 'PREFETCH_w' and it should take an immediate parameter,
+even if we intend to pass 0 for it.
 
-Thanks!
-Leo
+> +	INSN_R(OPCODE_PREFETCH, FUNC3(6), FUNC7(0),		\
+> +	       RD(x0), RS1(base), RS2(x0))
 
-> 
-> >
-> > > +
-> > > +#ifdef CONFIG_QUEUED_SPINLOCKS
-> > > +#include <asm/qspinlock.h>
-> > > +#include <asm/qrwlock.h>
-> > > +#else
-> > > +#include <asm-generic/spinlock.h>
-> > > +#endif
-> > > +
-> > > +#endif /* __ASM_RISCV_SPINLOCK_H */
-> > > --
-> > > 2.36.1
-> > >
-> >
-> > Thanks!
-> > Leo
-> >
-> 
-> 
+prefetch.w is not an R-type instruction, it's an S-type. While the bit
+shifts are the same, the names are different. We need to add S-type
+names while defining this instruction. Then, this define would be
+
+ #define PREFETCH_w(base, imm) \
+     INSN_S(OPCODE_OP_IMM, FUNC3(6), IMM_11_5(imm), __IMM_4_0(0), \
+            RS1(base), __RS2(3))
+
+When the assembler as insn_r I hope it will validate that
+(imm & 0xfe0) == imm
+
+> +
+>  #endif /* __ASM_INSN_DEF_H */
+> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> index de9da852f78d..7ad3a24212e8 100644
+> --- a/arch/riscv/include/asm/processor.h
+> +++ b/arch/riscv/include/asm/processor.h
+> @@ -12,6 +12,8 @@
+>  #include <vdso/processor.h>
+>  
+>  #include <asm/ptrace.h>
+> +#include <asm/insn-def.h>
+> +#include <asm/hwcap.h>
+>  
+>  #ifdef CONFIG_64BIT
+>  #define DEFAULT_MAP_WINDOW	(UL(1) << (MMAP_VA_BITS - 1))
+> @@ -103,6 +105,17 @@ static inline void arch_thread_struct_whitelist(unsigned long *offset,
+>  #define KSTK_EIP(tsk)		(ulong)(task_pt_regs(tsk)->epc)
+>  #define KSTK_ESP(tsk)		(ulong)(task_pt_regs(tsk)->sp)
+>  
+> +#define ARCH_HAS_PREFETCHW
+> +#define PREFETCHW_ASM(base)	ALTERNATIVE(__nops(1), \
+> +					    CBO_prefetchw(base), \
+> +					    0, \
+> +					    RISCV_ISA_EXT_ZICBOP, \
+> +					    CONFIG_RISCV_ISA_ZICBOP)
+> +static inline void prefetchw(const void *ptr)
+> +{
+> +	asm volatile(PREFETCHW_ASM(%0)
+> +		: : "r" (ptr) : "memory");
+> +}
+>  
+>  /* Do necessary setup to start up a newly executed thread. */
+>  extern void start_thread(struct pt_regs *regs,
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index ef7b4fd9e876..e0b897db0b97 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -159,6 +159,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>  	__RISCV_ISA_EXT_DATA(h, RISCV_ISA_EXT_h),
+>  	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+>  	__RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
+> +	__RISCV_ISA_EXT_DATA(zicbop, RISCV_ISA_EXT_ZICBOP),
+
+zicbop should be above zicboz (extensions alphabetical within their
+category).
+
+>  	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
+>  	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
+>  	__RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
 > -- 
-> Best Regards
->  Guo Ren
-> 
+> 2.36.1
+>
 
+Thanks,
+drew
