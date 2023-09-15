@@ -2,59 +2,59 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7557A1605
-	for <lists+linux-csky@lfdr.de>; Fri, 15 Sep 2023 08:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C2A7A160C
+	for <lists+linux-csky@lfdr.de>; Fri, 15 Sep 2023 08:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjIOGYK (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 15 Sep 2023 02:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S232228AbjIOG0d (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 15 Sep 2023 02:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbjIOGYJ (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 15 Sep 2023 02:24:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D4B61FE0
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 23:23:19 -0700 (PDT)
+        with ESMTP id S230109AbjIOG0d (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 15 Sep 2023 02:26:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7DC11FE0
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 23:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694758998;
+        s=mimecast20190719; t=1694759142;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=h49HJZ/O577BqKvSVyAVyTrcbTxM3sCo8B/Q+wbyQ4s=;
-        b=aQMWXYcBeXTCbrRyYq8fzs6BBjH0TBlJ4I9UYJ1Xk2tfYeBYbHT26Xi8yYoYY70rbrQyGp
-        jl9bjSY2OMexqhfwPG1s2n7DUf5tydfbMNw65bVf3xKdbWLPf2EYXuzNwCn/tgx3EWtNfv
-        ElGF1Uwr/9MG3oDLJhfSl2PxWlZC5Js=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=9+jnNNi5vRzRYE59Q36xUOPPsHIe6r3BvoxI49Al2Kk=;
+        b=ex9P29ftQON9ujoep4VfLpQZ+ZuXB/JteIYz/wbuhk4yHJQjjA+Oxg41pYIzuAnl0Ir+gf
+        c1StUgdoM65K0HCcIz5kMC4PP8gpxFT2cJuhL4IHouyBvKLVQC4EKQfmENNGPr44FKyeXK
+        Oobx4sjKlQ6e2LRRK3XKf6iusAE2qhY=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-14-ka9eSk2sMQaPor6103yMfA-1; Fri, 15 Sep 2023 02:23:16 -0400
-X-MC-Unique: ka9eSk2sMQaPor6103yMfA-1
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3aa172b512eso2719305b6e.3
-        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 23:23:16 -0700 (PDT)
+ us-mta-479-s1C-19XkPJmEmeauphttDQ-1; Fri, 15 Sep 2023 02:25:40 -0400
+X-MC-Unique: s1C-19XkPJmEmeauphttDQ-1
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3aa0fabef2cso2306102b6e.1
+        for <linux-csky@vger.kernel.org>; Thu, 14 Sep 2023 23:25:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694758995; x=1695363795;
+        d=1e100.net; s=20230601; t=1694759139; x=1695363939;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h49HJZ/O577BqKvSVyAVyTrcbTxM3sCo8B/Q+wbyQ4s=;
-        b=N3Aqzn3Hj0pBW612IlX8Sr2kDhy5cZqbm/rEHJhFzhnA9frwNcOSRxBKY5wqP/LJ9P
-         O4z29psIXRh7WeJJrg5a7f1hfUKDUdYFijuAjB/CRoQDpTsAZWFYtFcLrpnC9NbZg/S1
-         X/smTOrzoDOCcSxDwCAQ4YjwkMcnEieuIsxKmmeBqOx4i9J8ZoWBfV+lGqmB5Hg1kYg3
-         km9kiiSDD13CWUfP6GpcDBrE1PbEkgmcHD3CXxGAviTtjTPuYhuDgx+aFLwN91FLMqia
-         HcYlO3jrcBhciYoaYNAEsqfvNCtjypLtTjp8PUs7Iq9miCaM94lU250vz3pp5bLS4Any
-         F0dQ==
-X-Gm-Message-State: AOJu0YyryfZXDw4QZQhAO+EKDgWa0eHVVb9OTzYXGL/weanfpHMyJXgY
-        GIUK4AiFX/cSUGFKHfof4DhLstEG32GyYoo7Z3AIb68/ATpw2/Afmx5LRxDwYX/s84+QDwIePhT
-        UkiUa4G1f5g77uXBXg0b3gQ==
-X-Received: by 2002:a05:6808:15a4:b0:3a1:e12b:2f80 with SMTP id t36-20020a05680815a400b003a1e12b2f80mr1008564oiw.35.1694758995691;
-        Thu, 14 Sep 2023 23:23:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEnXl+iWXUNkjlGJTgGvcCE0+QSxnHePkAelhd7hHtYCVfy9sGfEJ3pO9ERuYXBQlky5+8lHw==
-X-Received: by 2002:a05:6808:15a4:b0:3a1:e12b:2f80 with SMTP id t36-20020a05680815a400b003a1e12b2f80mr1008543oiw.35.1694758995419;
-        Thu, 14 Sep 2023 23:23:15 -0700 (PDT)
+        bh=9+jnNNi5vRzRYE59Q36xUOPPsHIe6r3BvoxI49Al2Kk=;
+        b=CbeqwmmduAJwgznfBETQChvzJ6qLZY7aWr0QsHuLSJVWHYZsk2kuYLJiAaU5qk5FSx
+         Pw0QMjkUtffShOUXpkWCx3yKol3oqMQniF9DT1Gv/wBYMQGAykr1dUzYrkol9AFtLSqu
+         rcnIe7jKmWtelpFiR9rQL05abjY287ItyQQ+n+cMSluOIPKVoddThicoTfhxokk98F/Y
+         NGyfr22mPbeQnxNU3up8zPJMojkChln/LzBU1VcKeTH4UH57tF2FJJYJ6VKgS9IRQ22R
+         ZF763V8nm0GGD8H3hUglfFlYKWjp98nUuUIGCzc2fzAq4sdAC6X3ir8Av868GSxXMeaQ
+         0UTw==
+X-Gm-Message-State: AOJu0YxDVkLZ2D3W5rF97luqgcTGdu2Xx1cBUUI16qZli9U5oKnMXdf5
+        s6q6E6A8K+2s9BpKeBVyZCj531vh+wel1/34P86g3V/lQrBpOS6K4jLaKaRrVnPfoySZ5wuwz42
+        U25/m9bY6/p2JtcU2pLInvA==
+X-Received: by 2002:a05:6808:b34:b0:3ac:ab36:2741 with SMTP id t20-20020a0568080b3400b003acab362741mr797317oij.53.1694759139624;
+        Thu, 14 Sep 2023 23:25:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEMHaFc+UC1EHaQRMbCwUpAmphXEf20cxE2AiOsjMs+KiUT0/fC2jPyxpfPcipU6ikyGrIg1Q==
+X-Received: by 2002:a05:6808:b34:b0:3ac:ab36:2741 with SMTP id t20-20020a0568080b3400b003acab362741mr797288oij.53.1694759139377;
+        Thu, 14 Sep 2023 23:25:39 -0700 (PDT)
 Received: from redhat.com ([2804:1b3:a803:4ff9:7c29:fe41:6aa7:43df])
-        by smtp.gmail.com with ESMTPSA id e2-20020a9d7302000000b006c0d686f76esm1338510otk.63.2023.09.14.23.23.08
+        by smtp.gmail.com with ESMTPSA id e27-20020a05680809bb00b003a37372e6b2sm1294124oig.21.2023.09.14.23.25.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 23:23:14 -0700 (PDT)
-Date:   Fri, 15 Sep 2023 03:23:05 -0300
+        Thu, 14 Sep 2023 23:25:38 -0700 (PDT)
+Date:   Fri, 15 Sep 2023 03:25:29 -0300
 From:   Leonardo Bras <leobras@redhat.com>
 To:     guoren@kernel.org
 Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
@@ -70,18 +70,18 @@ Cc:     paul.walmsley@sifive.com, anup@brainfault.org,
         linux-doc@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V11 13/17] RISC-V: paravirt: pvqspinlock: Add SBI
- implementation
-Message-ID: <ZQP4SXLf00IntVWd@redhat.com>
+Subject: Re: [PATCH V11 14/17] RISC-V: paravirt: pvqspinlock: Add kconfig
+ entry
+Message-ID: <ZQP42f5SC2ecaAKE@redhat.com>
 References: <20230910082911.3378782-1-guoren@kernel.org>
- <20230910082911.3378782-14-guoren@kernel.org>
+ <20230910082911.3378782-15-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230910082911.3378782-14-guoren@kernel.org>
+In-Reply-To: <20230910082911.3378782-15-guoren@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,88 +90,57 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sun, Sep 10, 2023 at 04:29:07AM -0400, guoren@kernel.org wrote:
+On Sun, Sep 10, 2023 at 04:29:08AM -0400, guoren@kernel.org wrote:
 > From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> Implement pv_kick with SBI implementation, and add SBI_EXT_PVLOCK
-> extension detection.
+> Add kconfig entry for paravirt_spinlock, an unfair qspinlock
+> virtualization-friendly backend, by halting the virtual CPU rather
+> than spinning.
 > 
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > Signed-off-by: Guo Ren <guoren@kernel.org>
 > ---
->  arch/riscv/include/asm/sbi.h           | 6 ++++++
->  arch/riscv/kernel/qspinlock_paravirt.c | 7 ++++++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
+>  arch/riscv/Kconfig         | 12 ++++++++++++
+>  arch/riscv/kernel/Makefile |  1 +
+>  2 files changed, 13 insertions(+)
 > 
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index e0233b3d7a5f..3533f8d4f3e2 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -30,6 +30,7 @@ enum sbi_ext_id {
->  	SBI_EXT_HSM = 0x48534D,
->  	SBI_EXT_SRST = 0x53525354,
->  	SBI_EXT_PMU = 0x504D55,
-> +	SBI_EXT_PVLOCK = 0xAB0401,
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 4bcff2860f48..ec0da24ed6fb 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -813,6 +813,18 @@ config RELOCATABLE
 >  
->  	/* Experimentals extensions must lie within this range */
->  	SBI_EXT_EXPERIMENTAL_START = 0x08000000,
-> @@ -243,6 +244,11 @@ enum sbi_pmu_ctr_type {
->  /* Flags defined for counter stop function */
->  #define SBI_PMU_STOP_FLAG_RESET (1 << 0)
+>            If unsure, say N.
 >  
-> +/* SBI PVLOCK (kick cpu out of wfi) */
-> +enum sbi_ext_pvlock_fid {
-> +	SBI_EXT_PVLOCK_KICK_CPU = 0,
-> +};
+> +config PARAVIRT_SPINLOCKS
+> +	bool "Paravirtualization layer for spinlocks"
+> +	depends on QUEUED_SPINLOCKS
+> +	default y
+> +	help
+> +	  Paravirtualized spinlocks allow a unfair qspinlock to replace the
+> +	  test-set kvm-guest virt spinlock implementation with something
+> +	  virtualization-friendly, for example, halt the virtual CPU rather
+> +	  than spinning.
 > +
->  #define SBI_SPEC_VERSION_DEFAULT	0x1
->  #define SBI_SPEC_VERSION_MAJOR_SHIFT	24
->  #define SBI_SPEC_VERSION_MAJOR_MASK	0x7f
-> diff --git a/arch/riscv/kernel/qspinlock_paravirt.c b/arch/riscv/kernel/qspinlock_paravirt.c
-> index a0ad4657f437..571626f350be 100644
-> --- a/arch/riscv/kernel/qspinlock_paravirt.c
-> +++ b/arch/riscv/kernel/qspinlock_paravirt.c
-> @@ -11,6 +11,8 @@
->  
->  void pv_kick(int cpu)
->  {
-> +	sbi_ecall(SBI_EXT_PVLOCK, SBI_EXT_PVLOCK_KICK_CPU,
-> +		  cpuid_to_hartid_map(cpu), 0, 0, 0, 0, 0);
->  	return;
->  }
->  
-> @@ -25,7 +27,7 @@ void pv_wait(u8 *ptr, u8 val)
->  	if (READ_ONCE(*ptr) != val)
->  		goto out;
->  
-> -	/* wait_for_interrupt(); */
-> +	wait_for_interrupt();
->  out:
->  	local_irq_restore(flags);
->  }
-> @@ -62,6 +64,9 @@ void __init pv_qspinlock_init(void)
->  	if(sbi_get_firmware_id() != SBI_EXT_BASE_IMPL_ID_KVM)
->  		return;
->  
-> +	if (!sbi_probe_extension(SBI_EXT_PVLOCK))
-> +		return;
+> +	  If you are unsure how to answer this question, answer Y.
 > +
->  	pr_info("PV qspinlocks enabled\n");
->  	__pv_init_lock_hash();
+>  endmenu # "Kernel features"
 >  
+>  menu "Boot options"
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index 671ad85f28f2..114b29234c46 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -103,3 +103,4 @@ obj-$(CONFIG_ARCH_RV64ILP32)	+= compat_signal.o
+>  
+>  obj-$(CONFIG_64BIT)		+= pi/
+>  obj-$(CONFIG_ACPI)		+= acpi.o
+> +obj-$(CONFIG_PARAVIRT_SPINLOCKS) += qspinlock_paravirt.o
 > -- 
 > 2.36.1
 > 
 
-IIUC this PVLOCK extension is now a requirement to use pv_qspinlock(), and 
-it allows a cpu to use an instruction to wait for interrupt in pv_wait(), 
-and kicks it out of this wait using a new sbi_ecall() on pv_kick().
-
-Overall it LGTM, but would be nice to have the reference doc in the commit
-msg. I end up inferring some of the inner workings by your implementation, 
-which is not ideal for reviewing.
-
-If understanding above is right,
+LGTM:
 Reviewed-by: Leonardo Bras <leobras@redhat.com>
 
 Thanks!
