@@ -2,90 +2,65 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F8D7A8E24
-	for <lists+linux-csky@lfdr.de>; Wed, 20 Sep 2023 23:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E835C7AFE74
+	for <lists+linux-csky@lfdr.de>; Wed, 27 Sep 2023 10:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjITVBp (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 20 Sep 2023 17:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
+        id S230039AbjI0Ibd (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Wed, 27 Sep 2023 04:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjITVBo (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 20 Sep 2023 17:01:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2C3BB;
-        Wed, 20 Sep 2023 14:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=az/Js1qF679MHxIz4hhXazYZEbEi8gu09dkZtiwmuX0=; b=UvFQToudjIHsbXoBhoCpv/JCy5
-        q0xUgS0z5kAtDjmhlolxdXTv9bksN8Pf8xZWK/pHqcVzdRAOHmz/01zFL3BtMMR8cqsRGxs+pxnXI
-        BuLXY775HyQC8SyYkSmupfEcsbPlT9P9uqkxymu1Y2hKEO/3YUTfzgIglXw3YZV/FIigu2WnPoKgT
-        jR0K72e08akM941MjuMFG5p3zV1PUlT6c8L5oEhS1PdkM2ngJ0uoo0BCAEngPPSx4jpzWQRTa1pUO
-        4iFf5VdrG47kBUv1+FhEJS/K/GS8sWTh1J0gYywbvikVoKmcvntPLFZKBCIU6GzkfxnqIbVBhlfzQ
-        Pmu4VU4A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qj4Jj-004CX6-2H;
-        Wed, 20 Sep 2023 21:01:04 +0000
-Date:   Wed, 20 Sep 2023 14:01:03 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     j.granados@samsung.com
-Cc:     willy@infradead.org, josh@joshtriplett.org,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Guo Ren <guoren@kernel.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-csky@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH v2 0/8] sysctl: Remove sentinel elements from arch
-Message-ID: <ZQtdj211q5PekVRc@bombadil.infradead.org>
-References: <20230913-jag-sysctl_remove_empty_elem_arch-v2-0-d1bd13a29bae@samsung.com>
+        with ESMTP id S230168AbjI0IbU (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Wed, 27 Sep 2023 04:31:20 -0400
+Received: from mail.socialglobal.pl (mail.socialglobal.pl [51.195.90.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D448A11D
+        for <linux-csky@vger.kernel.org>; Wed, 27 Sep 2023 01:31:16 -0700 (PDT)
+Received: by mail.socialglobal.pl (Postfix, from userid 1002)
+        id 84E312231E; Wed, 27 Sep 2023 08:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=socialglobal.pl;
+        s=mail; t=1695803475;
+        bh=XwhyqI/moZPDJ7KCfcA6Gip8fA7ZKcg5SWsKuF/26zk=;
+        h=Date:From:To:Subject:From;
+        b=JWsvmQ5QG5Aa37YeBA7H/kwQiiFGjsd+lcYJc3GwFj8l3M7quLCbV1gqdMduEi9tT
+         D0FQwokFb3LH0W6Rch0F5tJsvBd5XjCnlzNsKDAhTty7ABBgXpb+6Cs9ZMURm0NHwb
+         43a/t5K9NKieq2Mi/fWrU18z5yu82tyJ3pA4BJskDybTdyjoOYyI7nGj0bqaIPNoZt
+         iPMMUtbJk3NdPoXqvBjdxfxnAWJM7FFZyVH929joxRPcgB+gBO1HzqROtdnZ/itJ5D
+         +990QfQglghQyxOnEPPEwALN+EtqYeJS+1R8xcaIi06LYBCLANunz2QAMGA+Da482J
+         akukqw7jtzsVQ==
+Received: by mail.socialglobal.pl for <linux-csky@vger.kernel.org>; Wed, 27 Sep 2023 08:30:56 GMT
+Message-ID: <20230927075535-0.1.8p.2yrn8.0.qe3bccale8@socialglobal.pl>
+Date:   Wed, 27 Sep 2023 08:30:56 GMT
+From:   "Dominik Perkowski" <dominik.perkowski@socialglobal.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: Pozycjonowanie- informacja
+X-Mailer: mail.socialglobal.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913-jag-sysctl_remove_empty_elem_arch-v2-0-d1bd13a29bae@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 11:10:54AM +0200, Joel Granados via B4 Relay wrote:
-> V2:
-> * Added clarification both in the commit messages and the coverletter as
->   to why this patch is safe to apply.
-> * Added {Acked,Reviewed,Tested}-by from list
-> * Link to v1: https://lore.kernel.org/r/20230906-jag-sysctl_remove_empty_elem_arch-v1-0-3935d4854248@samsung.com
+Dzie=C5=84 dobry,=20
 
-Thanks! I've merged this onto sysctl-next.
+jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
+j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
+e Google.=20
 
-  Luis
+Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
+=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
+w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
+owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
+dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+
+Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
+edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
+edstawi=C4=87 ofert=C4=99?=20
+
+
+Pozdrawiam serdecznie,
+Dominik Perkowski
