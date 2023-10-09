@@ -2,43 +2,48 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009417B791A
-	for <lists+linux-csky@lfdr.de>; Wed,  4 Oct 2023 09:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8DE7BDC68
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Oct 2023 14:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241576AbjJDHyA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Wed, 4 Oct 2023 03:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S1376468AbjJIMmT (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Mon, 9 Oct 2023 08:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241586AbjJDHx6 (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Wed, 4 Oct 2023 03:53:58 -0400
-X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Oct 2023 00:53:55 PDT
-Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE0A1
-        for <linux-csky@vger.kernel.org>; Wed,  4 Oct 2023 00:53:55 -0700 (PDT)
-Received: by mail.citycodes.pl (Postfix, from userid 1001)
-        id C7AEC1F497; Wed,  4 Oct 2023 09:45:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
-        t=1696405574; bh=mMhfBvhM53FtUQl1P3lyeSY5aDBQYiR8qQBy6YFQHi0=;
-        h=Date:From:To:Subject:From;
-        b=kwhyooM07RhCKwuUk7oNVtsPBnrEFQ1O/SyvU0+VVpiiBzvmmkUrF2pfhJRlcJxob
-         HvHquBi1OjvfviKIOKd6ugmuhCpUQgAhUaOI6i1F2uzUgotqlc8Vo5aSrl/JF2cxXU
-         AltZHgzKB3NTsDiRRjPc5tu48GShVmPCvsPFslc7yNPpw771ztz1pAbnq8Yg4oYowm
-         aog4R+Sp+WAgMAwq+duJUx/XmLKF4cBd1wtT0jrlDVjnGwPV1eNIzzTxe45PtBCxY2
-         fBZIIbuJSN8AtStLiQZhuBQ7907VGo8oAIn3e2flREEA+BihGCoCUkR9arAtqfY2za
-         KnJV2jgCmNm/w==
-Received: by mail.citycodes.pl for <linux-csky@vger.kernel.org>; Wed,  4 Oct 2023 07:45:38 GMT
-Message-ID: <20231004084500-0.1.7v.j19y.0.jk88anllly@citycodes.pl>
-Date:   Wed,  4 Oct 2023 07:45:38 GMT
-From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
-To:     <linux-csky@vger.kernel.org>
-Subject: =?UTF-8?Q?Rozszerzenie_Programu_M=C3=B3j_Pr=C4=85d_5.0?=
-X-Mailer: mail.citycodes.pl
+        with ESMTP id S1346437AbjJIMmT (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Mon, 9 Oct 2023 08:42:19 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FF794;
+        Mon,  9 Oct 2023 05:42:17 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29EB0C433C8;
+        Mon,  9 Oct 2023 12:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696855337;
+        bh=U5dRpNkQ/fqBLnscaXBlROlahn0CmiCXkgV4c0FDvI0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kI5SrLE3zsToT0oF3qzS1NvJht0qifBdMCiFQK/v9FTbI5L5n0EW6pYd5tuRl6ieP
+         HjcPlaqvxs2P1rdLZGTTdzoWudgM8hzKId9mZWBwXs6pCuJX6vnz+0E3ALlL+YFXWU
+         94ijd1tGExFHZ3B8P8E7hnKvTc3OsQF3vsMruK2UOg3+xlAFI12HkS7zNoWgeU9j5P
+         RqbGaNnpNq4mlV5D/TDLteQavy7GJgmfuO1Z3pz5lFVya+ir9OBnfBnLIK8QmIx8rd
+         QlNvlPOE9wtrWmdoNHUNCCaM0evOSeld2l1CPXbYgNd4+aOygWhRolJf7rUglqPuUx
+         wwtq9TTnaNu1Q==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, loongarch@lists.linux.dev,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Guo Ren <guoren@kernel.org>
+Subject: [PATCH 1/5] csky: remove unused cmd_vdso_install
+Date:   Mon,  9 Oct 2023 21:42:06 +0900
+Message-Id: <20231009124210.1064021-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,19 +51,37 @@ Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-Szanowni Pa=C5=84stwo!
+You cannot run this code because arch/csky/Makefile does not define the
+vdso_install target.
 
-W ramach nowej edycji programu M=C3=B3j Pr=C4=85d mog=C4=85 otrzyma=C4=87=
- Pa=C5=84stwo dofinansowanie na zakup i monta=C5=BC fotowoltaiki i/lub ma=
-gazynu energii. Maksymalna kwota dofinansowania wynosi 58 tys. z=C5=82.=20
+It appears that this code was blindly copied from another architecture.
 
-Jako firma wyspecjalizowana w tym zakresie zajmiemy si=C4=99 Pa=C5=84stwa=
- wnioskiem o dofinansowanie oraz instalacj=C4=85 i serwisem dopasowanych =
-do Pa=C5=84stwa budynku paneli s=C5=82onecznych.
+Remove the dead code.
 
-B=C4=99d=C4=99 wdzi=C4=99czny za informacj=C4=99 czy s=C4=85 Pa=C5=84stwo=
- zainteresowani.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
+ arch/csky/kernel/vdso/Makefile | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-Pozdrawiam,
-Kamil Lasek
+diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
+index 299e4e41ebc5..ddf784a62c11 100644
+--- a/arch/csky/kernel/vdso/Makefile
++++ b/arch/csky/kernel/vdso/Makefile
+@@ -58,13 +58,3 @@ quiet_cmd_vdsold = VDSOLD  $@
+ # that contains the same symbols at the same offsets.
+ quiet_cmd_so2s = SO2S    $@
+       cmd_so2s = $(NM) -D $< | $(srctree)/$(src)/so2s.sh > $@
+-
+-# install commands for the unstripped file
+-quiet_cmd_vdso_install = INSTALL $@
+-      cmd_vdso_install = cp $(obj)/$@.dbg $(MODLIB)/vdso/$@
+-
+-vdso.so: $(obj)/vdso.so.dbg
+-	@mkdir -p $(MODLIB)/vdso
+-	$(call cmd,vdso_install)
+-
+-vdso_install: vdso.so
+-- 
+2.39.2
+
