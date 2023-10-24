@@ -2,84 +2,60 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9E47CC24A
-	for <lists+linux-csky@lfdr.de>; Tue, 17 Oct 2023 14:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1D57D49A9
+	for <lists+linux-csky@lfdr.de>; Tue, 24 Oct 2023 10:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbjJQMGA (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Tue, 17 Oct 2023 08:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S233755AbjJXIPj (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Tue, 24 Oct 2023 04:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235001AbjJQMFc (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Tue, 17 Oct 2023 08:05:32 -0400
-X-Greylist: delayed 426 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Oct 2023 05:05:05 PDT
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2993E134;
-        Tue, 17 Oct 2023 05:05:04 -0700 (PDT)
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Tue, 17 Oct 2023 13:57:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1697543873; bh=osOPrqiiKOprJxC70XFTAVq992xL7ZaM2aZVaEQG2Qc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LnJgpiNWAMGVc0xEWtD9K4S88LSSPMbgijDz2pOHmBktW2Orxe1PlrhnLTDsBrgGX
-         tfFz/35yEpjsd2lWXJB3L8dxOM1f2ywcRKM8oZxaKD9ofLnmAeJI+8zMVH6ERwT4HW
-         LewlwUwa8Y743N4nthnjDBYgG1826/sWxFei++6o=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPA id 1002280683;
-        Tue, 17 Oct 2023 13:57:54 +0200 (CEST)
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-        id 0841B1819FD; Tue, 17 Oct 2023 13:57:54 +0200 (CEST)
-Date:   Tue, 17 Oct 2023 13:57:54 +0200
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        x86@kernel.org, Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH v2 2/2] kbuild: unify no-compiler-targets and
- no-sync-config-targets
-Message-ID: <ZS52wrL9meW8iehZ@buildd.core.avm.de>
-Mail-Followup-To: Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20231014105436.2119702-1-masahiroy@kernel.org>
- <20231014105436.2119702-2-masahiroy@kernel.org>
+        with ESMTP id S232799AbjJXIPh (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Tue, 24 Oct 2023 04:15:37 -0400
+Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F60192
+        for <linux-csky@vger.kernel.org>; Tue, 24 Oct 2023 01:15:35 -0700 (PDT)
+Received: by mail.citycodes.pl (Postfix, from userid 1001)
+        id 4C85D217E3; Tue, 24 Oct 2023 10:15:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
+        t=1698135334; bh=fClkhHu/p6gIm8tbpvFwCqGX3kXIMdqjiuDdSiYGEkk=;
+        h=Date:From:To:Subject:From;
+        b=BMceimFD0s/wSmKccvubDaqu5d++vtkb1bEfxh6kQLEgsE7QXEjDryZN34PIwDBO6
+         QJ3HYav2a6B2QYeqLxFVwt5Yfnfvetjul3Rwv3ZhduGTQlp52/5gFH8UX4UnLP8hmq
+         22jXNxgrV3mz7D1pBFe6e1UIHfC9Dj5n690otc32kJUW0LRss/LCiian9F9tN959YH
+         nxX/Nd9XjojEzrOJonX9YuLSAjTDsyyNWzaZ0nww4u3Ngb2FxufUqTwmWvc6OCO+r7
+         4FK0VH+k5dXAt9L6z+gaWi/bsqXXLX+NUR3GJTCjhcTipPeuHPqoQ4W3haFHB0J7mC
+         0Z0vMW4wc6jDw==
+Received: by mail.citycodes.pl for <linux-csky@vger.kernel.org>; Tue, 24 Oct 2023 08:15:29 GMT
+Message-ID: <20231024084500-0.1.8a.l8l3.0.h92c6plhvm@citycodes.pl>
+Date:   Tue, 24 Oct 2023 08:15:29 GMT
+From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
+To:     <linux-csky@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.citycodes.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231014105436.2119702-2-masahiroy@kernel.org>
-X-purgate-ID: 149429::1697543872-187BED95-BE924DB1/0/0
-X-purgate-type: clean
-X-purgate-size: 416
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Sat, Oct 14, 2023 at 07:54:36PM +0900, Masahiro Yamada wrote:
-> Now that vdso_install does not depend on any in-tree build artifact,
-> it no longer needs a compiler, making no-compiler-targets the same
-> as no-sync-config-targets.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
-> Changes in v2:
->   - Revive need-compiler flag
-> 
+Dzie=C5=84 dobry,
 
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
+
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Kamil Lasek
