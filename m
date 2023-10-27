@@ -2,22 +2,41 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237447D9DED
-	for <lists+linux-csky@lfdr.de>; Fri, 27 Oct 2023 18:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8FA7DA172
+	for <lists+linux-csky@lfdr.de>; Fri, 27 Oct 2023 21:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjJ0QYZ (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Fri, 27 Oct 2023 12:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
+        id S232816AbjJ0TtF (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Fri, 27 Oct 2023 15:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjJ0QYY (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Oct 2023 12:24:24 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF31E5;
-        Fri, 27 Oct 2023 09:24:22 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A6AC433C7;
-        Fri, 27 Oct 2023 16:24:16 +0000 (UTC)
-Date:   Fri, 27 Oct 2023 17:24:12 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
+        with ESMTP id S231302AbjJ0TtE (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Fri, 27 Oct 2023 15:49:04 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F431B1;
+        Fri, 27 Oct 2023 12:49:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=x0iYI5oenjIZgr5Ea1ttq1u1uXaCUnuC+gyTKvhjOBk=; b=Ibrs5OOIynLh1ZqBHvo810vT2q
+        eZ2nAuEC+K8WhADZyxCD7xKQ7OjuqkB8rNWbweBGcKtCe8Efu7z905xSwkmaFhMWLogTpKeKp530c
+        y+snwDCtQLvQDi8jIBsm//i44Q6CVALD1DuRwOCHIrexGbVrRgcuPC0+OBgc0ect2BhZQxjhCQYj2
+        MSiZAfwX7ZMLxY1tPkBJ/kabOPASmDIlm14+ujvKWv7mtx2AMBdzfungg4OSeOdSvSQNubRBDCYW8
+        Wb6MfUkoZIBWsMA4dmC6oIypgl/PXBefZx7wAkV/9ynOow1ZBq2mVcMm41FTVxyfegcHh4AJBlsxe
+        Bi32VVuw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59754)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qwSpA-0008EM-0T;
+        Fri, 27 Oct 2023 20:48:52 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qwSp5-00018G-6R; Fri, 27 Oct 2023 20:48:47 +0100
+Date:   Fri, 27 Oct 2023 20:48:47 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
@@ -28,6 +47,7 @@ Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Andy Lutomirski <luto@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -40,22 +60,23 @@ Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nicolas Schier <nicolas@fjasle.eu>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Russell King <linux@armlinux.org.uk>,
         Sven Schnelle <svens@linux.ibm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Vasily Gorbik <gor@linux.ibm.com>,
         WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>
 Subject: Re: [PATCH 4/5] kbuild: unify vdso_install rules
-Message-ID: <ZTvkLIVmC3fnxX9p@arm.com>
+Message-ID: <ZTwUH0uNESuWeKPR@shell.armlinux.org.uk>
 References: <20231009124210.1064021-1-masahiroy@kernel.org>
  <20231009124210.1064021-4-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20231009124210.1064021-4-masahiroy@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,13 +84,13 @@ List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
 On Mon, Oct 09, 2023 at 09:42:09PM +0900, Masahiro Yamada wrote:
-> Currently, there is no standard implementation for vdso_install,
-> leading to various issues:
-[...]
->  arch/arm64/Makefile                    |  9 ++----
->  arch/arm64/kernel/vdso/Makefile        | 10 ------
->  arch/arm64/kernel/vdso32/Makefile      | 10 ------
+>  arch/arm/Makefile                      |  7 +---
+>  arch/arm/vdso/Makefile                 | 25 --------------
 
-For arm64:
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Thanks!
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
