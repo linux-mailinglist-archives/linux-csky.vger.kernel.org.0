@@ -2,119 +2,72 @@ Return-Path: <linux-csky-owner@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C227DBF54
-	for <lists+linux-csky@lfdr.de>; Mon, 30 Oct 2023 18:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3517DF444
+	for <lists+linux-csky@lfdr.de>; Thu,  2 Nov 2023 14:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjJ3RvT (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
-        Mon, 30 Oct 2023 13:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S229535AbjKBNsU (ORCPT <rfc822;lists+linux-csky@lfdr.de>);
+        Thu, 2 Nov 2023 09:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjJ3RvT (ORCPT
-        <rfc822;linux-csky@vger.kernel.org>); Mon, 30 Oct 2023 13:51:19 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A412B4;
-        Mon, 30 Oct 2023 10:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Ni1GPgCl8w8Lwh/aSdbo/ks9Sgjz4jtglOS0ql7XSO4=; b=01c617rJlquZVt2QBAZvsxfiUn
-        We9Aa2YJR/FiIGF2DchKsF4HTzXH4x13XmbhOFjuOjjTLrSvKEbbIiIVeMQu4u7PR8HN2WFJmMyfQ
-        C6J8t3czF4AKG2F9u13+0fCagYzgASIqbySFKQ8DbW1a5cFRQtx6yrNueDmBMUQgJ3HEoQfA/tW2Y
-        6zKGiVKt5ORIV3bWGHSyvSBoiOH7RlM0U2llB7+2OXH2TD8iVukcZ8K6w4/w+3LY6bhMz5YBBMP6H
-        5M32zkEld5QtXKRKatFhDhrcgT9/IEWXaX/fsQh6kfxMZP7g104aTS23og0hO0W/VM5RGC4DF0bOO
-        lTqzoc7Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50422)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qxWPr-0001wo-2E;
-        Mon, 30 Oct 2023 17:51:07 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qxWPn-0004Co-Sm; Mon, 30 Oct 2023 17:51:03 +0000
-Date:   Mon, 30 Oct 2023 17:51:03 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Miguel Luis <miguel.luis@oracle.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "acpica-devel@lists.linuxfoundation.org" 
-        <acpica-devel@lists.linuxfoundation.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        "jianyong.wu@arm.com" <jianyong.wu@arm.com>,
-        "justin.he@arm.com" <justin.he@arm.com>,
-        James Morse <james.morse@arm.com>
-Subject: Re: [RFC PATCH v3 00/39] ACPI/arm64: add support for virtual
- cpuhotplug
-Message-ID: <ZT/tB0ykr8JJd+E4@shell.armlinux.org.uk>
-References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
- <C2C5C292-AD2C-4D98-8225-39ABE68C5395@oracle.com>
+        with ESMTP id S229493AbjKBNsT (ORCPT
+        <rfc822;linux-csky@vger.kernel.org>); Thu, 2 Nov 2023 09:48:19 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9A183
+        for <linux-csky@vger.kernel.org>; Thu,  2 Nov 2023 06:48:17 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-28035cf6a30so917286a91.3
+        for <linux-csky@vger.kernel.org>; Thu, 02 Nov 2023 06:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698932897; x=1699537697; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=iEdJtCz9oT8GSY3+FeeJpRlcmZRPpdhnpq7Tflld/QmE770Q71JaO9GNxpYrcjHMHs
+         1cnNoS+2xJAxZeJaZK9v5xTyotPAMVnW5xrCEv3KBcgZAanTe6YQYspLYLaBngdYalik
+         DUi7aRNC5c5O48ZUW6dEJ0r9S0F+Xuw0gdlvHjrX/Q6HVcbIVdSVz6+GWSaFE3fNxKn4
+         oTDp9fKFV7a8nsYwRoYBZUs/OIqCp0fKmG1DI2JP60K+aAxHEtE3MCmEv3uUGqLScIyA
+         ioL5D12JgItnTUb5nlzVYFN/6ovhrIchlvbe2Yc+YpYz5DuwJp9H4l8o5sHFeN5yCBnE
+         4+5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698932897; x=1699537697;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=NkPpKkL2O4nMfCIDp7UnrWBPKKHe/RqV6YDEZLM5cB7f4Srmie46I9CXbrB33hNc0c
+         abA1ythft7477UMOzip3XcIbkxpdIOO7YzftLtWjeR+4GOHZBFXSbfJxdfkkkLqv+iV+
+         waTwj7RzGDXMRXpvnI+BHes89WvaQOg2Vziq0qZUJfzlv59WLOuFn1lfpnnyFsR0Y9QL
+         ZszFQr08Aq93+f00zve6qqCZvVUmfphe73b1UI/CoT4eJkDyWnbLAYIBWjcZ+dEChYZs
+         zX+xvQ23YqAPkQV5GYbiJU5l7fzAwzNAFFrOz9nM5Mt+nk+aK3ulePXJJbuGMc4iSRqO
+         D4Dg==
+X-Gm-Message-State: AOJu0YzVTyK/5SkTRU5u9Lydo5ToV9JYJNj966K0MvhChSfbm697dc4q
+        thbOWmrfCT4Kv+h6F7VEqGVgaTDqxbrzQh2Cus0=
+X-Google-Smtp-Source: AGHT+IHtTlz3yoO7+ORBQ7FRS7jCYrXOxtHtV3HDxcv1CW5Z5bWS+gKTisI53ZCgRk9awCStY4lZHopnPa022wKkJj4=
+X-Received: by 2002:a17:90b:1a8d:b0:274:616e:3fc4 with SMTP id
+ ng13-20020a17090b1a8d00b00274616e3fc4mr15243919pjb.34.1698932896879; Thu, 02
+ Nov 2023 06:48:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <C2C5C292-AD2C-4D98-8225-39ABE68C5395@oracle.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:92b:b0:6e:e303:a059 with HTTP; Thu, 2 Nov 2023
+ 06:48:16 -0700 (PDT)
+Reply-To: oj616414@gmail.com
+From:   johnson pattaego <alidjiman00229@gmail.com>
+Date:   Thu, 2 Nov 2023 13:48:16 +0000
+Message-ID: <CAECK7AYJ973G-p5dG7z6XN6w6Y9eoMqnWh8fd5W==RmNs0Wayw@mail.gmail.com>
+Subject: =?UTF-8?B?w5xkdsO2emzDtm0sIHZhbiBlZ3kgdsOhbGxhbGtvesOhc29tLCBhbWVseXJlIMO6Z3kgaA==?=
+        =?UTF-8?B?aXZhdGtvenRhbSByw6FkLCBtaW50IG5la2VkIHVneWFuYXogYSB2ZXpldMOpa27DqXYsIG1pbnQgYSBu?=
+        =?UTF-8?B?w6loYWkgw7xneWZlbGVtLCBkZSBhIHLDqXN6bGV0ZWsgYXogYWzDoWJiaWFrIGxlc3puZWsgw6lydGVz?=
+        =?UTF-8?B?w610asO8ayDDlm50LCBhbWlrb3IgbWVnZXLFkXPDrXRpIGVubmVrIGF6IGUtbWFpbG5layBhIGvDqXpo?=
+        =?UTF-8?B?ZXp2w6l0ZWzDqXQuIMOcZHbDtnpsZXR0ZWw=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-csky.vger.kernel.org>
 X-Mailing-List: linux-csky@vger.kernel.org
 
-On Mon, Oct 30, 2023 at 04:41:19PM +0000, Miguel Luis wrote:
-> Hi Russell,
-> 
-> Tested on QEMU, based on Salil's RFC v2 [1], running with KVM.
-> - boot
-> - hotplug up to 'maxcpus'
-> - hotunplug down to the number of boot cpus
-> - hotplug vcpus and migrate with vcpus offline
-> - hotplug vcpus and migrate with vcpus online
-> - hotplug vcpus then unplug vcpus then migrate
-> - successive live migrations (up until 6)
-> 
-> Feel free to add:
-> Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> 
-> Thank you
-> Miguel
-> 
-> [1] https://lore.kernel.org/qemu-devel/20230926100436.28284-1-salil.mehta@huawei.com/
 
-That's good news, thanks for testing!
-
-I've pushed out an updated series against v6.6 earlier today in case
-anyone wants something specifically against v6.6, but I don't think
-there is any pressing reason to re-test. The only ACPI change
-between the two is:
-
-9b311b7313d6 ACPI: NFIT: Install Notify() handler before getting NFIT table
-
-and the only arm64 changes are in dts files. Nothing significant in
-kernel/ and nothing in drivers/base/.
-
-So I think at this point, I will pause waiting for 6.7-rc1 (which
-I'll do an updated patch set, since it will include changes queued
-up) and hopefully followed by Rafael's comments. Maybe James will
-also have some time to work on this again.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
