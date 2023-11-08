@@ -1,113 +1,319 @@
-Return-Path: <linux-csky+bounces-26-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-27-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35AEC7E4783
-	for <lists+linux-csky@lfdr.de>; Tue,  7 Nov 2023 18:48:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A09DC7E56A3
+	for <lists+linux-csky@lfdr.de>; Wed,  8 Nov 2023 13:59:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C69A1F213F9
-	for <lists+linux-csky@lfdr.de>; Tue,  7 Nov 2023 17:48:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C90C281311
+	for <lists+linux-csky@lfdr.de>; Wed,  8 Nov 2023 12:59:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8B434CF6;
-	Tue,  7 Nov 2023 17:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82AC411C83;
+	Wed,  8 Nov 2023 12:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="HousSzc/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdJmX6Tf"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606923588A
-	for <linux-csky@vger.kernel.org>; Tue,  7 Nov 2023 17:48:13 +0000 (UTC)
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E793010D9
-	for <linux-csky@vger.kernel.org>; Tue,  7 Nov 2023 09:48:10 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cc37fb1310so42582545ad.1
-        for <linux-csky@vger.kernel.org>; Tue, 07 Nov 2023 09:48:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1699379290; x=1699984090; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TY15kIau+eDARAHjRIt1BbGYq8C7hJS6gitrNXYnQoM=;
-        b=HousSzc/TjsP9QqgcvSIDoufRgk897tprX2D8mQ95adj1B/2RgSgyZNdoHXOAi4POE
-         RyGSeJv4XJeNzp1qJCFnJQQdRkoq56vsC4XirAWI7snyChYAVnTwpS3fa+wBy9WrqElS
-         9R2e8WFkuuqV43XkSuhbARRfsELb92BgB/q37zaN2ZiYWtYUWAt96mKJdUdjhiN0/0FP
-         o4hxVnfu24k/VrGRdQn2TDq9wXbKSdRoTirQs8urvQaLa+An1fTZu6enivRYHA9IM7Yb
-         c87zXju/6oae3/n4iaoZqgW34MushccCIy0qF6RXIroGfOWMsOEZEH+xsciQFGCCFpP0
-         jVmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699379290; x=1699984090;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TY15kIau+eDARAHjRIt1BbGYq8C7hJS6gitrNXYnQoM=;
-        b=Cye9YKcCcVjG++02sqLdTZ7LSFYC8heWXQbNnfN1UMWc6+Sk886fsCYy8DDCo4MAZT
-         Ui2/J6GuU0tBGydseVez/JF7pm88vV5Atm5ANlXXKoi/90Lc8XrCPyQsmrBpKMlOyzMD
-         kM/UCCsd47K2f7+YsYCK9lCyiY3HuAZPeMEWhWHP9GDOaHD5fV/2aVlgENzQxzCAA6Wv
-         n/nygLLLYLT8ouzF/yNWYSCBbmyKTmOJnx012b/aATFndl78Z6l2x5+GB8XtBycSiDat
-         Js/7hIHNhtsMjm/dv629+dGkIYhWqqUmhv8vQJErh0O0J5NGW0P5SVFHMjNxWPG7ia9r
-         pcXw==
-X-Gm-Message-State: AOJu0YztSAEltu3Z46mf8f99Vy0GjXFweSkjKy2tbQS0L2RB7bPjDeQb
-	Ef4JPFgNPwD4K5cYiXYPp125xQ==
-X-Google-Smtp-Source: AGHT+IE1uUN1bCnM0e+Ov1l1naTtElUtLA3DgMMTfPPCXEEwKaTGd4dv0hVEl36p8Py1780zIW4h7w==
-X-Received: by 2002:a17:902:ccca:b0:1bd:c7e2:462 with SMTP id z10-20020a170902ccca00b001bdc7e20462mr31928892ple.11.1699379290316;
-        Tue, 07 Nov 2023 09:48:10 -0800 (PST)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903244c00b001b9be3b94d3sm102654pls.140.2023.11.07.09.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Nov 2023 09:48:09 -0800 (PST)
-Date: Tue, 07 Nov 2023 09:48:09 -0800 (PST)
-X-Google-Original-Date: Tue, 07 Nov 2023 09:48:06 PST (-0800)
-Subject:     Re: [PATCH RFC 22/22] riscv: convert to use arch_cpu_is_hotpluggable()
-In-Reply-To: <E1r0JMV-00CTyh-It@rmk-PC.armlinux.org.uk>
-CC: linux-pm@vger.kernel.org, loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-  linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-  linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, linux-csky@vger.kernel.org,
-  linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-  salil.mehta@huawei.com, jean-philippe@linaro.org, jianyong.wu@arm.com, justin.he@arm.com,
-  james.morse@arm.com, Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: rmk+kernel@armlinux.org.uk
-Message-ID: <mhng-b535d186-b241-4fe8-a6b5-b06aff516d1c@palmer-ri-x1c9>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4241B1370;
+	Wed,  8 Nov 2023 12:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 397CEC433C7;
+	Wed,  8 Nov 2023 12:58:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699448345;
+	bh=mCKY7B1NUlBI0NuotW3ba1ch9AEY8/W0fCgPLr2mO8c=;
+	h=From:To:Cc:Subject:Date:From;
+	b=hdJmX6TfcykocaTr5OrRW3LbdILEh0itmqr9P21mwGlg6MNeeNmqG3lC80LfvXy6g
+	 VtUPAhXRHS6nGjOfsUwjv4hGM05Gke0gSh30zzdYv1zPY1K/pw/ewTT8Yp/pFtHxgA
+	 CqlBBLPXwAyP7VR93PLJDWmmif9jbReJ7JLAXEI1K/cSXYfGNGTUY0jhDW7DQKkLkv
+	 3fLnVWbGfEdWbODApTbzfegitWoXOm7yzXOFjF2nGEbrSRbNtAzwlzPk6EFXSXbWOk
+	 /dWaNDETcJ9PdXN+Cgh02YBuiyQScJCQc1vmxaWB0AVd7HB7HFVPq6/I5aemCJlBbV
+	 L+fUTsc/kSZfw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Matt Turner <mattst88@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Guo Ren <guoren@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Greg Ungerer <gerg@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Geoff Levand <geoff@infradead.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	x86@kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Timur Tabi <timur@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-bcachefs@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: [PATCH 00/22] -Wmissing-prototype warning fixes
+Date: Wed,  8 Nov 2023 13:58:21 +0100
+Message-Id: <20231108125843.3806765-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Tue, 07 Nov 2023 02:31:11 PST (-0800), rmk+kernel@armlinux.org.uk wrote:
-> Convert riscv to use the arch_cpu_is_hotpluggable() helper rather than
-> arch_register_cpu().
->
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
->  arch/riscv/kernel/setup.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index f8875ae1b0aa..168f0db63d53 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -294,12 +294,9 @@ void __init setup_arch(char **cmdline_p)
->  	riscv_set_dma_cache_alignment();
->  }
->
-> -int arch_register_cpu(int cpu)
-> +bool arch_cpu_is_hotpluggable(int cpu)
->  {
-> -	struct cpu *c = &per_cpu(cpu_devices, cpu);
-> -
-> -	c->hotpluggable = cpu_has_hotplug(cpu);
-> -	return register_cpu(c, cpu);
-> +	return cpu_has_hotplug(cpu);
->  }
->
->  void free_initmem(void)
+From: Arnd Bergmann <arnd@arndb.de>
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+I slightly dropped the ball on this since last sending the series in
+August, but a number of warning fixes have made it into the kernel in
+the meantime, both from my earlier submission and from architecture
+maintainers.
+
+I have none patches that remain from the previous submission, with
+two of them reworked according to comments. The additional patches
+are from more testing across architectures and configurations that
+I had previously missed.
+
+At least one patch is for a newly added warning in recent kernels.
+
+Regarding the regressions in terms of added warnings, there are
+now only five architectures left that add warnings (alpha, mips,
+nios2, sh and sparc) rather than 15, so I think we can apply
+the Kbuild change directly and have the architecture maintainers
+take care of the warnings just like the others did already.
+
+As before, my preference would be for the patches to make it
+through the respective subsystem maintainer trees, though I
+can apply the architecture specific ones to the asm-generic
+tree as well.
+
+Sorry for posting these during the merge window, I wanted to
+get them out before LPC so we can have them in linux-next
+as early as possible.
+
+    Arnd
+
+Link: https://lore.kernel.org/lkml/20230810141947.1236730-1-arnd@kernel.org/
+
+Arnd Bergmann (22):
+  [RESEND^2] ida: make 'ida_dump' static
+  [RESEND^2] jffs2: mark __jffs2_dbg_superblock_counts() static
+  [RESEND] kprobes: unify kprobes_exceptions_nofify() prototypes
+  [RESEND] time: make sysfs_get_uname() function visible in header
+  [RESEND] parport: gsc: mark init function static
+  [RESEND] stackleak: add declarations for global functions
+  [RESEND] sched: fair: move unused stub functions to header
+  [v2] arch: consolidate arch_irq_work_raise prototypes
+  [v2] arch: fix asm-offsets.c building with -Wmissing-prototypes
+  microblaze: include linux/cpu.h for trap_init() prototype
+  x86: sta2x11: include header for sta2x11_get_instance() prototype
+  csky: fix arch_jump_label_transform_static override
+  arch: add do_page_fault prototypes
+  arch: add missing prepare_ftrace_return() prototypes
+  arch: vdso: consolidate gettime prototypes
+  bcachefs: mark bch2_target_to_text_sb() static
+  powerpc: ps3: move udbg_shutdown_ps3gelic prototype
+  powerpc: pasemi: mark pas_shutdown() static
+  powerpc: powermac: mark smp_psurge_{give,take}_timebase static
+  usb: fsl-mph-dr-of: mark fsl_usb2_mpc5121_init() static
+  fbdev/fsl-diu-fb: mark wr_reg_wa() static
+  Makefile.extrawarn: turn on missing-prototypes globally
+
+ arch/alpha/include/asm/mmu_context.h         |  2 ++
+ arch/alpha/kernel/asm-offsets.c              |  2 +-
+ arch/alpha/kernel/traps.c                    |  1 +
+ arch/arc/include/asm/kprobes.h               |  3 ---
+ arch/arm/include/asm/irq_work.h              |  2 --
+ arch/arm/include/asm/kprobes.h               |  2 --
+ arch/arm/include/asm/vdso.h                  |  5 ----
+ arch/arm/vdso/vgettimeofday.c                |  1 +
+ arch/arm64/include/asm/irq_work.h            |  2 --
+ arch/arm64/include/asm/kprobes.h             |  2 --
+ arch/arm64/kernel/vdso32/vgettimeofday.c     |  1 +
+ arch/csky/include/asm/ftrace.h               |  4 +++
+ arch/csky/include/asm/irq_work.h             |  2 +-
+ arch/csky/include/asm/jump_label.h           |  5 ++++
+ arch/csky/include/asm/traps.h                |  2 +-
+ arch/csky/kernel/traps.c                     |  1 +
+ arch/csky/kernel/vdso/vgettimeofday.c        | 11 +--------
+ arch/loongarch/kernel/asm-offsets.c          | 26 ++++++++++----------
+ arch/loongarch/vdso/vgettimeofday.c          |  7 +-----
+ arch/m68k/coldfire/vectors.c                 |  3 +--
+ arch/m68k/coldfire/vectors.h                 |  3 ---
+ arch/microblaze/include/asm/ftrace.h         |  1 +
+ arch/microblaze/kernel/traps.c               |  1 +
+ arch/mips/include/asm/ftrace.h               |  4 +++
+ arch/mips/include/asm/kprobes.h              |  2 --
+ arch/mips/include/asm/traps.h                |  3 +++
+ arch/mips/vdso/vgettimeofday.c               |  1 +
+ arch/nios2/include/asm/traps.h               |  2 ++
+ arch/powerpc/include/asm/irq_work.h          |  1 -
+ arch/powerpc/include/asm/kprobes.h           |  2 --
+ arch/powerpc/include/asm/ps3.h               |  6 +++++
+ arch/powerpc/platforms/pasemi/setup.c        |  2 +-
+ arch/powerpc/platforms/powermac/smp.c        |  4 +--
+ arch/powerpc/platforms/ps3/gelic_udbg.c      |  1 +
+ arch/riscv/include/asm/irq_work.h            |  2 +-
+ arch/riscv/kernel/vdso/vgettimeofday.c       |  7 +-----
+ arch/s390/include/asm/irq_work.h             |  2 --
+ arch/s390/include/asm/kprobes.h              |  2 --
+ arch/sh/include/asm/kprobes.h                |  2 --
+ arch/sh/include/asm/traps_32.h               |  3 +++
+ arch/sparc/include/asm/kprobes.h             |  2 --
+ arch/sparc/kernel/asm-offsets.c              |  6 ++---
+ arch/sparc/kernel/traps_32.c                 |  1 +
+ arch/sparc/kernel/traps_64.c                 |  1 +
+ arch/x86/entry/vdso/vclock_gettime.c         | 10 +-------
+ arch/x86/include/asm/irq_work.h              |  1 -
+ arch/x86/include/asm/kprobes.h               |  2 --
+ arch/x86/include/asm/traps.h                 |  1 -
+ arch/x86/include/asm/vdso/gettimeofday.h     |  2 --
+ arch/x86/kernel/traps.c                      |  1 +
+ arch/x86/pci/sta2x11-fixup.c                 |  1 +
+ arch/x86/um/vdso/um_vdso.c                   |  1 +
+ drivers/net/ethernet/toshiba/ps3_gelic_net.h |  6 -----
+ drivers/parport/parport_gsc.c                |  2 +-
+ drivers/usb/host/fsl-mph-dr-of.c             |  2 +-
+ drivers/video/fbdev/fsl-diu-fb.c             |  2 +-
+ fs/bcachefs/disk_groups.c                    |  2 +-
+ fs/jffs2/debug.c                             |  2 +-
+ include/linux/irq_work.h                     |  3 +++
+ include/linux/kprobes.h                      |  4 +++
+ include/linux/stackleak.h                    |  6 +++++
+ include/vdso/gettime.h                       | 23 +++++++++++++++++
+ kernel/sched/fair.c                          | 13 ----------
+ kernel/sched/sched.h                         | 11 +++++++++
+ kernel/time/tick-internal.h                  |  3 ++-
+ lib/test_ida.c                               |  2 +-
+ scripts/Makefile.extrawarn                   |  4 +--
+ 67 files changed, 127 insertions(+), 122 deletions(-)
+ delete mode 100644 arch/m68k/coldfire/vectors.h
+ create mode 100644 include/vdso/gettime.h
+
+-- 
+2.39.2
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Vineet Gupta <vgupta@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Geoff Levand <geoff@infradead.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: x86@kernel.org
+Cc: Helge Deller <deller@gmx.de>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Timur Tabi <timur@kernel.org>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: linux-csky@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-bcachefs@vger.kernel.org
+Cc: linux-mtd@lists.infradead.org
+Cc: linux-kbuild@vger.kernel.org
+
 
