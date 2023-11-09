@@ -1,71 +1,71 @@
-Return-Path: <linux-csky+bounces-63-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-64-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8C87E6772
-	for <lists+linux-csky@lfdr.de>; Thu,  9 Nov 2023 11:09:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB5B87E6786
+	for <lists+linux-csky@lfdr.de>; Thu,  9 Nov 2023 11:13:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0E66B20A17
-	for <lists+linux-csky@lfdr.de>; Thu,  9 Nov 2023 10:09:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81E23280DCD
+	for <lists+linux-csky@lfdr.de>; Thu,  9 Nov 2023 10:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4BA168B7;
-	Thu,  9 Nov 2023 10:09:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A644168D4;
+	Thu,  9 Nov 2023 10:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XY0jEFNI"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NQVVPWjJ"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B7A16419
-	for <linux-csky@vger.kernel.org>; Thu,  9 Nov 2023 10:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7257F15AC1
+	for <linux-csky@vger.kernel.org>; Thu,  9 Nov 2023 10:13:43 +0000 (UTC)
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06162D74
-	for <linux-csky@vger.kernel.org>; Thu,  9 Nov 2023 02:09:41 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC842D71
+	for <linux-csky@vger.kernel.org>; Thu,  9 Nov 2023 02:13:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1699524580;
+	s=mimecast20190719; t=1699524822;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=f66C/Uco7Rn4beNRod/QtpM+fKeOVkNE1m9/M9ZsY14=;
-	b=XY0jEFNIKPzoHUHhMSwhB8sXqU6m5Y49AnlMsK6EU6Xjrk6b75F5a11XVZE2gmxf6nMx9x
-	Dm4FzxhvV1rFYpaU6N/0oE0bk9KIwK7XF5vgm9Lp43cVChuRaqrWeekC/QDJQx8zotC3RL
-	0BIM2WE2wFeuOuM2C6gMvl7LJpK4ylg=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=3rYhpoB4lYmS4MLIzZUo4ZMf6R8bUZVPeYV6RdLZieo=;
+	b=NQVVPWjJqELKLpSGCsq5RCplSGdIJC/P3taGBNX6GM6zUIRVE1A/NKouiUP1yK9hZnV3J6
+	q3MrYkE12TSUNZYiMrBi4QE6M8q0dqP/e7o19p75oD3gt+nBsd6btkC+yaM1+ibtvMCzw7
+	EKMIMjQuX3kFRa0AAnO7blxVwkfPpWY=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-138-7kTq3OmmOAW8hp4vzMHukw-1; Thu, 09 Nov 2023 05:09:39 -0500
-X-MC-Unique: 7kTq3OmmOAW8hp4vzMHukw-1
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3b5119f7263so170045b6e.1
-        for <linux-csky@vger.kernel.org>; Thu, 09 Nov 2023 02:09:39 -0800 (PST)
+ us-mta-54-7H_m5zMKOfWewA8aqSdLwg-1; Thu, 09 Nov 2023 05:13:39 -0500
+X-MC-Unique: 7H_m5zMKOfWewA8aqSdLwg-1
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2800be2d781so188017a91.1
+        for <linux-csky@vger.kernel.org>; Thu, 09 Nov 2023 02:13:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699524579; x=1700129379;
+        d=1e100.net; s=20230601; t=1699524814; x=1700129614;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f66C/Uco7Rn4beNRod/QtpM+fKeOVkNE1m9/M9ZsY14=;
-        b=CK2uW97vAxQt353vfw8IZXAF3ZTsXZlgD13zFA3sCkzJGyDKGvZ2+mmK0SnIrMz4P/
-         Kqua472gs9uzqfThc3B0pXBZ9ydaM/zTEViS4SvKSv1RQOQ83jJJuEqm2KHtSAPZokfn
-         Iz1Wjd+PetdLzV+by+kLE3z6rooALi1ZpNGrt1Fu07puS3rWnJYiIb2iTcpueCE5plmq
-         HWDA63U89KeF/H05+cPpW15T8mF4xqV17eUw6oYb1X9ajeiFUz58dCIR1jmlB0GuC2II
-         7wIDwrL6ezuBMn5neqLpibKZFAiyxrJQQTiRU3DFaP5vzL7H0Va5c2gtIKnIWz4s0qvn
-         jz/Q==
-X-Gm-Message-State: AOJu0YyM43S9wFQQepFUB3rHJZ9+IMCz6rkYVn+gzLGUUS/D5XrlLsxK
-	zU7HDhH2XX+WW8bj4ZXGYv0PmhYMXleeel78TTrZT39yyE1rwNd5FXxuSMuuwOctziZ8kZPuDxL
-	294XriUM7mcwmq3JP5vptElSiczwp6HVN
-X-Received: by 2002:a05:6871:a113:b0:1e9:e8fd:bb77 with SMTP id vs19-20020a056871a11300b001e9e8fdbb77mr5119503oab.0.1699524578746;
-        Thu, 09 Nov 2023 02:09:38 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGuc2Fsk1aOG+26g+R1TKcXCB5LvcN3abO9ejRxfqdYaGILXhVW+FjXlWbJavq6vyZSTQA5Iw==
-X-Received: by 2002:a05:6871:a113:b0:1e9:e8fd:bb77 with SMTP id vs19-20020a056871a11300b001e9e8fdbb77mr5119472oab.0.1699524578430;
-        Thu, 09 Nov 2023 02:09:38 -0800 (PST)
+        bh=3rYhpoB4lYmS4MLIzZUo4ZMf6R8bUZVPeYV6RdLZieo=;
+        b=FezDHJ4DxUQGr9SoysSeVtCSrN8NQKtMOW8rW6ScwlCymcjoI+I4dtTojybCx4ZzyZ
+         DmOx4ou+d6a6ypsc3FW4Uw3UyMOLb/vU7FBDGVQSOPrOXgyvzuGcyFdlktIFeZJPVCm3
+         Rf5iYGheW/ii8tKgAtyVg3o0I6PBj3wSLdfexvjNnk8dT12ywrqbODDaEKaf89jyIKSQ
+         RFfu6TbeoOT/2p+gX6u8c8u6y7XcmdXna8HyJHo+S5HTrm3dL6+vwnkZ9VV5TIsUY/gi
+         dQAOt5gxlaYF9cJ0FHXP/zw4gtAxlmZvvbqe5FPRnW+uOpAKtJzESWaphYJ0eC/WE0N3
+         s3pg==
+X-Gm-Message-State: AOJu0Yx/+r4Y8KIKAvd+/LxSF/edD+gWj8SRGzOGcCxz1kU4BatVPeZw
+	5y4SQqTb91AM4JOMiAh4G9P/K6DAIeKRzKghIME6fIlrCGsu846dYu9uWN9H84WvkJ6sdi5/t4z
+	9C2xhdsau4ECBUhkEwemJEg==
+X-Received: by 2002:a17:903:120e:b0:1cc:ebe:5547 with SMTP id l14-20020a170903120e00b001cc0ebe5547mr5043358plh.0.1699524813773;
+        Thu, 09 Nov 2023 02:13:33 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGMYccyPUYXdRLbiWAt/Rrr2lff8DkVfjHrlmnPr9rVOEThxcSXfzeRdAMTZ0+vEY8CCgW5xw==
+X-Received: by 2002:a17:903:120e:b0:1cc:ebe:5547 with SMTP id l14-20020a170903120e00b001cc0ebe5547mr5043330plh.0.1699524813447;
+        Thu, 09 Nov 2023 02:13:33 -0800 (PST)
 Received: from [10.66.61.39] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id q18-20020a62ae12000000b006bae6eea9d0sm10335148pff.49.2023.11.09.02.09.33
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902e74200b001c60a2b5c61sm3165370plf.134.2023.11.09.02.13.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Nov 2023 02:09:38 -0800 (PST)
-Message-ID: <f00dd1cf-5b4c-38a8-a337-817d474d53d1@redhat.com>
-Date: Thu, 9 Nov 2023 18:09:32 +0800
+        Thu, 09 Nov 2023 02:13:33 -0800 (PST)
+Message-ID: <6341a77d-ba42-3f3a-4a2a-b598fb5c0e20@redhat.com>
+Date: Thu, 9 Nov 2023 18:13:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH RFC 06/22] drivers: base: Use present CPUs in
- GENERIC_CPU_DEVICES
+Subject: Re: [PATCH RFC 07/22] drivers: base: Allow parts of
+ GENERIC_CPU_DEVICES to be overridden
 Content-Language: en-US
 To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
  linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
@@ -88,104 +88,94 @@ Cc: Salil Mehta <salil.mehta@huawei.com>,
  Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
  justin.he@arm.com, James Morse <james.morse@arm.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Guo Ren <guoren@kernel.org>
+ "Rafael J. Wysocki" <rafael@kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>
 References: <ZUoRY33AAHMc5ThW@shell.armlinux.org.uk>
- <E1r0JLB-00CTwy-7y@rmk-PC.armlinux.org.uk>
+ <E1r0JLG-00CTx8-CG@rmk-PC.armlinux.org.uk>
 From: Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <E1r0JLB-00CTwy-7y@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1r0JLG-00CTx8-CG@rmk-PC.armlinux.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Russell,
+
 
 On 11/7/23 18:29, Russell King (Oracle) wrote:
 > From: James Morse <james.morse@arm.com>
 > 
-> Three of the five ACPI architectures create sysfs entries using
-> register_cpu() for present CPUs, whereas arm64, riscv and all
-> GENERIC_CPU_DEVICES do this for possible CPUs.
+> Architectures often have extra per-cpu work that needs doing
+> before a CPU is registered, often to determine if a CPU is
+> hotpluggable.
 > 
-> Registering a CPU is what causes them to show up in sysfs.
-> 
-> It makes very little sense to register all possible CPUs. Registering
-> a CPU is what triggers the udev notifications allowing user-space to
-> react to newly added CPUs.
-> 
-> To allow all five ACPI architectures to use GENERIC_CPU_DEVICES, change
-> it to use for_each_present_cpu(). Making the ACPI architectures use
-> GENERIC_CPU_DEVICES is a pre-requisite step to centralise their
-> cpu_register() logic, before moving it into the ACPI processor driver.
-> When ACPI is disabled this work would be done by
-> cpu_dev_register_generic().
-
-What do you actually mean about when ACPI is disabled this work would be 
-done by cpu_dev_register_generic()? Is the work means register the cpu?
-
-I'm not quite understand that, and how about when ACPI is enabled, which 
-function do this work?
-
-> 
-> Of the ACPI architectures that register possible CPUs, arm64 and riscv
-> do not support making possible CPUs present as they use the weak 'always
-> fails' version of arch_register_cpu().
-> 
-> Only two of the eight architectures that use GENERIC_CPU_DEVICES have a
-> distinction between present and possible CPUs.
-> 
-> The following architectures use GENERIC_CPU_DEVICES but are not SMP,
-> so possible == present:
->   * m68k
->   * microblaze
->   * nios2
-> 
-> The following architectures use GENERIC_CPU_DEVICES and consider
-> possible == present:
->   * csky: setup_smp()
->   * processor_probe() sets possible for all CPUs and present for all CPUs
->     except the boot cpu, which will have been done by
->     init/main.c::start_kernel().
-> 
-> um appears to be a subarchitecture of x86.
-> 
-> The remaining architecture using GENERIC_CPU_DEVICES are:
->   * openrisc and hexagon:
->     where smp_init_cpus() makes all CPUs < NR_CPUS possible,
->     whereas smp_prepare_cpus() only makes CPUs < setup_max_cpus present.
-> 
-> After this change, openrisc and hexagon systems that use the max_cpus
-> command line argument would not see the other CPUs present in sysfs.
-> This should not be a problem as these CPUs can't bre brought online as
-                                              ^ nit: can't be
-> _cpu_up() checks cpu_present().
-> 
-> After this change, only CPUs which are present appear in sysfs.
+> To allow the ACPI architectures to use GENERIC_CPU_DEVICES, move
+> the cpu_register() call into arch_register_cpu(), which is made __weak
+> so architectures with extra work can override it.
+> This aligns with the way x86, ia64 and loongarch register hotplug CPUs
+> when they become present.
 > 
 > Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-
-Thanks,
-Shaoqin
-
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
 > ---
->   drivers/base/cpu.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Changes since RFC:
+>   * Dropped __init from x86/ia64 arch_register_cpu()
+> Changes since RFC v2:
+>   * Dropped unnecessary Loongarch asm/cpu.h changes
+> ---
+>   drivers/base/cpu.c  | 14 ++++++++++----
+>   include/linux/cpu.h |  4 ++++
+>   2 files changed, 14 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> index 9ea22e165acd..34b48f660b6b 100644
+> index 34b48f660b6b..579064fda97b 100644
 > --- a/drivers/base/cpu.c
 > +++ b/drivers/base/cpu.c
-> @@ -533,7 +533,7 @@ static void __init cpu_dev_register_generic(void)
+> @@ -525,19 +525,25 @@ bool cpu_is_hotpluggable(unsigned int cpu)
+>   EXPORT_SYMBOL_GPL(cpu_is_hotpluggable);
+>   
 >   #ifdef CONFIG_GENERIC_CPU_DEVICES
+> -static DEFINE_PER_CPU(struct cpu, cpu_devices);
+> +DEFINE_PER_CPU(struct cpu, cpu_devices);
+> +
+> +int __weak arch_register_cpu(int cpu)
+> +{
+> +	return register_cpu(&per_cpu(cpu_devices, cpu), cpu);
+> +}
+>   #endif
+>   
+>   static void __init cpu_dev_register_generic(void)
+>   {
+> -#ifdef CONFIG_GENERIC_CPU_DEVICES
 >   	int i;
 >   
-> -	for_each_possible_cpu(i) {
-> +	for_each_present_cpu(i) {
->   		if (register_cpu(&per_cpu(cpu_devices, i), i))
+> +	if (!IS_ENABLED(CONFIG_GENERIC_CPU_DEVICES))
+> +		return;
+> +
+>   	for_each_present_cpu(i) {
+> -		if (register_cpu(&per_cpu(cpu_devices, i), i))
+> +		if (arch_register_cpu(i))
 >   			panic("Failed to register CPU device");
 >   	}
+> -#endif
+>   }
+>   
+>   #ifdef CONFIG_GENERIC_CPU_VULNERABILITIES
+> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+> index fc8094419084..1e982d63eae8 100644
+> --- a/include/linux/cpu.h
+> +++ b/include/linux/cpu.h
+> @@ -88,6 +88,10 @@ extern ssize_t arch_cpu_probe(const char *, size_t);
+>   extern ssize_t arch_cpu_release(const char *, size_t);
+>   #endif
+>   
+> +#ifdef CONFIG_GENERIC_CPU_DEVICES
+> +DECLARE_PER_CPU(struct cpu, cpu_devices);
+> +#endif
+> +
+>   /*
+>    * These states are not related to the core CPU hotplug mechanism. They are
+>    * used by various (sub)architectures to track internal state
+
+-- 
+Shaoqin
 
 
