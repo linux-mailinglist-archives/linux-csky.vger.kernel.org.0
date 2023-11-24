@@ -1,192 +1,174 @@
-Return-Path: <linux-csky+bounces-139-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-140-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 141917F515C
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Nov 2023 21:16:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 035407F7355
+	for <lists+linux-csky@lfdr.de>; Fri, 24 Nov 2023 13:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B9DD1C209C4
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Nov 2023 20:16:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B4ECB20B9E
+	for <lists+linux-csky@lfdr.de>; Fri, 24 Nov 2023 12:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76B7A5D90E;
-	Wed, 22 Nov 2023 20:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73CA1208CA;
+	Fri, 24 Nov 2023 12:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ASSOqFUT"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4571BD;
-	Wed, 22 Nov 2023 12:16:50 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1f4b29abdbcso21055fac.0;
-        Wed, 22 Nov 2023 12:16:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700684210; x=1701289010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U+AKNbPfGcSitF9DQBk43/GENfS9BTVC5pjwY2CWch8=;
-        b=Bu5pFWc2ETKxL65yawgTFd7QN/bAEYfIseyHUYG/wZv4J0cEI8nhynLHfTa7QvWgpn
-         UY6i6wsyCO4nqk7poMpH3gwZFogrqI2UlMoZKhy385XeLHqUGBy6p4Gj3K26HIjo5vbT
-         SFdIwNj1diF59CY/axcaC0cN3zzJUehQvNm7WSmq2Q3+sE0ji2i2enNeYb6w7XS33RN0
-         kC1unYUAdEH+y/gchfS7wg79HZqn6UjveITZ7SmkAOqx+ySIfBe05J3oJrMx2v5sTQhu
-         ACPcVkA83B2SibqwvK88yc7xy6DPcyQ4RlnlNZDvltTwmpQLhWw2KjJeHh8qpYJawe/7
-         CM+A==
-X-Gm-Message-State: AOJu0YwBcB68LlYn0Nia3sbFrGu7yDB2adf3QhBmPUfU8N4gDfZlEFcg
-	7Zyt40jhWHNXp1YmKF13Aa/UVAfIY6EGdYP8jrKalExF
-X-Google-Smtp-Source: AGHT+IEZOuwWL+O8Ns2NywQDonavCXvBHcgdxxi2QZSHFBHwzFPNR8Ac+xre6B7/Fz+/eqIGB2UbpAfb/c6ikknz6l8=
-X-Received: by 2002:a05:6871:7a0:b0:1e9:8a7e:5893 with SMTP id
- o32-20020a05687107a000b001e98a7e5893mr4323044oap.5.1700684209905; Wed, 22 Nov
- 2023 12:16:49 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C7B1EB42;
+	Fri, 24 Nov 2023 12:04:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C12FAC433C7;
+	Fri, 24 Nov 2023 12:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700827484;
+	bh=iYS7ANsuZ6vwOLgQk5XN795HJ5oXfHcHZNUjCJ6SXCw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ASSOqFUTTJHCjKWaYnDmAWOsdJx6xpTr/qPcu1HB+Fm5a/QclWrV0vncK2Q3Q7xX2
+	 aCCX9KBbw2Az9X58fZvG86NOH/nrOeX7BVzsNXr5gajrQU9ziayJ62atPHT8DwDcCc
+	 ahgZtb/ixwvuzDrehPu48aUVx6G2ccUCRb+KcZHUWGGyWnosZcOgffotJMEG6Q3zmg
+	 BKh8HHr1sjhFvHUZ1Iby4sERa66rD1silvF54u1GkmzyyDomzoGyssBaqUowuIrSEm
+	 G36HFkUDw4hjv0/b3iAj4rjrfH4/y0Ks3nDD/1Xr+xB/Qamv83b+9r9W6Jyz43KFdu
+	 6MPuY/CW+rmPA==
+Date: Fri, 24 Nov 2023 12:04:40 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Greg Ungerer <gerg@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Geoff Levand <geoff@infradead.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Timur Tabi <timur@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	Aishwarya TCV <aishwarya.tcv@arm.com>
+Subject: Re: [PATCH 15/22] arch: vdso: consolidate gettime prototypes
+Message-ID: <ZWCRWArzbTYUjvon@finisterre.sirena.org.uk>
+References: <20231108125843.3806765-1-arnd@kernel.org>
+ <20231108125843.3806765-16-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk> <E1r5R31-00Csyt-Jq@rmk-PC.armlinux.org.uk>
-In-Reply-To: <E1r5R31-00Csyt-Jq@rmk-PC.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 22 Nov 2023 21:16:39 +0100
-Message-ID: <CAJZ5v0iYRXh369M3XTM0V8Q9mWkAT2y+9pJMD7HMaGjgpvFEMw@mail.gmail.com>
-Subject: Re: [PATCH 05/21] ACPI: Move ACPI_HOTPLUG_CPU to be disabled on arm64
- and riscv
-To: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, 
-	justin.he@arm.com, James Morse <james.morse@arm.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="woSdJmrFfLwaS8m2"
+Content-Disposition: inline
+In-Reply-To: <20231108125843.3806765-16-arnd@kernel.org>
+X-Cookie: Am I in GRADUATE SCHOOL yet?
+
+
+--woSdJmrFfLwaS8m2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 21, 2023 at 2:44=E2=80=AFPM Russell King <rmk+kernel@armlinux.o=
-rg.uk> wrote:
->
-> From: James Morse <james.morse@arm.com>
->
-> Neither arm64 nor riscv support physical hotadd of CPUs that were not
-> present at boot. For arm64 much of the platform description is in static
-> tables which do not have update methods. arm64 does support HOTPLUG_CPU,
-> which is backed by a firmware interface to turn CPUs on and off.
->
-> acpi_processor_hotadd_init() and acpi_processor_remove() are for adding
-> and removing CPUs that were not present at boot. arm64 systems that do th=
-is
-> are not supported as there is currently insufficient information in the
-> platform description. (e.g. did the GICR get removed too?)
->
-> arm64 currently relies on the MADT enabled flag check in map_gicc_mpidr()
-> to prevent CPUs that were not described as present at boot from being
-> added to the system. Similarly, riscv relies on the same check in
-> map_rintc_hartid(). Both architectures also rely on the weak 'always fail=
-s'
-> definitions of acpi_map_cpu() and arch_register_cpu().
->
-> Subsequent changes will redefine ACPI_HOTPLUG_CPU as making possible
-> CPUs present. Neither arm64 nor riscv support this.
->
-> Disable ACPI_HOTPLUG_CPU for arm64 and riscv by removing 'default y' and
-> selecting it on the other three ACPI architectures. This allows the weak
-> definitions of some symbols to be removed.
->
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+On Wed, Nov 08, 2023 at 01:58:36PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The VDSO functions are defined as globals in the kernel sources but inten=
+ded
+> to be called from userspace, so there is no need to declare them in a ker=
+nel
+> side header.
 
-I can apply this if it gets ACKs from the maintainers of the affected
-architectures.
+This is in -next as commit 42874e4eb35bdfc54f8514685e50434098ba4f6c and
+breaks an arm64 defconfig build, the 32 bit vDSO build is broken:
 
-> ---
-> Changes since RFC:
->  * Expanded conditions to avoid ACPI_HOTPLUG_CPU being enabled when
->    HOTPLUG_CPU isn't.
-> Changes since RFC v3:
->  * Dropped ia64 changes
-> ---
->  arch/loongarch/Kconfig        |  1 +
->  arch/x86/Kconfig              |  1 +
->  drivers/acpi/Kconfig          |  1 -
->  drivers/acpi/acpi_processor.c | 18 ------------------
->  4 files changed, 2 insertions(+), 19 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index ee123820a476..331becb2cb4f 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -5,6 +5,7 @@ config LOONGARCH
->         select ACPI
->         select ACPI_GENERIC_GSI if ACPI
->         select ACPI_MCFG if ACPI
-> +       select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
->         select ACPI_PPTT if ACPI
->         select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
->         select ARCH_BINFMT_ELF_STATE
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 3762f41bb092..dbdcfc708369 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -59,6 +59,7 @@ config X86
->         #
->         select ACPI_LEGACY_TABLES_LOOKUP        if ACPI
->         select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
-> +       select ACPI_HOTPLUG_CPU                 if ACPI_PROCESSOR && HOTP=
-LUG_CPU
->         select ARCH_32BIT_OFF_T                 if X86_32
->         select ARCH_CLOCKSOURCE_INIT
->         select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
-> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-> index f819e760ff19..a3acfc750fce 100644
-> --- a/drivers/acpi/Kconfig
-> +++ b/drivers/acpi/Kconfig
-> @@ -310,7 +310,6 @@ config ACPI_HOTPLUG_CPU
->         bool
->         depends on ACPI_PROCESSOR && HOTPLUG_CPU
->         select ACPI_CONTAINER
-> -       default y
->
->  config ACPI_PROCESSOR_AGGREGATOR
->         tristate "Processor Aggregator"
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
-c
-> index 0f5218e361df..4fe2ef54088c 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -184,24 +184,6 @@ static void __init acpi_pcc_cpufreq_init(void) {}
->
->  /* Initialization */
->  #ifdef CONFIG_ACPI_HOTPLUG_CPU
-> -int __weak acpi_map_cpu(acpi_handle handle,
-> -               phys_cpuid_t physid, u32 acpi_id, int *pcpu)
-> -{
-> -       return -ENODEV;
-> -}
-> -
-> -int __weak acpi_unmap_cpu(int cpu)
-> -{
-> -       return -ENODEV;
-> -}
-> -
-> -int __weak arch_register_cpu(int cpu)
-> -{
-> -       return -ENODEV;
-> -}
-> -
-> -void __weak arch_unregister_cpu(int cpu) {}
-> -
->  static int acpi_processor_hotadd_init(struct acpi_processor *pr)
->  {
->         unsigned long long sta;
-> --
-> 2.30.2
->
+/build/stage/linux/arch/arm64/kernel/vdso32/vgettimeofday.c:10:5: error: co=
+nflic
+ting types for =E2=80=98__vdso_clock_gettime=E2=80=99; have =E2=80=98int(cl=
+ockid_t,  struct old_timespec
+32 *)=E2=80=99 {aka =E2=80=98int(int,  struct old_timespec32 *)=E2=80=99}
+   10 | int __vdso_clock_gettime(clockid_t clock,
+      |     ^~~~~~~~~~~~~~~~~~~~
+In file included from /build/stage/linux/arch/arm64/kernel/vdso32/vgettimeo=
+fday.
+c:8:
+/build/stage/linux/include/vdso/gettime.h:16:5: note: previous declaration =
+of =E2=80=98__vdso_clock_gettime=E2=80=99 with type =E2=80=98int(clockid_t,=
+  struct __kernel_timespec *)=E2=80=99 {aka =E2=80=98int(int,  struct __ker=
+nel_timespec *)=E2=80=99}
+   16 | int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec =
+*ts);
+      |     ^~~~~~~~~~~~~~~~~~~~
+/build/stage/linux/arch/arm64/kernel/vdso32/vgettimeofday.c:28:5: error: co=
+nflicting types for =E2=80=98__vdso_clock_getres=E2=80=99; have =E2=80=98in=
+t(clockid_t,  struct old_timespec32 *)=E2=80=99 {aka =E2=80=98int(int,  str=
+uct old_timespec32 *)=E2=80=99}
+   28 | int __vdso_clock_getres(clockid_t clock_id,
+      |     ^~~~~~~~~~~~~~~~~~~
+/build/stage/linux/include/vdso/gettime.h:15:5: note: previous declaration =
+of =E2=80=98__vdso_clock_getres=E2=80=99 with type =E2=80=98int(clockid_t, =
+ struct __kernel_timespec *)=E2=80=99 {aka =E2=80=98int(int,  struct __kern=
+el_timespec *)=E2=80=99}
+   15 | int __vdso_clock_getres(clockid_t clock, struct __kernel_timespec *=
+res);
+      |     ^~~~~~~~~~~~~~~~~~~
+
+--woSdJmrFfLwaS8m2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVgkVgACgkQJNaLcl1U
+h9Dz9gf/VMa1PvhU/bO1IxdTJVCJWAk44qPipqzqyUg2pLaBosU5v8Dx8eAPyIg0
+DgxKA9Cycd3l3JSSqWIwJ1xEztqi2CvdmV5Ljrml8UqOvqHNPtg16JgCCOZ+Ssww
+82B8fl93C3CmUtTLFx3u3lZRKd7FjyeOiiemekfHvdbZSOn+K6Dk9zvPAE63gI0I
+5m6xp+q1eJ7Uyq7o4kCOnJOo/y9eDGX3lGqOsVQ7bnQAH6Id5y32aplMkStvzLKI
+TrSlxBsnU/wry1msxEbcgmhN2YebA1wWGNC0j6fT4xg0MzuHevZwPTSm/2sK5Exc
+fOQ/QL09MCXtNwNJ3QpItc8VaAFrVQ==
+=sHT7
+-----END PGP SIGNATURE-----
+
+--woSdJmrFfLwaS8m2--
 
