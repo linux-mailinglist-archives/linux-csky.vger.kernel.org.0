@@ -1,33 +1,33 @@
-Return-Path: <linux-csky+bounces-177-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-178-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F5127FF750
-	for <lists+linux-csky@lfdr.de>; Thu, 30 Nov 2023 17:55:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF2DD7FF75A
+	for <lists+linux-csky@lfdr.de>; Thu, 30 Nov 2023 17:56:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF1E628166B
-	for <lists+linux-csky@lfdr.de>; Thu, 30 Nov 2023 16:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F05191C21161
+	for <lists+linux-csky@lfdr.de>; Thu, 30 Nov 2023 16:56:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6883E55794;
-	Thu, 30 Nov 2023 16:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 530C955C0F;
+	Thu, 30 Nov 2023 16:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-csky@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F14D170C;
-	Thu, 30 Nov 2023 08:55:39 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Sh2JL47zHz6K5xc;
-	Fri,  1 Dec 2023 00:50:58 +0800 (CST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7831720;
+	Thu, 30 Nov 2023 08:56:00 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Sh2Jl4h1Fz6891V;
+	Fri,  1 Dec 2023 00:51:19 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 615D01402CD;
-	Fri,  1 Dec 2023 00:55:37 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 74FC61402CD;
+	Fri,  1 Dec 2023 00:55:58 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 30 Nov
- 2023 16:55:36 +0000
-Date: Thu, 30 Nov 2023 16:55:36 +0000
+ 2023 16:55:57 +0000
+Date: Thu, 30 Nov 2023 16:55:57 +0000
 From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
@@ -38,14 +38,13 @@ CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
 	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
 	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
 	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse
-	<james.morse@arm.com>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
-	<kernel@xen0n.name>
-Subject: Re: [PATCH 19/21] LoongArch: convert to use
- arch_cpu_is_hotpluggable()
-Message-ID: <20231130165536.000025eb@Huawei.com>
-In-Reply-To: <E1r5R4B-00Ct0G-Kk@rmk-PC.armlinux.org.uk>
+	<james.morse@arm.com>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Subject: Re: [PATCH 21/21] riscv: convert to use arch_cpu_is_hotpluggable()
+Message-ID: <20231130165557.00000702@Huawei.com>
+In-Reply-To: <E1r5R4L-00Ct0d-To@rmk-PC.armlinux.org.uk>
 References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk>
-	<E1r5R4B-00Ct0G-Kk@rmk-PC.armlinux.org.uk>
+	<E1r5R4L-00Ct0d-To@rmk-PC.armlinux.org.uk>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
@@ -59,13 +58,13 @@ Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Tue, 21 Nov 2023 13:45:27 +0000
+On Tue, 21 Nov 2023 13:45:37 +0000
 "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk> wrote:
 
-> Convert loongarch to use the arch_cpu_is_hotpluggable() helper rather
-> than arch_register_cpu(). Also remove the export as nothing should be
-> using arch_register_cpu() outside of the core kernel/acpi code.
+> Convert riscv to use the arch_cpu_is_hotpluggable() helper rather than
+> arch_register_cpu().
 > 
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 > Reviewed-by: Gavin Shan <gshan@redhat.com>
 > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
