@@ -1,175 +1,140 @@
-Return-Path: <linux-csky+bounces-274-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-275-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F4AA828D5D
-	for <lists+linux-csky@lfdr.de>; Tue,  9 Jan 2024 20:27:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 420B18295D4
+	for <lists+linux-csky@lfdr.de>; Wed, 10 Jan 2024 10:09:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4D851F21D51
-	for <lists+linux-csky@lfdr.de>; Tue,  9 Jan 2024 19:27:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5E42285A3A
+	for <lists+linux-csky@lfdr.de>; Wed, 10 Jan 2024 09:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A212D3D38C;
-	Tue,  9 Jan 2024 19:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="MU44z6ma"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8989E3C099;
+	Wed, 10 Jan 2024 09:09:08 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937293D541;
-	Tue,  9 Jan 2024 19:27:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=L5q9G4EH+GvNtL+Wb8XKMCOl8tTep7D40VZuegMyoOA=; b=MU44z6maYlvs7GL6v/GT26fHEs
-	JywflQgaRGHzndkpt+lSurBg+ao2mQxU+/oGRSPRiPNkKcdcrWFvi+6rItnyaLc7f+FPAYo7I83W5
-	d2s5ZugUXxshlJZGVGdrzrlIPCvqO/paJ1S3aBQEm5m9WcY0LPaxU5tR2kGwmEZzaY4deEjqCqu4u
-	DArVZFITrAPbLhv9xLhr/UgPtS73DxSn0SkJEK4PDTSMy+YZBXGTEYK/DtGROgF9J5QMkTF/3HvTA
-	umaXB+rcdQQpV3GgnIh74H38yrte9HF9bmmSsTVhQfTau7kl/lzJA4JTLkbtSQEyuHbASkLLoClqJ
-	gOO/RXgQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56366)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rNHkv-0004Ud-0B;
-	Tue, 09 Jan 2024 19:27:21 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rNHku-0004Wn-DT; Tue, 09 Jan 2024 19:27:20 +0000
-Date: Tue, 9 Jan 2024 19:27:20 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 14/21] irqchip/gic-v3: Don't return errors from
- gic_acpi_match_gicc()
-Message-ID: <ZZ2eGLwlkqZrh0In@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOgx-00Dvkv-Bb@rmk-PC.armlinux.org.uk>
- <20231215163301.0000183a@Huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094D03BB43;
+	Wed, 10 Jan 2024 09:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4299a70d0a7so14917521cf.3;
+        Wed, 10 Jan 2024 01:09:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704877745; x=1705482545;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v2Qk0JS/X/M+iSFJkteLpcJbyzGhmpZqpSZNg5QY+TE=;
+        b=MXQacc1/SeAtAhpQ6GZYl4WNkxHzGOuKesQTqOTq2D0wG13B9sCgP/EMI6216nr3zZ
+         ZSZas4PvdF55ML8/anUphpB6ZaWfSIY4h80PIF+6UutnNd+boHBuXsz/4q9Zu9p1FZxc
+         xWSptQcPLCBJDAqzP9SLatdKWTnwvxeip3GInn4c4JJFJ0nhVNdY/gxTcI6xPxI3g+ui
+         VGMbqTYwl4JKvXZsZ9xT7UE1ilAM1deda5wMWYVUYcz6P97iwS3v7d8aslxLK4lSg5wE
+         jMQTMp0pklRYeh2yLo/T3ntCf996cSQfTPDwYkOweF+xZ9CLRQhj51DgPkrPNCNxQWrt
+         8+ZA==
+X-Gm-Message-State: AOJu0Yx/i3HoCadj8e3xLNVXhxLBl0G7hvnNIgZAKCb9nDSkD7WUKiir
+	hKZQoi4Jep9GArltCKL4ekP2udPp/aBF3Ii6
+X-Google-Smtp-Source: AGHT+IEUsCKPkoPS/e8/7saFk4TAecb9vR4YBKqRPFns5V18kVBjAPaIMgszLlEUrW0ooK7L0pQYDA==
+X-Received: by 2002:ac8:4e49:0:b0:429:b266:c9a7 with SMTP id e9-20020ac84e49000000b00429b266c9a7mr1095985qtw.124.1704877745657;
+        Wed, 10 Jan 2024 01:09:05 -0800 (PST)
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com. [209.85.160.169])
+        by smtp.gmail.com with ESMTPSA id bv10-20020a05622a0a0a00b00429a0688f8fsm1615777qtb.68.2024.01.10.01.09.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jan 2024 01:09:05 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-42989016014so23231471cf.0;
+        Wed, 10 Jan 2024 01:09:05 -0800 (PST)
+X-Received: by 2002:a81:9843:0:b0:5fa:7e0a:b133 with SMTP id
+ p64-20020a819843000000b005fa7e0ab133mr127729ywg.79.1704877413506; Wed, 10 Jan
+ 2024 01:03:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231215163301.0000183a@Huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20231108125843.3806765-1-arnd@kernel.org> <20231108125843.3806765-9-arnd@kernel.org>
+In-Reply-To: <20231108125843.3806765-9-arnd@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 10 Jan 2024 10:03:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV8uFKntiMfwwmnFpd4Dcx8vJDwS6r1iBLtkh40N71dbw@mail.gmail.com>
+Message-ID: <CAMuHMdV8uFKntiMfwwmnFpd4Dcx8vJDwS6r1iBLtkh40N71dbw@mail.gmail.com>
+Subject: Re: [PATCH 08/22] [v2] arch: consolidate arch_irq_work_raise prototypes
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
+	Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>, 
+	Huacai Chen <chenhuacai@kernel.org>, Greg Ungerer <gerg@linux-m68k.org>, 
+	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Geoff Levand <geoff@infradead.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	x86@kernel.org, Helge Deller <deller@gmx.de>, 
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Timur Tabi <timur@kernel.org>, 
+	Kent Overstreet <kent.overstreet@linux.dev>, David Woodhouse <dwmw2@infradead.org>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, Kees Cook <keescook@chromium.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Al Viro <viro@zeniv.linux.org.uk>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-bcachefs@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	Palmer Dabbelt <palmer@rivosinc.com>, Alexander Gordeev <agordeev@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 15, 2023 at 04:33:01PM +0000, Jonathan Cameron wrote:
-> On Wed, 13 Dec 2023 12:50:23 +0000
-> Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
-> 
-> > From: James Morse <james.morse@arm.com>
-> > 
-> > gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
-> > It should only count the number of enabled redistributors, but it
-> > also tries to sanity check the GICC entry, currently returning an
-> > error if the Enabled bit is set, but the gicr_base_address is zero.
-> > 
-> > Adding support for the online-capable bit to the sanity check
-> > complicates it, for no benefit. The existing check implicitly
-> > depends on gic_acpi_count_gicr_regions() previous failing to find
-> > any GICR regions (as it is valid to have gicr_base_address of zero if
-> > the redistributors are described via a GICR entry).
-> > 
-> > Instead of complicating the check, remove it. Failures that happen
-> > at this point cause the irqchip not to register, meaning no irqs
-> > can be requested. The kernel grinds to a panic() pretty quickly.
-> > 
-> > Without the check, MADT tables that exhibit this problem are still
-> > caught by gic_populate_rdist(), which helpfully also prints what
-> > went wrong:
-> > | CPU4: mpidr 100 has no re-distributor!
-> > 
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  drivers/irqchip/irq-gic-v3.c | 18 ++++++------------
-> >  1 file changed, 6 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-> > index 98b0329b7154..ebecd4546830 100644
-> > --- a/drivers/irqchip/irq-gic-v3.c
-> > +++ b/drivers/irqchip/irq-gic-v3.c
-> > @@ -2420,21 +2420,15 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
-> >  
-> >  	/*
-> >  	 * If GICC is enabled and has valid gicr base address, then it means
-> > -	 * GICR base is presented via GICC
-> > +	 * GICR base is presented via GICC. The redistributor is only known to
-> > +	 * be accessible if the GICC is marked as enabled. If this bit is not
-> > +	 * set, we'd need to add the redistributor at runtime, which isn't
-> > +	 * supported.
-> >  	 */
-> > -	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
-> > +	if (gicc->flags & ACPI_MADT_ENABLED && gicc->gicr_base_address)
-> 
-> I was very vague in previous review.  I think the reasons you are switching
-> from acpi_gicc_is_useable(gicc) to the gicc->flags & ACPI_MADT_ENABLED
-> needs calling out as I'm fairly sure that this point in the series at least
-> acpi_gicc_is_usable is same as current upstream:
-> 
-> static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
-> {
-> 	return gicc->flags & ACPI_MADT_ENABLED;
-> }
+On Wed, Nov 8, 2023 at 2:01=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The prototype was hidden in an #ifdef on x86, which causes a warning:
+>
+> kernel/irq_work.c:72:13: error: no previous prototype for 'arch_irq_work_=
+raise' [-Werror=3Dmissing-prototypes]
 
-In a previous patch adding acpi_gicc_is_usable() c54e52f84d7a ("arm64,
-irqchip/gic-v3, ACPI: Move MADT GICC enabled check into a helper") this
-was:
+This issue is now present upstream.
 
--       if ((gicc->flags & ACPI_MADT_ENABLED) && gicc->gicr_base_address) {
-+       if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+> Some architectures have a working prototype, while others don't.
+> Fix this by providing it in only one place that is always visible.
+>
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-so effectively this is undoing that particular change, which raises in
-my mind why the change was made in the first place if it's just going
-to be reverted in a later patch (because in a following patch,
-acpi_gicc_is_usable() has an additional condition added to it that
-isn't applicable here.) which effectively makes acpi_gicc_is_usable()
-return true if either ACPI_MADT_ENABLED _or_
-ACPI_MADT_GICC_ONLINE_CAPABLE (as it is now known) are set.
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-However, if ACPI_MADT_GICC_ONLINE_CAPABLE is set, does that actually
-mean that the GICC is usable? I'm not sure it does. ACPI v6.5 says that
-this bit indicates that the system supports enabling this processor
-later. Is the GICC of a currently disabled processor "usable"...
+Gr{oetje,eeting}s,
 
-Clearly, the intention of this change is not to count this GICC entry
-if it is marked ACPI_MADT_GICC_ONLINE_CAPABLE, but I feel that isn't
-described in the commit message.
+                        Geert
 
-Moreover, I am getting the feeling that there are _two_ changes going
-on here - there's the change that's talked about in the commit message
-(the complex validation that seems unnecessary) and then there's the
-preparation for the change to acpi_gicc_is_usable() - which maybe
-should be in the following patch where it would be less confusing.
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-Would you agree?
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
