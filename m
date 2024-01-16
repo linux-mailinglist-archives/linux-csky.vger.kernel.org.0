@@ -1,37 +1,37 @@
-Return-Path: <linux-csky+bounces-290-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-291-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1229D82E627
-	for <lists+linux-csky@lfdr.de>; Tue, 16 Jan 2024 02:06:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60F5082E62E
+	for <lists+linux-csky@lfdr.de>; Tue, 16 Jan 2024 02:07:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47A29B23650
-	for <lists+linux-csky@lfdr.de>; Tue, 16 Jan 2024 01:06:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F234D1F23CF1
+	for <lists+linux-csky@lfdr.de>; Tue, 16 Jan 2024 01:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C56A208DF;
-	Tue, 16 Jan 2024 01:06:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C57020B22;
+	Tue, 16 Jan 2024 01:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eYwYkqcp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W+mNVQ2q"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795EA208DD;
-	Tue, 16 Jan 2024 01:06:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA122C433F1;
-	Tue, 16 Jan 2024 01:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C86C20B1E;
+	Tue, 16 Jan 2024 01:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77D5C433C7;
+	Tue, 16 Jan 2024 01:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705367207;
-	bh=4Rgd6pj6ZzHj+h/R371GlQqWUydY+bynAeaxfKNSS8w=;
+	s=k20201202; t=1705367254;
+	bh=TfDrsInvUzA+wma/7RiDh79sAMkHkv8eHX1xyaL6l1Q=;
 	h=From:To:Cc:Subject:Date:From;
-	b=eYwYkqcpJZIKdV6TrNlSEcfnGSR4djZyuzFUVCWe/94NowvwuhMH6cGndv+qXAE3z
-	 IQMPuDJQpxItE0kNEbBClcIw4752kGOsckGC3Kkjp3qrcUBh9EuviRUBWFnJ9fEHkN
-	 2YaHOB04U/FWAjNcuSpo2UqcPYYfjJBeeG2kidc/w3u/6pVF8H4NWUyBiC1r0DqvSN
-	 uSvoKQM7hue/x1mtjYA9qW55kBYOmSa05qwGlUQhZZpb/GTzwWVbmVi65yK0cQEP3A
-	 MZn5r0/M4KDedv8H/scKnpPGlqHIbLN5p+hEPu7Cmz1Du4gHSOaWlm76muE5sS3K1q
-	 Irs6LJMxx4arA==
+	b=W+mNVQ2q/+GOj4ZrOXC4r0iMcYozdtKWlyHO3V3z6XBtnhOlHHxJiRdfLgpG+2UrC
+	 ehpIBNLiH2Eid+XXR+zeKO6TXtfBst/rL4TxRD7pRh8cn4vqZw6HNVoYPUhsQFXPfJ
+	 7YLW0KCUvp4B0c9JbUj0H1X8fzgWHZN2k/eF7nDAvYi9IrX+zPg5p5p6eOU+Jwpbhv
+	 ybNXDWudNJ5HQPHPTEszaiOS0pRxWa+hmp1eKQf7mdr1+JQg1iRtSfPGxqOmUdyTUL
+	 k4bEXMRfxwYk2IzHlTmjXQGC9vbODqc91TgvZ/M0PsG1tevs9/j0QQ7ZiOB+A+W+Rx
+	 wb+YP1UsgSeaA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -41,7 +41,6 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Palmer Dabbelt <palmer@rivosinc.com>,
 	Guo Ren <guoren@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	linux@armlinux.org.uk,
 	will@kernel.org,
 	mpe@ellerman.id.au,
 	paul.walmsley@sifive.com,
@@ -59,9 +58,9 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-riscv@lists.infradead.org,
 	linux-s390@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 01/14] arch: consolidate arch_irq_work_raise prototypes
-Date: Mon, 15 Jan 2024 20:06:03 -0500
-Message-ID: <20240116010642.218876-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 01/11] arch: consolidate arch_irq_work_raise prototypes
+Date: Mon, 15 Jan 2024 20:07:01 -0500
+Message-ID: <20240116010729.219219-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -71,7 +70,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.73
+X-stable-base: Linux 5.15.147
 Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
@@ -92,7 +91,6 @@ Acked-by: Guo Ren <guoren@kernel.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/include/asm/irq_work.h     | 2 --
  arch/arm64/include/asm/irq_work.h   | 2 --
  arch/csky/include/asm/irq_work.h    | 2 +-
  arch/powerpc/include/asm/irq_work.h | 1 -
@@ -100,19 +98,8 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  arch/s390/include/asm/irq_work.h    | 2 --
  arch/x86/include/asm/irq_work.h     | 1 -
  include/linux/irq_work.h            | 3 +++
- 8 files changed, 5 insertions(+), 10 deletions(-)
+ 7 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm/include/asm/irq_work.h b/arch/arm/include/asm/irq_work.h
-index 3149e4dc1b54..8895999834cc 100644
---- a/arch/arm/include/asm/irq_work.h
-+++ b/arch/arm/include/asm/irq_work.h
-@@ -9,6 +9,4 @@ static inline bool arch_irq_work_has_interrupt(void)
- 	return is_smp();
- }
- 
--extern void arch_irq_work_raise(void);
--
- #endif /* _ASM_ARM_IRQ_WORK_H */
 diff --git a/arch/arm64/include/asm/irq_work.h b/arch/arm64/include/asm/irq_work.h
 index 81bbfa3a035b..a1020285ea75 100644
 --- a/arch/arm64/include/asm/irq_work.h
@@ -183,10 +170,10 @@ index 800ffce0db29..6b4d36c95165 100644
  static inline bool arch_irq_work_has_interrupt(void)
  {
 diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
-index 8cd11a223260..136f2980cba3 100644
+index ec2a47a81e42..ee5f9120c4d7 100644
 --- a/include/linux/irq_work.h
 +++ b/include/linux/irq_work.h
-@@ -66,6 +66,9 @@ void irq_work_sync(struct irq_work *work);
+@@ -58,6 +58,9 @@ void irq_work_sync(struct irq_work *work);
  void irq_work_run(void);
  bool irq_work_needs_cpu(void);
  void irq_work_single(void *arg);
