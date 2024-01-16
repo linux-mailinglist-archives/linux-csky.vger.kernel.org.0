@@ -1,162 +1,204 @@
-Return-Path: <linux-csky+bounces-287-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-288-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67C8B82D80C
-	for <lists+linux-csky@lfdr.de>; Mon, 15 Jan 2024 12:06:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3430D82E613
+	for <lists+linux-csky@lfdr.de>; Tue, 16 Jan 2024 02:04:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB98B1F21F4A
-	for <lists+linux-csky@lfdr.de>; Mon, 15 Jan 2024 11:06:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B87CB21234
+	for <lists+linux-csky@lfdr.de>; Tue, 16 Jan 2024 01:04:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104EC2C69C;
-	Mon, 15 Jan 2024 11:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E2AF9F6;
+	Tue, 16 Jan 2024 01:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="If4u5sBw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aD+cWlto"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C43628DD1;
-	Mon, 15 Jan 2024 11:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=B8snCTk6m/S/IySGz0MUr7RGvF9ztHAy1wNv3isU/8A=; b=If4u5sBwSs6B37nBXDgiTbTUGN
-	lDo8qxPOFMMLR9tdUyLFo9NhxhiAei6ak3C/e+2MynMriUcITyfJLZRCR7Ly9EwLVRyTpXgvcUB3V
-	dwGg8WGAGKz7K/mPA9CiHN8UfYztvfbPPXOI0b0S+WLTsoNs8EV0O1R9IOUUphih0SDSGEtoXqkyc
-	uB4sWSh8b+qMXC/2xsfM+PilLtcS9vlGpghLJvk9GXVZXiWY3hrSNwUQ65+M5e30MzDBuRHWV1QU/
-	jXo3DcbVxcVsJSrnfHOPq2fWintWikuBFLjvQHJE8GaX60F8EKAbY9S+jDwY+ZggmQThypOLb+Xcb
-	DtnjfwcQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60190)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rPKnW-0002Kh-1U;
-	Mon, 15 Jan 2024 11:06:30 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rPKnV-0002tb-9h; Mon, 15 Jan 2024 11:06:29 +0000
-Date: Mon, 15 Jan 2024 11:06:29 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-Message-ID: <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
- <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE831F51F;
+	Tue, 16 Jan 2024 01:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AEAC433F1;
+	Tue, 16 Jan 2024 01:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705367076;
+	bh=4Rgd6pj6ZzHj+h/R371GlQqWUydY+bynAeaxfKNSS8w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=aD+cWltoW9RendeciKgnR7IKr3X3L02qsi6pyVVQuxoQzFV4ZmZ+bqN+BnMAkqSBA
+	 UailrtA6ofEYPXJHJwY88tdnSkp5ju5H0bFbOJN69wg18WzuaKs2qq0eF/gupdm6pf
+	 GsKvu2fj6eXTHAV4PzqWK8dAWMXq0YGOaz78JJFg6vex9jQVBozBSY2qd/pw//M+Mi
+	 X1QJouIAvzyxqhXcpuowRU6WRN3VXAeUQVtXCOa1Q+jO0V6SD/e2rWaiyeMIaj7JwC
+	 pPRHnQdJOmQecFodCvj/aMqCKps+YRkVnPWRi0UiDFuMTMmhCOIh+zqVz+SArjBwEM
+	 nH1eA9r+soSIQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Guo Ren <guoren@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux@armlinux.org.uk,
+	will@kernel.org,
+	mpe@ellerman.id.au,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	hca@linux.ibm.com,
+	gor@linux.ibm.com,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.7 02/21] arch: consolidate arch_irq_work_raise prototypes
+Date: Mon, 15 Jan 2024 20:03:39 -0500
+Message-ID: <20240116010422.217925-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240116010422.217925-1-sashal@kernel.org>
+References: <20240116010422.217925-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
-> >
-> > From: James Morse <james.morse@arm.com>
-> >
-> > ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
-> > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
-> > says "Each processor in the system must be declared in the ACPI
-> > namespace"). Having two descriptions allows firmware authors to get
-> > this wrong.
-> >
-> > If CPUs are described in the MADT/APIC, they will be brought online
-> > early during boot. Once the register_cpu() calls are moved to ACPI,
-> > they will be based on the DSDT description of the CPUs. When CPUs are
-> > missing from the DSDT description, they will end up online, but not
-> > registered.
-> >
-> > Add a helper that runs after acpi_init() has completed to register
-> > CPUs that are online, but weren't found in the DSDT. Any CPU that
-> > is registered by this code triggers a firmware-bug warning and kernel
-> > taint.
-> >
-> > Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
-> > is configured.
-> 
-> So why is this a kernel problem?
+From: Arnd Bergmann <arnd@arndb.de>
 
-So what are you proposing should be the behaviour here? What this
-statement seems to be saying is that QEMU as it exists today only
-describes the first CPU in DSDT.
+[ Upstream commit 64bac5ea17d527872121adddfee869c7a0618f8f ]
 
-As this patch series changes when arch_register_cpu() gets called (as
-described in the paragraph above) we obviously need to preserve the
-_existing_ behaviour to avoid causing regressions. So, if changing the
-kernel causes user visible regressions (e.g. sysfs entries to
-disappear) then it obviously _is_ a kernel problem that needs to be
-solved.
+The prototype was hidden in an #ifdef on x86, which causes a warning:
 
-We can't say "well fix QEMU then" without invoking the wrath of Linus.
+kernel/irq_work.c:72:13: error: no previous prototype for 'arch_irq_work_raise' [-Werror=missing-prototypes]
 
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  drivers/acpi/acpi_processor.c | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > index 6a542e0ce396..0511f2bc10bc 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -791,6 +791,25 @@ void __init acpi_processor_init(void)
-> >         acpi_pcc_cpufreq_init();
-> >  }
-> >
-> > +static int __init acpi_processor_register_missing_cpus(void)
-> > +{
-> > +       int cpu;
-> > +
-> > +       if (acpi_disabled)
-> > +               return 0;
-> > +
-> > +       for_each_online_cpu(cpu) {
-> > +               if (!get_cpu_device(cpu)) {
-> > +                       pr_err_once(FW_BUG "CPU %u has no ACPI namespace description!\n", cpu);
-> > +                       add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-> > +                       arch_register_cpu(cpu);
-> 
-> Which part of this code is related to ACPI?
+Some architectures have a working prototype, while others don't.
+Fix this by providing it in only one place that is always visible.
 
-That's a good question, and I suspect it would be more suited to being
-placed in drivers/base/cpu.c except for the problem that the error
-message refers to ACPI.
+Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/arm/include/asm/irq_work.h     | 2 --
+ arch/arm64/include/asm/irq_work.h   | 2 --
+ arch/csky/include/asm/irq_work.h    | 2 +-
+ arch/powerpc/include/asm/irq_work.h | 1 -
+ arch/riscv/include/asm/irq_work.h   | 2 +-
+ arch/s390/include/asm/irq_work.h    | 2 --
+ arch/x86/include/asm/irq_work.h     | 1 -
+ include/linux/irq_work.h            | 3 +++
+ 8 files changed, 5 insertions(+), 10 deletions(-)
 
-As long as we keep the acpi_disabled test, I guess that's fine.
-cpu_dev_register_generic() there already tests acpi_disabled.
-
+diff --git a/arch/arm/include/asm/irq_work.h b/arch/arm/include/asm/irq_work.h
+index 3149e4dc1b54..8895999834cc 100644
+--- a/arch/arm/include/asm/irq_work.h
++++ b/arch/arm/include/asm/irq_work.h
+@@ -9,6 +9,4 @@ static inline bool arch_irq_work_has_interrupt(void)
+ 	return is_smp();
+ }
+ 
+-extern void arch_irq_work_raise(void);
+-
+ #endif /* _ASM_ARM_IRQ_WORK_H */
+diff --git a/arch/arm64/include/asm/irq_work.h b/arch/arm64/include/asm/irq_work.h
+index 81bbfa3a035b..a1020285ea75 100644
+--- a/arch/arm64/include/asm/irq_work.h
++++ b/arch/arm64/include/asm/irq_work.h
+@@ -2,8 +2,6 @@
+ #ifndef __ASM_IRQ_WORK_H
+ #define __ASM_IRQ_WORK_H
+ 
+-extern void arch_irq_work_raise(void);
+-
+ static inline bool arch_irq_work_has_interrupt(void)
+ {
+ 	return true;
+diff --git a/arch/csky/include/asm/irq_work.h b/arch/csky/include/asm/irq_work.h
+index 33aaf39d6f94..d39fcc1f5395 100644
+--- a/arch/csky/include/asm/irq_work.h
++++ b/arch/csky/include/asm/irq_work.h
+@@ -7,5 +7,5 @@ static inline bool arch_irq_work_has_interrupt(void)
+ {
+ 	return true;
+ }
+-extern void arch_irq_work_raise(void);
++
+ #endif /* __ASM_CSKY_IRQ_WORK_H */
+diff --git a/arch/powerpc/include/asm/irq_work.h b/arch/powerpc/include/asm/irq_work.h
+index b8b0be8f1a07..c6d3078bd8c3 100644
+--- a/arch/powerpc/include/asm/irq_work.h
++++ b/arch/powerpc/include/asm/irq_work.h
+@@ -6,6 +6,5 @@ static inline bool arch_irq_work_has_interrupt(void)
+ {
+ 	return true;
+ }
+-extern void arch_irq_work_raise(void);
+ 
+ #endif /* _ASM_POWERPC_IRQ_WORK_H */
+diff --git a/arch/riscv/include/asm/irq_work.h b/arch/riscv/include/asm/irq_work.h
+index b53891964ae0..b27a4d64fc6a 100644
+--- a/arch/riscv/include/asm/irq_work.h
++++ b/arch/riscv/include/asm/irq_work.h
+@@ -6,5 +6,5 @@ static inline bool arch_irq_work_has_interrupt(void)
+ {
+ 	return IS_ENABLED(CONFIG_SMP);
+ }
+-extern void arch_irq_work_raise(void);
++
+ #endif /* _ASM_RISCV_IRQ_WORK_H */
+diff --git a/arch/s390/include/asm/irq_work.h b/arch/s390/include/asm/irq_work.h
+index 603783766d0a..f00c9f610d5a 100644
+--- a/arch/s390/include/asm/irq_work.h
++++ b/arch/s390/include/asm/irq_work.h
+@@ -7,6 +7,4 @@ static inline bool arch_irq_work_has_interrupt(void)
+ 	return true;
+ }
+ 
+-void arch_irq_work_raise(void);
+-
+ #endif /* _ASM_S390_IRQ_WORK_H */
+diff --git a/arch/x86/include/asm/irq_work.h b/arch/x86/include/asm/irq_work.h
+index 800ffce0db29..6b4d36c95165 100644
+--- a/arch/x86/include/asm/irq_work.h
++++ b/arch/x86/include/asm/irq_work.h
+@@ -9,7 +9,6 @@ static inline bool arch_irq_work_has_interrupt(void)
+ {
+ 	return boot_cpu_has(X86_FEATURE_APIC);
+ }
+-extern void arch_irq_work_raise(void);
+ #else
+ static inline bool arch_irq_work_has_interrupt(void)
+ {
+diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
+index 8cd11a223260..136f2980cba3 100644
+--- a/include/linux/irq_work.h
++++ b/include/linux/irq_work.h
+@@ -66,6 +66,9 @@ void irq_work_sync(struct irq_work *work);
+ void irq_work_run(void);
+ bool irq_work_needs_cpu(void);
+ void irq_work_single(void *arg);
++
++void arch_irq_work_raise(void);
++
+ #else
+ static inline bool irq_work_needs_cpu(void) { return false; }
+ static inline void irq_work_run(void) { }
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.43.0
+
 
