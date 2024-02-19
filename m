@@ -1,59 +1,59 @@
-Return-Path: <linux-csky+bounces-379-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-380-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 956E485A795
-	for <lists+linux-csky@lfdr.de>; Mon, 19 Feb 2024 16:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A0B1B85A797
+	for <lists+linux-csky@lfdr.de>; Mon, 19 Feb 2024 16:40:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47B47283551
-	for <lists+linux-csky@lfdr.de>; Mon, 19 Feb 2024 15:40:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C23A282D9C
+	for <lists+linux-csky@lfdr.de>; Mon, 19 Feb 2024 15:40:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DF63BB38;
-	Mon, 19 Feb 2024 15:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCD63FE3F;
+	Mon, 19 Feb 2024 15:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d0qhxuxn";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Z/DDyv+g"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3/UM9dNj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VArxm8BU"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE0B3A8F4;
-	Mon, 19 Feb 2024 15:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427373D3A3;
+	Mon, 19 Feb 2024 15:40:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708357207; cv=none; b=OCyFbSGT2xt80hP+ARIp9e/3P6ckOgMkQmfZuudQrloQYGmgW/cEpj1+Gd0dLVTOF+9q8p5X7yXuEgciF4k/TRt5KZrBmvQ1NwfIZseLpDebJ9nZaSCHzmycxQhcB6HyqBXI0oVuu1P5MOXgR1Wfm6KTDi59w5uXKozXd9jXpho=
+	t=1708357210; cv=none; b=QdfDf5lkHCkDJFUMEWiVLb8JqTDvtRiI/5rcbzJBJaixpT8baWnADyJnPv35fJVbNNISps8TMHLy+vUapSgz7dyWtMYLAyuxYrQxRJa+u4tnXA+fZaaHcBpkdD1QASOzwOvDwyE/w2RP4ja9norn2JVE079+Mg8y+t8SFsQgrso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708357207; c=relaxed/simple;
-	bh=58CUWxVlxm2mlSFdFUvdFxekmd2xImPEn9ABAjDBWok=;
+	s=arc-20240116; t=1708357210; c=relaxed/simple;
+	bh=pWCDQWj1ZGKNeKtUkk10UnRUvitx2JkEKKGeUE/9QBo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tpVdCLzgOeWE0CCAKRTnO/cu2l5Fc4ULel9RUaFK64gq5OxqZcs0esYYWFE0jSmw8em13o+qWV34Q4Zhob1tjF5+YBd7IvEZC5pV8mZw1DzbpfGB2/MhtS8sw1B8qPW21JGTrm2GIZoNZTZx6AJpzfoYvq2XeXpRixHFWPCGyOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=d0qhxuxn; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Z/DDyv+g; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=cC8q10TjcEKf2kZ3AoMYqZLuUKALtclYc5jd8BASC/W7UTlwFCNBayRVX1sEvTLyBU9Dqg75sSMPCHO6KVVngNTEbo6exN+5umzEdBfrE7BUpCkvCsBSN9ogeBKuWLZEJa6PNahuNmm2joj7Zj+VzYX/vy4IWq0kJLl10qgvWvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3/UM9dNj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=VArxm8BU; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1708357204;
+	s=2020; t=1708357207;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=U51NQ0C/sqG0k3Ofsflj974vXvNUKI5iq+y1fWYWuoA=;
-	b=d0qhxuxnsSpYGsOeZ4U81H1DlPOa3vx6VYhqqfzkE16V+mu361hQ64QzxmFKtIbGhNhQXr
-	VSDKAL/F4qd91grgCFQSWZCwW4ltGq3dXvP5xDKep7Hy7LZknzUFGBwhv+3FprUdCmvqRD
-	SX/oDNX1uR2BgMca28mK0pUxqoh2xLAqi3DTKH4nYS696Q7dmDSJr4w9BuAzNmZP9f6psc
-	yZsaTC3SX/M2ovROraSnk2MB1aEjVIo5KvbO5dCXYupXdxhXyJkcVqyFE6iuIaA44z9Bf9
-	qSZ4rCrE6OY1cIbh3kfzXkKassnS4S47ssmWQhkIITzNqzBtNzEAbqnMTHLLfA==
+	bh=jTsHPIZ0ef28j3t4F2fpsa7oGTHGH9ta8CIKVXueM1c=;
+	b=3/UM9dNj5/TaM9bUdHKQcc4OKv7ja6XkGFpf2YFpvEfr1XpudXG74nes6wwth2aXCf1p90
+	smHhAMqlq1RbZPkaEbFDJ36ydOS4dPPK829KHE8BmozcwkUTy3NNbZwPNSjQTLzdmI70cp
+	zb1c/KBdeU05g6/PbpA4DXGttlh1rsOJEQ7Ei+R9wAE1li79sPX4vv5cgThYHA/yfw2rYV
+	d1GO4k49vPKz8zgFsUL7fDKAdIINIqOGFTlZoXocRXZoV8kLquPvC3i5MAa4R4WXUJBJoN
+	5r6otuTsNVx2fnEULa4TUb+TioXDf/0Tem8ESW8NoOMbwokvxoOU5KH+J1CRLw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1708357204;
+	s=2020e; t=1708357207;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=U51NQ0C/sqG0k3Ofsflj974vXvNUKI5iq+y1fWYWuoA=;
-	b=Z/DDyv+guMTwbx7NrIiiBC4hv7+btme15HBUJiJWRwGhFZ2vEP6hlOu7SsG2HnwffOt3kJ
-	qPPi7YU5Qg/zmhAg==
+	bh=jTsHPIZ0ef28j3t4F2fpsa7oGTHGH9ta8CIKVXueM1c=;
+	b=VArxm8BUHFw/wNcOu6uyuCQuJOxxlgvOQN8+8bFiy7NcVxaY2v32b5mFu0FfhaSRY1AnBf
+	EPQp4M6V5QF/AvBg==
 To: linux-kernel@vger.kernel.org
 Cc: Andy Lutomirski <luto@kernel.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
@@ -61,9 +61,9 @@ Cc: Andy Lutomirski <luto@kernel.org>,
 	Anna-Maria Behnsen <anna-maria@linutronix.de>,
 	Guo Ren <guoren@kernel.org>,
 	linux-csky@vger.kernel.org
-Subject: [PATCH 03/10] csky/vdso: Remove superfluous ifdeffery
-Date: Mon, 19 Feb 2024 16:39:32 +0100
-Message-Id: <20240219153939.75719-4-anna-maria@linutronix.de>
+Subject: [PATCH 10/10] csky/vdso: Use generic union vdso_data_store
+Date: Mon, 19 Feb 2024 16:39:39 +0100
+Message-Id: <20240219153939.75719-11-anna-maria@linutronix.de>
 In-Reply-To: <20240219153939.75719-1-anna-maria@linutronix.de>
 References: <20240219153939.75719-1-anna-maria@linutronix.de>
 Precedence: bulk
@@ -74,49 +74,39 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-CSKY selects GENERIC_TIME_VSYSCALL. GENERIC_TIME_VSYSCALL dependent
-ifdeffery is superfluous. Clean it up.
+There is already a generic union definition for vdso_data_store in vdso
+datapage header.
+
+Use this definition to prevent code duplication.
 
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 Cc: Guo Ren <guoren@kernel.org>
 Cc: linux-csky@vger.kernel.org
 ---
- arch/csky/include/asm/vdso.h | 5 -----
- arch/csky/kernel/vdso.c      | 4 ----
- 2 files changed, 9 deletions(-)
+ arch/csky/kernel/vdso.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/csky/include/asm/vdso.h b/arch/csky/include/asm/vdso.h
-index bdce581b5fcb..181a15edafe8 100644
---- a/arch/csky/include/asm/vdso.h
-+++ b/arch/csky/include/asm/vdso.h
-@@ -5,11 +5,6 @@
- 
- #include <linux/types.h>
- 
--#ifndef GENERIC_TIME_VSYSCALL
--struct vdso_data {
--};
--#endif
--
- /*
-  * The VDSO symbols are mapped into Linux so we can just use regular symbol
-  * addressing to get their offsets in userspace.  The symbols are mapped at an
 diff --git a/arch/csky/kernel/vdso.c b/arch/csky/kernel/vdso.c
-index 16c20d64d165..e74a2504d331 100644
+index e74a2504d331..2ca886e4a458 100644
 --- a/arch/csky/kernel/vdso.c
 +++ b/arch/csky/kernel/vdso.c
-@@ -8,11 +8,7 @@
- #include <linux/slab.h>
+@@ -15,14 +15,8 @@ extern char vdso_start[], vdso_end[];
+ static unsigned int vdso_pages;
+ static struct page **vdso_pagelist;
  
- #include <asm/page.h>
--#ifdef GENERIC_TIME_VSYSCALL
- #include <vdso/datapage.h>
--#else
--#include <asm/vdso.h>
--#endif
+-/*
+- * The vDSO data page.
+- */
+-static union {
+-	struct vdso_data	data;
+-	u8			page[PAGE_SIZE];
+-} vdso_data_store __page_aligned_data;
+-struct vdso_data *vdso_data = &vdso_data_store.data;
++static union vdso_data_store vdso_data_store __page_aligned_data;
++struct vdso_data *vdso_data = vdso_data_store.data;
  
- extern char vdso_start[], vdso_end[];
- 
+ static int __init vdso_init(void)
+ {
 -- 
 2.39.2
 
