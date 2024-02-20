@@ -1,119 +1,169 @@
-Return-Path: <linux-csky+bounces-382-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-383-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C687F85B044
-	for <lists+linux-csky@lfdr.de>; Tue, 20 Feb 2024 02:13:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D017485BA8C
+	for <lists+linux-csky@lfdr.de>; Tue, 20 Feb 2024 12:27:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05C2D1C2195B
-	for <lists+linux-csky@lfdr.de>; Tue, 20 Feb 2024 01:13:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 422461F2234E
+	for <lists+linux-csky@lfdr.de>; Tue, 20 Feb 2024 11:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4593DFC1F;
-	Tue, 20 Feb 2024 01:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C706775E;
+	Tue, 20 Feb 2024 11:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="azThkOh+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="O6lRSVZh"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6D3FC19;
-	Tue, 20 Feb 2024 01:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90153664CF;
+	Tue, 20 Feb 2024 11:27:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708391604; cv=none; b=ZYJrP3ar+EtMBUFdEYywQA9nsZ9r0n7IkeBVfXEeS6tJmcWvKmVit9JbXuNkrsaEsDiK2VOutOsXKizpdUvyrIynk3C3kv32SotqaU8/leTwHmoJSnW2rjuhrARbj+Jp74PXYt8G4qymx9Nyge1unRvrhPE7M/JCwWow3E8GoRA=
+	t=1708428451; cv=none; b=uDN8xS+cXldVwbYhT3DuKFoepLTkqYQroXkXTxCp7x2SaeC5E2NYA/tZuDRvmlcSN3rmvZ2iP9mO2Zb5hQIff/a6VkahLwNs3SthDGHxTPFnihEt/eiQJOZV3tEZybpF9JCAbpBGGuRWR50c/NGJx1lbh69wVx/dTeN/9deTymI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708391604; c=relaxed/simple;
-	bh=1OOQqs9gGIXShrtHtgrk0GR+vwo9fMIkwu5VM+GuMys=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HvqYTutO8m6iiw5fkS9IoJWmcQYM3A0ZZaqItCm/qvvXIdePvKSRYykzS+5KCLIRcCcB5Q0a+OKmMQf8jQz78fLMAn+3eXVpjF5nfng8iJxplJLjfYR+Jo4Xq1pUgTElilEMaQb89rSp9vvy2pc3JB5p5F4xneJPElZ1EjsAijg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=azThkOh+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9689FC433F1;
-	Tue, 20 Feb 2024 01:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708391603;
-	bh=1OOQqs9gGIXShrtHtgrk0GR+vwo9fMIkwu5VM+GuMys=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=azThkOh+4ID7iBbpzd1V5Wp4tUfENPWQ2pzbvUXmD8WiMz6wXRp/BkhVpv2wuk0m7
-	 +m4cD03Io2mm0+2rDv588oA9Rs5FwcHpkDgz2VQMRm77eNkRRy3A3PhoJP+lOkGTWl
-	 /BAZXyb9we+C76KKVBOakfjKpXBYRfRLBp3SMyExBTiNGqY3P5z39qfLwb2kwPqxew
-	 9/j/r2zuA2OjAd1hBR1teJaoYE8xLDT3XNskHnmVyN0GdfimHXal/1R12o5w4x0to2
-	 qApMHYjeGuLoefTwvV2YmWhejJCe6uU1VWDkDge5WgiAzXMU9uBbYyxnX2UCdRtmki
-	 Ualrcw7+6BqmQ==
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a293f2280c7so687078666b.1;
-        Mon, 19 Feb 2024 17:13:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWzpfqTkrXytClPZmK830GYjaMYpHV7JzdyXXdXZdYYYDt4HX6W7DB9aUNRJFZrIxrE9/hr/rdLdJ4PUc5X+iVxTmlrkUO39qii5g==
-X-Gm-Message-State: AOJu0YzCDbbnWuiPVhJnEGMoXyHkO/ej45IOraLKFqfN8wVAqs1J3rnQ
-	3jJ5B3vwHguXnJaLe9PMSE0izjyg2IF1CHhMRjPf0hHwkPZDcOr/WsEbQhE/JunYPOBua1yk0hO
-	8xI6xeoXDZpKefpYLpOhK2EjGWjs=
-X-Google-Smtp-Source: AGHT+IE7PxUhN1XOXgivV1Cc2EzKxF/mEBfoR8lYdOioedLl7MprCPMe/OT1IaKwNhEcdnS3m5Y3bH0S5S8Q0MuR4j4=
-X-Received: by 2002:a17:906:f258:b0:a3e:d20a:f1d9 with SMTP id
- gy24-20020a170906f25800b00a3ed20af1d9mr1620905ejb.11.1708391602008; Mon, 19
- Feb 2024 17:13:22 -0800 (PST)
+	s=arc-20240116; t=1708428451; c=relaxed/simple;
+	bh=Mipp2WNrLFK4BBvNJ8I27aEf24TMVYEu5ip2QcqVhxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CGZ7SB5qw73LHRYGc2CIWp+FIP7azwMEBOy0EETU6BfQ8G1U7iObrE88/+c3vEvB8ZQc+36NwqJpEdzNaOrx9qGYE1CXDhLYXV2vw88DqYpShbCgckPGcm/aVzctpYlA1Evn5Tt0dimcQoEoHzgcyCW3YZogWTLhz5whKEvOV+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=O6lRSVZh; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=YAbiUOeHNTOOtMQq3T2dYQUt8NBgKEvDfS/NrGbV6TI=; b=O6lRSVZhxbh5i6u+BH25w3f3Cm
+	1Vw7wxiDSgvtyuvUnEQCtl4LHsD0HzY1J+QnwBBfWvzYrZnw4ZdEKbmD4OvhU0znyUN2QW3v3TQK6
+	acFANS/gPds8L+eRUinfOfYI/5P5/HHW8+MaTKOwBEFBIXcdD2h/rAjy4+NEGoLQ4VhzrvLbGSILa
+	e4bVQ4JEXiZ5ggyFjiYKM2SMFHyueGtUiByprCY7LB4A0i9T5NoqAM9yDfSyA8mANNn7sjoowzKXf
+	gZg39Bgc4AYxKTEmwc/LOvXE0VrkkOYgYtUo08k1FAqXJPZDFh0Fdt9VSeb+Bh6zHM/C3MKPJvsVF
+	UW/+AtXw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54660)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rcOHQ-0002Id-2W;
+	Tue, 20 Feb 2024 11:27:20 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rcOHM-0000pR-05; Tue, 20 Feb 2024 11:27:16 +0000
+Date: Tue, 20 Feb 2024 11:27:15 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <ZdSMk93c1I6x973h@shell.armlinux.org.uk>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
+ <E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240219153939.75719-1-anna-maria@linutronix.de> <20240219153939.75719-11-anna-maria@linutronix.de>
-In-Reply-To: <20240219153939.75719-11-anna-maria@linutronix.de>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 20 Feb 2024 09:13:10 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRtNJUw6rr0w2xR5gNMw6ab8diTq-h-bX8HcaX5qbmoVQ@mail.gmail.com>
-Message-ID: <CAJF2gTRtNJUw6rr0w2xR5gNMw6ab8diTq-h-bX8HcaX5qbmoVQ@mail.gmail.com>
-Subject: Re: [PATCH 10/10] csky/vdso: Use generic union vdso_data_store
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, Feb 19, 2024 at 11:40=E2=80=AFPM Anna-Maria Behnsen
-<anna-maria@linutronix.de> wrote:
->
-> There is already a generic union definition for vdso_data_store in vdso
-> datapage header.
->
-> Use this definition to prevent code duplication.
->
-> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: linux-csky@vger.kernel.org
-> ---
->  arch/csky/kernel/vdso.c | 10 ++--------
->  1 file changed, 2 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/csky/kernel/vdso.c b/arch/csky/kernel/vdso.c
-> index e74a2504d331..2ca886e4a458 100644
-> --- a/arch/csky/kernel/vdso.c
-> +++ b/arch/csky/kernel/vdso.c
-> @@ -15,14 +15,8 @@ extern char vdso_start[], vdso_end[];
->  static unsigned int vdso_pages;
->  static struct page **vdso_pagelist;
->
-> -/*
-> - * The vDSO data page.
-> - */
-> -static union {
-> -       struct vdso_data        data;
-> -       u8                      page[PAGE_SIZE];
-> -} vdso_data_store __page_aligned_data;
-> -struct vdso_data *vdso_data =3D &vdso_data_store.data;
-> +static union vdso_data_store vdso_data_store __page_aligned_data;
-> +struct vdso_data *vdso_data =3D vdso_data_store.data;
->
->  static int __init vdso_init(void)
->  {
-> --
-> 2.39.2
->
+On Thu, Feb 15, 2024 at 08:22:29PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Jan 31, 2024 at 5:50 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> > index cf7c1cca69dd..a68c475cdea5 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi_device *device)
+> >                         cpufreq_add_device("acpi-cpufreq");
+> >         }
+> >
+> > +       /*
+> > +        * Register CPUs that are present. get_cpu_device() is used to skip
+> > +        * duplicate CPU descriptions from firmware.
+> > +        */
+> > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> > +           !get_cpu_device(pr->id)) {
+> > +               int ret = arch_register_cpu(pr->id);
+> > +
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> > +
+> >         /*
+> >          *  Extra Processor objects may be enumerated on MP systems with
+> >          *  less than the max # of CPUs. They should be ignored _iff
+> 
+> This is interesting, because right below there is the following code:
+> 
+>     if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+>         int ret = acpi_processor_hotadd_init(pr);
+> 
+>         if (ret)
+>             return ret;
+>     }
+> 
+> and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
+> with some extra things around it (more about that below).
+> 
+> I do realize that acpi_processor_hotadd_init() is defined under
+> CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
+> consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
+> 
+> So why are the two conditionals that almost contradict each other both
+> needed?  It looks like the new code could be combined with
+> acpi_processor_hotadd_init() to do the right thing in all cases.
+> 
+> Now, acpi_processor_hotadd_init() does some extra things that look
+> like they should be done by the new code too.
+> 
+> 1. It checks invalid_phys_cpuid() which appears to be a good idea to me.
+> 
+> 2. It uses locking around arch_register_cpu() which doesn't seem
+> unreasonable either.
+> 
+> 3. It calls acpi_map_cpu() and I'm not sure why this is not done by
+> the new code.
+> 
+> The only thing that can be dropped from it is the _STA check AFAICS,
+> because acpi_processor_add() won't even be called if the CPU is not
+> present (and not enabled after the first patch).
+> 
+> So why does the code not do 1 - 3 above?
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Honestly, I'm out of my depth with this and can't answer your
+questions - and I really don't want to try fiddling with this code
+because it's just too icky (even in its current form in mainline)
+to be understandable to anyone who hasn't gained a detailed knowledge
+of this code.
 
---=20
-Best Regards
- Guo Ren
+It's going to require a lot of analysis - how acpi_map_cpuid() behaves
+in all circumstances, what this means for invalid_logical_cpuid() and
+invalid_phys_cpuid(), what paths will be taken in each case. This code
+is already just too hairy for someone who isn't an experienced ACPI
+hacker to be able to follow and I don't see an obvious way to make it
+more readable.
+
+James' additions make it even more complex and less readable.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
