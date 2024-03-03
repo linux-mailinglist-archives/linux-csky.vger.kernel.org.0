@@ -1,179 +1,183 @@
-Return-Path: <linux-csky+bounces-441-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-442-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 549CE86EDF8
-	for <lists+linux-csky@lfdr.de>; Sat,  2 Mar 2024 02:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 594AF86F377
+	for <lists+linux-csky@lfdr.de>; Sun,  3 Mar 2024 04:09:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 792B71C21B8C
-	for <lists+linux-csky@lfdr.de>; Sat,  2 Mar 2024 01:51:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 830641C209FA
+	for <lists+linux-csky@lfdr.de>; Sun,  3 Mar 2024 03:09:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1EB10A0A;
-	Sat,  2 Mar 2024 01:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636DE28FD;
+	Sun,  3 Mar 2024 03:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TIc1hC1B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nG19RN6e"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4EECC8E2
-	for <linux-csky@vger.kernel.org>; Sat,  2 Mar 2024 01:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370A37F;
+	Sun,  3 Mar 2024 03:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709344271; cv=none; b=QoF1LLlkR/6nfG/CPc0ajq1oxCMDJNrYUlmieYNeAOiXN1DGwogf0vJdPsy2m4V/8uahQnLsbS9bXGNlmFQEqNmT72s/9ipKIIE9w112Qsg/hO/yXZ+8GgJBpoL8/HrWqa2dmqOQDbnzJKNJbiJ8723ctrtHphPndgOf9sbKyMs=
+	t=1709435354; cv=none; b=Cl+p/cBE/8Lc+ja496VPzsm74DX2dxFLiiar29clIQiGKhJO49zk4XZ9FFg3XhB8iRU3l+ULlHKw2jxsLgVxs6pZwrS0oYuodUKePH5tPKDmRW+WfuYwf1pLKwNsbrBFMM2282V/ZwUJinFYzdAScUEUR2ME6tDJuOgyEZng6fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709344271; c=relaxed/simple;
-	bh=/8oSmkPc0IaP5CM6+fKqf9jvC9DwK8RXxd3zPN60QIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tTvt9NzdZYaqDy1HBpP0ZMUmeU3wyhb2kexzrpizgf1Q6gagNN2cnEpwCR/EbADhQjTP+NHOU+KAFZhZeXN3r7Fvn8JNMB8K4m4OWiMaurnVQGHdQGbKlS5jkDVRit0r0+ummEoCP3dszezeYtxjjKpq8dm5jODJ4r6Ddad/YxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TIc1hC1B; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6da202aa138so2055649b3a.2
-        for <linux-csky@vger.kernel.org>; Fri, 01 Mar 2024 17:51:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1709344269; x=1709949069; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1JOHRODJmattJBY3YtQ+51tfBSOEI55kux6+SckPNNk=;
-        b=TIc1hC1BaG2C6O48gHCVwqAMREqybRwL/38QZkQjs8birZpqFdZpqCIImbYMYW7Eiv
-         jRPIv6GZBhjfsVtfypwxiChRkpef7DVwQMyj5nOOLNLueAgFL8DiRBb4+OjSwCy83w58
-         nhEfdX/lBy3gXtmcU7KGWUmYplpKX5RVOBkGM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709344269; x=1709949069;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1JOHRODJmattJBY3YtQ+51tfBSOEI55kux6+SckPNNk=;
-        b=kDX9/XRKGUdqBV0IH/xWVidKOp3zFVFBxLl/v/AGHEOTiesJU3lBSEj9vvfB7zTsdE
-         0HJYmBV9YDL5PRLT6kh5NS5ml2GGJxSr6kaAnd2JwBdMhmIYOZyWy5YTDuU58MwXkln8
-         o6tihH/geIBdp6k4XtlikLx/1Hu9oOrabXwp+dCIm2gyt8r5R6PZmnxHq2jaCC/nT4HW
-         KMKVnc21n1dCvMG78gq/AtnNYsdkSmwi71QQ+T52WoRFs0HF0yViz6exU7do6Me7q4Wc
-         jS/EUcL3Ov3baRwhHvM4Qlnx2O4D5O6XD/b2t0499LJKMWM+27BP5PC5L80KGPDeHkxg
-         GMOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVR7j3eGWTZ8Fc4h0BmUi++ok3KDW5Uqg50JpNYML8Cl4srj4T7Je8T4PgoUHrU8RcQ3zZzqEV+pZwZoAeOycdi3DXo+gHGgf85Eg==
-X-Gm-Message-State: AOJu0Yy6SumXzqdMIipZUb6EYq2l6NgK4OZ5fkTcXZyvcO+BEVH37pJ3
-	ovgPttytD8GbijbaUbCxHLsk5yfCpTG5B8QHVspcS1pYGVjakFdOKeKJkoIUuQ==
-X-Google-Smtp-Source: AGHT+IHRDk8dRy87orC5sOO0fLYLW475IUp9U1sSARPtPvgR8uAOkuMFjfqikjpTM+PGmCnZ+zOW8Q==
-X-Received: by 2002:a05:6a20:e11f:b0:1a0:ef1e:a5a7 with SMTP id kr31-20020a056a20e11f00b001a0ef1ea5a7mr3447528pzb.4.1709344269211;
-        Fri, 01 Mar 2024 17:51:09 -0800 (PST)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id rm12-20020a17090b3ecc00b002993f72ed02sm3845854pjb.34.2024.03.01.17.51.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Mar 2024 17:51:08 -0800 (PST)
-Date: Fri, 1 Mar 2024 17:51:08 -0800
-From: Kees Cook <keescook@chromium.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-	"broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
-Message-ID: <202403011747.9ECFAD060B@keescook>
-References: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
- <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
- <94a2b919-e03b-4ade-b13e-7774849dc02b@csgroup.eu>
- <202402271004.7145FDB53F@keescook>
- <8265f804-4540-4858-adc3-a09c11a677eb@csgroup.eu>
- <91384b505cb78b9d9b71ad58e037c1ed8dfb10d1.camel@intel.com>
- <def71a27-2d5f-40da-867e-979648afc4cf@csgroup.eu>
- <202402280912.33AEE7A9CF@keescook>
- <ac04c9aa134807bbc00e6086e7a14a58a682f221.camel@intel.com>
+	s=arc-20240116; t=1709435354; c=relaxed/simple;
+	bh=U9vFa7R1cZbTVY8TgC99jtc/yq8v79DPan1lLC0trv4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z7ITw9Ax+8VLpYAe0XD7mtMvHGlHdVZ0F7wbcnrF6gNVio3OAZJrS3sJneXH5wCT7O8ARjca8iDXbx+ORmDF6d1b7ESOrKAf50bSQMvOZCC20w0QWJvFtEqhYEBl3UwJKEROYLuPjfVwIvj3soJQsfMXQTnHddJuOFGY5xzPrOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nG19RN6e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6928C43399;
+	Sun,  3 Mar 2024 03:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709435353;
+	bh=U9vFa7R1cZbTVY8TgC99jtc/yq8v79DPan1lLC0trv4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nG19RN6eG/zQjq7qxI33DDNUEgfaDVVRF5NqoVIkofd4hjPY83KMTm6bcam4zpO+7
+	 ggx+P9lWwh8oBX0/y1WWQuXVxGFnPV9Ma8t7c5un0Si2XdKA0ocxMfo/3HftDk+LVB
+	 IFyugzC+/VHTvtRVwK3gTUNFbJiMfTU9XVId3s7KsxOaQucgYju8EB3EoLMlR43DvJ
+	 I4MpkjWk1W0+lhkXb055GKDnpWenLxeFTDXiE4E+TGtWFQQHc8w6m+KXxjeSW/5Ok7
+	 gnDCTJT/JvH736w91sf1tqFgejGd1Un1f42HOdzcARYVIFmE9zuf8m3x+xFr4Hnl7B
+	 CJWjpxQvgABCQ==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2d23d301452so35728911fa.1;
+        Sat, 02 Mar 2024 19:09:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUXc7mcf20vFb13lq+m2rGV8z8qBdcFDm0n6MSpgbxVb5YF+VgIDT3w+RSTSRoHv7COaYh8Et0p1FDTlIIj8g8Z+pCubCv8gsMpt6UQWLuvlL4pLg+7KPGxYDVar+LEeXBymhRWlZE=
+X-Gm-Message-State: AOJu0YwBY4tclgDlkSXjnGtzygOZx0Tmp4Oy0lJfjqEWuRSiWU0kvTqt
+	jQUyzD9Q+YFj7Jl5rYfnBq+gBCNtHfJeeXmySVZSLwwCi+mj4XOpn+tpS/j9fg5KhSvHaTi19WB
+	keZ93n/xiNP4NrYOPHDtLBlwJ1pA=
+X-Google-Smtp-Source: AGHT+IGD78Wt0ncu+3aqMeWqNCB8JI7FP0zctiNsiIeugXcEmHUGawXXLZN7+mt4gVmwoSw/0oiyjgdsn/WF8N7af0k=
+X-Received: by 2002:a2e:bc26:0:b0:2d3:1172:c07f with SMTP id
+ b38-20020a2ebc26000000b002d31172c07fmr5072878ljf.17.1709435351907; Sat, 02
+ Mar 2024 19:09:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ac04c9aa134807bbc00e6086e7a14a58a682f221.camel@intel.com>
+References: <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
+ <20240302001714.674091-1-rick.p.edgecombe@intel.com> <20240302001714.674091-3-rick.p.edgecombe@intel.com>
+In-Reply-To: <20240302001714.674091-3-rick.p.edgecombe@intel.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Sun, 3 Mar 2024 11:09:00 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTjfW4DG8WaVrVopxQsak6X9YPnUXG3a-XWs2C=-vjxxg@mail.gmail.com>
+Message-ID: <CAJF2gTTjfW4DG8WaVrVopxQsak6X9YPnUXG3a-XWs2C=-vjxxg@mail.gmail.com>
+Subject: Re: [RFC v2.1 03/12] csky: Use initializer for struct vm_unmapped_area_info
+To: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, bp@alien8.de, 
+	broonie@kernel.org, dave.hansen@linux.intel.com, debug@rivosinc.com, 
+	hpa@zytor.com, keescook@chromium.org, kirill.shutemov@linux.intel.com, 
+	luto@kernel.org, mingo@redhat.com, peterz@infradead.org, 
+	sparclinux@vger.kernel.org, tglx@linutronix.de, x86@kernel.org, 
+	linux-csky@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Mar 02, 2024 at 12:47:08AM +0000, Edgecombe, Rick P wrote:
-> On Wed, 2024-02-28 at 09:21 -0800, Kees Cook wrote:
-> > I totally understand. If the "uninitialized" warnings were actually
-> > reliable, I would agree. I look at it this way:
-> > 
-> > - initializations can be missed either in static initializers or via
-> >   run time initializers. (So the risk of mistake here is matched --
-> >   though I'd argue it's easier to *find* static initializers when
-> > adding
-> >   new struct members.)
-> > - uninitialized warnings are inconsistent (this becomes an unknown
-> > risk)
-> > - when a run time initializer is missed, the contents are whatever
-> > was
-> >   on the stack (high risk)
-> > - what a static initializer is missed, the content is 0 (low risk)
-> > 
-> > I think unambiguous state (always 0) is significantly more important
-> > for
-> > the safety of the system as a whole. Yes, individual cases maybe bad
-> > ("what uid should this be? root?!") but from a general memory safety
-> > perspective the value doesn't become potentially influenced by order
-> > of
-> > operations, leftover stack memory, etc.
-> > 
-> > I'd agree, lifting everything into a static initializer does seem
-> > cleanest of all the choices.
-> 
-> Hi Kees,
-> 
-> Well, I just gave this a try. It is giving me flashbacks of when I last
-> had to do a tree wide change that I couldn't fully test and the
-> breakage was caught by Linus.
+On Sat, Mar 2, 2024 at 8:17=E2=80=AFAM Rick Edgecombe
+<rick.p.edgecombe@intel.com> wrote:
+>
+> Future changes will need to add a new member to struct
+> vm_unmapped_area_info. This would cause trouble for any call site that
+> doesn't initialize the struct. Currently every caller sets each field
+> manually, so if new fields are added they will be unitialized and the cor=
+e
+> code parsing the struct will see garbage in the new field.
+>
+> It could be possible to initialize the new field manually to 0 at each
+> call site. This and a couple other options were discussed, and the
+> consensus (see links) was that in general the best way to accomplish this
+> would be via static initialization with designated field initiators.
+> Having some struct vm_unmapped_area_info instances not zero initialized
+> will put those sites at risk of feeding garbage into vm_unmapped_area() i=
+f
+> the convention is to zero initialize the struct and any new field additio=
+n
+> misses a call site that initializes each field manually.
+>
+> It could be possible to leave the code mostly untouched, and just change
+> the line:
+> struct vm_unmapped_area_info info
+> to:
+> struct vm_unmapped_area_info info =3D {};
+>
+> However, that would leave cleanup for the fields that are manually set
+> to zero, as it would no longer be required.
+>
+> So to be reduce the chance of bugs via uninitialized fields, instead
+> simply continue the process to initialize the struct this way tree wide.
+> This will zero any unspecified members. Move the field initializers to th=
+e
+> struct declaration when they are known at that time. Leave the fields out
+> that were manually initialized to zero, as this would be redundant for
+> designated initializers.
+>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: linux-csky@vger.kernel.org
+> Link: https://lore.kernel.org/lkml/202402280912.33AEE7A9CF@keescook/#t
+> Link: https://lore.kernel.org/lkml/j7bfvig3gew3qruouxrh7z7ehjjafrgkbcmg6t=
+cghhfh3rhmzi@wzlcoecgy5rs/
+> ---
+> Hi,
+>
+> This patch was split and refactored out of a tree-wide change [0] to just
+> zero-init each struct vm_unmapped_area_info. The overall goal of the
+> series is to help shadow stack guard gaps. Currently, there is only one
+> arch with shadow stacks, but two more are in progress. It is 0day tested
+> only.
+>
+> Thanks,
+>
+> Rick
+>
+> [0] https://lore.kernel.org/lkml/20240226190951.3240433-6-rick.p.edgecomb=
+e@intel.com/
+> ---
+>  arch/csky/abiv1/mmap.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/csky/abiv1/mmap.c b/arch/csky/abiv1/mmap.c
+> index 6792aca49999..7f826331d409 100644
+> --- a/arch/csky/abiv1/mmap.c
+> +++ b/arch/csky/abiv1/mmap.c
+> @@ -28,7 +28,12 @@ arch_get_unmapped_area(struct file *filp, unsigned lon=
+g addr,
+>         struct mm_struct *mm =3D current->mm;
+>         struct vm_area_struct *vma;
+>         int do_align =3D 0;
+> -       struct vm_unmapped_area_info info;
+> +       struct vm_unmapped_area_info info =3D {
+> +               .length =3D len,
+> +               .low_limit =3D mm->mmap_base,
+> +               .high_limit =3D TASK_SIZE,
+> +               .align_offset =3D pgoff << PAGE_SHIFT
+> +       };
+>
+>         /*
+>          * We only need to do colour alignment if either the I or D
+> @@ -61,11 +66,6 @@ arch_get_unmapped_area(struct file *filp, unsigned lon=
+g addr,
+>                         return addr;
+>         }
+>
+> -       info.flags =3D 0;
+> -       info.length =3D len;
+> -       info.low_limit =3D mm->mmap_base;
+> -       info.high_limit =3D TASK_SIZE;
+>         info.align_mask =3D do_align ? (PAGE_MASK & (SHMLBA - 1)) : 0;
+> -       info.align_offset =3D pgoff << PAGE_SHIFT;
+>         return vm_unmapped_area(&info);
+>  }
+> --
+> 2.34.1
+>
+LGTM, that's equivalent.
 
-Yeah, testing isn't fun for these kinds of things. This is traditionally
-why the "obviously correct" changes tend to have an easier time landing
-(i.e. adding "= {}" to all of them).
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-> Could you let me know if you think this is additionally worthwhile
-> cleanup outside of the guard gap improvements of this series? Because I
-> was thinking a more cowardly approach could be a new vm_unmapped_area()
-> variant that takes the new start gap member as a separate argument
-> outside of struct vm_unmapped_area_info. It would be kind of strange to
-> keep them separate, but it would be less likely to bump something.
-
-I think you want a new member -- AIUI, that's what that struct is for.
-
-Looking at this resulting set of patches, I do kinda think just adding
-the "= {}" in a single patch is more sensible. Having to split things
-that are know at the top of the function from the stuff known at the
-existing initialization time is rather awkward.
-
-Personally, I think a single patch that sets "= {}" for all of them and
-drop the all the "= 0" or "= NULL" assignments would be the cleanest way
-to go.
-
--Kees
-
--- 
-Kees Cook
+--=20
+Best Regards
+ Guo Ren
 
