@@ -1,183 +1,224 @@
-Return-Path: <linux-csky+bounces-442-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-443-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 594AF86F377
-	for <lists+linux-csky@lfdr.de>; Sun,  3 Mar 2024 04:09:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FEEB8708E7
+	for <lists+linux-csky@lfdr.de>; Mon,  4 Mar 2024 19:00:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 830641C209FA
-	for <lists+linux-csky@lfdr.de>; Sun,  3 Mar 2024 03:09:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC1B21C21CC9
+	for <lists+linux-csky@lfdr.de>; Mon,  4 Mar 2024 18:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636DE28FD;
-	Sun,  3 Mar 2024 03:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C0B612D8;
+	Mon,  4 Mar 2024 18:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nG19RN6e"
+	dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b="FRPx+Cpx"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2133.outbound.protection.outlook.com [40.107.9.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370A37F;
-	Sun,  3 Mar 2024 03:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709435354; cv=none; b=Cl+p/cBE/8Lc+ja496VPzsm74DX2dxFLiiar29clIQiGKhJO49zk4XZ9FFg3XhB8iRU3l+ULlHKw2jxsLgVxs6pZwrS0oYuodUKePH5tPKDmRW+WfuYwf1pLKwNsbrBFMM2282V/ZwUJinFYzdAScUEUR2ME6tDJuOgyEZng6fA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709435354; c=relaxed/simple;
-	bh=U9vFa7R1cZbTVY8TgC99jtc/yq8v79DPan1lLC0trv4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z7ITw9Ax+8VLpYAe0XD7mtMvHGlHdVZ0F7wbcnrF6gNVio3OAZJrS3sJneXH5wCT7O8ARjca8iDXbx+ORmDF6d1b7ESOrKAf50bSQMvOZCC20w0QWJvFtEqhYEBl3UwJKEROYLuPjfVwIvj3soJQsfMXQTnHddJuOFGY5xzPrOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nG19RN6e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6928C43399;
-	Sun,  3 Mar 2024 03:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709435353;
-	bh=U9vFa7R1cZbTVY8TgC99jtc/yq8v79DPan1lLC0trv4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nG19RN6eG/zQjq7qxI33DDNUEgfaDVVRF5NqoVIkofd4hjPY83KMTm6bcam4zpO+7
-	 ggx+P9lWwh8oBX0/y1WWQuXVxGFnPV9Ma8t7c5un0Si2XdKA0ocxMfo/3HftDk+LVB
-	 IFyugzC+/VHTvtRVwK3gTUNFbJiMfTU9XVId3s7KsxOaQucgYju8EB3EoLMlR43DvJ
-	 I4MpkjWk1W0+lhkXb055GKDnpWenLxeFTDXiE4E+TGtWFQQHc8w6m+KXxjeSW/5Ok7
-	 gnDCTJT/JvH736w91sf1tqFgejGd1Un1f42HOdzcARYVIFmE9zuf8m3x+xFr4Hnl7B
-	 CJWjpxQvgABCQ==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2d23d301452so35728911fa.1;
-        Sat, 02 Mar 2024 19:09:13 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUXc7mcf20vFb13lq+m2rGV8z8qBdcFDm0n6MSpgbxVb5YF+VgIDT3w+RSTSRoHv7COaYh8Et0p1FDTlIIj8g8Z+pCubCv8gsMpt6UQWLuvlL4pLg+7KPGxYDVar+LEeXBymhRWlZE=
-X-Gm-Message-State: AOJu0YwBY4tclgDlkSXjnGtzygOZx0Tmp4Oy0lJfjqEWuRSiWU0kvTqt
-	jQUyzD9Q+YFj7Jl5rYfnBq+gBCNtHfJeeXmySVZSLwwCi+mj4XOpn+tpS/j9fg5KhSvHaTi19WB
-	keZ93n/xiNP4NrYOPHDtLBlwJ1pA=
-X-Google-Smtp-Source: AGHT+IGD78Wt0ncu+3aqMeWqNCB8JI7FP0zctiNsiIeugXcEmHUGawXXLZN7+mt4gVmwoSw/0oiyjgdsn/WF8N7af0k=
-X-Received: by 2002:a2e:bc26:0:b0:2d3:1172:c07f with SMTP id
- b38-20020a2ebc26000000b002d31172c07fmr5072878ljf.17.1709435351907; Sat, 02
- Mar 2024 19:09:11 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCB06166D;
+	Mon,  4 Mar 2024 18:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.9.133
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709575250; cv=fail; b=HNMivn0Q7C0r2gEwSAFfllSwBHdMeb5L+01QKP398M0VGMp/UYL2dYL+eSHAsXiHQLYjF4YtIZfb+aa8Boi+tx03jXoHZ//HK56G+t7yMESebmQ3fPAj84M4GbguijkQ6vy2Dgcl0POL84nC0q2ZRIogOG1wr3ET3amV7cuyLck=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709575250; c=relaxed/simple;
+	bh=ChzmTioaoJ3Tnoz2NuP640C18LPE4jO3THzzaW9t1EE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=KwMKU9blfDv7J/wSuqqUrOiS8ktF547Um8GdqH6d0lp+oKE/+kNA3dC+jgReMJE1tUD0MiLvzMz2aVXJzxEp8hEe8Z/WCv9XmHgETIumfwf0o9mswawvkb3wNkaB0zAdRzqgrLWmSUBjs0L60WqNPsrw3Vg/+IYll/d/+eJbu/Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b=FRPx+Cpx; arc=fail smtp.client-ip=40.107.9.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LEvtP9/66zp+vxc0YI77IottVO/NRi6vcTCNQjm1jhGb66jirCcfwxxW1uEd5LoPkWUy/BuZcVOPxDTwwVHPAQv9YjZqzEGOr+HIwTRv5bBA76O8H6RNDcl/4RW42djOOcJlNUEFSVAlJwnYOAUn5Mhpi3YZSE3i5g3OlTInS4Z8kXrjfnYfSzOe2svxUFpJAvb//xQpGZhttcRH/NMgI6x80x4Bkkql2gkfywNS5IZpUORO7N6UqAFJ2iD5xiPL6+XUhksYkDTWLLKGzDzFz8VOh9LXLTxVl3J6WByn4W8BmjMYUsNiWQqF6CLov7YdjNFOtdhw4gjZxqgkNgFhbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ChzmTioaoJ3Tnoz2NuP640C18LPE4jO3THzzaW9t1EE=;
+ b=drpm+3FLJgo8DZa3OaBXQMwQkxwoiIf5eupsuEi16RG00Ohik/XGf6QERWijtMQMiknarCu1V6/wzKTC9tdn5JO7toDzvc95IzeejdJE8JT58wq1NDL7WIzjacdZNEUHXVugsRvaXqQfBj5PtSXk8R+NB+aOK3+2LiYrLoAkhRfKWsdzqVgc2JnIwePbhe93Jj8ZwDIZ1nk2QSbQAp1OeWURhCuI0yQgvbeHTcD5wLoY/sn+nTt9fs7tvN0/0w8PP8Tox9k8i1lR9aCgUM2JvSvi9dT3O77fAbitcERg6vZXfv0aWsSRIeiwVsVH95JS7rNVPFEb0rWqr56PzTdl+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ChzmTioaoJ3Tnoz2NuP640C18LPE4jO3THzzaW9t1EE=;
+ b=FRPx+Cpx5lqpY3Y27KMEQ7Y3TLTCXCO1bwwRk44rknXX05g8w9qmHQlyBLorHCfvGvj9+eYH+czWdv4HeL+RUbzW3YQmzPCKtEs3Gqb+wvrUFwmbd/B2dmDU7tg0/2WaCv7IgOwaRhb6xFVHQyA36Hhcixbf/U5kBhnrYNJ0ky1Yh3jPficM9ddtI7JHTBDnVqPvjQla1XBtcn2nYr49T/29Mw2aOZ8yJeEr0YWusz8ftBJrUUnvDzTJuWZBsLWjYa8dV7OUMzJLUVPi3wz8NGRqwhWvj7e9tlxMbvR/kzIMrKtqTocbbSLpE0tK9Aotz5DVptuRKP3vA96e6qpgLw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2045.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Mon, 4 Mar
+ 2024 18:00:44 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c192:d40f:1c33:1f4e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c192:d40f:1c33:1f4e%6]) with mapi id 15.20.7339.035; Mon, 4 Mar 2024
+ 18:00:44 +0000
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Kees Cook <keescook@chromium.org>, "Edgecombe, Rick P"
+	<rick.p.edgecombe@intel.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>, "luto@kernel.org" <luto@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "linux-sh@vger.kernel.org"
+	<linux-sh@vger.kernel.org>, "linux-csky@vger.kernel.org"
+	<linux-csky@vger.kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "linux-parisc@vger.kernel.org"
+	<linux-parisc@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-snps-arc@lists.infradead.org" <linux-snps-arc@lists.infradead.org>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "hpa@zytor.com"
+	<hpa@zytor.com>, "peterz@infradead.org" <peterz@infradead.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"bp@alien8.de" <bp@alien8.de>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "linux-alpha@vger.kernel.org"
+	<linux-alpha@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-mips@vger.kernel.org"
+	<linux-mips@vger.kernel.org>, "sparclinux@vger.kernel.org"
+	<sparclinux@vger.kernel.org>, "broonie@kernel.org" <broonie@kernel.org>
+Subject: Re: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
+Thread-Topic: [PATCH v2 5/9] mm: Initialize struct vm_unmapped_area_info
+Thread-Index:
+ AQHaaOd3T09DEeJabki6TgRFYbqm47EdxC4AgAC5pgCAAAKNAIAAJBAAgAEcAgCAAELkgIADoSgAgAAR4gCABDOQgA==
+Date: Mon, 4 Mar 2024 18:00:43 +0000
+Message-ID: <ec3e377a-c0a0-4dd3-9cb9-96517e54d17e@csgroup.eu>
+References: <20240226190951.3240433-1-rick.p.edgecombe@intel.com>
+ <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
+ <94a2b919-e03b-4ade-b13e-7774849dc02b@csgroup.eu>
+ <202402271004.7145FDB53F@keescook>
+ <8265f804-4540-4858-adc3-a09c11a677eb@csgroup.eu>
+ <91384b505cb78b9d9b71ad58e037c1ed8dfb10d1.camel@intel.com>
+ <def71a27-2d5f-40da-867e-979648afc4cf@csgroup.eu>
+ <202402280912.33AEE7A9CF@keescook>
+ <ac04c9aa134807bbc00e6086e7a14a58a682f221.camel@intel.com>
+ <202403011747.9ECFAD060B@keescook>
+In-Reply-To: <202403011747.9ECFAD060B@keescook>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Mozilla Thunderbird
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2045:EE_
+x-ms-office365-filtering-correlation-id: 60952a1e-1f8f-435b-a1c4-08dc3c750315
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ QiHkvHWAmIEQ+lMV9izbpgV+qj/gGZM8GlRXJdt3PvAO4AyDKWMdepKIR29ScOSvKnBkBri+YAUrbVg4JwN4cV6L6wtg+GA6iW2315FUpxq3BmaVOdsWGJRW3mX9pUxtAjHxkXWP5ja7y91SHciALjhFtJ6iLiDrQbbksxn1QeoaCBLklhTERMcVMsf3oLoBbja+hDYslxP98BHHdFudjr2k4528j1vzgKGxt9klsOuslft+g4E+WWKbM9GJCp9dwTn9UlI9vn1R8LMqvcQ9WaG4bH7+a+W10lh4Vdg0RmD8PVIFJkakpNzRl43/Zp+2UdDhiq3Czwb+P8Q6M/5X5lGydrJmOZRtCilxUbSxv3PTbWBqY6q5uUhg+EJ7vQQDaCoasQ/IXwM4qOG5EdY2sKh3s2W9oVQqJ3W2Dc9gfczOnyBC8UDx6bm9bSXcHVjXPAB43HmCMsLJhLc8x51+/eaLN2KgbYSnKnElm77WqNDY92mBfPtv5bc+Nq5/8rDLn/5+OPXt7lwpEALccXdtIILmKdcP2VPtID8ahEfkyFlc3L1SgKIqYa/YYyXREjRi9ffJfapyrj5p6oQ/Kvf4czVedRTITtO+6fq/mrmOi9sGs9b4pDJSgrZ5ssjBztz3q9W+K9ydqS3FeiS21Hcng0frU02s0Yavs4KVaECFpR++TlHqHEaBRWbFioDlr7ZqZaBuW1hqZYfpbVxENtF8YbxsnS0ngbysTLH57/GdfVI=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(376005)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?akU3bXhsRVRDSG9ZWUMwQnVoLzRNYmdhQ3o4K0d3emVURzY5RDdSMnB1ZUh1?=
+ =?utf-8?B?dFl2K3l5TTk0d1pONHdyTU9NOVY4L1ZuTUg4WTB2WWl4c2Jmcm5UTmlCeitX?=
+ =?utf-8?B?Skk0bjBidXVuTGkzakREL0R2Rnh2bGhpK1l2NExHWXRIMUdadkJXRFByWGRm?=
+ =?utf-8?B?UDFkaWtYZVhkMzI0VC9md3NYYmcra1Y3YzhLK2MxMlZYL0IzdEJVSmdHaGxp?=
+ =?utf-8?B?bnJiUXFwRVFIWFpuaGFkek5jN2FWdGVybms2WnZhdWZ5c2hQMXdsNHA5MDNE?=
+ =?utf-8?B?WC9NbFNTdkh4MTBiOGhRRUovZFhBbVBDOGlSZGVuUzFkeGVkSEV5UWpQa0tz?=
+ =?utf-8?B?Rkc1MHpJNHJZS3VGQ0NDV0ZoeklqeEhHSXpWRXdaUFNYaEptMSt3VkdueDE0?=
+ =?utf-8?B?d3ZmMExNN2h3ajRKNjhCQ1phTFY5RjhQa3h0L1MyR1ZLaklSKzhjcTNadk9O?=
+ =?utf-8?B?RU5aSTlYMTU1dEhkdUFaUTl3dWpya3h1NC9RNTNGZDVpREkxSWU5anBrS3o2?=
+ =?utf-8?B?aTR0bFQwbWh1dm5LWndMZ2NUNmtYSDFHNVBjU1JnaVA4Q0wxQms1bkg0ekNt?=
+ =?utf-8?B?QkZvZW1rVUZwTkpta2MwTlBEekRsZWVkbDhrLytNK3NRanhNUkw0NmlnbWNR?=
+ =?utf-8?B?QWlRRUoxZTVhUDMvVEE1aXQvckdTdjFGMlRTZmM1QlRxWEJkcFJNMkZhZGZx?=
+ =?utf-8?B?R3dPY2czalB2SllnVG5nUWpRNzlWOFNJUzJDQXA0eG56TXUvZHo4ZnRTcWQ1?=
+ =?utf-8?B?c1pUZEllNDZyclJhZ05QenZTVWtYcmEycHJaTnAvbitsR201M2tvY1VZdCtU?=
+ =?utf-8?B?MkNYV3FXUk56NGErVHBaTzB2U0lJT2FIQUUyTm5QZCsyYWhaMUZld3pDRk1k?=
+ =?utf-8?B?UThYUkVVckxCVWtWeGtwZmo3VGJJbWpzODRWTkN5T3BjeUxIUTFhaklBcmd6?=
+ =?utf-8?B?a204d21saVNyS3FxNFVWeUJZcTMyS3VPZGZ2TEg0dVoyV09laGxsRHRmU01F?=
+ =?utf-8?B?Ky85K1FUZUJVRFpsZkZ4VmRhNVBQQ1dIM21IWnlhYk9Fa3B6aXU2SWtFQTI1?=
+ =?utf-8?B?TC9DWEFtNEdJdGZZM0lFbEw5b2Q3N0hKcmdWakJoK2E2aVFZbkRRVnIzcGoy?=
+ =?utf-8?B?N1UrRzVpb0lEOU9pT3UvUmhiTWtsNksrQnYraHE3NnQ1U0RtQWRjMzdxTCt6?=
+ =?utf-8?B?K0tFREF6Q1Zia0h1ZEJJeEJBUXVmT2gwQTl2ZjhxM1FlMnhSRStUZS9qNGpQ?=
+ =?utf-8?B?TzQwK0lEcEdHQTdTakNLRnVCL3BCMndNL2EyUjE2YmdPdjZOaEk3TU9VeHA3?=
+ =?utf-8?B?Q0YyMENjN3YrODZYM3JiS0k5SDN3ajRpOVk5NlVkMHh3a2ZXQkhuc1dHTnpR?=
+ =?utf-8?B?blBJYkpTMlRaTThOU0NXNi9TSkY0UEZuelE3Z2phUWJsMTNNaVpIOTdxTEZR?=
+ =?utf-8?B?QXV3TmRyOGFXWkdRMHg4RlVVUnJNSXZPeXJiNjRFWlB3UTArQjE4U3BhTnNB?=
+ =?utf-8?B?K0QzK3IrZHRVay9SeUxid3U3NzV0ODlDNmMxaVYwRkdqWnpCVmJsc0FURCtN?=
+ =?utf-8?B?QnY0RUc1VGZKTzdpSHArTDBzeDBncEttZGcxU2M1UkdlaFU1VW5uc3FMMHpx?=
+ =?utf-8?B?RGFlYXNEcjRRZGhscTZSUVZrNnNsbTN0UVlpMDVSSi84OGNqelRnMVkwbnM3?=
+ =?utf-8?B?b04vS2dPeGdjejEwZWdBdVNjUlh1MUVSSlV6cFlTcDBETk15QnRPRVpQMXlz?=
+ =?utf-8?B?NU1pVFdqQjFsZzN0ekRsOVQ5ZnJIQ1ZZZFRmQi9WTndoUEd5b2lFWm5iYyt6?=
+ =?utf-8?B?T1AvVElSb0ZvOFEvbnErUXZ6ckw0VGpKZ2xGYWZyTkZhWlBraGUzZThpRVhH?=
+ =?utf-8?B?Z0JtNHY1eTJzbk1MZW4xVzd3NUsyMG5TN2NLM0ZhTTdMRkQwODkxTEo5ZVNQ?=
+ =?utf-8?B?Rk1XSXRUUUIva1UwRkdVaDk4eXZFYWFPczBZTC9zOTNjUW90Ry9mMnhSWFkr?=
+ =?utf-8?B?ODF5OWo2REg2V0cybzRVeGM3VUhlWm01azZZZ0c1dy9WZ1lnWXZwOU1CNDBR?=
+ =?utf-8?B?N2Voaml4UjYxU3R2bzVIM25ORjJuTUJnTmRVOWJiQVY1RU1BN2lhRkJiblpD?=
+ =?utf-8?Q?SkzmFsR+rdtu9P6kmAADfZ0AN?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <50BF0531C663AC4B9F8EB29F53B588E1@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
- <20240302001714.674091-1-rick.p.edgecombe@intel.com> <20240302001714.674091-3-rick.p.edgecombe@intel.com>
-In-Reply-To: <20240302001714.674091-3-rick.p.edgecombe@intel.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Sun, 3 Mar 2024 11:09:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTjfW4DG8WaVrVopxQsak6X9YPnUXG3a-XWs2C=-vjxxg@mail.gmail.com>
-Message-ID: <CAJF2gTTjfW4DG8WaVrVopxQsak6X9YPnUXG3a-XWs2C=-vjxxg@mail.gmail.com>
-Subject: Re: [RFC v2.1 03/12] csky: Use initializer for struct vm_unmapped_area_info
-To: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org, bp@alien8.de, 
-	broonie@kernel.org, dave.hansen@linux.intel.com, debug@rivosinc.com, 
-	hpa@zytor.com, keescook@chromium.org, kirill.shutemov@linux.intel.com, 
-	luto@kernel.org, mingo@redhat.com, peterz@infradead.org, 
-	sparclinux@vger.kernel.org, tglx@linutronix.de, x86@kernel.org, 
-	linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60952a1e-1f8f-435b-a1c4-08dc3c750315
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2024 18:00:43.9787
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EmRlyleQyqcvqJEL3brT1SwWFgPreElok2udAY42dILNeJuxguefLIiy0/vYkqWzyeu8IHoOwRxjhLJQpdhYq7S3ghIuHp/6Nc0iVP9wBaQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2045
 
-On Sat, Mar 2, 2024 at 8:17=E2=80=AFAM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
->
-> Future changes will need to add a new member to struct
-> vm_unmapped_area_info. This would cause trouble for any call site that
-> doesn't initialize the struct. Currently every caller sets each field
-> manually, so if new fields are added they will be unitialized and the cor=
-e
-> code parsing the struct will see garbage in the new field.
->
-> It could be possible to initialize the new field manually to 0 at each
-> call site. This and a couple other options were discussed, and the
-> consensus (see links) was that in general the best way to accomplish this
-> would be via static initialization with designated field initiators.
-> Having some struct vm_unmapped_area_info instances not zero initialized
-> will put those sites at risk of feeding garbage into vm_unmapped_area() i=
-f
-> the convention is to zero initialize the struct and any new field additio=
-n
-> misses a call site that initializes each field manually.
->
-> It could be possible to leave the code mostly untouched, and just change
-> the line:
-> struct vm_unmapped_area_info info
-> to:
-> struct vm_unmapped_area_info info =3D {};
->
-> However, that would leave cleanup for the fields that are manually set
-> to zero, as it would no longer be required.
->
-> So to be reduce the chance of bugs via uninitialized fields, instead
-> simply continue the process to initialize the struct this way tree wide.
-> This will zero any unspecified members. Move the field initializers to th=
-e
-> struct declaration when they are known at that time. Leave the fields out
-> that were manually initialized to zero, as this would be redundant for
-> designated initializers.
->
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: linux-csky@vger.kernel.org
-> Link: https://lore.kernel.org/lkml/202402280912.33AEE7A9CF@keescook/#t
-> Link: https://lore.kernel.org/lkml/j7bfvig3gew3qruouxrh7z7ehjjafrgkbcmg6t=
-cghhfh3rhmzi@wzlcoecgy5rs/
-> ---
-> Hi,
->
-> This patch was split and refactored out of a tree-wide change [0] to just
-> zero-init each struct vm_unmapped_area_info. The overall goal of the
-> series is to help shadow stack guard gaps. Currently, there is only one
-> arch with shadow stacks, but two more are in progress. It is 0day tested
-> only.
->
-> Thanks,
->
-> Rick
->
-> [0] https://lore.kernel.org/lkml/20240226190951.3240433-6-rick.p.edgecomb=
-e@intel.com/
-> ---
->  arch/csky/abiv1/mmap.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/csky/abiv1/mmap.c b/arch/csky/abiv1/mmap.c
-> index 6792aca49999..7f826331d409 100644
-> --- a/arch/csky/abiv1/mmap.c
-> +++ b/arch/csky/abiv1/mmap.c
-> @@ -28,7 +28,12 @@ arch_get_unmapped_area(struct file *filp, unsigned lon=
-g addr,
->         struct mm_struct *mm =3D current->mm;
->         struct vm_area_struct *vma;
->         int do_align =3D 0;
-> -       struct vm_unmapped_area_info info;
-> +       struct vm_unmapped_area_info info =3D {
-> +               .length =3D len,
-> +               .low_limit =3D mm->mmap_base,
-> +               .high_limit =3D TASK_SIZE,
-> +               .align_offset =3D pgoff << PAGE_SHIFT
-> +       };
->
->         /*
->          * We only need to do colour alignment if either the I or D
-> @@ -61,11 +66,6 @@ arch_get_unmapped_area(struct file *filp, unsigned lon=
-g addr,
->                         return addr;
->         }
->
-> -       info.flags =3D 0;
-> -       info.length =3D len;
-> -       info.low_limit =3D mm->mmap_base;
-> -       info.high_limit =3D TASK_SIZE;
->         info.align_mask =3D do_align ? (PAGE_MASK & (SHMLBA - 1)) : 0;
-> -       info.align_offset =3D pgoff << PAGE_SHIFT;
->         return vm_unmapped_area(&info);
->  }
-> --
-> 2.34.1
->
-LGTM, that's equivalent.
-
-Reviewed-by: Guo Ren <guoren@kernel.org>
-
---=20
-Best Regards
- Guo Ren
+DQoNCkxlIDAyLzAzLzIwMjQgw6AgMDI6NTEsIEtlZXMgQ29vayBhIMOpY3JpdMKgOg0KPiBPbiBT
+YXQsIE1hciAwMiwgMjAyNCBhdCAxMjo0NzowOEFNICswMDAwLCBFZGdlY29tYmUsIFJpY2sgUCB3
+cm90ZToNCj4+IE9uIFdlZCwgMjAyNC0wMi0yOCBhdCAwOToyMSAtMDgwMCwgS2VlcyBDb29rIHdy
+b3RlOg0KPj4+IEkgdG90YWxseSB1bmRlcnN0YW5kLiBJZiB0aGUgInVuaW5pdGlhbGl6ZWQiIHdh
+cm5pbmdzIHdlcmUgYWN0dWFsbHkNCj4+PiByZWxpYWJsZSwgSSB3b3VsZCBhZ3JlZS4gSSBsb29r
+IGF0IGl0IHRoaXMgd2F5Og0KPj4+DQo+Pj4gLSBpbml0aWFsaXphdGlvbnMgY2FuIGJlIG1pc3Nl
+ZCBlaXRoZXIgaW4gc3RhdGljIGluaXRpYWxpemVycyBvciB2aWENCj4+PiAgwqAgcnVuIHRpbWUg
+aW5pdGlhbGl6ZXJzLiAoU28gdGhlIHJpc2sgb2YgbWlzdGFrZSBoZXJlIGlzIG1hdGNoZWQgLS0N
+Cj4+PiAgwqAgdGhvdWdoIEknZCBhcmd1ZSBpdCdzIGVhc2llciB0byAqZmluZCogc3RhdGljIGlu
+aXRpYWxpemVycyB3aGVuDQo+Pj4gYWRkaW5nDQo+Pj4gIMKgIG5ldyBzdHJ1Y3QgbWVtYmVycy4p
+DQo+Pj4gLSB1bmluaXRpYWxpemVkIHdhcm5pbmdzIGFyZSBpbmNvbnNpc3RlbnQgKHRoaXMgYmVj
+b21lcyBhbiB1bmtub3duDQo+Pj4gcmlzaykNCj4+PiAtIHdoZW4gYSBydW4gdGltZSBpbml0aWFs
+aXplciBpcyBtaXNzZWQsIHRoZSBjb250ZW50cyBhcmUgd2hhdGV2ZXINCj4+PiB3YXMNCj4+PiAg
+wqAgb24gdGhlIHN0YWNrIChoaWdoIHJpc2spDQo+Pj4gLSB3aGF0IGEgc3RhdGljIGluaXRpYWxp
+emVyIGlzIG1pc3NlZCwgdGhlIGNvbnRlbnQgaXMgMCAobG93IHJpc2spDQo+Pj4NCj4+PiBJIHRo
+aW5rIHVuYW1iaWd1b3VzIHN0YXRlIChhbHdheXMgMCkgaXMgc2lnbmlmaWNhbnRseSBtb3JlIGlt
+cG9ydGFudA0KPj4+IGZvcg0KPj4+IHRoZSBzYWZldHkgb2YgdGhlIHN5c3RlbSBhcyBhIHdob2xl
+LiBZZXMsIGluZGl2aWR1YWwgY2FzZXMgbWF5YmUgYmFkDQo+Pj4gKCJ3aGF0IHVpZCBzaG91bGQg
+dGhpcyBiZT8gcm9vdD8hIikgYnV0IGZyb20gYSBnZW5lcmFsIG1lbW9yeSBzYWZldHkNCj4+PiBw
+ZXJzcGVjdGl2ZSB0aGUgdmFsdWUgZG9lc24ndCBiZWNvbWUgcG90ZW50aWFsbHkgaW5mbHVlbmNl
+ZCBieSBvcmRlcg0KPj4+IG9mDQo+Pj4gb3BlcmF0aW9ucywgbGVmdG92ZXIgc3RhY2sgbWVtb3J5
+LCBldGMuDQo+Pj4NCj4+PiBJJ2QgYWdyZWUsIGxpZnRpbmcgZXZlcnl0aGluZyBpbnRvIGEgc3Rh
+dGljIGluaXRpYWxpemVyIGRvZXMgc2VlbQ0KPj4+IGNsZWFuZXN0IG9mIGFsbCB0aGUgY2hvaWNl
+cy4NCj4+DQo+PiBIaSBLZWVzLA0KPj4NCj4+IFdlbGwsIEkganVzdCBnYXZlIHRoaXMgYSB0cnku
+IEl0IGlzIGdpdmluZyBtZSBmbGFzaGJhY2tzIG9mIHdoZW4gSSBsYXN0DQo+PiBoYWQgdG8gZG8g
+YSB0cmVlIHdpZGUgY2hhbmdlIHRoYXQgSSBjb3VsZG4ndCBmdWxseSB0ZXN0IGFuZCB0aGUNCj4+
+IGJyZWFrYWdlIHdhcyBjYXVnaHQgYnkgTGludXMuDQo+IA0KPiBZZWFoLCB0ZXN0aW5nIGlzbid0
+IGZ1biBmb3IgdGhlc2Uga2luZHMgb2YgdGhpbmdzLiBUaGlzIGlzIHRyYWRpdGlvbmFsbHkNCj4g
+d2h5IHRoZSAib2J2aW91c2x5IGNvcnJlY3QiIGNoYW5nZXMgdGVuZCB0byBoYXZlIGFuIGVhc2ll
+ciB0aW1lIGxhbmRpbmcNCj4gKGkuZS4gYWRkaW5nICI9IHt9IiB0byBhbGwgb2YgdGhlbSkuDQo+
+IA0KPj4gQ291bGQgeW91IGxldCBtZSBrbm93IGlmIHlvdSB0aGluayB0aGlzIGlzIGFkZGl0aW9u
+YWxseSB3b3J0aHdoaWxlDQo+PiBjbGVhbnVwIG91dHNpZGUgb2YgdGhlIGd1YXJkIGdhcCBpbXBy
+b3ZlbWVudHMgb2YgdGhpcyBzZXJpZXM/IEJlY2F1c2UgSQ0KPj4gd2FzIHRoaW5raW5nIGEgbW9y
+ZSBjb3dhcmRseSBhcHByb2FjaCBjb3VsZCBiZSBhIG5ldyB2bV91bm1hcHBlZF9hcmVhKCkNCj4+
+IHZhcmlhbnQgdGhhdCB0YWtlcyB0aGUgbmV3IHN0YXJ0IGdhcCBtZW1iZXIgYXMgYSBzZXBhcmF0
+ZSBhcmd1bWVudA0KPj4gb3V0c2lkZSBvZiBzdHJ1Y3Qgdm1fdW5tYXBwZWRfYXJlYV9pbmZvLiBJ
+dCB3b3VsZCBiZSBraW5kIG9mIHN0cmFuZ2UgdG8NCj4+IGtlZXAgdGhlbSBzZXBhcmF0ZSwgYnV0
+IGl0IHdvdWxkIGJlIGxlc3MgbGlrZWx5IHRvIGJ1bXAgc29tZXRoaW5nLg0KPiANCj4gSSB0aGlu
+ayB5b3Ugd2FudCBhIG5ldyBtZW1iZXIgLS0gQUlVSSwgdGhhdCdzIHdoYXQgdGhhdCBzdHJ1Y3Qg
+aXMgZm9yLg0KPiANCj4gTG9va2luZyBhdCB0aGlzIHJlc3VsdGluZyBzZXQgb2YgcGF0Y2hlcywg
+SSBkbyBraW5kYSB0aGluayBqdXN0IGFkZGluZw0KPiB0aGUgIj0ge30iIGluIGEgc2luZ2xlIHBh
+dGNoIGlzIG1vcmUgc2Vuc2libGUuIEhhdmluZyB0byBzcGxpdCB0aGluZ3MNCj4gdGhhdCBhcmUg
+a25vdyBhdCB0aGUgdG9wIG9mIHRoZSBmdW5jdGlvbiBmcm9tIHRoZSBzdHVmZiBrbm93biBhdCB0
+aGUNCj4gZXhpc3RpbmcgaW5pdGlhbGl6YXRpb24gdGltZSBpcyByYXRoZXIgYXdrd2FyZC4NCj4g
+DQo+IFBlcnNvbmFsbHksIEkgdGhpbmsgYSBzaW5nbGUgcGF0Y2ggdGhhdCBzZXRzICI9IHt9IiBm
+b3IgYWxsIG9mIHRoZW0gYW5kDQo+IGRyb3AgdGhlIGFsbCB0aGUgIj0gMCIgb3IgIj0gTlVMTCIg
+YXNzaWdubWVudHMgd291bGQgYmUgdGhlIGNsZWFuZXN0IHdheQ0KPiB0byBnby4NCg0KSSBhZ3Jl
+ZSB3aXRoIEtlZXMsIHNldCA9IHt9IGFuZCBkcm9wIGFsbCB0aGUgInNvbWV0aGluZyA9IDA7IiBz
+dHVmZi4NCg0KQ2hyaXN0b3BoZQ0K
 
