@@ -1,196 +1,596 @@
-Return-Path: <linux-csky+bounces-446-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-447-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4F968721F9
-	for <lists+linux-csky@lfdr.de>; Tue,  5 Mar 2024 15:51:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F16F873345
+	for <lists+linux-csky@lfdr.de>; Wed,  6 Mar 2024 10:59:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A4BD2811CC
-	for <lists+linux-csky@lfdr.de>; Tue,  5 Mar 2024 14:51:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C971F286D90
+	for <lists+linux-csky@lfdr.de>; Wed,  6 Mar 2024 09:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328AE85928;
-	Tue,  5 Mar 2024 14:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 753B45F566;
+	Wed,  6 Mar 2024 09:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L3MU6hn3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R5y+M/NN"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06241E874;
-	Tue,  5 Mar 2024 14:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709650311; cv=fail; b=JJVB8IqY4ioyqV66ZGOwYEn4xxNmXhcGLo5a+qw/aA14E2mF4CzZO37hIGVRa5ZC1r0fN6T8xEldXD4Jx2BvTuhwWVFv90iTKk88tQgj1YI5TP97EglDZud6zwOusQuwsjx5heFS6ZBooahT6xj6412WemEN1S2GP56LiX/vMXo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709650311; c=relaxed/simple;
-	bh=Q0dFZY2C5pXQw8wFieESuDM5Jl6tHjLthU6kn2oVtJ0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=X8vSqJiu1sQj4Zt+t8rqWccdeVWOqWOnjESvsjc3zB3ScjNTLkqwvONEbEjfPmpiZuNST+nqOyeCu1EjCTBzSMUr3RYZITg9DSpQlfYEp/dJCT+StKsNBZQLBZ6wOb8Jxm+IrzO+Nb4Z0kwwyID8H9939SupcRpBUmnH5mDX/Ps=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L3MU6hn3; arc=fail smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709650309; x=1741186309;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Q0dFZY2C5pXQw8wFieESuDM5Jl6tHjLthU6kn2oVtJ0=;
-  b=L3MU6hn3f9p++qeqGaUev+EXd/2TKcxYZOx+wOtz0Lr/Ah+0lR9eGIpB
-   RjBPRb55+n4kntKDugnYaTQBU/3Sed98oY9/bbIMzfrVeB/xsu7FZraY0
-   iZHn7xqxoBLd1n/HCuCuFLE8t5FRx7jZirDLcbpQdt08Ol9iMNOQ9dKRU
-   VyhpyR+pfM7HxlifnZLlF09r1WFIhXhEBkOEMcHOsPTYaI9A2m3AT6aQp
-   ZXsV4DQkB7mgEJ0C/v3AFHYXXPNlO83PI4TI25I+03yfLrTauxlY5eAU+
-   tyDqDCkHvS/6EDd0lyEoKZXHDGfRksFDPzbZkptYlWpj2t7DCZJpNpe/M
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="4064654"
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="4064654"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 06:51:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
-   d="scan'208";a="9456968"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orviesa009.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Mar 2024 06:51:48 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 5 Mar 2024 06:51:47 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 5 Mar 2024 06:51:38 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Tue, 5 Mar 2024 06:51:38 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 5 Mar 2024 06:51:35 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=joPVH7Qlt8UCYhYM/hbuy2rv34G12Pfcfqbs3mbzDiP7jP7Tvz4djFLadMzeAXapD7JQrPUZJ5b7ZOlPinPhPLYXLtcb/ItqNVEXJKQM6AN7MSzM53d+TWWMvAoZ2GAoipnZdo1mfEqMBQ5PIIVi3sEc/M93ci9JQ1k1cxDGDRnJuEPgxjjrcN3raJcQ9ZYEQozzu0gA+Xh+9zkYRwxhFMOKjuKk8Xl8KTYsFwEkHC+NZsGfdi7tmh9X2IQhvFqPVekNITgcCTYcicfUKvJwn/+NVsv//e+qs00UIcqM8BWd34DihYF0Gf5PjUpk9vsIU5Q4iEZ8RtPnrP+pe7ckMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q0dFZY2C5pXQw8wFieESuDM5Jl6tHjLthU6kn2oVtJ0=;
- b=RganegaG3qDADpSqyKUYWQLrspXwKmR0rWBdAUENdACtqWv78ZXfHz3jWsVYY/f5eCO+i2I6AGGDGx9bTs6W1k/8fVSHFxeb38Ysq6s/Jy8i3/S76PF57bGjzTd+E55brILrQX8qho1RvBb7fM01ocPs6DuSnRJTwsQDDX6QosCLDoIW8bvu+w0mVNQrM91WIM5Ry1IrVgdnzu9yELukFyb7/vMEXn0OvgBec0yW+Rh67q7N33PUFNiJJqMpwoNWhtg+7YFsiZ+ihQdjt5ojzP/bihm4kFwHi4Oh6TSw/f/ZwxTnEaexRtOmA1y7ilUQv6SAHzocZvoqoPkTk+0yTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com (2603:10b6:208:372::10)
- by SN7PR11MB8112.namprd11.prod.outlook.com (2603:10b6:806:2ea::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7362.22; Tue, 5 Mar
- 2024 14:51:03 +0000
-Received: from MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::fc9e:b72f:eeb5:6c7b]) by MN0PR11MB5963.namprd11.prod.outlook.com
- ([fe80::fc9e:b72f:eeb5:6c7b%5]) with mapi id 15.20.7362.019; Tue, 5 Mar 2024
- 14:51:03 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "guoren@kernel.org" <guoren@kernel.org>
-CC: "keescook@chromium.org" <keescook@chromium.org>, "luto@kernel.org"
-	<luto@kernel.org>, "dave.hansen@linux.intel.com"
-	<dave.hansen@linux.intel.com>, "debug@rivosinc.com" <debug@rivosinc.com>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "mingo@redhat.com"
-	<mingo@redhat.com>, "linux-csky@vger.kernel.org"
-	<linux-csky@vger.kernel.org>, "kirill.shutemov@linux.intel.com"
-	<kirill.shutemov@linux.intel.com>, "tglx@linutronix.de" <tglx@linutronix.de>,
-	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>, "hpa@zytor.com"
-	<hpa@zytor.com>, "peterz@infradead.org" <peterz@infradead.org>,
-	"bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-	"broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [RFC v2.1 03/12] csky: Use initializer for struct
- vm_unmapped_area_info
-Thread-Topic: [RFC v2.1 03/12] csky: Use initializer for struct
- vm_unmapped_area_info
-Thread-Index: AQHabDcEfBDrw0l2OEiC+cGApO2TFbElV9gAgAPozwA=
-Date: Tue, 5 Mar 2024 14:51:02 +0000
-Message-ID: <5bf60a9709a8b20853bb2fc0df32e58f6be79467.camel@intel.com>
-References: <20240226190951.3240433-6-rick.p.edgecombe@intel.com>
-	 <20240302001714.674091-1-rick.p.edgecombe@intel.com>
-	 <20240302001714.674091-3-rick.p.edgecombe@intel.com>
-	 <CAJF2gTTjfW4DG8WaVrVopxQsak6X9YPnUXG3a-XWs2C=-vjxxg@mail.gmail.com>
-In-Reply-To: <CAJF2gTTjfW4DG8WaVrVopxQsak6X9YPnUXG3a-XWs2C=-vjxxg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.44.4-0ubuntu2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR11MB5963:EE_|SN7PR11MB8112:EE_
-x-ms-office365-filtering-correlation-id: 4ab9ca09-5c6a-4606-4368-08dc3d23ade5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bCf3fNy8MvJx8L8Lg9FjIMPsCqxGgJd8BXAq4xg36RPcjMyVc3EAE9w1sG66sPH9a/jX1h0IxlzYsGgfopJxlBlFKdgv/VT4RM+Gb1jRGMSL79jxwSVL/1Saom4B9cNHyJ+COs1i5IiG3tHiCJRl2y7QR+DMPjZcuPG3j7ZIlfPnwZW9agbY8/eoK/u2u0Wtig1+Uu5uuLfixCz+UJmgAuvK84485ZpPJBQFpb7LzR8ZuiC3bbp4LOo31YHUSbSwQoMDPVStkDinPixGT6JlfVyuXe4HTJ9ZxcjSISY3ZuJc0miUeD0Sjf8Eb4pKb9/rc0mxO9MTmGuoqi4pE+fMjrRGiP/ZIz9dmzKTucJY9PSefOoa+TU6pnjv77/tX0wwYC7n6uU+am++HYqeup5rsJE+nLlNsAV+xndyHbOzFxlOrBrUKo0nd29qOOAv2SpSRAVLdL8vVOGoJMfp6zogN6DrNHhUrGGsAPRAszedCGl6IeK1aN9fKirA753WTQnJNwD2A50qdAzg8UiF+iItUK6+RQoq8IA9YnT126nmDyzkb9Kx4P7i9TJcCEHUssmn4j5UXQMs0n0zD2WAc04iVy/Rss8m9PoKE8KgOrnrgKHHnpoeJTgMhZ1vVNLNm3Lzi+GeG3GUXYGkVWieGDsOakR1JjakbLybFPWeNfuLBj60eR3KYSoZZ9AomxjJetZzb9vqcFh9cruYYQqI5QhIVpGqzs9RT7gUzl7XQjOvVv8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB5963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bkJMQUlSUXV1NVF6cys3b2k5em1PZXBydGZabDBDN2Fnb0ZzM2M1YjUzaDRG?=
- =?utf-8?B?cEpHZDA0aWF4WEQwNGhmR3dlL2tnSExyWk01VTl4a1N4eHlyZ2N2OUxLTW5F?=
- =?utf-8?B?RGpDdUVJZ3c0VDBTNnMvYkN6N0J5Q3F6YjFqMUNZVExFd2pFeXUrTjJ5Vm1G?=
- =?utf-8?B?dTIwekdnRnFtY0RHdjNSU0ZIRnJRSGllUXovS1ZSZXpvaVZuektqS2lCczR5?=
- =?utf-8?B?OFRaVjY3N2Q4MmEyaXVqUGJqVEhaTmlxeE9BR2hHS3UvYWVraUt2YmYwUjA2?=
- =?utf-8?B?d01TRCswQzJONU01VFo0RWhTOWpoaDExWHNYdG95TC9OYTJvV1g0L0NaaFlZ?=
- =?utf-8?B?TnpDclFIT25JUmRwYndIM3RRT2NUMVhvWXhCd0FyNGg2NGlDalFmcUhNWWFK?=
- =?utf-8?B?QkhscmJXUnhCbXMxbFJKMTQ3N2hOeUFiQ0dialpnR1doczhhenlua0xyRW1p?=
- =?utf-8?B?LzBxcEVQeVBqRllHU1oySGtqcUxWbm1pNW5scTllZ2IvOXR5RlJwMm1KMWpi?=
- =?utf-8?B?ekdpK0U3WHQ4dnZSODRkM2NmTUFjU0RnSkh6dlFaRm5nbStTRE0wc29UY0FL?=
- =?utf-8?B?dXpoaVJqZjRBcnRLNXBxMnN2ZFNNUlJkaTJiWWFLeW85SHZJNlBxRXpMbFll?=
- =?utf-8?B?dWdVVnZvaUZVRkJ3V1o3aUhBd01wRnA3K1JPTThEQjNpNXBHUXU5MWVCamxB?=
- =?utf-8?B?dzh2cEw5dTY1azNyTnFzblJpR3I0dnNySkErc04wU1BOYm9MLy83YmtsUHl5?=
- =?utf-8?B?NmsrbmZsTHE2Yzlndmx6bldpQVMvcVJGcE5HVWdkZGxnbi92Vlozcm1YRnVj?=
- =?utf-8?B?a3BQMytHemFPVlJJZFlmSUFhOS9jekpMengwQWdFaGhSL3BhZDNMRmdyQXdF?=
- =?utf-8?B?L1VLVzhoVmxublBVaGJHdzNEVWZVd3JEMWgvcUgvNC9pMXNmODlrMXRRYnJ5?=
- =?utf-8?B?VWtNaFV3SVFFRkcvNUxDYXp2RWxlNEx4bXNXRHJoTDJkN2VDZVNvaUhKYVMy?=
- =?utf-8?B?elpIdXh6Yy9WZTBoeHFMaWw4U0VuZXZab0swWjMvU1pnZWNQdmhsSkJqVHN2?=
- =?utf-8?B?SUVLbXBKSWZBUGVtNEVkSlN0dVowZzJ5UXl6Mk16NWNNSldaTDJaU1VvVHI4?=
- =?utf-8?B?bys2elhPUTM3T3ZzT2g4NXFYRi9tTWxENFRmZWVHTFMvOTBiSytHWitOV0s3?=
- =?utf-8?B?QWMwRXA5OWVMSnkwRnNFcC9hcklCSVVDMVplU2NqVDlkZXNOc2FFcTJ0QnBh?=
- =?utf-8?B?cy9tS1JBZFVFMURMTDdySEU5UTdhOUNJUFdlQjRBbkowSmdXN0tZam5uV01F?=
- =?utf-8?B?dUlnYkphQnYyRnRiMnl0cXMxOVNHMUFOL1RjenhucU4xSGZPeVUxTi9udzJs?=
- =?utf-8?B?MmVCQzFDUXhWQXJ2OENYSEwzYXAzWDdEckRlMDZKYk02eElYUUZwZVduL1JS?=
- =?utf-8?B?SURremZVMXhaV1VvdHI5SWFpNVhVUmhVYUJOLyt3T1ZrYUZWRFVKdGRseTBE?=
- =?utf-8?B?eFNXRS9CY2ZGeElSZnU4N0EweTBhSjFha2hpcFcrSHFlSVkwQ05vUlFtWWMy?=
- =?utf-8?B?Z1hwTk9NQVdGOFhLc3lBWGh3SFg2OVp6NWxMUkxUNFc1OW9yMGY1K0MzV0hs?=
- =?utf-8?B?TWkwa09JbFAySm1ETWl0RC8xaGtkTkRYM2NFUG9udHNnN29wWkZJakNsMTNP?=
- =?utf-8?B?L0hiN091c3B1TGpyb1g4U2hlZGJwR2pCY0lEN3FVVzF3aUQzMkhNZnp3cFdm?=
- =?utf-8?B?MFBabmozQ3pDWkNNeHp6VC9XVmRwaUh1dWlqbVEvR3dNSEtCNGVHTytlWm5O?=
- =?utf-8?B?UVl6RVRnRUJwakJZS2hrWmlkOGY0K096RW13REs0Y3pzcG9NTWdBQTUvVGlG?=
- =?utf-8?B?OWZpNHNiZlBWaDhoVlpOVnFSOC9yeXJGMFZ5MHNpMTF6bi9PdjJ0MTJYM2cx?=
- =?utf-8?B?QWRsYWhYcnE4Q2NEY3dzUWM0dy9MK0VWOC8zQzQ5RlFRS1JWRXpiMldlRWFT?=
- =?utf-8?B?T3Fwa0hyUlh4ajRmTTA0cnIxKzQxQWw3NEpDY2hqN3dabFRPU2piOW1zOElB?=
- =?utf-8?B?VE5mWjBWTkVHNXJvM0VjSUl1ZFpZd3o2SDREY0dKNGpnT0RQWWZmZEVrZ1dQ?=
- =?utf-8?B?c3lwZU51ZE9DT21qdUpnc0RWNmNQQi9teGV4TWtXWmZXVEF6SUNaT3d3bXE4?=
- =?utf-8?B?RHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DBD8ABC40F86A44183281EA42A4EEAEE@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A6F5F55D
+	for <linux-csky@vger.kernel.org>; Wed,  6 Mar 2024 09:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709719167; cv=none; b=OMVu2Mp1/CC6R/DQA0PDfFa+D3pya06MLHmOTKD76hlxDyx+QV43xyuHLkMFuYrgTn6ftbpgTbds4Z6WNbtuHb7D3YZf0o5ncPO8sIBJgus7o/pv2LST2KOZihhkJ9Ft96RLm3rjM5MRMsw2OHaJxWDXB4ViZWk+zeYsCC0l9zI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709719167; c=relaxed/simple;
+	bh=niTOS0VpI2UtwuTr5Jfx9/9aMm+nj1CB6vPSr8gAIqE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xf6A88C3IGMdZe5omAUH2h68m20iuz0w5cxp/jqvlYchT0IPvHSvF9OBV4a0YEmoxde82PbA8NTREhEEZoD3HlLPcQTZMVVHRGzNmdz0n+5PF5ooNtor8Hiib4m3qHhH5uVLfRKvZQXpGTi1DtLO/1eV9zW1jgT45xxZWPYjLoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R5y+M/NN; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6da9c834646so6078849b3a.3
+        for <linux-csky@vger.kernel.org>; Wed, 06 Mar 2024 01:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1709719163; x=1710323963; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEi1Mb5V0I2YDh0yKJcX6D2UIVEJm/Y+pHd4v7WChg0=;
+        b=R5y+M/NNQQQkqUf38jXcrh//7VakpPJ0+6n11dTORvI8SeoKfakbFVpxIEi/LRBjH3
+         J7yRYSkKa1/hbqUexvimeUGB6S9JcWCAEc9qJIXHPbeuBHF/qb1QBfyU0sqjLb2aKd1h
+         BRiuBu63l5GbKk1zVd0GKz7gRHpfXBwd1iJdkTUfIqsry0p+kgRagkG6pWpuSNiUiSPN
+         Cdmi50YJd2oroADWfJ1nBGETzkXxv3jcQTHvYB+hS0wRqha3R4knClZYqydITIEcFWm/
+         gFsLXtC/r6KHb38eUcoQosS+/2Pk/cBC3edxn67YpYmAPGhgo6exXRHy8GYJizLu8/ow
+         Vg9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709719163; x=1710323963;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AEi1Mb5V0I2YDh0yKJcX6D2UIVEJm/Y+pHd4v7WChg0=;
+        b=nutlVxSooHkPPAHtOz5QL9Y074JkyBzpZLcheseXMMD51I/KKR2H4qvu8oNKfxSPPK
+         0BtQnA0VJFYrho1t1FTTv+XuAjTfSt2MAUO+aNiiomHu66UJU6wmePfOOsrkYsjCW2hv
+         1AvLHFqxBYTrbTXCFz6oUWNcoLkOtbhPjmG+iFDij63JMuBD37GHaZfdyixmOlTtbLEf
+         j8G1pS8XSTeI8+KUS/TpIXibI43GcdLJdUMmyMveLm6yrTVk0S/uod5BZgdt2wcu1NxE
+         4WPPC7kaLIIFvyonc3Am4Veg4TNbkGDeAHyeBrxlBkcU5ZrtSAaKHEpICr5pNLJuCLHP
+         eA1g==
+X-Forwarded-Encrypted: i=1; AJvYcCXdV65guMNoWEcQX66q9CfJS3vJCvoDIwU14ErHQLW89S2stTYAWOc7L49jSglDkXHj1N33C+gn3jns+6BsUa7JRvcyInr1Y7S30Q==
+X-Gm-Message-State: AOJu0YwjErfB6dKYTOEHFUXicojS1X2udnjyssaLe3UICFCXnYblQo5E
+	Tv048xHtRBhrJiUzzgHSKKHpfuCenGTPQLcU+tjiinIK83v7ZPFV8YlJUyiKwhdOhu2hqB3y0UD
+	7z0i/ZLJzNfcJbqru9tRJSqSmC7vkQgALBFg+ew==
+X-Google-Smtp-Source: AGHT+IEdNXbb2StmvXL5xE3qhXqu48Mh6g+sKzEfNb8rOFkLlGrqrgYtdKo9MB7oRfsLjfrHE0Eu/4AAFLHBuAxaoEw=
+X-Received: by 2002:a05:6a20:8925:b0:1a1:4bb8:3017 with SMTP id
+ i37-20020a056a20892500b001a14bb83017mr3612199pzg.61.1709719162677; Wed, 06
+ Mar 2024 01:59:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB5963.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ab9ca09-5c6a-4606-4368-08dc3d23ade5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Mar 2024 14:51:02.9978
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: krUO13HGQUHjScUuCgZrwAeB+W3+5WoVnHUKpJP+4dbLO//GrReMfNclaj4DtPPzh+13Qav3cbFTBKHMBxz+7n60i3VWgCkW5r+3BikqwuY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB8112
-X-OriginatorOrg: intel.com
+References: <20240220171457.703-1-kprateek.nayak@amd.com>
+In-Reply-To: <20240220171457.703-1-kprateek.nayak@amd.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Wed, 6 Mar 2024 10:59:11 +0100
+Message-ID: <CAKfTPtBqPVQ5bo8HTZ=sPCUTYr48qtH61A8Z1dwCT434O7cSyQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/14] Introducing TIF_NOTIFY_IPI flag
+To: K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: linux-kernel@vger.kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>, 
+	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Linus Walleij <linus.walleij@linaro.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Andrew Donnellan <ajd@linux.ibm.com>, 
+	Nicholas Miehlbradt <nicholas@linux.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Tony Battersby <tonyb@cybernetics.com>, 
+	Brian Gerst <brgerst@gmail.com>, Tim Chen <tim.c.chen@linux.intel.com>, 
+	David Vernet <void@manifault.com>, x86@kernel.org, linux-alpha@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Julia Lawall <julia.lawall@inria.fr>
+Content-Type: text/plain; charset="UTF-8"
 
-T24gU3VuLCAyMDI0LTAzLTAzIGF0IDExOjA5ICswODAwLCBHdW8gUmVuIHdyb3RlOg0KPiBMR1RN
-LCB0aGF0J3MgZXF1aXZhbGVudC4NCj4gDQo+IFJldmlld2VkLWJ5OiBHdW8gUmVuIDxndW9yZW5A
-a2VybmVsLm9yZz4NCg0KVGhhbmtzIQ0K
+Hi Prateek,
+
+Adding Julia who could be interested in this patchset. Your patchset
+should trigger idle load balance instead of newly idle load balance
+now when the polling is used. This was one reason for not migrating
+task in idle CPU
+
+On Tue, 20 Feb 2024 at 18:15, K Prateek Nayak <kprateek.nayak@amd.com> wrote:
+>
+> Hello everyone,
+>
+> Before jumping into the issue, let me clarify the Cc list. Everyone have
+> been cc'ed on Patch 0 through Patch 3. Respective arch maintainers,
+> reviewers, and committers returned by scripts/get_maintainer.pl have
+> been cc'ed on the respective arch side changes. Scheduler and CPU Idle
+> maintainers and reviewers have been included for the entire series. If I
+> have missed anyone, please do add them. If you would like to be dropped
+> from the cc list, wholly or partially, for the future iterations, please
+> do let me know.
+>
+> With that out of the way ...
+>
+> Problem statement
+> =================
+>
+> When measuring IPI throughput using a modified version of Anton
+> Blanchard's ipistorm benchmark [1], configured to measure time taken to
+> perform a fixed number of smp_call_function_single() (with wait set to
+> 1), an increase in benchmark time was observed between v5.7 and the
+> current upstream release (v6.7-rc6 at the time of encounter).
+>
+> Bisection pointed to commit b2a02fc43a1f ("smp: Optimize
+> send_call_function_single_ipi()") as the reason behind this increase in
+> runtime.
+>
+>
+> Experiments
+> ===========
+>
+> Since the commit cannot be cleanly reverted on top of the current
+> tip:sched/core, the effects of the optimizations were reverted by:
+>
+> 1. Removing the check for call_function_single_prep_ipi() in
+>    send_call_function_single_ipi(). With this change
+>    send_call_function_single_ipi() always calls
+>    arch_send_call_function_single_ipi()
+>
+> 2. Removing the call to flush_smp_call_function_queue() in do_idle()
+>    since every smp_call_function, with (1.), would unconditionally send
+>    an IPI to an idle CPU in TIF_POLLING mode.
+>
+> Following is the diff of the above described changes which will be
+> henceforth referred to as the "revert":
+>
+> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> index 31231925f1ec..735184d98c0f 100644
+> --- a/kernel/sched/idle.c
+> +++ b/kernel/sched/idle.c
+> @@ -332,11 +332,6 @@ static void do_idle(void)
+>          */
+>         smp_mb__after_atomic();
+>
+> -       /*
+> -        * RCU relies on this call to be done outside of an RCU read-side
+> -        * critical section.
+> -        */
+> -       flush_smp_call_function_queue();
+>         schedule_idle();
+>
+>         if (unlikely(klp_patch_pending(current)))
+> diff --git a/kernel/smp.c b/kernel/smp.c
+> index f085ebcdf9e7..2ff100c41885 100644
+> --- a/kernel/smp.c
+> +++ b/kernel/smp.c
+> @@ -111,11 +111,9 @@ void __init call_function_init(void)
+>  static __always_inline void
+>  send_call_function_single_ipi(int cpu)
+>  {
+> -       if (call_function_single_prep_ipi(cpu)) {
+> -               trace_ipi_send_cpu(cpu, _RET_IP_,
+> -                                  generic_smp_call_function_single_interrupt);
+> -               arch_send_call_function_single_ipi(cpu);
+> -       }
+> +       trace_ipi_send_cpu(cpu, _RET_IP_,
+> +                          generic_smp_call_function_single_interrupt);
+> +       arch_send_call_function_single_ipi(cpu);
+>  }
+>
+>  static __always_inline void
+> --
+>
+> With the revert, the time taken to complete a fixed set of IPIs using
+> ipistorm improves significantly. Following are the numbers from a dual
+> socket 3rd Generation EPYC system (2 x 64C/128T) (boost on, C2 disabled)
+> running ipistorm between CPU8 and CPU16:
+>
+> cmdline: insmod ipistorm.ko numipi=100000 single=1 offset=8 cpulist=8 wait=1
+>
+> (tip:sched/core at tag "sched-core-2024-01-08" for all the testing done
+> below)
+>
+>   ==================================================================
+>   Test          : ipistorm (modified)
+>   Units         : Normalized runtime
+>   Interpretation: Lower is better
+>   Statistic     : AMean
+>   ==================================================================
+>   kernel:                       time [pct imp]
+>   tip:sched/core                1.00 [0.00]
+>   tip:sched/core + revert       0.81 [19.36]
+>
+> Although the revert improves ipistorm performance, it also regresses
+> tbench and netperf, supporting the validity of the optimization.
+> Following are netperf and tbench numbers from the same machine comparing
+> vanilla tip:sched/core and the revert applied on top:
+>
+>   ==================================================================
+>   Test          : tbench
+>   Units         : Normalized throughput
+>   Interpretation: Higher is better
+>   Statistic     : AMean
+>   ==================================================================
+>   Clients:    tip[pct imp](CV)       revert[pct imp](CV)
+>       1     1.00 [  0.00]( 0.24)     0.91 [ -8.96]( 0.30)
+>       2     1.00 [  0.00]( 0.25)     0.92 [ -8.20]( 0.97)
+>       4     1.00 [  0.00]( 0.23)     0.91 [ -9.20]( 1.75)
+>       8     1.00 [  0.00]( 0.69)     0.91 [ -9.48]( 1.56)
+>      16     1.00 [  0.00]( 0.66)     0.92 [ -8.49]( 2.43)
+>      32     1.00 [  0.00]( 0.96)     0.89 [-11.13]( 0.96)
+>      64     1.00 [  0.00]( 1.06)     0.90 [ -9.72]( 2.49)
+>     128     1.00 [  0.00]( 0.70)     0.92 [ -8.36]( 1.26)
+>     256     1.00 [  0.00]( 0.72)     0.97 [ -3.30]( 1.10)
+>     512     1.00 [  0.00]( 0.42)     0.98 [ -1.73]( 0.37)
+>    1024     1.00 [  0.00]( 0.28)     0.99 [ -1.39]( 0.43)
+>
+>   ==================================================================
+>   Test          : netperf
+>   Units         : Normalized Througput
+>   Interpretation: Higher is better
+>   Statistic     : AMean
+>   ==================================================================
+>   Clients:         tip[pct imp](CV)       revert[pct imp](CV)
+>    1-clients     1.00 [  0.00]( 0.50)     0.89 [-10.51]( 0.20)
+>    2-clients     1.00 [  0.00]( 1.16)     0.89 [-11.10]( 0.59)
+>    4-clients     1.00 [  0.00]( 1.03)     0.89 [-10.68]( 0.38)
+>    8-clients     1.00 [  0.00]( 0.99)     0.89 [-10.54]( 0.50)
+>   16-clients     1.00 [  0.00]( 0.87)     0.89 [-10.92]( 0.95)
+>   32-clients     1.00 [  0.00]( 1.24)     0.89 [-10.85]( 0.63)
+>   64-clients     1.00 [  0.00]( 1.58)     0.90 [-10.11]( 1.18)
+>   128-clients    1.00 [  0.00]( 0.87)     0.89 [-10.94]( 1.11)
+>   256-clients    1.00 [  0.00]( 4.77)     1.00 [ -0.16]( 3.45)
+>   512-clients    1.00 [  0.00](56.16)     1.02 [  2.10](56.05)
+>
+> Since a simple revert is not a viable solution, we delved deeper into
+> the changes in the execution path with call_function_single_prep_ipi()
+> check.
+>
+>
+> Effects of call_function_single_prep_ipi()
+> ==========================================
+>
+> To pull a TIF_POLLING thread out of idle to process an IPI, the sender
+> sets the TIF_NEED_RESCHED bit in the idle task's thread info in
+> call_function_single_prep_ipi() and avoids sending an actual IPI to the
+> target. As a result, the scheduler expects a task to be enqueued when
+> exiting the idle path. This is not the case with non-polling idle states
+> where the idle CPU exits the non-polling idle state to process the
+> interrupt, and since need_resched() returns false, soon goes back to
+> idle again.
+>
+> When TIF_NEED_RESCHED flag is set, do_idle() will call schedule_idle(),
+> a large part of which runs with local IRQ disabled. In case of ipistorm,
+> when measuring IPI throughput, this large IRQ disabled section delays
+> processing of IPIs. Further auditing revealed that in absence of any
+> runnable tasks, pick_next_task_fair(), which is called from the
+> pick_next_task() fast path, will always call newidle_balance() in this
+> scenario, further increasing the time spent in the IRQ disabled section.
+>
+> Following is the crude visualization of the problem with relevant
+> functions expanded:
+> --
+> CPU0                                                    CPU1
+> ====                                                    ====
+>                                                         do_idle() {
+>                                                                 __current_set_polling();
+>                                                                 ...
+>                                                                 monitor(addr);
+>                                                                 if (!need_resched())
+>                                                                         mwait() {
+>                                                                         /* Waiting */
+> smp_call_function_single(CPU1, func, wait = 1) {                                ...
+>         ...                                                                     ...
+>         set_nr_if_polling(CPU1) {                                               ...
+>                 /* Realizes CPU1 is polling */                                  ...
+>                 try_cmpxchg(addr,                                               ...
+>                             &val,                                               ...
+>                             val | _TIF_NEED_RESCHED);                           ...
+>         } /* Does not send an IPI */                                            ...
+>         ...                                                             } /* mwait exit due to write at addr */
+>         csd_lock_wait() {                                       }
+>         /* Waiting */                                           preempt_set_need_resched();
+>                 ...                                             __current_clr_polling();
+>                 ...                                             flush_smp_call_function_queue() {
+>                 ...                                                     func();
+>         } /* End of wait */                                     }
+> }                                                               schedule_idle() {
+>                                                                         ...
+>                                                                         local_irq_disable();
+> smp_call_function_single(CPU1, func, wait = 1) {                        ...
+>         ...                                                             ...
+>         arch_send_call_function_single_ipi(CPU1);                       ...
+>                                                 \                       ...
+>                                                  \                      newidle_balance() {
+>                                                   \                             ...
+>                                               /* Delay */                       ...
+>                                                     \                   }
+>                                                      \                  ...
+>                                                       \-------------->  local_irq_enable();
+>                                                                         /* Processes the IPI */
+> --
+>
+>
+> Skipping newidle_balance()
+> ==========================
+>
+> In an earlier attempt to solve the challenge of the long IRQ disabled
+> section, newidle_balance() was skipped when a CPU waking up from idle
+> was found to have no runnable tasks, and was transitioning back to
+> idle [2]. Tim [3] and David [4] had pointed out that newidle_balance()
+> may be viable for CPUs that are idling with tick enabled, where the
+> newidle_balance() has the opportunity to pull tasks onto the idle CPU.
+>
+> Vincent [5] pointed out a case where the idle load kick will fail to
+> run on an idle CPU since the IPI handler launching the ILB will check
+> for need_resched(). In such cases, the idle CPU relies on
+> newidle_balance() to pull tasks towards itself.
+
+Calling newidle_balance() instead of the normal idle load balance
+prevents the CPU to pull tasks from other groups
+
+>
+> Using an alternate flag instead of NEED_RESCHED to indicate a pending
+> IPI was suggested as the correct approach to solve this problem on the
+> same thread.
+>
+>
+> Proposed solution: TIF_NOTIFY_IPI
+> =================================
+>
+> Instead of reusing TIF_NEED_RESCHED bit to pull an TIF_POLLING CPU out
+> of idle, TIF_NOTIFY_IPI is a newly introduced flag that
+> call_function_single_prep_ipi() sets on a target TIF_POLLING CPU to
+> indicate a pending IPI, which the idle CPU promises to process soon.
+>
+> On architectures that do not support the TIF_NOTIFY_IPI flag (this
+> series only adds support for x86 and ARM processors for now),
+
+I'm surprised that you are mentioning ARM processors because they
+don't use TIF_POLLING.
+
+> call_function_single_prep_ipi() will fallback to setting
+> TIF_NEED_RESCHED bit to pull the TIF_POLLING CPU out of idle.
+>
+> Since the pending IPI handlers are processed before the call to
+> schedule_idle() in do_idle(), schedule_idle() will only be called if the
+> IPI handler have woken / migrated a new task on the idle CPU and has set
+> TIF_NEED_RESCHED bit to indicate the same. This avoids running into the
+> long IRQ disabled section in schedule_idle() unnecessarily, and any
+> need_resched() check within a call function will accurately notify if a
+> task is waiting for CPU time on the CPU handling the IPI.
+>
+> Following is the crude visualization of how the situation changes with
+> the newly introduced TIF_NOTIFY_IPI flag:
+> --
+> CPU0                                                    CPU1
+> ====                                                    ====
+>                                                         do_idle() {
+>                                                                 __current_set_polling();
+>                                                                 ...
+>                                                                 monitor(addr);
+>                                                                 if (!need_resched_or_ipi())
+>                                                                         mwait() {
+>                                                                         /* Waiting */
+> smp_call_function_single(CPU1, func, wait = 1) {                                ...
+>         ...                                                                     ...
+>         set_nr_if_polling(CPU1) {                                               ...
+>                 /* Realizes CPU1 is polling */                                  ...
+>                 try_cmpxchg(addr,                                               ...
+>                             &val,                                               ...
+>                             val | _TIF_NOTIFY_IPI);                             ...
+>         } /* Does not send an IPI */                                            ...
+>         ...                                                             } /* mwait exit due to write at addr */
+>         csd_lock_wait() {                                       ...
+>         /* Waiting */                                           preempt_fold_need_resched(); /* fold if NEED_RESCHED */
+>                 ...                                             __current_clr_polling();
+>                 ...                                             flush_smp_call_function_queue() {
+>                 ...                                                     func(); /* Will set NEED_RESCHED if sched_ttwu_pending() */
+>         } /* End of wait */                                     }
+> }                                                               if (need_resched()) {
+>                                                                         schedule_idle();
+> smp_call_function_single(CPU1, func, wait = 1) {                }
+>         ...                                                     ... /* IRQs remain enabled */
+>         arch_send_call_function_single_ipi(CPU1); ----------->  /* Processes the IPI */
+> --
+>
+> Results
+> =======
+>
+> With the TIF_NOTIFY_IPI, the time taken to complete a fixed set of IPIs
+> using ipistorm improves drastically. Following are the numbers from the
+> same dual socket 3rd Generation EPYC system (2 x 64C/128T) (boost on,
+> C2 disabled) running ipistorm between CPU8 and CPU16:
+>
+> cmdline: insmod ipistorm.ko numipi=100000 single=1 offset=8 cpulist=8 wait=1
+>
+>   ==================================================================
+>   Test          : ipistorm (modified)
+>   Units         : Normalized runtime
+>   Interpretation: Lower is better
+>   Statistic     : AMean
+>   ==================================================================
+>   kernel:                               time [pct imp]
+>   tip:sched/core                        1.00 [0.00]
+>   tip:sched/core + revert               0.81 [19.36]
+>   tip:sched/core + TIF_NOTIFY_IPI       0.20 [80.99]
+>
+> Same experiment was repeated on an dual socket ARM server (2 x 64C)
+> which too saw a significant improvement in the ipistorm performance:
+
+Could you share more details about this ARM server ? Could it be an Arm64 one ?
+I was not expecting any change for arm/arm64 which are not using TIF_POLLING
+
+
+>
+>   ==================================================================
+>   Test          : ipistorm (modified)
+>   Units         : Normalized runtime
+>   Interpretation: Lower is better
+>   Statistic     : AMean
+>   ==================================================================
+>   kernel:                               time [pct imp]
+>   tip:sched/core                        1.00 [0.00]
+>   tip:sched/core + TIF_NOTIFY_IPI       0.41 [59.29]
+>
+> netperf and tbench results with the patch match the results on tip on
+> the dual socket 3rd Generation AMD system (2 x 64C/128T). Additionally,
+> hackbench, stream, and schbench too were tested, with results from the
+> patched kernel matching that of the tip.
+>
+>
+> Future Work
+> ===========
+>
+> Evaluate impact of newidle_balance() when scheduler tick hits an idle
+> CPU. The call to newidle_balance() will be skipped with the
+
+But it should call the normal idle load balance instead
+
+> TIF_NOTIFY_IPI solution similar to [2]. Counter argument for the case is
+> that if the idle state did not set the TIF_POLLING bit, the idle CPU
+> would not have called schedule_idle() unless the IPI handler set the
+> NEED_RESCHED bit.
+>
+>
+> Links
+> =====
+>
+> [1] https://github.com/antonblanchard/ipistorm
+> [2] https://lore.kernel.org/lkml/20240119084548.2788-1-kprateek.nayak@amd.com/
+> [3] https://lore.kernel.org/lkml/b4f5ac150685456cf45a342e3bb1f28cdd557a53.camel@linux.intel.com/
+> [4] https://lore.kernel.org/lkml/20240123211756.GA221793@maniforge/
+> [5] https://lore.kernel.org/lkml/CAKfTPtC446Lo9CATPp7PExdkLhHQFoBuY-JMGC7agOHY4hs-Pw@mail.gmail.com/
+>
+> This series is based on tip:sched/core at tag "sched-core-2024-01-08".
+> ---
+> Gautham R. Shenoy (4):
+>   thread_info: Add helpers to test and clear TIF_NOTIFY_IPI
+>   sched: Define a need_resched_or_ipi() helper and use it treewide
+>   sched/core: Use TIF_NOTIFY_IPI to notify an idle CPU in TIF_POLLING
+>     mode of pending IPI
+>   x86/thread_info: Introduce TIF_NOTIFY_IPI flag
+>
+> K Prateek Nayak (10):
+>   arm/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   alpha/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   openrisc/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   powerpc/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   sh/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   sparc/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   csky/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   parisc/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   nios2/thread_info: Introduce TIF_NOTIFY_IPI flag
+>   microblaze/thread_info: Introduce TIF_NOTIFY_IPI flag
+> ---
+> Cc: Richard Henderson <richard.henderson@linaro.org>
+> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> Cc: Matt Turner <mattst88@gmail.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: Michal Simek <monstr@monstr.eu>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>
+> Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Andrew Donnellan <ajd@linux.ibm.com>
+> Cc: Nicholas Miehlbradt <nicholas@linux.ibm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Tony Battersby <tonyb@cybernetics.com>
+> Cc: Brian Gerst <brgerst@gmail.com>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: David Vernet <void@manifault.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-alpha@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-csky@vger.kernel.org
+> Cc: linux-openrisc@vger.kernel.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> ---
+>  arch/alpha/include/asm/thread_info.h      |  2 ++
+>  arch/arm/include/asm/thread_info.h        |  3 ++
+>  arch/csky/include/asm/thread_info.h       |  2 ++
+>  arch/microblaze/include/asm/thread_info.h |  2 ++
+>  arch/nios2/include/asm/thread_info.h      |  2 ++
+>  arch/openrisc/include/asm/thread_info.h   |  2 ++
+>  arch/parisc/include/asm/thread_info.h     |  2 ++
+>  arch/powerpc/include/asm/thread_info.h    |  2 ++
+>  arch/sh/include/asm/thread_info.h         |  2 ++
+>  arch/sparc/include/asm/thread_info_32.h   |  2 ++
+>  arch/sparc/include/asm/thread_info_64.h   |  2 ++
+>  arch/x86/include/asm/mwait.h              |  2 +-
+>  arch/x86/include/asm/thread_info.h        |  2 ++
+>  arch/x86/kernel/process.c                 |  2 +-
+>  drivers/cpuidle/cpuidle-powernv.c         |  2 +-
+>  drivers/cpuidle/cpuidle-pseries.c         |  2 +-
+>  drivers/cpuidle/poll_state.c              |  2 +-
+>  include/linux/sched.h                     |  5 +++
+>  include/linux/sched/idle.h                | 12 +++----
+>  include/linux/thread_info.h               | 43 +++++++++++++++++++++++
+>  kernel/sched/core.c                       | 41 ++++++++++++++++-----
+>  kernel/sched/idle.c                       | 23 ++++++++----
+>  22 files changed, 133 insertions(+), 26 deletions(-)
+>
+> --
+> 2.34.1
+>
 
