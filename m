@@ -1,113 +1,189 @@
-Return-Path: <linux-csky+bounces-463-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-464-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C9B687686E
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Mar 2024 17:28:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8AB9879EA5
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Mar 2024 23:29:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 362F5281859
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Mar 2024 16:28:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EECF1F2343E
+	for <lists+linux-csky@lfdr.de>; Tue, 12 Mar 2024 22:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE27F3BBC1;
-	Fri,  8 Mar 2024 16:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383B11448E3;
+	Tue, 12 Mar 2024 22:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YlWgh+XJ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63562C198;
-	Fri,  8 Mar 2024 16:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF5B14403A;
+	Tue, 12 Mar 2024 22:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709915314; cv=none; b=dGNoNm+Fb2RVz2shwpsXDhrYqb1eBDOalIi9U7cOQkQxGpDmOc6rETVC5NeBBfcOQNVw2lDAPKq2czVxxq7S4poDqoykpZ6FqtJCDv5jlG/a2hiO/Q5G4ldnoyJaf7FUPkzYRoNGPKrUBAj/Ich5HQUDaz0feyVHEHM+jiiWsx4=
+	t=1710282549; cv=none; b=rx1oGqaqvGoBCEzQDNqZuW3p2Z4KH0C4J3p8XnZIa29laP/iEqpqW4iFHTOM683DdsudWO3O4+v9Y3tI/UwcHw9ONmQjAvjU/y/FDtdheq/Cvfxs+trmBPPXKkWphDu+x4rQmGTmursOQjIjdVbIJarChaGx4IbsM2Q6qY3vuYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709915314; c=relaxed/simple;
-	bh=9j/NHJuOnCijcSwAMnGxtR70JgvZ3zyScIi+TGHHdhc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EZ0BKZg9HeENGwvy/UPk8m6UlPIZHSqbwbUOX/3nt9fQww3uRmh7pS3t2Jk6Zc2nufm95HSVDytp1URYNcz+6j4QRXt7FB0Rzp82qxEcIuIwlZGJ4RwXfOtJO2OscYfBXkaponLlDSddEafECXOFsTBb9Q8vXUqaLswhmEK+tRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86262C15;
-	Fri,  8 Mar 2024 08:29:08 -0800 (PST)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2D0F3F73F;
-	Fri,  8 Mar 2024 08:28:25 -0800 (PST)
-Message-ID: <5b2d7341-553d-42f0-977b-404f2da411e9@arm.com>
-Date: Fri, 8 Mar 2024 16:28:23 +0000
+	s=arc-20240116; t=1710282549; c=relaxed/simple;
+	bh=u8AE1TgBiBYssYKjxzzEC6IaZ9p99XcwVxRZfDUcRoE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=tCuZS3ZpBd/HbxOQN8k1VxD154Nv6aCiVfo9VAg1GG2JC/lcvWNfq6je9gy2YGK/01uQpzzgfFw/ypN+6KTa7sbSjpkF4ly2JiDhMEOFmLOzEAEuo7O1K0VM8ZE11nGXZjXg0GajMo/7NLnGbWXgjsEA+OKsYix28C51SPUDjXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YlWgh+XJ; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1710282548; x=1741818548;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=u8AE1TgBiBYssYKjxzzEC6IaZ9p99XcwVxRZfDUcRoE=;
+  b=YlWgh+XJ6F+Ll9FvYBtWk9zJ0x+S4guMqq3owhv4OpS/d//spXWtFZQ3
+   /+To6A7fItKP59uVDafSFHiIcjAaDK2+xaKoAcZ3o2e9rPA2xuELGYZTX
+   PwjrbsFRhT4oT7zOnfKctgbvBW8lgUJWAsKMladPV9VdG5q8Wgpu4XiIl
+   lKjIKi/nz4pAcXPm3fAHgDaYNqiuWTTJ6f6EzqNBQ5NSYnp0Kzi8mE8VX
+   wmXAPZKgIdjHtm9Q9uxmdfdaBcLaYXuPamwmFajOs36uuFmKjrwSV1xsq
+   zlWpt1HkjUycNHKcuqN3ZMh18VqBxAmR0RA19fqFDuPa5UdjukzmlChxS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11011"; a="5191974"
+X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
+   d="scan'208";a="5191974"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 15:29:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,119,1708416000"; 
+   d="scan'208";a="16356852"
+Received: from gargayus-mobl1.amr.corp.intel.com (HELO rpedgeco-desk4.intel.com) ([10.255.231.196])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2024 15:29:02 -0700
+From: Rick Edgecombe <rick.p.edgecombe@intel.com>
+To: Liam.Howlett@oracle.com,
+	akpm@linux-foundation.org,
+	bp@alien8.de,
+	broonie@kernel.org,
+	dave.hansen@linux.intel.com,
+	debug@rivosinc.com,
+	hpa@zytor.com,
+	keescook@chromium.org,
+	kirill.shutemov@linux.intel.com,
+	luto@kernel.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	tglx@linutronix.de,
+	x86@kernel.org,
+	christophe.leroy@csgroup.eu
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	rick.p.edgecombe@intel.com,
+	Guo Ren <guoren@kernel.org>,
+	linux-csky@vger.kernel.org
+Subject: [PATCH v3 05/12] csky: Use initializer for struct vm_unmapped_area_info
+Date: Tue, 12 Mar 2024 15:28:36 -0700
+Message-Id: <20240312222843.2505560-6-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240312222843.2505560-1-rick.p.edgecombe@intel.com>
+References: <20240312222843.2505560-1-rick.p.edgecombe@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [v2 PATCH 0/3] arch: mm, vdso: consolidate PAGE_SIZE definition
-To: Arnd Bergmann <arnd@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Thomas Gleixner <tglx@linutronix.de>, Kees Cook <keescook@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>,
- Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>,
- Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Helge Deller
- <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Palmer Dabbelt <palmer@dabbelt.com>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Andreas Larsson <andreas@gaisler.com>, Richard Weinberger <richard@nod.at>,
- x86@kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
- Andy Lutomirski <luto@kernel.org>, Jan Kiszka <jan.kiszka@siemens.com>,
- Kieran Bingham <kbingham@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-um@lists.infradead.org
-References: <20240306141453.3900574-1-arnd@kernel.org>
-Content-Language: en-US
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <20240306141453.3900574-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Future changes will need to add a new member to struct
+vm_unmapped_area_info. This would cause trouble for any call site that
+doesn't initialize the struct. Currently every caller sets each member
+manually, so if new members are added they will be uninitialized and the
+core code parsing the struct will see garbage in the new member.
 
+It could be possible to initialize the new member manually to 0 at each
+call site. This and a couple other options were discussed, and a working
+consensus (see links) was that in general the best way to accomplish this
+would be via static initialization with designated member initiators.
+Having some struct vm_unmapped_area_info instances not zero initialized
+will put those sites at risk of feeding garbage into vm_unmapped_area() if
+the convention is to zero initialize the struct and any new member addition
+misses a call site that initializes each member manually.
 
-On 06/03/2024 14:14, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Naresh noticed that the newly added usage of the PAGE_SIZE macro in
-> include/vdso/datapage.h introduced a build regression. I had an older
-> patch that I revived to have this defined through Kconfig rather than
-> through including asm/page.h, which is not allowed in vdso code.
-> 
-> The vdso patch series now has a temporary workaround, but I still want to
-> get this into v6.9 so we can place the hack with CONFIG_PAGE_SIZE
-> in the vdso.
-> 
-> I've applied this to the asm-generic tree already, please let me know if
-> there are still remaining issues. It's really close to the merge window
-> already, so I'd probably give this a few more days before I send a pull
-> request, or defer it to v6.10 if anything goes wrong.
-> 
-> Sorry for the delay, I was still waiting to resolve the m68k question,
-> but there were no further replies in the end, so I kept my original
-> version.
-> 
-> Changes from v1:
-> 
->  - improve Kconfig help texts
->  - remove an extraneous line in hexagon
-> 
->       Arnd
->
+It could be possible to leave the code mostly untouched, and just change
+the line:
+struct vm_unmapped_area_info info
+to:
+struct vm_unmapped_area_info info = {};
 
-Thanks Arnd, looks good to me.
+However, that would leave cleanup for the members that are manually set
+to zero, as it would no longer be required.
 
-Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+So to be reduce the chance of bugs via uninitialized members, instead
+simply continue the process to initialize the struct this way tree wide.
+This will zero any unspecified members. Move the member initializers to the
+struct declaration when they are known at that time. Leave the members out
+that were manually initialized to zero, as this would be redundant for
+designated initializers.
+
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Link: https://lore.kernel.org/lkml/202402280912.33AEE7A9CF@keescook/#t
+Link: https://lore.kernel.org/lkml/j7bfvig3gew3qruouxrh7z7ehjjafrgkbcmg6tcghhfh3rhmzi@wzlcoecgy5rs/
+---
+v3:
+ - Fixed spelling errors in log
+ - Be consistent about field vs member in log
+
+Hi,
+
+This patch was split and refactored out of a tree-wide change [0] to just
+zero-init each struct vm_unmapped_area_info. The overall goal of the
+series is to help shadow stack guard gaps. Currently, there is only one
+arch with shadow stacks, but two more are in progress. It is compile tested
+only.
+
+There was further discussion that this method of initializing the structs
+while nice in some ways has a greater risk of introducing bugs in some of
+the more complicated callers. Since this version was reviewed my arch
+maintainers already, leave it as was already acknowledged.
+
+Thanks,
+
+Rick
+
+[0] https://lore.kernel.org/lkml/20240226190951.3240433-6-rick.p.edgecombe@intel.com/
+---
+ arch/csky/abiv1/mmap.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/arch/csky/abiv1/mmap.c b/arch/csky/abiv1/mmap.c
+index 6792aca49999..7f826331d409 100644
+--- a/arch/csky/abiv1/mmap.c
++++ b/arch/csky/abiv1/mmap.c
+@@ -28,7 +28,12 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+ 	int do_align = 0;
+-	struct vm_unmapped_area_info info;
++	struct vm_unmapped_area_info info = {
++		.length = len,
++		.low_limit = mm->mmap_base,
++		.high_limit = TASK_SIZE,
++		.align_offset = pgoff << PAGE_SHIFT
++	};
+ 
+ 	/*
+ 	 * We only need to do colour alignment if either the I or D
+@@ -61,11 +66,6 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
+ 			return addr;
+ 	}
+ 
+-	info.flags = 0;
+-	info.length = len;
+-	info.low_limit = mm->mmap_base;
+-	info.high_limit = TASK_SIZE;
+ 	info.align_mask = do_align ? (PAGE_MASK & (SHMLBA - 1)) : 0;
+-	info.align_offset = pgoff << PAGE_SHIFT;
+ 	return vm_unmapped_area(&info);
+ }
+-- 
+2.34.1
+
 
