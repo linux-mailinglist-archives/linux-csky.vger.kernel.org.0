@@ -1,127 +1,79 @@
-Return-Path: <linux-csky+bounces-504-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-505-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12B698C37C5
-	for <lists+linux-csky@lfdr.de>; Sun, 12 May 2024 19:28:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B86448C45F5
+	for <lists+linux-csky@lfdr.de>; Mon, 13 May 2024 19:28:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC7DD1F21086
-	for <lists+linux-csky@lfdr.de>; Sun, 12 May 2024 17:28:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E90711C209EF
+	for <lists+linux-csky@lfdr.de>; Mon, 13 May 2024 17:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2858C4B5AE;
-	Sun, 12 May 2024 17:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F4B20DF7;
+	Mon, 13 May 2024 17:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P0KyCyDK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eY1FxsKe"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE71C46430;
-	Sun, 12 May 2024 17:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C0720DCB;
+	Mon, 13 May 2024 17:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715534915; cv=none; b=giX0ih8IjUnLkktoPmj09lizOhGrpJL6sc1EZbsUmeqqcOrC0UdvMn1GjX6zhCI6FA5z8rd2Krsvvkjw0z5G8My9Inh25eZ18fYWyAMNMldjoNWKmrUeVHZLZfxdDyYNdzCKkZsswOoQev0/rTzgO1P5V9jNvWIbKdZWy5bgwj0=
+	t=1715621278; cv=none; b=FkY+2YQTfza394g4GdPRuVfl7ydWb5eieSFWQ22w1ikYU6iFTM8xbrVWU2K5Uh2z22J4wvBMqxTpr7ZZd3Q3C4kkDfM0z3lxS1hNHbVdZDLMxM1SYMkAGdP6R9JNfvlyDvUxrJsd2h/l27CunqZHTobyCjItIIV99SgRUNE+J9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715534915; c=relaxed/simple;
-	bh=yoD3v95RGwummZEVUok+lA5erasx7wbDTMozE5Oaj3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DAK8Htapvqn7zdIgNwDxjPVzm0dKwSmH55BhmnO/phsXw7Holhi+MwmyQKA9lO5r9b1mZ9nJnODw4vShY0p4J0bKzMZNaCns6Zh8Xq3EXBzg2Xwly45/w1f43Uq/zS2/klhDl22wMtOh1dQ7E7W+nmBar5aoVjiYpiCdGK1lNWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P0KyCyDK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A47C116B1;
-	Sun, 12 May 2024 17:28:34 +0000 (UTC)
+	s=arc-20240116; t=1715621278; c=relaxed/simple;
+	bh=3vLG1AxGuz9w5zzq4IK8ywypYzXBuUefpce5tWGp1HY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=oRmiROGE7LSK7Bh0uKyz9AZrk/5MCM3KmHUW1W89dlQ3Gd36GRUPidmcowPVeVi3an7S1qa+/cuhHAvTJCdO+taqSxrISH8Ms2JzWXzRqe2Hz1Sc556ooJanSpqFmNReLSCW/9cVUgjJ0sqB/TmF8cMz1QtqxTlxrMPjUoEAWT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eY1FxsKe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9EF42C113CC;
+	Mon, 13 May 2024 17:27:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715534914;
-	bh=yoD3v95RGwummZEVUok+lA5erasx7wbDTMozE5Oaj3Y=;
-	h=Date:From:To:Cc:Subject:Reply-To:From;
-	b=P0KyCyDKaU8O9AlnA1PLjeK92G0I4K0q1u/Uj08VU2XQSGnNQ1GT7g4fIcd3n0Kai
-	 D0eIJg/O3XOXWD2MR4zs8+0T+GaVul08+B5NsJgIKgh4djYrb+l0r2eZ+Ac9kNbI/e
-	 +sMlKnGgWtgZ5X4wVX8Y5jGQL9Xt3xsI4Gc3soxdIGUtxjaAKo9yPLKxqntjdYM0B8
-	 x/Vtx0n5sd5oIQIzkuv8trjn+w+o5XaoX00L9vYS6smr7hXXPuqYZTJIsQAZ8tYRaH
-	 K3E/+hVSy8cRxaUubCWeuWiSw9LvyjWX3w4Pwzt+ok+8PpPLKd8jasTjxNCfmXC4zj
-	 43xHDByEu6lcA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A10ADCE105C; Sun, 12 May 2024 10:28:33 -0700 (PDT)
-Date: Sun, 12 May 2024 10:28:33 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: torvalds@linux-foundation.org
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-csky@vger.kernel.org, kernel-team@meta.com,
-	viro@zeniv.linux.org.uk, elver@google.com,
-	akpm@linux-foundation.org, tglx@linutronix.de, peterz@infradead.org,
-	dianders@chromium.org, pmladek@suse.com, arnd@arndb.de,
-	yujie.liu@intel.com, guoren@kernel.org
-Subject: [GIT PULL] Native and emulated one-byte cmpxcha()g for v6.10
-Message-ID: <a03cbcce-ac01-46e7-9fd5-c4f0b782c8df@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+	s=k20201202; t=1715621278;
+	bh=3vLG1AxGuz9w5zzq4IK8ywypYzXBuUefpce5tWGp1HY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=eY1FxsKeRISgoVGl7oIIPjkned/19RaUeyFfScw919l3RlXX1gtLXGHe/+flUdGCo
+	 jVz33L36j7AaQhS43r6bXQBco33oVvsIpvqFTUjgDl6dNbIU9H3DCVb8UeK0Tc/cHP
+	 lkv+FrSNM81K6iwbVSL6Cuo2Yf6hd3z+tzYwd0kDtIzuflF/MTcBAnpWxOCuwQFHVC
+	 3GhCNWf9csw74hjjNMto3njTP0MNvgnQ3BGdkdf2iShne1lIvaCrhKLRjK4jDJfLit
+	 9o0hOpbeJ32WF7qg0eptbbLsAaZwFvjTkevbgPE2RxawbBld0n63qKi/4sReIWmvzQ
+	 GjFhmRCX9AESw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93AA6C433F2;
+	Mon, 13 May 2024 17:27:58 +0000 (UTC)
+Subject: Re: [GIT PULL] Native and emulated one-byte cmpxcha()g for v6.10
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <a03cbcce-ac01-46e7-9fd5-c4f0b782c8df@paulmck-laptop>
+References: <a03cbcce-ac01-46e7-9fd5-c4f0b782c8df@paulmck-laptop>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <a03cbcce-ac01-46e7-9fd5-c4f0b782c8df@paulmck-laptop>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/cmpxchg.2024.05.11a
+X-PR-Tracked-Commit-Id: 5800e77d88c0cd98bc10460df148631afa7b5e4d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2e57d1d6062af11420bc329ca004ebe3f3f6f0ee
+Message-Id: <171562127859.25347.11248305611726382716.pr-tracker-bot@kernel.org>
+Date: Mon, 13 May 2024 17:27:58 +0000
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: torvalds@linux-foundation.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-csky@vger.kernel.org, kernel-team@meta.com, viro@zeniv.linux.org.uk, elver@google.com, akpm@linux-foundation.org, tglx@linutronix.de, peterz@infradead.org, dianders@chromium.org, pmladek@suse.com, arnd@arndb.de, yujie.liu@intel.com, guoren@kernel.org
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hello, Linus,
+The pull request you sent on Sun, 12 May 2024 10:28:33 -0700:
 
-Please pull the following cmpxchg()-related changes:
+> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/cmpxchg.2024.05.11a
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/cmpxchg.2024.05.11a
-  # HEAD: 5800e77d88c0cd98bc10460df148631afa7b5e4d: csky: Emulate one-byte cmpxchg (2024-05-11 07:07:07 -0700)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2e57d1d6062af11420bc329ca004ebe3f3f6f0ee
 
-Please note that the commit and tag are quite recent.  However, the
-only change was to add the architecture maintainer'a ack.  The exact
-same change (other than the ack) has been in -next for quite some time.
+Thank you!
 
-Of course, if you would prefer that this exact commit be in -next for a
-decent interval, please let me know and I will be happy to re-send this
-pull request after a few days in -next.
-
-----------------------------------------------------------------
-sparc32,parisc,csky: Provide one-byte and two-byte cmpxchg() support
-
-This series provides native one-byte and two-byte cmpxchg() support
-for sparc32 and parisc, courtesy of Al Viro.  This support is provided
-by the same hashed-array-of-locks technique used for the other atomic
-operations provided for these two platforms.
-
-This series also provides emulated one-byte cmpxchg() support for csky
-using a new cmpxchg_emu_u8() function that uses a four-byte cmpxchg()
-to emulate the one-byte variant.
-
-Similar patches for emulation of one-byte cmpxchg() for arc, sh, and
-xtensa have not yet received maintainer acks, so they are slated for
-the v6.11 merge window.
-
-----------------------------------------------------------------
-Al Viro (8):
-      sparc32: make __cmpxchg_u32() return u32
-      sparc32: make the first argument of __cmpxchg_u64() volatile u64 *
-      sparc32: unify __cmpxchg_u{32,64}
-      sparc32: add __cmpxchg_u{8,16}() and teach __cmpxchg() to handle those sizes
-      parisc: __cmpxchg_u32(): lift conversion into the callers
-      parisc: unify implementations of __cmpxchg_u{8,32,64}
-      parisc: add missing export of __cmpxchg_u8()
-      parisc: add u16 support to cmpxchg()
-
-Paul E. McKenney (2):
-      lib: Add one-byte emulation function
-      csky: Emulate one-byte cmpxchg
-
- arch/Kconfig                        |  3 +++
- arch/csky/Kconfig                   |  1 +
- arch/csky/include/asm/cmpxchg.h     | 10 +++++++
- arch/parisc/include/asm/cmpxchg.h   | 22 +++++++---------
- arch/parisc/kernel/parisc_ksyms.c   |  2 ++
- arch/parisc/lib/bitops.c            | 52 ++++++++++++-------------------------
- arch/sparc/include/asm/cmpxchg_32.h | 20 +++++++-------
- arch/sparc/lib/atomic32.c           | 45 ++++++++++++++------------------
- include/linux/cmpxchg-emu.h         | 15 +++++++++++
- lib/Makefile                        |  1 +
- lib/cmpxchg-emu.c                   | 45 ++++++++++++++++++++++++++++++++
- 11 files changed, 133 insertions(+), 83 deletions(-)
- create mode 100644 include/linux/cmpxchg-emu.h
- create mode 100644 lib/cmpxchg-emu.c
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
