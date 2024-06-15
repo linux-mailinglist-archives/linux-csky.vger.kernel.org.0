@@ -1,141 +1,153 @@
-Return-Path: <linux-csky+bounces-564-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-565-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8050790989E
-	for <lists+linux-csky@lfdr.de>; Sat, 15 Jun 2024 16:27:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E21B290992C
+	for <lists+linux-csky@lfdr.de>; Sat, 15 Jun 2024 19:13:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 342D11C20FBE
-	for <lists+linux-csky@lfdr.de>; Sat, 15 Jun 2024 14:27:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5E2E1C20A87
+	for <lists+linux-csky@lfdr.de>; Sat, 15 Jun 2024 17:13:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA034596E;
-	Sat, 15 Jun 2024 14:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D377349647;
+	Sat, 15 Jun 2024 17:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="MX4ei3uI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9dtjdDd"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69051E511;
-	Sat, 15 Jun 2024 14:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34341E89C;
+	Sat, 15 Jun 2024 17:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718461646; cv=none; b=q3VmaNo+KbIg7aY99Ymw51D6bZjrYMQN/q10ooLGjGr+2NJKP0cQvmIOPc3GchlulFgeYIM+FT3bcszTZRRWHuDs/OXc2B0aTh6MxUg6vEbfVqSNhvQU/XuBfIWIBwqRuzguTcUOcqwQtMmPe9SOLEClRd+yTeg+U1tUZLtUbl8=
+	t=1718471632; cv=none; b=ji7kU3xRFlT5LlxDBqcwieo7AfJ//gAAa43b9qjeMFuyzJP3r0ZL/2x6V2N3F9xZrS1a2CNNvhAGI624A2DzU3mJaxiFa5Ekh2f/3O4JyrtFcydEkzK/b2bqKqr6e2Qh5NJ0MqPmZk0pwnMOIRx52bdeElVaeJEWE3JFum70l1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718461646; c=relaxed/simple;
-	bh=o/SQd+brB2QkhekD2Nrpw7e1Fn3IUdRHYI44H3HScPI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XSVZPOKaC31DOEnrvHMMWoMnrFqgyqs1hyCEvAvaFsd3heT29vtj3WVJF3qy53o2hR9juUcNBxnGIWhGbCS3Ifk5ImVuHtI7GAdgxCoehSN2/F+w3ikCAcPWcxHtv4pU/cC07E6C4f6yhCfEf1rxyndOKk8uYyTtU3oWVPookkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=MX4ei3uI; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=WMV4XdfigA9k42kYaaxbDI3Cm/CZfKkOSa4d9FAnLBU=; b=MX4ei3uInKB1tI7JcTqP72OeAy
-	dAOfULdNDyKssbwffE64lKqDt1qPcRwnmYki7uISHpalFK3Sjz+iistgd0XgbiGLtzs89mevgmISM
-	ImrsPYaQpLvEw5Phh/i3yvlf7inlN3S0pzbU9GojESRqQ8uAeFXUZJUkow9Fm+H/1X8oBu/mLnmRq
-	9KaqOzmhz1xLB1XksP4LJz8QjpGXNQ/awK+/Fm/9fA5aTCEzGfHyVwaUPxr/l/qe+aq/QXFM3w+YG
-	EVkOwrIShH1qhBOmLK+G7AsdGnZ871aaaCCVzH2vqnFOpwV4pDOcfLcGzWTk+QUOVhhlilPvTeTZk
-	szS/VgLg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:40990)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1sIUMt-0003Oz-1J;
-	Sat, 15 Jun 2024 15:26:59 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1sIUMc-00039D-Bw; Sat, 15 Jun 2024 15:26:42 +0100
-Date: Sat, 15 Jun 2024 15:26:42 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: linux-kernel@vger.kernel.org,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Guo Ren <guoren@kernel.org>,
-	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>,
-	Benjamin Gray <bgray@linux.ibm.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Xin Li <xin3.li@intel.com>, Kees Cook <keescook@chromium.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Tony Battersby <tonyb@cybernetics.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Brian Gerst <brgerst@gmail.com>, Leonardo Bras <leobras@redhat.com>,
-	Imran Khan <imran.f.khan@oracle.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Rik van Riel <riel@surriel.com>,
-	Tim Chen <tim.c.chen@linux.intel.com>,
-	David Vernet <void@manifault.com>,
-	Julia Lawall <julia.lawall@inria.fr>, linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v2 00/14] Introducing TIF_NOTIFY_IPI flag
-Message-ID: <Zm2kouKx/NSSrr6x@shell.armlinux.org.uk>
-References: <20240613181613.4329-1-kprateek.nayak@amd.com>
+	s=arc-20240116; t=1718471632; c=relaxed/simple;
+	bh=MrsrF30xKAE+H9SSpcALN+6xtQLJ32SlxbP4eLBlUxQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=doEZCNu8QSG8/P5jpEbb/ZI89Itk1oyO1BNhH+B+rF5klifY4+8vsve46Gm25LHU/kPdXN5SD8J6H0oVNILy0Ld/N49Q62coe9T4Pj8GWQqzTM4jGiMAcva37mtk3PZ/s/Y0gtIjzqKiwqhNSKH5mSB6BxyuwikifkCO96Rta1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9dtjdDd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DA9C4AF52;
+	Sat, 15 Jun 2024 17:13:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718471632;
+	bh=MrsrF30xKAE+H9SSpcALN+6xtQLJ32SlxbP4eLBlUxQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=O9dtjdDd8CzOVUdvA5IQW+8NoxjH5CW73Jw6idI5pkIG4Am2OI8s8U+MJ8i4deihm
+	 +eyDbB31nDxRQveSKkP2NDp5mLpyFbNZzzlC4miPzxKcuj0/iKULAElK2wmbK3Alle
+	 8gMfEgmioKeMPL8jtE7AXSAobG7zrQXQAjig39vsPavIysSt4cKTjwVjhfq7LNz4kt
+	 74bg+zrUlHExUjoeadsOCjvtKFSdj9HyYbhA/m8h7WCAPeJTauD6dODHehDShSx14a
+	 kTPXt1YIAwiB3W/l+qNHBaWbUltaN+aEmgxdBh2+wHcs+t/QNFIEj18v+BTHzEvOqj
+	 8Ia6sGOvlUAfA==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-57cce3bc8c6so632210a12.3;
+        Sat, 15 Jun 2024 10:13:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWMDrNfVKmu7UWVIBXqTJKnHSZvfMBS5P5HwR7HIiFy0opKM/qnwJRskW5ia3SNHeTF1VjMK4AWSmkKN3aSBu8ql+q11fT/3Xf/7s0i8p3HekY7LX7VgGuaDC3aX4/NTHlaxE3I
+X-Gm-Message-State: AOJu0YzY3hI1a8wgm3IZG0rw7YzGFtIj8HJPYJHWxLdGt/qAONoV1OU4
+	CeRWvEPY4ZokulYsvsaOWYrFXp/smPJic3ug6dRSheYa3PF+9y2TIsz89Y0aUkv2lf/gRRPAUTN
+	Z3zwqsbsPW1vMphkaXoXbd6uGpEo=
+X-Google-Smtp-Source: AGHT+IFxpS1aGq0kZ+HwiXAYX9qxRC0dRUemJpQt5RopJMhnpU1hLlCii5dLE56EONrHnBB2vC0Elpc0iVxYQXUEluo=
+X-Received: by 2002:a05:6402:17d9:b0:57c:c712:a3c7 with SMTP id
+ 4fb4d7f45d1cf-57cc712a42emr2547039a12.36.1718471630365; Sat, 15 Jun 2024
+ 10:13:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240613181613.4329-1-kprateek.nayak@amd.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20240613181613.4329-1-kprateek.nayak@amd.com> <20240613181613.4329-12-kprateek.nayak@amd.com>
+In-Reply-To: <20240613181613.4329-12-kprateek.nayak@amd.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Sun, 16 Jun 2024 01:13:39 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTVjD3T6F13rGVqCtqk4T+kLa+zx93aHaREo0e8tMrNOw@mail.gmail.com>
+Message-ID: <CAJF2gTTVjD3T6F13rGVqCtqk4T+kLa+zx93aHaREo0e8tMrNOw@mail.gmail.com>
+Subject: Re: [PATCH v2 11/14] csky/thread_info: Introduce TIF_NOTIFY_IPI flag
+To: K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: linux-kernel@vger.kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, linux-csky@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 13, 2024 at 06:15:59PM +0000, K Prateek Nayak wrote:
-> o Dropping the ARM results since I never got my hands on the ARM64
->   system I used in my last testing. If I do manage to get my hands on it
->   again, I'll rerun the experiments and share the results on the thread.
->   To test the case where TIF_NOTIFY_IPI is not enabled for a particular
->   architecture, I applied the series only until Patch 3 and tested the
->   same on my x86 machine with a WARN_ON_ONCE() in do_idle() to check if
->   tif_notify_ipi() ever return true and then repeated the same with
->   Patch 4 applied.
+On Fri, Jun 14, 2024 at 2:21=E2=80=AFAM K Prateek Nayak <kprateek.nayak@amd=
+.com> wrote:
+>
+> Add support for TIF_NOTIFY_IPI on C-SKY. With TIF_NOTIFY_IPI, a sender
+> sending an IPI to an idle CPU in TIF_POLLING mode will set the
+> TIF_NOTIFY_IPI flag in the target's idle tasks's thread_info to pull the
+> CPU out of idle, as opposed to setting TIF_NEED_RESCHED previously. This
+> avoids spurious calls to schedule_idle() in cases where an IPI does not
+> necessarily wake up a task on the idle CPU.
+>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: K Prateek Nayak <kprateek.nayak@amd.com>
+> Cc: linux-csky@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+> ---
+> v1..v2:
+> o Collected the ack. Thank you :)
+> ---
+>  arch/csky/include/asm/thread_info.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/csky/include/asm/thread_info.h b/arch/csky/include/asm/=
+thread_info.h
+> index b5ed788f0c68..9bc7a037c476 100644
+> --- a/arch/csky/include/asm/thread_info.h
+> +++ b/arch/csky/include/asm/thread_info.h
+> @@ -61,6 +61,7 @@ static inline struct thread_info *current_thread_info(v=
+oid)
+>  #define TIF_SYSCALL_TRACEPOINT 5       /* syscall tracepoint instrumenta=
+tion */
+>  #define TIF_SYSCALL_AUDIT      6       /* syscall auditing */
+>  #define TIF_NOTIFY_SIGNAL      7       /* signal notifications exist */
+> +#define TIF_NOTIFY_IPI         8       /* Pending IPI on TIF_POLLLING id=
+le CPU */
+>  #define TIF_POLLING_NRFLAG     16      /* poll_idle() is TIF_NEED_RESCHE=
+D */
+>  #define TIF_MEMDIE             18      /* is terminating due to OOM kill=
+er */
+>  #define TIF_RESTORE_SIGMASK    20      /* restore signal mask in do_sign=
+al() */
+> @@ -73,6 +74,7 @@ static inline struct thread_info *current_thread_info(v=
+oid)
+>  #define _TIF_SYSCALL_TRACEPOINT        (1 << TIF_SYSCALL_TRACEPOINT)
+>  #define _TIF_SYSCALL_AUDIT     (1 << TIF_SYSCALL_AUDIT)
+>  #define _TIF_NOTIFY_SIGNAL     (1 << TIF_NOTIFY_SIGNAL)
+> +#define _TIF_NOTIFY_IPI                (1 << TIF_NOTIFY_IPI)
+Acked-by: Guo Ren <guoren@kernel.org>
 
-Confused. ARM (32-bit) or ARM64? You patch 32-bit ARM, but you don't
-touch 64-bit Arm. "ARM" on its own in the context above to me suggests
-32-bit, since you refer to ARM64 later.
+>  #define _TIF_UPROBE            (1 << TIF_UPROBE)
+>  #define _TIF_POLLING_NRFLAG    (1 << TIF_POLLING_NRFLAG)
+>  #define _TIF_MEMDIE            (1 << TIF_MEMDIE)
+> --
+> 2.34.1
+>
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+
+--=20
+Best Regards
+ Guo Ren
 
