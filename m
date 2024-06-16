@@ -1,153 +1,316 @@
-Return-Path: <linux-csky+bounces-565-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-566-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E21B290992C
-	for <lists+linux-csky@lfdr.de>; Sat, 15 Jun 2024 19:13:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F265C909E04
+	for <lists+linux-csky@lfdr.de>; Sun, 16 Jun 2024 16:57:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5E2E1C20A87
-	for <lists+linux-csky@lfdr.de>; Sat, 15 Jun 2024 17:13:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 173631C21048
+	for <lists+linux-csky@lfdr.de>; Sun, 16 Jun 2024 14:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D377349647;
-	Sat, 15 Jun 2024 17:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A119214A81;
+	Sun, 16 Jun 2024 14:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9dtjdDd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BTWk6Jr4"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34341E89C;
-	Sat, 15 Jun 2024 17:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638AB19D8BA
+	for <linux-csky@vger.kernel.org>; Sun, 16 Jun 2024 14:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718471632; cv=none; b=ji7kU3xRFlT5LlxDBqcwieo7AfJ//gAAa43b9qjeMFuyzJP3r0ZL/2x6V2N3F9xZrS1a2CNNvhAGI624A2DzU3mJaxiFa5Ekh2f/3O4JyrtFcydEkzK/b2bqKqr6e2Qh5NJ0MqPmZk0pwnMOIRx52bdeElVaeJEWE3JFum70l1g=
+	t=1718549852; cv=none; b=gBzew3oSPCIuSDJDZlBA5tJEIG02xvnrbkrcVDXZz6zk5p+J1F7KiBdmYp3zg3B4tSZK5aoN0OileicLtpEQEGYAF0SWNuHbLmoWiEW0DkR5tw6jpwLQ/FPj2YJgCVx2k9Oi3qNQygEvdDDV5aMOkRhTHGJCjxlTAQyqJj/fInQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718471632; c=relaxed/simple;
-	bh=MrsrF30xKAE+H9SSpcALN+6xtQLJ32SlxbP4eLBlUxQ=;
+	s=arc-20240116; t=1718549852; c=relaxed/simple;
+	bh=utvuP9IoAszxWoU3ajATZDQZ4+EdgvtsV0c8Mt+Ezag=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=doEZCNu8QSG8/P5jpEbb/ZI89Itk1oyO1BNhH+B+rF5klifY4+8vsve46Gm25LHU/kPdXN5SD8J6H0oVNILy0Ld/N49Q62coe9T4Pj8GWQqzTM4jGiMAcva37mtk3PZ/s/Y0gtIjzqKiwqhNSKH5mSB6BxyuwikifkCO96Rta1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9dtjdDd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DA9C4AF52;
-	Sat, 15 Jun 2024 17:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718471632;
-	bh=MrsrF30xKAE+H9SSpcALN+6xtQLJ32SlxbP4eLBlUxQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=O9dtjdDd8CzOVUdvA5IQW+8NoxjH5CW73Jw6idI5pkIG4Am2OI8s8U+MJ8i4deihm
-	 +eyDbB31nDxRQveSKkP2NDp5mLpyFbNZzzlC4miPzxKcuj0/iKULAElK2wmbK3Alle
-	 8gMfEgmioKeMPL8jtE7AXSAobG7zrQXQAjig39vsPavIysSt4cKTjwVjhfq7LNz4kt
-	 74bg+zrUlHExUjoeadsOCjvtKFSdj9HyYbhA/m8h7WCAPeJTauD6dODHehDShSx14a
-	 kTPXt1YIAwiB3W/l+qNHBaWbUltaN+aEmgxdBh2+wHcs+t/QNFIEj18v+BTHzEvOqj
-	 8Ia6sGOvlUAfA==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-57cce3bc8c6so632210a12.3;
-        Sat, 15 Jun 2024 10:13:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWMDrNfVKmu7UWVIBXqTJKnHSZvfMBS5P5HwR7HIiFy0opKM/qnwJRskW5ia3SNHeTF1VjMK4AWSmkKN3aSBu8ql+q11fT/3Xf/7s0i8p3HekY7LX7VgGuaDC3aX4/NTHlaxE3I
-X-Gm-Message-State: AOJu0YzY3hI1a8wgm3IZG0rw7YzGFtIj8HJPYJHWxLdGt/qAONoV1OU4
-	CeRWvEPY4ZokulYsvsaOWYrFXp/smPJic3ug6dRSheYa3PF+9y2TIsz89Y0aUkv2lf/gRRPAUTN
-	Z3zwqsbsPW1vMphkaXoXbd6uGpEo=
-X-Google-Smtp-Source: AGHT+IFxpS1aGq0kZ+HwiXAYX9qxRC0dRUemJpQt5RopJMhnpU1hLlCii5dLE56EONrHnBB2vC0Elpc0iVxYQXUEluo=
-X-Received: by 2002:a05:6402:17d9:b0:57c:c712:a3c7 with SMTP id
- 4fb4d7f45d1cf-57cc712a42emr2547039a12.36.1718471630365; Sat, 15 Jun 2024
- 10:13:50 -0700 (PDT)
+	 To:Cc:Content-Type; b=GhOmCDL71OgMDE4K2cPm6Hj6vEZ1tCD0Pgy252yCLbuyxkwmr6hzawlxL2GafYW2URZfy6J6DE0/VpbRqBzvM5rniebC8yY3PFcBym/yADPd1RTonILkKDBa4OTIabIxAMYJx2cb3JRwWSjmmgLVZ4aPFwsW/T451FJ+vLBqcgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BTWk6Jr4; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-6bfd4b88608so2515079a12.1
+        for <linux-csky@vger.kernel.org>; Sun, 16 Jun 2024 07:57:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718549849; x=1719154649; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rYjghgjKd1ZembdVlTN5XgkOTmluzZxorMJSTjILbTo=;
+        b=BTWk6Jr43HB5uLdZ1kqYT9v+Uh1yHBmOszId7TEphwKZUSpQgOgtmAQEVRHOHUk5ps
+         dOzp+NiZqGgQJULG+2q5LClsi7eWZphmrcBXSRnji6Nu9zRlX/JWjQ16SJ2IUleL/mqC
+         UtNaafyh3gVavNj4wcp6BKuvf891Yw5VP41YO/PXdcu3iWzwmrw9OqPWNMdIajSdonme
+         +2UUm+3fARTdxu94y9ofOVvzZ5jYKBw3OyYAKedtLu8mC8egQiKtK+QHgZ6PBxbPBTh7
+         BDTzN8M8RXd2dTo62d6smEF6DJRL9lPgRAwzzNKw1sprjApz+yMmWP2kbo02QNJeH6YO
+         C9hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718549849; x=1719154649;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rYjghgjKd1ZembdVlTN5XgkOTmluzZxorMJSTjILbTo=;
+        b=jD5XGyd0LnZc5kzfBiX/pcx+o20aTZ+LfwA4fBnb6OeSHevbQqKxyrLXglwg6ZfHrv
+         s49pZ6DKJEhRHY6YyX5kYv9nQMTkxkBbndE2eCrJ4I/XbrrG5EeBXntwP3RA1UVcth3R
+         ECfg33oWhenRccgliBnha0a+wD7pyDYopfT7uy1Pv5kUe1Bb7PzyN4zzSPtS2e/rxfmW
+         VJLyvmqxoMDIwgelAxFst8LrOQbK+u9zgJWzcfVE5LZS9ROEHnV9urrPT9uyG5A6+EtU
+         msUCVQKamz0S79ry990jWuo3Zm36tfaxtfNXlB7UJZ40JHkVfYv9ypnKPOXyuPjPRWTT
+         Hq9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUhI50yg3/5CyjG8/lb3GbfKe0IgQBEvSKll2dUOmrPcQ/pwSZyFxXkK0Dg3aDMp/Z/YApjkIxydD8N720g7PyqMRl79iUB+MrSUQ==
+X-Gm-Message-State: AOJu0Yxfp+ROFxl95FP7/DZqmspFwYEhejWOhZllj6uwF0VCUFT+21Mc
+	VHsmmtRxmRf8kIH23OMu4/qEufBLlzNZu89MQHVSYQ2WwUsxQUeI87UmY0LZZFHnbS1642U51tM
+	tZyAf/jh9b77YzhH15XQJZDlhOeltvJG1aaZzUg==
+X-Google-Smtp-Source: AGHT+IHTgpoQyjqHNervCjt0EPZEZ7aZDOr+YosfkhATeXzbUFa46nGvC/JpQ1fK4xIcVu7QUZh21abUsAxqmPSmJcc=
+X-Received: by 2002:a05:6a21:32a5:b0:1b8:a188:53da with SMTP id
+ adf61e73a8af0-1bae7f0bb4bmr7762840637.29.1718549848620; Sun, 16 Jun 2024
+ 07:57:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240613181613.4329-1-kprateek.nayak@amd.com> <20240613181613.4329-12-kprateek.nayak@amd.com>
-In-Reply-To: <20240613181613.4329-12-kprateek.nayak@amd.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Sun, 16 Jun 2024 01:13:39 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTVjD3T6F13rGVqCtqk4T+kLa+zx93aHaREo0e8tMrNOw@mail.gmail.com>
-Message-ID: <CAJF2gTTVjD3T6F13rGVqCtqk4T+kLa+zx93aHaREo0e8tMrNOw@mail.gmail.com>
-Subject: Re: [PATCH v2 11/14] csky/thread_info: Introduce TIF_NOTIFY_IPI flag
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: linux-kernel@vger.kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+References: <20240613181613.4329-1-kprateek.nayak@amd.com> <20240614092801.GL8774@noisy.programming.kicks-ass.net>
+ <CAKfTPtBTxhbmh=605TJ9sRw-nFu6w-KY7QpAxRUh5AjhQWa2ig@mail.gmail.com> <20240615012814.GP8774@noisy.programming.kicks-ass.net>
+In-Reply-To: <20240615012814.GP8774@noisy.programming.kicks-ass.net>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Sun, 16 Jun 2024 16:57:17 +0200
+Message-ID: <CAKfTPtD2fUBqw09QDPGgAHyvQRmcvzbq9o3FDsctw=R6HP+=CA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/14] Introducing TIF_NOTIFY_IPI flag
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: K Prateek Nayak <kprateek.nayak@amd.com>, linux-kernel@vger.kernel.org, 
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>, 
+	Michal Simek <monstr@monstr.eu>, Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Juri Lelli <juri.lelli@redhat.com>, 
 	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
 	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, linux-csky@vger.kernel.org, 
-	linux-pm@vger.kernel.org
+	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, 
+	Andrew Donnellan <ajd@linux.ibm.com>, Benjamin Gray <bgray@linux.ibm.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Xin Li <xin3.li@intel.com>, 
+	Kees Cook <keescook@chromium.org>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Tony Battersby <tonyb@cybernetics.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Brian Gerst <brgerst@gmail.com>, Leonardo Bras <leobras@redhat.com>, 
+	Imran Khan <imran.f.khan@oracle.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Rik van Riel <riel@surriel.com>, Tim Chen <tim.c.chen@linux.intel.com>, 
+	David Vernet <void@manifault.com>, Julia Lawall <julia.lawall@inria.fr>, linux-alpha@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 14, 2024 at 2:21=E2=80=AFAM K Prateek Nayak <kprateek.nayak@amd=
-.com> wrote:
+On Sat, 15 Jun 2024 at 03:28, Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Add support for TIF_NOTIFY_IPI on C-SKY. With TIF_NOTIFY_IPI, a sender
-> sending an IPI to an idle CPU in TIF_POLLING mode will set the
-> TIF_NOTIFY_IPI flag in the target's idle tasks's thread_info to pull the
-> CPU out of idle, as opposed to setting TIF_NEED_RESCHED previously. This
-> avoids spurious calls to schedule_idle() in cases where an IPI does not
-> necessarily wake up a task on the idle CPU.
+> On Fri, Jun 14, 2024 at 12:48:37PM +0200, Vincent Guittot wrote:
+> > On Fri, 14 Jun 2024 at 11:28, Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: K Prateek Nayak <kprateek.nayak@amd.com>
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+> > > > Vincent [5] pointed out a case where the idle load kick will fail to
+> > > > run on an idle CPU since the IPI handler launching the ILB will check
+> > > > for need_resched(). In such cases, the idle CPU relies on
+> > > > newidle_balance() to pull tasks towards itself.
+> > >
+> > > Is this the need_resched() in _nohz_idle_balance() ? Should we change
+> > > this to 'need_resched() && (rq->nr_running || rq->ttwu_pending)' or
+> > > something long those lines?
+> >
+> > It's not only this but also in do_idle() as well which exits the loop
+> > to look for tasks to schedule
+>
+> Is that really a problem? Reading the initial email the problem seems to
+> be newidle balance, not hitting schedule. Schedule should be fairly
+> quick if there's nothing to do, no?
+
+There are 2 problems:
+- Because of NEED_RESCHED being set, we go through the full schedule
+path for no reason and we finally do a sched_balance_newidle()
+- Because of need_resched being set o wake up the cpu, we will not
+kick the softirq to run the nohz idle load balance and get a chance to
+pull a task on an idle CPU
+
+>
+> > > I mean, it's fairly trivial to figure out if there really is going to be
+> > > work there.
+> > >
+> > > > Using an alternate flag instead of NEED_RESCHED to indicate a pending
+> > > > IPI was suggested as the correct approach to solve this problem on the
+> > > > same thread.
+> > >
+> > > So adding per-arch changes for this seems like something we shouldn't
+> > > unless there really is no other sane options.
+> > >
+> > > That is, I really think we should start with something like the below
+> > > and then fix any fallout from that.
+> >
+> > The main problem is that need_resched becomes somewhat meaningless
+> > because it doesn't  only mean "I need to resched a task" and we have
+> > to add more tests around even for those not using polling
+>
+> True, however we already had some of that by having the wakeup list,
+> that made nr_running less 'reliable'.
+>
+> The thing is, most architectures seem to have the TIF_POLLING_NRFLAG
+> bit, even if their main idle routine isn't actually using it, much of
+
+Yes, I'm surprised that Arm arch has the TIF_POLLING_NRFLAG whereas it
+has never been supported by the arch
+
+> the idle loop until it hits the arch idle will be having it set and will
+> thus tickle these cases *sometimes*.
+>
+> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > > index 0935f9d4bb7b..cfa45338ae97 100644
+> > > --- a/kernel/sched/core.c
+> > > +++ b/kernel/sched/core.c
+> > > @@ -5799,7 +5800,7 @@ static inline struct task_struct *
+> > >  __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+> > >  {
+> > >         const struct sched_class *class;
+> > > -       struct task_struct *p;
+> > > +       struct task_struct *p = NULL;
+> > >
+> > >         /*
+> > >          * Optimization: we know that if all tasks are in the fair class we can
+> > > @@ -5810,9 +5811,11 @@ __pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+> > >         if (likely(!sched_class_above(prev->sched_class, &fair_sched_class) &&
+> > >                    rq->nr_running == rq->cfs.h_nr_running)) {
+> > >
+> > > -               p = pick_next_task_fair(rq, prev, rf);
+> > > -               if (unlikely(p == RETRY_TASK))
+> > > -                       goto restart;
+> > > +               if (rq->nr_running) {
+> >
+> > How do you make the diff between a spurious need_resched() because of
+> > polling and a cpu becoming idle ? isn't rq->nr_running null in both
+> > cases ?
+>
+> Bah, true. It should also check current being idle, which then makes a
+> mess of things again. Still, we shouldn't be calling newidle from idle,
+> that's daft.
+>
+> I should probably not write code at 3am, but the below horror is what
+> I came up with.
+>
 > ---
-> v1..v2:
-> o Collected the ack. Thank you :)
-> ---
->  arch/csky/include/asm/thread_info.h | 2 ++
->  1 file changed, 2 insertions(+)
 >
-> diff --git a/arch/csky/include/asm/thread_info.h b/arch/csky/include/asm/=
-thread_info.h
-> index b5ed788f0c68..9bc7a037c476 100644
-> --- a/arch/csky/include/asm/thread_info.h
-> +++ b/arch/csky/include/asm/thread_info.h
-> @@ -61,6 +61,7 @@ static inline struct thread_info *current_thread_info(v=
-oid)
->  #define TIF_SYSCALL_TRACEPOINT 5       /* syscall tracepoint instrumenta=
-tion */
->  #define TIF_SYSCALL_AUDIT      6       /* syscall auditing */
->  #define TIF_NOTIFY_SIGNAL      7       /* signal notifications exist */
-> +#define TIF_NOTIFY_IPI         8       /* Pending IPI on TIF_POLLLING id=
-le CPU */
->  #define TIF_POLLING_NRFLAG     16      /* poll_idle() is TIF_NEED_RESCHE=
-D */
->  #define TIF_MEMDIE             18      /* is terminating due to OOM kill=
-er */
->  #define TIF_RESTORE_SIGMASK    20      /* restore signal mask in do_sign=
-al() */
-> @@ -73,6 +74,7 @@ static inline struct thread_info *current_thread_info(v=
-oid)
->  #define _TIF_SYSCALL_TRACEPOINT        (1 << TIF_SYSCALL_TRACEPOINT)
->  #define _TIF_SYSCALL_AUDIT     (1 << TIF_SYSCALL_AUDIT)
->  #define _TIF_NOTIFY_SIGNAL     (1 << TIF_NOTIFY_SIGNAL)
-> +#define _TIF_NOTIFY_IPI                (1 << TIF_NOTIFY_IPI)
-Acked-by: Guo Ren <guoren@kernel.org>
-
->  #define _TIF_UPROBE            (1 << TIF_UPROBE)
->  #define _TIF_POLLING_NRFLAG    (1 << TIF_POLLING_NRFLAG)
->  #define _TIF_MEMDIE            (1 << TIF_MEMDIE)
-> --
-> 2.34.1
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 0935f9d4bb7b..cfe8d3350819 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -6343,19 +6344,12 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+>   * Constants for the sched_mode argument of __schedule().
+>   *
+>   * The mode argument allows RT enabled kernels to differentiate a
+> - * preemption from blocking on an 'sleeping' spin/rwlock. Note that
+> - * SM_MASK_PREEMPT for !RT has all bits set, which allows the compiler to
+> - * optimize the AND operation out and just check for zero.
+> + * preemption from blocking on an 'sleeping' spin/rwlock.
+>   */
+> -#define SM_NONE                        0x0
+> -#define SM_PREEMPT             0x1
+> -#define SM_RTLOCK_WAIT         0x2
+> -
+> -#ifndef CONFIG_PREEMPT_RT
+> -# define SM_MASK_PREEMPT       (~0U)
+> -#else
+> -# define SM_MASK_PREEMPT       SM_PREEMPT
+> -#endif
+> +#define SM_IDLE                        (-1)
+> +#define SM_NONE                        0
+> +#define SM_PREEMPT             1
+> +#define SM_RTLOCK_WAIT         2
 >
-
-
---=20
-Best Regards
- Guo Ren
+>  /*
+>   * __schedule() is the main scheduler function.
+> @@ -6396,11 +6390,12 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
+>   *
+>   * WARNING: must be called with preemption disabled!
+>   */
+> -static void __sched notrace __schedule(unsigned int sched_mode)
+> +static void __sched notrace __schedule(int sched_mode)
+>  {
+>         struct task_struct *prev, *next;
+>         unsigned long *switch_count;
+>         unsigned long prev_state;
+> +       bool preempt = sched_mode > 0;
+>         struct rq_flags rf;
+>         struct rq *rq;
+>         int cpu;
+> @@ -6409,13 +6404,13 @@ static void __sched notrace __schedule(unsigned int sched_mode)
+>         rq = cpu_rq(cpu);
+>         prev = rq->curr;
+>
+> -       schedule_debug(prev, !!sched_mode);
+> +       schedule_debug(prev, preempt);
+>
+>         if (sched_feat(HRTICK) || sched_feat(HRTICK_DL))
+>                 hrtick_clear(rq);
+>
+>         local_irq_disable();
+> -       rcu_note_context_switch(!!sched_mode);
+> +       rcu_note_context_switch(preempt);
+>
+>         /*
+>          * Make sure that signal_pending_state()->signal_pending() below
+> @@ -6449,7 +6444,12 @@ static void __sched notrace __schedule(unsigned int sched_mode)
+>          * that we form a control dependency vs deactivate_task() below.
+>          */
+>         prev_state = READ_ONCE(prev->__state);
+> -       if (!(sched_mode & SM_MASK_PREEMPT) && prev_state) {
+> +       if (sched_mode == SM_IDLE) {
+> +               if (!rq->nr_running) {
+> +                       next = prev;
+> +                       goto picked;
+> +               }
+> +       } else if (!preempt && prev_state) {
+>                 if (signal_pending_state(prev_state, prev)) {
+>                         WRITE_ONCE(prev->__state, TASK_RUNNING);
+>                 } else {
+> @@ -6483,6 +6483,7 @@ static void __sched notrace __schedule(unsigned int sched_mode)
+>         }
+>
+>         next = pick_next_task(rq, prev, &rf);
+> +picked:
+>         clear_tsk_need_resched(prev);
+>         clear_preempt_need_resched();
+>  #ifdef CONFIG_SCHED_DEBUG
+> @@ -6521,9 +6522,9 @@ static void __sched notrace __schedule(unsigned int sched_mode)
+>                 ++*switch_count;
+>
+>                 migrate_disable_switch(rq, prev);
+>                 psi_sched_switch(prev, next, !task_on_rq_queued(prev));
+>
+> -               trace_sched_switch(sched_mode & SM_MASK_PREEMPT, prev, next, prev_state);
+> +               trace_sched_switch(preempt, prev, next, prev_state);
+>
+>                 /* Also unlocks the rq: */
+>                 rq = context_switch(rq, prev, next, &rf);
+> @@ -6599,7 +6601,7 @@ static void sched_update_worker(struct task_struct *tsk)
+>         }
+>  }
+>
+> -static __always_inline void __schedule_loop(unsigned int sched_mode)
+> +static __always_inline void __schedule_loop(int sched_mode)
+>  {
+>         do {
+>                 preempt_disable();
+> @@ -6644,7 +6646,7 @@ void __sched schedule_idle(void)
+>          */
+>         WARN_ON_ONCE(current->__state);
+>         do {
+> -               __schedule(SM_NONE);
+> +               __schedule(SM_IDLE);
+>         } while (need_resched());
+>  }
+>
 
