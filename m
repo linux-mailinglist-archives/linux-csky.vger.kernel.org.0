@@ -1,175 +1,127 @@
-Return-Path: <linux-csky+bounces-607-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-608-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46198912E50
-	for <lists+linux-csky@lfdr.de>; Fri, 21 Jun 2024 22:12:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 973C2913CCE
+	for <lists+linux-csky@lfdr.de>; Sun, 23 Jun 2024 18:43:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A93FEB24F44
-	for <lists+linux-csky@lfdr.de>; Fri, 21 Jun 2024 20:12:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCDB61C21522
+	for <lists+linux-csky@lfdr.de>; Sun, 23 Jun 2024 16:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A30917B435;
-	Fri, 21 Jun 2024 20:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48E2D183066;
+	Sun, 23 Jun 2024 16:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJ3BBpuL"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from brightrain.aerifal.cx (brightrain.aerifal.cx [104.156.224.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08684160884
-	for <linux-csky@vger.kernel.org>; Fri, 21 Jun 2024 20:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.156.224.86
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4F427453;
+	Sun, 23 Jun 2024 16:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719000737; cv=none; b=bGo20aVxbbcEzPTBNILtgD/2D898wydmSTLUIR9cfwT3BZ0jvSRFUDNd1Beh7mwdZ8di74ABIU5FeNdSIFKaP7JFWqve/9AIycnqPT/c1KNlaq7OA/HecNE+9YzdC5I55yFdyPixQ8Sx7Gwxv7Sf0AH5Mlfx9Jbu7VmXd6NEoAI=
+	t=1719161016; cv=none; b=jFMeTDv5WGapNxDA4IDoBregLVyMSiOjZmTERxxPCpCJ5MtIVc8K26SvDnmK7I9eJjC28E9EbgNQO96CBSc2Qh5cyDyrsPogyy4sqFRUSWJUM3OPxXry7iTcZiX86YrFWCnuoR4Vr2npV5z5Cb4w+ex6+7gT3vNskp+F2CHww6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719000737; c=relaxed/simple;
-	bh=vhcmxHuEfXQE4obMPoKgf5UPHRF9VVw2LNmHi4WI0f8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o+mcpJO6EWGbRCWUtV1cYJUHtsxPxdOGx1scHnhoRwPH8mPjATHpJGifxExxM9Wvra9cetElqijsiarf6R9uVIw06uIMx7g1F9SIUeuoPL1tsv07LrRBIa1khkjdjZoq84GqjTL+NtonrNiPVjBQa9vbqMt5tdn1vXRRWFU3jAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org; spf=pass smtp.mailfrom=aerifal.cx; arc=none smtp.client-ip=104.156.224.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libc.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aerifal.cx
-Date: Fri, 21 Jun 2024 15:57:23 -0400
-From: Rich Felker <dalias@libc.org>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org, Helge Deller <deller@gmx.de>,
-	linux-parisc@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-	linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
-	linux-hexagon@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-	linux-csky@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	linux-fsdevel@vger.kernel.org, libc-alpha@sourceware.org,
-	musl@lists.openwall.com, ltp@lists.linux.it, stable@vger.kernel.org
-Subject: Re: [musl] Re: [PATCH 09/15] sh: rework sync_file_range ABI
-Message-ID: <20240621195723.GB10433@brightrain.aerifal.cx>
-References: <20240620162316.3674955-1-arnd@kernel.org>
- <20240620162316.3674955-10-arnd@kernel.org>
- <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
+	s=arc-20240116; t=1719161016; c=relaxed/simple;
+	bh=ntGbqQqM/+qtXCnzfR8Q9obaGlgLQHB3JfTRiNnDXWE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uY/CVDbjNrHrimECKDHRUFFHtx/OKS8LcjgzTLHnaCqZptMH7+pzKoXCgWZtQRrhYOZhBxJGNvKrixawhBGmwkWsBlcp/S7WBNki61mWvi5AddLDvJ+tmVAoM8KDaNkNJ1AKIVqHzA6MfUyhXUAC9UIlqywB6OkM3uzD0BJGB4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJ3BBpuL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A3EC32781;
+	Sun, 23 Jun 2024 16:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719161015;
+	bh=ntGbqQqM/+qtXCnzfR8Q9obaGlgLQHB3JfTRiNnDXWE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=aJ3BBpuLN//E3rEkuNOzmwk+vfzm8WbSWgxlwzjQsFieO+BNIwOL5JQoF6NEzJyZm
+	 VfgFcodnPOZhP7XqM8voCJGFt5NuE295vgMzs0RcfanB7DVcc17YvCSn6SoYzK5fdT
+	 XBxov4KJlypAR11spLzipT63pe9l13UqNBwEY+K8fqipZD5U97mr9YoBb/UVKxNOvB
+	 tq2OJhxCb1QsvexHxVfuu2HHfv883UBS1B4SG96rOE4vheBKVAj2xEScQYKL0uoR+c
+	 UZfgo0a3ZI8os2jt9lCEogOOXEH1+sCQY2C5YVlEKTNTWGAdjVmB7XhTYG8ZSBkt7/
+	 fXSNPzP+ALw2g==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-57cd26347d3so3691775a12.1;
+        Sun, 23 Jun 2024 09:43:35 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX6Ww7KKPOFNfVJbaDvoCG4RhIS22g2z4TeBBFYfCQKaWEN7tFZCr+fvpPuTpxV67ZFaJs/QQz6XJqkr2ZcAjWlgOsJeyfMW5b4BJi8aM0q6LLCn768EFltm6YTQOn4rJ5MdJwFBl4WXQ==
+X-Gm-Message-State: AOJu0YzxmointwW8ZmnNxo/7Dh0xi87MUcVsOTOp/Mbhw25CvfUOGPye
+	Jjh3F3pmF4hgQ1SANNCHfXVqSV0elFyOEX83h671lHbNh9WqZne2iqzp8/ad/VN7J9EeClAh5s7
+	LVvM9X3U8B7YSIpC2yp5pfPeqkLs=
+X-Google-Smtp-Source: AGHT+IHnTMEtgbHt3R0Y3l+fIKdz6ft1LcaDn9E2vGPhEdYX65CkmoUTe7bp8E7J1WPN2qsgoV9cGeGTGI8kmVSzLbE=
+X-Received: by 2002:a50:d619:0:b0:57c:bd49:9969 with SMTP id
+ 4fb4d7f45d1cf-57d4bde2850mr1629042a12.39.1719161014181; Sun, 23 Jun 2024
+ 09:43:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <366548c1a0d9749e42c0d0c993414a353c9b0b02.camel@physik.fu-berlin.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20240619073140.48817-1-puranjay@kernel.org>
+In-Reply-To: <20240619073140.48817-1-puranjay@kernel.org>
+From: Guo Ren <guoren@kernel.org>
+Date: Mon, 24 Jun 2024 00:43:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRiHV0VmMd7uJHBDut5VeGbwXTr2c18wK-fH4_HZp_GUA@mail.gmail.com>
+Message-ID: <CAJF2gTRiHV0VmMd7uJHBDut5VeGbwXTr2c18wK-fH4_HZp_GUA@mail.gmail.com>
+Subject: Re: [PATCH] csky: stacktrace: fix usage of ftrace_graph_ret_addr()
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, linux-csky@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, puranjay12@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 21, 2024 at 10:44:39AM +0200, John Paul Adrian Glaubitz wrote:
-> Hi Arnd,
-> 
-> thanks for your patch!
-> 
-> On Thu, 2024-06-20 at 18:23 +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The unusual function calling conventions on superh ended up causing
->                                               ^^^^^^
->                                        It's spelled SuperH
-> 
-> > sync_file_range to have the wrong argument order, with the 'flags'
-> > argument getting sorted before 'nbytes' by the compiler.
-> > 
-> > In userspace, I found that musl, glibc, uclibc and strace all expect the
-> > normal calling conventions with 'nbytes' last, so changing the kernel
-> > to match them should make all of those work.
-> > 
-> > In order to be able to also fix libc implementations to work with existing
-> > kernels, they need to be able to tell which ABI is used. An easy way
-> > to do this is to add yet another system call using the sync_file_range2
-> > ABI that works the same on all architectures.
-> > 
-> > Old user binaries can now work on new kernels, and new binaries can
-> > try the new sync_file_range2() to work with new kernels or fall back
-> > to the old sync_file_range() version if that doesn't exist.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: 75c92acdd5b1 ("sh: Wire up new syscalls.")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  arch/sh/kernel/sys_sh32.c           | 11 +++++++++++
-> >  arch/sh/kernel/syscalls/syscall.tbl |  3 ++-
-> >  2 files changed, 13 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/sh/kernel/sys_sh32.c b/arch/sh/kernel/sys_sh32.c
-> > index 9dca568509a5..d5a4f7c697d8 100644
-> > --- a/arch/sh/kernel/sys_sh32.c
-> > +++ b/arch/sh/kernel/sys_sh32.c
-> > @@ -59,3 +59,14 @@ asmlinkage int sys_fadvise64_64_wrapper(int fd, u32 offset0, u32 offset1,
-> >  				 (u64)len0 << 32 | len1, advice);
-> >  #endif
-> >  }
-> > +
-> > +/*
-> > + * swap the arguments the way that libc wants it instead of
-> 
-> I think "swap the arguments to the order that libc wants them" would
-> be easier to understand here.
-> 
-> > + * moving flags ahead of the 64-bit nbytes argument
-> > + */
-> > +SYSCALL_DEFINE6(sh_sync_file_range6, int, fd, SC_ARG64(offset),
-> > +                SC_ARG64(nbytes), unsigned int, flags)
-> > +{
-> > +        return ksys_sync_file_range(fd, SC_VAL64(loff_t, offset),
-> > +                                    SC_VAL64(loff_t, nbytes), flags);
-> > +}
-> > diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-> > index bbf83a2db986..c55fd7696d40 100644
-> > --- a/arch/sh/kernel/syscalls/syscall.tbl
-> > +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> > @@ -321,7 +321,7 @@
-> >  311	common	set_robust_list			sys_set_robust_list
-> >  312	common	get_robust_list			sys_get_robust_list
-> >  313	common	splice				sys_splice
-> > -314	common	sync_file_range			sys_sync_file_range
-> > +314	common	sync_file_range			sys_sh_sync_file_range6
->                                                                  ^^^^^^ Why the suffix 6 here?
-> 
-> >  315	common	tee				sys_tee
-> >  316	common	vmsplice			sys_vmsplice
-> >  317	common	move_pages			sys_move_pages
-> > @@ -395,6 +395,7 @@
-> >  385	common	pkey_alloc			sys_pkey_alloc
-> >  386	common	pkey_free			sys_pkey_free
-> >  387	common	rseq				sys_rseq
-> > +388	common	sync_file_range2		sys_sync_file_range2
-> >  # room for arch specific syscalls
-> >  393	common	semget				sys_semget
-> >  394	common	semctl				sys_semctl
-> 
-> I wonder how you discovered this bug. Did you look up the calling convention on SuperH
-> and compare the argument order for the sys_sync_file_range system call documented there
-> with the order in the kernel?
-> 
-> Did you also check what order libc uses? I would expect libc on SuperH misordering the
-> arguments as well unless I am missing something. Or do we know that the code is actually
-> currently broken?
+On Wed, Jun 19, 2024 at 3:31=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
+>
+> ftrace_graph_ret_addr() now returns the passed in return address when NUL=
+L
+> is passed for the 'idx' paramenter. This breaks the current usage in csky=
+'s
+> walk_stackframe()
+>
+> Fix this by passing a valid integer pointer to ftrace_graph_ret_addr()
+>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+LGTM, Thx!
 
-No, there's no reason libc would misorder them because syscalls aren't
-function calls, and aren't subject to function call ABI. We have to
-explicitly bind the arguments to registers and make a syscall
-instruction.
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-The only reason this bug happened on the kernel side is that someone
-thought it would be a smart idea to save maybe 10 instructions by
-treating the register state on entry as directly suitable to jump from
-asm to a C function rather than explicitly marshalling the arguments
-out of the user-kernel syscall ABI positions into actual arguments to
-a C function call.
+> ---
+>  arch/csky/kernel/stacktrace.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/csky/kernel/stacktrace.c b/arch/csky/kernel/stacktrace.=
+c
+> index 27ecd63e321b..1d72f18064c2 100644
+> --- a/arch/csky/kernel/stacktrace.c
+> +++ b/arch/csky/kernel/stacktrace.c
+> @@ -17,6 +17,7 @@ void notrace walk_stackframe(struct task_struct *task, =
+struct pt_regs *regs,
+>                              bool (*fn)(unsigned long, void *), void *arg=
+)
+>  {
+>         unsigned long fp, sp, pc;
+> +       int graph_idx =3D 0;
+>
+>         if (regs) {
+>                 fp =3D frame_pointer(regs);
+> @@ -50,7 +51,7 @@ void notrace walk_stackframe(struct task_struct *task, =
+struct pt_regs *regs,
+>                 frame =3D (struct stackframe *)fp;
+>                 sp =3D fp;
+>                 fp =3D frame->fp;
+> -               pc =3D ftrace_graph_ret_addr(current, NULL, frame->ra,
+> +               pc =3D ftrace_graph_ret_addr(current, &graph_idx, frame->=
+ra,
+>                                            (unsigned long *)(fp - 8));
+>         }
+>  }
+> --
+> 2.40.1
+>
 
-Rich
+
+--=20
+Best Regards
+ Guo Ren
 
