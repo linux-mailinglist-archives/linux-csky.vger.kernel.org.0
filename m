@@ -1,123 +1,141 @@
-Return-Path: <linux-csky+bounces-608-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-609-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 973C2913CCE
-	for <lists+linux-csky@lfdr.de>; Sun, 23 Jun 2024 18:43:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F083D913CFF
+	for <lists+linux-csky@lfdr.de>; Sun, 23 Jun 2024 19:10:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCDB61C21522
-	for <lists+linux-csky@lfdr.de>; Sun, 23 Jun 2024 16:43:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F5861C21E81
+	for <lists+linux-csky@lfdr.de>; Sun, 23 Jun 2024 17:10:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48E2D183066;
-	Sun, 23 Jun 2024 16:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1441183089;
+	Sun, 23 Jun 2024 17:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJ3BBpuL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SHcWkbRT"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4F427453;
-	Sun, 23 Jun 2024 16:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9549F183082;
+	Sun, 23 Jun 2024 17:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719161016; cv=none; b=jFMeTDv5WGapNxDA4IDoBregLVyMSiOjZmTERxxPCpCJ5MtIVc8K26SvDnmK7I9eJjC28E9EbgNQO96CBSc2Qh5cyDyrsPogyy4sqFRUSWJUM3OPxXry7iTcZiX86YrFWCnuoR4Vr2npV5z5Cb4w+ex6+7gT3vNskp+F2CHww6g=
+	t=1719162640; cv=none; b=KJZQqP/BhlVu6ZhCAgMZdmQuoDwd2SfyD2NwEDwfyGqJbOIoFEH3iZ40SRa8XDlTWKX1p0FFYVZhImbiX9lfwoQHQrwbHLEgo5CLP/LOHO/QUddYNWoi/9/AgYVWcCEypQ/jC1ob/bdm4sDKft/OxTrQxp60vols2R3TlWmKBVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719161016; c=relaxed/simple;
-	bh=ntGbqQqM/+qtXCnzfR8Q9obaGlgLQHB3JfTRiNnDXWE=;
+	s=arc-20240116; t=1719162640; c=relaxed/simple;
+	bh=aosSO/S+etUamgM4SS3mlQ3heoMUr6FZbeXpiXEovy0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uY/CVDbjNrHrimECKDHRUFFHtx/OKS8LcjgzTLHnaCqZptMH7+pzKoXCgWZtQRrhYOZhBxJGNvKrixawhBGmwkWsBlcp/S7WBNki61mWvi5AddLDvJ+tmVAoM8KDaNkNJ1AKIVqHzA6MfUyhXUAC9UIlqywB6OkM3uzD0BJGB4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJ3BBpuL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A3EC32781;
-	Sun, 23 Jun 2024 16:43:35 +0000 (UTC)
+	 To:Cc:Content-Type; b=OtiE5Nt0nFcnQljGlPPSqKqqVt9Ta7s/HUCXkDn/V4bo76YLtVeH6GBdyEVZJqf7Z1z+LNIJhaDnH4Do1ogb1FPxyQ0BjymFDIYH7Sb0oKfTNnGO8Tf5dwGG+I57rGIXar6MKGvALPUhXBRLlaDGp8bc+5gU+L9J+U8pc0kBr2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SHcWkbRT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1215EC4AF19;
+	Sun, 23 Jun 2024 17:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719161015;
-	bh=ntGbqQqM/+qtXCnzfR8Q9obaGlgLQHB3JfTRiNnDXWE=;
+	s=k20201202; t=1719162640;
+	bh=aosSO/S+etUamgM4SS3mlQ3heoMUr6FZbeXpiXEovy0=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aJ3BBpuLN//E3rEkuNOzmwk+vfzm8WbSWgxlwzjQsFieO+BNIwOL5JQoF6NEzJyZm
-	 VfgFcodnPOZhP7XqM8voCJGFt5NuE295vgMzs0RcfanB7DVcc17YvCSn6SoYzK5fdT
-	 XBxov4KJlypAR11spLzipT63pe9l13UqNBwEY+K8fqipZD5U97mr9YoBb/UVKxNOvB
-	 tq2OJhxCb1QsvexHxVfuu2HHfv883UBS1B4SG96rOE4vheBKVAj2xEScQYKL0uoR+c
-	 UZfgo0a3ZI8os2jt9lCEogOOXEH1+sCQY2C5YVlEKTNTWGAdjVmB7XhTYG8ZSBkt7/
-	 fXSNPzP+ALw2g==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-57cd26347d3so3691775a12.1;
-        Sun, 23 Jun 2024 09:43:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX6Ww7KKPOFNfVJbaDvoCG4RhIS22g2z4TeBBFYfCQKaWEN7tFZCr+fvpPuTpxV67ZFaJs/QQz6XJqkr2ZcAjWlgOsJeyfMW5b4BJi8aM0q6LLCn768EFltm6YTQOn4rJ5MdJwFBl4WXQ==
-X-Gm-Message-State: AOJu0YzxmointwW8ZmnNxo/7Dh0xi87MUcVsOTOp/Mbhw25CvfUOGPye
-	Jjh3F3pmF4hgQ1SANNCHfXVqSV0elFyOEX83h671lHbNh9WqZne2iqzp8/ad/VN7J9EeClAh5s7
-	LVvM9X3U8B7YSIpC2yp5pfPeqkLs=
-X-Google-Smtp-Source: AGHT+IHnTMEtgbHt3R0Y3l+fIKdz6ft1LcaDn9E2vGPhEdYX65CkmoUTe7bp8E7J1WPN2qsgoV9cGeGTGI8kmVSzLbE=
-X-Received: by 2002:a50:d619:0:b0:57c:bd49:9969 with SMTP id
- 4fb4d7f45d1cf-57d4bde2850mr1629042a12.39.1719161014181; Sun, 23 Jun 2024
- 09:43:34 -0700 (PDT)
+	b=SHcWkbRTRysffowmKeNtbvp9bhDl+zoDvjEJ2fFDHg7LSDrwqFsJdD9YYXV4Vr+sp
+	 2E8pAnecGBkfcW3fYWlLjSsfPlPKcXnQ8nJbcMvEmYSYZS0YcgH+rt/qDOrTB8Gvu+
+	 agZuIo6AmTpr2D4xK4pBnUswovpS9ueZT7VqTzkz0VoNehsJKjKIbT7Hxbmzrk7px2
+	 nKkeeohgJbLaTj1UD/4bc2iBlfTD7iIkm5ON/CNdK03bV+FGcWIvguDXvdHM+5cgLf
+	 OB8EHfsL2MFz6vrCmyH5CregCIOmWkoz7MbvmFg/cF39yMwxMHUAlyiXqW1imSaGS0
+	 Nv1EJ4Jnnv/6A==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2eaafda3b5cso38463451fa.3;
+        Sun, 23 Jun 2024 10:10:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUABcrWO+546WA1uq/7iZtUfrtI/F8b3SCqjuQoTkdlv00T6gIbcBPtNW860k9lZCksUyptHLTKTPx5Ry9PlTGpYgXaz8Q6Pc8d4ViFGEGXd00NSe5SY080a7But/HVjU/K/XbEm4TcqPYSyFraOEjoGPQnCETFMgAS8syfAd1KuhZHOKsCiFbYygqoLXuKzE0YDjH0BIZok7JLuYRNtKYh1cDqEbYIg0zMOffnXEuL8oCsRUB5E9Aoo2HxJXIHkOHykqq+OmC0s6JxPGesMrTN0oAr467I+B4OJgef7fy8pVehj7mUnWwR71Jgmti7yYhFuLBR83jIcWn74u8BqTaD9Qr7CrC/Q+W7WixgrxRhm5Oym2OJ533GrvLiArZ7iNUNPgi8XL/4e/YCewaZ1V2EWkcIdpt+F9D7lLyZ6/aZYhBr5cMOLgMJ5d0=
+X-Gm-Message-State: AOJu0YwlgS3fibMxZXsahhE6nqg8Txd2oqTFnvZr/y0iSDTRuMZIOiFl
+	AzkjI2K/klNnQ5tYVDglow4ULt7DWn7CPfw2aHP8VAbsQZFzWYqAIK/Jh76DQE+I6ik18Zmwi9B
+	sWDR9R06h9ucP+I2mFYh3Nt8ApuI=
+X-Google-Smtp-Source: AGHT+IHxMABTsjE/bTBoMOuJE1ctF+u0ZebsEtw1bh3nJ1bb3woGpWj5W/Pz1qQmYslYoKzzGRd0eu1pNlr+yN6Ofzo=
+X-Received: by 2002:a2e:3101:0:b0:2ec:1cf1:b74c with SMTP id
+ 38308e7fff4ca-2ec594cfe8fmr16740431fa.32.1719162638077; Sun, 23 Jun 2024
+ 10:10:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619073140.48817-1-puranjay@kernel.org>
-In-Reply-To: <20240619073140.48817-1-puranjay@kernel.org>
+References: <20240620162316.3674955-1-arnd@kernel.org> <20240620162316.3674955-11-arnd@kernel.org>
+In-Reply-To: <20240620162316.3674955-11-arnd@kernel.org>
 From: Guo Ren <guoren@kernel.org>
-Date: Mon, 24 Jun 2024 00:43:21 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRiHV0VmMd7uJHBDut5VeGbwXTr2c18wK-fH4_HZp_GUA@mail.gmail.com>
-Message-ID: <CAJF2gTRiHV0VmMd7uJHBDut5VeGbwXTr2c18wK-fH4_HZp_GUA@mail.gmail.com>
-Subject: Re: [PATCH] csky: stacktrace: fix usage of ftrace_graph_ret_addr()
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, linux-csky@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, puranjay12@gmail.com
+Date: Mon, 24 Jun 2024 01:10:25 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS9xKLSbSN2Scs016Boxzr6TdNxVLr2TYEfbJ0KqSgppw@mail.gmail.com>
+Message-ID: <CAJF2gTS9xKLSbSN2Scs016Boxzr6TdNxVLr2TYEfbJ0KqSgppw@mail.gmail.com>
+Subject: Re: [PATCH 10/15] csky, hexagon: fix broken sys_sync_file_range
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
+	Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, 
+	linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>, 
+	linux-hexagon@vger.kernel.org, linux-csky@vger.kernel.org, 
+	Heiko Carstens <hca@linux.ibm.com>, linux-s390@vger.kernel.org, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, linux-sh@vger.kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	libc-alpha@sourceware.org, musl@lists.openwall.com, ltp@lists.linux.it, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 19, 2024 at 3:31=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
-> wrote:
+On Fri, Jun 21, 2024 at 12:24=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
+ote:
 >
-> ftrace_graph_ret_addr() now returns the passed in return address when NUL=
-L
-> is passed for the 'idx' paramenter. This breaks the current usage in csky=
-'s
-> walk_stackframe()
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Fix this by passing a valid integer pointer to ftrace_graph_ret_addr()
+> Both of these architectures require u64 function arguments to be
+> passed in even/odd pairs of registers or stack slots, which in case of
+> sync_file_range would result in a seven-argument system call that is
+> not currently possible. The system call is therefore incompatible with
+> all existing binaries.
 >
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-LGTM, Thx!
-
-Reviewed-by: Guo Ren <guoren@kernel.org>
-
+> While it would be possible to implement support for seven arguments
+> like on mips, it seems better to use a six-argument version, either
+> with the normal argument order but misaligned as on most architectures
+> or with the reordered sync_file_range2() calling conventions as on
+> arm and powerpc.
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  arch/csky/kernel/stacktrace.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  arch/csky/include/uapi/asm/unistd.h    | 1 +
+>  arch/hexagon/include/uapi/asm/unistd.h | 1 +
+>  2 files changed, 2 insertions(+)
 >
-> diff --git a/arch/csky/kernel/stacktrace.c b/arch/csky/kernel/stacktrace.=
-c
-> index 27ecd63e321b..1d72f18064c2 100644
-> --- a/arch/csky/kernel/stacktrace.c
-> +++ b/arch/csky/kernel/stacktrace.c
-> @@ -17,6 +17,7 @@ void notrace walk_stackframe(struct task_struct *task, =
-struct pt_regs *regs,
->                              bool (*fn)(unsigned long, void *), void *arg=
-)
->  {
->         unsigned long fp, sp, pc;
-> +       int graph_idx =3D 0;
+> diff --git a/arch/csky/include/uapi/asm/unistd.h b/arch/csky/include/uapi=
+/asm/unistd.h
+> index 7ff6a2466af1..e0594b6370a6 100644
+> --- a/arch/csky/include/uapi/asm/unistd.h
+> +++ b/arch/csky/include/uapi/asm/unistd.h
+> @@ -6,6 +6,7 @@
+>  #define __ARCH_WANT_SYS_CLONE3
+>  #define __ARCH_WANT_SET_GET_RLIMIT
+>  #define __ARCH_WANT_TIME32_SYSCALLS
+> +#define __ARCH_WANT_SYNC_FILE_RANGE2
+For csky part.
+Acked-by: Guo Ren <guoren@kernel.org>
+
+>  #include <asm-generic/unistd.h>
 >
->         if (regs) {
->                 fp =3D frame_pointer(regs);
-> @@ -50,7 +51,7 @@ void notrace walk_stackframe(struct task_struct *task, =
-struct pt_regs *regs,
->                 frame =3D (struct stackframe *)fp;
->                 sp =3D fp;
->                 fp =3D frame->fp;
-> -               pc =3D ftrace_graph_ret_addr(current, NULL, frame->ra,
-> +               pc =3D ftrace_graph_ret_addr(current, &graph_idx, frame->=
-ra,
->                                            (unsigned long *)(fp - 8));
->         }
->  }
+>  #define __NR_set_thread_area   (__NR_arch_specific_syscall + 0)
+> diff --git a/arch/hexagon/include/uapi/asm/unistd.h b/arch/hexagon/includ=
+e/uapi/asm/unistd.h
+> index 432c4db1b623..21ae22306b5d 100644
+> --- a/arch/hexagon/include/uapi/asm/unistd.h
+> +++ b/arch/hexagon/include/uapi/asm/unistd.h
+> @@ -36,5 +36,6 @@
+>  #define __ARCH_WANT_SYS_VFORK
+>  #define __ARCH_WANT_SYS_FORK
+>  #define __ARCH_WANT_TIME32_SYSCALLS
+> +#define __ARCH_WANT_SYNC_FILE_RANGE2
+>
+>  #include <asm-generic/unistd.h>
 > --
-> 2.40.1
+> 2.39.2
 >
 
 
