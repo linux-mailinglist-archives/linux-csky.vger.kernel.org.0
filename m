@@ -1,175 +1,138 @@
-Return-Path: <linux-csky+bounces-627-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-628-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A6A9915EAE
-	for <lists+linux-csky@lfdr.de>; Tue, 25 Jun 2024 08:12:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA76D9167B3
+	for <lists+linux-csky@lfdr.de>; Tue, 25 Jun 2024 14:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A676283753
-	for <lists+linux-csky@lfdr.de>; Tue, 25 Jun 2024 06:12:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBDD11C25439
+	for <lists+linux-csky@lfdr.de>; Tue, 25 Jun 2024 12:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E16A145B2F;
-	Tue, 25 Jun 2024 06:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="kMKIkUXC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 274EE158A29;
+	Tue, 25 Jun 2024 12:24:15 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAEE1B806;
-	Tue, 25 Jun 2024 06:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A307B158A23;
+	Tue, 25 Jun 2024 12:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719295934; cv=none; b=oony8bf1leb2i0a+rNk6DQBSKtXGz5DNI6IYKC2ur6Z0/jWqci1KKN5JPWas++U85XX9rmVPepcek2j2AmnaHe8cN4yYTlriplgQJwJ8yat6h5Uul+K2Rb+kyl2n954h0/hzHOkvXqCxJGAfqD5TUzISTEMLygF8IyIFn00caSk=
+	t=1719318255; cv=none; b=mKOiYqug7vbTW5ETDRHhYg5+XGH+Q04OPwsnRatWBTdE7uyV2g5TqTL8HoAM5RWNXTPvuHW2s1RmUr+LQQ50dZPoHjjdMn7QDSVOPL8aXwjl9ii/TiwB/x1KBkMW+TIUPwgE/9Xc54K6bPgFtnCGSvhE+YfV7EPTAJBMknRnuyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719295934; c=relaxed/simple;
-	bh=A9l5QJ5wVUxN0j1TWgVqhhHFCdASWZMj33PGqLt6VA0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=b4nabD8O1g8vM98AvMhvOhz9h+88q3ljAqTLSNGcMKUVfZvwrT25sAMFwvZwokWMEEwu5NHB8R3oMFQUWmMg+4WqsLCLCEn3ELvLin/syKK1hX3DLGjwCByhaavGQqf0BCBl/tyofMvFe5XU4qFkW5Z2uOzpZxy5SDfGe8tRDLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=kMKIkUXC; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=QR3y2Y/czPDzz8uhrOTX+qZKGKnv9qtlOLRYnVuIPwY=; t=1719295930; x=1719900730; 
-	b=kMKIkUXCpW4k/lh4bfIHLQJ7yXaQaua42W5My0YpiNHiilmaG69pdb5IiE9StEvH36UYTlg2wfF
-	Tdb/CPgfLOpILqYOWYZS7k0EvxHiB4Yz6K+AIaa5OtXhE9YR5RjGJ4STuCmmYTd8HRVm+pACcRawL
-	EVS4LdZZkx88lnlVGO7hwGqOdh0gF+Kg22Ipn2MdidppsNRFw/yqNvlnXtamDkZEYlONN/1b8Vl0s
-	oPBAMYWW7go097qgb9r16qmHKOvCsm2PLjS56KL1M/z+bU8T/eKUNkYZNAKl9ItLFseIrud1TmZ9t
-	Ci3ZLg7RBgLYlLuJny8/YueTY14197NeyvAA==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.97)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1sLzPJ-00000002pcY-2WGY; Tue, 25 Jun 2024 08:11:58 +0200
-Received: from p5b13a475.dip0.t-ipconnect.de ([91.19.164.117] helo=[192.168.178.20])
-          by inpost2.zedat.fu-berlin.de (Exim 4.97)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1sLzPJ-00000001jTk-3HF5; Tue, 25 Jun 2024 08:11:57 +0200
-Message-ID: <b7e20a2dbf5bad8cae0227644b2f78531dd6ef5a.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v2 08/13] sh: rework sync_file_range ABI
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, Helge Deller
- <deller@gmx.de>, linux-parisc@vger.kernel.org, "David S. Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
- sparclinux@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, Nicholas
- Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
- linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
- linux-hexagon@vger.kernel.org, Guo Ren <guoren@kernel.org>, 
- linux-csky@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>, 
- linux-s390@vger.kernel.org, Rich Felker <dalias@libc.org>, 
- linux-sh@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
- linux-fsdevel@vger.kernel.org, libc-alpha@sourceware.org, 
- musl@lists.openwall.com, stable@vger.kernel.org
-Date: Tue, 25 Jun 2024 08:11:56 +0200
-In-Reply-To: <20240624163707.299494-9-arnd@kernel.org>
-References: <20240624163707.299494-1-arnd@kernel.org>
-	 <20240624163707.299494-9-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	s=arc-20240116; t=1719318255; c=relaxed/simple;
+	bh=xWkRfjXbcQV976odVJL6jnfAgd/Ex17HQpOdk8g38nQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LhAv6+IWGHvJfyOzEvFBC2QWqK0wJukAfzbH3Wb4rzLh4tNm007cqWSgw67HjpHuoJbFGFMWFtnsgeTOQEEkeK9M3587koEDrnewdqXOorciD0fgbA7R5D2mMOeQi7LbUisZV8GVIidYpUylVqIDXJqhOAPncoU86Yinkn+ZA/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7923C339;
+	Tue, 25 Jun 2024 05:24:36 -0700 (PDT)
+Received: from [192.168.1.100] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6CD783F766;
+	Tue, 25 Jun 2024 05:24:05 -0700 (PDT)
+Message-ID: <1fdf637d-3571-4145-8008-f2b5f8fc8bca@arm.com>
+Date: Tue, 25 Jun 2024 13:24:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 7/8] perf python: Switch module to linking libraries
+ from building source
+To: Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+ Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>,
+ Will Deacon <will@kernel.org>, Mike Leach <mike.leach@linaro.org>,
+ Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Yicong Yang <yangyicong@hisilicon.com>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
+ <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
+ <aliceryhl@google.com>, Nick Terrell <terrelln@fb.com>,
+ Ravi Bangoria <ravi.bangoria@amd.com>, Kees Cook <keescook@chromium.org>,
+ Andrei Vagin <avagin@google.com>, Athira Jajeev
+ <atrajeev@linux.vnet.ibm.com>, Oliver Upton <oliver.upton@linux.dev>,
+ Ze Gao <zegao2021@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org,
+ coresight@lists.linaro.org, rust-for-linux@vger.kernel.org,
+ bpf@vger.kernel.org
+References: <20240613233122.3564730-1-irogers@google.com>
+ <20240613233122.3564730-8-irogers@google.com> <Znnyi2IPC79jMd9y@google.com>
+Content-Language: en-US
+From: James Clark <james.clark@arm.com>
+In-Reply-To: <Znnyi2IPC79jMd9y@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2024-06-24 at 18:37 +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The unusual function calling conventions on SuperH ended up causing
-> sync_file_range to have the wrong argument order, with the 'flags'
-> argument getting sorted before 'nbytes' by the compiler.
->=20
-> In userspace, I found that musl, glibc, uclibc and strace all expect the
-> normal calling conventions with 'nbytes' last, so changing the kernel
-> to match them should make all of those work.
->=20
-> In order to be able to also fix libc implementations to work with existin=
-g
-> kernels, they need to be able to tell which ABI is used. An easy way
-> to do this is to add yet another system call using the sync_file_range2
-> ABI that works the same on all architectures.
->=20
-> Old user binaries can now work on new kernels, and new binaries can
-> try the new sync_file_range2() to work with new kernels or fall back
-> to the old sync_file_range() version if that doesn't exist.
->=20
-> Cc: stable@vger.kernel.org
-> Fixes: 75c92acdd5b1 ("sh: Wire up new syscalls.")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/sh/kernel/sys_sh32.c           | 11 +++++++++++
->  arch/sh/kernel/syscalls/syscall.tbl |  3 ++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/sh/kernel/sys_sh32.c b/arch/sh/kernel/sys_sh32.c
-> index 9dca568509a5..d6f4afcb0e87 100644
-> --- a/arch/sh/kernel/sys_sh32.c
-> +++ b/arch/sh/kernel/sys_sh32.c
-> @@ -59,3 +59,14 @@ asmlinkage int sys_fadvise64_64_wrapper(int fd, u32 of=
-fset0, u32 offset1,
->  				 (u64)len0 << 32 | len1, advice);
->  #endif
->  }
-> +
-> +/*
-> + * swap the arguments the way that libc wants them instead of
-> + * moving flags ahead of the 64-bit nbytes argument
-> + */
-> +SYSCALL_DEFINE6(sh_sync_file_range6, int, fd, SC_ARG64(offset),
-> +                SC_ARG64(nbytes), unsigned int, flags)
-> +{
-> +        return ksys_sync_file_range(fd, SC_VAL64(loff_t, offset),
-> +                                    SC_VAL64(loff_t, nbytes), flags);
-> +}
-> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscall=
-s/syscall.tbl
-> index bbf83a2db986..c55fd7696d40 100644
-> --- a/arch/sh/kernel/syscalls/syscall.tbl
-> +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> @@ -321,7 +321,7 @@
->  311	common	set_robust_list			sys_set_robust_list
->  312	common	get_robust_list			sys_get_robust_list
->  313	common	splice				sys_splice
-> -314	common	sync_file_range			sys_sync_file_range
-> +314	common	sync_file_range			sys_sh_sync_file_range6
->  315	common	tee				sys_tee
->  316	common	vmsplice			sys_vmsplice
->  317	common	move_pages			sys_move_pages
-> @@ -395,6 +395,7 @@
->  385	common	pkey_alloc			sys_pkey_alloc
->  386	common	pkey_free			sys_pkey_free
->  387	common	rseq				sys_rseq
-> +388	common	sync_file_range2		sys_sync_file_range2
->  # room for arch specific syscalls
->  393	common	semget				sys_semget
->  394	common	semctl				sys_semctl
 
-Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
-Adrian
+On 24/06/2024 23:26, Namhyung Kim wrote:
+> On Thu, Jun 13, 2024 at 04:31:21PM -0700, Ian Rogers wrote:
+>> setup.py was building most perf sources causing setup.py to mimic the
+>> Makefile logic as well as flex/bison code to be stubbed out, due to
+>> complexity building. By using libraries fewer functions are stubbed
+>> out, the build is faster and the Makefile logic is reused which should
+>> simplify updating. The libraries are passed through LDFLAGS to avoid
+>> complexity in python.
+>>
+>> Force the -fPIC flag for libbpf.a to ensure it is suitable for linking
+>> into the perf python module.
+>>
+>> Signed-off-by: Ian Rogers <irogers@google.com>
+>> Reviewed-by: James Clark <james.clark@arm.com>
+>> ---
+>>  tools/perf/Makefile.config |   5 +
+>>  tools/perf/Makefile.perf   |   6 +-
+>>  tools/perf/util/python.c   | 271 ++++++++++++++-----------------------
+>>  tools/perf/util/setup.py   |  33 +----
+>>  4 files changed, 110 insertions(+), 205 deletions(-)
+>>
+>> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+>> index 7f1e016a9253..639be696f597 100644
+>> --- a/tools/perf/Makefile.config
+>> +++ b/tools/perf/Makefile.config
+>> @@ -910,6 +910,11 @@ else
+>>           endif
+>>           CFLAGS += -DHAVE_LIBPYTHON_SUPPORT
+>>           $(call detected,CONFIG_LIBPYTHON)
+>> +	 ifeq ($(filter -fPIC,$(CFLAGS)),)
+> 
+> Nitpick: mixed TAB and SPACEs.
+> 
+> 
+>> +           # Building a shared library requires position independent code.
+>> +           CFLAGS += -fPIC
+>> +           CXXFLAGS += -fPIC
+>> +         endif
+> 
+> 
+> I'm curious if it's ok for static libraries too..
+> 
+> Thanks,
+> Namhyung
+> 
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+I think I tested the whole set with a static build so it should be ok.
+
+> 
+>>        endif
+>>      endif
+>>    endif
 
