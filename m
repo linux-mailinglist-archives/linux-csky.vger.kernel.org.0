@@ -1,197 +1,180 @@
-Return-Path: <linux-csky+bounces-761-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-762-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13CAE9697AE
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Sep 2024 10:48:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E95A796A54B
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Sep 2024 19:18:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1656287206
-	for <lists+linux-csky@lfdr.de>; Tue,  3 Sep 2024 08:48:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2803A1C240F4
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Sep 2024 17:18:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E9F1C9868;
-	Tue,  3 Sep 2024 08:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eBaPbLcZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAA2B18DF62;
+	Tue,  3 Sep 2024 17:18:37 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835201C986B
-	for <linux-csky@vger.kernel.org>; Tue,  3 Sep 2024 08:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191E51420DD;
+	Tue,  3 Sep 2024 17:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725353078; cv=none; b=a9W8ATKqF3CmNq4gFJNMOp1SnCpEND75L2PDQrHjIlo0jR2+c4mPU9iJJQS8RpwTIcQNf6jLL9aD6V+7N3wiHNmkiYO+JBhZ1ZT1o2OdFk/BvWctVafVbQDL9yvgUWYns7cjyeHS5cgpD3jymChLiwfiU7Avykchy7VmKrGsLYI=
+	t=1725383917; cv=none; b=q85UdUcYglCvJ1EiQaBXdE4juMKTXCUABEZzVNrxs1J/sT5PsOrGLxX3GxF7LOryIvGHqzGTSosI3bax96v7zxrSzox+SoJu0mqGdHiAzPzW0fVL9LHUOUxHwd1m/evW8gxlJSXo0wddTMQ7iiTWKHwjzCtprqbkqF8CMnoIXKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725353078; c=relaxed/simple;
-	bh=FylgyOwq14Qsy2hkaZjp9Qg7WlZxSe0pWmI+6hs5XKY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=moiEkmC4dXVpULgOa7LMKEmTv/WMyOPdqzLXIZKdVMxhPFn9EQblpx7lsrgEIE+fkrI/ToNs53Br0i/O8Q6xdI9rbVD+ZHlkwe5KoqsIto8pfgD66oR9YiHoEYPgPKa2gas07JjMnXlF/JmnHph/zdzIfdWSAVK6xZdBvHh08Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eBaPbLcZ; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a86c476f679so582680466b.1
-        for <linux-csky@vger.kernel.org>; Tue, 03 Sep 2024 01:44:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725353074; x=1725957874; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DZlZAQzsLSUE2kbM2Ozq+ZCTE7DVngzemuZ7Ob/TXXo=;
-        b=eBaPbLcZj1QpjtCTxIlveYA9NjAMBat3LfV2VMZqRQEkxDggQlVltFrgdhlwojjtCz
-         LOdrUlbhopWw9KppBfUB8i0pdAZChfI9QG/Ct/MJ+hWhNkwWbSEZ0O4nwHVVTKVR6+Xk
-         dQqleV4X75UIT0UjMQQEh8WbLV/APCh8TZcpLo2ap+Z1tSKBOadFaZCXw0rS0tk0yOFx
-         aQmLFVcm2Zj8RkLZONc4LQVZk8fRnwBTXnYpWYKftfVcv/E9rGNlAn5gILtH1eTnH278
-         dAt3oPlozi/junFhSnm2zigmTiE9luwZBDjykGjFkWSTIdv7w8Mfx3JnEH9s34x3MChx
-         0PWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725353074; x=1725957874;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DZlZAQzsLSUE2kbM2Ozq+ZCTE7DVngzemuZ7Ob/TXXo=;
-        b=ieqrYGgabX+efUimLPC5dHrK0n3ODFNMzKxIOdn859064gfda0vrpgNTEJmOCr4mMQ
-         wxgFThJTsB949XHPutyiMrfUUIUDhedgnY9MUaQECoGXmtGJrYrAEG3ic4YhQVuqm0iV
-         LwxdEtjwWDR5CuM3rAmPF5WFCaJ3/rEVl1RCtEGYNDs1I6jWyHuOdFwsrGRDrV4z0aLX
-         i1fMKndhO1x6wd2IpzUGp9KoMzhB46L97DUWKsbdtAH/JrbO95puDss1ThefRmU6M+q4
-         HRVdbAs4CH5S+atKXFP9gU3cj8iMP9ZH3TZ8raLRdfdWcWJ8/0vldXRWgsua/3SFWxlH
-         ZWYg==
-X-Forwarded-Encrypted: i=1; AJvYcCXEVGUQjWyq1A9joQMAK4tzzA8ARMFzYb+OMeJ7yZmzgYbFcIKKw62ZqTT3Z0XJxN/40I5h7Nf3y6VR@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHV0bRTaIFfqAEoZz0xDZX6w/gfvTRWoRAA4HlQlDl7xABAjnN
-	Ix9e/G2SjzzCFqrnkhMh+dE7uoM3Y+TYKGShQbX/gQbHD+E7kn583txghLZ6Dqk=
-X-Google-Smtp-Source: AGHT+IHxwo9IPQ3UzoYFwfDhkPsGqhCSjCzcHlJOoBuRWzF1gLxd2R9P128YTojI0aYfG8i4cNsStA==
-X-Received: by 2002:a17:907:2cc3:b0:a86:9058:c01b with SMTP id a640c23a62f3a-a89b9729542mr798530966b.65.1725353073684;
-        Tue, 03 Sep 2024 01:44:33 -0700 (PDT)
-Received: from localhost ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8989221e15sm653868266b.193.2024.09.03.01.44.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 01:44:33 -0700 (PDT)
-Date: Tue, 3 Sep 2024 10:44:32 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-Message-ID: <ZtbMcN3vK-Ih1gpN@tiehlicka>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <ZtAxwJFH_hAh1BPG@tiehlicka>
- <ZtCw4vgonbJzV1xs@ghost>
+	s=arc-20240116; t=1725383917; c=relaxed/simple;
+	bh=rAT/16lEXiR/FQGCf8mH61WrxLJvKpfnUCw3JXbOKlk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aMYZvRwPzKbHvQjy+LnWLJRw7iHRHbfsE5FzHqr9nQsWPh1U6xRR1yoeeI/3q4uyx3Hua+1CdN5JNDqVSewh5TbiqTgXWzIAC4Ke4bK9goeW2rxnvPQOqpFw50ctPwt/5ER6bui/RRLjIGlStf2NoV4yn2enL9hmm63EBN1Qn4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Wyslp6shpz9sSC;
+	Tue,  3 Sep 2024 19:18:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id hEi4N-oS1BVW; Tue,  3 Sep 2024 19:18:30 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wysln4fbCz9sSH;
+	Tue,  3 Sep 2024 19:18:29 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7E91E8B779;
+	Tue,  3 Sep 2024 19:18:29 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id pxEcRzUEidZI; Tue,  3 Sep 2024 19:18:29 +0200 (CEST)
+Received: from [192.168.234.228] (unknown [192.168.234.228])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 3CEB98B774;
+	Tue,  3 Sep 2024 19:18:27 +0200 (CEST)
+Message-ID: <6b07c48d-656f-4e42-bfa7-0ecead72a7b8@csgroup.eu>
+Date: Tue, 3 Sep 2024 19:18:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZtCw4vgonbJzV1xs@ghost>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v2 2/4] mm: Add hint and mmap_flags to struct
+ vm_unmapped_area_info
+To: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+ <20240829-patches-below_hint_mmap-v2-2-638a28d9eae0@rivosinc.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240829-patches-below_hint_mmap-v2-2-638a28d9eae0@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu 29-08-24 10:33:22, Charlie Jenkins wrote:
-> On Thu, Aug 29, 2024 at 10:30:56AM +0200, Michal Hocko wrote:
-> > On Thu 29-08-24 00:15:57, Charlie Jenkins wrote:
-> > > Some applications rely on placing data in free bits addresses allocated
-> > > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> > > address returned by mmap to be less than the 48-bit address space,
-> > > unless the hint address uses more than 47 bits (the 48th bit is reserved
-> > > for the kernel address space).
-> > > 
-> > > The riscv architecture needs a way to similarly restrict the virtual
-> > > address space. On the riscv port of OpenJDK an error is thrown if
-> > > attempted to run on the 57-bit address space, called sv57 [1].  golang
-> > > has a comment that sv57 support is not complete, but there are some
-> > > workarounds to get it to mostly work [2].
-> > > 
-> > > These applications work on x86 because x86 does an implicit 47-bit
-> > > restriction of mmap() address that contain a hint address that is less
-> > > than 48 bits.
-> > > 
-> > > Instead of implicitly restricting the address space on riscv (or any
-> > > current/future architecture), a flag would allow users to opt-in to this
-> > > behavior rather than opt-out as is done on other architectures. This is
-> > > desirable because it is a small class of applications that do pointer
-> > > masking.
-> > 
-> > IIRC this has been discussed at length when 5-level page tables support
-> > has been proposed for x86. Sorry I do not have a link handy but lore
-> > should help you. Linus was not really convinced and in the end vetoed it
-> > and prefer that those few applications that benefit from greater address
-> > space would do that explicitly than other way around.
+Hi Charlie,
+
+Le 29/08/2024 à 09:15, Charlie Jenkins a écrit :
+> The hint address and mmap_flags are necessary to determine if
+> MAP_BELOW_HINT requirements are satisfied.
 > 
-> I believe I found the conversation you were referring to. Ingo Molnar
-> recommended a flag similar to what I have proposed [1]. Catalin
-> recommended to make 52-bit opt-in on arm64 [2]. Dave Hansen brought up
-> MPX [3].
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>   arch/alpha/kernel/osf_sys.c      | 2 ++
+>   arch/arc/mm/mmap.c               | 3 +++
+>   arch/arm/mm/mmap.c               | 7 +++++++
+>   arch/csky/abiv1/mmap.c           | 3 +++
+>   arch/loongarch/mm/mmap.c         | 3 +++
+>   arch/mips/mm/mmap.c              | 3 +++
+>   arch/parisc/kernel/sys_parisc.c  | 3 +++
+>   arch/powerpc/mm/book3s64/slice.c | 7 +++++++
+>   arch/s390/mm/hugetlbpage.c       | 4 ++++
+>   arch/s390/mm/mmap.c              | 6 ++++++
+>   arch/sh/mm/mmap.c                | 6 ++++++
+>   arch/sparc/kernel/sys_sparc_32.c | 3 +++
+>   arch/sparc/kernel/sys_sparc_64.c | 6 ++++++
+>   arch/sparc/mm/hugetlbpage.c      | 4 ++++
+>   arch/x86/kernel/sys_x86_64.c     | 6 ++++++
+>   arch/x86/mm/hugetlbpage.c        | 4 ++++
+>   fs/hugetlbfs/inode.c             | 4 ++++
+>   include/linux/mm.h               | 2 ++
+>   mm/mmap.c                        | 6 ++++++
+>   19 files changed, 82 insertions(+)
 > 
-> However these conversations are tangential to what I am proposing. arm64
-> and x86 decided to have the default address space be 48 bits. However
-> this was done on a per-architecture basis with no way for applications
-> to have guarantees between architectures. Even this behavior to restrict
-> to 48 bits does not even appear in the man pages, so would require
-> reading the kernel source code to understand that this feature is
-> available. Then to opt-in to larger address spaces, applications have to
-> know to provide a hint address that is greater than 47 bits, mmap() will
-> then return an address that contains up to 56 bits on x86 and 52 bits on
-> arm64. This difference of 4 bits causes inconsistency and is part of the
-> problem I am trying to solve with this flag.
 
-Yes, I guess I do understand where you are heading. Our existing model
-assumes that anybody requiring more address space know what they are
-doing and deal with the reality. This is the way Linus has pushed this
-and I am not really convinced it is the right way TBH. On the other hand
-it is true that this allows a safe(r) transition to larger address
-spaces.
+>   
+> diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
+> index ef3ce37f1bb3..f0e2550af6d0 100644
+> --- a/arch/powerpc/mm/book3s64/slice.c
+> +++ b/arch/powerpc/mm/book3s64/slice.c
+> @@ -286,6 +286,10 @@ static unsigned long slice_find_area_bottomup(struct mm_struct *mm,
+>   		.length = len,
+>   		.align_mask = PAGE_MASK & ((1ul << pshift) - 1),
+>   	};
+> +
+> +	info.hint = addr;
+> +	info.mmap_flags = flags;
+> +
+>   	/*
+>   	 * Check till the allow max value for this mmap request
+>   	 */
+> @@ -331,6 +335,9 @@ static unsigned long slice_find_area_topdown(struct mm_struct *mm,
+>   	};
+>   	unsigned long min_addr = max(PAGE_SIZE, mmap_min_addr);
+>   
+> +	info.hint = addr;
+> +	info.mmap_flags = flags;
+> +
+>   	/*
+>   	 * If we are trying to allocate above DEFAULT_MAP_WINDOW
+>   	 * Add the different to the mmap_base.
 
-> I am not proposing to change x86 and arm64 away from using their opt-out
-> feature, I am instead proposing a standard ABI for applications that
-> need some guarantees of the bits used in pointers.
+ppc64_defconfig:
 
-Right, but this is not really different from earlier attempts to achieve
-this IIRC. Extentind mmap for that purpose seems quite tricky as already
-pointed out in other sub-threads. Quite honestly I am not really sure
-what is the right and backwards compatible way. I just wanted to make
-you aware this has been discussed at lenght in the past.
--- 
-Michal Hocko
-SUSE Labs
+   CC      arch/powerpc/mm/book3s64/slice.o
+arch/powerpc/mm/book3s64/slice.c: In function 'slice_find_area_bottomup':
+arch/powerpc/mm/book3s64/slice.c:291:27: error: 'flags' undeclared 
+(first use in this function)
+   291 |         info.mmap_flags = flags;
+       |                           ^~~~~
+arch/powerpc/mm/book3s64/slice.c:291:27: note: each undeclared 
+identifier is reported only once for each function it appears in
+arch/powerpc/mm/book3s64/slice.c: In function 'slice_find_area_topdown':
+arch/powerpc/mm/book3s64/slice.c:339:27: error: 'flags' undeclared 
+(first use in this function)
+   339 |         info.mmap_flags = flags;
+       |                           ^~~~~
+make[5]: *** [scripts/Makefile.build:244: 
+arch/powerpc/mm/book3s64/slice.o] Error 1
 
