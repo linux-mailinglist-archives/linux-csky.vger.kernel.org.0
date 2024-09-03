@@ -1,172 +1,197 @@
-Return-Path: <linux-csky+bounces-760-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-761-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39AEF968E3D
-	for <lists+linux-csky@lfdr.de>; Mon,  2 Sep 2024 21:09:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13CAE9697AE
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Sep 2024 10:48:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E09D1C2251C
-	for <lists+linux-csky@lfdr.de>; Mon,  2 Sep 2024 19:09:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1656287206
+	for <lists+linux-csky@lfdr.de>; Tue,  3 Sep 2024 08:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B2019CC0C;
-	Mon,  2 Sep 2024 19:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E9F1C9868;
+	Tue,  3 Sep 2024 08:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N9sI26+Y"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eBaPbLcZ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE454F881;
-	Mon,  2 Sep 2024 19:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835201C986B
+	for <linux-csky@vger.kernel.org>; Tue,  3 Sep 2024 08:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725304156; cv=none; b=jBksFvdj/BESF9nCuWBW+yJdRPvRwfGMpuKcfI5dIrO1paf6IK8IrK7kaOUzYEfG8BtxjICafKwwQffEkEeHnTBQ6PsQ6OThT4fouj8+nSwJQNLv65VYUJaibHJt238B9CsxGVsqxl2xyZOHTJs9yb4BlVb/Tqns9Xi6tcsLqSs=
+	t=1725353078; cv=none; b=a9W8ATKqF3CmNq4gFJNMOp1SnCpEND75L2PDQrHjIlo0jR2+c4mPU9iJJQS8RpwTIcQNf6jLL9aD6V+7N3wiHNmkiYO+JBhZ1ZT1o2OdFk/BvWctVafVbQDL9yvgUWYns7cjyeHS5cgpD3jymChLiwfiU7Avykchy7VmKrGsLYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725304156; c=relaxed/simple;
-	bh=0/hF44fORO0Gery9A2B+FBHrfD+c3aFRzdrAQPNITJE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VOi2ojDN/TUBwltC0brmE+e8rUpjdSIjIylUYjsFUcQNxsxLqKSTXUb9w1nJlZKMvjoIDa13iyL88Tp70Z/HfzZgfpOsc6HYY3KPMgODoCON20IakRznGn0jOKXkZtCdy87YSTpJUM5MKeQce7MJKYtHp5A7a7RcW9CyThxHT4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N9sI26+Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C9CC4CEC8;
-	Mon,  2 Sep 2024 19:09:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725304155;
-	bh=0/hF44fORO0Gery9A2B+FBHrfD+c3aFRzdrAQPNITJE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=N9sI26+YB1BFPD9a0+oQnaOYoEp8JD6VMjANXfF4vZthYCbAVo/geEan5PCYE/5YG
-	 KyNtsWx0ZmtF4GI6OmQqvHuRlOVg8nJg01jLUUvrGS8k0qXeZSz9H6+XV52mPp5OT9
-	 SiFxv0FaUoXnD8v0PwGJEyUEBBupfs/d/2YxBDJJeebGN6LeO2fcg3zg8MsSGoraop
-	 tcocc1osS+PVlcQOrKjq5qbDCptBphGD5397tCq3uoQScdTyYNG0/L00MB3+u9eT91
-	 Po9TaiUwdOyyXQuJiSHGiI3yZh0UNZiv/JBij7SxkXKL2T4XOAiQx7+fQg9SMU8IKV
-	 ZubyoBQssJRwg==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 02 Sep 2024 20:08:15 +0100
-Subject: [PATCH 3/3] mm: Care about shadow stack guard gap when getting an
- unmapped area
+	s=arc-20240116; t=1725353078; c=relaxed/simple;
+	bh=FylgyOwq14Qsy2hkaZjp9Qg7WlZxSe0pWmI+6hs5XKY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=moiEkmC4dXVpULgOa7LMKEmTv/WMyOPdqzLXIZKdVMxhPFn9EQblpx7lsrgEIE+fkrI/ToNs53Br0i/O8Q6xdI9rbVD+ZHlkwe5KoqsIto8pfgD66oR9YiHoEYPgPKa2gas07JjMnXlF/JmnHph/zdzIfdWSAVK6xZdBvHh08Jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eBaPbLcZ; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a86c476f679so582680466b.1
+        for <linux-csky@vger.kernel.org>; Tue, 03 Sep 2024 01:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1725353074; x=1725957874; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZlZAQzsLSUE2kbM2Ozq+ZCTE7DVngzemuZ7Ob/TXXo=;
+        b=eBaPbLcZj1QpjtCTxIlveYA9NjAMBat3LfV2VMZqRQEkxDggQlVltFrgdhlwojjtCz
+         LOdrUlbhopWw9KppBfUB8i0pdAZChfI9QG/Ct/MJ+hWhNkwWbSEZ0O4nwHVVTKVR6+Xk
+         dQqleV4X75UIT0UjMQQEh8WbLV/APCh8TZcpLo2ap+Z1tSKBOadFaZCXw0rS0tk0yOFx
+         aQmLFVcm2Zj8RkLZONc4LQVZk8fRnwBTXnYpWYKftfVcv/E9rGNlAn5gILtH1eTnH278
+         dAt3oPlozi/junFhSnm2zigmTiE9luwZBDjykGjFkWSTIdv7w8Mfx3JnEH9s34x3MChx
+         0PWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725353074; x=1725957874;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DZlZAQzsLSUE2kbM2Ozq+ZCTE7DVngzemuZ7Ob/TXXo=;
+        b=ieqrYGgabX+efUimLPC5dHrK0n3ODFNMzKxIOdn859064gfda0vrpgNTEJmOCr4mMQ
+         wxgFThJTsB949XHPutyiMrfUUIUDhedgnY9MUaQECoGXmtGJrYrAEG3ic4YhQVuqm0iV
+         LwxdEtjwWDR5CuM3rAmPF5WFCaJ3/rEVl1RCtEGYNDs1I6jWyHuOdFwsrGRDrV4z0aLX
+         i1fMKndhO1x6wd2IpzUGp9KoMzhB46L97DUWKsbdtAH/JrbO95puDss1ThefRmU6M+q4
+         HRVdbAs4CH5S+atKXFP9gU3cj8iMP9ZH3TZ8raLRdfdWcWJ8/0vldXRWgsua/3SFWxlH
+         ZWYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXEVGUQjWyq1A9joQMAK4tzzA8ARMFzYb+OMeJ7yZmzgYbFcIKKw62ZqTT3Z0XJxN/40I5h7Nf3y6VR@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHV0bRTaIFfqAEoZz0xDZX6w/gfvTRWoRAA4HlQlDl7xABAjnN
+	Ix9e/G2SjzzCFqrnkhMh+dE7uoM3Y+TYKGShQbX/gQbHD+E7kn583txghLZ6Dqk=
+X-Google-Smtp-Source: AGHT+IHxwo9IPQ3UzoYFwfDhkPsGqhCSjCzcHlJOoBuRWzF1gLxd2R9P128YTojI0aYfG8i4cNsStA==
+X-Received: by 2002:a17:907:2cc3:b0:a86:9058:c01b with SMTP id a640c23a62f3a-a89b9729542mr798530966b.65.1725353073684;
+        Tue, 03 Sep 2024 01:44:33 -0700 (PDT)
+Received: from localhost ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8989221e15sm653868266b.193.2024.09.03.01.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Sep 2024 01:44:33 -0700 (PDT)
+Date: Tue, 3 Sep 2024 10:44:32 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
+Message-ID: <ZtbMcN3vK-Ih1gpN@tiehlicka>
+References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+ <ZtAxwJFH_hAh1BPG@tiehlicka>
+ <ZtCw4vgonbJzV1xs@ghost>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240902-mm-generic-shadow-stack-guard-v1-3-9acda38b3dd3@kernel.org>
-References: <20240902-mm-generic-shadow-stack-guard-v1-0-9acda38b3dd3@kernel.org>
-In-Reply-To: <20240902-mm-generic-shadow-stack-guard-v1-0-9acda38b3dd3@kernel.org>
-To: Richard Henderson <richard.henderson@linaro.org>, 
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
- Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
- Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, 
- Max Filippov <jcmvbkbc@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Deepak Gupta <debug@rivosinc.com>, 
- linux-arm-kernel@lists.infradead.org, linux-alpha@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
- loongarch@lists.linux.dev, linux-parisc@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org, 
- Mark Brown <broonie@kernel.org>, 
- Rick Edgecombe <rick.p.edgecombe@intel.com>
-X-Mailer: b4 0.15-dev-37811
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2208; i=broonie@kernel.org;
- h=from:subject:message-id; bh=0/hF44fORO0Gery9A2B+FBHrfD+c3aFRzdrAQPNITJE=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBm1g0waix/xDVLlXSaTD4u/rRM+Xov1S4sJqN9L4bW
- qlKpuiaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZtYNMAAKCRAk1otyXVSH0D8aCA
- CF9K7LlaivE2EybLobtlEVyd3x4/yQFEmQzQPnmLchhUTmpNDtOjAWH5nWJB5csnuTjOxnJKPohxjU
- OlGKNnXZ4xzXd0tKckj2SwQe75FXPlRlPAsaelj3L+B0sFx+eaxKOJptUrnxX0L5qOqpZ7yxSSg7Lp
- QqS957ontDIGI1sWL7Jr883SmGUsD3O1znFCoOJSJgM0E4BSv5EsC6tkrAy58jG3VQAOqtDHm5b8r9
- 9yDRusfPXLA88jssbTu7Bg4R1DSDS6OnJlDIn0c2CKKk/Cw+o6jzMxTmxntZMd5Iiz1JndFzNYziYB
- 5TydVe5LsQPAyaA9p8ecpXQVC+h/i/
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZtCw4vgonbJzV1xs@ghost>
 
-As covered in the commit log for c44357c2e76b ("x86/mm: care about shadow
-stack guard gap during placement") our current mmap() implementation does
-not take care to ensure that a new mapping isn't placed with existing
-mappings inside it's own guard gaps. This is particularly important for
-shadow stacks since if two shadow stacks end up getting placed adjacent to
-each other then they can overflow into each other which weakens the
-protection offered by the feature.
+On Thu 29-08-24 10:33:22, Charlie Jenkins wrote:
+> On Thu, Aug 29, 2024 at 10:30:56AM +0200, Michal Hocko wrote:
+> > On Thu 29-08-24 00:15:57, Charlie Jenkins wrote:
+> > > Some applications rely on placing data in free bits addresses allocated
+> > > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+> > > address returned by mmap to be less than the 48-bit address space,
+> > > unless the hint address uses more than 47 bits (the 48th bit is reserved
+> > > for the kernel address space).
+> > > 
+> > > The riscv architecture needs a way to similarly restrict the virtual
+> > > address space. On the riscv port of OpenJDK an error is thrown if
+> > > attempted to run on the 57-bit address space, called sv57 [1].  golang
+> > > has a comment that sv57 support is not complete, but there are some
+> > > workarounds to get it to mostly work [2].
+> > > 
+> > > These applications work on x86 because x86 does an implicit 47-bit
+> > > restriction of mmap() address that contain a hint address that is less
+> > > than 48 bits.
+> > > 
+> > > Instead of implicitly restricting the address space on riscv (or any
+> > > current/future architecture), a flag would allow users to opt-in to this
+> > > behavior rather than opt-out as is done on other architectures. This is
+> > > desirable because it is a small class of applications that do pointer
+> > > masking.
+> > 
+> > IIRC this has been discussed at length when 5-level page tables support
+> > has been proposed for x86. Sorry I do not have a link handy but lore
+> > should help you. Linus was not really convinced and in the end vetoed it
+> > and prefer that those few applications that benefit from greater address
+> > space would do that explicitly than other way around.
+> 
+> I believe I found the conversation you were referring to. Ingo Molnar
+> recommended a flag similar to what I have proposed [1]. Catalin
+> recommended to make 52-bit opt-in on arm64 [2]. Dave Hansen brought up
+> MPX [3].
+> 
+> However these conversations are tangential to what I am proposing. arm64
+> and x86 decided to have the default address space be 48 bits. However
+> this was done on a per-architecture basis with no way for applications
+> to have guarantees between architectures. Even this behavior to restrict
+> to 48 bits does not even appear in the man pages, so would require
+> reading the kernel source code to understand that this feature is
+> available. Then to opt-in to larger address spaces, applications have to
+> know to provide a hint address that is greater than 47 bits, mmap() will
+> then return an address that contains up to 56 bits on x86 and 52 bits on
+> arm64. This difference of 4 bits causes inconsistency and is part of the
+> problem I am trying to solve with this flag.
 
-On x86 there is a custom arch_get_unmapped_area() which was updated by the
-above commit to cover this case by specifying a start_gap for allocations
-with VM_SHADOW_STACK. Both arm64 and RISC-V have equivalent features and
-use the generic implementation of arch_get_unmapped_area() so let's make
-the equivalent change there so they also don't get shadow stack pages
-placed without guard pages.
+Yes, I guess I do understand where you are heading. Our existing model
+assumes that anybody requiring more address space know what they are
+doing and deal with the reality. This is the way Linus has pushed this
+and I am not really convinced it is the right way TBH. On the other hand
+it is true that this allows a safe(r) transition to larger address
+spaces.
 
-Architectures which do not have this feature will define VM_SHADOW_STACK
-to VM_NONE and hence be unaffected.
+> I am not proposing to change x86 and arm64 away from using their opt-out
+> feature, I am instead proposing a standard ABI for applications that
+> need some guarantees of the bits used in pointers.
 
-Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- mm/mmap.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index b06ba847c96e..902c482b6084 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1753,6 +1753,14 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
- 	return gap;
- }
- 
-+static inline unsigned long stack_guard_placement(vm_flags_t vm_flags)
-+{
-+	if (vm_flags & VM_SHADOW_STACK)
-+		return PAGE_SIZE;
-+
-+	return 0;
-+}
-+
- /*
-  * Search for an unmapped address range.
-  *
-@@ -1814,6 +1822,7 @@ generic_get_unmapped_area(struct file *filp, unsigned long addr,
- 	info.length = len;
- 	info.low_limit = mm->mmap_base;
- 	info.high_limit = mmap_end;
-+	info.start_gap = stack_guard_placement(vm_flags);
- 	return vm_unmapped_area(&info);
- }
- 
-@@ -1863,6 +1872,7 @@ generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
- 	info.length = len;
- 	info.low_limit = PAGE_SIZE;
- 	info.high_limit = arch_get_mmap_base(addr, mm->mmap_base);
-+	info.start_gap = stack_guard_placement(vm_flags);
- 	addr = vm_unmapped_area(&info);
- 
- 	/*
-
+Right, but this is not really different from earlier attempts to achieve
+this IIRC. Extentind mmap for that purpose seems quite tricky as already
+pointed out in other sub-threads. Quite honestly I am not really sure
+what is the right and backwards compatible way. I just wanted to make
+you aware this has been discussed at lenght in the past.
 -- 
-2.39.2
-
+Michal Hocko
+SUSE Labs
 
