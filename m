@@ -1,75 +1,76 @@
-Return-Path: <linux-csky+bounces-781-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-782-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDAC896C6D8
-	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 20:54:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFC296C71B
+	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 21:07:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3EF66B227E4
-	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 18:54:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA92228316D
+	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 19:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A8C91E4120;
-	Wed,  4 Sep 2024 18:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E2F5145A01;
+	Wed,  4 Sep 2024 19:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="I1V7lquB"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="O83/Gbf8"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03EA1E0B81
-	for <linux-csky@vger.kernel.org>; Wed,  4 Sep 2024 18:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BB3144312
+	for <linux-csky@vger.kernel.org>; Wed,  4 Sep 2024 19:07:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725476032; cv=none; b=ZkDIKOVih/ntIhuNgzypYEsVXgvYutEN+HIOQc12YKwQWv6ZZNaiCPsQ3vI1q8I7gIUD7msuMUp93VDBD2myzwyY/fx4+tYsiHpC1Dz1OmTClENclPgDetZ7NTWXeQn0wADr/2OYKwgGR4kAGI9iGLOI8RtUxPV0fCOKw78og/o=
+	t=1725476839; cv=none; b=XarcWpWsLwg4OBwhpDu9Hr2AsdGgrCm+UoIlmDncQo41Mm356orjkQpehg95oUghA5DLJAOxPy4wf+pBOjbmfEQzPESBSLvErpVYZc4SFe2+ae4ZiJgkqcPPU/anZygpwujfNQHLVdL4IXJabNzushWSCojzTEbp5H8Vj4dlYBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725476032; c=relaxed/simple;
-	bh=s92rW/1gEQr3xvJKMRwsWt6P8BZ8Funj1rbavwH4oWQ=;
+	s=arc-20240116; t=1725476839; c=relaxed/simple;
+	bh=hLtrV9fo2ENFsppI3EM5//2a1v6xLdR6UciGmLp3E0Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=avkeqYgUuil8qISf3j4fTUQhp5pZhfyIgGDhDWXVmEhUumctocU3iFr6zPGtyMWIHFwIDr1PraSnq3qa4t3Nmz5TP4sZS72HQBh4Lhn70SF4hooXzNMQmMIjkvaZQm/DoWJ2VOiIgRnNbPENjhFzoAgxoWCTsatpiiFyf9aQ5bA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=I1V7lquB; arc=none smtp.client-ip=209.85.210.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=nAjn+6z914rrce6MLO3Xq+T91w5t54fccLBHV/Y5CAD/A9KBTQAe2vnZoYb695i1PSfFF4Rdvh3MoBUsqRU5skF+Hz9ueb2FIk9GQVFn+HgDqB4lxAd+t+5Urj/245FUqNurrc0HxWPRTth71EBoonpIlVsQ1h0WNgZnTidXlu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=O83/Gbf8; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-717849c0dcaso544767b3a.3
-        for <linux-csky@vger.kernel.org>; Wed, 04 Sep 2024 11:53:50 -0700 (PDT)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2d885019558so3751927a91.2
+        for <linux-csky@vger.kernel.org>; Wed, 04 Sep 2024 12:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1725476030; x=1726080830; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1725476837; x=1726081637; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s92rW/1gEQr3xvJKMRwsWt6P8BZ8Funj1rbavwH4oWQ=;
-        b=I1V7lquBIV1tuMbzWo1Rmr78uwgd64Cz90/LN5ociO6ZEW/Wqw8V1kSNDjHwc1SQrl
-         gBaI66alz16WK+pvTbrtual3WbJtpGuczxNRYdc1gLcuOrMZ4usss1N5f7NdK8JHnD2p
-         F0XUwhgMpxkeLvZRW8Uzgt0KvOaFvkDxTAi68bTiJhkqBH+yK8paVuDHYd72QvNHI6kY
-         nwO80rF+Oxe0S7e2FzsxLeUgvXejLVpZZJVNZGqiQ+eQ9RCbCRxo2YOrTrYuADPwYNeo
-         UMBDEP1bCuHsTMQKOvPWkizZfCYV9cQhfOEuy7O2CfqqeC+9S4/t4PFaZ6WN6eBloGGM
-         W2FA==
+        bh=o2U7wgEbLS4i4a8ingcWCBDQrhNmwXrz+ffgx64j+qE=;
+        b=O83/Gbf8QHytDjtKBC2VP1NHGE69K97QzsnnPLhood4y27NcYWvbRpAYJZHt9lWN5L
+         piIbJArzYN5Qf7SPBI49vUE2VjW4GYvYSSeWevifsRIo2JwxWESaOWjUw9KNQUlcAOjW
+         M57C0o6ln8DywnEEETUAFokbAoSyohPtRCDiZcplIwBMyuz2tior5wk9DBWcDqSCynVu
+         jAvaHC4YqJY0ofPBytPoIllLrn/HiP7br0fsxdsL6Iq9qfvJZ6jQmTfrZAaTKNkj8iqz
+         t2z+vruq/jHHUU7ujoGLdO82BtEDxwSzFDLuOmaaNt8DQwT2aKkt8z2EJBcsRPlrEHcB
+         kXQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725476030; x=1726080830;
+        d=1e100.net; s=20230601; t=1725476837; x=1726081637;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s92rW/1gEQr3xvJKMRwsWt6P8BZ8Funj1rbavwH4oWQ=;
-        b=i1nbOM5uWQ5C7gSwIA3LgNeF2i4mfjerpHxkuvtWaPNlxMlboIxMUAW/HhvFs/XbxW
-         BkThdT8xVQYNaTSQMi3TwT2L4EDc2B+jhEIYX1h36e+JRXub0dE+VTjlzHguOFEnlExb
-         dZpZx+0LCA6CI/3RFCBK3y4SW/VAgW/8cyfXUeaahJeE2fHpF4VEZEARj91Cw+YiAJcS
-         lJvw1rIgTcEUnMHr44VBeaSpGqAS/NBH9YGaTd8RUz9Y5xvyxJGpVDMdHsqShfgQzFC4
-         Qg0srPCn6LhFOaW81WjiyVFg37zpDgD4Weff/DE6q0JnEE09fBQ+DqqlHjyAEhHxKXVP
-         NMpw==
-X-Forwarded-Encrypted: i=1; AJvYcCWnL6SOHFSoIMmk3hoWyGioiDqzYmUXxcwTLr4YHsmvUrLB6Icske4TJgszU4lIhrV/Dz8zo1SqK2Xw@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbDo1BsYiMfjgKWr6xLB0ZXBf+i+qMCNi+MmgRBKm62jDFFx8b
-	MRcq6y/BO4GN6fzzpAcBgnexn1rYa53XhNiGpaH8Zg5Hi9eQkbYmlJMU4odaPXo=
-X-Google-Smtp-Source: AGHT+IE2IsoC0LRmiLcI1CkvV1DU3vw4DUJdyqp6MID1n1cX+56uyYB7jBo1wGGq/wkl04oTY4Plng==
-X-Received: by 2002:a05:6a21:318b:b0:1ce:cbcf:aaa9 with SMTP id adf61e73a8af0-1cecdfdea62mr20770394637.36.1725476029832;
-        Wed, 04 Sep 2024 11:53:49 -0700 (PDT)
+        bh=o2U7wgEbLS4i4a8ingcWCBDQrhNmwXrz+ffgx64j+qE=;
+        b=JFKlp0hpmxsFE5TULktihsjPgJUSXv0tA4yxadh2liYilo5MLuyy7CRXzkW3mLtgI3
+         pFKd/yfFyd6QQSgzhtZdxSmE5mR+RK1JchQM1SsesM70NdASF1M78Gxuif1qHezgrjtZ
+         Gof5VgsYiMwfUQMm0C4paG4N+71MXq4/J7NXAE1KRyhyEEAA8R0JQlUmzHGJNRBJcrLn
+         sQsOuZ5JTW68Ijv6vTL7+R4ALgz2IHW56Uv/cV3aNB7u+JYjUFke3kEUpB/KojnqJsD7
+         MPvAAWAZsLn/MzQVMuPXfr0Xac1oBUdXXQJ3Lof5+aMZTFbgTGh65OhdI58JNpF9nhA1
+         SFZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWyOreFqp7jovklrR9NudnuYtjA/NPhst5/GDEzwkC8+WXPxaKL4Y9Cs9pGQinI6FQEXiMZIjKUSylN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwG3qvo+oC7c3lYj1hY4GZ4nVdD7AlyC1JO06qb3wfvh/oV6TXc
+	qs1JVg3SFI7q2UmcaXNWyadce/GCayUIeJQCKi7himNBPMJ4uZAXjDdS0VTWSeQ=
+X-Google-Smtp-Source: AGHT+IGRXMFw8eODDeHuSZGixob1QmbWy894YR3dac/q8kTYt2afjYPzXJiDq5qdDnRm4AHLgT4d4Q==
+X-Received: by 2002:a17:90b:300e:b0:2d8:27c3:87d7 with SMTP id 98e67ed59e1d1-2d893284ebdmr13545892a91.8.1725476836620;
+        Wed, 04 Sep 2024 12:07:16 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71778522979sm1947597b3a.30.2024.09.04.11.53.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2da53740084sm4858056a91.32.2024.09.04.12.07.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 11:53:49 -0700 (PDT)
-Date: Wed, 4 Sep 2024 11:53:45 -0700
+        Wed, 04 Sep 2024 12:07:16 -0700 (PDT)
+Date: Wed, 4 Sep 2024 12:07:12 -0700
 From: Deepak Gupta <debug@rivosinc.com>
 To: Mark Brown <broonie@kernel.org>
-Cc: Richard Henderson <richard.henderson@linaro.org>,
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
 	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
 	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
 	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
@@ -97,7 +98,6 @@ Cc: Richard Henderson <richard.henderson@linaro.org>,
 	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
 	Max Filippov <jcmvbkbc@gmail.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
 	Vlastimil Babka <vbabka@suse.cz>,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	Catalin Marinas <catalin.marinas@arm.com>,
@@ -107,11 +107,14 @@ Cc: Richard Henderson <richard.henderson@linaro.org>,
 	loongarch@lists.linux.dev, linux-parisc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
 	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 2/3] mm: Pass vm_flags to generic_get_unmapped_area()
-Message-ID: <ZtisuRySfREHjnN/@debug.ba.rivosinc.com>
+	linux-mm@kvack.org, Rick Edgecombe <rick.p.edgecombe@intel.com>
+Subject: Re: [PATCH 3/3] mm: Care about shadow stack guard gap when getting
+ an unmapped area
+Message-ID: <Ztiv4NtsIkKnyiLO@debug.ba.rivosinc.com>
 References: <20240902-mm-generic-shadow-stack-guard-v1-0-9acda38b3dd3@kernel.org>
- <20240902-mm-generic-shadow-stack-guard-v1-2-9acda38b3dd3@kernel.org>
+ <20240902-mm-generic-shadow-stack-guard-v1-3-9acda38b3dd3@kernel.org>
+ <is6ewj3bhtqy3zadj6lbdv6maupx4kmduvhny66ntifkji6hoj@xmhcf5jt4o66>
+ <dbaf5653-df46-4e17-bce1-aec7fb168197@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -120,16 +123,24 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20240902-mm-generic-shadow-stack-guard-v1-2-9acda38b3dd3@kernel.org>
+In-Reply-To: <dbaf5653-df46-4e17-bce1-aec7fb168197@sirena.org.uk>
 
-On Mon, Sep 02, 2024 at 08:08:14PM +0100, Mark Brown wrote:
->In preparation for using vm_flags to ensure guard pages for shadow stacks
->supply them as an argument to generic_get_unmapped_area(). The only user
->outside of the core code is the PowerPC book3s64 implementation which is
->trivially wrapping the generic implementation in the radix_enabled() case.
+On Tue, Sep 03, 2024 at 08:57:20PM +0100, Mark Brown wrote:
+>On Tue, Sep 03, 2024 at 03:41:49PM -0400, Liam R. Howlett wrote:
+>> * Mark Brown <broonie@kernel.org> [240902 15:09]:
 >
->Signed-off-by: Mark Brown <broonie@kernel.org>
+>> > +static inline unsigned long stack_guard_placement(vm_flags_t vm_flags)
+>> > +{
+>> > +	if (vm_flags & VM_SHADOW_STACK)
+>> > +		return PAGE_SIZE;
+>
+>> Is PAGE_SIZE is enough?
+>
+>It's what x86 currently uses so it'll be no worse off if it gets moved
+>to the generic code (there's a comment in the arch code explaing what's
+>needed there) and it's enough for arm64, we only do single record
+>pushes/pops or (optionally) writes to unconstrained addresses.
 
-Reviewed-by: Deepak Gupta <debug@rivosinc.com>
+It's enough for RISC-V too.
 
 
