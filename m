@@ -1,199 +1,192 @@
-Return-Path: <linux-csky+bounces-773-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-774-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A64BC96AFB0
-	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 06:14:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D154796B237
+	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 08:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 253891F24D8A
-	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 04:14:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 011691C20F43
+	for <lists+linux-csky@lfdr.de>; Wed,  4 Sep 2024 06:59:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3642A61FEA;
-	Wed,  4 Sep 2024 04:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E840C146A62;
+	Wed,  4 Sep 2024 06:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="Atgw5p+o"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tQGmHwE+"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00BB3D6B;
-	Wed,  4 Sep 2024 04:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF21A145B39;
+	Wed,  4 Sep 2024 06:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725423242; cv=none; b=VzxKpdsBIbZOJUnyC9kHqM38CBKHeLm1jAis/mZEKb67iU8jYglnxoOnK+QqWFKD+67gfrnE/kSHgpVRaTMPxQ4xtvOqzvl82f20YmueQArOdO80ZQXYkhusGYHG/81NogTmHpdqt3d8Oq+l0CL2mxRbx/ogrOGOsZvMhfa/mr0=
+	t=1725433174; cv=none; b=Mq1gFbv9nR4OFgl1xIGW46omodhximUUn+/UBGMhv2cpADJ80kV5utDWCIaGrDN1WWbvuq/TH0/SPacY5/lzHraYUiWidENPXL+mQNRBUtLO4NeaBn98Z0Mum51LTyQA02QJsqdvBDTg0xiehMZYj0z6HbqfpDt3T8FF3o6wgrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725423242; c=relaxed/simple;
-	bh=BLJDIM+UhFjsEpA2gm+jsKfoSlgXOmwgzm0WXa5YV/w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=itL54jqwsB48te3WRGyqZSmCgt131o370ekvM8IRESaRIShNtkfkX9nUNy2+ZoJzmJ4msoEfeWFxKrkFSH3AK11Xm/y2oku/jxDBmOpOMU2AoZTzeuFjKRu5mM/2c4ARQFO6jhFLqbXd2yeReW5Y7jiyXblNwaHe0hvFbzq6aQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=Atgw5p+o; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1725423237;
-	bh=eMgOBDwTX8trwBbhMUy1qHUpMDhdRlVDIssPJb8Gsmo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Atgw5p+ous8ponaujRBR9zeHm87YGXlWFJw/APeKvwTJfN+vDA+MA/XCf729+PnVA
-	 yIoWrvR8Tg01Q4kTrqjbf+6l9UmkC2+E2eKeM0lpnBzHzQLZr6WfUF+RwlGDv9na7Y
-	 VJ6SDLZrN5hF4Pw9qE+168Zj3QWww8gocoC1nJ966vxltqaxwrFOfSbul6kyFfi2d0
-	 JlXz4kSSwijD4hHUrXsf8IlpvudZE3CIHAEjc3DtzlAKa/tvrIdpfiNxgF0xas/YL4
-	 mHLB2qUie8SKPjqF5MpzhdViqlVcFcXog5f66aL4m0C5o/rSTOnJ5fJzWnRTdDtt9J
-	 XaxynAPBdZR7w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wz8Hv4YYPz4wb7;
-	Wed,  4 Sep 2024 14:13:47 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Mark Brown <broonie@kernel.org>, Richard Henderson
- <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Guo Ren
- <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Alexander
- Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer
- <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker
- <dalias@libc.org>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max
- Filippov <jcmvbkbc@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Deepak Gupta <debug@rivosinc.com>,
- linux-arm-kernel@lists.infradead.org, linux-alpha@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org,
- Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 2/3] mm: Pass vm_flags to generic_get_unmapped_area()
-In-Reply-To: <20240902-mm-generic-shadow-stack-guard-v1-2-9acda38b3dd3@kernel.org>
-References: <20240902-mm-generic-shadow-stack-guard-v1-0-9acda38b3dd3@kernel.org>
- <20240902-mm-generic-shadow-stack-guard-v1-2-9acda38b3dd3@kernel.org>
-Date: Wed, 04 Sep 2024 14:13:47 +1000
-Message-ID: <87plpk5a4k.fsf@mail.lhotse>
+	s=arc-20240116; t=1725433174; c=relaxed/simple;
+	bh=97WvkdOLuH8nFg1jfDBA+OBN3SlRNf9YII4h9vv9Qpw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IH1oILfhoKRswyBjXebfb1ylX4dpcCLVYydRX0ncpyrT2Nu70pk8VRFnsJWhyB0DVZB8tsdLwNV+rznsQ3w95HrLvrtnEd8AESZSIE1SRQstdeZNL+g7VJ136OMVZCxNRG4kdSwz3dncva5HlaPxe1qkzdvuoWgMYs5dABGm1pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tQGmHwE+; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 483Mn3O8031356;
+	Wed, 4 Sep 2024 06:59:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=5Y1gyYG60jOF3JE98uZpYCUiZX
+	bStaASEh6e18i5Q1M=; b=tQGmHwE+Ps8bt17Iaquf5rQBl5WDo7mjSWYR4Wg4tI
+	JhrxW53qYzmHI15te292CcSsvHw02Pu5cdzQQKr9cvNOCS6+8sAWIbLZ8r0VABwh
+	B1GNQT71yvkaWhx9kwNLmklgTQ1B5dG26jlBRmnC4H8OemCENLm/dFg2xu3r9J7/
+	9aaRfgyDl/p9yFmvwpC36kGasC5xDl2ru7jXdesBt1NA23kk8UlEkndgMlluBq3y
+	wz76Gol9p9L+/sm4yVWYQv91z/JmCS8Cxb2kkcNwrdWXY22nTc2iRVDiJY7SZwmC
+	hdntE7JUxzYyCnDuGMzfyBo2BGVOpr9ylXsMFLKihUhA==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41brkqt1tq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 06:59:18 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4844rSWI012058;
+	Wed, 4 Sep 2024 06:59:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41cegpxf99-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Sep 2024 06:59:17 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4846xFOR58720732
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 4 Sep 2024 06:59:15 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9B0C52004B;
+	Wed,  4 Sep 2024 06:59:15 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 888B220043;
+	Wed,  4 Sep 2024 06:59:15 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed,  4 Sep 2024 06:59:15 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+	id 1C085E0297; Wed,  4 Sep 2024 08:59:15 +0200 (CEST)
+From: Sven Schnelle <svens@linux.ibm.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Guo Ren <guoren@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+Subject: [PATCH 0/7] add function arguments to ftrace
+Date: Wed,  4 Sep 2024 08:58:54 +0200
+Message-ID: <20240904065908.1009086-1-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IyPlP0Aqv9vpIEU4M-A0s0FHBpbG2XRG
+X-Proofpoint-ORIG-GUID: IyPlP0Aqv9vpIEU4M-A0s0FHBpbG2XRG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-04_04,2024-09-03_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 mlxscore=0 impostorscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 mlxlogscore=829 bulkscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2409040049
 
-Mark Brown <broonie@kernel.org> writes:
-> In preparation for using vm_flags to ensure guard pages for shadow stacks
-> supply them as an argument to generic_get_unmapped_area(). The only user
-> outside of the core code is the PowerPC book3s64 implementation which is
-> trivially wrapping the generic implementation in the radix_enabled() case.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/powerpc/mm/book3s64/slice.c |  4 ++--
->  include/linux/sched/mm.h         |  4 ++--
->  mm/mmap.c                        | 10 ++++++----
->  3 files changed, 10 insertions(+), 8 deletions(-)
+These patches add support for printing function arguments in ftrace.
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+Example usage:
 
-cheers
+function tracer:
 
-> diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
-> index ada6bf896ef8..87307d0fc3b8 100644
-> --- a/arch/powerpc/mm/book3s64/slice.c
-> +++ b/arch/powerpc/mm/book3s64/slice.c
-> @@ -641,7 +641,7 @@ unsigned long arch_get_unmapped_area(struct file *filp,
->  				     vm_flags_t vm_flags)
->  {
->  	if (radix_enabled())
-> -		return generic_get_unmapped_area(filp, addr, len, pgoff, flags);
-> +		return generic_get_unmapped_area(filp, addr, len, pgoff, flags, vm_flags);
->  
->  	return slice_get_unmapped_area(addr, len, flags,
->  				       mm_ctx_user_psize(&current->mm->context), 0);
-> @@ -655,7 +655,7 @@ unsigned long arch_get_unmapped_area_topdown(struct file *filp,
->  					     vm_flags_t vm_flags)
->  {
->  	if (radix_enabled())
-> -		return generic_get_unmapped_area_topdown(filp, addr0, len, pgoff, flags);
-> +		return generic_get_unmapped_area_topdown(filp, addr0, len, pgoff, flags, vm_flags);
->  
->  	return slice_get_unmapped_area(addr0, len, flags,
->  				       mm_ctx_user_psize(&current->mm->context), 1);
-> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> index c4d34abc45d4..07bb8d4181d7 100644
-> --- a/include/linux/sched/mm.h
-> +++ b/include/linux/sched/mm.h
-> @@ -204,11 +204,11 @@ unsigned long mm_get_unmapped_area_vmflags(struct mm_struct *mm,
->  unsigned long
->  generic_get_unmapped_area(struct file *filp, unsigned long addr,
->  			  unsigned long len, unsigned long pgoff,
-> -			  unsigned long flags);
-> +			  unsigned long flags, vm_flags_t vm_flags);
->  unsigned long
->  generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
->  				  unsigned long len, unsigned long pgoff,
-> -				  unsigned long flags);
-> +				  unsigned long flags, vm_flags_t vm_flags);
->  #else
->  static inline void arch_pick_mmap_layout(struct mm_struct *mm,
->  					 struct rlimit *rlim_stack) {}
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 7528146f886f..b06ba847c96e 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1789,7 +1789,7 @@ unsigned long vm_unmapped_area(struct vm_unmapped_area_info *info)
->  unsigned long
->  generic_get_unmapped_area(struct file *filp, unsigned long addr,
->  			  unsigned long len, unsigned long pgoff,
-> -			  unsigned long flags)
-> +			  unsigned long flags, vm_flags_t vm_flags)
->  {
->  	struct mm_struct *mm = current->mm;
->  	struct vm_area_struct *vma, *prev;
-> @@ -1823,7 +1823,8 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
->  		       unsigned long len, unsigned long pgoff,
->  		       unsigned long flags, vm_flags_t vm_flags)
->  {
-> -	return generic_get_unmapped_area(filp, addr, len, pgoff, flags);
-> +	return generic_get_unmapped_area(filp, addr, len, pgoff, flags,
-> +					 vm_flags);
->  }
->  #endif
->  
-> @@ -1834,7 +1835,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
->  unsigned long
->  generic_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
->  				  unsigned long len, unsigned long pgoff,
-> -				  unsigned long flags)
-> +				  unsigned long flags, vm_flags_t vm_flags)
->  {
->  	struct vm_area_struct *vma, *prev;
->  	struct mm_struct *mm = current->mm;
-> @@ -1887,7 +1888,8 @@ arch_get_unmapped_area_topdown(struct file *filp, unsigned long addr,
->  			       unsigned long len, unsigned long pgoff,
->  			       unsigned long flags, vm_flags_t vm_flags)
->  {
-> -	return generic_get_unmapped_area_topdown(filp, addr, len, pgoff, flags);
-> +	return generic_get_unmapped_area_topdown(filp, addr, len, pgoff, flags,
-> +						 vm_flags);
->  }
->  #endif
->  
->
-> -- 
-> 2.39.2
+cd /sys/kernel/tracing/
+echo icmp_rcv >set_ftrace_filter
+echo function >current_tracer
+echo 1 >options/func-args
+ping -c 10 127.0.0.1
+[..]
+cat trace
+[..]
+            ping-1277    [030] ..s1.    39.120939: icmp_rcv(skb = 0xa0ecab00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    39.120946: icmp_rcv(skb = 0xa0ecac00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    40.179724: icmp_rcv(skb = 0xa0ecab00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    40.179730: icmp_rcv(skb = 0xa0ecac00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    41.219700: icmp_rcv(skb = 0xa0ecab00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    41.219706: icmp_rcv(skb = 0xa0ecac00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    42.259717: icmp_rcv(skb = 0xa0ecab00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    42.259725: icmp_rcv(skb = 0xa0ecac00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    43.299735: icmp_rcv(skb = 0xa0ecab00) <-ip_protocol_deliver_rcu
+            ping-1277    [030] ..s1.    43.299742: icmp_rcv(skb = 0xa0ecac00) <-ip_protocol_deliver_rcu
+
+function graph:
+
+cd /sys/kernel/tracing
+echo icmp_rcv >set_graph_function
+echo function_graph >current_tracer
+echo 1 >options/funcgraph-args
+
+ping -c 1 127.0.0.1
+
+cat trace
+
+ 30)               |  icmp_rcv(skb = 0xa0ecab00) {
+ 30)               |    __skb_checksum_complete(skb = 0xa0ecab00) {
+ 30)               |      skb_checksum(skb = 0xa0ecab00, offset = 0, len = 64, csum = 0) {
+ 30)               |        __skb_checksum(skb = 0xa0ecab00, offset = 0, len = 64, csum = 0, ops = 0x232e0327a88) {
+ 30)   0.418 us    |          csum_partial(buff = 0xa0d20924, len = 64, sum = 0)
+ 30)   0.985 us    |        }
+ 30)   1.463 us    |      }
+ 30)   2.039 us    |    }
+[..]
+
+
+Sven Schnelle (7):
+  tracing: add ftrace_regs to function_graph_enter()
+  x86/tracing: pass ftrace_regs to function_graph_enter()
+  s390/tracing: pass ftrace_regs to function_graph_enter()
+  Add print_function_args()
+  tracing: add config option for print arguments in ftrace
+  tracing: add support for function argument to graph tracer
+  tracing: add arguments to function tracer
+
+ arch/arm/kernel/ftrace.c             |  2 +-
+ arch/arm64/kernel/ftrace.c           |  2 +-
+ arch/csky/kernel/ftrace.c            |  2 +-
+ arch/loongarch/kernel/ftrace.c       |  2 +-
+ arch/loongarch/kernel/ftrace_dyn.c   |  2 +-
+ arch/microblaze/kernel/ftrace.c      |  2 +-
+ arch/mips/kernel/ftrace.c            |  2 +-
+ arch/parisc/kernel/ftrace.c          |  2 +-
+ arch/powerpc/kernel/trace/ftrace.c   |  2 +-
+ arch/riscv/kernel/ftrace.c           |  2 +-
+ arch/s390/kernel/entry.h             |  4 +-
+ arch/s390/kernel/ftrace.c            |  4 +-
+ arch/sh/kernel/ftrace.c              |  2 +-
+ arch/sparc/kernel/ftrace.c           |  2 +-
+ arch/x86/include/asm/ftrace.h        |  2 +-
+ arch/x86/kernel/ftrace.c             |  6 +-
+ include/linux/ftrace.h               |  4 +-
+ kernel/trace/Kconfig                 | 12 ++++
+ kernel/trace/fgraph.c                |  7 ++-
+ kernel/trace/trace.c                 |  8 ++-
+ kernel/trace/trace.h                 |  4 +-
+ kernel/trace/trace_entries.h         |  7 ++-
+ kernel/trace/trace_functions.c       | 46 ++++++++++++++--
+ kernel/trace/trace_functions_graph.c | 74 +++++++++++++------------
+ kernel/trace/trace_irqsoff.c         |  4 +-
+ kernel/trace/trace_output.c          | 82 +++++++++++++++++++++++++++-
+ kernel/trace/trace_output.h          |  9 +++
+ kernel/trace/trace_sched_wakeup.c    |  4 +-
+ 28 files changed, 228 insertions(+), 73 deletions(-)
+
+--
+2.43.0
 
