@@ -1,218 +1,159 @@
-Return-Path: <linux-csky+bounces-800-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-804-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0844F96F090
-	for <lists+linux-csky@lfdr.de>; Fri,  6 Sep 2024 11:57:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA04A96F389
+	for <lists+linux-csky@lfdr.de>; Fri,  6 Sep 2024 13:50:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C730B2168A
-	for <lists+linux-csky@lfdr.de>; Fri,  6 Sep 2024 09:56:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0287E1C23E51
+	for <lists+linux-csky@lfdr.de>; Fri,  6 Sep 2024 11:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C83FB1C9DE7;
-	Fri,  6 Sep 2024 09:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA531CBEAB;
+	Fri,  6 Sep 2024 11:50:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JRZJEoBD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YbuZKsYy"
+	dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="gmN8Uhst";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="hC1gjkAQ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtpout144.security-mail.net (smtpout146.security-mail.net [85.31.212.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758A413CFB6;
-	Fri,  6 Sep 2024 09:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725616566; cv=none; b=adBUzLjbZZeW4/TorWldShE0AjYxHXER0lBCG9NYYgmass1qVzJ+Rb/2pos9U0ALG8Bdxfx5F8cki6lk62KWugaz1cW6HWVm+4LJuY79dth/lsKut/0sCqPAGExsh7mfocgpl1w6RVPvjsPb6QpubEwVQ13CyaUSV6MqWszjOd0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725616566; c=relaxed/simple;
-	bh=gUUvPOjWWjObJ8l/tpxlAMuAowT/tNkWWi/REiyptbc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=g0RveAz/cGOgC8/UW8yjyFAgo8Efh462/9MSCcVwKExO2O+Z1p2NG98PVi9JD5GQ0tAhzSYmKf8kGbW4Y++ON3tnvFMiJXrfdoKA4AI0ASWoaclM1c8vwzOFD18jKzyAlOsZhuGGXx2y7O5uZ8JGjgyb3DH3zSYOUYv3tutxCL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JRZJEoBD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YbuZKsYy; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 8D7481380406;
-	Fri,  6 Sep 2024 05:56:03 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 06 Sep 2024 05:56:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725616563;
-	 x=1725702963; bh=spCdL3tE0yzwRJuzWoP/dh86M1NxHAaaOfguj/M3bzI=; b=
-	JRZJEoBD7E03AtrbWnWmR/E4Bky06zQyVOaqEDrYtzVCYUtVqqML6vpNkpePZvmu
-	LkDh6ZKUYFxJIhFekagPIpis+EvEHIBr/7jMAKJCx4Mp0eFXfjOxw4omuLvqxgqq
-	yopa3r5GTd6Dz3crswRx7hsJ7t/FqRvEwoY6w6ScKbyAV1eQttm8AKxhpPqlNYjU
-	9JD/6Z9/Sox2d8GPcqjQb3jreF0sJhqOjKP6b8Q9pi23HKr0G3Q2i9oKPk62DsQi
-	bnERniHGyUEeY9laCvDrkugc4NYwfP/OCnL8b9dt+urZV20UCu5ikrb+SDJqWKSB
-	6zYPX7cpruqXL/kbX7r6Sg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725616563; x=
-	1725702963; bh=spCdL3tE0yzwRJuzWoP/dh86M1NxHAaaOfguj/M3bzI=; b=Y
-	buZKsYyDBXnvApXrykY/L9TZDdHeKiS5BvrOg1KjB4lbLjI+Pz1jBrWfjCBGz7b6
-	QXoSEn7Sp5lgP8KIwTf+hpIAuN6xMt+Dud9rMLf9h9nNfQXz+kLEj1T1fYuiKkDn
-	xo2M7cYQuagF0gPBh4D2qe1Wm8EMnc4zc2xpnH+h3RJCYoBoNbhpLVM7n2DrBQve
-	nOJIj1atr+y+akqlq99cnqMu0Y1Z41cYcQ6TazzWs/WDPHXiYWR3Qw9WjMENBVX2
-	iUJ0akO/5txv9gEcf9lT9E+LbAUOH02gMaeLaylnY6s67cj7xFzlL+qqk6Ct/Ig/
-	6GGTCcVbscbDGcLe6hjUA==
-X-ME-Sender: <xms:s9HaZg6T99twwNpEAUrg5EMam6_B2aHEhP2d_0uPbtGSUObGn3qT3Q>
-    <xme:s9HaZh5NZhMxeB34qIKrdxYW9sIdBeQtetUXCpcOF3KjfuOVbQCtzH8LOB7VyjGqv
-    BZtDrk_Wx610_rXHfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiuddgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddu
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgtshhkhiesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhsse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgrrhhishgt
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshefledtse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhhsehvghgv
-    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhprghrtghlihhnuhigsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:s9HaZvch4D5vjjeEUW8mCIns9gzXdDSCUK38eMYIOGz553WMOPB-_A>
-    <xmx:s9HaZlLMieryUgKfA90cp4bUrWxNAVkU-wPsVZ-4KCgHhrZXR664VQ>
-    <xmx:s9HaZkJvGV5rxrgidiv5v1AmF2Mr8SvDBii6qhVDEiQ_2ikC_UI0NQ>
-    <xmx:s9HaZmxHiDjy7TaPbAFN7scjDMfoVG7YWIlY3lLlwksDsPAwcRm4GA>
-    <xmx:s9HaZhBWotF2O5UX0Guk6WHI5NDPU9Edg2euSCzo2MFXf-Zyq83idrXt>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E5FF5222006F; Fri,  6 Sep 2024 05:56:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FED1CBE8A
+	for <linux-csky@vger.kernel.org>; Fri,  6 Sep 2024 11:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=85.31.212.146
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725623406; cv=fail; b=CwdxSXWfAISadZo+aQaim3wSSiAbApyVe/bEUinvJ4RtrgeIK8O9qqEfBtzbk+oe8LSKq3eBJgnB+6VYxS55nESiuNLEG89PcnK6cVnZItx/eGFnlDMIC2zbtMcplpNk+cFwS7jwSuingxeY60I739HxrdQMjBccyQBffZI0Edo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725623406; c=relaxed/simple;
+	bh=jQeIwSeV9x5cNLkMOCKbfvh2gAzZ0rXmkbBIP4/OHZs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KwY4ZsqISAKXtg+yW5NpE7PFsPlOrVVi4OnxtcXmORmIWcjL1usKmIqvcfehY/ByEzTgFHQGL8emVNmtvSDFVMaKsmBdQZg6bDRNwYopXNL/BMPw513JhQcLTLBELpWR+2UxjZLii8s6exRBl/i31cPEk9Y79OZzGiHOfH7u4zU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com; spf=pass smtp.mailfrom=kalrayinc.com; dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=gmN8Uhst; dkim=fail (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=hC1gjkAQ reason="signature verification failed"; arc=fail smtp.client-ip=85.31.212.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kalrayinc.com
+Received: from localhost (fx601.security-mail.net [127.0.0.1])
+	by fx601.security-mail.net (Postfix) with ESMTP id 0D5D8349801
+	for <linux-csky@vger.kernel.org>; Fri, 06 Sep 2024 13:47:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalrayinc.com;
+	s=sec-sig-email; t=1725623245;
+	bh=jQeIwSeV9x5cNLkMOCKbfvh2gAzZ0rXmkbBIP4/OHZs=;
+	h=From:To:Cc:Subject:Date;
+	b=gmN8UhstvLsnS9m6obVAhFjBDNxB+zpKCx7ydSyygbW3N6fEzf8EH19p49KXcTaoQ
+	 zky/krWF/AnkrYj26DBw+gQEEWtMUeMcntL5Hr+biE278emke/z/czA39DP1rAPbKS
+	 FRolSjpG9zOrG2Bt03zyryPwvhy8yFOASNJfQ+yo=
+Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
+ fx601.security-mail.net (Postfix) with ESMTP id 9F2B53497E1; Fri, 06 Sep
+ 2024 13:47:24 +0200 (CEST)
+Received: from PAUP264CU001.outbound.protection.outlook.com
+ (mail-francecentralazlp17011024.outbound.protection.outlook.com
+ [40.93.76.24]) by fx601.security-mail.net (Postfix) with ESMTPS id
+ DF7953497BF; Fri, 06 Sep 2024 13:47:23 +0200 (CEST)
+Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:118::6)
+ by PR0P264MB3466.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:14b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.26; Fri, 6 Sep
+ 2024 11:47:22 +0000
+Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::6fc2:2c8c:edc1:f626]) by PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::6fc2:2c8c:edc1:f626%4]) with mapi id 15.20.7939.017; Fri, 6 Sep 2024
+ 11:47:22 +0000
+X-Secumail-id: <5434.66daebcb.dd4a8.0>
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LfOB1Qn50tmh0wKyHby8mRDcSdtBkXwvgOcqqDteXwQku+vwAsPrnGLqDhiTEMTNLBcd++Jamo0UQiOEmRvmR6pGGmjOx+G+2QNhF4/yF8fibZj/IkMOEVtWZCNIfgaN/RD+O6ZQyiFAfoUQ0Y7HALPrN1DoilRRzegKufl94LSi04tb2kL6a9X/tQpXCivG1QYe7+BhyUkTDWXG4kqIGOT4oZ88fewXdsh/z7bW79MUpCLglFHUBjBQk8jI9loOCWGHwI/FimVoO3pV2wu59Qw2W1jaISo/4fvgwBg/taFuhm2oPPIaJ35JQzWKRD5YMIPbIwIr+OskXpoE0l+kOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microsoft.com; s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HiAnJIoHpbJxj5la1hMTIQmk3Srj/8Pr4XZVaZQhkpo=;
+ b=i4qEJUQRmW/KEH0TlOZdgDFAnwiSD35Rib0/R1WjYtWn8lK76AmQfo4hOSprxLwqz6ZyEbeVA1q0FIg3AYFdQpCu0FC6g7Ib8INTAVKzGflnPXhqbuIfIzYX+rmC+NRggJYHcB7Rl6uTkeGNHihq5lMGZs25LCEnvosSn9T16r0bN5SBZKKgLhLvc3yWH9FDaasuY199MQfTx721bT2LuDQXfRu1WQK7CkJCkVtEsx3939UBVSu5THqhJK+NRpw0UPHiNp+79m65h1WAR0/g7F/9U+F0wxErGfgWOBacplmqg8OyzdV8G7vvpAaDjhjUl/YybLz4Hmclq03Bu1ildQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kalrayinc.com; dmarc=pass action=none
+ header.from=kalrayinc.com; dkim=pass header.d=kalrayinc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalrayinc.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HiAnJIoHpbJxj5la1hMTIQmk3Srj/8Pr4XZVaZQhkpo=;
+ b=hC1gjkAQ+yspNCizMHr1Xq/LGLySeTggjqzTej+o40u+ooXjsQ6CgqCVAGoc1aQsIWXSsWCgyn+BP3sRdWJtKYxRhPFceWnqMXwWKWFzMQwPJwfr1OoG04q7UH+BbKFlLelXmsr3SWyoAweaaOpVxbIXkRfMl1nWe2ySHJVQt3svPuylgVmHwiMGXOq/ju0sZEbAhuk1Mr+tdUkp8eI0edb+rTHWiDcGFFzNOPq8+hah5o9/xNUqJfEQh9CC2TUQ5j1VZ73/9aokrFYCzNTJ/RC+k5Sma4qoIeIRgDcVQ22zyyCZu8HAAMs6yksSJ43jJNxdCpaSHMceiO7wDkeqWA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kalrayinc.com;
+From: Julian Vetter <jvetter@kalrayinc.com>
+To: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren
+ <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-csky@vger.kernel.org, loongarch@lists.linux.dev, Yann Sionneau
+ <ysionneau@kalrayinc.com>, Julian Vetter <jvetter@kalrayinc.com>
+Subject: [PATCH 0/4] Consolidate IO memcpy functions
+Date: Fri,  6 Sep 2024 13:41:47 +0200
+Message-ID: <20240906114151.519028-1-jvetter@kalrayinc.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR02CA0021.eurprd02.prod.outlook.com
+ (2603:10a6:208:3e::34) To PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:118::6)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 06 Sep 2024 09:55:42 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: guoren <guoren@kernel.org>
-Cc: "Charlie Jenkins" <charlie@rivosinc.com>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>, "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Muchun Song" <muchun.song@linux.dev>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, shuah <shuah@kernel.org>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Michal Hocko" <mhocko@suse.com>,
- "Kirill A. Shutemov" <kirill@shutemov.name>,
- "Chris Torek" <chris.torek@gmail.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
-Message-Id: <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
-In-Reply-To: 
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to 47 bits
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAYP264MB3766:EE_|PR0P264MB3466:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3afe11b6-8068-4afa-5312-08dcce69aba2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info: NwmKa8CfwphrOkxMicqezozWgDxeevxNxwSPIbK8JdzErPooHv9EJGkt9MdBr9ugpGtU4bBMOmtw553O9ZvS9ClAmHNzJd/wPFEv0eN/G6obuBmnn7WnBYGGytq2dkci0xWxVFmgX7caq5DXQS/eL9V9BG85ZuhmotDumHha2NM1SgvWB8JwLD3gDzRrvdJLc1JCdJknuBzmrt3VXvuugeXucW5jiSDDv28muw0cWN6EzRKYVpFIi8wYo98LKq/eKdM+aWxVpjxWCEDElZji/5nBWkLgNXjIcLeHvMOKd1TuJimTIu+LU19dIn7DA46GpJRXCWYx7rfHFVy+I6zLr2QqQ2C6GkZotkVExHKwwJwLo/R5+LaUqQhoeuOCUr52X4C6yYmCL7GeoqJKeOLzMb2NVo4Ox4hF8qqyXpfaqCv0UnOm5n6piflAceQYiCyHdxOEM0yLm2lrg1ND/OAfDMSNKMAB/KWeSD6XrxUXHXFtoQAa+woK1m9QoDEXMkdY67p69qkU4u6hny0YZzvfnLkjsF/9BMnHX15hKtJSIan+8cBzxr0W6EvTqa/6BMCHbk5qFUFsk8H8D6R5YYiGIaCSi+70vFCHQY6agilSGbDO6zaGumkPmqUFZog/zEzvTD/arEXwEJBlS7uWz4j0mk4UlxMliZEQ+m3pJiwVlG2L0NUf3C2PTebp7fkyE+rEclFJqBTLP8d+T6TU+JP4hnpUkgXDrVeQaeCHJd2Tqdjxdfcu/r6P2kGfhKkXIHL29LGqcmpqRDEEOfzOgNVv0bveOogYZhZH8sIUIOC+BW0MAGXHP/YuqJJ/oCYTJcnBGMdVxHRB7dAkxFlsHK/gPjaW4FQJux9EWKQ3xkl5EFzteM700zZfFHziA2Q/axSudLMkJxSZbCZPpqzFzW8k0NaIpXytyJnvoSBv/Qik89pXCU61nszNY38sdWlHWOWk97B
+ 4g228M75OLDBJZf0Fbj8fN/KDLRR+GKuH8znSWqFCPtdeoi2t7/jnqLEjT+sTMDFOTidZWllCp9uMv9c9kdjgndwAr8QDGJrS/y8ifwJ1k+5tchxFDu/5t5HjwfaZex4hc9VnruOkPV/k93cnClnMZBIui+dLL4dTAfFJKLqbbSHiNpYUkO/7uavLaS4010xDcDkbF5u+gRKsMOqyMDQ8sBbNTTsX0Xkw7G05XjzY8R6N72itibDMBUgqUUDuuNFBxQKTlogzYNmkm9KKfpvTnMKfWRYbAVDkiv3DtRk3YbAm+7JlV36BX9k3/QoUeWuXbCHvL/YgmGkb2RodR7v9sMvMaKFTfTItJMbBbUYU1ar6TjJmVuy/Ji3rwtzENM37oUU+rsOaUNgYn02hsC8TsLujE9EgcDasf6lJXzb7f2d2eTfISZePjEbMnQlPE8lyUt6h5h7RNL/9GQVpjQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: EEYvN/b/Cpp/Drow8JeRP1aQYJ7xkPXJF+SMj3Q3WQRiL7T8VnOdwyRzS/lajfWXxvQFpIT/4jRTZf+rD6MCtwJqmNgSgDr9ka/LLFYMIqbuVvgxRwdJOBp/LlIb/yLz/Uq33YAGwC0W1rZf3Q4xC21R0TWcPCKmywAOGsQeaiA5MSSKHf7ck82EiCcpi7Oi/OpEXkVFibC36ChRYltshbCWjBD6AhYjVrPWDRD2ID6CL/xgiyoTjjqYenhQ4iN/xwW3p1hWT09XjqgjlyK9E/CUuptDuNiovA0DmcSyIh3y7C5KnHZx20Y7Q7YexGW5uglO5pmjj9foq7C8Z5986vTvClktF0qBU7qPa0+oO+ToKSuZLqVxCeWVYCfmEq2LhpW5UXTOlCLB3ar5NZXinbUF4LiN/s43IeVtkdhWStsCNoL9Ys5ViFsQb2NMSdlJ273aul7ZaaRstKBe8+vCh81WkwY6ngdq0VwKPoaFGcimKmBvFqsZJmLgpUqR5c/IiOenPULM6hH03eNQ+ki5hUe4Bh2UepdaW/vFOxO9BHwxKsVxqeIZ43Shvtnljd8u9OrWHGzNlcGBAzLB1VXow5doSR2yqmqecHe6lxDkF/BSz8pD8dI3Itb9PfdFvmhurpkhmG0pYngyPcU7vTS8Cntdtp4ve0RVFU0667XiX8tLG8Q0Hj0sJBD5lIE8kVx4S0epSDXovDW2VFaHnVITlnkWEmkptoYzgj2nNTTBsgx02hLyMP1/qA72xMhXmrU/kz/EmLP/zGeWxXrUeZQiv7tMyju6pRQIXhGspXCnfeo+jNXQohUr/lEs1m+rJMXnt39tW2mprIsGoiJQvrQIlN0J2s7Fj+TQyCda2cMXOheS8h4P6NchObNVM4g6S5BvoR5eeBc8jlDmx3LQB88sOUXR+RWncAopZKb3Cdxcud2oO8jzo5kEnOENLFEqIKlJ
+ +4GClKKf1PkJ5tZQifWynt9MsOIFKifGcdhI+JXWcs/c6Q5ZJ67UCVLC/6sJICFzKzMI32EG/urix3ERLZ3yvR3/CyOj0TDLi53zBApVGEReZ71COoeXxPXplCNQcbV//AYRG3RTBRDPN9ICxKd4L1EL2/51bd6j0S+cPc3RiiCjU9jHZftfrTfOaOf+DE5ae/iWJOIschrEMkqnR7QrC4hV3cuDLlqAGIQmjDQrJQ726/gnuz8B2zctQJw2ug084swGFQdVnKOxUeZvd1ENzA2Dh1+VVI5VYyJSm5Mgv33hw91tDJqHcW4MO6XB3Zdh0X3O1M3wupVZeIXyXwXbFxujZRpQo4LouDPDUTPgVTLQBWM3gG8wtlxeVvjwmgLTkMOkI5iBn61r5w6OKMqr0IXJ35c9UfdibBZ12+3oDdqNn2VXjd2vVY0s+Kk5vBRA6844BwRaAp0Q7jN7c9/D2n3BetyxL9V6vfI4xX/LpwEEEg+C/wNAnq3if+HDePd/q9ia4CPw85PmHQm7lwcKnGUDL/iScrTay4RZFegniQxc7+V/6xFHdW2bvhM/YRXw/+C2/KYGpQWxc1hegxPJTEHtj4GjhVGjR/3gh9ygCKE6whlpJx8QPf20TDg4/1n9ka2EA6uUQC9jQj4GFHlEPA==
+X-OriginatorOrg: kalrayinc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3afe11b6-8068-4afa-5312-08dcce69aba2
+X-MS-Exchange-CrossTenant-AuthSource: PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 11:47:22.7749
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8931925d-7620-4a64-b7fe-20afd86363d3
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6PXTLuLTQE8wbEVxomkrrfPWQp+/COsl4hU0dfs8x14troLalGYU/dTv26sb41lYSzOZzqUC3fljrBqzx/5/SA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3466
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-ALTERMIMEV2_out: done
 
-On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> On Fri, Sep 6, 2024 at 3:18=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
-rote:
->>
->> It's also unclear to me how we want this flag to interact with
->> the existing logic in arch_get_mmap_end(), which attempts to
->> limit the default mapping to a 47-bit address space already.
->
-> To optimize RISC-V progress, I recommend:
->
-> Step 1: Approve the patch.
-> Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> Step 3: Wait approximately several iterations for Go & OpenJDK
-> Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
+Several architectures have almost the same implementation
+for__memcpy_toio, __memcpy_fromio and memset_io. So, this patch series
+consolidates them all into a single libs/io.c file.
 
-I really want to first see a plausible explanation about why
-RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-like all the other major architectures (x86, arm64, powerpc64),
-e.g. something like the patch below (untested, probably slightly
-wrong but show illustrate my point).
+Julian Vetter (4):
+  Consolidate __memcpy_{to,from}io and __memset_io into a single lib
+  Activate GENERIC_IO for the arm64 architecture
+  Activate GENERIC_IO for the csky architecture
+  Activate GENERIC_IO for the loongarch architecture
 
-     Arnd
+ arch/arm64/Kconfig             |   1 +
+ arch/arm64/kernel/io.c         |  87 ----------------------------
+ arch/csky/Kconfig              |   1 +
+ arch/csky/kernel/Makefile      |   2 +-
+ arch/csky/kernel/io.c          |  91 -----------------------------
+ arch/loongarch/Kconfig         |   1 +
+ arch/loongarch/kernel/Makefile |   2 +-
+ arch/loongarch/kernel/io.c     |  94 ------------------------------
+ lib/Kconfig                    |   3 +
+ lib/Makefile                   |   2 +
+ lib/io.c                       | 101 +++++++++++++++++++++++++++++++++
+ 11 files changed, 111 insertions(+), 274 deletions(-)
+ delete mode 100644 arch/csky/kernel/io.c
+ delete mode 100644 arch/loongarch/kernel/io.c
+ create mode 100644 lib/io.c
 
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm=
-/processor.h
-index 8702b8721a27..de9863be1efd 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -20,17 +20,8 @@
-  * mmap_end < addr, being mmap_end the top of that address space.
-  * See Documentation/arch/riscv/vm-layout.rst for more details.
-  */
--#define arch_get_mmap_end(addr, len, flags)			\
--({								\
--	unsigned long mmap_end;					\
--	typeof(addr) _addr =3D (addr);				\
--	if ((_addr) =3D=3D 0 || is_compat_task() ||			\
--	    ((_addr + len) > BIT(VA_BITS - 1)))			\
--		mmap_end =3D STACK_TOP_MAX;			\
--	else							\
--		mmap_end =3D (_addr + len);			\
--	mmap_end;						\
--})
-+#define arch_get_mmap_end(addr, len, flags) \
-+		(((addr) > DEFAULT_MAP_WINDOW) ? TASK_SIZE : DEFAULT_MAP_WINDOW)
-=20
- #define arch_get_mmap_base(addr, base)				\
- ({								\
-@@ -47,7 +38,7 @@
- })
-=20
- #ifdef CONFIG_64BIT
--#define DEFAULT_MAP_WINDOW     (UL(1) << (MMAP_VA_BITS - 1))
-+#define DEFAULT_MAP_WINDOW     (is_compat_task() ? (UL(1) << (MMAP_VA_B=
-ITS - 1)) : TASK_SIZE_32)
- #define STACK_TOP_MAX          TASK_SIZE_64
- #else
- #define DEFAULT_MAP_WINDOW     TASK_SIZE
+-- 
+2.34.1
+
+
+
+
+
 
