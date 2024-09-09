@@ -1,108 +1,232 @@
-Return-Path: <linux-csky+bounces-809-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-810-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFE5D9707BF
-	for <lists+linux-csky@lfdr.de>; Sun,  8 Sep 2024 15:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B6CD970CFE
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 07:38:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E91C1F21943
-	for <lists+linux-csky@lfdr.de>; Sun,  8 Sep 2024 13:28:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8E6D1F21CDC
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 05:38:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93058168C26;
-	Sun,  8 Sep 2024 13:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0841ACDE7;
+	Mon,  9 Sep 2024 05:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o7ebJUoT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lqk9+8fN"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650FC86AFA;
-	Sun,  8 Sep 2024 13:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D7422638;
+	Mon,  9 Sep 2024 05:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725802116; cv=none; b=GdzghuAabYpu7AGZ5UydKoIPeoIJXACfbPJ9oYaec3Ddr1jqZs33pY6ONJU3cmpRBEaPG2iK5p7keIx9kxfcN1Hp+Uufr987unsrK6q/nvh4pArCccB74ExNUkZQgvMErqNl1LJslZ6kzkX3WRAoSvisult71TFQu7+5m4/CA8k=
+	t=1725860298; cv=none; b=OxaIMNwCJ0iQQunjPQFXoKFMAdmKn96kl//zEw5SxE4sxkWWXyluUeL6DWDNTqj3NpCNU+jYPNENOAlxPNC7noc3Z3OzlN0J5n5ltl46pldEzPjuHUDOAfatdJvdqsl2CIqFLrvr2d97Qbjd7FLr3QrhPWcM4yjsRFHBuCog68M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725802116; c=relaxed/simple;
-	bh=Ri56JanrxzJT4UAsenigTt4NMozWGcCirDACmDKy/58=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=uHfhHQrypSALubptFjb5KZC5KKIeIKxx0QFJp5CGcX7V9xsgOEPY8DOT66yv/BNZD0Pw5UxAhRJTTMxxBqykOvJpHbzklo4cPdlHP5I0+dJKylLggU6gr/tYNAtmr9OWD8+9b+Bpyvy7zmHK6YqndaTn4yPAqR+qaZJ8CeHcTwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o7ebJUoT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 146EDC4CEC3;
-	Sun,  8 Sep 2024 13:28:32 +0000 (UTC)
+	s=arc-20240116; t=1725860298; c=relaxed/simple;
+	bh=248ziiTVCRGbM5LmN8AO7b96LuuBfqOH7lAwbsdPjxE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mVDmMXAMPp/0G8wmQrK09TnR64/3AHkxiMd5dfjBc/2+9zdag/wUb7ynaAPm7JWKJ6lKdjV93dpCHWa3zdn+e+LaMgNtX7rGyjABTT3Kbo51qBAiogCjgIYhK+n80W1GdybA0MDKKcrbUjkNVdZL1QUKFrc/R4n99pjw80rM0Ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lqk9+8fN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF8CC4CECF;
+	Mon,  9 Sep 2024 05:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725802116;
-	bh=Ri56JanrxzJT4UAsenigTt4NMozWGcCirDACmDKy/58=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=o7ebJUoTay3mWVdOCJ4YnYJZjSzmSnevlKrosJn8e6uCur1cUoVbw9AKKa6GDZXt1
-	 qxExlBWFTKM5q7/LVzILs04dk1Pq0KKrLMfdXcFBLK8l5WMlySIzzvHOBnNy5W8lNJ
-	 OPGhpYs0TrwJg+DYNRQHUBzF8/UvDPGLsiXswSS5Ko7wyXHPxVJSrcHt9v4OyO+BVE
-	 nNLHP+i0KOG/K0u7PtjWKIwfZLaKZpWhUDJmBAeGhOGRrsRkh6Yc/IRSqYU7myASWp
-	 aW/1VD16L2dLdm86/Vx+cuDhYrWRmEemikoIP+g4/KIs0YEJw+DmdL/j9CcjiEX9vL
-	 zImcMKORyq8mQ==
-Date: Sun, 8 Sep 2024 22:28:30 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Sven Schnelle <svens@linux.ibm.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
-Subject: Re: [PATCH 0/7] add function arguments to ftrace
-Message-Id: <20240908222830.01a01b10d62d59ed73dcb676@kernel.org>
-In-Reply-To: <20240906100738.2526cffd@gandalf.local.home>
-References: <20240904065908.1009086-1-svens@linux.ibm.com>
-	<20240905111620.5211d9f8@gandalf.local.home>
-	<yt9dv7z9l2zp.fsf@linux.ibm.com>
-	<20240906100738.2526cffd@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1725860298;
+	bh=248ziiTVCRGbM5LmN8AO7b96LuuBfqOH7lAwbsdPjxE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Lqk9+8fNiAJZsLmJZfNjOcJJrbex0CFOVOdjWsTc910wOK86Qm4pLowAw5rr5eeB+
+	 wo9r+pJbFpgOffoaExZP4OAp91aCK7r73u492I3hZeWJDNXSMTFJNS9M+FRo+3MzzD
+	 K44EA65vVaR5h8BqtrHvgLf15QhZs13OSz4ZUut5PrICZaAXuMm+u13n0g3x2UR/WP
+	 viN9fQwVPKtuNovaGECTam2aoE3V05ijvMtgo/m8mieZxCYVHH0GdiSDqx9mRwELw5
+	 9rXtc1IS19Qnh4VwtzwMC/AijM3ZIT6r47iyjhPMKbqbzezQfCm7xOeMQEeJDtPIR8
+	 N+bxt61PaH3AA==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a8a7596b7dfso640278166b.0;
+        Sun, 08 Sep 2024 22:38:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX4vJE6QeCGtcQ6I6QpI2cc6Fs8KoakIiQU/t8bOFxpbpXLJdlxQryqJYlOZMZN3V6/trB6nRBONX6tZzMW@vger.kernel.org, AJvYcCXBreL8lh73iyE2LiVRAeohrHZKKSrrgBgs2isGzADfTfoElEhFmAoYEujzacisGHhbO51slAj7o6qK@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywp8BN+6bIKvSW9T1oG0nKrvh4Ff5EnSkVggWcfT2spRmdlOvds
+	Gc2fVGMZ43Ye5QycW3xKY/VRvMUaDQrV630jfFP8WNv0BMCfD13LX0R5z3JnIdMIGqHVKalI7LM
+	kD9C3SzdBH/SKHGE4VkOLyaHntfQ=
+X-Google-Smtp-Source: AGHT+IHjBN35NmKR1OI5li20cLHkx9049W05deSAnLeL3Dhe+9B6DZKPW9onBE/+E2iLUZA1jWuOyBcAVE2WJG31aWA=
+X-Received: by 2002:a17:906:eece:b0:a77:c051:36a9 with SMTP id
+ a640c23a62f3a-a8a85f9af7cmr1134497066b.9.1725860296616; Sun, 08 Sep 2024
+ 22:38:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240906114151.519028-1-jvetter@kalrayinc.com> <20240906114151.519028-4-jvetter@kalrayinc.com>
+In-Reply-To: <20240906114151.519028-4-jvetter@kalrayinc.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Mon, 9 Sep 2024 13:38:05 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQHkdgNRBg+fGkKre1zdCXfC57YUGDU-GrMJOTRyCQzZg@mail.gmail.com>
+Message-ID: <CAJF2gTQHkdgNRBg+fGkKre1zdCXfC57YUGDU-GrMJOTRyCQzZg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] Activate GENERIC_IO for the csky architecture
+To: Julian Vetter <jvetter@kalrayinc.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, 
+	loongarch@lists.linux.dev, Yann Sionneau <ysionneau@kalrayinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 6 Sep 2024 10:07:38 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Sep 6, 2024 at 7:47=E2=80=AFPM Julian Vetter <jvetter@kalrayinc.com=
+> wrote:
+>
+> Use the generic __memcpy_{from,to}io and __memset_io for the csky
+> processor architecture.
+>
+> Reviewed by: Yann Sionneau <ysionneau@kalrayinc.com>
+> Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
+I'm okay with moving it into GENERIC_IO
 
-> On Fri, 06 Sep 2024 08:18:02 +0200
-> Sven Schnelle <svens@linux.ibm.com> wrote:
-> 
-> 
-> > One thing i learned after submitting the series is that struct
-> > ftrace_regs depends on CONFIG_FUNCTION_TRACER, so it cannot be used
-> > with the graph tracer.
+Acked-by: Guo Ren <guoren@kernel.org>
 
-Yeah, this is solved by my series [1].
+> ---
+>  arch/csky/Kconfig         |  1 +
+>  arch/csky/kernel/Makefile |  2 +-
+>  arch/csky/kernel/io.c     | 91 ---------------------------------------
+>  3 files changed, 2 insertions(+), 92 deletions(-)
+>  delete mode 100644 arch/csky/kernel/io.c
+>
+> diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+> index 5479707eb5d1..d64329b691f7 100644
+> --- a/arch/csky/Kconfig
+> +++ b/arch/csky/Kconfig
+> @@ -48,6 +48,7 @@ config CSKY
+>         select DMA_DIRECT_REMAP
+>         select IRQ_DOMAIN
+>         select DW_APB_TIMER_OF
+> +       select GENERIC_IO
+>         select GENERIC_IOREMAP
+>         select GENERIC_LIB_ASHLDI3
+>         select GENERIC_LIB_ASHRDI3
+> diff --git a/arch/csky/kernel/Makefile b/arch/csky/kernel/Makefile
+> index 8a868316b912..de1c3472e8f0 100644
+> --- a/arch/csky/kernel/Makefile
+> +++ b/arch/csky/kernel/Makefile
+> @@ -2,7 +2,7 @@
+>  extra-y :=3D vmlinux.lds
+>
+>  obj-y +=3D head.o entry.o atomic.o signal.o traps.o irq.o time.o vdso.o =
+vdso/
+> -obj-y +=3D power.o syscall.o syscall_table.o setup.o io.o
+> +obj-y +=3D power.o syscall.o syscall_table.o setup.o
+>  obj-y +=3D process.o cpu-probe.o ptrace.o stacktrace.o
+>  obj-y +=3D probes/
+>
+> diff --git a/arch/csky/kernel/io.c b/arch/csky/kernel/io.c
+> deleted file mode 100644
+> index 5883f13fa2b1..000000000000
+> --- a/arch/csky/kernel/io.c
+> +++ /dev/null
+> @@ -1,91 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -
+> -#include <linux/export.h>
+> -#include <linux/types.h>
+> -#include <linux/io.h>
+> -
+> -/*
+> - * Copy data from IO memory space to "real" memory space.
+> - */
+> -void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t=
+ count)
+> -{
+> -       while (count && !IS_ALIGNED((unsigned long)from, 4)) {
+> -               *(u8 *)to =3D __raw_readb(from);
+> -               from++;
+> -               to++;
+> -               count--;
+> -       }
+> -
+> -       while (count >=3D 4) {
+> -               *(u32 *)to =3D __raw_readl(from);
+> -               from +=3D 4;
+> -               to +=3D 4;
+> -               count -=3D 4;
+> -       }
+> -
+> -       while (count) {
+> -               *(u8 *)to =3D __raw_readb(from);
+> -               from++;
+> -               to++;
+> -               count--;
+> -       }
+> -}
+> -EXPORT_SYMBOL(__memcpy_fromio);
+> -
+> -/*
+> - * Copy data from "real" memory space to IO memory space.
+> - */
+> -void __memcpy_toio(volatile void __iomem *to, const void *from, size_t c=
+ount)
+> -{
+> -       while (count && !IS_ALIGNED((unsigned long)to, 4)) {
+> -               __raw_writeb(*(u8 *)from, to);
+> -               from++;
+> -               to++;
+> -               count--;
+> -       }
+> -
+> -       while (count >=3D 4) {
+> -               __raw_writel(*(u32 *)from, to);
+> -               from +=3D 4;
+> -               to +=3D 4;
+> -               count -=3D 4;
+> -       }
+> -
+> -       while (count) {
+> -               __raw_writeb(*(u8 *)from, to);
+> -               from++;
+> -               to++;
+> -               count--;
+> -       }
+> -}
+> -EXPORT_SYMBOL(__memcpy_toio);
+> -
+> -/*
+> - * "memset" on IO memory space.
+> - */
+> -void __memset_io(volatile void __iomem *dst, int c, size_t count)
+> -{
+> -       u32 qc =3D (u8)c;
+> -
+> -       qc |=3D qc << 8;
+> -       qc |=3D qc << 16;
+> -
+> -       while (count && !IS_ALIGNED((unsigned long)dst, 4)) {
+> -               __raw_writeb(c, dst);
+> -               dst++;
+> -               count--;
+> -       }
+> -
+> -       while (count >=3D 4) {
+> -               __raw_writel(qc, dst);
+> -               dst +=3D 4;
+> -               count -=3D 4;
+> -       }
+> -
+> -       while (count) {
+> -               __raw_writeb(c, dst);
+> -               dst++;
+> -               count--;
+> -       }
+> -}
+> -EXPORT_SYMBOL(__memset_io);
+> --
+> 2.34.1
+>
+>
+>
+>
+>
 
-[1] https://patchwork.kernel.org/project/linux-trace-kernel/patch/172398532480.293426.13232399076477198126.stgit@devnote2/
 
-So I think this series is easier to apply after my series, which
-passes fgraph_regs in return handler.
-
-Thanks,
-
-> > So either we make it available unconditionally,
-> > or use some other data structure. Would like to hear your opinion on
-> > that, but i'll wait for the review after your travel because there
-> > are likely other issues that needs to be fixed as well.
-> 
-> Hmm, I thought the graph tracer depends on function tracer? Anyway, the
-> configs should be cleaned up. I would like to make CONFIG_FTRACE just mean
-> the function hook mechanism (mcount,fentry,etc) and not be used for the
-> tracing system.
-> 
-> Anyway, we can just make ftrace_regs defined outside any config for now.
-> 
-> -- Steve
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--=20
+Best Regards
+ Guo Ren
 
