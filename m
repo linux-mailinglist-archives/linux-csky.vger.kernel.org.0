@@ -1,180 +1,138 @@
-Return-Path: <linux-csky+bounces-819-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-820-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94971970E92
-	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 08:52:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE593971051
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 09:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E1C51F210C6
-	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 06:52:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 053801C21F6E
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 07:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1CA71AE855;
-	Mon,  9 Sep 2024 06:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15B71B0129;
+	Mon,  9 Sep 2024 07:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BkZCp3fS"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sdc1ZcbQ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4FB1AC8B0;
-	Mon,  9 Sep 2024 06:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE061B012A;
+	Mon,  9 Sep 2024 07:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725864597; cv=none; b=B1dnDYq/bCtw6hqM9WsEt9lCY0+ugmTFSHODPJbgny8WHCpS2+2M7pfbYI/dMprJZqCpiofiH/p44T4Nkz2FnbZIt5TcjGlQ5ROpEzUw+FgEPMROq2hbzAbFA1rc/gLNYVOgFXfMR/qXwHK4/c/g3204OndfJK796ZKdp2nqBPI=
+	t=1725868362; cv=none; b=aKtBIW6s95QBns5RyvcPkXhlENzzRL55IXmYvmg7yD8KpfbERI0DmjyRIDC3glJZXvry9NlURhVOO8cV+JW9OwpEj0BIs/JLz4FNoO7qe/23Fe12Br2J2PlKJbLUcM/zQfqu3WPpduKijnQP1F8BrP6jbZPOsvL2TXUsbORVCkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725864597; c=relaxed/simple;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=liw9dugMCqYMNm8zUZX6JVuQRsz3Qj3Q91EwEnMF6RG8zNO2pl9LYRUKGcmBSJw6PuShvAUPSrdhiA4JhEY7G4+nqyIIlo+AfhKqXhvf6hPEaxH/1QVbmV722cGFoJ9HzH4d4clM9VYrL6YfQwdaAmdbSwtoey/6x+31Vxxu+WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BkZCp3fS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62106C4CECB;
-	Mon,  9 Sep 2024 06:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725864597;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BkZCp3fShQXfTG1Nn+VMmuW0LYueTyrn7acbRvvboJKcY6YjPoDDx968iFpKR1CWC
-	 aF/p0o4PzZ/eloW/K8mvH2s9aJhYiRq+CLA/Z6C5cf0zaOL7QYXEhZf0/TByS50AhI
-	 bJWZ0vLimK/FFtaJwXD9Yjc4jTIfHrr3Tv5YRIoRd3fkkJvNyNI486dzezhXOWgnQJ
-	 HbPC0BW8QqdHVqqtZvDGdZd2DLKkW13q6h3MOVdLTl2ijRdrSJoovSlNGk+YE1vLSL
-	 MY6Kf9lXc+klIMZqkADFnytoN8MKNCrTtrBVamTW4DGupk55fMoWoan0CIHDPihKAp
-	 1QrOM6cpJNDWA==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v3 8/8] x86/module: enable ROX caches for module text
-Date: Mon,  9 Sep 2024 09:47:30 +0300
-Message-ID: <20240909064730.3290724-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240909064730.3290724-1-rppt@kernel.org>
-References: <20240909064730.3290724-1-rppt@kernel.org>
+	s=arc-20240116; t=1725868362; c=relaxed/simple;
+	bh=BcuSQx643SHfhyrLiS2tq0Rnh9mIkchyToPZe+TkftI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=Bf2XG3STwhfanAe4CT33f/aMtL76gqftq5HgnWQ3qEvHV0X+w5gxnYNsbqLSIbUqrlfT6Zp+d7t9voR827dSnWrph/0Z42oEIz6ETrw0MvtPv7JItoKPIPvBAAUBKkMEsu/fCdlQyHNtos97AFYCi0CcXz6oAdpVyBpDiSDsRy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sdc1ZcbQ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 488EGkuL028493;
+	Mon, 9 Sep 2024 07:52:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:in-reply-to:references:date:message-id
+	:content-type:mime-version; s=pp1; bh=moBXgB70de3lqjGc3xvwz3nwGd
+	M+kLX4K4e1CtqCfZ4=; b=sdc1ZcbQ/8Uu30BI3hll/ZZKmpbCvKSUaQBgtC4Oft
+	h0CbuIuk2EVJzTcp492wfWrPk+jbTSvpPq768JHxnPo5xBp4UsSRsmPXtNAPxLDU
+	4vRfRwV3AqB4MypjtDPSc9HjovscGDk95GuElNQxzX7ihpdQcNqbROwxKp4tV/Fo
+	YFDpniTP5gt7xwrD3pqXvXFo8oxDE903tv5OY1exvkteLz7QBzO3jAb6U3dnm/yB
+	WJ1BJDhtg7msCVnZNCfL+Ptm0r2LpLnWrhwk4BtUygvaVU7f7wHii6mBOUk/ponX
+	X/Z/XydQbXbkckwbVTi3IcBAUb3387hkOODAsvH1iKuw==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41gefy8dw6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Sep 2024 07:52:24 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4894XkfN027333;
+	Mon, 9 Sep 2024 07:52:23 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 41h3v2w2dr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Sep 2024 07:52:23 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4897qLQu22217104
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 Sep 2024 07:52:21 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CBBDB2005A;
+	Mon,  9 Sep 2024 07:52:21 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A018320040;
+	Mon,  9 Sep 2024 07:52:21 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon,  9 Sep 2024 07:52:21 +0000 (GMT)
+From: Sven Schnelle <svens@linux.ibm.com>
+To: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Mark Rutland
+ <mark.rutland@arm.com>,
+        Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>,
+        Paul Walmsley
+ <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert
+ Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org
+Subject: Re: [PATCH 0/7] add function arguments to ftrace
+In-Reply-To: <20240908222830.01a01b10d62d59ed73dcb676@kernel.org> (Masami
+	Hiramatsu's message of "Sun, 8 Sep 2024 22:28:30 +0900")
+References: <20240904065908.1009086-1-svens@linux.ibm.com>
+	<20240905111620.5211d9f8@gandalf.local.home>
+	<yt9dv7z9l2zp.fsf@linux.ibm.com>
+	<20240906100738.2526cffd@gandalf.local.home>
+	<20240908222830.01a01b10d62d59ed73dcb676@kernel.org>
+Date: Mon, 09 Sep 2024 09:52:21 +0200
+Message-ID: <yt9dh6ape022.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jS8qGd1Kag-0cgWKKAQwQPih_Lh8MSWc
+X-Proofpoint-ORIG-GUID: jS8qGd1Kag-0cgWKKAQwQPih_Lh8MSWc
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-09_01,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=765 priorityscore=1501
+ adultscore=0 clxscore=1015 spamscore=0 bulkscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409090059
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Masami Hiramatsu (Google) <mhiramat@kernel.org> writes:
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations.
+> On Fri, 6 Sep 2024 10:07:38 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+>> On Fri, 06 Sep 2024 08:18:02 +0200
+>> Sven Schnelle <svens@linux.ibm.com> wrote:
+>> 
+>> 
+>> > One thing i learned after submitting the series is that struct
+>> > ftrace_regs depends on CONFIG_FUNCTION_TRACER, so it cannot be used
+>> > with the graph tracer.
+>
+> Yeah, this is solved by my series [1].
+>
+> [1] https://patchwork.kernel.org/project/linux-trace-kernel/patch/172398532480.293426.13232399076477198126.stgit@devnote2/
+>
+> So I think this series is easier to apply after my series, which
+> passes fgraph_regs in return handler.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/mm/init.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+Thanks, i'll rebase my changes on top of your patches then.
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..a0ec99fb9385 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1053,6 +1053,15 @@ unsigned long arch_max_swapfile_size(void)
- #ifdef CONFIG_EXECMEM
- static struct execmem_info execmem_info __ro_after_init;
- 
-+static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, INT3_INSN_OPCODE, size);
-+	else
-+		text_poke_set(ptr, INT3_INSN_OPCODE, size);
-+}
-+
- struct execmem_info __init *execmem_arch_setup(void)
- {
- 	unsigned long start, offset = 0;
-@@ -1063,8 +1072,23 @@ struct execmem_info __init *execmem_arch_setup(void)
- 	start = MODULES_VADDR + offset;
- 
- 	execmem_info = (struct execmem_info){
-+		.fill_trapping_insns = execmem_fill_trapping_insns,
- 		.ranges = {
--			[EXECMEM_DEFAULT] = {
-+			[EXECMEM_MODULE_TEXT] = {
-+				.flags	= EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL_ROX,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_KPROBES ... EXECMEM_BPF] = {
-+				.flags	= EXECMEM_KASAN_SHADOW,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_MODULE_DATA] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
--- 
-2.43.0
-
+Regards
+Sven
 
