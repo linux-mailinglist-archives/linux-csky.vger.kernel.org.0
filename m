@@ -1,195 +1,202 @@
-Return-Path: <linux-csky+bounces-823-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-821-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7500971443
-	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 11:47:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BADCB971239
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 10:37:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9E128174B
-	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 09:47:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D52891C22722
+	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 08:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F861B373F;
-	Mon,  9 Sep 2024 09:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0555A1B1D49;
+	Mon,  9 Sep 2024 08:36:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lBPc6O4v";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bHZrriof"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BMT/Vy3r";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="COEduUZQ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from flow8-smtp.messagingengine.com (flow8-smtp.messagingengine.com [103.168.172.143])
+Received: from fhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264631B2536;
-	Mon,  9 Sep 2024 09:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124631B1D4C;
+	Mon,  9 Sep 2024 08:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725875231; cv=none; b=c6CwM0GEWzgxO2iwG7AloAj3zgCG6DKmavV7IN9ZpH+2fK0pnhVw9H1DWMWbXWC+LUVsquZtniHdOKYSNHSREatV8ZQ3XQORQpv/RgsetZbwV9exzduXg40Qekh1i1HcKBDutLp6fFJnYCFtG2Mu3i/cmKWdPS+snQQQxY3U8v4=
+	t=1725870992; cv=none; b=g6Ru2FHFlGqGxmvG33hZQqbqGxHbmATo/GnVoFWz1TYEeyEbP6uFtHSV4NEmd1moqAHzdI2MqhxMzSbg9p2bW81Kx8KCCG/YBRRYBe0AcYL/xgA0ujaamg1KgwESv2WSjUmpj+abo8dNoZSrP8psur3gnHMBaPhPnLHMDCjTfFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725875231; c=relaxed/simple;
-	bh=lNwIR+xwbUxOSrIXTaBwVx4ar9uDyirb5m/6fHAwWXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qEu935tA4JqTNIWUtUVHEBBaBmIqMbqWGRisU7t2HW5FJM8JK5sJV+snmQLkb1RWy/zFFOAjKPY7Xco2fUMIwrm6dft3AxPoMMCQBKEBtx1tJZ7Sz+x5zXySbUGES//1c9QCdV79l170snMTW6vaC2ActHRviAJYtHg0TC17ZsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lBPc6O4v; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bHZrriof; arc=none smtp.client-ip=103.168.172.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailflow.phl.internal (Postfix) with ESMTP id EE18E2001DE;
-	Mon,  9 Sep 2024 05:47:07 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Mon, 09 Sep 2024 05:47:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1725875227; x=
-	1725882427; bh=BPa+t0OgPawOKIqR0T18RRhFI6N40wyPm8P4uVOmsYQ=; b=l
-	BPc6O4vkdjuFdPUQx/GWkjNHlfzM1blnQCFwmbYPk3ohfiJXU2katsOTsV/itMcP
-	I0kFE8ETPJ7hYqbwvzxprTbBjV24twDtCgKPsbHt0/ZHZgZkTCtITsYA91OWMeS8
-	5ToMm7yZ59k8mTdDcR+nlGo7XFtpVtWiKkfNQzQcNR2Cwplo4kvqxS3wcvBhIMzq
-	l/H2k3IBsAOTWMbejZoEwAqhKho3zUo2Tzq9tr+gfJoIIaoekqpRpDt3QN8JX7OA
-	E/W1pu07hhdoy+toDNG55B8/dOiDpeuBZgt2ZAU2x0NcUUZvZdVWPyco45pIDl67
-	hdfqVF2AGsJXsfUNyZ8LA==
+	s=arc-20240116; t=1725870992; c=relaxed/simple;
+	bh=BRd7iguuq3YS6+3Jho+aSkFhAaF4SJbpROvfc/0ETRU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=qJC++U/3Q1meaGaXIUV1YlWlIITEOFD7PB4ubQ+fmd0GBrVZiO1vGzWct6CMLeHclv0YB0JeLil0WShM9LBuV77jcVcwefom4bHhLCwdLSpKRqwt25ryja9oazg7lew5M3xQSHWrTyxUY6Bo61Tyex887XpyKDKBHPNARN4/x4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BMT/Vy3r; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=COEduUZQ; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 266AB1140236;
+	Mon,  9 Sep 2024 04:36:29 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Mon, 09 Sep 2024 04:36:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725870989;
+	 x=1725957389; bh=eUXvZi3N7syICvlD+Ix540Dah1pJESMT13JfPSWJwLM=; b=
+	BMT/Vy3rmsncpWkN+25cU3Fi2M574TZpnDkkEQ0dXHMrdljRr2koq2Eitvx1MP/h
+	DeuL7oMQEkXgWGI8KvIHzN9xvGH7Nx6YWa4WuhfHQiXWeiU3JK6WyRs8aVdG8OG2
+	CgnsAEJcTWJET/XzD4k51wyAQAElmjguczWbwspd0GwBqxMlgegQkFZwbbWL9vtf
+	a3N+HuY12tKPIdIuv7175EgXdrus/Xh0NZJLjFoJCnYFGIi190Wn/Sq+3vFI/XDW
+	BOgta8vJ53T5DJEUPi4xlb9ppTggJzujsHzJv8jvCYp9apt2O83GqzZPkE7YjCMO
+	cLtLOgUyvG3Mn5aNUtCqDQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1725875227; x=1725882427; bh=BPa+t0OgPawOKIqR0T18RRhFI6N4
-	0wyPm8P4uVOmsYQ=; b=bHZrriofaN4DC5WZCdXMUPXMz+etATu4nCBewnpqNsaw
-	FVV5NMsyoUF6Jr7J9/iQwdiQiVwufXFxL1xjmZ3ZTXtwAs7Xd47X8IK5kCeLH5Zx
-	gbn/t616nSUZyaLl27+WADgQM/2MzJLc4Dt9sX2YGuJzO5P9+Fe74Y2Sd9Q3QFL+
-	dR5RgCUMgdOfG/W5lQhba6p1V2wWv2l/tjStQSEN1k6fYC7IwDuKE+6kI4GRhDg3
-	Rwju+/48bdXwh3AMr3yD5uJoXxgqonm3AeH6u6SgW6lpschh0v4d93IkcQHj1qUP
-	wuiKGnPJX2TLpvB6TTW/yB3cxzohBLwQqOOJm56rNw==
-X-ME-Sender: <xms:GMTeZkb4ykAOR_EMJb8_tDn0TMOZFONau-MwujjLNHRr-Wkqt2dSUQ>
-    <xme:GMTeZva1-M1im4Jp1LIjaav2rAfFhxsHMXAhODt7T02hM4BuADB0ZzL__nLHdiiBz
-    SSxNINKU_xZ_uRM6kI>
-X-ME-Received: <xmr:GMTeZu_ViDBBY4wFBsBlNsC4hDIPt8FmsrKwqowsMOAkJLYpv49F3w-i-FZSYdAC09X5zA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeijecutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffrtefo
-    kffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsuc
-    dlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddttddvnecuhfhr
-    ohhmpedfmfhirhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuh
-    htvghmohhvrdhnrghmvgeqnecuggftrfgrthhtvghrnhepleetudegtdfgheduudfhteel
-    ieeuvddtheeijeejudefjeefgeettedutdeggfdunecuffhomhgrihhnpehkvghrnhgvlh
-    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvgdpnhgspghrtghpthhtohepheejpd
-    hmohguvgepshhmthhpohhuthdprhgtphhtthhopegthhgrrhhlihgvsehrihhvohhsihhn
-    tgdrtghomhdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhrtghpthhtoheprh
-    hitghhrghrugdrhhgvnhguvghrshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohep
-    ihhnkhesjhhurhgrshhsihgtrdhprghrkhdrmhhsuhdrrhhupdhrtghpthhtohepmhgrth
-    htshhtkeeksehgmhgrihhlrdgtohhmpdhrtghpthhtohepvhhguhhpthgrsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehlihhnuhigsegrrhhmlhhinhhugidrohhrghdruhhkpd
-    hrtghpthhtohepghhuohhrvghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegthhgv
-    nhhhuhgrtggriheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:GMTeZuo8r1nq-l9Iy1GG6lbrKIDlKAUfTYSJNOcMHx7SoM3_DQR_3Q>
-    <xmx:GMTeZvrvUvANLRDy_9LJ18nIkHenEaJwEIED0prbXl6sE_8pVNQDOQ>
-    <xmx:GMTeZsRlSV4fkIBrTLkTKBp6pnJALT50swFC-8I2Ke2cX1KpAQISKA>
-    <xmx:GMTeZvr9-1ECM5FvQVeumcsYIs50J0UTzC6J0l-CHe5sOz5eneb3pw>
-    <xmx:G8TeZngmbMM6nDA0aBg4nycXlZwqiuUgtwXCgxP4Ok8DOYuuB710QBwh>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 9 Sep 2024 05:46:47 -0400 (EDT)
-Date: Mon, 9 Sep 2024 12:46:42 +0300
-From: "Kirill A. Shutemov" <kirill@shutemov.name>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- 	Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- 	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- 	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, 	WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- 	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, 	Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- 	Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>,
- 	Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- 	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- 	Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- 	Yoshinori Sato <ysato@users.sourceforge.jp>,
- Rich Felker <dalias@libc.org>,
- 	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>,
- 	Andreas Larsson <andreas@gaisler.com>,
- Thomas Gleixner <tglx@linutronix.de>, 	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
- 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, 	Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- 	Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>,
- 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
- 	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org,
- 	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, 	linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- 	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, 	linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-Message-ID: <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
- <Ztnp3OAIRz/daj7s@ghost>
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725870989; x=
+	1725957389; bh=eUXvZi3N7syICvlD+Ix540Dah1pJESMT13JfPSWJwLM=; b=C
+	OEduUZQk+zgxb+1igY55Tx9mTQEkWQKCzfcBYBv8Uh71s0iI2aDU+hng2NTurZfM
+	2rHQO5pty7bRfJKv2iVSGOHXADFvDlXlrsrxwxFj8NqMTTdy++UBV+MuH2FlDo5v
+	jU0LMJJ31SMqmFvPf4opzqUNl7A2oYlmja+gVnE/DAyBC4XcQcJ2HL3ZssPFhJQ+
+	J3E6J0SNl855lUqn3AzpldS0ZvemI83EPgiChjkoad1vLHZaT+yxxHUqk43jjsPT
+	j7Y+dCGfB59F5mc4i1twt3OPcC+7cKDCdAhsgFsmRcLVU/wRSsd5Nz6OXl5mM889
+	N4nez7k2ueKQ8Jm/WSUiw==
+X-ME-Sender: <xms:jLPeZhUyLAkdryxEs3c0hraB1VvLhrnUZ_lD1-E8tj9irAhMjSQXhw>
+    <xme:jLPeZhlNIkYmZwLfqGo5IRfY2bioFLOLaX77nhMdvoZG8UXSBMZNKnq3hG3XB4Umc
+    a8xOPYc3C5ipYdTyWQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiiedgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddv
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrg
+    hssegrrhhmrdgtohhmpdhrtghpthhtohepjhhvvghtthgvrheskhgrlhhrrgihihhntgdr
+    tghomhdprhgtphhtthhopeihshhiohhnnhgvrghusehkrghlrhgrhihinhgtrdgtohhmpd
+    hrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pehguhhorhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhn
+    rdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrd
+    hinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishht
+    shdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:jLPeZtahS2ZLyg3YkDbQyoWcrJFkGknCRxl_wd3kBJ4WkFmu-9Hiyw>
+    <xmx:jLPeZkWYxYsozfaIpozex_S5D_NobsRXJ7aQK0dUQ-fYWYplAr_NFA>
+    <xmx:jLPeZrmXz3snPfgI1_4ioqEImXXW3ZaB4lGhBJ0VhMJKt60-OgDqLw>
+    <xmx:jLPeZhdsJgdACef-6CPyGF_ka-bcGaW_9D45aLR9BrvDAVHuV_eXHQ>
+    <xmx:jbPeZpeym_a4JGjP8qaz6EpICL5aHSbqNRjfxQaXaglw2LUgDzFwiccs>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 48B4C222006F; Mon,  9 Sep 2024 04:36:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ztnp3OAIRz/daj7s@ghost>
+Date: Mon, 09 Sep 2024 10:35:58 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Julian Vetter" <jvetter@kalrayinc.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ guoren <guoren@kernel.org>, "Huacai Chen" <chenhuacai@kernel.org>,
+ "WANG Xuerui" <kernel@xen0n.name>,
+ "Andrew Morton" <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ loongarch@lists.linux.dev, "Yann Sionneau" <ysionneau@kalrayinc.com>
+Message-Id: <3c56dbee-241c-4742-a586-254e10b98cbb@app.fastmail.com>
+In-Reply-To: <20240906114151.519028-2-jvetter@kalrayinc.com>
+References: <20240906114151.519028-1-jvetter@kalrayinc.com>
+ <20240906114151.519028-2-jvetter@kalrayinc.com>
+Subject: Re: [PATCH 1/4] Consolidate __memcpy_{to,from}io and __memset_io into a single
+ lib
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 05, 2024 at 10:26:52AM -0700, Charlie Jenkins wrote:
-> On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
-> > On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
-> > > Some applications rely on placing data in free bits addresses allocated
-> > > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> > > address returned by mmap to be less than the 48-bit address space,
-> > > unless the hint address uses more than 47 bits (the 48th bit is reserved
-> > > for the kernel address space).
-> > > 
-> > > The riscv architecture needs a way to similarly restrict the virtual
-> > > address space. On the riscv port of OpenJDK an error is thrown if
-> > > attempted to run on the 57-bit address space, called sv57 [1].  golang
-> > > has a comment that sv57 support is not complete, but there are some
-> > > workarounds to get it to mostly work [2].
+On Fri, Sep 6, 2024, at 11:41, Julian Vetter wrote:
+> Various architectures have almost the same implementations for
+> __memcpy_{to,from}io and __memset_io functions. So, consolidate them and
+> introduce a CONFIG_GENERIC_IO flag to build the given lib/io.c.
+>
+> Reviewed-by: Yann Sionneau <ysionneau@kalrayinc.com>
+> Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
 
-I also saw libmozjs crashing with 57-bit address space on x86.
+Thanks for working on this. The implementation looks correct
+to me and we should be able to use this on most architectures,
+but since this is a shared file, it would be good to make it
+as polished as possible.
 
-> > > These applications work on x86 because x86 does an implicit 47-bit
-> > > restriction of mmap() address that contain a hint address that is less
-> > > than 48 bits.
-> > > 
-> > > Instead of implicitly restricting the address space on riscv (or any
-> > > current/future architecture), a flag would allow users to opt-in to this
-> > > behavior rather than opt-out as is done on other architectures. This is
-> > > desirable because it is a small class of applications that do pointer
-> > > masking.
+>  lib/Kconfig  |   3 ++
+>  lib/Makefile |   2 +
+>  lib/io.c     | 101 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 106 insertions(+)
+>  create mode 100644 lib/io.c
 
-You reiterate the argument about "small class of applications". But it
-makes no sense to me.
+I feel the name is a little too geneal, maybe use io_copy.c and
+CONFIG_GENERIC_IO_COPY for the name?
 
-With full address space by default, this small class of applications is
-going to *broken* unless they would handle RISC-V case specifically.
+Alternatively, this could be part of lib/iomap_copy.c,
+which already has some related helper functions. In that
+case, I think we would rely on the per-architecture "#define
+__memcpy_fromio __memcpy_fromio" etc macros instead of a
+Kconfig symbol.
 
-On other hand, if you limit VA to 128TiB by default (like many
-architectures do[1]) everything would work without intervention.
-And if an app needs wider address space it would get it with hint opt-in,
-because it is required on x86-64 anyway. Again, no RISC-V-specific code.
+> +void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
+> +{
+> +	while (count && !IS_ALIGNED((unsigned long)from, NATIVE_STORE_SIZE)) {
+> +		*(u8 *)to = __raw_readb(from);
+> +		from++;
+> +		to++;
+> +		count--;
+> +	}
 
-I see no upside with your approach. Just worse user experience.
+There is a corner case that this bit actually misses (same in the
+existing implementation): If the __iomem buffer is aligned, but
+the 'to' buffer is not, this may cause an alignment fault on
+architectures without native unaligned stores. At the moment
+I think both csky and some configurations of loongarch64 can
+run into this. I think the best way to deal with this is to
+use get_unaligned()/put_unaligned() in place of the pointer
+dereference. This has no effect on architectures that have
+native unaligned access but otherwise uses byte access on the
+kernel buffer, which I think is a good tradeoff.
 
-[1] See va_high_addr_switch test case in https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/mm/Makefile#n115
+> +	while (count >= NATIVE_STORE_SIZE) {
+> +		*(uintptr_t *)to = __raw_read_native(from);
+> +		from += NATIVE_STORE_SIZE;
+> +		to += NATIVE_STORE_SIZE;
+> +		count -= NATIVE_STORE_SIZE;
+> +	}
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+The use of __raw_read_native() somehow bothers me, it seems
+a little more complicated than open-coding the two
+possibles paths, or even using the aligned-access
+helpers like
+
+      if (IS_ENABLED(CONFIG_64BIT))
+             __iowrite64_copy(to, from, count & WORD_MASK)
+      else
+             __iowrite32_copy(to, from, count & WORD_MASK)
+
+Those helpers do require the kernel buffer to be naturally
+aligned though.
+
+> +void __memset_io(volatile void __iomem *dst, int c, size_t count)
+> +{
+> +	uintptr_t qc = (u8)c;
+> +
+> +	qc |= qc << 8;
+> +	qc |= qc << 16;
+> +#if IS_ENABLED(CONFIG_64BIT)
+> +	qc |= qc << 32;
+> +#endif
+
+If you use IS_ENABLED() here, please do it like
+
+       if (IS_ENABLED(CONFIG_64BIT)
+              qc |= qc << 32;
+
+      Arnd
 
