@@ -1,131 +1,85 @@
-Return-Path: <linux-csky+bounces-832-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-833-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ABA69725B4
-	for <lists+linux-csky@lfdr.de>; Tue, 10 Sep 2024 01:22:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4252A972AB6
+	for <lists+linux-csky@lfdr.de>; Tue, 10 Sep 2024 09:29:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F7151C23740
-	for <lists+linux-csky@lfdr.de>; Mon,  9 Sep 2024 23:22:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44AAFB20331
+	for <lists+linux-csky@lfdr.de>; Tue, 10 Sep 2024 07:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60D618D65D;
-	Mon,  9 Sep 2024 23:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52A117C9EB;
+	Tue, 10 Sep 2024 07:28:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="I70ahWFl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KSSeH4UW"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E9A18C344
-	for <linux-csky@vger.kernel.org>; Mon,  9 Sep 2024 23:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFCB517BB3F;
+	Tue, 10 Sep 2024 07:28:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725924128; cv=none; b=mJV+NYx0IPR9C+4qCRAf61m5vrTiS05DvETiRiLUdNarf7OOMI6ES515Yrlsh4wkHXcTyYutNWfNcw+Il6DgZl9b5mMszyNYuKnwscQmPqBRY91mdx/hrR/ywfwPBSts2Q1O3P1gNHG3x0KX2gR6JJgd8zbGfYSt6ISyLn8rvk0=
+	t=1725953337; cv=none; b=ZhLf2f1YOM7rRBYl+uXe/rgr95WogQiHL34kQL9CRjU1vQ4XX2oVAbhJ4oMBkWllgpinvNyDNaG5UxhX0YAZ/PB9c1CQexl6glGUceIoFST0No4XAJ+aHtnBw4ZqoyxRM3mHGh2go5n65NMcw16h1zsPZ0SV1/K+hoqZ8onCpAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725924128; c=relaxed/simple;
-	bh=8JJzaGF9CaNmZI+aPwyqFsGvd7V3za2/MLB2npErI2I=;
+	s=arc-20240116; t=1725953337; c=relaxed/simple;
+	bh=oHfOiuXeROeapZx5nV1VqUqUHQVGGiRVnhF4ET0GNEs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oH90IorHV+s6t9mzRghtSgd6f7BOoKC0CJ5SleNStRU85KbwGwej0z5AGYT51axU88aUDpN8UXnzOapjYhhMprWgNSsec3Pk00/mhlVMpnZIPnODl86GR6ntdewTlng4fSItUHrao+hXuCVRShlf5UQokdbA788e/9EU7OzFQxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=I70ahWFl; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-207115e3056so19300935ad.2
-        for <linux-csky@vger.kernel.org>; Mon, 09 Sep 2024 16:22:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1725924126; x=1726528926; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vgysOd8aiDKhjc+ONWU9mJizPo8eq1lAJG8bEbfR9J4=;
-        b=I70ahWFlKGzQ610auIV/hft1h1O3uszRC8EpqEQ00Hq+XzAsO0+yNpZKDPUYmUfhWQ
-         mR0a75u9dMuojG+/hjF8tuHLDbtbmMZk4tddDgedeyQJJJF7bkjgp3w0RqCQD4Kx43wC
-         JzU4oMAg9grhbOggOWZPzBA80Tr/oeJzjyzlLHhHrBl+87VQiovGm2pHa276urwjHIS7
-         4LMPbYBMchTJyQjMgoRFiadl9V+zKjhBpw26UzZOqutrRi4i1hY+Z11mT220WSzx7272
-         A7xYyzJ7mkabM+DkvPjQEG3cGUlTv9CRJpbbCduIAQmHvAtxl1VAyoRUboj9uSI7VpMW
-         9YOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725924126; x=1726528926;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vgysOd8aiDKhjc+ONWU9mJizPo8eq1lAJG8bEbfR9J4=;
-        b=b+1LIncUoXA+LNGs8c6eVY0pp5xMkwbIU/J86hO5+iyAYxN+KDS/v7XyR/rLyY0Irw
-         TCclWdAVc7d2TFJYQvm/aALAFEBaS+uVyTq/k6ZaGbROkMtwqfiKjwiK7Hn4KmGvzSAp
-         PKbSFW/edBwyFOtmOrM81I4aLfjzlUFDENBmgTqkM/+bA2EBi0nByzQI3uM6yJbX7A1W
-         N2eAI3VvViHcNGmRai9KuiGOvRwvBId7SLR+hE9mmcrM/xg7L8zqqqXMMxwjH/3oxagE
-         WSmQSsqKB3HnJzEN7bOb0vUkjgaWOsPnL4CwnApkRiyPGuqdurX9CdYquSpAuUkRto/V
-         d3bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6YORHkShk6eit2ztMwHMo3EAGIK05v/y60ux/2kmm0nU1lTLqkNqsIqfRiD67XRcumZFyojg7OVRM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6GOibwWBUWHaEZJ/LcowpfONdPsrWDaWCIAnH5Vy0ygL4U+R1
-	B6gDNtzU1Eu92M0NmuGNIGpkIYZBp6YO9THDzqB+rK02o2g4AC/NdzUE7XJcT6g=
-X-Google-Smtp-Source: AGHT+IG9NuFtuhb2UjO8QtL3roig2p+Iq+0iRU2PXdKFn/RkpU7K/aJcE1bC5gzUXkPWX2WgO7Qkcg==
-X-Received: by 2002:a17:903:22c1:b0:1fd:5eab:8c76 with SMTP id d9443c01a7336-206f05e7881mr125620865ad.41.1725924125300;
-        Mon, 09 Sep 2024 16:22:05 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710e326d6sm38663045ad.66.2024.09.09.16.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 16:22:04 -0700 (PDT)
-Date: Mon, 9 Sep 2024 16:22:00 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, guoren <guoren@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZLail5Cwe+tnkZB/FyfiH2EerzVoinNJj6f9qNhltm/4M0O0ZlhOvD2d0i98PnuyxiGKJYnV5OVh7hu1DQP/earbbFx83I1h0WZuzS5u2UOER8HWHqjZmI8K/rI0ZMw58gHKLA19N/UcvZ7eoQCDNCuFNMz117w04kN36rdFQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KSSeH4UW; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725953336; x=1757489336;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oHfOiuXeROeapZx5nV1VqUqUHQVGGiRVnhF4ET0GNEs=;
+  b=KSSeH4UWLLD5BO5sShuGX4XvGITxobiVsMMkheV2mSwGqdqXmRXTBOHd
+   8hF6lwlU60GAPYwYt3NCWBajLdKukJGrMKH/0YYCQZftJjx6aaw1wV/Im
+   R8lneb+zn27KVGzeq2zxYVwplIAE9RadCVJrsUp98EHbhtsivi9rBfmTZ
+   V3sU8AJHTBNZzzUqFWErcS9vVeQ6hAO8NPuwUcIfhMDxOSXrMwnpYDEdB
+   1mKmgjd8+KI/81XdGwgOxZpeLRBr+ocNfqBECh5N6v8RwB9cmMXD4jUDT
+   y4VU01eLXFZQj8O29AWRa2CE28k6/PNDZyvmjOn+830R1Gjj6DKN4+GFX
+   A==;
+X-CSE-ConnectionGUID: 2fFTsUEWTzyypf9UWxDbig==
+X-CSE-MsgGUID: JjFczBwyRCSXUbVjLNYL2w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="35822078"
+X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
+   d="scan'208";a="35822078"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 00:28:09 -0700
+X-CSE-ConnectionGUID: ku3WCRXqRQGfm8cvnjYRrA==
+X-CSE-MsgGUID: tvhMKvAkT4+uKOGx3IKQvg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
+   d="scan'208";a="71539619"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 10 Sep 2024 00:27:54 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1snvI0-0000E6-0U;
+	Tue, 10 Sep 2024 07:27:52 +0000
+Date: Tue, 10 Sep 2024 15:27:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Julian Vetter <jvetter@kalrayinc.com>, Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
 	Huacai Chen <chenhuacai@kernel.org>,
 	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, shuah <shuah@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <Zt+DGHZrHFxfq7xo@ghost>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <58f39d58-579e-4dd3-8084-baebf86f1ae0@lucifer.local>
- <7be08ea9-f343-42da-805f-e5f0d61bde26@app.fastmail.com>
- <016c7857-9ea8-4333-96e6-3ae3870f375f@lucifer.local>
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+	Yann Sionneau <ysionneau@kalrayinc.com>,
+	Julian Vetter <jvetter@kalrayinc.com>
+Subject: Re: [PATCH v2 3/4] Use generic io memcpy functions on the csky
+ architecture
+Message-ID: <202409101549.CyV0mJ2S-lkp@intel.com>
+References: <20240909133159.2024688-4-jvetter@kalrayinc.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -134,158 +88,128 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <016c7857-9ea8-4333-96e6-3ae3870f375f@lucifer.local>
+In-Reply-To: <20240909133159.2024688-4-jvetter@kalrayinc.com>
 
-On Fri, Sep 06, 2024 at 10:52:34AM +0100, Lorenzo Stoakes wrote:
-> (Sorry having issues with my IPv6 setup that duplicated the original email...
-> 
-> On Fri, Sep 06, 2024 at 09:14:08AM GMT, Arnd Bergmann wrote:
-> > On Fri, Sep 6, 2024, at 08:14, Lorenzo Stoakes wrote:
-> > > On Fri, Sep 06, 2024 at 07:17:44AM GMT, Arnd Bergmann wrote:
-> > >> On Thu, Sep 5, 2024, at 21:15, Charlie Jenkins wrote:
-> > >> > Create a personality flag ADDR_LIMIT_47BIT to support applications
-> > >> > that wish to transition from running in environments that support at
-> > >> > most 47-bit VAs to environments that support larger VAs. This
-> > >> > personality can be set to cause all allocations to be below the 47-bit
-> > >> > boundary. Using MAP_FIXED with mmap() will bypass this restriction.
-> > >> >
-> > >> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > >>
-> > >> I think having an architecture-independent mechanism to limit the size
-> > >> of the 64-bit address space is useful in general, and we've discussed
-> > >> the same thing for arm64 in the past, though we have not actually
-> > >> reached an agreement on the ABI previously.
-> > >
-> > > The thread on the original proposals attests to this being rather a fraught
-> > > topic, and I think the weight of opinion was more so in favour of opt-in
-> > > rather than opt-out.
-> >
-> > You mean opt-in to using the larger addresses like we do on arm64 and
-> > powerpc, while "opt-out" means a limit as Charlie suggested?
-> 
-> I guess I'm not using brilliant terminology here haha!
-> 
-> To clarify - the weight of opinion was for a situation where the address
-> space is limited, except if you set a hint above that (you could call that
-> opt-out or opt-in depending which way you look at it, so yeah ok very
-> unclear sorry!).
-> 
-> It was against the MAP_ flag and also I think a _flexible_ per-process
-> limit is also questionable as you might end up setting a limit which breaks
-> something else, and this starts getting messy quick.
-> 
-> To be clear, the ADDR_LIMIT_47BIT suggestion is absolutely a compromise and
-> practical suggestion.
-> 
-> >
-> > >> > @@ -22,6 +22,7 @@ enum {
-> > >> >  	WHOLE_SECONDS =		0x2000000,
-> > >> >  	STICKY_TIMEOUTS	=	0x4000000,
-> > >> >  	ADDR_LIMIT_3GB = 	0x8000000,
-> > >> > +	ADDR_LIMIT_47BIT = 	0x10000000,
-> > >> > };
-> > >>
-> > >> I'm a bit worried about having this done specifically in the
-> > >> personality flag bits, as they are rather limited. We obviously
-> > >> don't want to add many more such flags when there could be
-> > >> a way to just set the default limit.
-> > >
-> > > Since I'm the one who suggested it, I feel I should offer some kind of
-> > > vague defence here :)
-> > >
-> > > We shouldn't let perfect be the enemy of the good. This is a relatively
-> > > straightforward means of achieving the aim (assuming your concern about
-> > > arch_get_mmap_end() below isn't a blocker) which has the least impact on
-> > > existing code.
-> > >
-> > > Of course we can end up in absurdities where we start doing
-> > > ADDR_LIMIT_xxBIT... but again - it's simple, shouldn't represent an
-> > > egregious maintenance burden and is entirely opt-in so has things going for
-> > > it.
-> >
-> > I'm more confused now, I think most importantly we should try to
-> > handle this consistently across all architectures. The proposed
-> > implementation seems to completely block addresses above BIT(47)
-> > even for applications that opt in by calling mmap(BIT(47), ...),
-> > which seems to break the existing applications.
-> 
-> Hm, I thought the commit message suggested the hint overrides it still?
-> 
-> The intent is to optionally be able to run a process that keeps higher bits
-> free for tagging and to be sure no memory mapping in the process will
-> clobber these (correct me if I'm wrong Charlie! :)
-> 
-> So you really wouldn't want this if you are using tagged pointers, you'd
-> want to be sure literally nothing touches the higher bits.
+Hi Julian,
 
-Various architectures handle the hint address differently, but it
-appears that the only case across any architecture where an address
-above 47 bits will be returned is if the application had a hint address
-with a value greater than 47 bits and was using the MAP_FIXED flag.
-MAP_FIXED bypasses all other checks so I was assuming that it would be
-logical for MAP_FIXED to bypass this as well. If MAP_FIXED is not set,
-then the intent is for no hint address to cause a value greater than 47
-bits to be returned.
+kernel test robot noticed the following build errors:
 
-This does have the issue that if MAP_FIXED is used then an address can
-be returned above 47-bits, but if an application does not want addresses
-above 47-bits then they shouldn't ask for a fixed address above that
-range.
+[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+[also build test ERROR on arm64/for-next/core soc/for-next linus/master v6.11-rc7 next-20240909]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> >
-> > If we want this flag for RISC-V and also keep the behavior of
-> > defaulting to >BIT(47) addresses for mmap(0, ...) how about
-> > changing arch_get_mmap_end() to return the limit based on
-> > ADDR_LIMIT_47BIT and then make this default to enabled on
-> > arm64 and powerpc but disabled on riscv?
-> 
-> But you wouldn't necessarily want all processes to be so restricted, I
-> think this is what Charlie's trying to avoid :)
-> 
-> On the ohter hand - I'm not sure there are many processes on any arch
-> that'd want the higher mappings.
-> 
-> So that'd push us again towards risc v just limiting to 48-bits and only
-> mapping above this if a hint is provided like x86-64 does (and as you
-> mentioned via irc - it seems risc v is an outlier in that
-> DEFAULT_MAP_WINDOW == TASK_SIZE).
-> 
-> This would be more consistent vs. other arches.
+url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Vetter/Consolidate-__memcpy_-to-from-io-and-__memset_io-into-a-single-lib/20240909-213659
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20240909133159.2024688-4-jvetter%40kalrayinc.com
+patch subject: [PATCH v2 3/4] Use generic io memcpy functions on the csky architecture
+config: csky-allnoconfig (https://download.01.org/0day-ci/archive/20240910/202409101549.CyV0mJ2S-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409101549.CyV0mJ2S-lkp@intel.com/reproduce)
 
-Yes riscv is an outlier here. The reason I am pushing for something like
-a flag to restrict the address space rather than setting it to be the
-default is it seems like if applications are relying on upper bits to be
-free, then they should be explicitly asking the kernel to keep them free
-rather than assuming them to be free.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409101549.CyV0mJ2S-lkp@intel.com/
 
-> 
-> >
-> > >> It's also unclear to me how we want this flag to interact with
-> > >> the existing logic in arch_get_mmap_end(), which attempts to
-> > >> limit the default mapping to a 47-bit address space already.
-> > >
-> > > How does ADDR_LIMIT_3GB presently interact with that?
-> >
-> > That is x86 specific and only relevant to compat tasks, limiting
-> > them to 3 instead of 4 GB. There is also ADDR_LIMIT_32BIT, which
-> > on arm32 is always set in practice to allow 32-bit addressing
-> > as opposed to ARMv2 style 26-bit addressing (IIRC ARMv3 supported
-> > both 26-bit and 32-bit addressing, while ARMv4 through ARMv7 are
-> > 32-bit only.
-> 
-> OK, I understand what it's for, I missed it was arch-specific bit, urgh.
-> 
-> I'd say this limit should be min of the arch-specific limit vs. the 48-bit
-> limit. If you have a 36-bit address space obviously it'd be rather unwise
-> to try to provide 48 bit addresses..
+All error/warnings (new ones prefixed by >>):
 
-In this patch I set the high limit to be the minimum of the provided
-high limit and 47 bits so I think that should cover this case?
+   In file included from ./arch/csky/include/generated/asm/unaligned.h:1,
+                    from lib/io_copy.c:9:
+   lib/io_copy.c: In function '__memcpy_fromio':
+>> lib/io_copy.c:28:39: error: implicit declaration of function '__raw_readq'; did you mean '__raw_readl'? [-Wimplicit-function-declaration]
+      28 |                         put_unaligned(__raw_readq(from), (uintptr_t *)to);
+         |                                       ^~~~~~~~~~~
+   include/asm-generic/unaligned.h:19:22: note: in definition of macro '__put_unaligned_t'
+      19 |         __pptr->x = (val);                                                      \
+         |                      ^~~
+   lib/io_copy.c:28:25: note: in expansion of macro 'put_unaligned'
+      28 |                         put_unaligned(__raw_readq(from), (uintptr_t *)to);
+         |                         ^~~~~~~~~~~~~
+   lib/io_copy.c: In function '__memcpy_toio':
+>> lib/io_copy.c:57:25: error: implicit declaration of function '__raw_writeq'; did you mean '__raw_writel'? [-Wimplicit-function-declaration]
+      57 |                         __raw_writeq(get_unaligned((uintptr_t *)from), to);
+         |                         ^~~~~~~~~~~~
+         |                         __raw_writel
+   lib/io_copy.c: In function '__memset_io':
+>> lib/io_copy.c:83:26: warning: left shift count >= width of type [-Wshift-count-overflow]
+      83 |                 qc |= qc << 32;
+         |                          ^~
 
-- Charlie
 
-> 
-> >
-> >       Arnd
+vim +28 lib/io_copy.c
+
+6a9bfa83709a84e Julian Vetter 2024-09-09  16  
+6a9bfa83709a84e Julian Vetter 2024-09-09  17  void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
+6a9bfa83709a84e Julian Vetter 2024-09-09  18  {
+6a9bfa83709a84e Julian Vetter 2024-09-09  19  	while (count && !IS_ALIGNED((unsigned long)from, NATIVE_STORE_SIZE)) {
+6a9bfa83709a84e Julian Vetter 2024-09-09  20  		*(u8 *)to = __raw_readb(from);
+6a9bfa83709a84e Julian Vetter 2024-09-09  21  		from++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  22  		to++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  23  		count--;
+6a9bfa83709a84e Julian Vetter 2024-09-09  24  	}
+6a9bfa83709a84e Julian Vetter 2024-09-09  25  
+6a9bfa83709a84e Julian Vetter 2024-09-09  26  	while (count >= NATIVE_STORE_SIZE) {
+6a9bfa83709a84e Julian Vetter 2024-09-09  27  		if (IS_ENABLED(CONFIG_64BIT))
+6a9bfa83709a84e Julian Vetter 2024-09-09 @28  			put_unaligned(__raw_readq(from), (uintptr_t *)to);
+6a9bfa83709a84e Julian Vetter 2024-09-09  29  		else
+6a9bfa83709a84e Julian Vetter 2024-09-09  30  			put_unaligned(__raw_readl(from), (uintptr_t *)to);
+6a9bfa83709a84e Julian Vetter 2024-09-09  31  
+6a9bfa83709a84e Julian Vetter 2024-09-09  32  		from += NATIVE_STORE_SIZE;
+6a9bfa83709a84e Julian Vetter 2024-09-09  33  		to += NATIVE_STORE_SIZE;
+6a9bfa83709a84e Julian Vetter 2024-09-09  34  		count -= NATIVE_STORE_SIZE;
+6a9bfa83709a84e Julian Vetter 2024-09-09  35  	}
+6a9bfa83709a84e Julian Vetter 2024-09-09  36  
+6a9bfa83709a84e Julian Vetter 2024-09-09  37  	while (count) {
+6a9bfa83709a84e Julian Vetter 2024-09-09  38  		*(u8 *)to = __raw_readb(from);
+6a9bfa83709a84e Julian Vetter 2024-09-09  39  		from++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  40  		to++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  41  		count--;
+6a9bfa83709a84e Julian Vetter 2024-09-09  42  	}
+6a9bfa83709a84e Julian Vetter 2024-09-09  43  }
+6a9bfa83709a84e Julian Vetter 2024-09-09  44  EXPORT_SYMBOL(__memcpy_fromio);
+6a9bfa83709a84e Julian Vetter 2024-09-09  45  
+6a9bfa83709a84e Julian Vetter 2024-09-09  46  void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
+6a9bfa83709a84e Julian Vetter 2024-09-09  47  {
+6a9bfa83709a84e Julian Vetter 2024-09-09  48  	while (count && !IS_ALIGNED((unsigned long)to, NATIVE_STORE_SIZE)) {
+6a9bfa83709a84e Julian Vetter 2024-09-09  49  		__raw_writeb(*(u8 *)from, to);
+6a9bfa83709a84e Julian Vetter 2024-09-09  50  		from++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  51  		to++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  52  		count--;
+6a9bfa83709a84e Julian Vetter 2024-09-09  53  	}
+6a9bfa83709a84e Julian Vetter 2024-09-09  54  
+6a9bfa83709a84e Julian Vetter 2024-09-09  55  	while (count >= NATIVE_STORE_SIZE) {
+6a9bfa83709a84e Julian Vetter 2024-09-09  56  		if (IS_ENABLED(CONFIG_64BIT))
+6a9bfa83709a84e Julian Vetter 2024-09-09 @57  			__raw_writeq(get_unaligned((uintptr_t *)from), to);
+6a9bfa83709a84e Julian Vetter 2024-09-09  58  		else
+6a9bfa83709a84e Julian Vetter 2024-09-09  59  			__raw_writel(get_unaligned((uintptr_t *)from), to);
+6a9bfa83709a84e Julian Vetter 2024-09-09  60  
+6a9bfa83709a84e Julian Vetter 2024-09-09  61  		from += NATIVE_STORE_SIZE;
+6a9bfa83709a84e Julian Vetter 2024-09-09  62  		to += NATIVE_STORE_SIZE;
+6a9bfa83709a84e Julian Vetter 2024-09-09  63  		count -= NATIVE_STORE_SIZE;
+6a9bfa83709a84e Julian Vetter 2024-09-09  64  	}
+6a9bfa83709a84e Julian Vetter 2024-09-09  65  
+6a9bfa83709a84e Julian Vetter 2024-09-09  66  	while (count) {
+6a9bfa83709a84e Julian Vetter 2024-09-09  67  		__raw_writeb(*(u8 *)from, to);
+6a9bfa83709a84e Julian Vetter 2024-09-09  68  		from++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  69  		to++;
+6a9bfa83709a84e Julian Vetter 2024-09-09  70  		count--;
+6a9bfa83709a84e Julian Vetter 2024-09-09  71  	}
+6a9bfa83709a84e Julian Vetter 2024-09-09  72  }
+6a9bfa83709a84e Julian Vetter 2024-09-09  73  EXPORT_SYMBOL(__memcpy_toio);
+6a9bfa83709a84e Julian Vetter 2024-09-09  74  
+6a9bfa83709a84e Julian Vetter 2024-09-09  75  void __memset_io(volatile void __iomem *dst, int c, size_t count)
+6a9bfa83709a84e Julian Vetter 2024-09-09  76  {
+6a9bfa83709a84e Julian Vetter 2024-09-09  77  	uintptr_t qc = (u8)c;
+6a9bfa83709a84e Julian Vetter 2024-09-09  78  
+6a9bfa83709a84e Julian Vetter 2024-09-09  79  	qc |= qc << 8;
+6a9bfa83709a84e Julian Vetter 2024-09-09  80  	qc |= qc << 16;
+6a9bfa83709a84e Julian Vetter 2024-09-09  81  
+6a9bfa83709a84e Julian Vetter 2024-09-09  82  	if (IS_ENABLED(CONFIG_64BIT))
+6a9bfa83709a84e Julian Vetter 2024-09-09 @83  		qc |= qc << 32;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
