@@ -1,122 +1,84 @@
-Return-Path: <linux-csky+bounces-871-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-872-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F34B197D265
-	for <lists+linux-csky@lfdr.de>; Fri, 20 Sep 2024 10:18:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB781983B49
+	for <lists+linux-csky@lfdr.de>; Tue, 24 Sep 2024 04:45:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD8F0286906
-	for <lists+linux-csky@lfdr.de>; Fri, 20 Sep 2024 08:18:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E52361C21C11
+	for <lists+linux-csky@lfdr.de>; Tue, 24 Sep 2024 02:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB5B82498;
-	Fri, 20 Sep 2024 08:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UKVW8JD9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9C78F49;
+	Tue, 24 Sep 2024 02:45:48 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E696054277;
-	Fri, 20 Sep 2024 08:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F3CC133;
+	Tue, 24 Sep 2024 02:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726820286; cv=none; b=o/HF/nnDTIrGSKanI1gxA5zWfJrnNBnED25fgABiiHMJ92RG6z3blcaewFlmq5PaJv5GbXzC7Ob2AMtKHh6IE8HEUBP4BJzes5knNJqdOQYRaJ0pVPDn496O8HAMMt1uxwz230xjMrHTN+BWKkF7TDNHkJKWwhEELKq96CFWWdk=
+	t=1727145948; cv=none; b=q4K0SF5oJi09T/5Qj2PNU4ArP7YJQ+UewKyWRxkixiGfA4AZ2GwFGPZx5dpnb6hpR/Tt/X5+BpuC93wvwAVS+W7MWHo3m4BFE44/USXu9soz7HADpTektMfTd48K5A42d2g7I12+lCxfiXqUbFwwhHQPNrXUOa4m1HqWopkCmH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726820286; c=relaxed/simple;
-	bh=seGYfVYfyPjidQeia0MSEPXhvPjaDb+jdaPoJ9YM/L8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=a5n/uhhS2bSv5+zYcU5kyLaTP8ua66grBbe8waEuiDfhyQ8TmDh24tm39q5AhuxEUqdErARIRqKkm1Xs9oM6H9tOM9dY3+YP1jjczHl0u8Mj2OmpyE2JmztSJaaUTEbpMLMWZ4wKQ0CkMD6gAUmHLnD81MwE8uY9W1296ynXlqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UKVW8JD9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61DC5C4CED1;
-	Fri, 20 Sep 2024 08:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726820285;
-	bh=seGYfVYfyPjidQeia0MSEPXhvPjaDb+jdaPoJ9YM/L8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=UKVW8JD9v7gxZ3lO5eOVhRM7Dae/E7cQ/gy5OZ/2TDHkPK6L3ccoY11FyDHU8I9oK
-	 DBNgEyHPIPFAo+rYuN4gGStSeD+eT3YZNV3LKIH7pssRNPXkAVHfegsg022ejDjuvN
-	 dVyz7L45+/PdN+j9Y+T/0AFCKD3pabW0L3HSfVimyaJk90mr01cBQSRBWXEZvPClhR
-	 PVx2tTnro6fTEsHVeDo19mZTMhMrb60xS30VeOVtyDAHbi+ZcqrMPMf8IAWM0WmSor
-	 CZ8nWn8uzP+gWaa0W3sNnsbl9/EHuWTZQ6Vv80MMR+jmXliaTg4OckmsjJIBc+YAZh
-	 b++MGYJd8X2ig==
-Date: Fri, 20 Sep 2024 10:17:58 +0200
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Sven Schnelle <svens@linux.ibm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Mark Rutland
- <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Guo Ren
- <guoren@kernel.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-csky@vger.kernel.org
-Subject: Re: [PATCH 0/7] add function arguments to ftrace
-Message-Id: <20240920101758.60419ec040c6f0643b475720@kernel.org>
-In-Reply-To: <yt9djzfgccoo.fsf@linux.ibm.com>
-References: <20240904065908.1009086-1-svens@linux.ibm.com>
-	<20240905111620.5211d9f8@gandalf.local.home>
-	<yt9dv7z9l2zp.fsf@linux.ibm.com>
-	<20240906100738.2526cffd@gandalf.local.home>
-	<20240908222830.01a01b10d62d59ed73dcb676@kernel.org>
-	<yt9dh6ape022.fsf@linux.ibm.com>
-	<yt9djzfgccoo.fsf@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1727145948; c=relaxed/simple;
+	bh=zLObBDzylKWSNZ6CMbWnuhKeN3LdJU8mNABA2JobP/U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PEL6xcYCruEYt9CHOtuuomWSLr1kB1gy4XgzMkSaBp/iESf0hXiQ2Gs/Hdh161gmNHOt3ncvdyoyq7DLgXWJ0xXaL8vlTaY7jbYuQDtPC4Xg2YL7UotG0iRSq44p19df/Nui5oCxAkRMGitphWDDD0As66AtOvFDvAtaTvbrg9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cdjrlc.com; spf=pass smtp.mailfrom=cdjrlc.com; arc=none smtp.client-ip=54.204.34.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cdjrlc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cdjrlc.com
+X-QQ-mid: bizesmtp84t1727145925t9as3lz0
+X-QQ-Originating-IP: 0OoMMaGNrfWw5XRlrUKUEIEAsvQv8NhpXr+cy1pAm00=
+Received: from localhost.localdomain ( [182.148.12.188])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 24 Sep 2024 10:45:03 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 12762500620221567328
+From: xujianghui <xujianghui@cdjrlc.com>
+To: guoren@kernel.org,
+	linux-csky@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: xujianghui <xujianghui@cdjrlc.com>
+Subject: [PATCH] csky: Fix the following errors reported by checkpatch:
+Date: Tue, 24 Sep 2024 10:44:35 +0800
+Message-ID: <2595426A1FD05BD9+20240924024437.63062-1-xujianghui@cdjrlc.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvrsz:qybglogicsvrsz4a-0
 
-On Fri, 13 Sep 2024 08:03:51 +0200
-Sven Schnelle <svens@linux.ibm.com> wrote:
+ERROR: spaces required around that ':' (ctx:VxE)
 
-> Sven Schnelle <svens@linux.ibm.com> writes:
-> 
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org> writes:
-> >
-> >> On Fri, 6 Sep 2024 10:07:38 -0400
-> >> Steven Rostedt <rostedt@goodmis.org> wrote:
-> >>
-> >>> On Fri, 06 Sep 2024 08:18:02 +0200
-> >>> Sven Schnelle <svens@linux.ibm.com> wrote:
-> >>> 
-> >>> 
-> >>> > One thing i learned after submitting the series is that struct
-> >>> > ftrace_regs depends on CONFIG_FUNCTION_TRACER, so it cannot be used
-> >>> > with the graph tracer.
-> >>
-> >> Yeah, this is solved by my series [1].
-> >>
-> >> [1] https://patchwork.kernel.org/project/linux-trace-kernel/patch/172398532480.293426.13232399076477198126.stgit@devnote2/
-> >>
-> >> So I think this series is easier to apply after my series, which
-> >> passes fgraph_regs in return handler.
-> >
-> > Thanks, i'll rebase my changes on top of your patches then.
-> 
-> While doing so i noticed that i completely forgot about arguments
-> located on the stack. The current patchset tries to read from the
-> current kernel stack, which is obviously wrong. So either the tracer
-> needs to save the stack frame in the ringbuffer (which would be quite
-> a lot of data), or ftrace only prints arguments located in registers.
-> Also not nice. Opinions?
+Signed-off-by: xujianghui <xujianghui@cdjrlc.com>
+---
+ arch/csky/abiv2/inc/abi/entry.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-We can limit it to first 6 arguments in the ftrace_regs by default,
-no need to save all of them. We can add an option to specify how
-many stack entries (but it is set 0 by default).
-
-Thank you,
-
-
-> 
-> Thanks
-> Sven
-
-
+diff --git a/arch/csky/abiv2/inc/abi/entry.h b/arch/csky/abiv2/inc/abi/entry.h
+index cca63e699b58..6085fbff2900 100644
+--- a/arch/csky/abiv2/inc/abi/entry.h
++++ b/arch/csky/abiv2/inc/abi/entry.h
+@@ -39,9 +39,9 @@
+ 	bf      1f
+ 	addi    lr, sp, 152
+ 	br	2f
+-1:
++1 :
+ 	mfcr	lr, usp
+-2:
++2 :
+ 	stw	lr, (sp, 16)
+ 
+ 	stw     a0, (sp, 20)
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.46.0
+
 
