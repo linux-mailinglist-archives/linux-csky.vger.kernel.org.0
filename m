@@ -1,79 +1,77 @@
-Return-Path: <linux-csky+bounces-875-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-879-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BFF19841FF
-	for <lists+linux-csky@lfdr.de>; Tue, 24 Sep 2024 11:25:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C65009845B9
+	for <lists+linux-csky@lfdr.de>; Tue, 24 Sep 2024 14:16:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28FB0283691
-	for <lists+linux-csky@lfdr.de>; Tue, 24 Sep 2024 09:25:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BF33B25712
+	for <lists+linux-csky@lfdr.de>; Tue, 24 Sep 2024 12:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE187155C94;
-	Tue, 24 Sep 2024 09:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C1A1A7249;
+	Tue, 24 Sep 2024 12:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="eIplAb5P";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="sKD/UN8e"
+	dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="dAHdPo2W";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="qldkJg+5"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtpout144.security-mail.net (smtpout144.security-mail.net [85.31.212.144])
+Received: from smtpout143.security-mail.net (smtpout143.security-mail.net [85.31.212.143])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4834A155743
-	for <linux-csky@vger.kernel.org>; Tue, 24 Sep 2024 09:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=85.31.212.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345401A7076
+	for <linux-csky@vger.kernel.org>; Tue, 24 Sep 2024 12:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=85.31.212.143
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727169906; cv=fail; b=LyjJdL2RgTlo3GI2bNq3rHF0YEMhxMqjd1cKeBv0AMItCY6ORlCUtv31cmjE678PnNwFoP+SvfIkd51JBRcZlp2ml9L79o7SLTjR4aBLcBi68KjTZcZ+A4FcFBJxFhRNOYnoaZrxc5ukhPK0wad6rADO+5hYEJqnbj0btOpdOa4=
+	t=1727180090; cv=fail; b=MPyc7Wj+mX0YIHxOwQMoD6iUNwsn11AFncGdwV1HSObVGp4xOTQDkkBTj2uyzGaEWuw+k3XwFR/HNn7gDXMxtFxpUnnQyVcc/2Q9zfMta6cp3QCcYieRGNsTfOvJtv4ZndEN7TnJZtdMyFNr5/fimdq2agaCUvf48hvRAucswM4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727169906; c=relaxed/simple;
-	bh=T5uSHgkmAwvTJQWgMDrPyQnAF/YeHQaaCcpuB+cWki0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nN7EyWYjcB7TlqCzQ/1gGPmYFc1LGowAnR6fnU8uK9GxrTFPnehIB6AVC+LljruyMQbOokkVwUdRrfFmfujmf0ZKqvor+4hy1A2nR9fC7bOvSKz8XWD0oEH/WjscgXahc14uMtwAFuCR/qZlnM8q2PN+W+kFMbOcM6MGljPphBE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com; spf=pass smtp.mailfrom=kalrayinc.com; dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=eIplAb5P; dkim=fail (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=sKD/UN8e reason="signature verification failed"; arc=fail smtp.client-ip=85.31.212.144
+	s=arc-20240116; t=1727180090; c=relaxed/simple;
+	bh=3ECi8fHQVDRG+KsymMA1Fxv2KmgGeKalYuq4swiCZGM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=haRrREX33GFovjgpOYbPJ8gnd/b7UCOTs5c6YglAui4TdUqTK0v0dGy7elTsImx+poop8qUzvNY9NXjVJnw/sGPGETpG4wddBysfsaBldcWRczGzBdu3VU9OuefjR8C70LpfmOlXdVB2KLy3K4H36nyC/dd+ng7hxpOqj63bP28=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com; spf=pass smtp.mailfrom=kalrayinc.com; dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=dAHdPo2W; dkim=fail (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=qldkJg+5 reason="signature verification failed"; arc=fail smtp.client-ip=85.31.212.143
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kalrayinc.com
-Received: from localhost (fx601.security-mail.net [127.0.0.1])
-	by fx601.security-mail.net (Postfix) with ESMTP id 61E223497E0
-	for <linux-csky@vger.kernel.org>; Tue, 24 Sep 2024 11:23:02 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by fx403.security-mail.net (Postfix) with ESMTP id 62B1C90327E
+	for <linux-csky@vger.kernel.org>; Tue, 24 Sep 2024 14:14:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalrayinc.com;
-	s=sec-sig-email; t=1727169782;
-	bh=T5uSHgkmAwvTJQWgMDrPyQnAF/YeHQaaCcpuB+cWki0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=eIplAb5PYMJiPhM+zEjD09Fe1nc9swQPwUK3u96zyo5CU26dnWpdESlHp+konHPjl
-	 wvdnhXoKuBVVfDD8vmXEMMpVdDPJlGAoRzJ+QMykXBVqePasYdRzM4/Zq1v9ut2Nkh
-	 +P5D+q38LAzwSIVGvLojwHid1gRqpg7SgHeKKa+U=
-Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
- fx601.security-mail.net (Postfix) with ESMTP id 2EBC134976F; Tue, 24 Sep
- 2024 11:23:02 +0200 (CEST)
+	s=sec-sig-email; t=1727180086;
+	bh=3ECi8fHQVDRG+KsymMA1Fxv2KmgGeKalYuq4swiCZGM=;
+	h=From:To:Cc:Subject:Date;
+	b=dAHdPo2W8/YcgzYc710G2KvdKjxy+sRDNEClWzpkRifg2luh1ebSzm9L2mfYPMgBu
+	 n3hABaZ/A6Kj6heduD13XEutt6zY4bOWego293fIyGypOh2DYepUpBbAWhmEtVbCnr
+	 TNgUSYyd4dkwbeM04yZMjEvBL3aG09lK5SCxLF/8=
+Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
+ (Postfix) with ESMTP id F3E1F903B1E; Tue, 24 Sep 2024 14:14:45 +0200 (CEST)
 Received: from PAUP264CU001.outbound.protection.outlook.com
- (mail-francecentralazlp17011025.outbound.protection.outlook.com
- [40.93.76.25]) by fx601.security-mail.net (Postfix) with ESMTPS id
- 76B59349570; Tue, 24 Sep 2024 11:23:01 +0200 (CEST)
+ (mail-francecentralazlp17011029.outbound.protection.outlook.com
+ [40.93.76.29]) by fx403.security-mail.net (Postfix) with ESMTPS id
+ 11C8A90327A; Tue, 24 Sep 2024 14:14:45 +0200 (CEST)
 Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:118::6)
- by MR1P264MB3073.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:3a::14) with
+ by PR0P264MB2391.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e2::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.22; Tue, 24 Sep
- 2024 09:23:00 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.27; Tue, 24 Sep
+ 2024 12:14:43 +0000
 Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
  ([fe80::6fc2:2c8c:edc1:f626]) by PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
  ([fe80::6fc2:2c8c:edc1:f626%4]) with mapi id 15.20.7982.022; Tue, 24 Sep
- 2024 09:23:00 +0000
-X-Secumail-id: <16471.66f284f5.74345.0>
+ 2024 12:14:43 +0000
+X-Secumail-id: <183d4.66f2ad35.febb.0>
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iR59ryZlXi0NOCk0VgPCx3yhA3ZpWbYdEkZ73RTimncbO+Ur1mugIQGAuyZTucXWbrSDCFa//sGiPdNWyVCgs3Y8bhj2VOme4tLCLWU7axglceAb8yUBTCLKoaAaEl+F6xkHFmCufAoCosi/qwhiWoMsMobU9QGN1A5QYUSiGrUbLhjAFGUUt/1+CL5YE97dWfzFuzkOmeWK7QfecVW7PDoJr9a7iHuMjsLlH6MqBDKgd1QHu3CjiROtW4wVneK2tV0IiPAaot4r+HzPOlaOecj+ptJqlvVtD3ERoB5Pqa/wjgIrdcuCHojuYzj1K66IHIdEc+ffiqtlJFsCh78Tsw==
+ b=UT7v7ix5dGjWofkygb0HxAzhpW46PBc+oSNpOzqb+zmcMg/c8ysq2d4nGgnjtVSIBM3hA9usXdvsTH+c3+e9yW7voAdUacDVQL5grS8OXFkqeVSJa9tH5hooADtDOieUUdh6QtjgAUzc5GQkVo4atiNl0aD7nnviUyBgFec7P+EiJ1PZLVRBavR5W3BeUygiw3P649WU12NtTbB4x2QowThZ43N/PjC79PFSekJjb0+2hXFnb2kPfjG4mgjqXIUioLTFK871FUXrVzCf4dAs74Dj5QTHIP+fkaXcjZPF1FaH65yqutBvci1b+kW1n3KWxmyLk6b1DLrnWncCqGhKNg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=microsoft.com; s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ap33tf5qZZ62I8NJEWvBds9aSZQ+d7OzAL26H+fuCc8=;
- b=oHVV3G9reGkIsHSea1cr4vwcxmkVETdd6LqBTu4yAGtPbxv0pS7xop0XXhkATC0PGHEN+AfTr+lDeC8S9TmcOH6EvrlaqLrL5StIolVBUExkgjQHj6ayqtUCIqf9tyfGvMwjRbuDZa0bOVyWEjD4RObYM+uvoLj2H0cAW5ZlAhejb8sdtGv6MeXi4tZxytw/+rBUz6cWS0vwhK0WegGVHwTi4Ef4tdX+IMjgD47cVVYu0jsZnwfjAKbsykDi0/4lG9l/LVOG5EQrjdc4a4NyuczYxz2DLBN2hMV2wz/3oImunvt7uQSgXHLfMFHSoHmEpoKoQwPFIZk4Apcb+oo9Pw==
+ bh=xMTQCS6YqrcBW2B3U1sogQqmX0jrdwYKxadXhJpwyik=;
+ b=HAak/zhvdLK+aMVbq5iNwee5gC2JMMci7gUBr6gZbg8ICNqe3d10QUgZnfC7iJ0sKlJpd77MsSNMgqHyW36lgJsN8KesnkjgFLSbLuCW6TYHtQ8fjF+27wsCG250QYpr852j0NR96KxyVWZQSAxFykSArmDTiW+xbN29uSG1P8uMWkragLxNuA2jAV7Ur9Mt21MLg4wwRnL8CW0acqUgVnQc0hbqSFg//tKVQvn49/jcl2PmsIqna6RomLsoJSbddBDVbaohZfM6fmLD09jaDTRi04gKvoXHI9dJVxUG4iROeX27POeqjidvLkZMWE0J+g8vOjJwU6sgrrqBDiqe+A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=kalrayinc.com; dmarc=pass action=none
  header.from=kalrayinc.com; dkim=pass header.d=kalrayinc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalrayinc.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ap33tf5qZZ62I8NJEWvBds9aSZQ+d7OzAL26H+fuCc8=;
- b=sKD/UN8elYWrJHK0oreZ4rM1vqb/ihd0ZDcd539hImuqHoWDhv16W0P/V3XAbfdBnHSKnIYNobDoiFvGjhdtpc6WyAk5njsZvivm/1hKRop7OTk4kKrK3XlUzjJyLdbJ3+rGoKHN76Qt4T9R+OlbosLo/H7A4wg+W6VSFQhTczF6QmOFTnHQO3awwsLSod0PEdc488oCCk+cNjWNFmvF1gn+9WeB3f3xpP2+ZS421pxIS+5jU/yfi5ozfFbt3+S1JWPrUrzczdmywovsnRIDhvEQOPef7bvQTNwgtb8jeOANbEImpC3CqJoCmqlpStTsfpoQqiLMw7xFNNCaIlDrKQ==
+ bh=xMTQCS6YqrcBW2B3U1sogQqmX0jrdwYKxadXhJpwyik=;
+ b=qldkJg+50aeAv+p0Iisxpb4aVYrAd5lo/wgrcWca4CYhsnLlKPpJUkpEw8CtuukDY2PCSCBlohw6ANzfuGlz99Zgwk6c3X1IttpTsTlsPgKHx9xclitdKeWf6U6dJAvYctm/B/nzK4IIOx99PlXQD6acqVCMxlYaGFpSWkD6Qu8EAVR343iPmvFmWUjYLdDeBaw9JKjn7YGq+v0hSoGp8Lbfv0yEtqr9kt2ZJYrbTOdF8uZwaQA2/SDq7geeSKG659segnshF/dnX5GNDyrs0y9edIr4Cxw2W9WuldNPg4qPuGPJQtQkc029oKiUhPyoJBFkgMBV8alr6rZSTGwb8w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=kalrayinc.com;
 From: Julian Vetter <jvetter@kalrayinc.com>
@@ -84,16 +82,13 @@ To: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
 Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-csky@vger.kernel.org, loongarch@lists.linux.dev, Yann Sionneau
  <ysionneau@kalrayinc.com>, Julian Vetter <jvetter@kalrayinc.com>
-Subject: [PATCH v4 5/5] Use generic io memcpy functions on the loongarch
- architecture
-Date: Tue, 24 Sep 2024 11:22:23 +0200
-Message-ID: <20240924092223.534040-6-jvetter@kalrayinc.com>
+Subject: [PATCH v5 0/5] Consolidate IO memcpy functions
+Date: Tue, 24 Sep 2024 14:14:27 +0200
+Message-ID: <20240924121432.798655-1-jvetter@kalrayinc.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240924092223.534040-1-jvetter@kalrayinc.com>
-References: <20240924092223.534040-1-jvetter@kalrayinc.com>
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS4P191CA0028.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d9::20) To PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+X-ClientProxiedBy: PR3P195CA0005.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:102:b6::10) To PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
  (2603:10a6:102:118::6)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -102,168 +97,69 @@ List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAYP264MB3766:EE_|MR1P264MB3073:EE_
-X-MS-Office365-Filtering-Correlation-Id: 557af0dd-54de-4834-96d1-08dcdc7a7bf3
+X-MS-TrafficTypeDiagnostic: PAYP264MB3766:EE_|PR0P264MB2391:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e28ec95-4b41-4e99-423f-08dcdc92790d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|52116014|1800799024|376014|7416014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info: ClE0vi6dd6acGpZk7qmFmvVqn+jN1TesnT5i5M4nxDzFzyuizG6G6tIjesBY5zWKidmCQapMELWW9lnAIkMIpTDZP33SuB0JkhZjIHojs1inTIiVyFLZ84WUS0mDcrn08XkbntLz1QTtbK5aJr/X4+JoNXKT1qG+Hi/ww0xtb1EKpzBMigYe4ieB+7eIUGOYxc1lngwV80Gfm6rZJiTYJmp+MVbqnZeKAoKtXro+jE6ahhj9P4JThJCeEHY4w9SQ8SAiwAEFNXDaNGghEyL8PJkWA6GL/zEUa6vD/sKNBfYhUQzPdv9khoHBoZpGhJK8u9Rw/DkKP5QyIPVMMjgjI0UIixWDzQQtwnOxYCFvGE00tHnrE61dcAJe0mRdwrL+tcSY4qMGf53RWDGVqyF9QMMT76qAsnKnyf8gTWp7iB2YKbQWjpQexKZeyAC9Ml0xURmV0JTueIXMfISyCguAeVoR8azdqiTsrat8W4DZOculJMKC0SSpo4YxxQ4p6GERigXkzd7+xIOxCXEtKsulxhzAdLNQ+We2wfUFJP0njmS5ddo3ovBIQA019m7GGD4sNjmSn36NBohPj+c/SB5Aiqcc6EXpDa5pTrGvN7OvhPfwURvS7jv6COv3n00+2eRcchIL+vv0Q4+Xzt0ePT1dBHS1fC3sF8T/ML20bFSJFFM0iPg0Xt9AL3W9qTzBlhbLOiwnu39fPL9Cjt289VRIugeyTKWNwHJTapndU6VFmTadJ9okqQPNuN1KqeoMjdxSEoRYyyAWPX7tYRaeM0GceE06k1yKt6nr3U94qQTDaIWBcarreCVdbA8PsndBXL8ue62V7WxeovXaD/dNks13YgZHBcAGt5rj40yNMFE8BUuxH3i/71yVmslUIdQzmLdt1anvlflTaozfToeoRs6X/7qJepi8ZBfSTAeHpTlBHhWgKSjSzIDYR0sonFaXfxnzDcL
- mRLmjqY8OCPs9L2fWS3zPaN7/2Btk7mggf21nv0aOSgxtEXrXj48dfHQwwCnulZLhZCqjtDFP0vE+BdU8mD9qJ+esj+YqQYI/AHSnA+sjOJ0JHxFaGZDkAQE2vZnWwBS95MylrbWJFnrGR/nn+xdYkKG2L3iXTgC967VBro+Qsnn8vIMxMx0xmEqt37VfXODapFjFw75FBDW3iuMeN/L8S89V3Kp6QnGRIN38Z7vgMif/07gfqHX9intiumyjiAcFiQ5D1FfFyBLbZBSILMv9xr9GyLF0AYqRUI8xWHarSFmPqDREvgXcy8MLgqfcaYB/gnEGi5gAFaX/YmR3gfRzBrWIRQ6ygMk3UI36XWE+r22my1uMv5mDqYkXvhP5pWax+qg6M+bZcPdAHHWojw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(52116014)(1800799024)(376014)(7416014)(366016)(38350700014);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|52116014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info: 3bELz1oyao4EPwaJLdsIWaBY4vJ6aBSYWiL9VbP5tsLWEKyKcZKqzFERcabcd/HTrCKXJufmSYwt919uk/PeicdS2mOFm6iJt2nBRXaUyql5VkHkT6i04QXh497QEXbJO0G3QOJqMn35ph7vLq7+rj8Z7SlvPZZQJ4OyNIeJea1BqKneYt31cHrU2JTUiShzzDJuW9+2NdMdiYpqouLO09k7fa4LOAOLgUXqv9p3HcWicgKVa57qf6+nipYjArQlDst8QIBlmHITjKXucrAVJaCt+8WhcnB54BBrrzE5jKgc0mSIe2Xrg5/tERWBNTvzqO4yc0/h+TkiVyTYXJQjL9gxU5cdhjibrnfLKY9N/OITXBYBhEelablr/5xLgjw5V7U1A5a2AGbs/QD3AoGpTs0mTds8MPtJgYlRvJ0xwKiGORYRQ9uNuUvr9C9FCTEj8lS+4LaSjUDZBoKYc0AZDL6iDvAHGONtXTya5W0Du7Zp98P433MN4Qu01zWJUk3c9o6sjDqEX5Ui3lkLRDZsiMQSXTJrXabfV7Za3hlpcBHl6Q5nOUD6Y3uZlRv+UoldWsUeJ2pFyouOCGM4XgI7QvP//JzQhZVZSTKW6bUcqLgArvZN6Vd1FEM2x/TsgPDstVL2HQFyyOb1cG9QXQ3FdjcwvqoHGuh0NIknAfFBC7YtG3J0CaqnkP8ldcdxya0W8w3DambzvQr4K3/JlSTTblbVPmzR6mtMukciLVCmZ9nWDo0qk660lXauwDe9B2OKH+4zwMFlVP7AhhMHAcFrUS8nNruRjx1VdXP8AjLCngYLP5bMx0gRhezic9/FmWOcvkNF7zHgCnCVpky/WTbpcVcCD57Qn4uYzh0JUTNHcn/gRxU1jiKPoVZOrZCN4KGuk74e8nal0FH4teOUaAktJeDy6VHQDjd1rbMmEIoM9i4x2j3CEL5yKs0IKjDdwc4FzaC
+ uRuaq40usIlHWBdkUe97V5PFIqmV4bzcnBquHIekj184MYMKlzpcO/UZewICXNErTlCIqii36PCfiY8jGNe4npypGxrOeyXinH70k7CZ5sqPxuicm8wj6iVLrUH8MRlZrCci4YQ9o7I9Pz1AU4epuVUJNlPbj29Pmp7AMFKeRCqvQPSA2DE2y+PucZ1nNlrsAr504wmO5jWDgP1z41T79zxxVqg90Cg1eK0GL0ohdUBAlsD2D+QbwkHczKFwQGmtPU3mEX5pWeoEMmJmrNfGysWov7PTaO8C3JalwhHbgSxOZ6AYYG04iSaHm9yRJUZntG3N6uOYy4pEh8iDh1W4RJCpx+wd7PZPLfZoCNVLT2Z7R/+Fl1muxaD+G4bzctryR3WdOHL8OKnEqwvOy6xlHMPbryxriwxcxi0tzVLcE426R7514MRXnblJF9tmQUBXywJOYwszDd6mJW6M0IQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(52116014)(376014)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: AsHJ9KRUZvnsp6R8TOAgsuT6LUjM1H/t6yUHyAz9odBXCax2RYt5EGowLNpOwjUjtitL/nIuqcmwChI6u90lvjbsoZtngN99D4q+FXTb4r2NzomMDs2nCTun64RPbB88JzOTwWVB3iph1jLpZ+GOaP3bp+HHMGzjMGIRUD4a4IWyo8BglGXqlf9NzKy8XvdN0grfcPUrRmur2B0Ty+43ctqxXWo3jtmXkqsVKtT3Oe/Il4uJ/Amyzak21eKhJk54Vlk12PZIqhbTWjpG60gf8it2hU8pqnuwPQgtssxDOKnWajzX9f+Qz2VnJiCCrWh/uV9FSbD2QDgLw1Uq1aMNAx2NMtOQRwdfk+iV+Q/WrPBTDruwBpdAwqW2+qM9VoeOuWwq0tnl7Dm/c0aEjmdY749044WTCSq3bL8U0s0UB+XAwba0TO4+zyG2LDb43pF42LzqcYV1gZUgzgVGTaJ3AbyOyqaIfFBXciMlNcIM2YZqSkHsxg7zysLB5wmA9PJ19GQRWt4uHGmWqQIT+H0+i70Tp5tntUirNnlDEYbbljlg/HYdrm8l/4Fg41HS5Wo6CJHO/w4U9QtyM9s20XAWwyuKrjkofQARwbfvb0dBmZlT00YQTB5WJH9MGWc0G/sB+jtyqjM3BAMDWCwPbD21xYJr4SIz90kzkqaw6mtRnpH7X8k7qybqG0Cl+rskD5IdPKGVtN1lhUjQgzm+n0n6D5526VjvA+G0wjK12APfg2NEZnARVeAbgd1jS1bIVq88g/P8ogAF007L/kKskAk7VTrpqXO94LQqahbGkIp+8TdpLDxtuueY2H65zF3yoZP8hnL+OyfCRO/3nB9MkDcOrRctpdnkLGeEzpusZaeQgUjxYnY16feUhvEzqjH3zWN+4gRX/oTR3Vanf1MaX5nocnG92hsBXygwSmc+VYSruuOtKl2sbvXG9FimDyUbw1zu
- bHhm2gjMEoY4mNSnYSO2k1kN4i0Zp0Vt7Ei6jT0sIJlFJrOC4Jr11nJNkgemdsW0WIESUARRhkoaaE6K8dSNvgbnH7UPR2abx4i319dGq5p8HPT/kzXOdAUpldfKKfjQ1VD8jTkPfMojFy11jFkm+u5NtByVc0fQKYkn4C/BW1OqhJsRma+0s8zDZBGDin+qP1Hg7S7fB1sw17uec7cmJncS0Qh6d1Niig8L6SQdk52bRZZjPSkQMG8tDt7jc1UW/MsG1L4rXyuakAy4t10rqbCn7eZDHI76BbeY1056XdIZZ+rOXZctnFwR+e/sh3WdVYcBr1NlpNiNLWEcoPl8eAJAykHoPtquWQLuxEhZVM7iUXtmz3jASDUOqV/Bz0xjVryPqRfsvObP0+8Pz7M5Ums/c+BTq4gpuHc6dzJPe6EIkE3WRQBBbGUZVEpJz1Sma7qSp4aAWkwZ8h7rKyhmky5iHw5ODdYOyFxDaJJ4Zg5hA1/3ZnIos7wwXW0b3NnUzZg81W9kGFq6jw1lIrFXhHn+EhgJp7MJSiChOdzxzW7eqfruWTbd+qMMcTiQI0F6KUXjMU3Hi86bQI4xY3tpuQpCw2AsAnuZSvIHyIclMB9vgdNfaKsd9/aBbT2vqPAI
+X-MS-Exchange-AntiSpam-MessageData-0: ThJq4zjTb6O6YzLlVHk1s//HUvTFipnjTAjRK2+OAcA7dmC7R9AGtjokeweX/SDNXACO/7CWe6WXpbYftGQsLiVgA3cXK0G6k3KRaf4QfTx6mHvk+dhN8QC9lK83dIZSHs/9sfp8kIaKd9JUZAlMa6Mjy3BDhVijsSiwHEpzQ8LUk+CxBQJfEgQNqdh/9lhbJgPCU7u8cqZNzq+kwukF9s6UzLOBwKK3MhhS7qT2KECTdyR2zdiOCDdYjaFVp8IgUy1AYqrfzCWPvq6uhHKjHfvTERX1sw24O0i6IuPqoAV3LfkxJof+57tV4KilAbRZoEnhGo2QEhgKRTKAs5Ly5MlprMz3h6pFSp1UYcdkLOhias+Z1C5z9+nUlEcZDJ4uOjsYlTOhkQokS7dUNiarew5E05mPwW0cM1PRpEXTt0biLcemkvsdhVTPX8vnsXrIIuTpfLi0/g0k7mJPm316UpFggFqh4s79CBIAoYRvDgZD0GuVDFOKZ/HHs4Xkpk5yCqnAE2Cd6baaqOgjCR03Futg9WS/xUR17bH5+oLCOFqLB2gR/at6M8caqCwzWqKU5j95fCyek6ZYQQqbCyzyJh0bmpswLhbslL7AOopqRwMO6CaUVBMN88520JvFCLQIOn6fSiUTvkN2qSI+Vn45SeGJCF7UYtlJF1bEOW3sqNKrgcHVM/Tfg11/ZRVmbpiJ9EcZiqZcHTUSofHMExVma1tYEvWLodFywUF/qkS6KKAGYUuK4T1ypZuh3MQ1sDVb77AbKzPpWmFxpwUkhvjf2tyGO7tfc43xHNy6Sd1mmWJ8Kf9/qyQEZ0991tqdPhqor/4zNe9Kf1+r07YIruzD1fj4YoEEiISwiEn0pcomyMbJb/RhjZWz8dxzRxvkcxe5IgHtkC+Frb7+mVMDKaj2Wh9Ai25SS9iLe2Lye7itqmf8hpFxMdnGc757Thel2Gkp
+ 4yFwQtMbMIPbNyP3Zt45yPfuikTruWS3V/jWKs1T8t/kAfdNelEnj0xrnAMOWvdkuPHi0L1plTzyWwEuOklr/40/gfJEdzS5Z75xHkjzQWuv8IzbzY7DJDwYmpXlnYOGeQUZYliY2DYZzqz2m+FAho8yx/HRRmsGq5+84KhdqD4aHNIgWtN/yUHdC116iQ0PYPyG8G46DxtfSqoliTFm8kOdsfys3TjVfwX9OIoRMyW5Q250ktbkRKNABrmhisoRjB8bySWRjfx8BJESkaDwitlGF1bZFIXawbDA/Ca3q4iLEnz1SxIUFlTSsOIwaHVG+idQS+g+ZX6+vVS7fsPjnCs9rbDYhXuEYst7ECGC14WbDQCwQI/GRqwFlB//bT7SN7D4dakuNlQGtQs6vKjJsaMPCYiKGuTXl8vVq0nXtmqHmqgbQpbSdW9rvu/9ICZmyFLwpev30pjtNqgmBEkWzxfKg3JY+XK77xHh1A+NsUzTqW6wPaWhiq9n/sLc0WkCuSomQNg9e/R/u1RQLZTKG5+HDfral1nYvWVSdqbvXzhuGChePwO1rYB8YWkC34VWR4pia9mSv3En4DuPLUD8UjLLAMc6VRQvJJtX2WhJG74Tc64FZGtxa7EN5wsFiu79x2cxHdM5RHlxZfAqaZ9adw==
 X-OriginatorOrg: kalrayinc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 557af0dd-54de-4834-96d1-08dcdc7a7bf3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e28ec95-4b41-4e99-423f-08dcdc92790d
 X-MS-Exchange-CrossTenant-AuthSource: PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2024 09:23:00.4393
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2024 12:14:43.4870
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8931925d-7620-4a64-b7fe-20afd86363d3
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: exUCptaH5lhbs5eJudIQlgtkq4fjqEX1fWKXrqtFJX7TLCV1tH8LoZm6n39ff5a8saBwmObIaU7U6TClNb8n3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3073
+X-MS-Exchange-CrossTenant-UserPrincipalName: u9/X+tddNIVPad1FnoqqDsL96NxkAd5MZzQ+vNRrVpDENdaTpys1iFeZsXF5/6NS+8Mv68D692+ZLh08yiEIGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2391
 Content-Type: text/plain; charset=utf-8
 X-ALTERMIMEV2_out: done
 
-Use the generic __memcpy_{from,to}io and __memset_io functions on the
-loongarch processor architecture.
+Sorry for spaming the mailinglist with new patches. But please forget my
+previous patchset. It was broken. I didn't fully understand your
+previous comments/feedback. Now, I added the new functions to
+iomap_copy.c (as you proposed before already). I guard all of them with
+an '#ifndef __memcpy_toio', etc. So, if an architecture already has its
+own implementation it will use it. If not, it will either call the new
+'__memcpy_{to,from}io' and '__memset_io functions' from 'iomap_copy.c'
+or directly the 'memcpy_{to,from}io' and 'memset_io' functions from
+'asm-generic/io.h' which are just a wrappers around the __xxx functions.
 
-Reviewed-by: Yann Sionneau <ysionneau@kalrayinc.com>
 Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
 ---
- arch/loongarch/Kconfig         |  1 +
- arch/loongarch/kernel/Makefile |  2 +-
- arch/loongarch/kernel/io.c     | 94 ----------------------------------
- 3 files changed, 2 insertions(+), 95 deletions(-)
+Changes for v5:
+- Added functions to iomap_copy.c as proposed by Arndt
+- Removed again the new io_copy.c and related objects
+- Removed GENERIC_IO_COPY symbol and instead rely on the existing
+  HAS_IOMEM symbol
+- Added prototypes of __memcpy_{to,from}io and __memset_io functions to
+  asm-generic/io.h
+---
+Julian Vetter (5):
+  Consolidate __memcpy_{to,from}io and __memset_io into iomap_copy.c
+  Replace generic memcpy and memset by IO memcpy functions
+  Use generic io memcpy functions on the arm64 architecture
+  Use generic io memcpy functions on the csky architecture
+  Use generic io memcpy functions on the loongarch architecture
+
+ arch/arm64/kernel/io.c         |  87 ---------------------------
+ arch/csky/kernel/Makefile      |   2 +-
+ arch/csky/kernel/io.c          |  91 ----------------------------
+ arch/loongarch/kernel/Makefile |   2 +-
+ arch/loongarch/kernel/io.c     |  94 -----------------------------
+ include/asm-generic/io.h       |  18 +++++-
+ lib/iomap_copy.c               | 107 +++++++++++++++++++++++++++++++++
+ 7 files changed, 124 insertions(+), 277 deletions(-)
+ delete mode 100644 arch/csky/kernel/io.c
  delete mode 100644 arch/loongarch/kernel/io.c
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 70f169210b52..bc97b09efd16 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -84,6 +84,7 @@ config LOONGARCH
- 	select GENERIC_CPU_DEVICES
- 	select GENERIC_ENTRY
- 	select GENERIC_GETTIMEOFDAY
-+	select GENERIC_IO_COPY
- 	select GENERIC_IOREMAP if !ARCH_IOREMAP
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select GENERIC_IRQ_PROBE
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index c9bfeda89e40..9497968ee158 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -8,7 +8,7 @@ OBJECT_FILES_NON_STANDARD_head.o := y
- extra-y		:= vmlinux.lds
- 
- obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
--		   traps.o irq.o idle.o process.o dma.o mem.o io.o reset.o switch.o \
-+		   traps.o irq.o idle.o process.o dma.o mem.o reset.o switch.o \
- 		   elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o \
- 		   alternative.o unwind.o
- 
-diff --git a/arch/loongarch/kernel/io.c b/arch/loongarch/kernel/io.c
-deleted file mode 100644
-index cb85bda5a6ad..000000000000
---- a/arch/loongarch/kernel/io.c
-+++ /dev/null
-@@ -1,94 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-- */
--#include <linux/export.h>
--#include <linux/types.h>
--#include <linux/io.h>
--
--/*
-- * Copy data from IO memory space to "real" memory space.
-- */
--void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
--{
--	while (count && !IS_ALIGNED((unsigned long)from, 8)) {
--		*(u8 *)to = __raw_readb(from);
--		from++;
--		to++;
--		count--;
--	}
--
--	while (count >= 8) {
--		*(u64 *)to = __raw_readq(from);
--		from += 8;
--		to += 8;
--		count -= 8;
--	}
--
--	while (count) {
--		*(u8 *)to = __raw_readb(from);
--		from++;
--		to++;
--		count--;
--	}
--}
--EXPORT_SYMBOL(__memcpy_fromio);
--
--/*
-- * Copy data from "real" memory space to IO memory space.
-- */
--void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
--{
--	while (count && !IS_ALIGNED((unsigned long)to, 8)) {
--		__raw_writeb(*(u8 *)from, to);
--		from++;
--		to++;
--		count--;
--	}
--
--	while (count >= 8) {
--		__raw_writeq(*(u64 *)from, to);
--		from += 8;
--		to += 8;
--		count -= 8;
--	}
--
--	while (count) {
--		__raw_writeb(*(u8 *)from, to);
--		from++;
--		to++;
--		count--;
--	}
--}
--EXPORT_SYMBOL(__memcpy_toio);
--
--/*
-- * "memset" on IO memory space.
-- */
--void __memset_io(volatile void __iomem *dst, int c, size_t count)
--{
--	u64 qc = (u8)c;
--
--	qc |= qc << 8;
--	qc |= qc << 16;
--	qc |= qc << 32;
--
--	while (count && !IS_ALIGNED((unsigned long)dst, 8)) {
--		__raw_writeb(c, dst);
--		dst++;
--		count--;
--	}
--
--	while (count >= 8) {
--		__raw_writeq(qc, dst);
--		dst += 8;
--		count -= 8;
--	}
--
--	while (count) {
--		__raw_writeb(c, dst);
--		dst++;
--		count--;
--	}
--}
--EXPORT_SYMBOL(__memset_io);
 -- 
 2.34.1
 
