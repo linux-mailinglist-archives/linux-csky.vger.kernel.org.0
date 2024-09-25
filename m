@@ -1,170 +1,163 @@
-Return-Path: <linux-csky+bounces-890-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-891-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BF0E98508E
-	for <lists+linux-csky@lfdr.de>; Wed, 25 Sep 2024 03:13:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EF909860B1
+	for <lists+linux-csky@lfdr.de>; Wed, 25 Sep 2024 16:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9540B20B30
-	for <lists+linux-csky@lfdr.de>; Wed, 25 Sep 2024 01:13:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7C7A1F25B1D
+	for <lists+linux-csky@lfdr.de>; Wed, 25 Sep 2024 14:31:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD34014265F;
-	Wed, 25 Sep 2024 01:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C761AE846;
+	Wed, 25 Sep 2024 13:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="drUx5ndJ"
+	dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="QDA/+wZA";
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b="RBrFgkOU"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtpout144.security-mail.net (smtpout144.security-mail.net [85.31.212.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B8A18DF8B;
-	Wed, 25 Sep 2024 01:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727226115; cv=none; b=tHH9kn8JIQbh8eK9dQbzwHxrl1Xf28I+BIHaGRa70CY5vW7pE3skRJnKXqQWmWrXg5elnPfbp9S45qmHcU+2OS6itr6xUNVKRr6+MHFaQxWNXB72PQYE5RQz3TYwn5+cC2UO/i1JgJFaNozh3zhgtET6xpqOhfEgY3UQ+cYssSs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727226115; c=relaxed/simple;
-	bh=Hnp42PrKfzfKYFo6ILUHY5XMvAkAmXvxiR+pbf7CaC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FMnAD2kMWXDLlC6ys4rWPjo+4XYKYZEbb3iC7GICyhdS9oTGBN5velACNkom3UhmqZ45qXy3FtHY7ovxYBwfllTXHIZaeAb1CB4b9hcAfWqEFeHyc/T9gFh85XRqDTfC8FJeI87gTNEq3Wm8zuKQWcSw8j6yi7VWeCBDDAum0xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=drUx5ndJ; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727226114; x=1758762114;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Hnp42PrKfzfKYFo6ILUHY5XMvAkAmXvxiR+pbf7CaC0=;
-  b=drUx5ndJS0usk9W7hhdlzD3JrmSf1fNkcrdSYM4FVBu5+hB3i9hfrUCD
-   qtDmq1QF+G61a3Y59GdNI5TJPnP2aPNdF5CW1oaE1z7l4xANkc6ED1sFa
-   RsPll5gPst8xz4Z5mys9QYi5NbvBV18Np/GNrpulJyW2iN1SSUH8CaHZg
-   YRF6w2d8t5YEmqE94iNMY0s/76LA6tqBLZ94hQCCwgWXI9T0E1x2rcSg9
-   AZnHwLPlke4jKevhLknQ2vjzsI604ZAM8j6er1P+k+Qxb+XyQyfFYSW8C
-   c47ikpcxzWzAb5CSax8dHQkO+UY3p2NxtA8Aw61xKfb8eNSYY8WL2eL5q
-   Q==;
-X-CSE-ConnectionGUID: 0SbvFaTCT9Ojhv8ZKZ8f+Q==
-X-CSE-MsgGUID: scRb83tISBi5w9MVe0GIEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11205"; a="26202631"
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="26202631"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2024 18:01:53 -0700
-X-CSE-ConnectionGUID: Cwx/qdCnQKe5Hne8tzPqeA==
-X-CSE-MsgGUID: EdaeGnIYSqWQqwhZhn+3fg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,256,1719903600"; 
-   d="scan'208";a="71896695"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 24 Sep 2024 18:01:49 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1stGPa-000J0D-2h;
-	Wed, 25 Sep 2024 01:01:46 +0000
-Date: Wed, 25 Sep 2024 09:01:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Julian Vetter <jvetter@kalrayinc.com>, Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	Yann Sionneau <ysionneau@kalrayinc.com>,
-	Julian Vetter <jvetter@kalrayinc.com>
-Subject: Re: [PATCH v5 1/5] Consolidate __memcpy_{to,from}io and __memset_io
- into iomap_copy.c
-Message-ID: <202409250806.Lq8C7QZr-lkp@intel.com>
-References: <20240924121432.798655-2-jvetter@kalrayinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3AA18C933
+	for <linux-csky@vger.kernel.org>; Wed, 25 Sep 2024 13:24:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=85.31.212.144
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727270685; cv=fail; b=tz28bKK2p1U39EzlBUpaCZ/KN8ApoDzDMuYaotjMILRFQTD6+oawJ9iJrTTGOdQL4VMXaMxJRfCzJ+G5gryhvt0Uthv7NhV2XXKv0J6BGCyKpaBMPjlKdtUcGtDvHAhAr66QwOaYJP+8zzln5ObkX5CbzigyP2IGhJzhUCngxww=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727270685; c=relaxed/simple;
+	bh=8lEi+VuejbU/yw6FJTZvefT4xKEhJd0dp0LwFqP0BmU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cFWuUXzBKAMnL60zMClWj54mvhLAhkPlmFU6NWBnehOUMRSluRZp6RR4pagCiTXJWFZYNN4UoCeIOUDTQTqYGfr1wwSBeHM9AdbRHddiDHkRdWlbP+Yoh3m2ZtNFl0S92KOp2jsfuAMVV8p5wUIrtaLxf30XpWYEmCrJccZnzds=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com; spf=pass smtp.mailfrom=kalrayinc.com; dkim=pass (1024-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=QDA/+wZA; dkim=fail (2048-bit key) header.d=kalrayinc.com header.i=@kalrayinc.com header.b=RBrFgkOU reason="signature verification failed"; arc=fail smtp.client-ip=85.31.212.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kalrayinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kalrayinc.com
+Received: from localhost (fx601.security-mail.net [127.0.0.1])
+	by fx601.security-mail.net (Postfix) with ESMTP id 333763496F2
+	for <linux-csky@vger.kernel.org>; Wed, 25 Sep 2024 15:24:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalrayinc.com;
+	s=sec-sig-email; t=1727270676;
+	bh=8lEi+VuejbU/yw6FJTZvefT4xKEhJd0dp0LwFqP0BmU=;
+	h=From:To:Cc:Subject:Date;
+	b=QDA/+wZAAHf8y1xIHFixTWFHNNkH4pqVzSO13NjFE23kwqrpvhRqTtlqVqWYF93NP
+	 qw5QpYkB8UO8GNq23MZonVb5aCDdeIXPkbokADqsUVPleJzoRjSo/RXw6AlaF6Z2ID
+	 5rsYrxCu+iaFdajbuJ4PhI/8auAn9Moaepr5pZ74=
+Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
+ fx601.security-mail.net (Postfix) with ESMTP id EAB2C34969D; Wed, 25 Sep
+ 2024 15:24:35 +0200 (CEST)
+Received: from PR0P264CU014.outbound.protection.outlook.com
+ (mail-francecentralazlp17012048.outbound.protection.outlook.com
+ [40.93.76.48]) by fx601.security-mail.net (Postfix) with ESMTPS id
+ 1BBE634962F; Wed, 25 Sep 2024 15:24:35 +0200 (CEST)
+Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:118::6)
+ by PAZP264MB2543.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f1::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.27; Wed, 25 Sep
+ 2024 13:24:33 +0000
+Received: from PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::6fc2:2c8c:edc1:f626]) by PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::6fc2:2c8c:edc1:f626%4]) with mapi id 15.20.7982.022; Wed, 25 Sep
+ 2024 13:24:33 +0000
+X-Secumail-id: <ab3.66f40f13.1a33d.0>
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BaKTfohv74X/62JrQF5/bzq3xqxMYtmYrhH6CIzFBhVR/nt+xsFrf3ThMzi4z9hfegp/UOG5Cxc5gIY8j8O05nsIukpoCdfmB8td5aT1iUV/HRUlw6sv1QihqFuNTGlG/LVjH5+keMd2y8HphdejX9ThjaGPUcuvcnrozdTtM1uIYus272Npu3cA0Q3uDmKAi1WNy1FUdJpluLmqv+9wtX1awoNhvFk6X/Te2hfBL+V7jvbNUAYIklvjj7KnqWxQjMSPmVb7rNGTu+0gcN4HzktRHnu3VR8nXtZUg7O9WqSg8pz4/DSe3D/BcboCtmZZh2sdwY/OYn/6pTKh4MChiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microsoft.com; s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kMEgvJFKFqDrV18lig9ZekYMNCjW6s3gxtl2Zuk1OKw=;
+ b=XAz1FMtgHoFatZRDvMaBeSVWHNF+fgzfwLxjEexJbMyjv8jMmvnoh4iD9mB2duwxxYRL52I4OIVtAJnDhaknVDYebl/hwtYLGXK32GUARlIsers6i7zpo0D9lzfCLzJkNhb+RDKEzAQTUI1YzCiKJ6/1jJlc+7iSo4yy0hBo0cTUd8qJPhps/p5X7NwX8CriJ0zcyRzgfOs4i88PPsbuLanUax1MpA0T3IVhLKl0WSO3SmYgh3HqBx3VsLIofeh3/lcGBZgnlXb7drH9E9Yk/re/E1+Q5lx8Z0y7MDCLPdK4treaRrXKSAGAskqqCX+K114ffqnBka2Ccmak6VDp9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kalrayinc.com; dmarc=pass action=none
+ header.from=kalrayinc.com; dkim=pass header.d=kalrayinc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalrayinc.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kMEgvJFKFqDrV18lig9ZekYMNCjW6s3gxtl2Zuk1OKw=;
+ b=RBrFgkOUjJYr8perRyLPD//gymdTO+NHVOvLXiOAZFsS4ywsHvNaxqY9FuuWeOIw2bXeIXgWGYYv6ZqRAT/B+21rk+XVT0LbfVfeW/hLP0oSdUll+bUgbopNuYG/9pgb8J5Pn91qPIOer5QonWiv09hTLBKBX9n8RkoSSDtYU/panrUo33AQDCTqQwmGHkIecYl1zebxkFkW6On1mR4LpiovK8c4/t516aZKQAPJGiPuQY3tohqjgcNhhRBFwUcz/JkFJAJzuNStVWv4AZ24e30uyU2GeCLVxcuaKDECNHSxLNg10v1QpL+gwp0y8TqnxKtnFdPBsDg+lxia7ic/WA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kalrayinc.com;
+From: Julian Vetter <jvetter@kalrayinc.com>
+To: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren
+ <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-csky@vger.kernel.org, loongarch@lists.linux.dev, Yann Sionneau
+ <ysionneau@kalrayinc.com>, Julian Vetter <jvetter@kalrayinc.com>
+Subject: [PATCH v6 0/5] Consolidate IO memcpy functions
+Date: Wed, 25 Sep 2024 15:24:15 +0200
+Message-ID: <20240925132420.821473-1-jvetter@kalrayinc.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR06CA0138.eurprd06.prod.outlook.com
+ (2603:10a6:208:ab::43) To PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:102:118::6)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240924121432.798655-2-jvetter@kalrayinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAYP264MB3766:EE_|PAZP264MB2543:EE_
+X-MS-Office365-Filtering-Correlation-Id: c055267f-1a92-4285-cb48-08dcdd6564de
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info: ChIVTiwMfI4r3TRBtZ/iCVDcAPsH9qibf5JuiQ8HqIZAYU7p+gPzufCU5JDq9jHBV1mcNG/1UD9kmOZfLSZ0uwtVzNnLXxSKjecTcfwOnEicfH5TGoEGrKcTPPc8U0zPoYlBDdnHpGBaxN1fMD/Fvab3LGCFNi55aXeBENDo1UaQnrkq8NJza0q/VhV45Qm4n49f3rYOLLZJkKm/m88JAdJJ/kdrBGQnsKHLTnN2VsCovZlhQ9rxRg2mG8fsroFfkZDWZXCkAGjPxVRF+q8ytUmQ5P8OdPoUJWa8rOIOYQVwoKmC7X8Us4qn+KntVPYkkpCqGsy6WoXDLoL3ZpESCxOvikjlKU/NfuRWQILKpawuzo1hx9GkTBJUhmYkq+ClvIbhma6BGdooJkJq3xETqLabbJ+tntkrlh6vr6CItsYGH/gw5r0ke1GUSAW2LTKSmk4QZtIOhOJQkzjMZqNR3YyfUVBPrpWqnVxhzsuy4fNGidFNxkLwhNWmvlLx7wn1pxUleFFTpvw7T8onI+Fq5kprXQLflpzl5yUEfU3vt/OzQnRBGayTSpd7uTcTw0BJ0FjGSi6R3st0fqLz/1EZpMaAEMpHh0yJ1SFOj59opuRGM+Yrvzb0JBkC0L38IR1rZYfl5991VE0LpNoJKMwU4pJfCiVYFTF0vJm8k0fbaX0DCqSEvxaUjeq6v8Tfj5D7dcYaMUh3lUM3qdyH/eaOM60HB8K3fQtDEQEud4whpx9ZUJZSjRuh55lWM2hNw7wYt+3wpkkEzRvVTBD4rJKSOs2VanORReskcNIaI1wtKqK6S0yCrkFPIkHqqxCul363jkIvCBm2zWYx2UG8hPxBft6HyHr8hxHJH5WapSXNlbTd5OWHwaUQ6Xy8YJumjj9eCT6sKluxG2hhU2e1LhPC/480sU/+9EPW5tqGfsuPd7Xd5VM0iSvPSPLdmPiOfNNclWb
+ /axxkX7qSSn04GYZPTKVnX2T9xdCcI41B4Vei7jlShDfBimhmPHKRbBWbRhkwGrIgZ1wqjrNjrTLx1bzo8AG2j1+gurA4chZ9iFhwMUSPsH0eUam1xUBceaoddzmBRej94zwSslYFtCf+hBbfd8Q6RWZB6+AdJmvpG/2IVafDeKTtoJp7Lf3E7rsady7qiAsF3C2U1t8W9CWgbBy9ls8bkHq95xn3GXYPu1hNpZ0MqnKi0tND+uzXiH7kCxJGi3mLxd9Tbdl8RMKFYChM/L1OPAmhV34vtE26Xj9YjVyLOYThkHyWf+WzCHzjN0x1sj6MjFEjEgM3duI4DHniKy5c5oSVNSeVcDMZpTzKHXHZDl8BDMeZKTMuRBMitBv193JZvwLeRo0Zsk20xKngHeU2aO8V8jsDMRvhctyOU/AsegoKaaiOJjxZhZ1W+8EIHILoM8x7lfTCXdtJN5IY7g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(52116014)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 8TZoXZ2OvSiK2X6C1ldAqCYJDUT+EYKXlLlQ9k4ouTc4FRVkiUSP7RniSKLKy/n5nMyehhGCgkhPvBHOrhpBTSJZgA4glPl84Njih6pIDTYIV8Fl44yY0kWxnep8bSCOvnrkX3oxROGtk1+GYVqZIUVHGXaWuJcmJMprdpux5FMb/nN3NrfIz7R599RPP7S3mEYfpwv4QTodwHww6swmLQORU714/LZy87mdzcMdYOxYE1c4YEkqgbQOMQ9tOR3g5cJZwXXFN5aAKW3eI6piVxhZG34ql9gTkNVACHSb4ponpMaM4Y+zTJKdc1Rlbc5vIALMvgbP8f71Dk7IIPPlh/mjp4N6iD2NEXXwSt1IfaW0fogyNl+WVeuU6vgKecIOc1K7CS9SzWQRhkRFFE+QjN+s31Ti4O+FZbSSPA/nmONSaEEfPRTg1LfKMEua+FZBTLpixYc3evKcWH9bVr0TOaDuM32yktHFvKLB7bX9xD2E1Tr24aMGfMoWTrKSWw/qNFzLEJf44fqaPooTq0vNz4MPT2UAsTcJ0/e6kK4ef5DM6d+MYjfpXcTucQ0ml7NDitdW8/co9hPD3X5lE4GUgzKEL7XDX4EsjsoFaduOu6b5FmrzYFIfaN/P68kLofe7ghTeLxBAHm0aiHsCPv0Obe+rncipGnQAukLBunWXu1IQQb0koltKnd2zsgYGVDQy0J6S47a+gpzcATxOO34H7Dc7KNZWP7S6QicqupWEUiGJggi1N9omzmCcS2X2UmdoImiWjmYCoUw5dkH5WnGmOlG4w+SdOYWUeklvo5A05ge6YXWfN9RYcWRI2PnO8xkOqHeL1xxzQR6IKtt2eOxANdYV4VpMSI2GWBse/VrpEj/mGOI0g+UhtzD7Vz/nZ61td+h1rTAuHEbTJvqPMGdX0QSrVn89BDc2JRdEgRmhJKMJS0XCohDFLiumpu7WcCxl
+ lCw8nHIQFelPx4U05qfGVGkrr9rxbuOLMdFmKtnYD7ijcSJr8Jw83exUhioOgURncN/j6EcsMQgUmBD0j3bsT4OlOEo7as2BocrwEKOApSA0lP498D3Hyv4j6silQaTRrY1gcqcl5DnuWSbTIIbo+VDywaxNgZSLF0RLcDDh9Rba25wsBXDIV9vOy5S9M0WKmtzM1Y4mE+HpQtKNU4tq29nIQJDTb5dMdAw6VTgSAcw920mCvlgH4DBRipcdJZvl+nCpiGpzvDXcPXv5D5X+CClQhXHM+QuxhqZWueLmgvj2zUo/J0htaJf/uIb2+3JiSxY0bnRza5XiuOGLgbjY5jFc/2pMbpxkM+X+xdWe8E5ss42W/5EN+3YEH0lY41aL/r32IMd5bAMyL1BCsqYA1EPNYoGBye70L69Tt8OU9dC2+bUfJkRCsRShtSrUleOMBZO01u/BMPJvPVp+VvynFoSP6wByHLQklrKeteg47zS03t10++OmwUMaZPqtoLy1iz62gbbO//gehOp2QWWRzYkmIvSvO8IXXTwqYFvILL7Zy4JhM3r6oz32LaO+yJSCajU4czptYZXW8oNKUrr5NwLaiU2KQnT6eqlAz8NK5x59ynypVy0sFqjhmq2JT+p+
+X-OriginatorOrg: kalrayinc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c055267f-1a92-4285-cb48-08dcdd6564de
+X-MS-Exchange-CrossTenant-AuthSource: PAYP264MB3766.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2024 13:24:33.4977
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8931925d-7620-4a64-b7fe-20afd86363d3
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OJTlAFWqv6T+I6RhfcGDRNXZQvSko4PirvdN9FIwhGvib7NU699XR070fk+FNZvycVhGr35CcX77GNC7rlwMXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB2543
+Content-Type: text/plain; charset=utf-8
+X-ALTERMIMEV2_out: done
 
-Hi Julian,
+Thank you Catalin for the feedback. It's not a nitpick. I have addressed
+it, and added the architecture before the message for the 3 commits that
+modify arch code.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
+---
+Changes for v6:
+- Added include of linux/align.h to fix build on arm arch
+- Replaced compile-time check by ifdef for the CONFIG_64BIT otherwise we
+  get a warning for the 'qc << 32' for archs with 32bit int types
+- Suffixed arch commits by arch name
+---
+Julian Vetter (5):
+  Consolidate __memcpy_{to,from}io and __memset_io into iomap_copy.c
+  Replace generic memcpy and memset by IO memcpy functions
+  arm64: Use generic io memcpy functions
+  csky: Use generic io memcpy functions
+  loongarch: Use generic io memcpy functions
 
-[auto build test ERROR on arnd-asm-generic/master]
-[also build test ERROR on soc/for-next akpm-mm/mm-nonmm-unstable arm64/for-next/core linus/master v6.11 next-20240924]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Julian-Vetter/Consolidate-__memcpy_-to-from-io-and-__memset_io-into-iomap_copy-c/20240924-202154
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
-patch link:    https://lore.kernel.org/r/20240924121432.798655-2-jvetter%40kalrayinc.com
-patch subject: [PATCH v5 1/5] Consolidate __memcpy_{to,from}io and __memset_io into iomap_copy.c
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240925/202409250806.Lq8C7QZr-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240925/202409250806.Lq8C7QZr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409250806.Lq8C7QZr-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> lib/iomap_copy.c:89:19: error: implicit declaration of function 'IS_ALIGNED' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           while (count && !IS_ALIGNED((unsigned long)from, NATIVE_STORE_SIZE)) {
-                            ^
-   lib/iomap_copy.c:121:19: error: implicit declaration of function 'IS_ALIGNED' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           while (count && !IS_ALIGNED((unsigned long)to, NATIVE_STORE_SIZE)) {
-                            ^
-   lib/iomap_copy.c:161:19: error: implicit declaration of function 'IS_ALIGNED' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           while (count && !IS_ALIGNED((unsigned long)dst, NATIVE_STORE_SIZE)) {
-                            ^
-   3 errors generated.
-
-
-vim +/IS_ALIGNED +89 lib/iomap_copy.c
-
-    84	
-    85	
-    86	#ifndef __memcpy_fromio
-    87	void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
-    88	{
-  > 89		while (count && !IS_ALIGNED((unsigned long)from, NATIVE_STORE_SIZE)) {
-    90			*(u8 *)to = __raw_readb(from);
-    91			from++;
-    92			to++;
-    93			count--;
-    94		}
-    95	
-    96		while (count >= NATIVE_STORE_SIZE) {
-    97	#ifdef CONFIG_64BIT
-    98				put_unaligned(__raw_readq(from), (uintptr_t *)to);
-    99	#else
-   100				put_unaligned(__raw_readl(from), (uintptr_t *)to);
-   101	#endif
-   102	
-   103			from += NATIVE_STORE_SIZE;
-   104			to += NATIVE_STORE_SIZE;
-   105			count -= NATIVE_STORE_SIZE;
-   106		}
-   107	
-   108		while (count) {
-   109			*(u8 *)to = __raw_readb(from);
-   110			from++;
-   111			to++;
-   112			count--;
-   113		}
-   114	}
-   115	EXPORT_SYMBOL(__memcpy_fromio);
-   116	#endif
-   117	
+ arch/arm64/kernel/io.c         |  87 --------------------------
+ arch/csky/kernel/Makefile      |   2 +-
+ arch/csky/kernel/io.c          |  91 ---------------------------
+ arch/loongarch/kernel/Makefile |   2 +-
+ arch/loongarch/kernel/io.c     |  94 ----------------------------
+ include/asm-generic/io.h       |  18 +++++-
+ lib/iomap_copy.c               | 109 +++++++++++++++++++++++++++++++++
+ 7 files changed, 126 insertions(+), 277 deletions(-)
+ delete mode 100644 arch/csky/kernel/io.c
+ delete mode 100644 arch/loongarch/kernel/io.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
+
+
+
+
 
