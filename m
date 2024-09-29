@@ -1,184 +1,94 @@
-Return-Path: <linux-csky+bounces-902-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-903-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D3AF9882F2
-	for <lists+linux-csky@lfdr.de>; Fri, 27 Sep 2024 13:00:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CDC69893BF
+	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 10:26:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16B52281FB5
-	for <lists+linux-csky@lfdr.de>; Fri, 27 Sep 2024 11:00:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3480C1C21338
+	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 08:26:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DE3B189537;
-	Fri, 27 Sep 2024 11:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08DC13B29B;
+	Sun, 29 Sep 2024 08:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Sa0op7Dr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HaO1PFwd"
+	dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b="EXIVItjx"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195E2186E29;
-	Fri, 27 Sep 2024 11:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0581E4B0
+	for <linux-csky@vger.kernel.org>; Sun, 29 Sep 2024 08:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727434810; cv=none; b=b82/j6oyl2marpwpKisQHb+d4FYqo7RBD997pt0Bd+6PvW3rtoCN44yM/K1FL7/GWVEXGvVCvJBkhkupSjk1/ltQ8SEfIYKelcdSSyWXmRYX9WQ31W9EHa8wD97IR67OCWF+DCi8tAizDTP1na05ZZEbex9p6yFxQtCoahpM5Hg=
+	t=1727598371; cv=none; b=UXYJ2GXoz4+hiyXV99jOQ7MAmoOMrx6bFktxsW6w/HKSJjZFdnAkqJewDoTMczObH6dAcnNYdZqQWRTSIUxqFTHtMh/Ghkit0tlSkRv9Czhrr2ll8Xocn83L24ITLdArZjLPLdY4RElPmpdMNfOkOAWVUUnJqE8ZLcjWWWTzdm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727434810; c=relaxed/simple;
-	bh=lcNikPtKAxq/dN0ibeXX8gwGwA4AaxcYAE0tjk+fG1c=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=gsgnIv/A0HUhZEjDkXCz2b6w4LOOO4hiuewFcUGJ+nlHyY1hyVvjRaJxAKeKVHnp7Sf/pdrxukw0SarlxdC9pYCCw80JxTyeN6WnmRCH67W8qwBMJ6iU/zwmFDH6b8+BZr1JyspDrE7I76Lly0KDddPZ1pyLS8tsEOQkM6pA0OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Sa0op7Dr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HaO1PFwd; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 18FDF1380712;
-	Fri, 27 Sep 2024 07:00:07 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 27 Sep 2024 07:00:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1727434807;
-	 x=1727521207; bh=pM2APWPqWSep6TrEUhdTADKW01Hs8FHzTKdjsf1tTCg=; b=
-	Sa0op7Dr+YKcZT4oSmDjVDjyMXp++/lhg9SG1pk3fix1TZsDR1PQWsO3JOSQ7ZTE
-	TG+bn6JASXdbNtP2wemJRrtSYzFtLA0j+/QrA4V/JcTksSDprGBDgx7jJdcAvAF5
-	bvMbk+FESfTZzdv2Wl6E0oUr1i2mpmwCb0/AmMhqu57jWG48qSo5cjfOiXdO9Oqp
-	MRpgpIrqaDx/SLmVkP+nX6NwQ/EfrptteLz2XeTOgt7ANclRlZVb8oiRlzJwcf+g
-	z9Qtq0qarFNckTLUBu0a8kFxg3KwpIrFH6MTfFXfVmNCTq5vh08Ehlwe/npM5eB5
-	XvDNY1hp7zYHB0A/0om7MQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727434807; x=
-	1727521207; bh=pM2APWPqWSep6TrEUhdTADKW01Hs8FHzTKdjsf1tTCg=; b=H
-	aO1PFwdJbcwb/BehiJ5iwCUUWbl9Htv1oPV7KPmK+sSA4EgddZMkdtohxsYgpu5O
-	DR+Q0Dz2HG67E3K5tLab2uGGg3gq2PmzXu1ebKzBHtmHORuXSJrmrwenqajM5gRk
-	Ee9DeYsfwljro3NMVgJoROOsELCctNMwdDLI+Y2fH4DqGcThMKi6b0M49G4IkqpG
-	Q0MKDbXwloEJ2ic68aHg5sTn9RSQvrrz2LuCFxoYvtFmnELPcYBzkmPU0ggpv+gW
-	eAyZCfBQOKlFMIqE5TtmnVQkuLwbqPyZ3nbNQtHvRz3DD0jsGbkt0QrvvHLhm+kU
-	m8lLxabveKBu30AwKHZUw==
-X-ME-Sender: <xms:NpD2ZqeoXQiUdMM4N8bET5a2qBVYW_jNcmmobJya1kyF0ZzAQheh6g>
-    <xme:NpD2ZkP1UElTwyTzTPb6rPqh-VwWjpMkNUMzzD8Axor6jBICpWo1SYJkPPbd03moo
-    E_w8vagQGjFgCEvsY8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddtledgfeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddv
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrg
-    hssegrrhhmrdgtohhmpdhrtghpthhtohepjhhvvghtthgvrheskhgrlhhrrgihihhntgdr
-    tghomhdprhgtphhtthhopeihshhiohhnnhgvrghusehkrghlrhgrhihinhgtrdgtohhmpd
-    hrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pehguhhorhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhn
-    rdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrd
-    hinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishht
-    shdrlhhinhhugidruggvvh
-X-ME-Proxy: <xmx:NpD2Zrj39h4VXYFaMgI8sVlcLpAxmyDOujVyG1ZgjUZ3BT1CGw1SlQ>
-    <xmx:NpD2Zn81OkRaBTLxkF_TIr7PeiNMt_LEThqUoLdGK4t0gQ1yr3D7eg>
-    <xmx:NpD2ZmulMAj_Gpr4hsFXlDcuEbDVjnHZrWLGKMLnPdfXSbCQskLxvw>
-    <xmx:NpD2ZuEs3_rbzNrhVBC-fy7VEXLVJNrvXFvYi3hodc8RvZeUmHKIHg>
-    <xmx:N5D2ZuE5jmWpEuas5KCvyuGrRCcFCPV7idgmVmfWNgU5dFBTyKnkVfC5>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 661A92220071; Fri, 27 Sep 2024 07:00:06 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1727598371; c=relaxed/simple;
+	bh=uKkmgsVXzVAyPJSJMRLAmmBWnVUdzjLfm4uBg816XnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Vu16h9naNkmSbGns7GYhffKLMwg6tJF/L90D17/HJ5XMFw10nnrVh0dQnyOL3zZg/0kyvmsBGPsL8iQ+JpFpaIqN5+VM77cZTSLE39PafuQKwJ6HBmT9e37KSNOK/yvk98W2nNZsW9LmDqUhe8TQ0BdvfEIRQ9GWMZlu3U0u8VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de; spf=pass smtp.mailfrom=t-8ch.de; dkim=pass (1024-bit key) header.d=t-8ch.de header.i=@t-8ch.de header.b=EXIVItjx; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=t-8ch.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-8ch.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+	t=1727597846; bh=uKkmgsVXzVAyPJSJMRLAmmBWnVUdzjLfm4uBg816XnE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=EXIVItjxP/30JiULOavGnIqoKJVgMZ0Nc9LKXt7w4OTq52UA+UPHuXl2JGCT3XxQV
+	 578RVao2doJ9xqgKamnUIGDkNo3IrFfYKpiQdOWCkmzKdC6eB9wZjrxxYSpIwWv9nS
+	 15thnhkHQbm4OyiRyWz9jtvBJjf82UNUIKmAceUA=
+Date: Sun, 29 Sep 2024 10:17:26 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Subject: [BUG?] csky: qemu-user: swapped syscall numbers for getppid and
+ rt_sigreturn
+Message-ID: <2fa3151f-5aab-406c-95d9-add398ae58b3@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 27 Sep 2024 10:59:43 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Julian Vetter" <jvetter@kalrayinc.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- guoren <guoren@kernel.org>, "Huacai Chen" <chenhuacai@kernel.org>,
- "WANG Xuerui" <kernel@xen0n.name>,
- "Andrew Morton" <akpm@linux-foundation.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, "Yann Sionneau" <ysionneau@kalrayinc.com>
-Message-Id: <7100d48e-2b11-4d7a-8c5d-48900e8d4916@app.fastmail.com>
-In-Reply-To: <b9f3f692-d4fa-473b-9bdf-4ea73b22ccde@kalrayinc.com>
-References: <20240925132420.821473-1-jvetter@kalrayinc.com>
- <20240925132420.821473-2-jvetter@kalrayinc.com>
- <f47e66f9-ec20-4e75-b88f-d412339e797d@app.fastmail.com>
- <b9f3f692-d4fa-473b-9bdf-4ea73b22ccde@kalrayinc.com>
-Subject: Re: [PATCH v6 1/5] Consolidate __memcpy_{to,from}io and __memset_io into
- iomap_copy.c
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Sep 27, 2024, at 08:19, Julian Vetter wrote:
-> On 26.09.24 09:14, Arnd Bergmann wrote:
->>> +#ifndef __memcpy_fromio
->>> +void __memcpy_fromio(void *to, const volatile void __iomem *from,
->>> size_t count);
->>> +#endif
->>> +
->>> +#ifndef __memcpy_toio
->>> +void __memcpy_toio(volatile void __iomem *to, const void *from, size_t
->>> count);
->>> +#endif
->>> +
->>> +#ifndef __memset_io
->>> +void __memset_io(volatile void __iomem *dst, int c, size_t count);
->>> +#endif
->> 
->> I'm not entirely sure about the purpose of the #ifdef here, since
->> nothing ever overrides the double-underscore versions, both before
->> and after your patches.
->> 
->> Unless I'm missing something here, I think a more logical
->> sequence would be:
->> 
->> 1. add the definitions in this file without the underscores,
->
-> by: "...in this file..." you mean the 'lib/iomap_copy.c' file, right? 
+Hi Guo Ren,
 
-Yes
+it seems the values of __NR_rt_sigreturn and __NR_getppid are swapped
+between csky qemu-user and the kernel.
 
-> But what if an architecture does not select 'CONFIG_HAS_IOMEM'. Then 
-> 'iomap_copy.c' is not compiled and we don't have an implementation, 
-> right?
-> I tried to compile with ARCH=um, with some MTD chip driver, like 
-> the robot did and it indeed fails, because um has 'NO_IOMEM' set. and 
-> the driver uses memcpy_fromio. I mean it's a strange combination, 
-> because apparently we try to use IO memory? Is this an invalid 
-> combination? But shouldn't the driver then 'depends on HAS_IOMEM'?
+In qemu-user [0, 1]:
+(With context to show the disconuity)
 
-Yes, I think that would be the best way to do it. Alternatively,
-arch/um could provide a dummy implementation of these.
+#define TARGET_NR_rt_sigqueueinfo 138
+--> #define TARGET_NR_rt_sigreturn 173
+#define TARGET_NR_setpriority 140
 
->> 3. convert the other architectures, removing both the
->>     implementations and the prototypes.
->> 
->
-> I have removed the prototypes and have aligned the function arguments in 
-> m68k, alpha, parisc, and sh, which all have their own implementation, 
-> but had slightly different function arguments.
+#define TARGET_NR_getpid 172
+--> #define TARGET_NR_getppid 139
+#define TARGET_NR_getuid 174
 
-Sorry for being unclear, I meant only the architectures that
-you are already touching.
+The mainline kernel however uses the generic syscall numbers:
 
-> Btw, I have not removed 
-> their implementations because some of them seem to have optimized 
-> implementations (e.g., alpha and m68k), that I didn't want to touch. But 
-> you're right others (e.g., sh) just do byte wise accesses and have a 
-> comment "This needs to be optimized." Maybe I should remove these and 
-> let them use the new version?!
+#define __NR_rt_sigreturn 139
+#define __NR_getppid 173
 
-Ideally we should end up with only one copy, but I'd leave the
-rest for a future cleanup. In particular, alpha probably still
-needs a custom function.
+Is this intentional? If so, what am I supposed to do about it?
 
-      Arnd
+
+While we are here:
+
+Is there a known bug about upstream gcc 14.2.0 (and earlier) loosing
+track of registers, especially r4, during optimizations?
+It seems to me that this register gets overwritten sometimes before it
+is meant to be used.
+
+
+Thanks,
+Thomas
+
+
+[0] https://raw.githubusercontent.com/XUANTIE-RV/qemu/refs/heads/xuantie-qemu-6.1.0/linux-user/csky/syscall_nr.h
+[1] https://raw.githubusercontent.com/XUANTIE-RV/qemu/refs/heads/xuantie-qemu-8.0/linux-user/csky/syscall_nr.h
 
