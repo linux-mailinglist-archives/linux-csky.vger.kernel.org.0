@@ -1,192 +1,105 @@
-Return-Path: <linux-csky+bounces-905-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-909-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A56998974B
-	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 22:38:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDA58989802
+	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 23:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCD2EB212BE
-	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 20:38:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 979331F216C5
+	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 21:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88622AE90;
-	Sun, 29 Sep 2024 20:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC91C17DE2D;
+	Sun, 29 Sep 2024 21:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IEx6r+98"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2DC433D1
-	for <linux-csky@vger.kernel.org>; Sun, 29 Sep 2024 20:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C60F5FDA7;
+	Sun, 29 Sep 2024 21:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727642301; cv=none; b=C6Rrsun9fjyDMnjEGZU5kvc0/1KiPDnjgIoMQeF+X6zXMJp3YYM89Ohyl5BzlTxPdElyxUuSpM9PrH8KK2oiEEIRx3oZ+m9aCHj9NNhDaQlAqWfR5/RCXvJgCIEQ5Jb3SlSW/+f+vlFdgomeJ+zmKnsEgOi+TZ+sQHgo1ru/NUo=
+	t=1727646471; cv=none; b=KE5O+o2oH5liRq1gFzUE9VFsd7Xi+Nv8xjSjyn0wIMfZVGzqGG1RXoxzwgLiDJCARNiliG/+EeMk5OK9CMhMTOMxLVzhDh7KZZfEHSP/+YIVi/hiZnxVmV+O7JmtL2UiViFYt8dl/oyCygsTpYvyyS6Dh/bqIEkXuJvHEr7QWIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727642301; c=relaxed/simple;
-	bh=kDZ8DiveU6qQT4mghaV/wgrhMD9g1V+Rww0fBIDGViI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=g/tRWGOfo9Yknu5iBBVhA/MqZwGHQ/BijVc+jPnipSJs7UzeYBf2CwKyNFFdmn86D2yDKl2E5OnOt92m8isl1MCStHQAfxkE/mkAaqHuEIo8hO2PGuTsKiVNJyOymlVzOUAL3hGU4kH85RpnNadaWv3U+ORc0xTr8wZCr/E4yNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-249-b7mGYlNsMQO2oFNBFFPGaA-1; Sun, 29 Sep 2024 21:38:10 +0100
-X-MC-Unique: b7mGYlNsMQO2oFNBFFPGaA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 29 Sep
- 2024 21:37:17 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sun, 29 Sep 2024 21:37:17 +0100
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Julian Vetter' <jvetter@kalrayinc.com>, Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	"Guo Ren" <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG
- Xuerui <kernel@xen0n.name>, Andrew Morton <akpm@linux-foundation.org>
-CC: "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-csky@vger.kernel.org"
-	<linux-csky@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>, Yann Sionneau <ysionneau@kalrayinc.com>
-Subject: RE: [PATCH v6 1/5] Consolidate __memcpy_{to,from}io and __memset_io
- into iomap_copy.c
-Thread-Topic: [PATCH v6 1/5] Consolidate __memcpy_{to,from}io and __memset_io
- into iomap_copy.c
-Thread-Index: AQHbD1eMTwS2+51gCUupXjyBebLx9rJvHKbg
-Date: Sun, 29 Sep 2024 20:37:17 +0000
-Message-ID: <f1673602e3f246cf92f3453f0c13911b@AcuMS.aculab.com>
-References: <20240925132420.821473-1-jvetter@kalrayinc.com>
- <20240925132420.821473-2-jvetter@kalrayinc.com>
-In-Reply-To: <20240925132420.821473-2-jvetter@kalrayinc.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1727646471; c=relaxed/simple;
+	bh=QdlZBa0RkbDHGXHRwfBzodC7B0WksXLt0gUgoIRDxcI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dg9pi+QhUYXYe4lZ3NJrSgO+7iWuC1In1ZIehnMP0372ttV9lh0hfwxQNOJaWUIhwRsEk9dFp0T9y/vFSNtp6Ooqe+QTGUVIFG4j9L5jsYXg+TRh6FldUuiaY2jq4nCiOZ4Sm8Shq+HIx4uysojf1yIKvb7YYVEEEv0umM5U6aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IEx6r+98; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1727646464;
+	bh=QdlZBa0RkbDHGXHRwfBzodC7B0WksXLt0gUgoIRDxcI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=IEx6r+98+MS9YiZUrGuRvDqGY9nsRS/x2pI0iaKmENL08sp/G6uRxZtGoK5eqA3si
+	 ocwYEaPXqZuGd4SNklQjPhqvUWAPRbyc+OmdjAd+HL2jCux9bWOKCEZ6/F+afvkYJD
+	 s7GaMEnERJYsG2PT9cac6dNsEHCp+YUksI0Snkjk=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/5] csky: add shutdown and nolibc support
+Date: Sun, 29 Sep 2024 23:47:35 +0200
+Message-Id: <20240929-nolibc-csky-v1-0-bb28031a73b0@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAPfK+WYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSyML3bz8nMykZN3k4uxK3dS0NENDAxMLI9MUIyWgjoKi1LTMCrBp0bG
+ 1tQBvG6UkXQAAAA==
+X-Change-ID: 20240928-nolibc-csky-eff1104825d2
+To: Guo Ren <guoren@kernel.org>, Willy Tarreau <w@1wt.eu>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727646464; l=1470;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=QdlZBa0RkbDHGXHRwfBzodC7B0WksXLt0gUgoIRDxcI=;
+ b=8Xtziw6rjVTxDK3ArFAIxoJgvx9yshYqhu3ZlXPAzTf/fg3Zd/lEj93vxITqFAnAdH1Ex/2br
+ yHxmBxBQHFbD+IRk5xhY1gTGKr8Id9daolYy1GKVsQcD4kz3b8nXDFH
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-RnJvbTogSnVsaWFuIFZldHRlcg0KPiBTZW50OiAyNSBTZXB0ZW1iZXIgMjAyNCAxNDoyNA0KPiAN
-Cj4gVmFyaW91cyBhcmNoaXRlY3R1cmVzIGhhdmUgYWxtb3N0IHRoZSBzYW1lIGltcGxlbWVudGF0
-aW9ucyBmb3INCj4gX19tZW1jcHlfe3RvLGZyb219aW8gYW5kIF9fbWVtc2V0X2lvIGZ1bmN0aW9u
-cy4gU28sIGNvbnNvbGlkYXRlIHRoZW0NCj4gaW50byB0aGUgZXhpc3RpbmcgbGliL2lvbWFwX2Nv
-cHkuYy4NCj4gDQo+IFJldmlld2VkLWJ5OiBZYW5uIFNpb25uZWF1IDx5c2lvbm5lYXVAa2FscmF5
-aW5jLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSnVsaWFuIFZldHRlciA8anZldHRlckBrYWxyYXlp
-bmMuY29tPg0KPiAtLS0NCj4gU2lnbmVkLW9mZi1ieTogSnVsaWFuIFZldHRlciA8anZldHRlckBr
-YWxyYXlpbmMuY29tPg0KPiAtLS0NCj4gQ2hhbmdlcyBmb3IgdjY6DQo+IC0gSW5jbHVkZWQgbGlu
-dXgvYXNsaWduLmgNCj4gLSBSZXBsYWNlZCBjb21waWxlIHRpbWUgY2hlY2sgYnkgaWZkZWYgdG8g
-cmVtb3ZlIGNvbXBpbGVyIHdhcm5pbmcNCj4gLS0tDQo+ICBpbmNsdWRlL2FzbS1nZW5lcmljL2lv
-LmggfCAgMTIgKysrKysNCj4gIGxpYi9pb21hcF9jb3B5LmMgICAgICAgICB8IDEwOSArKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTIx
-IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2FzbS1nZW5lcmljL2lv
-LmggYi9pbmNsdWRlL2FzbS1nZW5lcmljL2lvLmgNCj4gaW5kZXggODBkZTY5OWJmNmFmLi45Yjhl
-MDQ0OWRhMjggMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvYXNtLWdlbmVyaWMvaW8uaA0KPiArKysg
-Yi9pbmNsdWRlL2FzbS1nZW5lcmljL2lvLmgNCj4gQEAgLTEwMiw2ICsxMDIsMTggQEAgc3RhdGlj
-IGlubGluZSB2b2lkIGxvZ19wb3N0X3JlYWRfbW1pbyh1NjQgdmFsLCB1OCB3aWR0aCwgY29uc3Qg
-dm9sYXRpbGUgdm9pZCBfX2kNCj4gDQo+ICAjZW5kaWYgLyogQ09ORklHX1RSQUNFX01NSU9fQUND
-RVNTICovDQo+IA0KPiArI2lmbmRlZiBfX21lbWNweV9mcm9taW8NCj4gK3ZvaWQgX19tZW1jcHlf
-ZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmZyb20sIHNpemVf
-dCBjb3VudCk7DQo+ICsjZW5kaWYNCj4gKw0KPiArI2lmbmRlZiBfX21lbWNweV90b2lvDQo+ICt2
-b2lkIF9fbWVtY3B5X3RvaW8odm9sYXRpbGUgdm9pZCBfX2lvbWVtICp0bywgY29uc3Qgdm9pZCAq
-ZnJvbSwgc2l6ZV90IGNvdW50KTsNCj4gKyNlbmRpZg0KPiArDQo+ICsjaWZuZGVmIF9fbWVtc2V0
-X2lvDQo+ICt2b2lkIF9fbWVtc2V0X2lvKHZvbGF0aWxlIHZvaWQgX19pb21lbSAqZHN0LCBpbnQg
-Yywgc2l6ZV90IGNvdW50KTsNCj4gKyNlbmRpZg0KPiArDQo+ICAvKg0KPiAgICogX19yYXdfe3Jl
-YWQsd3JpdGV9e2IsdyxsLHF9KCkgYWNjZXNzIG1lbW9yeSBpbiBuYXRpdmUgZW5kaWFubmVzcy4N
-Cj4gICAqDQo+IGRpZmYgLS1naXQgYS9saWIvaW9tYXBfY29weS5jIGIvbGliL2lvbWFwX2NvcHku
-Yw0KPiBpbmRleCAyZmQ1NzEyZmI3YzAuLmMyY2VlNjQxMDE1MSAxMDA2NDQNCj4gLS0tIGEvbGli
-L2lvbWFwX2NvcHkuYw0KPiArKysgYi9saWIvaW9tYXBfY29weS5jDQo+IEBAIC0zLDkgKzMsMTUg
-QEANCj4gICAqIENvcHlyaWdodCAyMDA2IFBhdGhTY2FsZSwgSW5jLiAgQWxsIFJpZ2h0cyBSZXNl
-cnZlZC4NCj4gICAqLw0KPiANCj4gKyNpbmNsdWRlIDxhc20vdW5hbGlnbmVkLmg+DQo+ICsNCj4g
-KyNpbmNsdWRlIDxsaW51eC9hbGlnbi5oPg0KPiAgI2luY2x1ZGUgPGxpbnV4L2V4cG9ydC5oPg0K
-PiArI2luY2x1ZGUgPGxpbnV4L3R5cGVzLmg+DQo+ICAjaW5jbHVkZSA8bGludXgvaW8uaD4NCj4g
-DQo+ICsjZGVmaW5lIE5BVElWRV9TVE9SRV9TSVpFCShCSVRTX1BFUl9MT05HLzgpDQoNCihzaXpl
-b2YgKGxvbmcpKQ0KDQo+ICsNCj4gIC8qKg0KPiAgICogX19pb3dyaXRlMzJfY29weSAtIGNvcHkg
-ZGF0YSB0byBNTUlPIHNwYWNlLCBpbiAzMi1iaXQgdW5pdHMNCj4gICAqIEB0bzogZGVzdGluYXRp
-b24sIGluIE1NSU8gc3BhY2UgKG11c3QgYmUgMzItYml0IGFsaWduZWQpDQo+IEBAIC03NiwzICs4
-MiwxMDYgQEAgdm9pZCBfX2lvd3JpdGU2NF9jb3B5KHZvaWQgX19pb21lbSAqdG8sIGNvbnN0IHZv
-aWQgKmZyb20sIHNpemVfdCBjb3VudCkNCj4gIH0NCj4gIEVYUE9SVF9TWU1CT0xfR1BMKF9faW93
-cml0ZTY0X2NvcHkpOw0KPiAgI2VuZGlmDQo+ICsNCj4gKw0KPiArI2lmbmRlZiBfX21lbWNweV9m
-cm9taW8NCj4gK3ZvaWQgX19tZW1jcHlfZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2b2xhdGlsZSB2
-b2lkIF9faW9tZW0gKmZyb20sIHNpemVfdCBjb3VudCkNCj4gK3sNCj4gKwl3aGlsZSAoY291bnQg
-JiYgIUlTX0FMSUdORUQoKHVuc2lnbmVkIGxvbmcpZnJvbSwgTkFUSVZFX1NUT1JFX1NJWkUpKSB7
-DQo+ICsJCSoodTggKil0byA9IF9fcmF3X3JlYWRiKGZyb20pOw0KPiArCQlmcm9tKys7DQo+ICsJ
-CXRvKys7DQo+ICsJCWNvdW50LS07DQo+ICsJfQ0KPiArDQo+ICsJd2hpbGUgKGNvdW50ID49IE5B
-VElWRV9TVE9SRV9TSVpFKSB7DQo+ICsjaWZkZWYgQ09ORklHXzY0QklUDQo+ICsJCQlwdXRfdW5h
-bGlnbmVkKF9fcmF3X3JlYWRxKGZyb20pLCAodWludHB0cl90ICopdG8pOw0KPiArI2Vsc2UNCj4g
-KwkJCXB1dF91bmFsaWduZWQoX19yYXdfcmVhZGwoZnJvbSksICh1aW50cHRyX3QgKil0byk7DQo+
-ICsjZW5kaWYNCg0KVGhhdCBsb29rcyBob3JyaWQgdG8gbWUuDQpZb3Ugc2VlbSB0byBiZSBtaXhp
-bmcgc2V2ZXJhbCBkaWZmZXJlbnQgdHlwZXMgYW5kIHRlc3RzLg0KTkFUSVZFX1NUT1JFX1NJWkUg
-aXMgYmFzZWQgb24gdGhlICdsb25nICcgdHlwZSAoaW5kaXJlY3RseSBhbmQgYnkgYXNzdW1wdGlv
-bikuDQpDT05GSUdfNjRCaUlUIChwcm9iYWJseSkgaW1wbGllcyBMUDY0Lg0KcmVhZGwoKSByZWFk
-cyA0IGJ5dGVzIGFuZCByZWFkcSgpIDggKGZvciBib3RoIDMyYml0IGFuZCA2NGJpdCBrZXJuZWxz
-KQ0KdWludHB0ciBpcyBhbiB1bnNpZ25lZCBpbnRlZ2VyIGxhcmdlIGVub3VnaCB0byBob2xkIGEg
-cG9pbnRlci4NClRoZSBzaXplcyBtaWdodCBhbGwgaGFwcGVuIHRvIG1hdGNoLCBidXQgdGhlcmUg
-aXMgbm8gbmVlZCB0byByZWx5IG9uIGFsbCBvZiB0aGVtLg0KDQpJIG1pZ2h0IGJlIGJlc3QgdG8g
-anVzdCB1c2UgJ3NpemVvZiAobG9uZyknIGV4Y2VwdCB0aGF0IHlvdSBtaWdodA0KZ2V0IGEgY29t
-cGlsZSBlcnJvciBvbiBzb21lIDMyYml0IGFyY2hzIGZvciB0aGU6DQoJbG9uZyB2YWwgPSBzaXpl
-b2YgKHZhbCkgPT0gOCkgPyByZWFkcShmcm9tKSA6IHJlYWRsKGZyb20pOw0KCXB1dF91bmFsaWdu
-ZWQodmFsLCAobG9uZyAqKXRvKTsNCihkdWUgdG8gdGhlcmUgYmVpbmcgbm8gZGVjbGFyYXRpb24g
-cmVhZHEoKSkNCnNvIGl0IG1pZ2h0IG5lZWQgYSAjaWYgc29tZXdoZXJlLg0KT1RPSCB0aGVyZSBt
-aWdodCBhbHdheXMgYmUgYW4gJ2V4dGVybicgZm9yIHJlYWRxKCkuDQoNCklmIHlvdSBhcmUgdXNp
-bmcgdGhlIF9fcmF3X3JlYWR4KCkgZnVuY3Rpb25zIGRvbid0IHlvdSBuZWVkIHRoZQ0Kc3luY2hy
-b25pc2F0aW9uIGJhcnJpZXJzIHRvcCBhbmQgYm90dG9tPw0KDQpBbHNvIGlmIHB1dF91bmFsaWdu
-ZWQoKSBpcyBub24tdHJpdmlhbCB0aGUgY29kZSB3aWxsIGJlIGhvcnJpZC4NCkFuIGluaXRpYWwg
-dGVzdCBmb3IgKCh0byB8IGZyb20pICYgKHNpemVvZiAobG9uZykgLSAxKSA9PSAwKSBmb3IgYW4N
-CmFsaWduZWQgY29weSBtYXkgYmUgd29ydGh3aGlsZS4NCg0KVGhlcmUgaXMgdGhlIHF1ZXN0aW9u
-IG9mIHdoZXRoZXIgdGhlIGNvZGUgaXMgYWxsb3dlZCB0byBkbyBmdWxsDQp3b3JkIHJlYWRzIC0g
-dmFsaWQgaWYgdGhlIGlvIGFyZWEgYmVoYXZlcyBsaWtlIG1lbW9yeS4NCkluIHdoaWNoIGNhc2Ug
-eW91IGRvbid0IHdhbnQgdG8gZG8gYnl0ZSB0cmFuc2ZlcnMgZm9yIGFsaWdubWVudA0KYW5kIHRh
-aWwgdHJhbnNmZXJzIC0ganVzdCByZWFkIHRoZSBmdWxsIHdvcmQgdGhhdCBjb250YWlucyB0aGUg
-ZGF0YS4NCg0KUENJZSByZWFkcyBjYW4gYmUgaG9ycmlibHkgc2xvdyAod3JpdGVzIGFyZSAncG9z
-dGVkJyBzbyBtdWNoIGJldHRlcikuDQpJJ20gbm90IHN1cmUgaG93IGxvbmcgdGhleSB0YWtlIGlu
-dG8gYSAnbm9ybWFsJyB0YXJnZXQsIGJ1dCBiYWNrIHRvDQpiYWNrIHJlYWRzIGludG8gb3VyIGZw
-Z2EgYXJlIGFib3V0IDEyOCBjbG9ja3MgYXBhcnQgb24gaXRzIGludGVybmFsDQoxMjVNaHogY2xv
-Y2sgLSB0aGUgaG9zdCBjcHUgd2lsbCBzdGFsbCBmb3IgdGhlIGVudGlyZSBwZXJpb2QuDQpTbyB5
-b3UgZGVmaW5pdGVseSB3YW50IHRvIHVzZSB0aGUgbGFyZ2VzdCByZWdpc3RlciBwb3NzaWJsZS4N
-CihPciB0cnkgdmVyeSBoYXJkIHRvIG5ldmVyIGRvIG5vbi1kbWEgcmVhZHMgaW4gZWl0aGVyIGRp
-cmVjdGlvbi4pDQoNCglEYXZpZA0KDQo+ICsNCj4gKwkJZnJvbSArPSBOQVRJVkVfU1RPUkVfU0la
-RTsNCj4gKwkJdG8gKz0gTkFUSVZFX1NUT1JFX1NJWkU7DQo+ICsJCWNvdW50IC09IE5BVElWRV9T
-VE9SRV9TSVpFOw0KPiArCX0NCj4gKw0KPiArCXdoaWxlIChjb3VudCkgew0KPiArCQkqKHU4ICop
-dG8gPSBfX3Jhd19yZWFkYihmcm9tKTsNCj4gKwkJZnJvbSsrOw0KPiArCQl0bysrOw0KPiArCQlj
-b3VudC0tOw0KPiArCX0NCj4gK30NCj4gK0VYUE9SVF9TWU1CT0woX19tZW1jcHlfZnJvbWlvKTsN
-Cj4gKyNlbmRpZg0KPiArDQo+ICsjaWZuZGVmIF9fbWVtY3B5X3RvaW8NCj4gK3ZvaWQgX19tZW1j
-cHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXpl
-X3QgY291bnQpDQo+ICt7DQo+ICsJd2hpbGUgKGNvdW50ICYmICFJU19BTElHTkVEKCh1bnNpZ25l
-ZCBsb25nKXRvLCBOQVRJVkVfU1RPUkVfU0laRSkpIHsNCj4gKwkJX19yYXdfd3JpdGViKCoodTgg
-Kilmcm9tLCB0byk7DQo+ICsJCWZyb20rKzsNCj4gKwkJdG8rKzsNCj4gKwkJY291bnQtLTsNCj4g
-Kwl9DQo+ICsNCj4gKwl3aGlsZSAoY291bnQgPj0gTkFUSVZFX1NUT1JFX1NJWkUpIHsNCj4gKyNp
-ZmRlZiBDT05GSUdfNjRCSVQNCj4gKwkJCV9fcmF3X3dyaXRlcShnZXRfdW5hbGlnbmVkKCh1aW50
-cHRyX3QgKilmcm9tKSwgdG8pOw0KPiArI2Vsc2UNCj4gKwkJCV9fcmF3X3dyaXRlbChnZXRfdW5h
-bGlnbmVkKCh1aW50cHRyX3QgKilmcm9tKSwgdG8pOw0KPiArI2VuZGlmDQo+ICsNCj4gKwkJZnJv
-bSArPSBOQVRJVkVfU1RPUkVfU0laRTsNCj4gKwkJdG8gKz0gTkFUSVZFX1NUT1JFX1NJWkU7DQo+
-ICsJCWNvdW50IC09IE5BVElWRV9TVE9SRV9TSVpFOw0KPiArCX0NCj4gKw0KPiArCXdoaWxlIChj
-b3VudCkgew0KPiArCQlfX3Jhd193cml0ZWIoKih1OCAqKWZyb20sIHRvKTsNCj4gKwkJZnJvbSsr
-Ow0KPiArCQl0bysrOw0KPiArCQljb3VudC0tOw0KPiArCX0NCj4gK30NCj4gK0VYUE9SVF9TWU1C
-T0woX19tZW1jcHlfdG9pbyk7DQo+ICsjZW5kaWYNCj4gKw0KPiArI2lmbmRlZiBfX21lbXNldF9p
-bw0KPiArdm9pZCBfX21lbXNldF9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmRzdCwgaW50IGMs
-IHNpemVfdCBjb3VudCkNCj4gK3sNCj4gKwl1aW50cHRyX3QgcWMgPSAodTgpYzsNCj4gKw0KPiAr
-CXFjIHw9IHFjIDw8IDg7DQo+ICsJcWMgfD0gcWMgPDwgMTY7DQo+ICsNCj4gKyNpZmRlZiBDT05G
-SUdfNjRCSVQNCj4gKwlxYyB8PSBxYyA8PCAzMjsNCj4gKyNlbmRpZg0KPiArDQo+ICsJd2hpbGUg
-KGNvdW50ICYmICFJU19BTElHTkVEKCh1bnNpZ25lZCBsb25nKWRzdCwgTkFUSVZFX1NUT1JFX1NJ
-WkUpKSB7DQo+ICsJCV9fcmF3X3dyaXRlYihjLCBkc3QpOw0KPiArCQlkc3QrKzsNCj4gKwkJY291
-bnQtLTsNCj4gKwl9DQo+ICsNCj4gKwl3aGlsZSAoY291bnQgPj0gTkFUSVZFX1NUT1JFX1NJWkUp
-IHsNCj4gKyNpZmRlZiBDT05GSUdfNjRCSVQNCj4gKwkJCV9fcmF3X3dyaXRlcShxYywgZHN0KTsN
-Cj4gKyNlbHNlDQo+ICsJCQlfX3Jhd193cml0ZWwocWMsIGRzdCk7DQo+ICsjZW5kaWYNCj4gKw0K
-PiArCQlkc3QgKz0gTkFUSVZFX1NUT1JFX1NJWkU7DQo+ICsJCWNvdW50IC09IE5BVElWRV9TVE9S
-RV9TSVpFOw0KPiArCX0NCj4gKw0KPiArCXdoaWxlIChjb3VudCkgew0KPiArCQlfX3Jhd193cml0
-ZWIoYywgZHN0KTsNCj4gKwkJZHN0Kys7DQo+ICsJCWNvdW50LS07DQo+ICsJfQ0KPiArfQ0KPiAr
-RVhQT1JUX1NZTUJPTChfX21lbXNldF9pbyk7DQo+ICsjZW5kaWYNCj4gLS0NCj4gMi4zNC4xDQo+
-IA0KPiANCj4gDQo+IA0KPiANCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
-bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
-YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+This series adds support for the C-SKY architecture to nolibc.
+It is hard to find a usable C-SKY userspace and compiler, so having
+support in nolibc provides an easy way to perform tests there.
+
+The nolibc test suite requires system power off support in QEMU,
+so a driver for that is added, too.
+I'm not sure who is responsible for drivers/virt/ and can take the
+driver.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (5):
+      drivers/virt: introduce csky_exit system poweroff driver
+      tools/nolibc: provide a fallback for lseek through llseek
+      selftests/nolibc: add support to use standalone kernels for tests
+      tools/nolibc: add csky support
+      selftests/nolibc: skip test for getppid() on csky
+
+ drivers/virt/Kconfig                         |  11 ++
+ drivers/virt/Makefile                        |   1 +
+ drivers/virt/csky_exit.c                     |  57 ++++++++++
+ tools/include/nolibc/arch-csky.h             | 161 +++++++++++++++++++++++++++
+ tools/include/nolibc/arch.h                  |   2 +
+ tools/include/nolibc/sys.h                   |   8 ++
+ tools/testing/selftests/nolibc/Makefile      |  21 +++-
+ tools/testing/selftests/nolibc/nolibc-test.c |   9 +-
+ 8 files changed, 265 insertions(+), 5 deletions(-)
+---
+base-commit: e7ed343658792771cf1b868df061661b7bcc5cef
+change-id: 20240928-nolibc-csky-eff1104825d2
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
 
