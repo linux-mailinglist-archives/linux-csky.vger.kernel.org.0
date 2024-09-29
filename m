@@ -1,124 +1,192 @@
-Return-Path: <linux-csky+bounces-904-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-905-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF2629893EC
-	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 11:07:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A56998974B
+	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 22:38:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69FD628568E
-	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 09:07:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCD2EB212BE
+	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 20:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E0E1311B6;
-	Sun, 29 Sep 2024 09:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KmitqqRB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88622AE90;
+	Sun, 29 Sep 2024 20:38:21 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B44BE4E
-	for <linux-csky@vger.kernel.org>; Sun, 29 Sep 2024 09:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2DC433D1
+	for <linux-csky@vger.kernel.org>; Sun, 29 Sep 2024 20:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727600843; cv=none; b=L90cCYixwPjunIxedQo4Ak92zds6swTg7gvLCVF89J0A5ntWfNnYV7VxRYI/7Cf25mztmMBK7dPy9FCukkUVLcKhb6u67sZXEhjQbBKhqnEThSzM0K3rYOMqBkUX0n4V3h/YlDk0m2RzNsD/iXVUjyHKASO7Vx/aaFQV0/HsXEE=
+	t=1727642301; cv=none; b=C6Rrsun9fjyDMnjEGZU5kvc0/1KiPDnjgIoMQeF+X6zXMJp3YYM89Ohyl5BzlTxPdElyxUuSpM9PrH8KK2oiEEIRx3oZ+m9aCHj9NNhDaQlAqWfR5/RCXvJgCIEQ5Jb3SlSW/+f+vlFdgomeJ+zmKnsEgOi+TZ+sQHgo1ru/NUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727600843; c=relaxed/simple;
-	bh=t9CZZjF6vCoqoLElfF3NcT4MuYAcsVhnZXWUfBKrGxo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BLBdV7lK6ENgT09icGFdqV/7RHGXbTjl/WARzTLx6G0tEzWjcjY89S0WFDp28oPKUKzTOx8Z8JocmypSX1UssLkysxHxNmTCBV/PSQtfPDoAmrSBygG6koQMxnTdb0xMOfVhyzDL1Y5Rp46a4NdpvcIhRgrbUHF8pA77jQON7j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KmitqqRB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FB5C4CEC5
-	for <linux-csky@vger.kernel.org>; Sun, 29 Sep 2024 09:07:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727600842;
-	bh=t9CZZjF6vCoqoLElfF3NcT4MuYAcsVhnZXWUfBKrGxo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KmitqqRBD8n8DUxVG53R8tgNMPL7M6YnRxUPJk/+lKh+vDxC3bZOBaUN0bd1ElNME
-	 XsDrrcuaGXahvRwWUQfJMPAyrDdrkIU66n8pI3xfqmiW9KYQE4zXSlTiqypztKqw5M
-	 3PLWE5agpR+rkwfA6UlAO3Pi3T/2dqy3Lqa1mzrNtqhW5yfK6/SUXxuFc75Y8WyjoA
-	 fslN7hNB65hfS+aKBGnI42oUWiT+hXN7yXBXO1KHXLfUa61Ezi49JYixqWSVSx188L
-	 CQM8U19Rvt3LsJ9YYTQ9EjODX7WJyAF/mBjFRdA7quxsh/5ymig31cSQLRaibYZ6v3
-	 HfCdapPeTek9A==
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c88e45f467so936232a12.1
-        for <linux-csky@vger.kernel.org>; Sun, 29 Sep 2024 02:07:22 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxBHRCdU7IkSwYhnK8n692Zflv9aJ2P3A7vSxQx+04Y0ylPsn1f
-	BagOE+Yon5bsS7jVHeL9qJDt8SSscd4aI8n9g9XzteBlGXCxld7/lAksGt28EFHhK2Y0Y5muEW6
-	QfbGyddfrOtXqPuX6Ny2qOhAD4ns=
-X-Google-Smtp-Source: AGHT+IENE6ItzWMNVzMZizLlU/u4rS5KV4dUTgDnBZAAydNCEYFbwO3GGVbvEy3UPv89V7SXfLl3j+xV2CYBVsUgDnI=
-X-Received: by 2002:a05:6402:1d56:b0:5c5:c444:4e3a with SMTP id
- 4fb4d7f45d1cf-5c8823f905bmr10506979a12.0.1727600841453; Sun, 29 Sep 2024
- 02:07:21 -0700 (PDT)
+	s=arc-20240116; t=1727642301; c=relaxed/simple;
+	bh=kDZ8DiveU6qQT4mghaV/wgrhMD9g1V+Rww0fBIDGViI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=g/tRWGOfo9Yknu5iBBVhA/MqZwGHQ/BijVc+jPnipSJs7UzeYBf2CwKyNFFdmn86D2yDKl2E5OnOt92m8isl1MCStHQAfxkE/mkAaqHuEIo8hO2PGuTsKiVNJyOymlVzOUAL3hGU4kH85RpnNadaWv3U+ORc0xTr8wZCr/E4yNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-249-b7mGYlNsMQO2oFNBFFPGaA-1; Sun, 29 Sep 2024 21:38:10 +0100
+X-MC-Unique: b7mGYlNsMQO2oFNBFFPGaA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 29 Sep
+ 2024 21:37:17 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sun, 29 Sep 2024 21:37:17 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Julian Vetter' <jvetter@kalrayinc.com>, Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	"Guo Ren" <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG
+ Xuerui <kernel@xen0n.name>, Andrew Morton <akpm@linux-foundation.org>
+CC: "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-csky@vger.kernel.org"
+	<linux-csky@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, Yann Sionneau <ysionneau@kalrayinc.com>
+Subject: RE: [PATCH v6 1/5] Consolidate __memcpy_{to,from}io and __memset_io
+ into iomap_copy.c
+Thread-Topic: [PATCH v6 1/5] Consolidate __memcpy_{to,from}io and __memset_io
+ into iomap_copy.c
+Thread-Index: AQHbD1eMTwS2+51gCUupXjyBebLx9rJvHKbg
+Date: Sun, 29 Sep 2024 20:37:17 +0000
+Message-ID: <f1673602e3f246cf92f3453f0c13911b@AcuMS.aculab.com>
+References: <20240925132420.821473-1-jvetter@kalrayinc.com>
+ <20240925132420.821473-2-jvetter@kalrayinc.com>
+In-Reply-To: <20240925132420.821473-2-jvetter@kalrayinc.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2fa3151f-5aab-406c-95d9-add398ae58b3@t-8ch.de>
-In-Reply-To: <2fa3151f-5aab-406c-95d9-add398ae58b3@t-8ch.de>
-From: Guo Ren <guoren@kernel.org>
-Date: Sun, 29 Sep 2024 17:07:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQerCZdTPyUObeWQR89UirG-Xw7cnwZBTKtNpftn0H2aA@mail.gmail.com>
-Message-ID: <CAJF2gTQerCZdTPyUObeWQR89UirG-Xw7cnwZBTKtNpftn0H2aA@mail.gmail.com>
-Subject: Re: [BUG?] csky: qemu-user: swapped syscall numbers for getppid and rt_sigreturn
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc: linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-On Sun, Sep 29, 2024 at 4:17=E2=80=AFPM Thomas Wei=C3=9Fschuh <thomas@t-8ch=
-.de> wrote:
->
-> Hi Guo Ren,
->
-> it seems the values of __NR_rt_sigreturn and __NR_getppid are swapped
-> between csky qemu-user and the kernel.
->
-> In qemu-user [0, 1]:
-> (With context to show the disconuity)
->
-> #define TARGET_NR_rt_sigqueueinfo 138
-> --> #define TARGET_NR_rt_sigreturn 173
-> #define TARGET_NR_setpriority 140
->
-> #define TARGET_NR_getpid 172
-> --> #define TARGET_NR_getppid 139
-> #define TARGET_NR_getuid 174
->
-> The mainline kernel however uses the generic syscall numbers:
->
-> #define __NR_rt_sigreturn 139
-> #define __NR_getppid 173
->
-> Is this intentional? If so, what am I supposed to do about it?
-Yes, Linux csky has followed the mainline kernel and abandoned csky's
-custom definition of unistd.h. So I think qemu-user should follow
-that, too.
+RnJvbTogSnVsaWFuIFZldHRlcg0KPiBTZW50OiAyNSBTZXB0ZW1iZXIgMjAyNCAxNDoyNA0KPiAN
+Cj4gVmFyaW91cyBhcmNoaXRlY3R1cmVzIGhhdmUgYWxtb3N0IHRoZSBzYW1lIGltcGxlbWVudGF0
+aW9ucyBmb3INCj4gX19tZW1jcHlfe3RvLGZyb219aW8gYW5kIF9fbWVtc2V0X2lvIGZ1bmN0aW9u
+cy4gU28sIGNvbnNvbGlkYXRlIHRoZW0NCj4gaW50byB0aGUgZXhpc3RpbmcgbGliL2lvbWFwX2Nv
+cHkuYy4NCj4gDQo+IFJldmlld2VkLWJ5OiBZYW5uIFNpb25uZWF1IDx5c2lvbm5lYXVAa2FscmF5
+aW5jLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSnVsaWFuIFZldHRlciA8anZldHRlckBrYWxyYXlp
+bmMuY29tPg0KPiAtLS0NCj4gU2lnbmVkLW9mZi1ieTogSnVsaWFuIFZldHRlciA8anZldHRlckBr
+YWxyYXlpbmMuY29tPg0KPiAtLS0NCj4gQ2hhbmdlcyBmb3IgdjY6DQo+IC0gSW5jbHVkZWQgbGlu
+dXgvYXNsaWduLmgNCj4gLSBSZXBsYWNlZCBjb21waWxlIHRpbWUgY2hlY2sgYnkgaWZkZWYgdG8g
+cmVtb3ZlIGNvbXBpbGVyIHdhcm5pbmcNCj4gLS0tDQo+ICBpbmNsdWRlL2FzbS1nZW5lcmljL2lv
+LmggfCAgMTIgKysrKysNCj4gIGxpYi9pb21hcF9jb3B5LmMgICAgICAgICB8IDEwOSArKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIDIgZmlsZXMgY2hhbmdlZCwgMTIx
+IGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2FzbS1nZW5lcmljL2lv
+LmggYi9pbmNsdWRlL2FzbS1nZW5lcmljL2lvLmgNCj4gaW5kZXggODBkZTY5OWJmNmFmLi45Yjhl
+MDQ0OWRhMjggMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvYXNtLWdlbmVyaWMvaW8uaA0KPiArKysg
+Yi9pbmNsdWRlL2FzbS1nZW5lcmljL2lvLmgNCj4gQEAgLTEwMiw2ICsxMDIsMTggQEAgc3RhdGlj
+IGlubGluZSB2b2lkIGxvZ19wb3N0X3JlYWRfbW1pbyh1NjQgdmFsLCB1OCB3aWR0aCwgY29uc3Qg
+dm9sYXRpbGUgdm9pZCBfX2kNCj4gDQo+ICAjZW5kaWYgLyogQ09ORklHX1RSQUNFX01NSU9fQUND
+RVNTICovDQo+IA0KPiArI2lmbmRlZiBfX21lbWNweV9mcm9taW8NCj4gK3ZvaWQgX19tZW1jcHlf
+ZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmZyb20sIHNpemVf
+dCBjb3VudCk7DQo+ICsjZW5kaWYNCj4gKw0KPiArI2lmbmRlZiBfX21lbWNweV90b2lvDQo+ICt2
+b2lkIF9fbWVtY3B5X3RvaW8odm9sYXRpbGUgdm9pZCBfX2lvbWVtICp0bywgY29uc3Qgdm9pZCAq
+ZnJvbSwgc2l6ZV90IGNvdW50KTsNCj4gKyNlbmRpZg0KPiArDQo+ICsjaWZuZGVmIF9fbWVtc2V0
+X2lvDQo+ICt2b2lkIF9fbWVtc2V0X2lvKHZvbGF0aWxlIHZvaWQgX19pb21lbSAqZHN0LCBpbnQg
+Yywgc2l6ZV90IGNvdW50KTsNCj4gKyNlbmRpZg0KPiArDQo+ICAvKg0KPiAgICogX19yYXdfe3Jl
+YWQsd3JpdGV9e2IsdyxsLHF9KCkgYWNjZXNzIG1lbW9yeSBpbiBuYXRpdmUgZW5kaWFubmVzcy4N
+Cj4gICAqDQo+IGRpZmYgLS1naXQgYS9saWIvaW9tYXBfY29weS5jIGIvbGliL2lvbWFwX2NvcHku
+Yw0KPiBpbmRleCAyZmQ1NzEyZmI3YzAuLmMyY2VlNjQxMDE1MSAxMDA2NDQNCj4gLS0tIGEvbGli
+L2lvbWFwX2NvcHkuYw0KPiArKysgYi9saWIvaW9tYXBfY29weS5jDQo+IEBAIC0zLDkgKzMsMTUg
+QEANCj4gICAqIENvcHlyaWdodCAyMDA2IFBhdGhTY2FsZSwgSW5jLiAgQWxsIFJpZ2h0cyBSZXNl
+cnZlZC4NCj4gICAqLw0KPiANCj4gKyNpbmNsdWRlIDxhc20vdW5hbGlnbmVkLmg+DQo+ICsNCj4g
+KyNpbmNsdWRlIDxsaW51eC9hbGlnbi5oPg0KPiAgI2luY2x1ZGUgPGxpbnV4L2V4cG9ydC5oPg0K
+PiArI2luY2x1ZGUgPGxpbnV4L3R5cGVzLmg+DQo+ICAjaW5jbHVkZSA8bGludXgvaW8uaD4NCj4g
+DQo+ICsjZGVmaW5lIE5BVElWRV9TVE9SRV9TSVpFCShCSVRTX1BFUl9MT05HLzgpDQoNCihzaXpl
+b2YgKGxvbmcpKQ0KDQo+ICsNCj4gIC8qKg0KPiAgICogX19pb3dyaXRlMzJfY29weSAtIGNvcHkg
+ZGF0YSB0byBNTUlPIHNwYWNlLCBpbiAzMi1iaXQgdW5pdHMNCj4gICAqIEB0bzogZGVzdGluYXRp
+b24sIGluIE1NSU8gc3BhY2UgKG11c3QgYmUgMzItYml0IGFsaWduZWQpDQo+IEBAIC03NiwzICs4
+MiwxMDYgQEAgdm9pZCBfX2lvd3JpdGU2NF9jb3B5KHZvaWQgX19pb21lbSAqdG8sIGNvbnN0IHZv
+aWQgKmZyb20sIHNpemVfdCBjb3VudCkNCj4gIH0NCj4gIEVYUE9SVF9TWU1CT0xfR1BMKF9faW93
+cml0ZTY0X2NvcHkpOw0KPiAgI2VuZGlmDQo+ICsNCj4gKw0KPiArI2lmbmRlZiBfX21lbWNweV9m
+cm9taW8NCj4gK3ZvaWQgX19tZW1jcHlfZnJvbWlvKHZvaWQgKnRvLCBjb25zdCB2b2xhdGlsZSB2
+b2lkIF9faW9tZW0gKmZyb20sIHNpemVfdCBjb3VudCkNCj4gK3sNCj4gKwl3aGlsZSAoY291bnQg
+JiYgIUlTX0FMSUdORUQoKHVuc2lnbmVkIGxvbmcpZnJvbSwgTkFUSVZFX1NUT1JFX1NJWkUpKSB7
+DQo+ICsJCSoodTggKil0byA9IF9fcmF3X3JlYWRiKGZyb20pOw0KPiArCQlmcm9tKys7DQo+ICsJ
+CXRvKys7DQo+ICsJCWNvdW50LS07DQo+ICsJfQ0KPiArDQo+ICsJd2hpbGUgKGNvdW50ID49IE5B
+VElWRV9TVE9SRV9TSVpFKSB7DQo+ICsjaWZkZWYgQ09ORklHXzY0QklUDQo+ICsJCQlwdXRfdW5h
+bGlnbmVkKF9fcmF3X3JlYWRxKGZyb20pLCAodWludHB0cl90ICopdG8pOw0KPiArI2Vsc2UNCj4g
+KwkJCXB1dF91bmFsaWduZWQoX19yYXdfcmVhZGwoZnJvbSksICh1aW50cHRyX3QgKil0byk7DQo+
+ICsjZW5kaWYNCg0KVGhhdCBsb29rcyBob3JyaWQgdG8gbWUuDQpZb3Ugc2VlbSB0byBiZSBtaXhp
+bmcgc2V2ZXJhbCBkaWZmZXJlbnQgdHlwZXMgYW5kIHRlc3RzLg0KTkFUSVZFX1NUT1JFX1NJWkUg
+aXMgYmFzZWQgb24gdGhlICdsb25nICcgdHlwZSAoaW5kaXJlY3RseSBhbmQgYnkgYXNzdW1wdGlv
+bikuDQpDT05GSUdfNjRCaUlUIChwcm9iYWJseSkgaW1wbGllcyBMUDY0Lg0KcmVhZGwoKSByZWFk
+cyA0IGJ5dGVzIGFuZCByZWFkcSgpIDggKGZvciBib3RoIDMyYml0IGFuZCA2NGJpdCBrZXJuZWxz
+KQ0KdWludHB0ciBpcyBhbiB1bnNpZ25lZCBpbnRlZ2VyIGxhcmdlIGVub3VnaCB0byBob2xkIGEg
+cG9pbnRlci4NClRoZSBzaXplcyBtaWdodCBhbGwgaGFwcGVuIHRvIG1hdGNoLCBidXQgdGhlcmUg
+aXMgbm8gbmVlZCB0byByZWx5IG9uIGFsbCBvZiB0aGVtLg0KDQpJIG1pZ2h0IGJlIGJlc3QgdG8g
+anVzdCB1c2UgJ3NpemVvZiAobG9uZyknIGV4Y2VwdCB0aGF0IHlvdSBtaWdodA0KZ2V0IGEgY29t
+cGlsZSBlcnJvciBvbiBzb21lIDMyYml0IGFyY2hzIGZvciB0aGU6DQoJbG9uZyB2YWwgPSBzaXpl
+b2YgKHZhbCkgPT0gOCkgPyByZWFkcShmcm9tKSA6IHJlYWRsKGZyb20pOw0KCXB1dF91bmFsaWdu
+ZWQodmFsLCAobG9uZyAqKXRvKTsNCihkdWUgdG8gdGhlcmUgYmVpbmcgbm8gZGVjbGFyYXRpb24g
+cmVhZHEoKSkNCnNvIGl0IG1pZ2h0IG5lZWQgYSAjaWYgc29tZXdoZXJlLg0KT1RPSCB0aGVyZSBt
+aWdodCBhbHdheXMgYmUgYW4gJ2V4dGVybicgZm9yIHJlYWRxKCkuDQoNCklmIHlvdSBhcmUgdXNp
+bmcgdGhlIF9fcmF3X3JlYWR4KCkgZnVuY3Rpb25zIGRvbid0IHlvdSBuZWVkIHRoZQ0Kc3luY2hy
+b25pc2F0aW9uIGJhcnJpZXJzIHRvcCBhbmQgYm90dG9tPw0KDQpBbHNvIGlmIHB1dF91bmFsaWdu
+ZWQoKSBpcyBub24tdHJpdmlhbCB0aGUgY29kZSB3aWxsIGJlIGhvcnJpZC4NCkFuIGluaXRpYWwg
+dGVzdCBmb3IgKCh0byB8IGZyb20pICYgKHNpemVvZiAobG9uZykgLSAxKSA9PSAwKSBmb3IgYW4N
+CmFsaWduZWQgY29weSBtYXkgYmUgd29ydGh3aGlsZS4NCg0KVGhlcmUgaXMgdGhlIHF1ZXN0aW9u
+IG9mIHdoZXRoZXIgdGhlIGNvZGUgaXMgYWxsb3dlZCB0byBkbyBmdWxsDQp3b3JkIHJlYWRzIC0g
+dmFsaWQgaWYgdGhlIGlvIGFyZWEgYmVoYXZlcyBsaWtlIG1lbW9yeS4NCkluIHdoaWNoIGNhc2Ug
+eW91IGRvbid0IHdhbnQgdG8gZG8gYnl0ZSB0cmFuc2ZlcnMgZm9yIGFsaWdubWVudA0KYW5kIHRh
+aWwgdHJhbnNmZXJzIC0ganVzdCByZWFkIHRoZSBmdWxsIHdvcmQgdGhhdCBjb250YWlucyB0aGUg
+ZGF0YS4NCg0KUENJZSByZWFkcyBjYW4gYmUgaG9ycmlibHkgc2xvdyAod3JpdGVzIGFyZSAncG9z
+dGVkJyBzbyBtdWNoIGJldHRlcikuDQpJJ20gbm90IHN1cmUgaG93IGxvbmcgdGhleSB0YWtlIGlu
+dG8gYSAnbm9ybWFsJyB0YXJnZXQsIGJ1dCBiYWNrIHRvDQpiYWNrIHJlYWRzIGludG8gb3VyIGZw
+Z2EgYXJlIGFib3V0IDEyOCBjbG9ja3MgYXBhcnQgb24gaXRzIGludGVybmFsDQoxMjVNaHogY2xv
+Y2sgLSB0aGUgaG9zdCBjcHUgd2lsbCBzdGFsbCBmb3IgdGhlIGVudGlyZSBwZXJpb2QuDQpTbyB5
+b3UgZGVmaW5pdGVseSB3YW50IHRvIHVzZSB0aGUgbGFyZ2VzdCByZWdpc3RlciBwb3NzaWJsZS4N
+CihPciB0cnkgdmVyeSBoYXJkIHRvIG5ldmVyIGRvIG5vbi1kbWEgcmVhZHMgaW4gZWl0aGVyIGRp
+cmVjdGlvbi4pDQoNCglEYXZpZA0KDQo+ICsNCj4gKwkJZnJvbSArPSBOQVRJVkVfU1RPUkVfU0la
+RTsNCj4gKwkJdG8gKz0gTkFUSVZFX1NUT1JFX1NJWkU7DQo+ICsJCWNvdW50IC09IE5BVElWRV9T
+VE9SRV9TSVpFOw0KPiArCX0NCj4gKw0KPiArCXdoaWxlIChjb3VudCkgew0KPiArCQkqKHU4ICop
+dG8gPSBfX3Jhd19yZWFkYihmcm9tKTsNCj4gKwkJZnJvbSsrOw0KPiArCQl0bysrOw0KPiArCQlj
+b3VudC0tOw0KPiArCX0NCj4gK30NCj4gK0VYUE9SVF9TWU1CT0woX19tZW1jcHlfZnJvbWlvKTsN
+Cj4gKyNlbmRpZg0KPiArDQo+ICsjaWZuZGVmIF9fbWVtY3B5X3RvaW8NCj4gK3ZvaWQgX19tZW1j
+cHlfdG9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKnRvLCBjb25zdCB2b2lkICpmcm9tLCBzaXpl
+X3QgY291bnQpDQo+ICt7DQo+ICsJd2hpbGUgKGNvdW50ICYmICFJU19BTElHTkVEKCh1bnNpZ25l
+ZCBsb25nKXRvLCBOQVRJVkVfU1RPUkVfU0laRSkpIHsNCj4gKwkJX19yYXdfd3JpdGViKCoodTgg
+Kilmcm9tLCB0byk7DQo+ICsJCWZyb20rKzsNCj4gKwkJdG8rKzsNCj4gKwkJY291bnQtLTsNCj4g
+Kwl9DQo+ICsNCj4gKwl3aGlsZSAoY291bnQgPj0gTkFUSVZFX1NUT1JFX1NJWkUpIHsNCj4gKyNp
+ZmRlZiBDT05GSUdfNjRCSVQNCj4gKwkJCV9fcmF3X3dyaXRlcShnZXRfdW5hbGlnbmVkKCh1aW50
+cHRyX3QgKilmcm9tKSwgdG8pOw0KPiArI2Vsc2UNCj4gKwkJCV9fcmF3X3dyaXRlbChnZXRfdW5h
+bGlnbmVkKCh1aW50cHRyX3QgKilmcm9tKSwgdG8pOw0KPiArI2VuZGlmDQo+ICsNCj4gKwkJZnJv
+bSArPSBOQVRJVkVfU1RPUkVfU0laRTsNCj4gKwkJdG8gKz0gTkFUSVZFX1NUT1JFX1NJWkU7DQo+
+ICsJCWNvdW50IC09IE5BVElWRV9TVE9SRV9TSVpFOw0KPiArCX0NCj4gKw0KPiArCXdoaWxlIChj
+b3VudCkgew0KPiArCQlfX3Jhd193cml0ZWIoKih1OCAqKWZyb20sIHRvKTsNCj4gKwkJZnJvbSsr
+Ow0KPiArCQl0bysrOw0KPiArCQljb3VudC0tOw0KPiArCX0NCj4gK30NCj4gK0VYUE9SVF9TWU1C
+T0woX19tZW1jcHlfdG9pbyk7DQo+ICsjZW5kaWYNCj4gKw0KPiArI2lmbmRlZiBfX21lbXNldF9p
+bw0KPiArdm9pZCBfX21lbXNldF9pbyh2b2xhdGlsZSB2b2lkIF9faW9tZW0gKmRzdCwgaW50IGMs
+IHNpemVfdCBjb3VudCkNCj4gK3sNCj4gKwl1aW50cHRyX3QgcWMgPSAodTgpYzsNCj4gKw0KPiAr
+CXFjIHw9IHFjIDw8IDg7DQo+ICsJcWMgfD0gcWMgPDwgMTY7DQo+ICsNCj4gKyNpZmRlZiBDT05G
+SUdfNjRCSVQNCj4gKwlxYyB8PSBxYyA8PCAzMjsNCj4gKyNlbmRpZg0KPiArDQo+ICsJd2hpbGUg
+KGNvdW50ICYmICFJU19BTElHTkVEKCh1bnNpZ25lZCBsb25nKWRzdCwgTkFUSVZFX1NUT1JFX1NJ
+WkUpKSB7DQo+ICsJCV9fcmF3X3dyaXRlYihjLCBkc3QpOw0KPiArCQlkc3QrKzsNCj4gKwkJY291
+bnQtLTsNCj4gKwl9DQo+ICsNCj4gKwl3aGlsZSAoY291bnQgPj0gTkFUSVZFX1NUT1JFX1NJWkUp
+IHsNCj4gKyNpZmRlZiBDT05GSUdfNjRCSVQNCj4gKwkJCV9fcmF3X3dyaXRlcShxYywgZHN0KTsN
+Cj4gKyNlbHNlDQo+ICsJCQlfX3Jhd193cml0ZWwocWMsIGRzdCk7DQo+ICsjZW5kaWYNCj4gKw0K
+PiArCQlkc3QgKz0gTkFUSVZFX1NUT1JFX1NJWkU7DQo+ICsJCWNvdW50IC09IE5BVElWRV9TVE9S
+RV9TSVpFOw0KPiArCX0NCj4gKw0KPiArCXdoaWxlIChjb3VudCkgew0KPiArCQlfX3Jhd193cml0
+ZWIoYywgZHN0KTsNCj4gKwkJZHN0Kys7DQo+ICsJCWNvdW50LS07DQo+ICsJfQ0KPiArfQ0KPiAr
+RVhQT1JUX1NZTUJPTChfX21lbXNldF9pbyk7DQo+ICsjZW5kaWYNCj4gLS0NCj4gMi4zNC4xDQo+
+IA0KPiANCj4gDQo+IA0KPiANCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
+bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
+YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
->
->
-> While we are here:
->
-> Is there a known bug about upstream gcc 14.2.0 (and earlier) loosing
-> track of registers, especially r4, during optimizations?
-> It seems to me that this register gets overwritten sometimes before it
-> is meant to be used.
->
->
-> Thanks,
-> Thomas
->
->
-> [0] https://raw.githubusercontent.com/XUANTIE-RV/qemu/refs/heads/xuantie-=
-qemu-6.1.0/linux-user/csky/syscall_nr.h
-> [1] https://raw.githubusercontent.com/XUANTIE-RV/qemu/refs/heads/xuantie-=
-qemu-8.0/linux-user/csky/syscall_nr.h
-
-
-
---=20
-Best Regards
- Guo Ren
 
