@@ -1,119 +1,97 @@
-Return-Path: <linux-csky+bounces-911-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-912-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 583B998980A
-	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 23:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7028798999B
+	for <lists+linux-csky@lfdr.de>; Mon, 30 Sep 2024 05:50:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A754282C04
-	for <lists+linux-csky@lfdr.de>; Sun, 29 Sep 2024 21:48:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B9B02828C1
+	for <lists+linux-csky@lfdr.de>; Mon, 30 Sep 2024 03:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D21A185B5F;
-	Sun, 29 Sep 2024 21:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dMGieA04"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D45BB1DA21;
+	Mon, 30 Sep 2024 03:50:00 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3137181D00;
-	Sun, 29 Sep 2024 21:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3535A1878;
+	Mon, 30 Sep 2024 03:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727646474; cv=none; b=oNvmu8W/btvdChUxGZ5t0COz/JCGSDml5SMsq0RaS7osVwLwRu1u/uQOq4hXcCbajb6aMfBmCrEdWFYJm+dmU+GOVttf3vC+TQpLYtQlsR5t3gBBLkaRbDl8h53Ipj64NdlA+UdifmsBkHT6XS8fpEO8h/dLNpRV0GdeBsLpcY4=
+	t=1727668200; cv=none; b=uK/KLNAut8+Uok76TXf5pIDeWfrbgo3tUe7MZJ2hYOENpjNWRX10RvTWN7ewVmM5/FuLbvtYYFFV0aG5ymRSb5L2XrSupM58z68T1S5A5ORhX/gXy355qrwLgY20rGPY8Il5stagWm5P1ekpAbGQZSRWU5PBtBZv6MUeINwzZJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727646474; c=relaxed/simple;
-	bh=KjxYPOTEK04i0aDe9R3P7xjZpnny61B4KWUV7zhoxYU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=d8DflxCb+DvNr1jftPoezA6TQluLjOVhfdKWxWAdUheuth1LmzgWtUx6kNDmXYW9g8SnL5ZWDRev0LGoXvsJhnonsv101NHmVyH+TZheSuVOSMgOJG2vbj1C/XtmqLM32c8WjkaPU1+xwr6CaF0w/rtaF638G9tfzWWwAWB28ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dMGieA04; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1727646465;
-	bh=KjxYPOTEK04i0aDe9R3P7xjZpnny61B4KWUV7zhoxYU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=dMGieA04I1ViWnYpd+fojwnXQNoDCDM47Tc3qxbuohIipbMr6MQ1XzJUctpFpn840
-	 atD1wP4kFz3zep0LWQp0lYrDXi7Nk9eT+3LvMZh+Rgbry4efJlEduzfI4TXtmnWlm9
-	 RM0IhRHYpl5reL7QvfZJKLmQQ2eFU4BEH+5OrMSk=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 29 Sep 2024 23:47:40 +0200
-Subject: [PATCH 5/5] selftests/nolibc: skip test for getppid() on csky
+	s=arc-20240116; t=1727668200; c=relaxed/simple;
+	bh=csPcHVQHvBvl68tXieUjtZxzQSNZqNLqUC+nsW49kPE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y5tEGNkonGVZpkobh5UtFqRGQteqQEqSwiS0jPiepLgC6HnaQ6vgtntCPaCTtkRJW2g+va5cO1qfSFDoEkjPhiBVNLzPBZca3Pr4aNS+xkWVeMUFoqAceBA4sUiMsPVcZreA63C+m9CvS2gwaXPFWrWtv8hRaEqhRVKurOqhndA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 48U3nkO1018157;
+	Mon, 30 Sep 2024 05:49:46 +0200
+Date: Mon, 30 Sep 2024 05:49:46 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Guo Ren <guoren@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 4/5] tools/nolibc: add csky support
+Message-ID: <20240930034946.GB13730@1wt.eu>
+References: <20240929-nolibc-csky-v1-0-bb28031a73b0@weissschuh.net>
+ <20240929-nolibc-csky-v1-4-bb28031a73b0@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240929-nolibc-csky-v1-5-bb28031a73b0@weissschuh.net>
-References: <20240929-nolibc-csky-v1-0-bb28031a73b0@weissschuh.net>
-In-Reply-To: <20240929-nolibc-csky-v1-0-bb28031a73b0@weissschuh.net>
-To: Guo Ren <guoren@kernel.org>, Willy Tarreau <w@1wt.eu>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727646464; l=2023;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=KjxYPOTEK04i0aDe9R3P7xjZpnny61B4KWUV7zhoxYU=;
- b=1ofSVpBYrnMLeG02nuqsxZrKjnXJpHxpp3FJIwFQKCCUGVb/PKQivP6lnZtC9zsAv+qE/yfU4
- qMonmekTr0PBbReUXTPKJKk8O69mrEgD4eJ5VlJShxAWAaZ3vZGp+Iz
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+In-Reply-To: <20240929-nolibc-csky-v1-4-bb28031a73b0@weissschuh.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Old non-mainline Linux and current non-mainline qemu-user use different
-syscall numbers than mainline Linux.
-__NR_getppid and __NR_rt_sigreturn are swapped.
-As the runtime environment can't be determined during compilation,
-sidestep the whole issue by skipping the test.
+Hi Thomas,
 
-Link: https://lore.kernel.org/linux-csky/2fa3151f-5aab-406c-95d9-add398ae58b3@t-8ch.de/
-Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+On Sun, Sep 29, 2024 at 11:47:39PM +0200, Thomas Weiﬂschuh wrote:
+> Add support for the C-SKY architecture, which is very similar to
+> LoongArch.
+> Only v2 ABI is supported.
+> Optimizations are disabled as the compiler[0] seems to misoptimize the
+> code, especially the r4 register gets clobbered.
+> Compile the initramfs directly into the kernel, as qemu does not support
+> passing the initrd via OF.
+> 
+> There is no qemu mainline support for qemu.
+> Testing was done with commit 1f172a2c7cd5c2e7 of the downstream csky qemu [1].
+> Some tiny changes were necessary on top [2].
+> 
+> [0] gcc 13.2.0 and 14.2.0 from kernel.org crosstools
+> [1] https://github.com/XUANTIE-RV/qemu/
+> [2]
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 6fba7025c5e3c002085862fdf6fa950da6000d6c..daf6a9b84a3051413cbb1d01918f745c3b83426c 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -995,7 +995,7 @@ int run_syscall(int min, int max)
- 	int tmp;
- 	int ret = 0;
- 	void *p1, *p2;
--	int has_gettid = 1;
-+	int has_gettid = 1, has_getppid = 1;
- 	int has_brk;
- 
- 	/* <proc> indicates whether or not /proc is mounted */
-@@ -1009,6 +1009,11 @@ int run_syscall(int min, int max)
- 	has_gettid = __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 30);
- #endif
- 
-+	/* qemu-user and non-mainline Linux use different syscall number */
-+#if defined(__csky__)
-+	has_getppid = 0;
-+#endif
-+
- 	/* on musl setting brk()/sbrk() always fails */
- 	has_brk = brk(0) == 0;
- 
-@@ -1020,7 +1025,7 @@ int run_syscall(int min, int max)
- 		 */
- 		switch (test + __LINE__ + 1) {
- 		CASE_TEST(getpid);            EXPECT_SYSNE(1, getpid(), -1); break;
--		CASE_TEST(getppid);           EXPECT_SYSNE(1, getppid(), -1); break;
-+		CASE_TEST(getppid);           EXPECT_SYSNE(has_getppid, getppid(), -1); break;
- 		CASE_TEST(gettid);            EXPECT_SYSNE(has_gettid, gettid(), -1); break;
- 		CASE_TEST(getpgid_self);      EXPECT_SYSNE(1, getpgid(0), -1); break;
- 		CASE_TEST(getpgid_bad);       EXPECT_SYSER(1, getpgid(-1), -1, ESRCH); break;
+I think you wanted to place a link or something above for [2].
 
--- 
-2.46.2
+> diff --git a/target/csky/cpu-param.h b/target/csky/cpu-param.h
+> index 80554cc0fc03..9181b602a26f 100644
+> --- a/target/csky/cpu-param.h
+> +++ b/target/csky/cpu-param.h
+(...)
+> diff --git a/target/csky/op_vdsp2.c b/target/csky/op_vdsp2.c
+> index a9985a03be33..d953f5ea94fe 100644
+> --- a/target/csky/op_vdsp2.c
+> +++ b/target/csky/op_vdsp2.c
 
+Also, the first two patches look like fixes for the arch itself, they
+should really go outside of the nolibc development tree, at least
+because they might have to be backported to some stable branches,
+or later fixed/reverted in case they wouldn't be optimal.
+
+Aside this, it's been a long time since we last added an architecture
+and it's pleasant to see how easy it has become over time, even when
+requiring specific settings ;-)
+
+Cheers,
+Willy
 
