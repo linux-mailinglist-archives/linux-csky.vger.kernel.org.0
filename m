@@ -1,244 +1,355 @@
-Return-Path: <linux-csky+bounces-986-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-987-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FECC9931F1
-	for <lists+linux-csky@lfdr.de>; Mon,  7 Oct 2024 17:48:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9F72993CAC
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Oct 2024 04:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 999D51F23320
-	for <lists+linux-csky@lfdr.de>; Mon,  7 Oct 2024 15:48:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18F0B1C23527
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Oct 2024 02:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2641DACB8;
-	Mon,  7 Oct 2024 15:47:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A614225D7;
+	Tue,  8 Oct 2024 02:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UtAK+FSO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJVgAncT"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807081D9697
-	for <linux-csky@vger.kernel.org>; Mon,  7 Oct 2024 15:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0956224FA;
+	Tue,  8 Oct 2024 02:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728316036; cv=none; b=HBpgLIdCdWBDsB9cV2wNXC8XbUPuuU/PvNIw+HJIjem+ubM8wYtaVYzFshj6OeinXOcW8xNJBXjv9MaslbHIB1wcmv33pQwWrGJjshrZsFIBjvjhvxWGrSWpBa/IzwDd1fCoc2mXbF9QGFJAeN3O8OKRHH8+nVa+CDKpynwC6LU=
+	t=1728353499; cv=none; b=kxjZYHz9Ah78Dx+x+97YILXfbua2qT4ovzcyWEy4KHiwi8v+HCFaWcFIFIxNoqfEXpyn/QNKJD00IrOpG16sKPQka03DVXDeAdXTtjawEFDb7H7pwtmCEoQHLR3NY5FIatPbPICyRcgrqCOPgATRCFvsptnGEk1CYPbu08Z25rU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728316036; c=relaxed/simple;
-	bh=3orWU/TR+HwUCJf+N/O4kdpAwTQz6wOCTHh40ojhmqw=;
+	s=arc-20240116; t=1728353499; c=relaxed/simple;
+	bh=ecuISJm/aWL+tNMQ+twAVlW+4RZvWpoN2srrbXkDB94=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O15uiJRI6pGihb/Em404zfGxd/fOOj0fJdaVJ7MXqV2luWXNgbQnVTx6NnOTjGHCC3GyOspbJ6sKENldiZpr4OzrkgZDoMfimZoEv6IiO5x/pLmZ2iCKs6k6lt4PSj3JC+cAW6X70fK+4C9BarBTiQN1hnjhJTrV0lP7H6lACps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UtAK+FSO; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20b4a090f3eso264105ad.1
-        for <linux-csky@vger.kernel.org>; Mon, 07 Oct 2024 08:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728316033; x=1728920833; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WrYqnjJpJB2lRJdraSxJi37iXg6kEfvU/vqtEVr4XQ0=;
-        b=UtAK+FSOJewCaxmSisiQxqfebpEw0ZEHmXKET2I+eV0XdJl2Hv0nmnS1VoCIyG9bMm
-         poqZGXNuaV759+1drYYi6CvbnRYlwFQz8PHJ0ox/QETX3LvC1A6ESSAf2DTjwd5ovBOS
-         6Q7TC/Jbvxs5unMk2cD1RXZreweE3BITG5dJky9oP4pWPn7g0KOgOaMku5GH9XUCzMoX
-         0GQKDsj7zEftqybNg4Wi+sHZDF5t3pdRyWS4mnSUVGcWzO1ureutlgwuz8ajC6sao1D2
-         HgFasy4/rPnnIJTVQ2Oz3BJ+oy5JklPGVyJDNlEpasgeeyyFhVSWd6MerrU/L4tOiB8e
-         XpLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728316033; x=1728920833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WrYqnjJpJB2lRJdraSxJi37iXg6kEfvU/vqtEVr4XQ0=;
-        b=M3kIUn9Fqssk11N21ydQ9sG04U5myq6LD7hVpm2YBfYYXhHqMUYGBeCZbNA3DxOBcs
-         oQUNx+Hb4Hh/ZXRWcjBBladN2d7kOFZTqpzi9CEPTHbAfBqqm3VHt9nZvH5xpq41ak66
-         3iRx53NoCKkkAYP8ya0EH9zWobBkycKuvPDXLniTYHifRS73IJxmIyLg2UXKA77bwIYp
-         FeReu8jdy96sJoePwgv6Nhjm88iDEpkQMm05Bbqvfe3yqCBZ3iAjlf8CKZ6DrHEyoO75
-         F7gsfq735BVQPhz0lEvVdPqjwYdx556QXjQVyqxUsA1tPhdYlbIIiK+VfIHXwGzNjIiW
-         PNEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWKyBiMYz9kSuOakrElhxuB1GaeS2PD3AQVpkmE6WFbvBr7EE/d6KYji+mdexPNInO3hwMiagU/wCSN@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWIQjM0BQZtpctCXsA+P5gihElUEfIZwHeAI4Cbt4HfHUIAYpO
-	1LKQiuxxPK/2lFoBbpvC+f3ioYmqB/nfa6v1Pev05+YeF9s6gQ+fkQ9l3jwOQL2sP/NbzQYMbUj
-	/KQCcb1g2C4I0wv/UUii0ANltNNV4ouThvKpx
-X-Google-Smtp-Source: AGHT+IGwu4PJ1LIQLyt4RHgM7VecbrJWT3jfoSUY3o0Fb4S+9czwyhW4r49SVjqTMABhYHxG7QyAo4EIkLYc5TDV9ys=
-X-Received: by 2002:a17:902:daca:b0:1fb:172a:f3d4 with SMTP id
- d9443c01a7336-20c15ab20b3mr3586035ad.8.1728316031023; Mon, 07 Oct 2024
- 08:47:11 -0700 (PDT)
+	 To:Cc:Content-Type; b=aUsqmyvkKAqojaQthubbDoX4KV9HTc3oiS1YXoRd1Q3n8NzBxNNjBtDiEuNARs3iU+oh2IhSxaF11wlSvWFGpuwk4fOhAErVSWZWi3mSHpO9PiE/bf/b/f8wcavhmoILDxHbVpEHamCCvksz61j1XYcFwIg8DzVpofvSOs2znX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJVgAncT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA0AC4CECD;
+	Tue,  8 Oct 2024 02:11:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728353498;
+	bh=ecuISJm/aWL+tNMQ+twAVlW+4RZvWpoN2srrbXkDB94=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sJVgAncTPsJH0dYu/FY7tpoM13FlZrkcGW302R2qV3rAtntuHnx6b6IBtsoGqJfUK
+	 OJlF20yd3fT8v8p+RPUvLVZ1RAMX5W6IbxX8tZagSwZOA/94MMpuD4+qFDEILoEjsf
+	 P9uAjzPBaX291VACffb+ISH0H3TDsmmxM/gNcXrwWMJ0mwOhLF9F36oQ6KMq+Kl+J3
+	 cl4KezTj+ksZUrr54Ao44lrKdmPEUpk3T3kJ7LEHkgZvFjg/8ZeTWGIRfWaPxyNycf
+	 uEqf34myc+g6AkPGGZi/bTzkGCJuh9wf939s4XdMc4f/DEpE3N6CmVgYLon7hKR9NJ
+	 ZKCT4YfZMpMYg==
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d2ddb61c8so119690f8f.2;
+        Mon, 07 Oct 2024 19:11:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUNPA+rtDH5uYjZVbNY0F7smViTncwDq+rDIbEpaAECa2zfXnDqjH44soMVZJNrsA3O8toN8U7GJGeINUTgrA==@vger.kernel.org, AJvYcCUShv6w18H7qxmBv3rauvICCRq2nooWqQBa8zNuAr62o7Lf8GWrKBnIdP8w0M0PPqvhbzmFm/rDy5deYA==@vger.kernel.org, AJvYcCUUto2NDOkbfKA4FDP3Ba9HUSaHUO9/TXSExe10XqGY4myP1j+CEYjYDAomqwbxO3g08RcHt3TyuXfN6+JZ@vger.kernel.org, AJvYcCUYW8NFoBVPE1J6xzauEQW7olec5iC6wpn8sm2HidpVBHsyALUwCAT1TjqHesnL3Tzl5HYt+wY3to4=@vger.kernel.org, AJvYcCUwlrpU0pUYm1ezlH6emNxO1HPBcigiuq0+yaiykXdK89lfeVMXPNc/aeHyxW0Bkx0caK7khD07Mh4lQiv8@vger.kernel.org, AJvYcCUymArPZHfkrpwwPZvR4VMCb1H372TJxoopgqfjEb1WI4bhCNtlTEP3hgzaoSNxQMvoSE4=@vger.kernel.org, AJvYcCVcWgWDIS4ovuOnvvGkH6qUs2VgPkdg68cRt5mE8uY9IoZQQITBIOXFagD2+nxf4NiHZJJnzxYxQL/kXqoBtH0=@vger.kernel.org, AJvYcCWHzw5SUWeSGWiAtxoQtzQDY7KwX8/dWCpiNcUu+Z/GtDvpl4C62DhCRbGC3jUa4Kyq/+giktVgZnJh27w=@vger.kernel.org, AJvYcCWkZHEnXvEfIgRm4SCTbvQFocAg86/jONp0FFoQSL9w7xakQwSul/x9c+ftAhq6oluBsULJzlnRmrJvrzQwXVE+QsZQ@vger.kernel.org, AJvYcCXF65q8QSTr
+ C4HJK0PmNVUxDz7XYsP6j5odccrXFO/SXo4F0/09egB0koJqZcQdc4rhZ1Jxoe6WXQ7riGaVlQ==@vger.kernel.org, AJvYcCXJxg71K3KwHX1WmS4LfP9MuxFdxfaozsea2KokzqKyhRzOt5V7F6yOqlKJClZoqY4BDnFAVyX4b6Awfg==@vger.kernel.org, AJvYcCXOrfvlQUOOajdeW+B9I/Lf/8QqKtmJTB5kQIDEL8TW/LhfWwAweeziqs5A9nWdHxq9ARTk5G5IoeevYQ==@vger.kernel.org, AJvYcCXslaWvCJ55ET4+7eEesoiwZg90bWPLAwIHtqajaX1llRZya2FGHb8hA+v66LWxr0snosXLwg+W34pvug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKMxHfmbmxegTTQv1+JDm9JH8NzIl7+eAX4tJntxcYVHOfsDzB
+	ao7LXoBIGlk0MU/f4lUL3FMKqILGlYkl3hROylGkegkIUzuJAylmsvo6SO1nsrsdCfw1HBYPRxE
+	rob4Jwp7n72zgcexJCMLyXGtPGwM=
+X-Google-Smtp-Source: AGHT+IG9/HXDQPVy3roiGpnpx5nYoWEmk19PPS8Q+OmkGvZ1j1NxJVVRW61nrohcbFPxLB5t6MVKLRvfuhF1lJEIdu8=
+X-Received: by 2002:a5d:6e0a:0:b0:374:ce15:9995 with SMTP id
+ ffacd0b85a97d-37d0e78253cmr10508015f8f.34.1728353497103; Mon, 07 Oct 2024
+ 19:11:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241005195541.380070-1-irogers@google.com> <20241005195541.380070-17-irogers@google.com>
- <20241007170755.03697b9178ed3dcac24dfa21@kernel.org>
-In-Reply-To: <20241007170755.03697b9178ed3dcac24dfa21@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 7 Oct 2024 08:46:59 -0700
-Message-ID: <CAP-5=fU4hTL1hfB7-FpMnFopJJriZAOXY_8iakW5yHC_gfhTWg@mail.gmail.com>
-Subject: Re: [PATCH v2 16/31] perf dwarf-regs: Pass accurate disassembly
- machine to get_dwarf_regnum
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Nick Terrell <terrelln@fb.com>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Guilherme Amadio <amadio@gentoo.org>, 
-	Changbin Du <changbin.du@huawei.com>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	Daniel Wagner <dwagner@suse.de>, Aditya Gupta <adityag@linux.ibm.com>, 
-	Athira Rajeev <atrajeev@linux.vnet.ibm.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Kajol Jain <kjain@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	Bibo Mao <maobibo@loongson.cn>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atishp@rivosinc.com>, Shenlin Liang <liangshenlin@eswincomputing.com>, 
-	Oliver Upton <oliver.upton@linux.dev>, "Steinar H. Gunderson" <sesse@google.com>, 
-	"Dr. David Alan Gilbert" <linux@treblig.org>, Chen Pei <cp0613@linux.alibaba.com>, 
-	Dima Kogan <dima@secretsauce.net>, Yury Norov <yury.norov@gmail.com>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20241007062858.44248-1-rppt@kernel.org> <20241007062858.44248-6-rppt@kernel.org>
+In-Reply-To: <20241007062858.44248-6-rppt@kernel.org>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 8 Oct 2024 10:11:25 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4u5qk-Zd8ctiooCv_hGKbDpXRAtTZMMsUab9bbLAnd5A@mail.gmail.com>
+Message-ID: <CAAhV-H4u5qk-Zd8ctiooCv_hGKbDpXRAtTZMMsUab9bbLAnd5A@mail.gmail.com>
+Subject: Re: [PATCH v4 5/8] arch: introduce set_direct_map_valid_noflush()
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
+	Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, 
+	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 7, 2024 at 1:08=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.or=
-g> wrote:
->
-> On Sat,  5 Oct 2024 12:55:26 -0700
-> Ian Rogers <irogers@google.com> wrote:
->
-> > Rather than pass 0/EM_NONE, use the value computed in the disasm
-> > struct arch. Switch the EM_NONE case to EM_HOST, rewriting EM_NONE if
-> > it were passed to get_dwarf_regnum. Pass a flags value as
-> > architectures like csky need the flags to determine the ABI variant.
-> >
->
-> Does this change the command output when we use it for cross-build
-> environment? E.g. remote arch is different from host arch? If so,
-> please add output examples with/without this change.
+Hi, Mike,
 
-The cases where this would apply are small as get_arch_regnum is only
-implemented for x86. get_dwarf_regnum likewise only works for x86 and
-it is only called by annotate.
-In this code without this patch the behavior is to return -ENOTSUP, ie
-the code is set up to fail and this code just makes it not fail for
-the x86 case (when not on x86) with code that is well tested on x86.
-The code exists as x86 registers may be the same dwarf number but have
-different names: e.g. rax, eax, ax, al. I'm not sure this reaches a
-high complexity level for extensive testing. I'll see if I can grab an
-x86 perf.data file to analyze on ARM, but I don't think doing this
-should gate the series.
-
-Thanks,
-Ian
-
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/annotate.c           | 6 +++---
-> >  tools/perf/util/dwarf-regs.c         | 8 ++++++--
-> >  tools/perf/util/include/dwarf-regs.h | 5 +++--
-> >  3 files changed, 12 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-> > index 37ce43c4eb8f..b1d98da79be8 100644
-> > --- a/tools/perf/util/annotate.c
-> > +++ b/tools/perf/util/annotate.c
-> > @@ -2292,7 +2292,7 @@ static int extract_reg_offset(struct arch *arch, =
-const char *str,
-> >       if (regname =3D=3D NULL)
-> >               return -1;
-> >
-> > -     op_loc->reg1 =3D get_dwarf_regnum(regname, 0);
-> > +     op_loc->reg1 =3D get_dwarf_regnum(regname, arch->e_machine, arch-=
->e_flags);
-> >       free(regname);
-> >
-> >       /* Get the second register */
-> > @@ -2305,7 +2305,7 @@ static int extract_reg_offset(struct arch *arch, =
-const char *str,
-> >               if (regname =3D=3D NULL)
-> >                       return -1;
-> >
-> > -             op_loc->reg2 =3D get_dwarf_regnum(regname, 0);
-> > +             op_loc->reg2 =3D get_dwarf_regnum(regname, arch->e_machin=
-e, arch->e_flags);
-> >               free(regname);
-> >       }
-> >       return 0;
-> > @@ -2405,7 +2405,7 @@ int annotate_get_insn_location(struct arch *arch,=
- struct disasm_line *dl,
-> >                               return -1;
-> >
-> >                       if (*s =3D=3D arch->objdump.register_char)
-> > -                             op_loc->reg1 =3D get_dwarf_regnum(s, 0);
-> > +                             op_loc->reg1 =3D get_dwarf_regnum(s, arch=
-->e_machine, arch->e_flags);
-> >                       else if (*s =3D=3D arch->objdump.imm_char) {
-> >                               op_loc->offset =3D strtol(s + 1, &p, 0);
-> >                               if (p && p !=3D s + 1)
-> > diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.=
-c
-> > index 7c01bc4d7e5b..1321387f6948 100644
-> > --- a/tools/perf/util/dwarf-regs.c
-> > +++ b/tools/perf/util/dwarf-regs.c
-> > @@ -70,7 +70,7 @@ __weak int get_arch_regnum(const char *name __maybe_u=
-nused)
-> >  }
-> >
-> >  /* Return DWARF register number from architecture register name */
-> > -int get_dwarf_regnum(const char *name, unsigned int machine)
-> > +int get_dwarf_regnum(const char *name, unsigned int machine, unsigned =
-int flags __maybe_unused)
-> >  {
-> >       char *regname =3D strdup(name);
-> >       int reg =3D -1;
-> > @@ -84,8 +84,12 @@ int get_dwarf_regnum(const char *name, unsigned int =
-machine)
-> >       if (p)
-> >               *p =3D '\0';
-> >
-> > +     if (machine =3D=3D EM_NONE) {
-> > +             /* Generic arch - use host arch */
-> > +             machine =3D EM_HOST;
-> > +     }
-> >       switch (machine) {
-> > -     case EM_NONE:   /* Generic arch - use host arch */
-> > +     case EM_HOST:
-> >               reg =3D get_arch_regnum(regname);
-> >               break;
-> >       default:
-> > diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/inc=
-lude/dwarf-regs.h
-> > index f4f87ded5e3d..ee0a734564c7 100644
-> > --- a/tools/perf/util/include/dwarf-regs.h
-> > +++ b/tools/perf/util/include/dwarf-regs.h
-> > @@ -93,12 +93,13 @@ int get_arch_regnum(const char *name);
-> >   * name: architecture register name
-> >   * machine: ELF machine signature (EM_*)
-> >   */
-> > -int get_dwarf_regnum(const char *name, unsigned int machine);
-> > +int get_dwarf_regnum(const char *name, unsigned int machine, unsigned =
-int flags);
-> >
-> >  #else /* HAVE_LIBDW_SUPPORT */
-> >
-> >  static inline int get_dwarf_regnum(const char *name __maybe_unused,
-> > -                                unsigned int machine __maybe_unused)
-> > +                                unsigned int machine __maybe_unused,
-> > +                                unsigned int flags __maybe_unused)
-> >  {
-> >       return -1;
-> >  }
-> > --
-> > 2.47.0.rc0.187.ge670bccf7e-goog
-> >
+On Mon, Oct 7, 2024 at 2:30=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wrot=
+e:
 >
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 >
+> Add an API that will allow updates of the direct/linear map for a set of
+> physically contiguous pages.
+>
+> It will be used in the following patches.
+>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/arm64/include/asm/set_memory.h     |  1 +
+>  arch/arm64/mm/pageattr.c                | 10 ++++++++++
+>  arch/loongarch/include/asm/set_memory.h |  1 +
+>  arch/loongarch/mm/pageattr.c            | 21 +++++++++++++++++++++
+>  arch/riscv/include/asm/set_memory.h     |  1 +
+>  arch/riscv/mm/pageattr.c                | 15 +++++++++++++++
+>  arch/s390/include/asm/set_memory.h      |  1 +
+>  arch/s390/mm/pageattr.c                 | 11 +++++++++++
+>  arch/x86/include/asm/set_memory.h       |  1 +
+>  arch/x86/mm/pat/set_memory.c            |  8 ++++++++
+>  include/linux/set_memory.h              |  6 ++++++
+>  11 files changed, 76 insertions(+)
+>
+> diff --git a/arch/arm64/include/asm/set_memory.h b/arch/arm64/include/asm=
+/set_memory.h
+> index 917761feeffd..98088c043606 100644
+> --- a/arch/arm64/include/asm/set_memory.h
+> +++ b/arch/arm64/include/asm/set_memory.h
+> @@ -13,6 +13,7 @@ int set_memory_valid(unsigned long addr, int numpages, =
+int enable);
+>
+>  int set_direct_map_invalid_noflush(struct page *page);
+>  int set_direct_map_default_noflush(struct page *page);
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid);
+>  bool kernel_page_present(struct page *page);
+>
+>  #endif /* _ASM_ARM64_SET_MEMORY_H */
+> diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+> index 0e270a1c51e6..01225900293a 100644
+> --- a/arch/arm64/mm/pageattr.c
+> +++ b/arch/arm64/mm/pageattr.c
+> @@ -192,6 +192,16 @@ int set_direct_map_default_noflush(struct page *page=
+)
+>                                    PAGE_SIZE, change_page_range, &data);
+>  }
+>
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid)
+> +{
+> +       unsigned long addr =3D (unsigned long)page_address(page);
+> +
+> +       if (!can_set_direct_map())
+> +               return 0;
+> +
+> +       return set_memory_valid(addr, nr, valid);
+> +}
+> +
+>  #ifdef CONFIG_DEBUG_PAGEALLOC
+>  void __kernel_map_pages(struct page *page, int numpages, int enable)
+>  {
+> diff --git a/arch/loongarch/include/asm/set_memory.h b/arch/loongarch/inc=
+lude/asm/set_memory.h
+> index d70505b6676c..55dfaefd02c8 100644
+> --- a/arch/loongarch/include/asm/set_memory.h
+> +++ b/arch/loongarch/include/asm/set_memory.h
+> @@ -17,5 +17,6 @@ int set_memory_rw(unsigned long addr, int numpages);
+>  bool kernel_page_present(struct page *page);
+>  int set_direct_map_default_noflush(struct page *page);
+>  int set_direct_map_invalid_noflush(struct page *page);
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid);
+>
+>  #endif /* _ASM_LOONGARCH_SET_MEMORY_H */
+> diff --git a/arch/loongarch/mm/pageattr.c b/arch/loongarch/mm/pageattr.c
+> index ffd8d76021d4..f14b40c968b4 100644
+> --- a/arch/loongarch/mm/pageattr.c
+> +++ b/arch/loongarch/mm/pageattr.c
+> @@ -216,3 +216,24 @@ int set_direct_map_invalid_noflush(struct page *page=
+)
+>
+>         return __set_memory(addr, 1, __pgprot(0), __pgprot(_PAGE_PRESENT =
+| _PAGE_VALID));
+>  }
+> +
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid)
+> +{
+> +       unsigned long addr =3D (unsigned long)page_address(page);
+> +       pgprot_t set, clear;
+> +
+> +       return __set_memory((unsigned long)page_address(page), nr, set, c=
+lear);
+This line should be removed.
+
+Huacai
+
+> +
+> +       if (addr < vm_map_base)
+> +               return 0;
+> +
+> +       if (valid) {
+> +               set =3D PAGE_KERNEL;
+> +               clear =3D __pgprot(0);
+> +       } else {
+> +               set =3D __pgprot(0);
+> +               clear =3D __pgprot(_PAGE_PRESENT | _PAGE_VALID);
+> +       }
+> +
+> +       return __set_memory(addr, 1, set, clear);
+> +}
+> diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm=
+/set_memory.h
+> index ab92fc84e1fc..ea263d3683ef 100644
+> --- a/arch/riscv/include/asm/set_memory.h
+> +++ b/arch/riscv/include/asm/set_memory.h
+> @@ -42,6 +42,7 @@ static inline int set_kernel_memory(char *startp, char =
+*endp,
+>
+>  int set_direct_map_invalid_noflush(struct page *page);
+>  int set_direct_map_default_noflush(struct page *page);
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid);
+>  bool kernel_page_present(struct page *page);
+>
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+> index 271d01a5ba4d..d815448758a1 100644
+> --- a/arch/riscv/mm/pageattr.c
+> +++ b/arch/riscv/mm/pageattr.c
+> @@ -386,6 +386,21 @@ int set_direct_map_default_noflush(struct page *page=
+)
+>                             PAGE_KERNEL, __pgprot(_PAGE_EXEC));
+>  }
+>
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid)
+> +{
+> +       pgprot_t set, clear;
+> +
+> +       if (valid) {
+> +               set =3D PAGE_KERNEL;
+> +               clear =3D __pgprot(_PAGE_EXEC);
+> +       } else {
+> +               set =3D __pgprot(0);
+> +               clear =3D __pgprot(_PAGE_PRESENT);
+> +       }
+> +
+> +       return __set_memory((unsigned long)page_address(page), nr, set, c=
+lear);
+> +}
+> +
+>  #ifdef CONFIG_DEBUG_PAGEALLOC
+>  static int debug_pagealloc_set_page(pte_t *pte, unsigned long addr, void=
+ *data)
+>  {
+> diff --git a/arch/s390/include/asm/set_memory.h b/arch/s390/include/asm/s=
+et_memory.h
+> index 06fbabe2f66c..240bcfbdcdce 100644
+> --- a/arch/s390/include/asm/set_memory.h
+> +++ b/arch/s390/include/asm/set_memory.h
+> @@ -62,5 +62,6 @@ __SET_MEMORY_FUNC(set_memory_4k, SET_MEMORY_4K)
+>
+>  int set_direct_map_invalid_noflush(struct page *page);
+>  int set_direct_map_default_noflush(struct page *page);
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid);
+>
+>  #endif
+> diff --git a/arch/s390/mm/pageattr.c b/arch/s390/mm/pageattr.c
+> index 5f805ad42d4c..4c7ee74aa130 100644
+> --- a/arch/s390/mm/pageattr.c
+> +++ b/arch/s390/mm/pageattr.c
+> @@ -406,6 +406,17 @@ int set_direct_map_default_noflush(struct page *page=
+)
+>         return __set_memory((unsigned long)page_to_virt(page), 1, SET_MEM=
+ORY_DEF);
+>  }
+>
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid)
+> +{
+> +       unsigned long flags;
+> +
+> +       if (valid)
+> +               flags =3D SET_MEMORY_DEF;
+> +       else
+> +               flags =3D SET_MEMORY_INV;
+> +
+> +       return __set_memory((unsigned long)page_to_virt(page), nr, flags)=
+;
+> +}
+>  #if defined(CONFIG_DEBUG_PAGEALLOC) || defined(CONFIG_KFENCE)
+>
+>  static void ipte_range(pte_t *pte, unsigned long address, int nr)
+> diff --git a/arch/x86/include/asm/set_memory.h b/arch/x86/include/asm/set=
+_memory.h
+> index 4b2abce2e3e7..cc62ef70ccc0 100644
+> --- a/arch/x86/include/asm/set_memory.h
+> +++ b/arch/x86/include/asm/set_memory.h
+> @@ -89,6 +89,7 @@ int set_pages_rw(struct page *page, int numpages);
+>
+>  int set_direct_map_invalid_noflush(struct page *page);
+>  int set_direct_map_default_noflush(struct page *page);
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid);
+>  bool kernel_page_present(struct page *page);
+>
+>  extern int kernel_set_to_readonly;
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index 44f7b2ea6a07..069e421c2247 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -2444,6 +2444,14 @@ int set_direct_map_default_noflush(struct page *pa=
+ge)
+>         return __set_pages_p(page, 1);
+>  }
+>
+> +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool va=
+lid)
+> +{
+> +       if (valid)
+> +               return __set_pages_p(page, nr);
+> +
+> +       return __set_pages_np(page, nr);
+> +}
+> +
+>  #ifdef CONFIG_DEBUG_PAGEALLOC
+>  void __kernel_map_pages(struct page *page, int numpages, int enable)
+>  {
+> diff --git a/include/linux/set_memory.h b/include/linux/set_memory.h
+> index e7aec20fb44f..3030d9245f5a 100644
+> --- a/include/linux/set_memory.h
+> +++ b/include/linux/set_memory.h
+> @@ -34,6 +34,12 @@ static inline int set_direct_map_default_noflush(struc=
+t page *page)
+>         return 0;
+>  }
+>
+> +static inline int set_direct_map_valid_noflush(struct page *page,
+> +                                              unsigned nr, bool valid)
+> +{
+> +       return 0;
+> +}
+> +
+>  static inline bool kernel_page_present(struct page *page)
+>  {
+>         return true;
 > --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 2.43.0
+>
 
