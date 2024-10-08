@@ -1,114 +1,173 @@
-Return-Path: <linux-csky+bounces-988-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-989-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AD21993E72
-	for <lists+linux-csky@lfdr.de>; Tue,  8 Oct 2024 07:46:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D20C993EEE
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Oct 2024 08:51:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC4FD1C2319F
-	for <lists+linux-csky@lfdr.de>; Tue,  8 Oct 2024 05:46:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 107E31F21E6D
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Oct 2024 06:51:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122087DA8C;
-	Tue,  8 Oct 2024 05:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B9A1CC883;
+	Tue,  8 Oct 2024 06:23:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aQgahom9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLZ7O/Hp"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42CF2905;
-	Tue,  8 Oct 2024 05:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5E1190463;
+	Tue,  8 Oct 2024 06:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728366387; cv=none; b=qqiFGM87aZO+yiN4NMy+oA+y/o/axmFF299hND/ZbkVPHZT1NHpyOyUU5bJeAiU11V3U/Z219V4jlgPa6hwJwseNO5+kEVdctomUvivbF2f9annJmo9OKs8GqY3QgXAXyUrjpith0DA8z+Ewuedua9XhUD1xJYV3PiHuI/2I/eA=
+	t=1728368581; cv=none; b=b0+i7NIf4tZtGEygf48LH97G/5MJNgJD3Lo+n/svHlSRHc5+O8C+ujWoXX1dB4dKEj2fXIFPikjSodmb09XaVgY52wid/yz0lRL9LgnSlpxRbXYqdXDn+jyd3keRyqyanJQcYvX2ML7ELdWGDwMW3UEQOPZXOEWjxptmNQfMw3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728366387; c=relaxed/simple;
-	bh=N/Spo9SDduv0RLowIffYPfGmNx1YtohH9VQK4z1BrSM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AE+grb318TDyJFnFeOfFNgbZS0A0bMIYe7hl6X11H9uG2hNmymSV78rziphngwXnCyM0Px4g5BpiI9orupRH5af+1jilqckBo9xxQkHVFyzEhp6ZY6l/2egPX/kfyI5NAr4vBiYpYqf5dEhcZUehXdfI2Z+Oz5Z0woWIOvDlEMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aQgahom9; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20b7259be6fso57469635ad.0;
-        Mon, 07 Oct 2024 22:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728366385; x=1728971185; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pc93Myxhw5WDTjlUIkYMv2Vf5o3lHuclVJG9aINvVes=;
-        b=aQgahom9TbAgn8J8DOXeff+FkjyKQDzTC4ZWWNPSh8uShbAJGh7yRqB6ArLDXqM+vt
-         0aXBb+nBmodkql7HCUSVAW5gd8wSqLKQVRIZG1ff3WHwO4tvtj1sdcEvd7pHbOBkDB4I
-         DtNGan/6bIFPosNdZfatTSalVu2Lr2oEXpXl90IJHZS6OUF/NP3+gJ0U/Od/fNqHQI5D
-         zgXX3fxqsxj53LMIF/CNNxLMRiOxjKZrUxe7VjXLImy6AhCnsJiNALbZgYFS7/3Tw3Ax
-         I1iVk15B+y6hYKPazhfP9jpj1DfpZkB/FLaYSkQXlBB6OKwsz1bGYJSNojF3gM3sZeKR
-         aBOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728366385; x=1728971185;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pc93Myxhw5WDTjlUIkYMv2Vf5o3lHuclVJG9aINvVes=;
-        b=m6QCO23JxBM0tmIcEBvLEMaINsBe+uMJ6qQS5lyOOMXAxqQmytRxMZoc8CXSZTAGnH
-         bpvuRqj5132vjPyJz5wl6uRWApCK5d9e1GAeA+nqox/qHlOHTBZ8eaupjuM11Oy8jJHc
-         znVOaYdNij2rdn+kHxLD3it43j6jXXX6UftmL+NeTaVAkWv2Qd3utjWoekV69NKkEYrK
-         J50YKZi7AobdFQQEMUghD0Dwx1SoUCtb0h6TZwcmWMTjOi/KPU2YL9+x0JfoWAhFefPT
-         zq7oFogfsBPlSvs+YBzk8n3Km5boHEcbHR2jhVb2FCYRXDv2RffUkRTn8wRT+ggwQbcb
-         0ncQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX2qUylZyQ5V6B8hX0Dom1z66NnxPTcGB/7KW/NDjBjQVc+hk7shxSauBgXCSHLtpwToMHaK09rxTkdf48=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEB5d7s6J+gWooDj2UxGlDcjQs/0D8AEhYqFYdmgi6or8TzFUS
-	sczFyBsge7IhXbfhCFAQt5TUlZTNMd17Ef+kmXv3xdxLxXR6VPK22/qWkUNZ6BI=
-X-Google-Smtp-Source: AGHT+IHxznj5YGFHAoWp8hwcy9eUBWmkaPeX447OgP8eReH1zm/Z/baPjrCgcZTCfhWCxirLxtgdrQ==
-X-Received: by 2002:a17:902:e2d4:b0:20b:b079:5b7a with SMTP id d9443c01a7336-20bff03519fmr136454675ad.50.1728366384899;
-        Mon, 07 Oct 2024 22:46:24 -0700 (PDT)
-Received: from localhost ([202.85.210.186])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c5a90c002sm1136015ad.72.2024.10.07.22.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2024 22:46:24 -0700 (PDT)
-From: Yang Li <yang.li85200@gmail.com>
-To: guoren@kernel.org
-Cc: linux-csky@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yang Li <yang.li85200@gmail.com>
-Subject: [PATCH] csky: fix csky_cmpxchg_fixup not working
-Date: Tue,  8 Oct 2024 13:46:15 +0800
-Message-Id: <20241008054615.43062-1-yang.li85200@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1728368581; c=relaxed/simple;
+	bh=7+OOlYDwjjrmYkugp0zG3rCIOBJXVhabkZlBvijiN0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M+jiP2eICH93Xd25lhaeFb8hoxpl+Au5fgjUGRklcsO4Sm7rSGaAqmt6p2Xka+wAs8DAVY0qTGDKecUG1Qz+3ELSjZns6wXXoJLbFmnYmCVsLTstksO9Q7eNYJjhQwrVrbwf4x8hr7N5qpaYaSKTevBs9vvE0dV+0CTatrl0BcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLZ7O/Hp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C076C4CEC7;
+	Tue,  8 Oct 2024 06:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728368581;
+	bh=7+OOlYDwjjrmYkugp0zG3rCIOBJXVhabkZlBvijiN0Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HLZ7O/HpKqwZhtBX1cNCiAk8EV6vD0WzAl1dR/RILMS7jSHhGDnYDNH2Dzn6ECEly
+	 M0+GSr/JGL8nAopaejPjKSQKa6Jmnx6kHabKvo9FyggKvIK/+rwoLnO5mphSBOrVi8
+	 U9wdgL7Nl7zM0jbSh9FiGcxw5b5J+su+JR+7Gf4XG9wvT3v6GVYlXJH8m3l11OFKZ1
+	 9jEHuFYuJh2kBStvb3JCpXCoRR3L/JiHNjMlM70jCbMyIiQEwYJp2wijiSZ4G1su3J
+	 9j8W/sm+G2yCx41UsRZ1DC/eNueJYqT+Lq5WzrcGaGCVNkuw9bP/AltQfceSnkaSt6
+	 lK+siW3UD/EyQ==
+Date: Tue, 8 Oct 2024 09:19:13 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 5/8] arch: introduce set_direct_map_valid_noflush()
+Message-ID: <ZwTO4S_smfPbP06x@kernel.org>
+References: <20241007062858.44248-1-rppt@kernel.org>
+ <20241007062858.44248-6-rppt@kernel.org>
+ <CAAhV-H4u5qk-Zd8ctiooCv_hGKbDpXRAtTZMMsUab9bbLAnd5A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H4u5qk-Zd8ctiooCv_hGKbDpXRAtTZMMsUab9bbLAnd5A@mail.gmail.com>
 
-In the csky_cmpxchg_fixup function, using the global variable
-csky_cmpxchg_stw to determine the address where the exception
-occurred is incorrect. The global variable csky_cmpxchg_stw
-stores the opcode at the time of the exception, while
-&csky_cmpxchg_stw is the address where the exception occurred.
+Hi Huacai,
 
-Signed-off-by: Yang Li <yang.li85200@gmail.com>
----
- arch/csky/mm/fault.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, Oct 08, 2024 at 10:11:25AM +0800, Huacai Chen wrote:
+> Hi, Mike,
+> 
+> On Mon, Oct 7, 2024 at 2:30 PM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> >
+> > Add an API that will allow updates of the direct/linear map for a set of
+> > physically contiguous pages.
+> >
+> > It will be used in the following patches.
+> >
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > ---
+> >  arch/arm64/include/asm/set_memory.h     |  1 +
+> >  arch/arm64/mm/pageattr.c                | 10 ++++++++++
+> >  arch/loongarch/include/asm/set_memory.h |  1 +
+> >  arch/loongarch/mm/pageattr.c            | 21 +++++++++++++++++++++
+> >  arch/riscv/include/asm/set_memory.h     |  1 +
+> >  arch/riscv/mm/pageattr.c                | 15 +++++++++++++++
+> >  arch/s390/include/asm/set_memory.h      |  1 +
+> >  arch/s390/mm/pageattr.c                 | 11 +++++++++++
+> >  arch/x86/include/asm/set_memory.h       |  1 +
+> >  arch/x86/mm/pat/set_memory.c            |  8 ++++++++
+> >  include/linux/set_memory.h              |  6 ++++++
+> >  11 files changed, 76 insertions(+)
+> >
+> > diff --git a/arch/loongarch/include/asm/set_memory.h b/arch/loongarch/include/asm/set_memory.h
+> > index d70505b6676c..55dfaefd02c8 100644
+> > --- a/arch/loongarch/include/asm/set_memory.h
+> > +++ b/arch/loongarch/include/asm/set_memory.h
+> > @@ -17,5 +17,6 @@ int set_memory_rw(unsigned long addr, int numpages);
+> >  bool kernel_page_present(struct page *page);
+> >  int set_direct_map_default_noflush(struct page *page);
+> >  int set_direct_map_invalid_noflush(struct page *page);
+> > +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool valid);
+> >
+> >  #endif /* _ASM_LOONGARCH_SET_MEMORY_H */
+> > diff --git a/arch/loongarch/mm/pageattr.c b/arch/loongarch/mm/pageattr.c
+> > index ffd8d76021d4..f14b40c968b4 100644
+> > --- a/arch/loongarch/mm/pageattr.c
+> > +++ b/arch/loongarch/mm/pageattr.c
+> > @@ -216,3 +216,24 @@ int set_direct_map_invalid_noflush(struct page *page)
+> >
+> >         return __set_memory(addr, 1, __pgprot(0), __pgprot(_PAGE_PRESENT | _PAGE_VALID));
+> >  }
+> > +
+> > +int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool valid)
+> > +{
+> > +       unsigned long addr = (unsigned long)page_address(page);
+> > +       pgprot_t set, clear;
+> > +
+> > +       return __set_memory((unsigned long)page_address(page), nr, set, clear);
+> This line should be removed.
 
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index a885518ce1dd..87ff26212261 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_regs *regs)
- 	if (trap_no(regs) != VEC_TLBMODIFIED)
- 		return;
+Argh, copy/paste is so hard...
+
+Thanks, will do.
  
--	if (instruction_pointer(regs) == csky_cmpxchg_stw)
--		instruction_pointer_set(regs, csky_cmpxchg_ldw);
-+	if (instruction_pointer(regs) == &csky_cmpxchg_stw)
-+		instruction_pointer_set(regs, &csky_cmpxchg_ldw);
- 	return;
- }
- #endif
--- 
-2.34.1
+> Huacai
 
+-- 
+Sincerely yours,
+Mike.
 
