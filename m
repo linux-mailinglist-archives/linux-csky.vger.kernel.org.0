@@ -1,199 +1,230 @@
-Return-Path: <linux-csky+bounces-1084-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1085-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B9D9999EF2
-	for <lists+linux-csky@lfdr.de>; Fri, 11 Oct 2024 10:24:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9AB099A450
+	for <lists+linux-csky@lfdr.de>; Fri, 11 Oct 2024 15:02:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5301B2111A
-	for <lists+linux-csky@lfdr.de>; Fri, 11 Oct 2024 08:24:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5774A2858B7
+	for <lists+linux-csky@lfdr.de>; Fri, 11 Oct 2024 13:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262C120ADE9;
-	Fri, 11 Oct 2024 08:24:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D779218D83;
+	Fri, 11 Oct 2024 13:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SWkP/aJm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="R19x8WHf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oaq6u26x"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9DC1CB334;
-	Fri, 11 Oct 2024 08:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD882218D69;
+	Fri, 11 Oct 2024 13:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728635053; cv=none; b=oZ2lKJSS+7rGSMeeafYorkJQUsEv08qPp6IzLOE+/GtWOZanL2RK241XPHwJdvAxv5wiuXp4t9bEZmRTms/S17CHSX4FJosEP6FaK3Sr6ekHLI2FtgcKfNMK/aFD3Rsd9ExKqtk8d3YEeM3i1IFQ3ov35I1TMV83JW5d2jh2dc8=
+	t=1728651715; cv=none; b=Qyoiimoe8Ms2p2HcaJ+vIuN+xrB6uhv9YpsdQLKJabgCs0Ii50l7NXielSprcakeUTNDbPtUysZMZPZlQbuBZoLGs3H78ZXZAyAZKNPZjVv8vyYSwhHLfcJzELtYx7MscuDcakpW2iAmj04t1+cl6HCLoTZOsYg00IB7ZdX2rCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728635053; c=relaxed/simple;
-	bh=8EUqwvVY7/NZVo1qP3E37S4ZJrjC+XzHgmrKAQgTsL4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=a+0aLFGwfqyz3OPBBMI4To+bW/q11GZNYX/R/O2WYZfHx1CqbiuNIgC4Afao437SV9RqPiwnKDKoxk7H5ncid4tLcgU1IxJtMUi++xv36BnQpZ2yyg38taqShblfR/c+m8JquPsMbkDl8QroinEdv7p2K2SgHAKOr7Ow9OG5jQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SWkP/aJm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=R19x8WHf; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 437161140112;
-	Fri, 11 Oct 2024 04:24:09 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 11 Oct 2024 04:24:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1728635049;
-	 x=1728721449; bh=UyL+mCcJFkad+Eo1GO8YfBJSki2GXtgM/kCxpSj0AKk=; b=
-	SWkP/aJm/pV3SqODnIlySdfirz1D7can3fMoAIZZ0UBAqQzyE1l7rKpm3JcSTj3B
-	SNT+w6wDA0QRjlJNDjwN4Y4+9MQ20bCm+tqR+S55jmuYEB9Ms5GtPxkgDpSGkSPh
-	TZf11sAkUxwMvUG0VxkRR4O5dBv00BRF4mqzGt1A9WJ/w6VPTQKL1teoXWHbB+0s
-	8Y4gzG1k+DK1ptS5jHfZVUnnSr3yJD0iL8oG/TecQk65E/fwHBwJirVEOKmTfB0e
-	z78S/YthYlQavNwPWQry+OchUdMojKjJzSSuJMEPQS+iFSjwyWVNKEDdgNytDId4
-	zdyhR9l4cATznL92Hh0M/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728635049; x=
-	1728721449; bh=UyL+mCcJFkad+Eo1GO8YfBJSki2GXtgM/kCxpSj0AKk=; b=R
-	19x8WHfJtBQUdyWvNwYDX2IifYZwIwnsXeY7LhBWre0BjTdfWnhvDo7AJ7FCH8f9
-	rTntw46ZPNoNrqh57vL+awtosa8a9GfEIdmv8ZyaU+Qjpmxpa6AoSfOWaO3BiQ1x
-	2BeuqvMea8ii5j98RZs5ET5VeV6UQUbQ/AiFmcHPL94oSHDesrYOxsKewEwBbq4J
-	vVZ0cLlkyiJqF00Asc5MN40QWFPi6TYNwWVueb/8nMFPwQ8C3dPLgtkSU6utwA7j
-	judfccDurlemaARwbgCmqkhSCroTaFbDWWxOjKAUkHh0vF6bk9NQrnsyPd9KEZAt
-	z8mxGgUj4Oga2wI1vgDnA==
-X-ME-Sender: <xms:qOAIZzkwl7WBdDJ1zHKuEZLDEH8ZZ2M73TqLqkobJWlfCyRaMjI_cw>
-    <xme:qOAIZ23aNFE0z4JCS6t8ZebZ0uNzIqGipLjI4pvQczVrT9JV8gXa1alM-DAGJGopv
-    S1YMLY2fVbsnXN2ZtM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefkedgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddu
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegurghvihgurdhlrghighhhthesrg
-    gtuhhlrggsrdgtohhmpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghr
-    mhdrtghomhdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrd
-    gtohhmpdhrtghpthhtohephhgthhesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthho
-    pehjvhgvthhtvghrsehkrghlrhgrhihinhgtrdgtohhmpdhrtghpthhtohephihsihhonh
-    hnvggruheskhgrlhhrrgihihhntgdrtghomhdprhgtphhtthhopegthhgvnhhhuhgrtggr
-    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhuohhrvghnsehkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:qOAIZ5pGm-mwttjOsXR_R05EgkpPfKGoasgvfI-vFcs_cSd2J7CLnw>
-    <xmx:qOAIZ7nXZt_KlwURdKGjvEcW5yfmuXNlmieKtbZUWQogGJQefNwLBg>
-    <xmx:qOAIZx3UaQ0Zr_ZCzNdQaOzDsyrbrvGS2QUmR-28JY4y3y7a_Y_D4A>
-    <xmx:qOAIZ6v6Q_y-mJwMAI8jh5rCVhKsLNTFRkXaYqrPNG4xYquCt9aUzw>
-    <xmx:qeAIZzVsuKpsvUWzdBiUJdNTF4R4Vh65TXEMHmrvTxVT8usO5-wg-_rF>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 19560222006F; Fri, 11 Oct 2024 04:24:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1728651715; c=relaxed/simple;
+	bh=j6FIkJsgrJb7Fy59tSRAkzfdThNSkDRiwl7mc5Gyfrs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lui3SpDtahZHaPTCJziDEtUrwD2PfBBiKXeauK5K+qjqfR2Q2Q/ewELhImdolxa1PbOUES4jOUS8BqybyoOnnJxcSIl5/22kK+Vsen8mOOf4pISca40n2fmHaM8qTPEago80rPSFs5uj1J+78kSB5Kdch4Auo3yuoxkqSG0cd/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oaq6u26x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DABE8C4CECC;
+	Fri, 11 Oct 2024 13:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728651714;
+	bh=j6FIkJsgrJb7Fy59tSRAkzfdThNSkDRiwl7mc5Gyfrs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oaq6u26xuDAEns7R2BMHzk4mIfr5FvGiVAeZZthgyUlPcz06DFRl95J0wmkdOT54S
+	 YxSAeidiUzjAm9FHVkdDWMVY0Rbrih0bi/ggL0JYHKzOopKm6PqY7SOiicdRP66yLH
+	 5VGXr5I3OyVhwrNf1s3DsezlYqKELPmsDJA9V5PkevyRbR9c/cPzuOfoCS+m2Co7l0
+	 +b6MYlu7b05Tu5XRA7HGcdEBXgbkMUXnasokDLcI2U83NwvkTB9/gQY3jZ2G5u5tvh
+	 AFQJNhIyJak3q6KuqIiMeMoh+g8h6wyqQ854Avo5pBLLyOPI6RqZBJ4HC26lw54SRH
+	 zUMItw7kbSuLg==
+Date: Fri, 11 Oct 2024 15:58:04 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 6/8] x86/module: perpare module loading for ROX
+ allocations of text
+Message-ID: <Zwkg3LwlNJOwNWZh@kernel.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-7-rppt@kernel.org>
+ <20241010225411.GA922684@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 11 Oct 2024 08:23:18 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Julian Vetter" <jvetter@kalrayinc.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- guoren <guoren@kernel.org>, "Huacai Chen" <chenhuacai@kernel.org>,
- "WANG Xuerui" <kernel@xen0n.name>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Niklas Schnelle" <schnelle@linux.ibm.com>, "Takashi Iwai" <tiwai@suse.com>,
- "Miquel Raynal" <miquel.raynal@bootlin.com>,
- "David Laight" <David.Laight@aculab.com>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "Christoph Hellwig" <hch@infradead.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
- "Yann Sionneau" <ysionneau@kalrayinc.com>
-Message-Id: <3e6d420e-5e81-4325-b5fd-a1746ff6216f@app.fastmail.com>
-In-Reply-To: <20241010123627.695191-2-jvetter@kalrayinc.com>
-References: <20241010123627.695191-1-jvetter@kalrayinc.com>
- <20241010123627.695191-2-jvetter@kalrayinc.com>
-Subject: Re: [PATCH v9 1/4] Consolidate IO memcpy/memset into iomem_copy.c
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241010225411.GA922684@thelio-3990X>
 
-On Thu, Oct 10, 2024, at 12:36, Julian Vetter wrote:
-> Various architectures have almost the same implementations for
-> memcpy_{to,from}io and memset_io functions. So, consolidate them
-> into a common lib/iomem_copy.c.
->
-> Reviewed-by: Yann Sionneau <ysionneau@kalrayinc.com>
-> Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
-> ---
-> Changes for v9:
-> - Moved all functions to iomem_copy.c
-> - Build the new iomem_copy.c unconditionally
-> - Guard prototypes in asm-generic/io.h with ifdefs
-
-I'm happy with the patch contents, but it looks like you forgot
-to update the description as this is not what this version of the
-patch does: Instead of consolidating the identical versions (which
-you do in patches 2-4), this changes the ones that use the
-memcpy/memset fallback: arc, microblaze, mips, nios2, openrisc,
-riscv, and xtensa.
-
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -102,6 +102,16 @@ static inline void log_post_read_mmio(u64 val, u8 
-> width, const volatile void __i
+On Thu, Oct 10, 2024 at 03:54:11PM -0700, Nathan Chancellor wrote:
+> Hi Mike,
 > 
->  #endif /* CONFIG_TRACE_MMIO_ACCESS */
+> On Wed, Oct 09, 2024 at 09:08:14PM +0300, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > When module text memory will be allocated with ROX permissions, the
+> > memory at the actual address where the module will live will contain
+> > invalid instructions and there will be a writable copy that contains the
+> > actual module code.
+> > 
+> > Update relocations and alternatives patching to deal with it.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > 
-> +#ifndef memcpy_fromio
-> +void memcpy_fromio(void *to, const volatile void __iomem *from, size_t 
-> count);
-> +#endif
-> +#ifndef memcpy_toio
-> +void memcpy_toio(volatile void __iomem *to, const void *from, size_t 
-> count);
-> +#endif
-> +#ifndef memset_io
-> +void memset_io(volatile void __iomem *dst, int c, size_t count);
-> +#endif
-> +
->  /*
->   * __raw_{read,write}{b,w,l,q}() access memory in native endianness.
->   *
-> @@ -1150,58 +1160,6 @@ static inline void 
-> unxlate_dev_mem_ptr(phys_addr_t phys, void *addr)
->  }
->  #endif
+> I bisected a boot failure that I see with CONFIG_CFI_CLANG enabled to
+> this change as commit be712757cabd ("x86/module: perpare module loading
+> for ROX allocations of text") in -next.
+ 
+>   [    0.000000] Linux version 6.12.0-rc2-00140-gbe712757cabd (nathan@n3-xlarge-x86) (ClangBuiltLinux clang version 19.1.0 (https://github.com/llvm/llvm-project.git a4bf6cd7cfb1a1421ba92bca9d017b49936c55e4), ClangBuiltLinux LLD 19.1.0 (https://github.com/llvm/llvm-project.git a4bf6cd7cfb1a1421ba92bca9d017b49936c55e4)) #1 SMP PREEMPT_DYNAMIC Thu Oct 10 22:42:57 UTC 2024
+>   ...
+>   [    0.092204] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
+>   [    0.093207] TAA: Mitigation: TSX disabled
+>   [    0.093711] MMIO Stale Data: Mitigation: Clear CPU buffers
+>   [    0.094228] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+>   [    0.095203] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+>   [    0.096203] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+>   [    0.097203] x86/fpu: Supporting XSAVE feature 0x020: 'AVX-512 opmask'
+>   [    0.098003] x86/fpu: Supporting XSAVE feature 0x040: 'AVX-512 Hi256'
+>   [    0.098203] x86/fpu: Supporting XSAVE feature 0x080: 'AVX-512 ZMM_Hi256'
+>   [    0.099203] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+>   [    0.100204] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+>   [    0.101204] x86/fpu: xstate_offset[5]:  832, xstate_sizes[5]:   64
+>   [    0.102203] x86/fpu: xstate_offset[6]:  896, xstate_sizes[6]:  512
+>   [    0.103204] x86/fpu: xstate_offset[7]: 1408, xstate_sizes[7]: 1024
+>   [    0.104051] x86/fpu: xstate_offset[9]: 2432, xstate_sizes[9]:    8
+>   [    0.104204] x86/fpu: Enabled xstate features 0x2e7, context size is 2440 bytes, using 'compacted' format.
 > 
-> -#ifndef memset_io
-> -#define memset_io memset_io
-> -/**
-> - * memset_io	Set a range of I/O memory to a constant value
-> - * @addr:	The beginning of the I/O-memory range to set
-> - * @val:	The value to set the memory to
-> - * @count:	The number of bytes to set
-> - *
-> - * Set a range of I/O memory to a given value.
-> - */
-> -static inline void memset_io(volatile void __iomem *addr, int value,
-> -			     size_t size)
-> -{
-> -	memset(__io_virt(addr), value, size);
-> -}
-> -#endif
+> then nothing after that. Boot is successful if CFI is not enabled (the
+> initrd will just shutdown the machine after printing the version string).
+> 
+> If there is any further information I can provide or patches I can test,
+> I am more than happy to do so.
 
-Unless there is a technical reason to move the location of
-these I think it would be clearer to change it in place
-and keep the three #ifdef but replace the contents.
+I overlooked how cfi_*_callers routines update addr.
+This patch should fix it:
 
-You can also choose to add the definition in one patch
-and then change the header in the next patch, which would
-let you have more descriptive changelog texts for the
-new common implementation and the second patch that changes
-the fallback.
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 3b3fa93af3b1..cf782f431110 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1148,11 +1148,13 @@ static int cfi_disable_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
++
+ 		if (!hash) /* nocfi callers */
+ 			continue;
+ 
+@@ -1172,11 +1174,12 @@ static int cfi_enable_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
+ 		if (!hash) /* nocfi callers */
+ 			continue;
+ 
+@@ -1249,11 +1252,12 @@ static int cfi_rand_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
+ 		if (hash) {
+ 			hash = -cfi_rehash(hash);
+ 			text_poke_early(wr_addr + 2, &hash, 4);
+@@ -1269,14 +1273,15 @@ static int cfi_rewrite_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
+ 		if (hash) {
+ 			text_poke_early(wr_addr, fineibt_caller_start, fineibt_caller_size);
+-			WARN_ON(*(u32 *)(addr + fineibt_caller_hash) != 0x12345678);
++			WARN_ON(*(u32 *)(wr_addr + fineibt_caller_hash) != 0x12345678);
+ 			text_poke_early(wr_addr + fineibt_caller_hash, &hash, 4);
+ 		}
+ 		/* rely on apply_retpolines() */
+ 
+> Cheers,
+> Nathan
 
-     Arnd
+-- 
+Sincerely yours,
+Mike.
 
