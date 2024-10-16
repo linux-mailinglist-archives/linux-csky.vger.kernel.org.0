@@ -1,351 +1,200 @@
-Return-Path: <linux-csky+bounces-1119-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1120-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10FE79A1085
-	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 19:22:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435B59A1480
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 23:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34F601C216D5
-	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 17:22:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00C5D284017
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 21:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60DAD208208;
-	Wed, 16 Oct 2024 17:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EVmS0PGB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDCBA19340B;
+	Wed, 16 Oct 2024 21:01:14 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD8E188580
-	for <linux-csky@vger.kernel.org>; Wed, 16 Oct 2024 17:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969A94409;
+	Wed, 16 Oct 2024 21:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729099333; cv=none; b=IK90D7qMJ6grtx0dFHTk1ThvZKCXIQJya8FmMEx2otOmak8bhtuOpJQPTNctc9TwjK2KzYTm8tyK6xWMDhjx1KWwDjESF3xF1ZSPXcBn9th23us3UDBJE/4GY/5E/fVB7vsGMvBsW3gdErd4q8hY42/BTG4WrwxkR9TUm0TzI3I=
+	t=1729112474; cv=none; b=J8Rg8wu5SSEo+fuMdV1I1MgSncStWregB9qzlUe3OH6+C2m93jwILQ7f53AvsSfUFIHYeOXpDRvnJ6PoluGEioahxcj0HBqmEq7fMbXgfb3SH/sscaoLwY9DqNGG07E8TAB8cQapBs+BbAK+sjZ2YLMeZ8VQBzv3brncZ1MPbxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729099333; c=relaxed/simple;
-	bh=p58YBz3mCPXRx1C11mdVr8nwYV1zD8w5IVKOwatxwVQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=ikthfYUS9oUaHRxE5ee+fngYiwBpMK7pk/hufOw5PIipWTuvOIsCqD0BxrxgPBpejkWRYqV+qTV/tX8sb5obkKvsZDE4ba1xpipKZcG2dL4ZMxVtgbp7YuZqEVlaVBspbuF4oe3ANZN5TOex0iizCGnNqX6tbSy9f6w3bP1ovnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EVmS0PGB; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-45fb0ebb1d0so14681cf.1
-        for <linux-csky@vger.kernel.org>; Wed, 16 Oct 2024 10:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729099329; x=1729704129; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zj4BpFF+3EfK+Q7KXtfS5PCqNKdGjX8auqgD68MCSp4=;
-        b=EVmS0PGBXCFACvmHpk/SZaVRk+ECkTRVYwGZqU0CkAE0RQ2oyS69K24DMMHM4NiVNi
-         Kyez95jYZXhh5XyuPKWSnHqr5BDx0smhzAtvHH3OpYE49+CSE24ZrS1lJ+ZcbTAi5Agr
-         widrJ+mliQcj+MhB+e09c1yu056ftCoFTlAepTSiY3FbwlIX4tOHpbNZBCV5cnqma3aH
-         eRWTzKOBATwiC4x0bvTVKpTX5hPLncJPX7LlJZHupbIBNv3EGSe8kUqM7MVm+s23SPM2
-         tTyrb1EOlv8Z+Y+gFzyx4yjmsrzdUh2V7/Mok/rWOWYEr1SNWDy6qorcoScU6MBFLUtN
-         uNPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729099329; x=1729704129;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zj4BpFF+3EfK+Q7KXtfS5PCqNKdGjX8auqgD68MCSp4=;
-        b=kJrUWRSgukWGkJoeYhRQfMwDXRxcTS/NpEPB+Ukar0f+cb1ok7a6ZwKwMT1qJGjRft
-         TIr17qz9mfEgbK63BtyFuTnekgy6puKuROuNzZ1s682BFl6tBwyXUP8xwJMAqnui+bMP
-         0000Q6coqr4d/381/SrnLI4Qew6FMrsNSSmfd+nkzLfv1kUWnX6r6r2Qv0gqcWU3AwUV
-         oSNHuQdRWVNJNmK/H8cunz10AaWSNmUftROtzTAefDKEBIAdfn3OyVX16a5aguBfOAbo
-         bDAOakmWi0czYNswH99BWsXgy/YYLCAlfRFGCtDFlDj+/AeN0ENoyGGvCYtNCGOdMvap
-         6PYg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTOOkpumEfHzpl40XsyDlStgEHAROb4+FzwkCR4go0HrgjglqWmA2bmX+xhuBMcug6DjFogwBLINmP@vger.kernel.org
-X-Gm-Message-State: AOJu0YxN4jKr5HhtASYmG5rBfUfRAjKGwmGx9cXPj5lP7xSkL7n2eYU8
-	v7bZJz1cMkXmGf+qE2nrrzCQQLcfB32IS08CNQY7jvQSKBWqaFH8OD5TrvET9kWJJG6HdT7PWj2
-	B6cq/DhboPgmvmjAGTqSqjX+uQRL6G71+MYV5
-X-Google-Smtp-Source: AGHT+IFUP4wwgDPU5xadFsW2+YtAxm/ZRXMJCUO2VUwq3pewJ3T2QBLtcH9PvvF/iU6uJ9WXqPBDfTPSkeLB94Bg/as=
-X-Received: by 2002:a05:622a:4512:b0:45f:924:6bcd with SMTP id
- d75a77b69052e-4608dbdc93emr6646781cf.22.1729099329189; Wed, 16 Oct 2024
- 10:22:09 -0700 (PDT)
+	s=arc-20240116; t=1729112474; c=relaxed/simple;
+	bh=k1HVXdWEl9r8b7TWbb3PEMrECBBSUgCGgBCTB9XVEhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PDvAwy44qOXyIlxo2VEJZMmt/uf1OoV/oqh3lVQECuGpwf1OjZUj1xX+5Q0WJNY9tCSMFRbUbonmF5e+BWDwEfjb8wXCj14LaTMHKDYiKIzGtAVXMoR4qesJzACFJt/8TkhX5H7K4a54o5D5v+G3vReN5nQsXJHdrmmFdxB8Lwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368BFC4CEC5;
+	Wed, 16 Oct 2024 21:01:07 +0000 (UTC)
+Date: Wed, 16 Oct 2024 17:01:28 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski
+ <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
+ <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
+ Hellwig <hch@infradead.org>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
+ <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
+ Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
+ <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>, Max Filippov
+ <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek
+ <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, Richard
+ Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu
+ <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Suren Baghdasaryan
+ <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <20241016170128.7afeb8b0@gandalf.local.home>
+In-Reply-To: <20241016122424.1655560-7-rppt@kernel.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+	<20241016122424.1655560-7-rppt@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241005195541.380070-1-irogers@google.com>
-In-Reply-To: <20241005195541.380070-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 16 Oct 2024 10:21:55 -0700
-Message-ID: <CAP-5=fVZH3L-6y_sxLwSmT8WyMXDMFnuqUksNULdQYJCPNBFYw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/31] Libdw/dwarf build clean up
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
-	Will Deacon <will@kernel.org>, James Clark <james.clark@linaro.org>, 
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Nick Terrell <terrelln@fb.com>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
-	Guilherme Amadio <amadio@gentoo.org>, Changbin Du <changbin.du@huawei.com>, 
-	Daniel Bristot de Oliveira <bristot@kernel.org>, Daniel Wagner <dwagner@suse.de>, 
-	Aditya Gupta <adityag@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kajol Jain <kjain@linux.ibm.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, Bibo Mao <maobibo@loongson.cn>, 
-	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@rivosinc.com>, 
-	Shenlin Liang <liangshenlin@eswincomputing.com>, Oliver Upton <oliver.upton@linux.dev>, 
-	"Steinar H. Gunderson" <sesse@google.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
-	Chen Pei <cp0613@linux.alibaba.com>, Dima Kogan <dima@secretsauce.net>, 
-	Yury Norov <yury.norov@gmail.com>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 5, 2024 at 12:55=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> There patches are on top of:
-> https://lore.kernel.org/lkml/20240924003720.617258-1-irogers@google.com/
-> where it was pointed out that a lot of the libdw conditional
-> compilation was due to features that have now been standard for 10 or
-> 15 years. The patches remove the conditional compilation assuming the
-> features are in libdw where the feature test is expanded to check
-> there pressence.
->
-> In the Makefile code, and for `perf record --call-graph`, dwarf tends
-> to mean unwind or libdw support for dwarf things. To make it clearer
-> when dwarf really just means libdw numerous build variables and
-> defines are renamed. PERF_HAVE_DWARF_REGS was particularly tricky and
-> has been removed as it isn't necessary as was somewhat inversely
-> guarding libdw support. The Makefile variable indicated an
-> architecture having a dwarf-regs.c file. This file contained code for
-> BPF prologues, which were removed with BPF event support. The files
-> also often just contained a redundant get_arch_regstr function. The
-> function was redundant as get_dwarf_regstr would do the appropriate
-> thing if the ELF machine were given. To remove get_arch_regstr the ELF
-> machine is computed for the host machine. This now makes the logic
-> work across platforms, but the testing I was able to do across
-> platforms was minimal.
+On Wed, 16 Oct 2024 15:24:22 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-It would be nice if these patches could land as they remove quite a
-bit of code and complexity. To recap:
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 8da0e66ca22d..b498897b213c 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+>  		return ret;
+>  
+>  	/* replace the text with the new text */
+> -	if (ftrace_poke_late)
+> +	if (ftrace_poke_late) {
+>  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> -	else
+> -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> +	} else {
+> +		mutex_lock(&text_mutex);
+> +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> +		mutex_unlock(&text_mutex);
+> +	}
+>  	return 0;
+>  }
 
-1) there are initial patches trying to renaming dwarfy things to libdw
-things to be more intention revealing. There was some initial concern
-wrt PERF_HAVE_DWARF_REGS and so the series has now removed that
-variable as explained next. I believe landing the first part of the
-patches was agreed upon as okay (Masami/Namhyung).
+So this slows down the boot by over 30ms. That may not sound like much, but
+we care very much about boot times. This code is serialized with boot and
+runs whenever ftrace is configured in the kernel. The way I measured this,
+was that I added:
 
-2) PERF_HAVE_DWARF_REGS indicated the presence of dwarf-regs.c in the
-arch directory. dwarf-regs.c provided upto 3 functions:
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 4dd0ad6c94d6..b72bb9943140 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -104,6 +104,8 @@ static int ftrace_verify_code(unsigned long ip, const char *old_code)
+ 	return 0;
+ }
+ 
++u64 sdr_total;
++
+ /*
+  * Marked __ref because it calls text_poke_early() which is .init.text. That is
+  * ok because that call will happen early, during boot, when .init sections are
+@@ -114,6 +116,8 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+ 			  const char *new_code)
+ {
+ 	int ret = ftrace_verify_code(ip, old_code);
++	u64 start, stop;
++
+ 	if (ret)
+ 		return ret;
+ 
+@@ -121,9 +125,12 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+ 	if (ftrace_poke_late) {
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+ 	} else {
++		start = trace_clock_local();
+ 		mutex_lock(&text_mutex);
+ 		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+ 		mutex_unlock(&text_mutex);
++		stop = trace_clock_local();
++		sdr_total += stop - start;
+ 	}
+ 	return 0;
+ }
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index c01375adc471..93284557144d 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -10738,6 +10738,11 @@ __init static int tracer_alloc_buffers(void)
+ 
+ 	register_snapshot_cmd();
+ 
++	{
++		extern u64 sdr_total;
++		printk("SDR TOTAL: %lld\n", sdr_total);
++	}
++
+ 	test_can_verify();
+ 
+ 	return 0;
 
-2.1) regs_query_register_offset would translate a register name into a
-pt_regs offset and was used by BPF prologues. BPF prologues existed
-for BPF events and support for these was removed many releases ago.
-This code was dead and could be removed.
 
-2.2) get_arch_regstr duplicated get_dwarf_regstr and so it could be
-removed as Masami agreed:
-https://lore.kernel.org/lkml/20241007171942.e96d5c520e065bbe4cf8ae5f@kernel=
-.org/
-The case for csky was a little more complicated as the ABI controlled
-the string. The callers of get_dwarf_regstr were updated to also pass
-the ELF flags so that on csky the appropriate table could be used. As
-the argument is only used on csky this a no-op for everything else.
+And did the same before this patch. I ran it three times and have the
+following numbers (all in nanoseconds):
 
-2.3) get_arch_regnum translated a register name back to a dwarf number
-and only existed on x86 where "al", "ax", "eax" and "rax" could all
-mean register 0. This code was moved to util with similar
-machine/flags logic to get_arch_regstr and for consistency with it.
+before: 11356637	11863526	11507750
+ after: 43978750	41293162	42741067
 
-2.2 and 2.3 required the wiring through of the ELF machine and flags
-in callers to get_dwarf_regstr and get_dwarf_regnum. When these values
-weren't dependent on an ELF file a new EM_HOST and EF_HOST were added
-to give the host ELF machine and flags. These 2 #defines got rid of
-the existing separate arch files and #ifdefs.
+Before this patch, the total updates took 11ms. After the patch it takes
+around 42ms. This is because we are patching 59 thousand sites with this.
 
-So what's changed? On most architectures we're now passing ELF flags
-to get_dwarf_regstr/regnum but these are unused unless we're on csky.
-There's the get_dwarf_regstr simplification in 2.2, but I think we're
-agreed that's fine. For 2.3 most of the concern seemed to be whether
-we should put it in the arch directory or util, I prefer util so that
-cross-platform perf.data recording/reporting is supported. Other than
-this there was a call for demonstrating what happens with the wiring
-up the cross-platform ELF machine/flags. To some extent this worked
-before this series, this series really just fixes the plumbing so it
-will work in more EM_NONE machine type cases, etc. Fixing
-cross-platform isn't the intent of the series, cleaning up the code
-base is, so I don't think this should gate landing the work. The code
-is all well tested on the normal non-cross-platform case.
+# dmesg |grep ftrace
+[    1.620569] ftrace: allocating 59475 entries in 233 pages
+[    1.667178] ftrace: allocated 233 pages with 5 groups
 
-Removing 21 files, 703 lines of code and making the build variables
-and defines more intention revealing feels like progress, so I'd like
-for this to land.
 
-Thanks,
-Ian
+If this is only needed for module load, can we at least still use the
+text_poke_early() at boot up?
 
-> There is some tech debt in the changes as perf check still reports the
-> values using the old name and for features that are no longer
-> tested. This can be cleanup for another day.
->
-> v2: Instead of renaming PERF_HAVE_DWARF_REGS to PERF_HAVE_LIBDW_REGS,
->     remove it.
->
-> Ian Rogers (31):
->   perf build: Fix !HAVE_DWARF_GETLOCATIONS_SUPPORT
->   perf build: Rename NO_DWARF to NO_LIBDW
->   perf build: Remove defined but never used variable
->   perf build: Rename test-dwarf to test-libdw
->   perf build: Combine libdw-dwarf-unwind into libdw feature tests
->   perf build: Combine test-dwarf-getlocations into test-libdw
->   perf build: Combine test-dwarf-getcfi into test-libdw
->   perf probe: Move elfutils support check to libdw check
->   perf libdw: Remove unnecessary defines
->   perf build: Rename HAVE_DWARF_SUPPORT to HAVE_LIBDW_SUPPORT
->   perf build: Rename CONFIG_DWARF to CONFIG_LIBDW
->   perf bpf-prologue: Remove unused file
->   perf dwarf-regs: Remove PERF_HAVE_ARCH_REGS_QUERY_REGISTER_OFFSET
->   perf dwarf-regs: Add EM_HOST and EF_HOST defines
->   perf disasm: Add e_machine/e_flags to struct arch
->   perf dwarf-regs: Pass accurate disassembly machine to get_dwarf_regnum
->   perf dwarf-regs: Pass ELF flags to get_dwarf_regstr
->   perf dwarf-regs: Move x86 dwarf-regs out of arch
->   perf arm64: Remove dwarf-regs.c
->   perf arm: Remove dwarf-regs.c
->   perf dwarf-regs: Move csky dwarf-regs out of arch
->   perf loongarch: Remove dwarf-regs.c
->   perf mips: Remove dwarf-regs.c
->   perf dwarf-regs: Move powerpc dwarf-regs out of arch
->   perf riscv: Remove dwarf-regs.c and add dwarf-regs-table.h
->   perf s390: Remove dwarf-regs.c
->   perf sh: Remove dwarf-regs.c
->   perf sparc: Remove dwarf-regs.c
->   perf xtensa: Remove dwarf-regs.c
->   perf dwarf-regs: Remove get_arch_regstr code
->   perf build: Remove PERF_HAVE_DWARF_REGS
->
->  tools/build/Makefile.feature                  |  11 +-
->  tools/build/feature/Makefile                  |  24 +--
->  tools/build/feature/test-all.c                |  16 +-
->  tools/build/feature/test-dwarf.c              |  11 --
->  tools/build/feature/test-dwarf_getcfi.c       |   9 --
->  tools/build/feature/test-dwarf_getlocations.c |  13 --
->  tools/build/feature/test-libdw-dwarf-unwind.c |  14 --
->  tools/build/feature/test-libdw.c              |  56 +++++++
->  tools/perf/Documentation/perf-check.txt       |   6 +-
->  tools/perf/Makefile.config                    |  58 ++-----
->  tools/perf/Makefile.perf                      |   2 +-
->  tools/perf/arch/arc/annotate/instructions.c   |   2 +
->  tools/perf/arch/arm/Makefile                  |   3 -
->  tools/perf/arch/arm/annotate/instructions.c   |   2 +
->  tools/perf/arch/arm/util/Build                |   2 -
->  tools/perf/arch/arm/util/dwarf-regs.c         |  61 -------
->  tools/perf/arch/arm64/Makefile                |   4 -
->  tools/perf/arch/arm64/annotate/instructions.c |   2 +
->  tools/perf/arch/arm64/util/Build              |   1 -
->  tools/perf/arch/arm64/util/dwarf-regs.c       |  92 -----------
->  tools/perf/arch/csky/Makefile                 |   4 -
->  tools/perf/arch/csky/annotate/instructions.c  |   7 +-
->  tools/perf/arch/csky/util/Build               |   1 -
->  tools/perf/arch/loongarch/Makefile            |   4 -
->  .../arch/loongarch/annotate/instructions.c    |   2 +
->  tools/perf/arch/loongarch/util/Build          |   1 -
->  tools/perf/arch/loongarch/util/dwarf-regs.c   |  44 -----
->  tools/perf/arch/mips/Makefile                 |   4 -
->  tools/perf/arch/mips/annotate/instructions.c  |   2 +
->  tools/perf/arch/mips/util/Build               |   1 -
->  tools/perf/arch/mips/util/dwarf-regs.c        |  38 -----
->  tools/perf/arch/powerpc/Makefile              |   5 -
->  .../perf/arch/powerpc/annotate/instructions.c |   6 +-
->  tools/perf/arch/powerpc/util/Build            |   3 +-
->  tools/perf/arch/powerpc/util/dwarf-regs.c     | 153 ------------------
->  tools/perf/arch/riscv/Makefile                |   5 +-
->  .../arch/riscv/include/dwarf-regs-table.h     |  42 +++++
->  tools/perf/arch/riscv/util/Build              |   1 -
->  tools/perf/arch/riscv/util/dwarf-regs.c       |  72 ---------
->  .../perf/arch/riscv64/annotate/instructions.c |   2 +
->  tools/perf/arch/s390/Makefile                 |   4 -
->  tools/perf/arch/s390/annotate/instructions.c  |   2 +
->  tools/perf/arch/s390/util/Build               |   1 -
->  tools/perf/arch/s390/util/dwarf-regs.c        |  43 -----
->  tools/perf/arch/sh/Build                      |   1 -
->  tools/perf/arch/sh/Makefile                   |   4 -
->  tools/perf/arch/sh/util/Build                 |   1 -
->  tools/perf/arch/sh/util/dwarf-regs.c          |  41 -----
->  tools/perf/arch/sparc/Build                   |   1 -
->  tools/perf/arch/sparc/Makefile                |   4 -
->  tools/perf/arch/sparc/annotate/instructions.c |   2 +
->  tools/perf/arch/sparc/util/Build              |   1 -
->  tools/perf/arch/sparc/util/dwarf-regs.c       |  39 -----
->  tools/perf/arch/x86/Makefile                  |   4 -
->  tools/perf/arch/x86/annotate/instructions.c   |   5 +-
->  tools/perf/arch/x86/util/Build                |   3 -
->  tools/perf/arch/x86/util/dwarf-regs.c         | 153 ------------------
->  tools/perf/arch/xtensa/Build                  |   1 -
->  tools/perf/arch/xtensa/Makefile               |   4 -
->  tools/perf/arch/xtensa/util/Build             |   1 -
->  tools/perf/arch/xtensa/util/dwarf-regs.c      |  21 ---
->  tools/perf/builtin-annotate.c                 |   2 +-
->  tools/perf/builtin-check.c                    |   6 +-
->  tools/perf/builtin-probe.c                    |  14 +-
->  tools/perf/builtin-report.c                   |   4 +-
->  tools/perf/util/Build                         |  15 +-
->  tools/perf/util/annotate-data.h               |   8 +-
->  tools/perf/util/annotate.c                    |   6 +-
->  tools/perf/util/bpf-prologue.h                |  37 -----
->  tools/perf/util/debuginfo.h                   |   6 +-
->  tools/perf/util/disasm.c                      |   4 +-
->  tools/perf/util/disasm.h                      |   8 +-
->  tools/perf/util/dwarf-aux.c                   |   6 -
->  tools/perf/util/dwarf-aux.h                   |  53 ------
->  .../dwarf-regs.c =3D> util/dwarf-regs-csky.c}   |  19 +--
->  tools/perf/util/dwarf-regs-powerpc.c          |  61 +++++++
->  tools/perf/util/dwarf-regs-x86.c              |  50 ++++++
->  tools/perf/util/dwarf-regs.c                  |  38 +++--
->  tools/perf/util/genelf.c                      |   4 +-
->  tools/perf/util/genelf.h                      |   2 +-
->  tools/perf/util/include/dwarf-regs.h          | 114 ++++++++++---
->  tools/perf/util/probe-event.c                 |   4 +-
->  tools/perf/util/probe-finder.c                |  19 +--
->  tools/perf/util/probe-finder.h                |   9 +-
->  84 files changed, 454 insertions(+), 1157 deletions(-)
->  delete mode 100644 tools/build/feature/test-dwarf.c
->  delete mode 100644 tools/build/feature/test-dwarf_getcfi.c
->  delete mode 100644 tools/build/feature/test-dwarf_getlocations.c
->  delete mode 100644 tools/build/feature/test-libdw-dwarf-unwind.c
->  create mode 100644 tools/build/feature/test-libdw.c
->  delete mode 100644 tools/perf/arch/arm/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/arm64/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/csky/Makefile
->  delete mode 100644 tools/perf/arch/loongarch/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/mips/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/powerpc/util/dwarf-regs.c
->  create mode 100644 tools/perf/arch/riscv/include/dwarf-regs-table.h
->  delete mode 100644 tools/perf/arch/riscv/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/s390/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/sh/Build
->  delete mode 100644 tools/perf/arch/sh/Makefile
->  delete mode 100644 tools/perf/arch/sh/util/Build
->  delete mode 100644 tools/perf/arch/sh/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/sparc/Build
->  delete mode 100644 tools/perf/arch/sparc/util/Build
->  delete mode 100644 tools/perf/arch/sparc/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/x86/util/dwarf-regs.c
->  delete mode 100644 tools/perf/arch/xtensa/Build
->  delete mode 100644 tools/perf/arch/xtensa/Makefile
->  delete mode 100644 tools/perf/arch/xtensa/util/Build
->  delete mode 100644 tools/perf/arch/xtensa/util/dwarf-regs.c
->  delete mode 100644 tools/perf/util/bpf-prologue.h
->  rename tools/perf/{arch/csky/util/dwarf-regs.c =3D> util/dwarf-regs-csky=
-.c} (74%)
->  create mode 100644 tools/perf/util/dwarf-regs-powerpc.c
->  create mode 100644 tools/perf/util/dwarf-regs-x86.c
->
-> --
-> 2.47.0.rc0.187.ge670bccf7e-goog
->
+ 	if (ftrace_poke_late) {
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+	} else if (system_state == SYSTEM_BOOTING) {
+		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+ 	} else {
+ 		mutex_lock(&text_mutex);
+ 		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+ 		mutex_unlock(&text_mutex);
+ 	}
+
+?
+
+The above if statement looks to slow things down just slightly, but only by
+2ms, which is more reasonable.
+
+-- Steve
 
