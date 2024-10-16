@@ -1,120 +1,141 @@
-Return-Path: <linux-csky+bounces-1105-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1106-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EF3B9A062E
-	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 11:56:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4CAC9A07AB
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 12:44:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39F791F23BCF
-	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 09:56:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 023861C27145
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 10:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F29820604C;
-	Wed, 16 Oct 2024 09:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B39E4206E84;
+	Wed, 16 Oct 2024 10:44:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0tssgJ1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tu7R+TE5"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89F91B78F3;
-	Wed, 16 Oct 2024 09:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2C41C9DC8;
+	Wed, 16 Oct 2024 10:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729072595; cv=none; b=Ldoq1NLzJymi8ZpKW4EEpJO+6ONOdHz5XBlmyOngM+aMIZtO3w+W52lDAJW+l79MnrgB89Tadu7f9ijipZcJfpcqHcM9vLVXhFKK7QMJr4uGhKzpd7ThM7YxwVp0zpmtKxhzDJWQVYk7vtausSCV9rk3OAa31IGcomlUeuZWKOo=
+	t=1729075491; cv=none; b=aVJRpJeeuCfA088n8apUXU0J5NhbVjFC9mVuT2HJGHLyYg6mnblpCpdRvSAw9GhAd1joR7jWlTKI+mvLjXF30seoUMpqAT5CzOpijDDdcDSoYMOi2005uf17czDoaIAmSBs0ZVkaabazWsQ/eSy86ou5vq3CnfZOg5JlQ7MuPq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729072595; c=relaxed/simple;
-	bh=nITX4l5cqP0y7EEZ7tQeL0WLMHfL/LyZRt/gFUg95m8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q2jiT9AilAGhK0YBgHHt+KyZc6BP1vgNW3zplnqoHxBIpKGQ0ytJu125TYR82wiqp7h6+XjNqHvQgMoafjBouLsrNGv2pYBJKzCsd/eUIzz/F7oKClqM5ev2gOWCS0Lpy7uPCicIypn1s2wfoqQdhkjd4D8ewQY5Q3EGufSw0u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d0tssgJ1; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-71e49ef3b2bso3418760b3a.2;
-        Wed, 16 Oct 2024 02:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729072593; x=1729677393; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E3yNxgct7QY44bG7w60XotfbN9PqaxadBpIDEsrxKZI=;
-        b=d0tssgJ1E+B3h+Kmc1Arm/Eweaa46ZDyfzmwsVODFp6G5fO9Tp1Z3qI0qtcykj47V5
-         lU1OBCxEmDQKl0ZWrMVaKqVUQokMdCPyhuOARiMOHosDS7hNoVq5c0PYIqUukdoIDg1m
-         xTW2nNuDfM5iESRAQV99ZkmdoV1S2+Q4PugpDaVQXokmTWvRz+VRLBLgtxiyi19+X9tk
-         b98vRXn5rPAHNwP0s/EdTDz2cu2UBe5hRARTcUwwufmUxnzumgqb2btPUeRyoMiujqun
-         SxXruPSITtgXW8so4GDsLqAPrQ/dMGA5r+oOjc+r3H/pKFEEz+c0NdnlTXlECl7sTHox
-         L1GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729072593; x=1729677393;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E3yNxgct7QY44bG7w60XotfbN9PqaxadBpIDEsrxKZI=;
-        b=AONlypKpQ1GX/1H/KzU201THnRL+9E1xygbXYouDw0Q8RB4j2TDDFgBkAw7THDucag
-         XRToNOqFs4VrTwCpb3m5HuV5Wax3DWWiR3ovAQVkn1fzjNTQ98u+4JQX+hD6hue1WIKC
-         CNVlgQtlFwhsIZh9XIDY+3U5BktFH58/5aC0BqrWbwMUZQQ/pY3qPCNuj4LeoW4yFPRe
-         T4ewQH49q9ZGmnbZf4d8AxMjAalj6mdS2vPpVVsGloMXfCNbPgPKzFcn8QJfp5CsdO8Q
-         X44tv8DLMHvq0tJs8b1e7ae4j2R0t/TxyH0XNS36ocH6bYO7+P7ct/F29vMBvUhFc0zl
-         jEPw==
-X-Forwarded-Encrypted: i=1; AJvYcCU52ttHO/krGz18ajvoX5hkH8jQbU1ZBw0dusjRpbbbrzxMve80TYTqv8SbzUcuXEjVWrwwTQSx70uwxWQ9@vger.kernel.org, AJvYcCWZQNuvrT9UOGNUeD23G3Odn408vVD1bulLO8sEV7AA87VUsa7yuJOgVJUOuhHY5MVP5PQLRd81pnht@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaF5jRemv+DYR0+lt5i18b/yvlqZGgF/sJr22p1TaX6YElslqs
-	4Xpx8nSMNDa8y4xcRaxktGCV5GbmRO40ysgErT7oi7MmBd2wYUx1
-X-Google-Smtp-Source: AGHT+IFcz0yc81Apz/niZRH1c8GvcpfAlXt/Rr+JESn0CLZRy9SMDtYy1hlbLHmPYLcM9H2gyiJwOg==
-X-Received: by 2002:aa7:88cf:0:b0:71e:4c86:6594 with SMTP id d2e1a72fcca58-71e4c866d85mr22837310b3a.10.1729072592864;
-        Wed, 16 Oct 2024 02:56:32 -0700 (PDT)
-Received: from localhost ([202.85.210.186])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e84982905sm763996b3a.96.2024.10.16.02.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2024 02:56:32 -0700 (PDT)
-From: Yang Li <yang.li85200@gmail.com>
-To: yang.li85200@gmail.com
-Cc: guoren@kernel.org,
-	linux-csky@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] csky: fix csky_cmpxchg_fixup not working
-Date: Wed, 16 Oct 2024 17:56:26 +0800
-Message-Id: <20241016095626.8162-1-yang.li85200@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241008054615.43062-1-yang.li85200@gmail.com>
-References: <20241008054615.43062-1-yang.li85200@gmail.com>
+	s=arc-20240116; t=1729075491; c=relaxed/simple;
+	bh=REY0yUs/eb8jGqS7iPmNLu0O7M3zjCPm2K1uOQnlIfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YfWqYCZ0cda3DGVYPs/1s0FKMi5bcMzksfVhVb4m9JqnkyLoKypMooWDasO+QH4lkeuomcSO3EsCGRhsBuK76A/7ZWyq3+1BRSR4FxRaGOAZQKiK4RJSp3s/O4dcYZhMj5IIAIvpfwBHMQ5W/pJ1MHu50HBhB8mFYDHZZsHrQl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tu7R+TE5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A439EC4CEC5;
+	Wed, 16 Oct 2024 10:44:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729075491;
+	bh=REY0yUs/eb8jGqS7iPmNLu0O7M3zjCPm2K1uOQnlIfY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tu7R+TE5l4rMjxEyzDDIH6fpt5ZNmC1c7xJx7SQDlI9CzDxMt5yOQnVYNAW9hdV8J
+	 OeaDo9Hr12xvhUKQgId1tm4/CewmMpWCLOk3wgiUJwXyvWq4QlFB+Uh/pOgd95q0F1
+	 zyNekZpzro5oJZ2JEUpyorUNUZLep/wgUFWwzFdkGHL+BF7JNIRifDS33KF/5qGC2v
+	 jYrUvBLfr/xZZ4LfL7bWflm1YPeuIUzgGbLP+eWNj7AbuOUcsPGdhrgXCl4uUGrO38
+	 j9PqqivnqqmoYQsjfU9edkgWUJ3Ic8/MVLUiY8xlv+pKvbZQmwKQdokHEcp8hCdCUB
+	 nLnfE4mx3UK6g==
+Date: Wed, 16 Oct 2024 13:40:55 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org, kdevops@lists.linux.dev
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zw-YN4JIltntY52Y@kernel.org>
+References: <20241009180816.83591-8-rppt@kernel.org>
+ <Zwd7GRyBtCwiAv1v@infradead.org>
+ <ZwfPPZrxHzQgYfx7@kernel.org>
+ <ZwjXz0dz-RldVNx0@infradead.org>
+ <ZwuIPZkjX0CfzhjS@kernel.org>
+ <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
+ <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
+ <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
+ <Zw4DlTTbz4QwhOvU@kernel.org>
+ <Zw7MirnsHnhRveBB@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zw7MirnsHnhRveBB@bombadil.infradead.org>
 
-In the csky_cmpxchg_fixup function, it is incorrect to use the global
- variable csky_cmpxchg_stw to determine the address where the exception
- occurred.The global variable csky_cmpxchg_stw stores the opcode at the
- time of the exception, while &csky_cmpxchg_stw shows the address where
- the exception occurred.
+On Tue, Oct 15, 2024 at 01:11:54PM -0700, Luis Chamberlain wrote:
+> On Tue, Oct 15, 2024 at 08:54:29AM +0300, Mike Rapoport wrote:
+> > On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
+> > > Mike, please run this with kmemleak enabled and running, and also try to get
+> > > tools/testing/selftests/kmod/kmod.sh to pass.
+> > 
+> > There was an issue with kmemleak, I fixed it here:
+> > 
+> > https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
+> 
+> Ah, so this was a side fix, not part of this series, thanks.
+> 
+> > > I run into silly boot issues with just a guest.
+> > 
+> > Was it kmemleak or something else?
+> 
+> Both kmemleak and the kmod selftest failed, here is a run of the test
+> with this patch series:
+> 
+> https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11352286624/job/31574722735
 
-Signed-off-by: Yang Li <yang.li85200@gmail.com>
----
-V1 -> V2:Eliminate compilation warnings
-
- arch/csky/mm/fault.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index a885518ce1dd..5226bc08c336 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_regs *regs)
- 	if (trap_no(regs) != VEC_TLBMODIFIED)
- 		return;
+Is there a kernel log to look at? Could not find it in the run report
  
--	if (instruction_pointer(regs) == csky_cmpxchg_stw)
--		instruction_pointer_set(regs, csky_cmpxchg_ldw);
-+	if (instruction_pointer(regs) == (unsigned long)&csky_cmpxchg_stw)
-+		instruction_pointer_set(regs, (unsigned long)&csky_cmpxchg_ldw);
- 	return;
- }
- #endif
--- 
-2.34.1
+>   Luis
 
+-- 
+Sincerely yours,
+Mike.
 
