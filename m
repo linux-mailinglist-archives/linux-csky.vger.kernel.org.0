@@ -1,105 +1,75 @@
-Return-Path: <linux-csky+bounces-1103-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1104-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 043C999F7E8
-	for <lists+linux-csky@lfdr.de>; Tue, 15 Oct 2024 22:12:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5217299FEB1
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 04:13:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 368D51C2138B
-	for <lists+linux-csky@lfdr.de>; Tue, 15 Oct 2024 20:12:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1E5EB24A34
+	for <lists+linux-csky@lfdr.de>; Wed, 16 Oct 2024 02:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 288461F8180;
-	Tue, 15 Oct 2024 20:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09F714884C;
+	Wed, 16 Oct 2024 02:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NeA6yj5h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mcz53zZk"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC27D1B3936;
-	Tue, 15 Oct 2024 20:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2798013C807;
+	Wed, 16 Oct 2024 02:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729023120; cv=none; b=flCsEz+TU8eycGVeQoWJkRTr17a7UmKJZislmuBLfNA6sjQytuSJx6B3nGQUtgkdN+hfwDAWid6sszyIMUBwUYClyMFrF42Fyhu1byCCiPDAHKSXeCWx+8G8kEdXu9tryTz0c6KxW+OLVzyyxWiiACa2569OXbdYWfVyZ+ywkfI=
+	t=1729044825; cv=none; b=EvpRzYiN4Q1pcwI0P660GjuEuRnYC/6zkVGYfwcFmwowrjyLSgiRp5Y3kTnaP35AFoiYBvBKFzUji3w83b2lhxWPtHSNgJa3P6LxkkO9Sh2iIOjWvJazuG9V+FWOv7dt3s9S0y2mFWQx1GYPUT1JI6iGX0x37bkCqYSsui5nP8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729023120; c=relaxed/simple;
-	bh=Y6PhmBa/nN+iDUxTFqcR/Mb33RbOlJl9A4RsS6bV0b4=;
+	s=arc-20240116; t=1729044825; c=relaxed/simple;
+	bh=pLHR8sgV1YYQCR3HgSpvj06ZJH7LDxDS5GNtuTzF37I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vh7lmVVpJqvfT2SuyTn01QJQPSrNqOINo1fmqe0P++7LKpc+a7oe7d2sBQw0SCHjpZfwrGDP+Vqtlu6EVwfKHSZN3mGjoCyaqag5LelnjsPyKKzYBJcSPjHWwBpPiy/sZZb8tMw7v2E3jk9A0vxXbRHdO0Jjadx65pR0YDiQrNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NeA6yj5h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB4EC4CEC6;
-	Tue, 15 Oct 2024 20:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729023118;
-	bh=Y6PhmBa/nN+iDUxTFqcR/Mb33RbOlJl9A4RsS6bV0b4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NeA6yj5hajfLYEdkGLWG8XB5N4aid73nUjDZb/ugsyZ3AQoALVnXt8x2U69teh7bp
-	 +Jxn6eME2rpnC6+5s7BU9sn0TueSyVekqQmYatz9jkvCTO794aSB0wivMugKOyBQcF
-	 f12fUI4D7cG8AqwuNBz90ooW8BLJGSzfYerkziVJS4gVWwzpr6llRoBCSoxKz8d+Fs
-	 0rPGTZgvQEw9IByGG03TdQUKWcviEE7gexwsotoi1Pu3fbgseCJrzYVZZZHzQHsDOS
-	 xg878mky4sIBNDtU8Y7CZD0UtD4jLkQQWx+cO7Oq3WKQ8DmXAZc3hC28g+NG7SbCgU
-	 uBbk2RUOwLABQ==
-Date: Tue, 15 Oct 2024 13:11:54 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org, kdevops@lists.linux.dev
-Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <Zw7MirnsHnhRveBB@bombadil.infradead.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-8-rppt@kernel.org>
- <Zwd7GRyBtCwiAv1v@infradead.org>
- <ZwfPPZrxHzQgYfx7@kernel.org>
- <ZwjXz0dz-RldVNx0@infradead.org>
- <ZwuIPZkjX0CfzhjS@kernel.org>
- <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
- <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
- <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
- <Zw4DlTTbz4QwhOvU@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hUM1NSlH1sSbPw0h8s0KtATOXNTcWiPhBqq+xXdtssD/QVA0z+/3tfCGX5M4xElDj4jd3SkMpBNU0CSsnCRcN08+MYuIsnkNRS4tQyJnAw+LiYH4GUAIcck5TMEt+QBZPzC/k4aHnjhogvi5Kzl6Fno/pdYh7GmB3T4lKl6AHo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mcz53zZk; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729044824; x=1760580824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pLHR8sgV1YYQCR3HgSpvj06ZJH7LDxDS5GNtuTzF37I=;
+  b=mcz53zZki+5X9TMsUxfQxBDE3QkKftISG0uiBzdhz/pM9bdo/NZ4ZF/H
+   k/L1K8JhETSICTU44EYfe+pbuVsfjk58DnXRhn45STz3vjn5OFhoRnu8+
+   ANI6OkyUCy+tFI8S7euyesTeOEHO7d+5XmsTdUfQFPbjCH8KQjyPVHvzq
+   RDESaP08yAcFEWll4VmwgHwMXuVubIqIxV4asJj+6CO5CuV+aK9az+Dbe
+   iDoIikoGr9BOYXgygAz35W6/vhERjqyAIR4BC2SclKCHHAkYl/bx1VUbT
+   8noCjpPY+hVRS2eVgws/DYzCChjW0uBXgUrxWwtEKrq+4d7gHuNW9AODB
+   A==;
+X-CSE-ConnectionGUID: f+LlYrrdQQa5DwGDHWohvQ==
+X-CSE-MsgGUID: ZPW1/Mw6R82xiSHGs/DPTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="45950691"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="45950691"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 19:13:44 -0700
+X-CSE-ConnectionGUID: dKtKS4fOSgCcrnwxRcQPLg==
+X-CSE-MsgGUID: SBDcVXBHRh6IYvtfdIXW2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,206,1725346800"; 
+   d="scan'208";a="77702802"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 15 Oct 2024 19:11:06 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t0tV9-000KAF-2e;
+	Wed, 16 Oct 2024 02:11:03 +0000
+Date: Wed, 16 Oct 2024 10:10:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yang Li <yang.li85200@gmail.com>, guoren@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-csky@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Yang Li <yang.li85200@gmail.com>
+Subject: Re: [PATCH] csky: fix csky_cmpxchg_fixup not working
+Message-ID: <202410160952.7oClZ4pG-lkp@intel.com>
+References: <20241008054615.43062-1-yang.li85200@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -108,37 +78,80 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zw4DlTTbz4QwhOvU@kernel.org>
+In-Reply-To: <20241008054615.43062-1-yang.li85200@gmail.com>
 
-On Tue, Oct 15, 2024 at 08:54:29AM +0300, Mike Rapoport wrote:
-> On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
-> > Mike, please run this with kmemleak enabled and running, and also try to get
-> > tools/testing/selftests/kmod/kmod.sh to pass.
-> 
-> There was an issue with kmemleak, I fixed it here:
-> 
-> https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
+Hi Yang,
 
-Ah, so this was a side fix, not part of this series, thanks.
+kernel test robot noticed the following build errors:
 
-> > I run into silly boot issues with just a guest.
-> 
-> Was it kmemleak or something else?
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.12-rc3 next-20241015]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Both kmemleak and the kmod selftest failed, here is a run of the test
-with this patch series:
+url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Li/csky-fix-csky_cmpxchg_fixup-not-working/20241008-134806
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20241008054615.43062-1-yang.li85200%40gmail.com
+patch subject: [PATCH] csky: fix csky_cmpxchg_fixup not working
+config: csky-allnoconfig (https://download.01.org/0day-ci/archive/20241016/202410160952.7oClZ4pG-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241016/202410160952.7oClZ4pG-lkp@intel.com/reproduce)
 
-https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11352286624/job/31574722735
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410160952.7oClZ4pG-lkp@intel.com/
 
-We now have automated tests generated when people post patches to
-linux-modules, but if you give me your github username you can push
-onto the linux-kdevops/linux-modules-kpd [0] repo a random branch once you
-have it ready, just cp -a the linux-ci-modules/.github [1] directory onto
-your branch before a push and that'll trigger a test run (you need to
-git add -f .github on your Linux branch) with our self-hosted runners.
+All error/warnings (new ones prefixed by >>):
 
-[0] https://github.com/linux-kdevops/linux-modules-kpd
-[1] https://github.com/linux-kdevops/kdevops-ci-modules
+   arch/csky/mm/fault.c: In function 'csky_cmpxchg_fixup':
+>> arch/csky/mm/fault.c:48:39: warning: comparison between pointer and integer
+      48 |         if (instruction_pointer(regs) == &csky_cmpxchg_stw)
+         |                                       ^~
+>> arch/csky/mm/fault.c:49:47: error: passing argument 2 of 'instruction_pointer_set' makes integer from pointer without a cast [-Wint-conversion]
+      49 |                 instruction_pointer_set(regs, &csky_cmpxchg_ldw);
+         |                                               ^~~~~~~~~~~~~~~~~
+         |                                               |
+         |                                               long unsigned int *
+   In file included from arch/csky/include/asm/processor.h:8,
+                    from arch/csky/include/asm/thread_info.h:10,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/current.h:6,
+                    from ./arch/csky/include/generated/asm/current.h:1,
+                    from include/linux/mutex.h:14,
+                    from include/linux/notifier.h:14,
+                    from include/linux/kprobes.h:21,
+                    from arch/csky/mm/fault.c:5:
+   arch/csky/include/asm/ptrace.h:29:58: note: expected 'long unsigned int' but argument is of type 'long unsigned int *'
+      29 |                                            unsigned long val)
+         |                                            ~~~~~~~~~~~~~~^~~
 
-  Luis
+
+vim +/instruction_pointer_set +49 arch/csky/mm/fault.c
+
+    34	
+    35	#ifdef CONFIG_CPU_HAS_LDSTEX
+    36	static inline void csky_cmpxchg_fixup(struct pt_regs *regs)
+    37	{
+    38		return;
+    39	}
+    40	#else
+    41	extern unsigned long csky_cmpxchg_ldw;
+    42	extern unsigned long csky_cmpxchg_stw;
+    43	static inline void csky_cmpxchg_fixup(struct pt_regs *regs)
+    44	{
+    45		if (trap_no(regs) != VEC_TLBMODIFIED)
+    46			return;
+    47	
+  > 48		if (instruction_pointer(regs) == &csky_cmpxchg_stw)
+  > 49			instruction_pointer_set(regs, &csky_cmpxchg_ldw);
+    50		return;
+    51	}
+    52	#endif
+    53	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
