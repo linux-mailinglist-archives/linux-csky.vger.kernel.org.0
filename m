@@ -1,127 +1,156 @@
-Return-Path: <linux-csky+bounces-1155-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1156-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C40169A1A6C
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Oct 2024 08:05:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F5E69A1E80
+	for <lists+linux-csky@lfdr.de>; Thu, 17 Oct 2024 11:35:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 001211C2034A
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Oct 2024 06:05:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08674280D46
+	for <lists+linux-csky@lfdr.de>; Thu, 17 Oct 2024 09:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E070D16E892;
-	Thu, 17 Oct 2024 06:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13A2A1D8E0F;
+	Thu, 17 Oct 2024 09:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6E59cY7"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XiFI8B0o"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69F920E3;
-	Thu, 17 Oct 2024 06:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B117B12DD8A;
+	Thu, 17 Oct 2024 09:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729145102; cv=none; b=YjrTctQzX9/JmkwzNxfMEQ9RCFP3sddOHCFQcFdCHRRz7CWpLSVhRw8jPtJLhKA+jBOHdm8Y4eRtQfz4HcdMzto+7RANJ38n1tPocxyWhFLSEBOoJH78G8SEtA1c5bwOMtBpB3nFszV3BJq/fGcpQPYRBgE+7KRchjOF5ZblO9U=
+	t=1729157722; cv=none; b=UpUiOJbtw8iZ3OKHSVxebF+uGWLS8vNm2NCm+hvjhRvzS2cSuF5i2BybNOXgS1e/q+R9OGC+eO0ah6MfCRnpLzk/zuGv45PoEU/Zp1N9Jc0xyA48Ep4am3M+4T/Hg5H16vBQPCu6DnlPnCIg/EOdSROTCR9MDx3Ji3ywBIqg9Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729145102; c=relaxed/simple;
-	bh=t1HnCydS0atSYI/AGcOQFR+eukRX/dfYhPbg8mMxkOg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SecwDDtGsC5uL86q/TlI7E/SbNNjM8Ppe3cfHMCYoqqb7b9m0LkK2nfLGM03aQuGGSSVvlNs7KsFv3bobCwiUiCjMXccJxzVV/ewWHuvLI94QFk3eSnNVQFSbPi4iZscT1xbrCIKipAlcxv6VwRkrdq1aU/r3Uyhi5994DyXLm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6E59cY7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5B4C4CEC3;
-	Thu, 17 Oct 2024 06:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729145102;
-	bh=t1HnCydS0atSYI/AGcOQFR+eukRX/dfYhPbg8mMxkOg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=h6E59cY7HtIXuLhOF5NPKvzWs8TyfwU49D0uYv4Uo7rO8jlkoVuzKsXChW5PE559d
-	 B7NJLAFbE3ZwhqAfcYrGvA6yrCHaoTt0x7S6TvT/jmC6JoMK4gwDmo2uYFz24iH+NG
-	 t4kF4L8umcwrQZ4vysQuSkZHsERht0eT+PmHSzT16w5c27WZUUCC7KXGFNliFn4X7w
-	 ICnU+uGc4G/vOIBJJ0NqJeCm+0FMyGNpEtzh8aJxkAeEaUJTVtYLF2ua80ui/ZXcLv
-	 TsS1nX202kpEZkrl+/WxYMWduhHIiQsb7UX6BOJw13tmvbVBoH+ZHutnYjKkyEWmlg
-	 zJsbrPzJbHLVg==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c96df52c52so695164a12.1;
-        Wed, 16 Oct 2024 23:05:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUoz16WgJRi9s0dkISg4+laanzb+T7FGo+nH27Or7fOW9f52idn1Afel2Oy5CjCA2Rnv4VRRVBBVZcsV+o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm2qPyaxHsVAtytyHd8L+NzwLty3b9DJuP3zQFNvDxsH3r4fVb
-	82CHgu+WUDoKSbbeuPtuAa3D1VzsltxE1X0TpvjTE50lr4atsoBSsObbqZ5pzhd86i9H9AjcDDD
-	Vbk0A9Fm0qYHkJR5Tb58b0FywaF8=
-X-Google-Smtp-Source: AGHT+IFy9ktPvvSG7d7EbKwJZdWQWk4IaHwQ/GuH/sYXtfkd2At0LwgewwZ53gH+DCidLAld2f1Q0TR2Ufq61untAYA=
-X-Received: by 2002:a05:6402:13c3:b0:5c9:218d:7071 with SMTP id
- 4fb4d7f45d1cf-5c95ac1776cmr14288236a12.20.1729145100724; Wed, 16 Oct 2024
- 23:05:00 -0700 (PDT)
+	s=arc-20240116; t=1729157722; c=relaxed/simple;
+	bh=ped3950d54S9hAnLeEAj3X1RF7de8yQC2eJe9g2KexQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sv8MyB8pyytV987E6kqqqbg5g6m9STWTSaQnrT5pgPr5TxCrkicKeIMX69tWBC7ej3UzeOdtxQQw+sespwseuMEdqKv9krABRrG1s6oIFQEi8RksbUHoPXDRQHjNM4Grc+2QyIkS9yxMiEEipChXZtYelJcxlisohlhB27DhJaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XiFI8B0o; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=VVu7cX1SI2+XfnYlKmwbrDG3+CJWOAmt2jAl9wbUo9k=; b=XiFI8B0ovduSIe40JjuY242meO
+	1tWdoXPB8Y4u6FvdJlkOh0pr/b+ptTLEARYM4Fz0YcPpgeZ6S8vIFL3pv7C67je495kkW38x9jgPx
+	kZcvMosNEICP21MaeTfL4OcNrqj3D/g6hBzGdP9sE2b36zBWvYJp4QWDybwMxKdlcL3ZpeYi7ki7+
+	suQtk2YIywEtSE8+GUQPkWxddDo9J2uY+LZoII7Oa4V1WDt8U55u9QC4d2zaOtcNPZVh6JsT6n2VV
+	yz3mabQVBKOF3bVpb3D/1s3d5tFfjBLa1mZAU7RdfOnmovvB/POi51RCfYsgOa7ik7FCs2q+EK5D6
+	fjlJqizw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t1Mua-000000075pF-1RkI;
+	Thu, 17 Oct 2024 09:35:17 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id EF73A3005AF; Thu, 17 Oct 2024 11:35:15 +0200 (CEST)
+Date: Thu, 17 Oct 2024 11:35:15 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <20241017093515.GU16066@noisy.programming.kicks-ass.net>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-7-rppt@kernel.org>
+ <20241016170128.7afeb8b0@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008054615.43062-1-yang.li85200@gmail.com> <20241016095626.8162-1-yang.li85200@gmail.com>
-In-Reply-To: <20241016095626.8162-1-yang.li85200@gmail.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Thu, 17 Oct 2024 14:04:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ5D8fU9rSs7V28S9c5+ZPuQSJW7inQtoFsM6X6gBgOKg@mail.gmail.com>
-Message-ID: <CAJF2gTQ5D8fU9rSs7V28S9c5+ZPuQSJW7inQtoFsM6X6gBgOKg@mail.gmail.com>
-Subject: Re: [PATCH v2] csky: fix csky_cmpxchg_fixup not working
-To: Yang Li <yang.li85200@gmail.com>
-Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241016170128.7afeb8b0@gandalf.local.home>
 
-On Wed, Oct 16, 2024 at 5:56=E2=80=AFPM Yang Li <yang.li85200@gmail.com> wr=
-ote:
->
-> In the csky_cmpxchg_fixup function, it is incorrect to use the global
->  variable csky_cmpxchg_stw to determine the address where the exception
->  occurred.The global variable csky_cmpxchg_stw stores the opcode at the
->  time of the exception, while &csky_cmpxchg_stw shows the address where
->  the exception occurred.
->
-> Signed-off-by: Yang Li <yang.li85200@gmail.com>
-> ---
-> V1 -> V2:Eliminate compilation warnings
->
->  arch/csky/mm/fault.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-> index a885518ce1dd..5226bc08c336 100644
-> --- a/arch/csky/mm/fault.c
-> +++ b/arch/csky/mm/fault.c
-> @@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_regs *r=
-egs)
->         if (trap_no(regs) !=3D VEC_TLBMODIFIED)
->                 return;
->
-> -       if (instruction_pointer(regs) =3D=3D csky_cmpxchg_stw)
-> -               instruction_pointer_set(regs, csky_cmpxchg_ldw);
-> +       if (instruction_pointer(regs) =3D=3D (unsigned long)&csky_cmpxchg=
-_stw)
-> +               instruction_pointer_set(regs, (unsigned long)&csky_cmpxch=
-g_ldw);
-csky_cmpxchg_ldw(stw) is a label symbol, not a variable.
+On Wed, Oct 16, 2024 at 05:01:28PM -0400, Steven Rostedt wrote:
+> On Wed, 16 Oct 2024 15:24:22 +0300
+> Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> > index 8da0e66ca22d..b498897b213c 100644
+> > --- a/arch/x86/kernel/ftrace.c
+> > +++ b/arch/x86/kernel/ftrace.c
+> > @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+> >  		return ret;
+> >  
+> >  	/* replace the text with the new text */
+> > -	if (ftrace_poke_late)
+> > +	if (ftrace_poke_late) {
+> >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> > -	else
+> > -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > +	} else {
+> > +		mutex_lock(&text_mutex);
+> > +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > +		mutex_unlock(&text_mutex);
+> > +	}
+> >  	return 0;
+> >  }
+> 
+> So this slows down the boot by over 30ms. That may not sound like much, but
+> we care very much about boot times. This code is serialized with boot and
+> runs whenever ftrace is configured in the kernel. The way I measured this,
+> was that I added:
+> 
 
-arch/csky/kernel/atomic.S:
-GLOBAL(csky_cmpxchg_ldw)
-GLOBAL(csky_cmpxchg_stw)
+> If this is only needed for module load, can we at least still use the
+> text_poke_early() at boot up?
 
-Your modification does not affect the ASM output.
+Right, so I don't understand why this is needed at all.
+ftrace_module_init() runs before complete_formation() which normally
+switches to ROX, as such ftrace should be able to continue to do direct
+modifications here.
 
-(gdb) p main
-$1 =3D {void (void)} 0x5fa <main>
-(gdb) p &main
-$2 =3D (void (*)(void)) 0x5fa <main>
-
->         return;
->  }
->  #endif
-> --
-> 2.34.1
->
-
-
---=20
-Best Regards
- Guo Ren
+Which reminds me, at some point I did patches adding a
+MODULE_STATE_UNFORMED callback in order for static_call / jump_label to
+be able to avoid the expensive patching on module load as well (arguably
+ftrace should be using that too, instead of a custom callback).
 
