@@ -1,108 +1,193 @@
-Return-Path: <linux-csky+bounces-1159-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1160-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFA349A26B5
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Oct 2024 17:34:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FFF69A3904
+	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 10:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8612D288AE9
-	for <lists+linux-csky@lfdr.de>; Thu, 17 Oct 2024 15:34:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7382E1C246F4
+	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 08:47:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1C511DE880;
-	Thu, 17 Oct 2024 15:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEFDC190051;
+	Fri, 18 Oct 2024 08:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhRDr5Lu"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE421DDC1D;
-	Thu, 17 Oct 2024 15:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B13E18EFF1;
+	Fri, 18 Oct 2024 08:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729179286; cv=none; b=gnkhFvfIsu1e3HXAQQ2xmPowsyDUcMGry6bQHA523GDl70ZhP9o0Lj/44tvt1x0gThEazKiMzor+JB6PxB87NjTNcVORw7nCOqyepIfheT86U/Mw/amFEhJBnVNjQmg+biQI3SNfNun/WAk+f9XLqJjwM7I5g0MPV3xOcTKixVs=
+	t=1729241217; cv=none; b=Pkrl7bs/gqutoIAsULzxzawFpB/p1ZYrU7w4cyvQvpO2a1YKW7BFT4rQz/7sVYfrfq/gGLph6+AuGxK5Je6JyM+oLdSWgGjmNyGTiaC+Cg1rzciMDUJZk45/nUKlOCr5rlE7370WOa0MnysHysxASpV4xpyJM9qDVoflaTgAns4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729179286; c=relaxed/simple;
-	bh=nzTlkeEckY4SDdkxVWF1AoJhGSXOvj0VWFdu9nVmTI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lfb0X/j8HiT1wP4TwY80yI0sauTal+b2h5MP3DYOhz4YMUghfURHMluSo+UQUrUs8cyaW7hkNWvzoobTjZIzK/9l+i3RNO8rsxPKDzIEp2a++sJy1ffu+wGM3YD0BbR+nZJLofsx+CSfUZT8ljG+uomntP+0pdczqk66dYeSdxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1027DC4CECD;
-	Thu, 17 Oct 2024 15:34:38 +0000 (UTC)
-Date: Thu, 17 Oct 2024 11:35:02 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Andrew Morton
- <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, Andreas
- Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Ard
- Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Borislav
- Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen
- <dave.hansen@linux.intel.com>, Dinh Nguyen <dinguyen@kernel.org>, Geert
- Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge
- Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
- Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
- <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>, Max Filippov
- <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek
- <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Richard Weinberger <richard@nod.at>, Russell King
- <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, Stafford Horne
- <shorne@gmail.com>, Suren Baghdasaryan <surenb@google.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
- <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
- allocations of text
-Message-ID: <20241017113453.685ba175@gandalf.local.home>
-In-Reply-To: <ZxD0EVBoO-jcxEGE@kernel.org>
-References: <20241016122424.1655560-1-rppt@kernel.org>
-	<20241016122424.1655560-7-rppt@kernel.org>
-	<20241016170128.7afeb8b0@gandalf.local.home>
-	<20241017093515.GU16066@noisy.programming.kicks-ass.net>
-	<ZxD0EVBoO-jcxEGE@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729241217; c=relaxed/simple;
+	bh=tfE4V3W8ykmNE09bvwGw+LdTUj5YFdV78WhZB/lzxR8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZgGnR1+USbOyVF8hQUZNOb21yDjTmyfCn1uUkQbasWVh4OPUtkOLjZ9mSUWOkeZn29kNx/u6hBQCwCft0SYV1284Na0UhO4WV1N8vZLGwqdC+q4ZcgGFYo3j6EWc+UDNaEkrmaE27Sfs48WAU0bUOfc3+Jn15KRtMC4fMQQotzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhRDr5Lu; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2fb561f273eso19334181fa.2;
+        Fri, 18 Oct 2024 01:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729241214; x=1729846014; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ftsjmpU0affWST2ixW5xYnYew3ZAwBw9E/4OsheRmi8=;
+        b=fhRDr5LuL+r5j+pmpagL/+glG2lj5zgm+ErqVXvfsjBUm8MHMmk+WSzIHytYq+qTgm
+         OT3XxEerpnFfAyZ+jlEdbieqv/thVquj9npRuTSt80NiBw2Lro2kBWokjeiUdz3srq6+
+         q/CpPnH4CTNiGxB6u2EtftW3UWV7boRoV8t9uKG2gaSWLZQt6ypNVmZwVIE+Lnpmoj7O
+         0SgniLxJLNHUsIXR7Cr2Cxa3Kv9+pKx8uTrd7uKGc5yCdNtSaBNDQuWCBmP60LtUpjXq
+         rODcXT1LwuuxlX+4PmSc9lmvmnI2X4UtIGcFZM9RkWemTPZssXjkv+mZvPSSrwI+Q5fs
+         HA1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729241214; x=1729846014;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ftsjmpU0affWST2ixW5xYnYew3ZAwBw9E/4OsheRmi8=;
+        b=DAGLDAbpMIS+pmCx/SNyZShDGU2GOtMZBun4+ldP5BxR3zBxX1t3XwnrrIe5//6Uue
+         +B0J4tkE7PM6vBqiYddompDD5szLXGGfai5AHO2kybcANKyxJyiGeiOX1MDLrzqV4Zfc
+         yURA1dasFVplBdRK5mmTNGFPNIvbFjieeEvUz9oxPQbBD93xW82L2bx5tkSJE/AS1q/u
+         10f3rhmxIgj0yKE7IzlLTZVPl6bG75cN1pDJeUCM16V0LHyeqIR1AEecmkpsaIL1Kun4
+         pg8IoISR9RpE7WOVkUAaCYWEk+S80OvoKK0VwjmGQjqF9AALmSGb7wy1ocH14nLQvazQ
+         ouqg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcaALFTUaxdaATezby4ffYuWS0c1v3nA9a26uW5WvvFWsRMr1hNQXUxaKfMfFoHx9asFR2uk77YWKjqtE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWp+oTSeLYcAG36FPPU47dQG/E4ljflX1ObSGIRiC0ACK8VHTA
+	mgwtwHMFmgNpPEi3lz4FnLCEcur8k4LXL1/giPXSAcRDX80yNbTIP8rNQvLcY2joweaNqBhonW3
+	Vl0RreKYCfP85hsF626sAejI4p2zG8ZneiQdl1sDg
+X-Google-Smtp-Source: AGHT+IEXYTlUVTz6d9hr6wtJg18uXsksAynXi0Q8ifViYQ6L4DUtCzdSzNGLed1bEO0ib551F1BEc3HUTw69WFEA1x4=
+X-Received: by 2002:a2e:4a19:0:b0:2fa:d84a:bd83 with SMTP id
+ 38308e7fff4ca-2fb82fb1e9dmr5696031fa.24.1729241213929; Fri, 18 Oct 2024
+ 01:46:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20241008054615.43062-1-yang.li85200@gmail.com>
+ <20241016095626.8162-1-yang.li85200@gmail.com> <CAJF2gTQ5D8fU9rSs7V28S9c5+ZPuQSJW7inQtoFsM6X6gBgOKg@mail.gmail.com>
+ <CA+N+=zu0=scmv9w7iZE2ZebxBVpvVb1eeoJ-qi=vhac-JhLthg@mail.gmail.com>
+In-Reply-To: <CA+N+=zu0=scmv9w7iZE2ZebxBVpvVb1eeoJ-qi=vhac-JhLthg@mail.gmail.com>
+From: yang li <yang.li85200@gmail.com>
+Date: Fri, 18 Oct 2024 16:46:42 +0800
+Message-ID: <CA+N+=zsB=wd2G-nsYT9xxvsgBMtnOMUJb8ru8XHaqusX2nzzEg@mail.gmail.com>
+Subject: Re: [PATCH v2] csky: fix csky_cmpxchg_fixup not working
+To: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 17 Oct 2024 14:25:05 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+Hi Guo Ren:
+I used the readelf tool to view the address of csky_cmpxchg_ldw,
+and used printk("0x%x\n",csky_cmpxchg_ldw) and
+printk("0x%x\n",&csky_cmpxchg_ldw) to print it out in the code.
+ The result is that printk("0x%x\n",&csky_cmpxchg_ldw) prints the
+correct result.
 
-> With this series the module text is allocated as ROX at the first place, so
-> the modifications ftrace does to module text have to either use text poking
-> even before complete_formation() or deal with a writable copy like I did
-> for relocations and alternatives.
-> 
-> I've been carrying the ftrace changes from a very old prototype and
-> didn't pay enough attention to them them until Steve's complaint.
-> 
-> I'll look into it.
+include/linux/linkage.h
+#define GLOBAL(name)  \
+        .globl name ASM_NL \
+        name:
+#endif
 
-I just posted a patch where you can see the effects of these changes with
-respect to ftrace patching times.
+arch/csky/kernel/atomic.S:
+GLOBAL(csky_cmpxchg_ldw)
+so
+.globl  csky_cmpxchg_ldw   --->globl symbol
+csky_cmpxchg_ldw:             --->label symbol
 
-  https://lore.kernel.org/all/20241017113105.1edfa943@gandalf.local.home/
 
-I'll be adding this to the next merge window.
-
--- Steve
+yang li <yang.li85200@gmail.com> =E4=BA=8E2024=E5=B9=B410=E6=9C=8818=E6=97=
+=A5=E5=91=A8=E4=BA=94 16:33=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Guo Ren:
+> I used the readelf tool to view the address of csky_cmpxchg_ldw,
+> and used printk("0x%x\n",csky_cmpxchg_ldw) and
+> printk("0x%x\n",&csky_cmpxchg_ldw) to print it out in the code.
+>  The result is that printk("0x%x\n",&csky_cmpxchg_ldw) prints the
+> correct result.
+>
+> include/linux/linkage.h
+> #define GLOBAL(name)  \
+>         .globl name ASM_NL \
+>         name:
+> #endif
+>
+> arch/csky/kernel/atomic.S:
+> GLOBAL(csky_cmpxchg_ldw)
+> so
+> .globl  csky_cmpxchg_ldw   --->globl symbol
+> csky_cmpxchg_ldw:             --->label symbol
+>
+>
+>
+>
+> Guo Ren <guoren@kernel.org> =E4=BA=8E2024=E5=B9=B410=E6=9C=8817=E6=97=A5=
+=E5=91=A8=E5=9B=9B 14:05=E5=86=99=E9=81=93=EF=BC=9A
+>>
+>> On Wed, Oct 16, 2024 at 5:56=E2=80=AFPM Yang Li <yang.li85200@gmail.com>=
+ wrote:
+>> >
+>> > In the csky_cmpxchg_fixup function, it is incorrect to use the global
+>> >  variable csky_cmpxchg_stw to determine the address where the exceptio=
+n
+>> >  occurred.The global variable csky_cmpxchg_stw stores the opcode at th=
+e
+>> >  time of the exception, while &csky_cmpxchg_stw shows the address wher=
+e
+>> >  the exception occurred.
+>> >
+>> > Signed-off-by: Yang Li <yang.li85200@gmail.com>
+>> > ---
+>> > V1 -> V2:Eliminate compilation warnings
+>> >
+>> >  arch/csky/mm/fault.c | 4 ++--
+>> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+>> > index a885518ce1dd..5226bc08c336 100644
+>> > --- a/arch/csky/mm/fault.c
+>> > +++ b/arch/csky/mm/fault.c
+>> > @@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_regs=
+ *regs)
+>> >         if (trap_no(regs) !=3D VEC_TLBMODIFIED)
+>> >                 return;
+>> >
+>> > -       if (instruction_pointer(regs) =3D=3D csky_cmpxchg_stw)
+>> > -               instruction_pointer_set(regs, csky_cmpxchg_ldw);
+>> > +       if (instruction_pointer(regs) =3D=3D (unsigned long)&csky_cmpx=
+chg_stw)
+>> > +               instruction_pointer_set(regs, (unsigned long)&csky_cmp=
+xchg_ldw);
+>> csky_cmpxchg_ldw(stw) is a label symbol, not a variable.
+>>
+>> arch/csky/kernel/atomic.S:
+>> GLOBAL(csky_cmpxchg_ldw)
+>> GLOBAL(csky_cmpxchg_stw)
+>>
+>> Your modification does not affect the ASM output.
+>>
+>> (gdb) p main
+>> $1 =3D {void (void)} 0x5fa <main>
+>> (gdb) p &main
+>> $2 =3D (void (*)(void)) 0x5fa <main>
+>>
+>> >         return;
+>> >  }
+>> >  #endif
+>> > --
+>> > 2.34.1
+>> >
+>>
+>>
+>> --
+>> Best Regards
+>>  Guo Ren
 
