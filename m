@@ -1,193 +1,203 @@
-Return-Path: <linux-csky+bounces-1160-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1161-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FFF69A3904
-	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 10:47:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F3059A446E
+	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 19:15:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7382E1C246F4
-	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 08:47:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D2CD1F2327A
+	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 17:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEFDC190051;
-	Fri, 18 Oct 2024 08:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB311202F65;
+	Fri, 18 Oct 2024 17:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhRDr5Lu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cbvFbEbb"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B13E18EFF1;
-	Fri, 18 Oct 2024 08:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E3918C03B;
+	Fri, 18 Oct 2024 17:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729241217; cv=none; b=Pkrl7bs/gqutoIAsULzxzawFpB/p1ZYrU7w4cyvQvpO2a1YKW7BFT4rQz/7sVYfrfq/gGLph6+AuGxK5Je6JyM+oLdSWgGjmNyGTiaC+Cg1rzciMDUJZk45/nUKlOCr5rlE7370WOa0MnysHysxASpV4xpyJM9qDVoflaTgAns4=
+	t=1729271751; cv=none; b=h9wsUwWWmwcpi50IQylfRIHC5ETg4b+5VrFlM740b/UqrUD/V4RiLXLy422dXL+NnvBSYBcGZJofYaNLl87BKa84pzS1lDsPHNNQsLveGBBaic/+7TOq1uroZpO8VFEuO4j3Q8yQ/4M5Dom0UQSsggWlDELUO10bEGCDPIRwvsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729241217; c=relaxed/simple;
-	bh=tfE4V3W8ykmNE09bvwGw+LdTUj5YFdV78WhZB/lzxR8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZgGnR1+USbOyVF8hQUZNOb21yDjTmyfCn1uUkQbasWVh4OPUtkOLjZ9mSUWOkeZn29kNx/u6hBQCwCft0SYV1284Na0UhO4WV1N8vZLGwqdC+q4ZcgGFYo3j6EWc+UDNaEkrmaE27Sfs48WAU0bUOfc3+Jn15KRtMC4fMQQotzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhRDr5Lu; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2fb561f273eso19334181fa.2;
-        Fri, 18 Oct 2024 01:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729241214; x=1729846014; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ftsjmpU0affWST2ixW5xYnYew3ZAwBw9E/4OsheRmi8=;
-        b=fhRDr5LuL+r5j+pmpagL/+glG2lj5zgm+ErqVXvfsjBUm8MHMmk+WSzIHytYq+qTgm
-         OT3XxEerpnFfAyZ+jlEdbieqv/thVquj9npRuTSt80NiBw2Lro2kBWokjeiUdz3srq6+
-         q/CpPnH4CTNiGxB6u2EtftW3UWV7boRoV8t9uKG2gaSWLZQt6ypNVmZwVIE+Lnpmoj7O
-         0SgniLxJLNHUsIXR7Cr2Cxa3Kv9+pKx8uTrd7uKGc5yCdNtSaBNDQuWCBmP60LtUpjXq
-         rODcXT1LwuuxlX+4PmSc9lmvmnI2X4UtIGcFZM9RkWemTPZssXjkv+mZvPSSrwI+Q5fs
-         HA1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729241214; x=1729846014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ftsjmpU0affWST2ixW5xYnYew3ZAwBw9E/4OsheRmi8=;
-        b=DAGLDAbpMIS+pmCx/SNyZShDGU2GOtMZBun4+ldP5BxR3zBxX1t3XwnrrIe5//6Uue
-         +B0J4tkE7PM6vBqiYddompDD5szLXGGfai5AHO2kybcANKyxJyiGeiOX1MDLrzqV4Zfc
-         yURA1dasFVplBdRK5mmTNGFPNIvbFjieeEvUz9oxPQbBD93xW82L2bx5tkSJE/AS1q/u
-         10f3rhmxIgj0yKE7IzlLTZVPl6bG75cN1pDJeUCM16V0LHyeqIR1AEecmkpsaIL1Kun4
-         pg8IoISR9RpE7WOVkUAaCYWEk+S80OvoKK0VwjmGQjqF9AALmSGb7wy1ocH14nLQvazQ
-         ouqg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcaALFTUaxdaATezby4ffYuWS0c1v3nA9a26uW5WvvFWsRMr1hNQXUxaKfMfFoHx9asFR2uk77YWKjqtE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWp+oTSeLYcAG36FPPU47dQG/E4ljflX1ObSGIRiC0ACK8VHTA
-	mgwtwHMFmgNpPEi3lz4FnLCEcur8k4LXL1/giPXSAcRDX80yNbTIP8rNQvLcY2joweaNqBhonW3
-	Vl0RreKYCfP85hsF626sAejI4p2zG8ZneiQdl1sDg
-X-Google-Smtp-Source: AGHT+IEXYTlUVTz6d9hr6wtJg18uXsksAynXi0Q8ifViYQ6L4DUtCzdSzNGLed1bEO0ib551F1BEc3HUTw69WFEA1x4=
-X-Received: by 2002:a2e:4a19:0:b0:2fa:d84a:bd83 with SMTP id
- 38308e7fff4ca-2fb82fb1e9dmr5696031fa.24.1729241213929; Fri, 18 Oct 2024
- 01:46:53 -0700 (PDT)
+	s=arc-20240116; t=1729271751; c=relaxed/simple;
+	bh=PxV2+YSoG3L+9FeMerajwARE0bW9TZdVPVKJTc27WUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jV6KOK6yfiK1ATZjYvZX7RUszWHoPCpfUr8J48KB6WxZTM/OJkOu7Ob1s7QfF1Gd5Eif6vFISRQnW/rPi7BoJn8FMzYp3zixhQzW7ZB55xnkaAIu2Kp1Jat0ZlXwsSJwmzN0Mm820h2ZeDNZagPjGZG5eurYYQQdNFfYMD74RXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cbvFbEbb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB06C4CEC3;
+	Fri, 18 Oct 2024 17:15:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729271751;
+	bh=PxV2+YSoG3L+9FeMerajwARE0bW9TZdVPVKJTc27WUA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cbvFbEbbpWMa6AqYecZ4p4hhtkMqbi/BuKtCX7EzVu6UN5hpx7MAEsWF2Gr9jo015
+	 9nBZlci6FFMUYSRTJ4b9ruiX2a1ibXh4lk1H5FrzfJSKnPjL51aWEQN4HhDIs60CvH
+	 ooFkj/EEeSpTaGpGL3R3XnNhWeU1yIvJq0aCkRT4j/0KjK2ZQElfa9R5fmeuCF/cvj
+	 qPmahqoIHpnGBm1zzdqgDXJUv/0/RSUdospo9VsssVBKS/HUPpG+pkwzVZx3CaT2uF
+	 z4i+X/yDN05FzTEIw+UsYoCQvFw2+S0oTNrLriybVne3LifqGaEVnce0680oMLG+fT
+	 e7mMlDJtITQJA==
+Date: Fri, 18 Oct 2024 10:15:48 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Guo Ren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Nick Terrell <terrelln@fb.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Changbin Du <changbin.du@huawei.com>,
+	Guilherme Amadio <amadio@gentoo.org>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Kajol Jain <kjain@linux.ibm.com>, Atish Patra <atishp@rivosinc.com>,
+	Shenlin Liang <liangshenlin@eswincomputing.com>,
+	Anup Patel <anup@brainfault.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Chen Pei <cp0613@linux.alibaba.com>,
+	Dima Kogan <dima@secretsauce.net>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 00/11] Libdw/dwarf build clean up
+Message-ID: <ZxKXxKji_LhtLLpu@google.com>
+References: <20241017001354.56973-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008054615.43062-1-yang.li85200@gmail.com>
- <20241016095626.8162-1-yang.li85200@gmail.com> <CAJF2gTQ5D8fU9rSs7V28S9c5+ZPuQSJW7inQtoFsM6X6gBgOKg@mail.gmail.com>
- <CA+N+=zu0=scmv9w7iZE2ZebxBVpvVb1eeoJ-qi=vhac-JhLthg@mail.gmail.com>
-In-Reply-To: <CA+N+=zu0=scmv9w7iZE2ZebxBVpvVb1eeoJ-qi=vhac-JhLthg@mail.gmail.com>
-From: yang li <yang.li85200@gmail.com>
-Date: Fri, 18 Oct 2024 16:46:42 +0800
-Message-ID: <CA+N+=zsB=wd2G-nsYT9xxvsgBMtnOMUJb8ru8XHaqusX2nzzEg@mail.gmail.com>
-Subject: Re: [PATCH v2] csky: fix csky_cmpxchg_fixup not working
-To: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241017001354.56973-1-irogers@google.com>
 
-Hi Guo Ren:
-I used the readelf tool to view the address of csky_cmpxchg_ldw,
-and used printk("0x%x\n",csky_cmpxchg_ldw) and
-printk("0x%x\n",&csky_cmpxchg_ldw) to print it out in the code.
- The result is that printk("0x%x\n",&csky_cmpxchg_ldw) prints the
-correct result.
+On Wed, Oct 16, 2024 at 05:13:43PM -0700, Ian Rogers wrote:
+> These patches were originally on top of:
+> https://lore.kernel.org/lkml/20240924003720.617258-1-irogers@google.com/
+> where it was pointed out that a lot of the libdw conditional
+> compilation was due to features that have now been standard for 10 or
+> 15 years. The patches remove the conditional compilation assuming the
+> features are in libdw where the feature test is expanded to check
+> there pressence. The patch series is now on top of:
+> https://lore.kernel.org/lkml/20241016235622.52166-1-irogers@google.com/
+> 
+> In the Makefile code, and for `perf record --call-graph`, dwarf tends
+> to mean unwind or libdw support for dwarf things. To make it clearer
+> when dwarf really just means libdw numerous build variables and
+> defines are renamed.
+> 
+> There is some tech debt in the changes as perf check still reports the
+> values using the old name and for features that are no longer
+> tested. This can be cleanup for another day.
+> 
+> v3: Move PERF_HAVE_DWARF_REGS cleanup to follow up patch series. Add
+>     build fix from patch series these changes are on top of.
+> v2: Instead of renaming PERF_HAVE_DWARF_REGS to PERF_HAVE_LIBDW_REGS,
+>     remove it.
+> 
+> Ian Rogers (11):
+>   perf build: Fix LIBDW_DIR
+>   perf build: Rename NO_DWARF to NO_LIBDW
+>   perf build: Remove defined but never used variable
+>   perf build: Rename test-dwarf to test-libdw
+>   perf build: Combine libdw-dwarf-unwind into libdw feature tests
+>   perf build: Combine test-dwarf-getlocations into test-libdw
+>   perf build: Combine test-dwarf-getcfi into test-libdw
+>   perf probe: Move elfutils support check to libdw check
+>   perf libdw: Remove unnecessary defines
+>   perf build: Rename HAVE_DWARF_SUPPORT to HAVE_LIBDW_SUPPORT
+>   perf build: Rename CONFIG_DWARF to CONFIG_LIBDW
 
-include/linux/linkage.h
-#define GLOBAL(name)  \
-        .globl name ASM_NL \
-        name:
-#endif
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-arch/csky/kernel/atomic.S:
-GLOBAL(csky_cmpxchg_ldw)
-so
-.globl  csky_cmpxchg_ldw   --->globl symbol
-csky_cmpxchg_ldw:             --->label symbol
+Thanks,
+Namhyung
 
-
-yang li <yang.li85200@gmail.com> =E4=BA=8E2024=E5=B9=B410=E6=9C=8818=E6=97=
-=A5=E5=91=A8=E4=BA=94 16:33=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi Guo Ren:
-> I used the readelf tool to view the address of csky_cmpxchg_ldw,
-> and used printk("0x%x\n",csky_cmpxchg_ldw) and
-> printk("0x%x\n",&csky_cmpxchg_ldw) to print it out in the code.
->  The result is that printk("0x%x\n",&csky_cmpxchg_ldw) prints the
-> correct result.
->
-> include/linux/linkage.h
-> #define GLOBAL(name)  \
->         .globl name ASM_NL \
->         name:
-> #endif
->
-> arch/csky/kernel/atomic.S:
-> GLOBAL(csky_cmpxchg_ldw)
-> so
-> .globl  csky_cmpxchg_ldw   --->globl symbol
-> csky_cmpxchg_ldw:             --->label symbol
->
->
->
->
-> Guo Ren <guoren@kernel.org> =E4=BA=8E2024=E5=B9=B410=E6=9C=8817=E6=97=A5=
-=E5=91=A8=E5=9B=9B 14:05=E5=86=99=E9=81=93=EF=BC=9A
->>
->> On Wed, Oct 16, 2024 at 5:56=E2=80=AFPM Yang Li <yang.li85200@gmail.com>=
- wrote:
->> >
->> > In the csky_cmpxchg_fixup function, it is incorrect to use the global
->> >  variable csky_cmpxchg_stw to determine the address where the exceptio=
-n
->> >  occurred.The global variable csky_cmpxchg_stw stores the opcode at th=
-e
->> >  time of the exception, while &csky_cmpxchg_stw shows the address wher=
-e
->> >  the exception occurred.
->> >
->> > Signed-off-by: Yang Li <yang.li85200@gmail.com>
->> > ---
->> > V1 -> V2:Eliminate compilation warnings
->> >
->> >  arch/csky/mm/fault.c | 4 ++--
->> >  1 file changed, 2 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
->> > index a885518ce1dd..5226bc08c336 100644
->> > --- a/arch/csky/mm/fault.c
->> > +++ b/arch/csky/mm/fault.c
->> > @@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_regs=
- *regs)
->> >         if (trap_no(regs) !=3D VEC_TLBMODIFIED)
->> >                 return;
->> >
->> > -       if (instruction_pointer(regs) =3D=3D csky_cmpxchg_stw)
->> > -               instruction_pointer_set(regs, csky_cmpxchg_ldw);
->> > +       if (instruction_pointer(regs) =3D=3D (unsigned long)&csky_cmpx=
-chg_stw)
->> > +               instruction_pointer_set(regs, (unsigned long)&csky_cmp=
-xchg_ldw);
->> csky_cmpxchg_ldw(stw) is a label symbol, not a variable.
->>
->> arch/csky/kernel/atomic.S:
->> GLOBAL(csky_cmpxchg_ldw)
->> GLOBAL(csky_cmpxchg_stw)
->>
->> Your modification does not affect the ASM output.
->>
->> (gdb) p main
->> $1 =3D {void (void)} 0x5fa <main>
->> (gdb) p &main
->> $2 =3D (void (*)(void)) 0x5fa <main>
->>
->> >         return;
->> >  }
->> >  #endif
->> > --
->> > 2.34.1
->> >
->>
->>
->> --
->> Best Regards
->>  Guo Ren
+> 
+>  tools/build/Makefile.feature                  | 11 +---
+>  tools/build/feature/Makefile                  | 24 ++------
+>  tools/build/feature/test-all.c                | 16 +-----
+>  tools/build/feature/test-dwarf.c              | 11 ----
+>  tools/build/feature/test-dwarf_getcfi.c       |  9 ---
+>  tools/build/feature/test-dwarf_getlocations.c | 13 -----
+>  tools/build/feature/test-libdw-dwarf-unwind.c | 14 -----
+>  tools/build/feature/test-libdw.c              | 56 +++++++++++++++++++
+>  tools/perf/Documentation/perf-check.txt       |  6 +-
+>  tools/perf/Makefile.config                    | 47 +++++-----------
+>  tools/perf/Makefile.perf                      |  2 +-
+>  tools/perf/arch/arm/Makefile                  |  2 +-
+>  tools/perf/arch/arm/util/Build                |  2 +-
+>  tools/perf/arch/arm64/Makefile                |  2 +-
+>  tools/perf/arch/arm64/util/Build              |  2 +-
+>  tools/perf/arch/csky/Makefile                 |  2 +-
+>  tools/perf/arch/csky/util/Build               |  2 +-
+>  tools/perf/arch/loongarch/Makefile            |  2 +-
+>  tools/perf/arch/loongarch/util/Build          |  2 +-
+>  tools/perf/arch/mips/Makefile                 |  2 +-
+>  tools/perf/arch/mips/util/Build               |  2 +-
+>  tools/perf/arch/powerpc/Makefile              |  2 +-
+>  .../perf/arch/powerpc/annotate/instructions.c |  4 +-
+>  tools/perf/arch/powerpc/util/Build            |  4 +-
+>  tools/perf/arch/riscv/Makefile                |  2 +-
+>  tools/perf/arch/riscv/util/Build              |  2 +-
+>  tools/perf/arch/s390/Makefile                 |  2 +-
+>  tools/perf/arch/s390/util/Build               |  2 +-
+>  tools/perf/arch/sh/Makefile                   |  2 +-
+>  tools/perf/arch/sh/util/Build                 |  2 +-
+>  tools/perf/arch/sparc/Makefile                |  2 +-
+>  tools/perf/arch/sparc/util/Build              |  2 +-
+>  tools/perf/arch/x86/Makefile                  |  2 +-
+>  tools/perf/arch/x86/annotate/instructions.c   |  2 +-
+>  tools/perf/arch/x86/util/Build                |  2 +-
+>  tools/perf/arch/xtensa/Makefile               |  2 +-
+>  tools/perf/arch/xtensa/util/Build             |  2 +-
+>  tools/perf/builtin-annotate.c                 |  2 +-
+>  tools/perf/builtin-check.c                    |  6 +-
+>  tools/perf/builtin-probe.c                    | 14 ++---
+>  tools/perf/builtin-report.c                   |  4 +-
+>  tools/perf/util/Build                         | 12 ++--
+>  tools/perf/util/annotate-data.h               |  8 +--
+>  tools/perf/util/debuginfo.h                   |  6 +-
+>  tools/perf/util/disasm.c                      |  4 +-
+>  tools/perf/util/disasm.h                      |  4 +-
+>  tools/perf/util/dwarf-aux.c                   |  6 --
+>  tools/perf/util/dwarf-aux.h                   | 54 ------------------
+>  tools/perf/util/genelf.c                      |  4 +-
+>  tools/perf/util/genelf.h                      |  2 +-
+>  tools/perf/util/include/dwarf-regs.h          |  6 +-
+>  tools/perf/util/probe-event.c                 |  4 +-
+>  tools/perf/util/probe-finder.c                |  6 --
+>  tools/perf/util/probe-finder.h                |  6 +-
+>  54 files changed, 154 insertions(+), 259 deletions(-)
+>  delete mode 100644 tools/build/feature/test-dwarf.c
+>  delete mode 100644 tools/build/feature/test-dwarf_getcfi.c
+>  delete mode 100644 tools/build/feature/test-dwarf_getlocations.c
+>  delete mode 100644 tools/build/feature/test-libdw-dwarf-unwind.c
+>  create mode 100644 tools/build/feature/test-libdw.c
+> 
+> -- 
+> 2.47.0.105.g07ac214952-goog
+> 
 
