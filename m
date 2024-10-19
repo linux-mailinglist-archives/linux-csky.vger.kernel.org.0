@@ -1,229 +1,201 @@
-Return-Path: <linux-csky+bounces-1162-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1163-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66E2A9A4719
-	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 21:39:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A38269A4DB2
+	for <lists+linux-csky@lfdr.de>; Sat, 19 Oct 2024 14:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2028D28524A
-	for <lists+linux-csky@lfdr.de>; Fri, 18 Oct 2024 19:39:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCADD282368
+	for <lists+linux-csky@lfdr.de>; Sat, 19 Oct 2024 12:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B231205AA5;
-	Fri, 18 Oct 2024 19:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D22D41E04A6;
+	Sat, 19 Oct 2024 12:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="Jg5bfSxG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ji+u5mIf"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE06204944
-	for <linux-csky@vger.kernel.org>; Fri, 18 Oct 2024 19:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5B91E0495;
+	Sat, 19 Oct 2024 12:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729280345; cv=none; b=FSD1mPfXvoGzx2THtNibALNPe2XdhHiZSrGP96viaWypJN76nk+BBcAz4o6twBYq+D1OMA5fGPQXelBeRcN0cBbvnVtyaxMqK6WXFm+0E3DMqc1Ho0tR+6b9tr2+nf3jcHBlMsd7LdaY+/kUigasWfqx9+jNW0IFY4gfNofFA/I=
+	t=1729339862; cv=none; b=CgUq0NlakXJjLmJQWF+3GgyodcqHmQ3X3iyntOtSBYqgYQC7Err53cQBaSWR2kHJo6Z2lmKxd6JZkoM9hmzIHRNs0+BG+WqgCDDbWcNBp1hPKkdT8DcQEXc9+gfdudl/e0fXB3A6SsPk89NxrtpHNEyh9aWCOoKfwTkF0KrTWFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729280345; c=relaxed/simple;
-	bh=2PKDJhlB3QPDNbsr3o5S9FVspq5upY+vv4l/wlI8dNw=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=rAg3rF47auToKIRv1ndTsID/HFIMBc22vy5VFvajLy5n+QQv30Ratm3BJYRmeYKEkmIL+tYlyaSmpMeUPdlHnxmbuWu0R5ybaR9I1xxcgInvBOzNRLwwNZREUqZkXcKu6bln8wnudzpKvN8zGqm5QeboTb5g1hrWWT7+9595BG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=Jg5bfSxG; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-71e4e481692so2150296b3a.1
-        for <linux-csky@vger.kernel.org>; Fri, 18 Oct 2024 12:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1729280341; x=1729885141; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FiT5fWlA/ERvmoNoGd6vO/wEcabREvD5vErT274A8nM=;
-        b=Jg5bfSxGro8EbfG6Kvt9K9FinUyeYrKsxiUiQPob53bLQ0zmnnsYugVtMZUDpIIxaG
-         UOvcDaBzpRTZ8Dc945CoV0FHBqkbptdaIBxh6n2b3gHvRJy22LYUbItP/wih8iWZPEaj
-         cnWblg4isC+5hmpw2R000A8vkez3tFjhj6SVrsRG1YjKzfjdQk1KyWRnkZLmLoLRQ+wT
-         O2T0vSaDjSbrdpDYWNqtSQOIxx0CVfrY9GbEyqKkwJLV/oXl1c7S6qDNssvpaFnEXUsu
-         i1ThdpebocB7k3lSmKhqi29xgjOyCFtAZlBy38kve4RxG2lAjbK/XIMcDlqd2HGpyzmV
-         BMxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729280341; x=1729885141;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FiT5fWlA/ERvmoNoGd6vO/wEcabREvD5vErT274A8nM=;
-        b=CCzcuawSkdR5Ue/KxsBPSMVgDViFAEwgBtIrhPReEK/4ltpkM6lf2r5wfrcyxGzn4H
-         3rom6bsevfIdWk6n5dDlU1GRDRmQ/mVOjFiLlPQzwGO47llpgn2Sm5rUmh2ZWzGSMeom
-         RQKHeOyyDpk8a7scDaiEkGuoIkcCtBq188BKMnOpfd8QnuNnmp3XJETMpX9oTEURfmer
-         VtCQXuOmeWSu79i6Ss7c82EZX4ytFIGWhYtRZCedeF+flo1PvPVJ7gmwPsTd4cEOUsC1
-         bMhsprfbKS8Gl7GrtYol0U4pf7doNyyb3mjr8TMelIJOJ9ibFx+OfAQnd7GMSN/U4+84
-         BRNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCsMfcP+mp16De0EDqKdduY387FIC1xdTVl01csHmj+1h/LsDZUV5mqhwcJLg1tlpqZj1hEzM3zQN4@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOLak1GkYMjolSK5ykHDTQoUvn7oUNPM6l93/wgLZhRMkkB6at
-	TRskbHlnaCNGctI8gtJqeqjdQh8lrhnQqeiCdKuLo1sRsXz5pDN0IOtuvNzpn6g=
-X-Google-Smtp-Source: AGHT+IEaz8xK2W5RjSu2Q9b6C4y0O26xQFCdJyP2lVmFbBHXT7gzr62PkAtdtybkW4AY+Kl/19589g==
-X-Received: by 2002:a05:6a00:1989:b0:70d:14d1:1bb7 with SMTP id d2e1a72fcca58-71ea331c750mr4761453b3a.28.1729280340869;
-        Fri, 18 Oct 2024 12:39:00 -0700 (PDT)
-Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ea33663e1sm1837071b3a.89.2024.10.18.12.38.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 12:39:00 -0700 (PDT)
-Date: Fri, 18 Oct 2024 12:39:00 -0700 (PDT)
-X-Google-Original-Date: Fri, 18 Oct 2024 12:38:57 PDT (-0700)
-Subject:     Re: [PATCH v3 14/20] perf riscv: Remove dwarf-regs.c and add dwarf-regs-table.h
-In-Reply-To: <20241017002520.59124-15-irogers@google.com>
-CC: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
-  Mark Rutland <mark.rutland@arm.com>, alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
-  adrian.hunter@intel.com, kan.liang@linux.intel.com, john.g.garry@oracle.com,
-  Will Deacon <will@kernel.org>, james.clark@linaro.org, mike.leach@linaro.org, leo.yan@linux.dev,
-  guoren@kernel.org, Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-  terrelln@fb.com, mhiramat@kernel.org, changbin.du@huawei.com, amadio@gentoo.org,
-  yangjihong@bytedance.com, adityag@linux.ibm.com, atrajeev@linux.vnet.ibm.com, masahiroy@kernel.org,
-  maobibo@loongson.cn, chenhuacai@kernel.org, kjain@linux.ibm.com, Atish Patra <atishp@rivosinc.com>,
-  liangshenlin@eswincomputing.com, anup@brainfault.org, oliver.upton@linux.dev, sesse@google.com,
-  linux@treblig.org, cp0613@linux.alibaba.com, dima@secretsauce.net, przemyslaw.kitszel@intel.com,
-  davem@davemloft.net, aleksander.lobakin@intel.com, linux-kernel@vger.kernel.org,
-  linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-  linux-riscv@lists.infradead.org
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: irogers@google.com
-Message-ID: <mhng-77fefb3c-c270-471c-b71b-ef3ab65d8b79@palmer-ri-x1c9a>
+	s=arc-20240116; t=1729339862; c=relaxed/simple;
+	bh=FSuVpxp8ZC8+I9iOSenx9AlHNi52QSz7zz+w4xwBZFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KryTlx4mafgLlC1YKfp/w1oQ98hpeR/aM7v3aBYXQN59lXBaS6wFv3O8haz+YLJq9zqgiHAoWJgTZ8EzumQvhHd5BA9yWOIIzxn+tX1JPgV6rczZ2q51pnLbsbqco51xipOXItaYd6Xg1ABwAUiKEd8uZj0YBa6jN+Q7CXD9zlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ji+u5mIf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C444C4CEC5;
+	Sat, 19 Oct 2024 12:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729339862;
+	bh=FSuVpxp8ZC8+I9iOSenx9AlHNi52QSz7zz+w4xwBZFU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ji+u5mIf1nBg2Nj6gLisAF5MRqi/wx3vBw5aJxxyqXCZq6i3mNEIjudfG3JajAqFI
+	 WJRVPOIUQSQMsfw+JO35XVRk0koV9Zi9I3YAvvjqBLsmrQOq5ay1ac5pdb0lvGGzR1
+	 j08uXL+V5r/xzvXwZInMDzkCPiTd8EFrbVzmdTCt/13Ip6ENRmE+El1EXUc14T5/hg
+	 fuuSACJI10Sa/jG2tlc11AxV3tkbudw+OnnTaatlKtiS8TlF8dKP0jJBWpV4zxhOjz
+	 kxntgxyzd/tCBOSTcO89LQ6Xv/hweCp+LHVMbTjkYPRC9v5XPDgpwR4Gn2FpyhtFiC
+	 QsF+azFAwnoMg==
+Date: Sat, 19 Oct 2024 15:07:00 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <ZxOg5MEXzH4qPq-s@kernel.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-7-rppt@kernel.org>
+ <20241016170128.7afeb8b0@gandalf.local.home>
+ <20241017101712.5a052712@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241017101712.5a052712@gandalf.local.home>
 
-On Wed, 16 Oct 2024 17:25:14 PDT (-0700), irogers@google.com wrote:
-> The file just provides the function get_arch_regstr, however, if in
-> the only caller get_dwarf_regstr EM_HOST is used for the EM_NONE case,
-> and the register table is provided in a header file, the function can
-> never be called. So remove as dead code. Tidy up the EM_NONE cases for
-> riscv in dwarf-regs.c.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  .../dwarf-regs-table.h}                       | 32 ++++---------------
->  tools/perf/arch/riscv/util/Build              |  1 -
->  tools/perf/util/dwarf-regs.c                  |  7 ++--
->  tools/perf/util/include/dwarf-regs.h          |  2 +-
->  4 files changed, 12 insertions(+), 30 deletions(-)
->  rename tools/perf/arch/riscv/{util/dwarf-regs.c => include/dwarf-regs-table.h} (56%)
->
-> diff --git a/tools/perf/arch/riscv/util/dwarf-regs.c b/tools/perf/arch/riscv/include/dwarf-regs-table.h
-> similarity index 56%
-> rename from tools/perf/arch/riscv/util/dwarf-regs.c
-> rename to tools/perf/arch/riscv/include/dwarf-regs-table.h
-> index a9c4402ae57e..a45b63a6d5a8 100644
-> --- a/tools/perf/arch/riscv/util/dwarf-regs.c
-> +++ b/tools/perf/arch/riscv/include/dwarf-regs-table.h
-> @@ -1,23 +1,10 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * Copyright (C) 2019 Hangzhou C-SKY Microsystems co.,ltd.
-> - * Mapping of DWARF debug register numbers into register names.
-> - */
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifdef DEFINE_DWARF_REGSTR_TABLE
-> +/* This is included in perf/util/dwarf-regs.c */
->
-> -#include <stddef.h>
-> -#include <errno.h> /* for EINVAL */
-> -#include <string.h> /* for strcmp */
-> -#include <dwarf-regs.h>
-> +#define REG_DWARFNUM_NAME(reg, idx)	[idx] = "%" #reg
->
-> -struct regs_dwarfnum {
-> -	const char *name;
-> -	unsigned int dwarfnum;
-> -};
-> -
-> -#define REG_DWARFNUM_NAME(r, num) {.name = r, .dwarfnum = num}
-> -#define REG_DWARFNUM_END {.name = NULL, .dwarfnum = 0}
-> -
-> -struct regs_dwarfnum riscv_dwarf_regs_table[] = {
-> +static const char * const riscv_regstr_tbl[] = {
->  	REG_DWARFNUM_NAME("%zero", 0),
->  	REG_DWARFNUM_NAME("%ra", 1),
->  	REG_DWARFNUM_NAME("%sp", 2),
-> @@ -50,13 +37,6 @@ struct regs_dwarfnum riscv_dwarf_regs_table[] = {
->  	REG_DWARFNUM_NAME("%t4", 29),
->  	REG_DWARFNUM_NAME("%t5", 30),
->  	REG_DWARFNUM_NAME("%t6", 31),
-> -	REG_DWARFNUM_END,
->  };
->
-> -#define RISCV_MAX_REGS ((sizeof(riscv_dwarf_regs_table) / \
-> -		 sizeof(riscv_dwarf_regs_table[0])) - 1)
-> -
-> -const char *get_arch_regstr(unsigned int n)
-> -{
-> -	return (n < RISCV_MAX_REGS) ? riscv_dwarf_regs_table[n].name : NULL;
-> -}
-> +#endif
-> diff --git a/tools/perf/arch/riscv/util/Build b/tools/perf/arch/riscv/util/Build
-> index 8f93091b8345..58a672246024 100644
-> --- a/tools/perf/arch/riscv/util/Build
-> +++ b/tools/perf/arch/riscv/util/Build
-> @@ -2,5 +2,4 @@ perf-util-y += perf_regs.o
->  perf-util-y += header.o
->
->  perf-util-$(CONFIG_LIBTRACEEVENT) += kvm-stat.o
-> -perf-util-$(CONFIG_LIBDW) += dwarf-regs.o
->  perf-util-$(CONFIG_LIBDW_DWARF_UNWIND) += unwind-libdw.o
-> diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
-> index 3d98c2bf6035..2c6b197556dd 100644
-> --- a/tools/perf/util/dwarf-regs.c
-> +++ b/tools/perf/util/dwarf-regs.c
-> @@ -20,6 +20,7 @@
->  #include "../arch/arm64/include/dwarf-regs-table.h"
->  #include "../arch/sh/include/dwarf-regs-table.h"
->  #include "../arch/powerpc/include/dwarf-regs-table.h"
-> +#include "../arch/riscv/include/dwarf-regs-table.h"
->  #include "../arch/s390/include/dwarf-regs-table.h"
->  #include "../arch/sparc/include/dwarf-regs-table.h"
->  #include "../arch/xtensa/include/dwarf-regs-table.h"
-> @@ -33,7 +34,7 @@ const char *get_dwarf_regstr(unsigned int n, unsigned int machine, unsigned int
->  {
->  #if EM_HOST == EM_X86_64 || EM_HOST == EM_386 || EM_HOST == EM_AARCH64 || EM_HOST == EM_ARM \
->      || EM_HOST == EM_CSKY || EM_HOST == EM_LOONGARCH || EM_HOST == EM_MIPS || EM_HOST == EM_PPC \
-> -    || EM_HOST == EM_PPC64
-> +    || EM_HOST == EM_PPC64 || EM_HOST == EM_RISCV
->  	if (machine == EM_NONE) {
->  		/* Generic arch - use host arch */
->  		machine = EM_HOST;
-> @@ -42,7 +43,7 @@ const char *get_dwarf_regstr(unsigned int n, unsigned int machine, unsigned int
->  	switch (machine) {
->  #if EM_HOST != EM_X86_64 && EM_HOST != EM_386 && EM_HOST != EM_AARCH64 && EM_HOST != EM_ARM \
->      && EM_HOST != EM_CSKY && EM_HOST != EM_LOONGARCH && EM_HOST != EM_MIPS && EM_HOST != EM_PPC \
-> -    && EM_HOST != EM_PPC64
-> +    && EM_HOST != EM_PPC64 && EM_HOST != EM_RISCV
->  	case EM_NONE:	/* Generic arch - use host arch */
->  		return get_arch_regstr(n);
->  #endif
-> @@ -63,6 +64,8 @@ const char *get_dwarf_regstr(unsigned int n, unsigned int machine, unsigned int
->  	case EM_PPC:
->  	case EM_PPC64:
->  		return __get_dwarf_regstr(powerpc_regstr_tbl, n);
-> +	case EM_RISCV:
-> +		return __get_dwarf_regstr(riscv_regstr_tbl, n);
->  	case EM_SPARC:
->  	case EM_SPARCV9:
->  		return __get_dwarf_regstr(sparc_regstr_tbl, n);
-> diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/include/dwarf-regs.h
-> index 1763280855ce..35f4f33205da 100644
-> --- a/tools/perf/util/include/dwarf-regs.h
-> +++ b/tools/perf/util/include/dwarf-regs.h
-> @@ -81,7 +81,7 @@
->  #ifdef HAVE_LIBDW_SUPPORT
->  #if !defined(__x86_64__) && !defined(__i386__) && !defined(__aarch64__) && !defined(__arm__) \
->      && !defined(__loongarch__) && !defined(__mips__) && !defined(__powerpc__) \
-> -    && !defined(__powerpc64__)
-> +    && !defined(__powerpc64__) && !defined(__riscv__)
->  const char *get_arch_regstr(unsigned int n);
->  #endif
+On Thu, Oct 17, 2024 at 10:17:12AM -0400, Steven Rostedt wrote:
+> On Wed, 16 Oct 2024 17:01:28 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > If this is only needed for module load, can we at least still use the
+> > text_poke_early() at boot up?
+> > 
+> >  	if (ftrace_poke_late) {
+> >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> > 	} else if (system_state == SYSTEM_BOOTING) {
+> > 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> >  	} else {
+> >  		mutex_lock(&text_mutex);
+> >  		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> >  		mutex_unlock(&text_mutex);
+> >  	}
+> > 
+> > ?
+> > 
+> > The above if statement looks to slow things down just slightly, but only by
+> > 2ms, which is more reasonable.
+> 
+> I changed the above to this (yes it's a little hacky) and got my 2ms back!
+> 
+> -- Steve
+> 
+> DEFINE_STATIC_KEY_TRUE(ftrace_modify_boot);
+> 
+> static int __init ftrace_boot_init_done(void)
+> {
+> 	static_branch_disable(&ftrace_modify_boot);
+> 	return 0;
+> }
+> /* Ftrace updates happen before core init */
+> core_initcall(ftrace_boot_init_done);
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+We can also pass mod to ftrace_modify_code_direct() and use that to
+distinguish early boot and ftrace_module_init.
+With this I get very similar numbers like with the static branch
+
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 8da0e66ca22d..859902dd06fc 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -111,17 +111,22 @@ static int ftrace_verify_code(unsigned long ip, const char *old_code)
+  */
+ static int __ref
+ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+-			  const char *new_code)
++			  const char *new_code, struct module *mod)
+ {
+ 	int ret = ftrace_verify_code(ip, old_code);
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* replace the text with the new text */
+-	if (ftrace_poke_late)
++	if (ftrace_poke_late) {
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+-	else
++	} else if (!mod) {
+ 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
++	} else {
++		mutex_lock(&text_mutex);
++		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
++		mutex_unlock(&text_mutex);
++	}
+ 	return 0;
+ }
+ 
+@@ -142,7 +147,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec, unsigned long ad
+ 	 * just modify the code directly.
+ 	 */
+ 	if (addr == MCOUNT_ADDR)
+-		return ftrace_modify_code_direct(ip, old, new);
++		return ftrace_modify_code_direct(ip, old, new, mod);
+ 
+ 	/*
+ 	 * x86 overrides ftrace_replace_code -- this function will never be used
+@@ -161,7 +166,7 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 	new = ftrace_call_replace(ip, addr);
+ 
+ 	/* Should only be called when module is loaded */
+-	return ftrace_modify_code_direct(rec->ip, old, new);
++	return ftrace_modify_code_direct(rec->ip, old, new, NULL);
+ }
+ 
+ /*
+ 
+
+-- 
+Sincerely yours,
+Mike.
 
