@@ -1,108 +1,123 @@
-Return-Path: <linux-csky+bounces-1164-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1165-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 012A19A4FBB
-	for <lists+linux-csky@lfdr.de>; Sat, 19 Oct 2024 18:23:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4CC39A5137
+	for <lists+linux-csky@lfdr.de>; Sun, 20 Oct 2024 00:17:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FBA91C21B8B
-	for <lists+linux-csky@lfdr.de>; Sat, 19 Oct 2024 16:23:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF1A41F226F2
+	for <lists+linux-csky@lfdr.de>; Sat, 19 Oct 2024 22:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7595518BB8E;
-	Sat, 19 Oct 2024 16:23:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5754F192593;
+	Sat, 19 Oct 2024 22:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ONVh/KVY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y3/Gl4uf"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C096173;
-	Sat, 19 Oct 2024 16:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C837647F53;
+	Sat, 19 Oct 2024 22:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729354992; cv=none; b=n+xE/c+WcwCrWlUqTc0aqJr5UV6+kOW0O9ONaOZpmeF6l8XHv+KjiS0w9d3AMP2iQvxD/I7ZBLR4EffYP4ulY/0tuik2PkUNO1f5sPt9hOvXZZipjZ4RDaTYkaHrA4UBY3WajJe93jnCSRI9mhjrFUC91kBEgbRnrIWBQFWJXAI=
+	t=1729376234; cv=none; b=bPYTtgHg5njHBvkLZ9vQ58eklhvocJ8JIQHGgn6oydzCXdXRulgZeNZr618MRBp/LO7QvBhjbwdfZSPb41yw+fz8z+wrLrb52U7witVQKwYR5acEmwe6fGTb+5xlhngOSJGpjqxhDB7TFxHFXZyEg9Yv1au9silV9JrUb7LjZCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729354992; c=relaxed/simple;
-	bh=mcuO5wxNXqpn40QCC+5ATBwUwZ6THwiREuzChC5wZhg=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=dwR962oQ7Kc2vkyh7j8+zDxO7R+9hb/Olj4P77GTDmzD2dyCeGjBIYXPCCI+OzwiNzg9EKERhc8kCATxMAkBwce5KUcp9pCSW4NjhqhZt/+jinWZD1n1NaWNIaWcrl/MzhuBB3c/VwBqZTTr+Qf5pZWo7f9W8l6dv4wwQ8QUsQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ONVh/KVY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2A9FC4CEC5;
-	Sat, 19 Oct 2024 16:23:10 +0000 (UTC)
+	s=arc-20240116; t=1729376234; c=relaxed/simple;
+	bh=Z2c0wsfmuX1zi8SflpbS251BcU2hxlDOujSruYyu/d0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ep6vGmEM6thKxeHMYCkQ2ihUoH2L33cAIh50WSmS1QEWddxgoUWHv6ZZrgXDZ5SsGftxFkODdoWoFtFWsGMgEYtVa9Om/eN1TWdUcLVb9RFSFXdPL8KIfbkV0oQJgofC1KqWxOYiIMi+u5JbhI827l4eSyth8ohv0DZBvvNmIVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y3/Gl4uf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2BF9C4CEC5;
+	Sat, 19 Oct 2024 22:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729354991;
-	bh=mcuO5wxNXqpn40QCC+5ATBwUwZ6THwiREuzChC5wZhg=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=ONVh/KVYXZcbyCX/rGFoDGAHAX3cUfatQe9BIzEkW+srF3i+8XT6QIvCdSwdNzqEz
-	 MbZOTgy4C072BCeXEi4Wfu/m8yZtoGKyDfdOnvm3H0LaTuAybHagzmeMZ+CFRU7JWY
-	 pEqPPi0nN/lCLuWzZPfl+xIb3U/Q60wlGIE1V266vBIgYCRvgfpuUOJMg7JNhhz87H
-	 DNTdS/m4JXnQyl33iR2w8kR/VZrXqzJa2/6J6rVSZksA0cUPjQEwclbMwzU2gCLFuA
-	 cBgXefQujb3z7+czO9JNqnzMR7vkM1ETIMHbDb45LRDR1axbTB9bHrWm648TMQh1gX
-	 OVzrGzTyPOqyg==
-From: Namhyung Kim <namhyung@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
- Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
- Will Deacon <will@kernel.org>, James Clark <james.clark@linaro.org>, 
- Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>, 
- Guo Ren <guoren@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Nick Terrell <terrelln@fb.com>, 
- "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
- Changbin Du <changbin.du@huawei.com>, Guilherme Amadio <amadio@gentoo.org>, 
- Yang Jihong <yangjihong@bytedance.com>, 
- Aditya Gupta <adityag@linux.ibm.com>, 
- Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
- Masahiro Yamada <masahiroy@kernel.org>, Bibo Mao <maobibo@loongson.cn>, 
- Huacai Chen <chenhuacai@kernel.org>, Kajol Jain <kjain@linux.ibm.com>, 
- Atish Patra <atishp@rivosinc.com>, 
- Shenlin Liang <liangshenlin@eswincomputing.com>, 
- Anup Patel <anup@brainfault.org>, Oliver Upton <oliver.upton@linux.dev>, 
- "Steinar H. Gunderson" <sesse@google.com>, 
- "Dr. David Alan Gilbert" <linux@treblig.org>, 
- Chen Pei <cp0613@linux.alibaba.com>, Dima Kogan <dima@secretsauce.net>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
- linux-riscv@lists.infradead.org, Ian Rogers <irogers@google.com>
-In-Reply-To: <20241017001354.56973-1-irogers@google.com>
-References: <20241017001354.56973-1-irogers@google.com>
-Subject: Re: [PATCH v3 00/11] Libdw/dwarf build clean up
-Message-Id: <172935499069.2388898.6689149497765145884.b4-ty@kernel.org>
-Date: Sat, 19 Oct 2024 09:23:10 -0700
+	s=k20201202; t=1729376233;
+	bh=Z2c0wsfmuX1zi8SflpbS251BcU2hxlDOujSruYyu/d0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y3/Gl4ufOW+DMjq3rv6lYuhhIdTKFTpnYyq9HW3K85Fpw/HAzL0vMrW4IM6WgA6ot
+	 bjEzE8mPv3G48TEzrc49STj8tErEueRnWJWErlpFGCRDNYXxf9im+wvXTmSV4zaKV0
+	 ldRIuiJMSPHK7+jcRgJoan6AukGaTfuRN0fLb0k4bEoOLO4bzzu30c0zr4xQe5rqsB
+	 ele2dWq5/Lat3gCmSxFXcXRfJdqOONJR5Y9PAtRblqYiPb3tzG5o6SkuYpbslQB3Wg
+	 ZrBARuLjQoY8sKdBblenF5FJQAR6rsrhvv/Ra8Vcs8mcf/tC+y4RqwTBTJVaeAg57/
+	 Qr4B5j9wt3E/A==
+Date: Sat, 19 Oct 2024 15:17:10 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v6 1/8] mm: vmalloc: group declarations depending on
+ CONFIG_MMU together
+Message-ID: <ZxQv5vUuaFBT6Kxd@bombadil.infradead.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-2-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c04d2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241016122424.1655560-2-rppt@kernel.org>
 
-On Wed, 16 Oct 2024 17:13:43 -0700, Ian Rogers wrote:
-
-> These patches were originally on top of:
-> https://lore.kernel.org/lkml/20240924003720.617258-1-irogers@google.com/
-> where it was pointed out that a lot of the libdw conditional
-> compilation was due to features that have now been standard for 10 or
-> 15 years. The patches remove the conditional compilation assuming the
-> features are in libdw where the feature test is expanded to check
-> there pressence. The patch series is now on top of:
-> https://lore.kernel.org/lkml/20241016235622.52166-1-irogers@google.com/
+On Wed, Oct 16, 2024 at 03:24:17PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> [...]
+> There are a couple of declarations that depend on CONFIG_MMU in
+> include/linux/vmalloc.h spread all over the file.
+> 
+> Group them all together to improve code readability.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-Applied to perf-tools-next, thanks!
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Best regards,
-Namhyung
-
+  Luis
 
