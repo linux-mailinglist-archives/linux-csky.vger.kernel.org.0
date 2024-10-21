@@ -1,188 +1,188 @@
-Return-Path: <linux-csky+bounces-1173-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1174-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2CCA9A5D93
-	for <lists+linux-csky@lfdr.de>; Mon, 21 Oct 2024 09:51:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A41939A69FE
+	for <lists+linux-csky@lfdr.de>; Mon, 21 Oct 2024 15:23:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2ED87B21DA4
-	for <lists+linux-csky@lfdr.de>; Mon, 21 Oct 2024 07:51:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C54E01C2297C
+	for <lists+linux-csky@lfdr.de>; Mon, 21 Oct 2024 13:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E951E0B9C;
-	Mon, 21 Oct 2024 07:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lcpea5Iv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20CA61F80A9;
+	Mon, 21 Oct 2024 13:23:15 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3CD1D1308;
-	Mon, 21 Oct 2024 07:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B481EC01E;
+	Mon, 21 Oct 2024 13:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729497095; cv=none; b=aq8XbtJ4WqfiB6hkl87H6tWkAiDIpSztpzpJ9pbTkYONRizCROCbJ5IeFaA+m2xnyc72iUcyyJohlTfb3vBU1lBbwFNb0bpWnwQKJ6XNGrbQEsZSpo2+wyz842ib5dJCJ9byVzcyu7nn4cnAk0PsG4yiQ2prpqrnbF8AKC4HvnI=
+	t=1729516995; cv=none; b=lpZJ/Bo9Ev/NPQOpEJ5aB1O+mKrVKwFpDqgDJDGY5MXphjf6Bx/FCuSWLg+qgfvNXKRAihK71f2Lk1ELAreJHVSngXvXNgpt1Qi+sr16A+miSV747zYPHSaLe9CVZZj/jQa4siodZWpT2L1MxcKQStPPNl9tRhAz4gbtEwsesgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729497095; c=relaxed/simple;
-	bh=B/+QQSXeVAV8qhjBIr60FMU2TxAWb7d3IKRFyK1/9xc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HtE5gGcOLeHk3lb6O7ec8c1k0b15hZuxv1n/g4ItGUDbHNTtW0vneLBHztJIb37QEWLRSRwxRkWRMaIvG+7lVrzIsCVrfHCdv4yyfI1aHAxMahvIPjjo3ocHUEo0enDunyq8maLz1tlGsVnii8WJtJjWMhmGSRX29mhxb8AfSMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lcpea5Iv; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2fb4ec17f5cso38390991fa.3;
-        Mon, 21 Oct 2024 00:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729497091; x=1730101891; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QYx22NJnU8m5zMVc9qXfVExwyrt1nX+c8Lx7LpR9E7U=;
-        b=Lcpea5Iv7dcABLRONIvriWaYX5bxGRLvo6tk/o6z5pv3evYDtqM7MZJjkxCudrXKZg
-         1lXBZNuRroQ1qNgC1/vfW5BYdJvYr+KJ3FWW2byXsozeBcH1/MSIHGxZ5IZAXx6eKTNU
-         QGZVnNtvkjxo7m768PcLQzR5x5u3zMaSFtHf266Z0xjwEXCTSK+0MmAjY1KZeU8XG3Hq
-         yodUPqv1QbD0V5MhYV7PMriaF88J4dkaK4SkjeDsnwwwbPbkmsie4ve2MU2ZwURAU3xW
-         lMFwNYF6YRK7cTRNwep4vxa1/VtnwZS0fc/0SlS7PMcUo72w21E90LnJqXzJitmWblvM
-         88Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729497091; x=1730101891;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QYx22NJnU8m5zMVc9qXfVExwyrt1nX+c8Lx7LpR9E7U=;
-        b=hu8QsPKt/LKi2qpqluww48eb+NEGmGjzmnrNiaa3fbFLkKvH/f4yIjYv3rN4wuMNOP
-         +siCkknYlBoyzwM/50hE97OQYqYmljPePuq4aAhdIG/l5RuJCTdCssVNeB5Q/hFd81/7
-         eOqXgXsTi6p91+XDJ5D7HGNcY9V30n4JT2rwDqaI7B9ZNISr5N6r3nABCEthQlP+vXs+
-         UlIt293q30W9TrSD7sTkNpsdkZXwhWMm/u04ZI9LQwlp8BHoo/q7PiiuG8IPev6u5rGk
-         IdDvtsPwNWnPM5pLXhwZwtxD+USAISQ/0LN1G/J6TS+JhFc6fZ7D4MAfBiWX+zNKOk6k
-         Klqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWAh8DhdGoCG6NHTYcHaE0E5lo78HgDvRH+bk+QBZpb1fCuSc2D4xVFZTkp6kPcW3wumIq7cRUumSSCw6M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4E//IVlSXNVW1AKaEly/Sgb4Rsi6wSUFqhKYv3BRe0bG2S0YS
-	CGy2SEU3NKcvRsMV7i7vE2hkuP+FNOsKTIPBi0e+qMVRYp+8vl0DBLKhB+H3FZsxeSPQrdpqmWa
-	WFUXtpG+hM0Q7UrmNCBcIlf4m+A0=
-X-Google-Smtp-Source: AGHT+IFLOGfRY6ct8GZX60Bpp0Uwa+HWCtZXKnr+ZCoywSARUvYnfkMVWHh22+t6nOSTCIzfAZgCV7d8s1MikHvXzeI=
-X-Received: by 2002:a2e:be0f:0:b0:2f7:4f84:50a2 with SMTP id
- 38308e7fff4ca-2fb832020b6mr43469821fa.31.1729497090839; Mon, 21 Oct 2024
- 00:51:30 -0700 (PDT)
+	s=arc-20240116; t=1729516995; c=relaxed/simple;
+	bh=sZVT35tPktjswObqMzDeNjpp8MfKEIT8nIy1KCQbxUQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=sF/oF9SKWLwPVFcclItM4nMbFAO+AMKWGk0Cg1481KQTRa2KgXkDhQ2Axxfc5QcrPJlPt9+4+zIz3Z3Y9VD+cJupxbNu4tAmYv1UWJChrCI/hy5UJCt72VQa8D/OYQ62nm6iOv2vz3I2qntAMXZjJpQF6himc2gtRkRsuuDKiqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1B4ADA7;
+	Mon, 21 Oct 2024 06:23:40 -0700 (PDT)
+Received: from [10.57.24.27] (unknown [10.57.24.27])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8DCB3F73B;
+	Mon, 21 Oct 2024 06:22:59 -0700 (PDT)
+Message-ID: <b6ca55b7-4de2-4085-97bd-619f91d9fcb8@arm.com>
+Date: Mon, 21 Oct 2024 14:22:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008054615.43062-1-yang.li85200@gmail.com>
- <20241016095626.8162-1-yang.li85200@gmail.com> <CAJF2gTQ5D8fU9rSs7V28S9c5+ZPuQSJW7inQtoFsM6X6gBgOKg@mail.gmail.com>
-In-Reply-To: <CAJF2gTQ5D8fU9rSs7V28S9c5+ZPuQSJW7inQtoFsM6X6gBgOKg@mail.gmail.com>
-From: yang li <yang.li85200@gmail.com>
-Date: Mon, 21 Oct 2024 15:51:18 +0800
-Message-ID: <CA+N+=zvG62nrmz=f1n1hCztu8k=KBg24_ZZKCWbn2Bhzd7cUdQ@mail.gmail.com>
-Subject: Re: [PATCH v2] csky: fix csky_cmpxchg_fixup not working
-To: Guo Ren <guoren@kernel.org>
-Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Steven Price <steven.price@arm.com>
+Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
+To: "Kirill A. Shutemov" <kirill@shutemov.name>,
+ Charlie Jenkins <charlie@rivosinc.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Naveen N Rao <naveen@kernel.org>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+ <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
+ <Ztnp3OAIRz/daj7s@ghost>
+ <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
+Content-Language: en-GB
+In-Reply-To: <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Guo Ren:
-In C language, your conclusion is correct, but in assembly language,
- global_symbol !=3D &global_symbol
-I did the following experiment:
+On 09/09/2024 10:46, Kirill A. Shutemov wrote:
+> On Thu, Sep 05, 2024 at 10:26:52AM -0700, Charlie Jenkins wrote:
+>> On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
+>>> On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
+>>>> Some applications rely on placing data in free bits addresses allocated
+>>>> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+>>>> address returned by mmap to be less than the 48-bit address space,
+>>>> unless the hint address uses more than 47 bits (the 48th bit is reserved
+>>>> for the kernel address space).
+>>>>
+>>>> The riscv architecture needs a way to similarly restrict the virtual
+>>>> address space. On the riscv port of OpenJDK an error is thrown if
+>>>> attempted to run on the 57-bit address space, called sv57 [1].  golang
+>>>> has a comment that sv57 support is not complete, but there are some
+>>>> workarounds to get it to mostly work [2].
+> 
+> I also saw libmozjs crashing with 57-bit address space on x86.
+> 
+>>>> These applications work on x86 because x86 does an implicit 47-bit
+>>>> restriction of mmap() address that contain a hint address that is less
+>>>> than 48 bits.
+>>>>
+>>>> Instead of implicitly restricting the address space on riscv (or any
+>>>> current/future architecture), a flag would allow users to opt-in to this
+>>>> behavior rather than opt-out as is done on other architectures. This is
+>>>> desirable because it is a small class of applications that do pointer
+>>>> masking.
+> 
+> You reiterate the argument about "small class of applications". But it
+> makes no sense to me.
 
-liyang@liyang-virtual-machine:~/Desktop/test$ ls
-main.c  test.s
-liyang@liyang-virtual-machine:~/Desktop/test$ cat test.s
+Sorry to chime in late on this - I had been considering implementing
+something like MAP_BELOW_HINT and found this thread.
 
-.globl test_symbol
-test_symbol:
-        nop
-liyang@liyang-virtual-machine:~/Desktop/test$ cat main.c
-#include <stdio.h>
+While the examples of applications that want to use high VA bits and get
+bitten by future upgrades is not very persuasive. It's worth pointing
+out that there are a variety of somewhat horrid hacks out there to work
+around this feature not existing.
 
-extern unsigned long test_symbol;
-int main(void)
-{
-        printf("test_symbol =3D 0x%lx\n",(unsigned long)test_symbol);
-        printf("&test_symbol =3D 0x%lx\n",(unsigned long)&test_symbol);
+E.g. from my brief research into other code:
 
-        printf("main =3D 0x%lx\n",(unsigned long)main);
-        printf("&main =3D 0x%lx\n",(unsigned long)&main);
-}
-liyang@liyang-virtual-machine:~/Desktop/test$ gcc main.c test.s --static -o=
- test
-liyang@liyang-virtual-machine:~/Desktop/test$ ls
-main.c  test  test.s
-liyang@liyang-virtual-machine:~/Desktop/test$ readelf test -s | grep test_s=
-ymbol
-   884: 000000000040170c     0 NOTYPE  GLOBAL DEFAULT    7 test_symbol
-liyang@liyang-virtual-machine:~/Desktop/test$ readelf test -s | grep main -=
-w
-  1605: 0000000000401685   135 FUNC    GLOBAL DEFAULT    7 main
-liyang@liyang-virtual-machine:~/Desktop/test$ ./test
-test_symbol =3D 0x4b853001f0f90
-&test_symbol =3D 0x40170c
-main =3D 0x401685
-&main =3D 0x401685
+  * Box64 seems to have a custom allocator based on reading 
+    /proc/self/maps to allocate a block of VA space with a low enough 
+    address [1]
 
-The above test can lead to the conclusion that:
-Both c_symbol and &c_symbol represent the address of a symbol, but
-&ASM_symbol represents the address of a symbol while ASM_symbol
- represents the opcode stored at that address.
+  * PHP has code reading /proc/self/maps - I think this is to find a 
+    segment which is close enough to the text segment [2]
 
-On Thu, Oct 17, 2024 at 2:05=E2=80=AFPM Guo Ren <guoren@kernel.org> wrote:
->
-> On Wed, Oct 16, 2024 at 5:56=E2=80=AFPM Yang Li <yang.li85200@gmail.com> =
-wrote:
-> >
-> > In the csky_cmpxchg_fixup function, it is incorrect to use the global
-> >  variable csky_cmpxchg_stw to determine the address where the exception
-> >  occurred.The global variable csky_cmpxchg_stw stores the opcode at the
-> >  time of the exception, while &csky_cmpxchg_stw shows the address where
-> >  the exception occurred.
-> >
-> > Signed-off-by: Yang Li <yang.li85200@gmail.com>
-> > ---
-> > V1 -> V2:Eliminate compilation warnings
-> >
-> >  arch/csky/mm/fault.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-> > index a885518ce1dd..5226bc08c336 100644
-> > --- a/arch/csky/mm/fault.c
-> > +++ b/arch/csky/mm/fault.c
-> > @@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_regs =
-*regs)
-> >         if (trap_no(regs) !=3D VEC_TLBMODIFIED)
-> >                 return;
-> >
-> > -       if (instruction_pointer(regs) =3D=3D csky_cmpxchg_stw)
-> > -               instruction_pointer_set(regs, csky_cmpxchg_ldw);
-> > +       if (instruction_pointer(regs) =3D=3D (unsigned long)&csky_cmpxc=
-hg_stw)
-> > +               instruction_pointer_set(regs, (unsigned long)&csky_cmpx=
-chg_ldw);
-> csky_cmpxchg_ldw(stw) is a label symbol, not a variable.
->
-> arch/csky/kernel/atomic.S:
-> GLOBAL(csky_cmpxchg_ldw)
-> GLOBAL(csky_cmpxchg_stw)
->
-> Your modification does not affect the ASM output.
->
-> (gdb) p main
-> $1 =3D {void (void)} 0x5fa <main>
-> (gdb) p &main
-> $2 =3D (void (*)(void)) 0x5fa <main>
->
-> >         return;
-> >  }
-> >  #endif
-> > --
-> > 2.34.1
-> >
->
->
-> --
-> Best Regards
->  Guo Ren
+  * FEX-Emu mmap()s the upper 128TB of VA on Arm to avoid full 48 bit
+    addresses [3][4]
+
+  * pmdk has some funky code to find the lowest address that meets 
+    certain requirements - this does look like an ALSR alternative and 
+    probably couldn't directly use MAP_BELOW_HINT, although maybe this 
+    suggests we need a mechanism to map without a VA-range? [5]
+
+  * MIT-Scheme parses /proc/self/maps to find the lowest mapping within 
+    a range [6]
+
+  * LuaJIT uses an approach to 'probe' to find a suitable low address 
+    for allocation [7]
+
+The biggest benefit I see of MAP_BELOW_HINT is that it would allow a
+library to get low addresses without causing any problems for the rest
+of the application. The use case I'm looking at is in a library and 
+therefore a personality mode wouldn't be appropriate (because I don't 
+want to affect the rest of the application). Reading /proc/self/maps
+is also problematic because other threads could be allocating/freeing
+at the same time.
+
+Thanks,
+Steve
+
+
+[1] https://sources.debian.org/src/box64/0.3.0+dfsg-1/src/custommem.c/
+[2] https://sources.debian.org/src/php8.2/8.2.24-1/ext/opcache/shared_alloc_mmap.c/#L62
+[3] https://github.com/FEX-Emu/FEX/blob/main/FEXCore/Source/Utils/Allocator.cpp
+[4] https://github.com/FEX-Emu/FEX/commit/df2f1ad074e5cdfb19a0bd4639b7604f777fb05c
+[5] https://sources.debian.org/src/pmdk/1.13.1-1.1/src/common/mmap_posix.c/?hl=29#L29
+[6] https://sources.debian.org/src/mit-scheme/12.1-3/src/microcode/ux.c/#L826
+[7] https://sources.debian.org/src/luajit/2.1.0+openresty20240815-1/src/lj_alloc.c/
+
+> With full address space by default, this small class of applications is
+> going to *broken* unless they would handle RISC-V case specifically.
+> 
+> On other hand, if you limit VA to 128TiB by default (like many
+> architectures do[1]) everything would work without intervention.
+> And if an app needs wider address space it would get it with hint opt-in,
+> because it is required on x86-64 anyway. Again, no RISC-V-specific code.
+> 
+> I see no upside with your approach. Just worse user experience.
+> 
+> [1] See va_high_addr_switch test case in https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/mm/Makefile#n115
+> 
+
 
