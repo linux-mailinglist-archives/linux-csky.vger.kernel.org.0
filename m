@@ -1,100 +1,196 @@
-Return-Path: <linux-csky+bounces-1202-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1203-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34C359B1270
-	for <lists+linux-csky@lfdr.de>; Sat, 26 Oct 2024 00:16:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E5809B2349
+	for <lists+linux-csky@lfdr.de>; Mon, 28 Oct 2024 03:54:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 649971C2146A
-	for <lists+linux-csky@lfdr.de>; Fri, 25 Oct 2024 22:16:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4C8E280CB6
+	for <lists+linux-csky@lfdr.de>; Mon, 28 Oct 2024 02:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF1C1D45FD;
-	Fri, 25 Oct 2024 22:16:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18106185949;
+	Mon, 28 Oct 2024 02:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnsUCoKs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k42hSf4n"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D639217F40;
-	Fri, 25 Oct 2024 22:16:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BE217E016;
+	Mon, 28 Oct 2024 02:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729894577; cv=none; b=tolFa/TlmvrERuqrHuzvte7Tjr4ql0VDhT0poCiwWAsGKMaDIBbdFK+5lqRnQ9LncJra/DT5O4dorrER4b7M5pqJc09atXd42zUrr/Oa9xx6mwEpqW0TQ1ib0tRUKM1+ZyryJkiWCgnGocviNJ2bWtd71A1o74bCngL1xWOaxvY=
+	t=1730084058; cv=none; b=OCYDvGARydGbMAmpMGeKtJla7UZ3u5W4ojf3s9yGQ26LpubuFVDN/Ps+/6Jw44e4PThk8CpuFGsaUWPtSFOKE6A91zZMttHv86YOnAj6iQaFTfRuM/1J/Gzl1MRkjkYRB11tSE1GTCb84gxTMopZQ3oZVRl7zoDyvg7pFp0F17Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729894577; c=relaxed/simple;
-	bh=uJTuxxbpUOhYgzs5WgqjZ9oJKXZ+IXXPP0S1EvdK364=;
+	s=arc-20240116; t=1730084058; c=relaxed/simple;
+	bh=ecVyzUwd0wuMFCUUyLBpM+3P4H8SU/a4LFzelsYnR1c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EBSGcxSHScBEBRpfzv0vqrC5YkOllkG27SEYG5XKHteGqUorPkVVbNDxahLmzmVJ0l7q7MHPyUUAilQwET13kvL5g7NvHJTZmO/skZ/KSy5hC7y1Z6rQcNCbJCWVBreMBRTJB/N8jYaevVGY6eIc0M5SQHz+2ybjOKh1CjVAqwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnsUCoKs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD093C4AF09;
-	Fri, 25 Oct 2024 22:16:16 +0000 (UTC)
+	 To:Cc:Content-Type; b=XwrsEz42pR637GO/QrmAfDLpoTSVlfihMrcOcP7vhXgLqqysh6yvtbBUcGpUmXHevWr6alyUUQzGh4GRZhFnpfracASXMV3SXmjCG9xLkvn4vNtc+p24E5ywdWCn1KlCmJm0bGc+dxaSLdGauWvM5e7j8WB0VCGR7IwDmxOjo6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k42hSf4n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61569C4CEC3;
+	Mon, 28 Oct 2024 02:54:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729894576;
-	bh=uJTuxxbpUOhYgzs5WgqjZ9oJKXZ+IXXPP0S1EvdK364=;
+	s=k20201202; t=1730084057;
+	bh=ecVyzUwd0wuMFCUUyLBpM+3P4H8SU/a4LFzelsYnR1c=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nnsUCoKsPy331Chn2UUcsngk6k5T9x6sJ5x/vQCqmf50lgps9XEwpgmo4ieWnMh2v
-	 hKKhwmyShVPTqg/aa8W1r73marKoLDlVeVlofleUY/xPKgT1+9Mj3gW7tRebb1/J0Z
-	 0Nb8Myml3Mh8xhW6GxZCRVqJQI9a0IlZxwhIb/FFLjWW7zb3vS5IAOKR5P46cuH1bX
-	 6HIe2Fv9Hy8qoXg6BWAQLe1RwZxXCtspPILf7Beo+xbCY0Zov9G0Zr+tfys0Y9cjmm
-	 B8TBd0ZUpDH1lyus/5Zn/fUtOn0w957/BJ7tJ0vN45wzDau2TLxE75xt0/m5uLMVPd
-	 35fr3Z21N4TFw==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539e690479cso2617526e87.3;
-        Fri, 25 Oct 2024 15:16:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVKprcsRllH7BJ41sXSlqyiCtIEsZ5vnmYR+0LZuY6d1/SABCV4Eki8T+FS+cDAf7Ae0Xa34HX/3o8=@vger.kernel.org, AJvYcCVbtVU1h19fnBYgkPHPIuPVmzehwOx3o1Nvl9HFsoZ+WZREgRcolAuNCgtPmCv2x6sARdrCSHszGMAmeoSQ4aY=@vger.kernel.org, AJvYcCVmrLmjITh4Vz5rfc6pQkgS+TdDkeDTDhhapBIizEAHZfjr4BA0PTnjQeKc1l9o+wlTujqosk/Juj1U@vger.kernel.org, AJvYcCWgNNJWtqw0SNqrO5synDUeNVMHVpTMwpQBgYGWbp8LGyIgJNCM2JbITEaHeYr6I+bBiTFfuuly3GltLA==@vger.kernel.org, AJvYcCX66Kl9k9Pj5j2YoaCxI3IBhJtrzoV6SAjWvwXY25tTg7yPZ6MRFuhaELIC3AtFuyorkyRPEaRdSk6NgEVN@vger.kernel.org, AJvYcCXk7+aoCbzPQb0qZOhdFPB5agJ6xjWL3i430K4kk4cakm6LEqnQ173u/Got0SfcCVvsVbVr/5nCFE8zgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy02GYSOV3/Ce2xQEewmVNy4zY5tTDypkvTAnF6N02Ff7wzHJj5
-	KDwmA0xSn+Rjjywy2e+QIjAZSd/boiumJLJr4HKMxjlvTge52sEq8d7BGZO/+uwOIDMcQ0ol4Jn
-	HdrViav/x34Dn0aLHRmgwrk/WbA==
-X-Google-Smtp-Source: AGHT+IFDzz30e4eepxmp8y9NIgcU0ohK45V4obAXv/vuq7kDznzhS/1RZo0KUZFB2KLhRb/lyUfqMvvtY4COXI6AOVA=
-X-Received: by 2002:a05:6512:3d8b:b0:539:d0ef:b3f9 with SMTP id
- 2adb3069b0e04-53b3491dfc0mr415910e87.40.1729894575274; Fri, 25 Oct 2024
- 15:16:15 -0700 (PDT)
+	b=k42hSf4ng8mDl8OJeWo+rxwyeyfytjzah8SwHLJRhUD240AFYz57uIfzoFM47cBz7
+	 AQPGXpLpjbN1dE+Gz44pXiFi1mRGaG1UEdq9QlQtyS2JPTm6QU0U4q7qU8TLA+dcJX
+	 ye6DTW78WeR0sPELJFwoC88sZUh1ot7MP3wCYYqKZvz0yeRNIaagyZJjrH7x40xuGc
+	 c/rY7VlBEgbc6TqbzS/Xg/j7RlNp3+CXWdvh8znsfK3TiBStraC1JB8sToS0dk5btS
+	 q+B1pLrnK3ihA/c+j4ti1TthbTXErvomOK73aQ08FdljT3ayE06irAi6LwdTAzHaFs
+	 YgUnHsMvoW2yQ==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5c941623a5aso7848699a12.0;
+        Sun, 27 Oct 2024 19:54:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVe6cMghnJYKQm83TDzqZcDay9uz7mgOALfvmI89rhxmaxoXH21SXpJ7kKnytA8loIn0NzmzqWB8suGIG8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFTPSRIOF8NG4zpZEIcW6ZKowxgpNr1eyddbq7IfSI1k/bagUk
+	ZjZnzFQGJOU0m6oZd0BKGvHfsv/S/dJnAy5IZrN91lHfpYprP64B2FjPiR4XDHwOXSWE43hyA4L
+	QgycDRaCHDNh0Y9JO38TWo6vv/vk=
+X-Google-Smtp-Source: AGHT+IFI4uJwqWiqfnsgzy+BaJOyDNHUW7eKApEia+Dv5RyczfboqsxIVf85+Bj6zpG+/iL0bP1xkxFYrIOVdW41PLc=
+X-Received: by 2002:a17:907:eab:b0:a99:3db2:eb00 with SMTP id
+ a640c23a62f3a-a9ad1add979mr1126355066b.28.1730084055978; Sun, 27 Oct 2024
+ 19:54:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023171426.452688-1-usamaarif642@gmail.com>
-In-Reply-To: <20241023171426.452688-1-usamaarif642@gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Fri, 25 Oct 2024 17:15:53 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLBuzRYgnYHCdbdO4wneFNPe5_iEfbehvKK5M7bBuiyfA@mail.gmail.com>
-Message-ID: <CAL_JsqLBuzRYgnYHCdbdO4wneFNPe5_iEfbehvKK5M7bBuiyfA@mail.gmail.com>
-Subject: Re: [PATCH v2] of/fdt: add dt_phys arg to early_init_dt_scan and early_init_dt_verify
-To: Usama Arif <usamaarif642@gmail.com>
-Cc: mark.rutland@arm.com, will@kernel.org, leitao@debian.org, 
-	catalin.marinas@arm.com, tglx@linutronix.de, chris@zankel.net, 
-	saravanak@google.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	kexec@lists.infradead.org, loongarch@lists.linux.dev, 
-	linux-sh@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-openrisc@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-csky@vger.kernel.org
+References: <20241008054615.43062-1-yang.li85200@gmail.com>
+ <20241016095626.8162-1-yang.li85200@gmail.com> <CAJF2gTQ5D8fU9rSs7V28S9c5+ZPuQSJW7inQtoFsM6X6gBgOKg@mail.gmail.com>
+ <CA+N+=zvG62nrmz=f1n1hCztu8k=KBg24_ZZKCWbn2Bhzd7cUdQ@mail.gmail.com>
+In-Reply-To: <CA+N+=zvG62nrmz=f1n1hCztu8k=KBg24_ZZKCWbn2Bhzd7cUdQ@mail.gmail.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Mon, 28 Oct 2024 10:54:05 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS0bm_PSSJrXrzaL98zeJt-nguj85Dzg6zNG6Qy_JD+Vg@mail.gmail.com>
+Message-ID: <CAJF2gTS0bm_PSSJrXrzaL98zeJt-nguj85Dzg6zNG6Qy_JD+Vg@mail.gmail.com>
+Subject: Re: [PATCH v2] csky: fix csky_cmpxchg_fixup not working
+To: yang li <yang.li85200@gmail.com>
+Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 23, 2024 at 12:14=E2=80=AFPM Usama Arif <usamaarif642@gmail.com=
+Hi yang,
+
+
+On Mon, Oct 21, 2024 at 3:51=E2=80=AFPM yang li <yang.li85200@gmail.com> wr=
+ote:
+>
+> Hi Guo Ren:
+> In C language, your conclusion is correct, but in assembly language,
+>  global_symbol !=3D &global_symbol
+> I did the following experiment:
+>
+> liyang@liyang-virtual-machine:~/Desktop/test$ ls
+> main.c  test.s
+> liyang@liyang-virtual-machine:~/Desktop/test$ cat test.s
+>
+> .globl test_symbol
+> test_symbol:
+>         nop
+> liyang@liyang-virtual-machine:~/Desktop/test$ cat main.c
+> #include <stdio.h>
+>
+> extern unsigned long test_symbol;
+> int main(void)
+> {
+>         printf("test_symbol =3D 0x%lx\n",(unsigned long)test_symbol);
+>         printf("&test_symbol =3D 0x%lx\n",(unsigned long)&test_symbol);
+>
+>         printf("main =3D 0x%lx\n",(unsigned long)main);
+>         printf("&main =3D 0x%lx\n",(unsigned long)&main);
+> }
+> liyang@liyang-virtual-machine:~/Desktop/test$ gcc main.c test.s --static =
+-o test
+> liyang@liyang-virtual-machine:~/Desktop/test$ ls
+> main.c  test  test.s
+> liyang@liyang-virtual-machine:~/Desktop/test$ readelf test -s | grep test=
+_symbol
+>    884: 000000000040170c     0 NOTYPE  GLOBAL DEFAULT    7 test_symbol
+> liyang@liyang-virtual-machine:~/Desktop/test$ readelf test -s | grep main=
+ -w
+>   1605: 0000000000401685   135 FUNC    GLOBAL DEFAULT    7 main
+> liyang@liyang-virtual-machine:~/Desktop/test$ ./test
+> test_symbol =3D 0x4b853001f0f90
+> &test_symbol =3D 0x40170c
+> main =3D 0x401685
+> &main =3D 0x401685
+>
+> The above test can lead to the conclusion that:
+> Both c_symbol and &c_symbol represent the address of a symbol, but
+> &ASM_symbol represents the address of a symbol while ASM_symbol
+>  represents the opcode stored at that address.
+>
+> On Thu, Oct 17, 2024 at 2:05=E2=80=AFPM Guo Ren <guoren@kernel.org> wrote=
+:
+> >
+> > On Wed, Oct 16, 2024 at 5:56=E2=80=AFPM Yang Li <yang.li85200@gmail.com=
 > wrote:
->
->  __pa() is only intended to be used for linear map addresses and using
-> it for initial_boot_params which is in fixmap for arm64 will give an
-> incorrect value. Hence save the physical address when it is known at
-> boot time when calling early_init_dt_scan for arm64 and use it at kexec
-> time instead of converting the virtual address using __pa().
->
-> Reported-by: Breno Leitao <leitao@debian.org>
-> Suggested-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Usama Arif <usamaarif642@gmail.com>
-> Fixes: ac10be5cdbfa ("arm64: Use common of_kexec_alloc_and_setup_fdt()")
+> > >
+> > > In the csky_cmpxchg_fixup function, it is incorrect to use the global
+> > >  variable csky_cmpxchg_stw to determine the address where the excepti=
+on
+> > >  occurred.The global variable csky_cmpxchg_stw stores the opcode at t=
+he
+> > >  time of the exception, while &csky_cmpxchg_stw shows the address whe=
+re
+> > >  the exception occurred.
+> > >
+> > > Signed-off-by: Yang Li <yang.li85200@gmail.com>
 
-This looks fine, but what is the symptom without this compared to
-before the above change? The original code in the referenced commit
-above didn't remove the reservation at all. Unless the current code
-does something worse, this is new functionality more than a fix (for
-stable).
+You convinced me. Applied to csky/linux-next, thanks!
 
-Rob
+
+> > > ---
+> > > V1 -> V2:Eliminate compilation warnings
+> > >
+> > >  arch/csky/mm/fault.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+> > > index a885518ce1dd..5226bc08c336 100644
+> > > --- a/arch/csky/mm/fault.c
+> > > +++ b/arch/csky/mm/fault.c
+> > > @@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_reg=
+s *regs)
+> > >         if (trap_no(regs) !=3D VEC_TLBMODIFIED)
+> > >                 return;
+> > >
+> > > -       if (instruction_pointer(regs) =3D=3D csky_cmpxchg_stw)
+> > > -               instruction_pointer_set(regs, csky_cmpxchg_ldw);
+> > > +       if (instruction_pointer(regs) =3D=3D (unsigned long)&csky_cmp=
+xchg_stw)
+> > > +               instruction_pointer_set(regs, (unsigned long)&csky_cm=
+pxchg_ldw);
+> > csky_cmpxchg_ldw(stw) is a label symbol, not a variable.
+> >
+> > arch/csky/kernel/atomic.S:
+> > GLOBAL(csky_cmpxchg_ldw)
+> > GLOBAL(csky_cmpxchg_stw)
+> >
+> > Your modification does not affect the ASM output.
+> >
+> > (gdb) p main
+> > $1 =3D {void (void)} 0x5fa <main>
+> > (gdb) p &main
+> > $2 =3D (void (*)(void)) 0x5fa <main>
+> >
+> > >         return;
+> > >  }
+> > >  #endif
+> > > --
+> > > 2.34.1
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+
+
+
+--
+Best Regards
+ Guo Ren
 
