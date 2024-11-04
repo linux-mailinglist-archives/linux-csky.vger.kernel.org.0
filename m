@@ -1,160 +1,167 @@
-Return-Path: <linux-csky+bounces-1237-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1238-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 255889BC089
-	for <lists+linux-csky@lfdr.de>; Mon,  4 Nov 2024 23:03:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FF909BC168
+	for <lists+linux-csky@lfdr.de>; Tue,  5 Nov 2024 00:27:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94A17B219F7
-	for <lists+linux-csky@lfdr.de>; Mon,  4 Nov 2024 22:03:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 959BF1F229B3
+	for <lists+linux-csky@lfdr.de>; Mon,  4 Nov 2024 23:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9792D1FDF88;
-	Mon,  4 Nov 2024 22:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9C51FE0E6;
+	Mon,  4 Nov 2024 23:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dXWibLQp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uD6aQVKZ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C569A1ABEDF
-	for <linux-csky@vger.kernel.org>; Mon,  4 Nov 2024 22:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAC11FDFB8;
+	Mon,  4 Nov 2024 23:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730757823; cv=none; b=oYq97tZA0TqOEugUNtPjS3E321O8WGEm+imSnNKexgmtoJtxfKYInWJ30BDX07CabbfxVa4W1GWSN42Egho3sHjLBomfEhSWgEqkogn+3q+QONN8ZWy7Zwe/A2noZFq+w22dCBd43Ra3HGmxhB6nxRUSvO6FPxEztip0HnreCm8=
+	t=1730762866; cv=none; b=DUmZPgGllUSpsCScWP67LZ4WMz+xT3AIpFq7UTpxuw5IfdeNNr8pE5DNZPab2rE0JxBnk3V8TCMgYZF5jbe1vGmyB5Lai0nFa1jEqP98FoTjJg38Us1QgBtAOjRLVG82HwqMwtRC1PPLrujn7N1zC02qF3YkIxvSa4oXiQfAZTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730757823; c=relaxed/simple;
-	bh=FwdJ/tZnq5Q1ZNjaalXxz9pm9mHtJsnsrILgdEWNMTI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=opoTL58D4ymP13AuUiKqhnO7zZekes27rUvKwyXPNOrZLMv2z98YlaC/hJVXV6VnxhnwfWUbDQ8xWzYponPsgiSclEbM13f8keBl7VqFLcuD4oL8YD4Zt2j6a9URXgl1bKHvv0SKL6zz3BIBaHmWmRmyu9Gx8qt8ID7Ct6+mDl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dXWibLQp; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-20c87b0332cso27215ad.1
-        for <linux-csky@vger.kernel.org>; Mon, 04 Nov 2024 14:03:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730757820; x=1731362620; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FwdJ/tZnq5Q1ZNjaalXxz9pm9mHtJsnsrILgdEWNMTI=;
-        b=dXWibLQpNrIWrk0HRxsj0Sj29SkxNk7/doQpfI212XJNwtsrHMzl61g/geVopl2R1x
-         flj1ceS6uTShJF9f/mdhwjzmuyk35lb08eLtTfkHbElqOyIF0KKiKMp/gRFAPoyA0BUX
-         hyxrEvsPMHmAZTs5jIZ9Jehwy43mt1xnV83TjkZZq125rdhjFR/07hpJQmrlzIn1CR2C
-         aw5ASygB8cHqXPC3udkXaRpqvMwSFA+VYnL52Fq5ZDyYSRqiwi2CcafJW2dL1DPbp5Uw
-         fPOGY03xMMuRsQRrL5LsVu8efP8xkJnCYjJeYej05xGFa0HBoBgSFZcETtfz9XxlIuiu
-         1mUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730757820; x=1731362620;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FwdJ/tZnq5Q1ZNjaalXxz9pm9mHtJsnsrILgdEWNMTI=;
-        b=EKQ7GSKrfEWfvSWlmDhYdZ9pBK1GP+QyaJqLcp0CIrxh3KZJhDbXmAin1s9BQwUpRU
-         OKpakdhCuVrBxsw8I6+OBshI4JLmiRlqH+oOfQO7uuZqcSLPXWQysEzfBYLErFWr9P3e
-         vF9UqKAvOfYHhvtyxQ7AgKEXX0gcxRUceHfLmXf9KY8GjnLxQrtX12DYrPhQrJ+5grZj
-         N4XV21Q2eZhTq9xUOBjjLrYkr4NkB9aA7H/4II8Jh3SzZYGwqyjmcTvFuZeO8kv166WK
-         cDSS/AkKGNrNVAkcdDuoBuQ98YT6cJym9Jpq3nyeh1Oplfwbf6fMsMilEMUxOd3WuYHC
-         rIZw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdS6XQmdOWiFdt7T3v/tbhTzaDykU5aHh1vzwhg0bmt/jJ+NTMMyCFmGeziBZ9Ro06cpMJhmpx33Z8@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE/tR+hVrXUHmEXyUKZnKhtXMhzJcOaNGYQs067h2A/6TzGoLa
-	8yiKyuPIhX8rnX2kIVhtqjkaBC+519qFHOguM3N01TP6j0g7RCNQgHBOAv3G/1pN75RYGK0A4J/
-	Wh300sx9nGypkeD5eZ1rkCFjV4sMelYxD0jcI
-X-Gm-Gg: ASbGnctXz/OaXv+nkZ/GpQfiZhRpnw2Xk8gqEOnHGf0K7S+URmpIy+qdOq8VJSQ3BOZ
-	CY58qcn6voYmxq59sW42fP47ifYVtgr/WkthHdYnTvVS0akJt083b2TdB1T4VdsM=
-X-Google-Smtp-Source: AGHT+IEti60SDL7RHxI+cAhb1vGKCJSZIYIvkK03gIl3UEiSV24cOOJW04C/9MY0z0qdxUSpneeeMi3ERfOoxdjdYyo=
-X-Received: by 2002:a17:902:c401:b0:206:b7b2:4876 with SMTP id
- d9443c01a7336-2115e2cb7c5mr1245345ad.20.1730757819913; Mon, 04 Nov 2024
- 14:03:39 -0800 (PST)
+	s=arc-20240116; t=1730762866; c=relaxed/simple;
+	bh=G7tF/ZaqXBtDJLMTb97Oc+SktZk//Kx3oRVjwm2Gkec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iMfr9ma5FM5iB+sdPQI+ndfM51faiAWWz/rSdiqVGlsTnRDmmrbVlCCzCVQfOR+CUMMgOC020tyydBrT60q6bI3PWwXC6wyIs3oc6FirponM3aGC8+VE9nH8tjmg1eu9f4qqmpUcBEEFUvDTV4354qXfHRoQYtp7o5KRUYqqpXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uD6aQVKZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB3A7C4CECE;
+	Mon,  4 Nov 2024 23:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730762866;
+	bh=G7tF/ZaqXBtDJLMTb97Oc+SktZk//Kx3oRVjwm2Gkec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uD6aQVKZ8xYi+PTTwYupZ6PGdQoZjGxor3CJ6T/KZlWjFxurKitUGg4OsLqeVl22R
+	 oTMAQXmWqXP0EO6JaBIYZ9VEqoL35XGUitRTwgi+bJtDhjSL6UuAIcLW7XMfz2tbvE
+	 x3MFVpG1yHfJRXfsS6NaRprs6A1rIqEf/OZ8jX2sy+DwUFdsMetTULRZ3iOQoxlOsn
+	 5JoGBx6K0BrtfF9Z0+hxFGtNMWymLR+Dppngi0NxeJnTpYgOWeDN7FHowhaRXk3khA
+	 u6nha7LupF4lzkb6ryYEoHDIxLmpv0DY+XiF9diWn7xWUzJjMMZ/7hbbF3UF0ISQXS
+	 B++nhrf0RE3MQ==
+Date: Mon, 4 Nov 2024 16:27:41 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v7 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <20241104232741.GA3843610@thelio-3990X>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+ <20241023162711.2579610-7-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241104-perf_syscalltbl-v1-0-9adae5c761ef@rivosinc.com>
- <3b56fc50-4c6c-4520-adba-461797a3b5ec@app.fastmail.com> <Zyk9hX8CB_2rbWsi@ghost>
-In-Reply-To: <Zyk9hX8CB_2rbWsi@ghost>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 4 Nov 2024 14:03:28 -0800
-Message-ID: <CAP-5=fUdZRbCp+2ghEUdp+qJ1BuMDuTtw9R+dFAaom+3oqQV_g@mail.gmail.com>
-Subject: Re: [PATCH RFT 00/16] perf tools: Use generic syscall scripts for all archs
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Christian Brauner <brauner@kernel.org>, guoren <guoren@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241023162711.2579610-7-rppt@kernel.org>
 
-On Mon, Nov 4, 2024 at 1:32=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.co=
-m> wrote:
->
-> On Mon, Nov 04, 2024 at 10:13:18PM +0100, Arnd Bergmann wrote:
-> > On Mon, Nov 4, 2024, at 22:06, Charlie Jenkins wrote:
-> > > Standardize the generation of syscall headers around syscall tables.
-> > > Previously each architecture independently selected how syscall heade=
-rs
-> > > would be generated, or would not define a way and fallback onto
-> > > libaudit. Convert all architectures to use a standard syscall header
-> > > generation script and allow each architecture to override the syscall
-> > > table to use if they do not use the generic table.
-> > >
-> > > As a result of these changes, no architecture will require libaudit, =
-and
-> > > so the fallback case of using libaudit is removed by this series.
-> > >
-> > > Testing:
-> > >
-> > > I have tested that the syscall mappings of id to name generation work=
-s
-> > > as expected for every architecture, but I have only validated that pe=
-rf
-> > > trace compiles and runs as expected on riscv, arm64, and x86_64.
-> > >
-> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> >
-> > Thanks for doing this, I had plans to do this myself, but hadn't
-> > completed that bit so far. I'm travelling at the moment, so I'm
-> > not sure I have time to look at it in enough detail this week.
-> >
-> > One problem I ran into doing this previously was the incompatible
-> > format of the tables for x86 and s390, which have conflicting
-> > interpretations of what the '-' character means. It's possible
-> > that this is only really relevant for the in-kernel table,
-> > not the version in tools.
-> >
->
-> I don't think that is an issue for this usecase because the only
-> information that is taken from the syscall table is the number and the
-> name of the syscall. '-' doesn't appear in either of these columns!
+Hi Mike,
 
-This is cool stuff. An area that may not be immediately apparent for
-improvement is that the x86-64 build only has access to the 64-bit
-syscall table. Perhaps all the syscall tables should always be built
-and then at runtime the architecture of the perf.data file, etc. used
-to choose the appropriate one. The cleanup to add an ELF host #define
-could help with this:
-https://lore.kernel.org/linux-perf-users/20241017002520.59124-1-irogers@goo=
-gle.com/
+On Wed, Oct 23, 2024 at 07:27:09PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> When module text memory will be allocated with ROX permissions, the
+> memory at the actual address where the module will live will contain
+> invalid instructions and there will be a writable copy that contains the
+> actual module code.
+> 
+> Update relocations and alternatives patching to deal with it.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Tested-by: kdevops <kdevops@lists.linux.dev>
 
-Ultimately I'd like to see less arch code as it inherently makes cross
-platform worker harder. That doesn't impact this work which I'm happy
-to review.
+Hopefully the last time you have to hear from me, as I am only
+experiencing issues with only one of my test machines at this point and
+it is my only machine that supports IBT, so it seems to point to
+something specific with the IBT part of the FineIBT support. I notice
+either a boot hang or an almost immediate reboot (triple fault?). I
+guess this is how I missed reporting this earlier, as my machine was
+falling back to the default distribution kernel after the restart and I
+did not notice I was not actually testing a -next kernel.
 
-Thanks,
-Ian
+Checking out the version of this change that is in next-20241104, commit
+7ca6ed09db62 ("x86/module: prepare module loading for ROX allocations of
+text"), it boots with either 'cfi=off' or 'cfi=kcfi' but it exhibits the
+issues noted above with 'cfi=fineibt'. At the immediate parent, commit
+b575d981092f ("arch: introduce set_direct_map_valid_noflush()"), all
+three combinations boot fine.
+
+  $ uname -r; tr ' ' '\n' </proc/cmdline | grep cfi=
+
+  6.12.0-rc5-debug-00214-g7ca6ed09db62
+  cfi=kcfi
+
+  6.12.0-rc5-debug-00214-g7ca6ed09db62
+  cfi=off
+
+  6.12.0-rc5-debug-00213-gb575d981092f
+  cfi=fineibt
+
+  6.12.0-rc5-debug-00213-gb575d981092f
+  cfi=kcfi
+
+  6.12.0-rc5-debug-00213-gb575d981092f
+  cfi=off
+
+I do not think this machine has an accessible serial port and I do not
+think IBT virtualization is supported via either KVM or TCG in QEMU, so
+I am not sure how to get more information about what is going on here. I
+wanted to try reverting these changes on top of next-20241104 but there
+was a non-trivial conflict in mm/execmem.c due to some changes on top,
+so I just tested in the mm history.
+
+If there is any other information I can provide or patches I can test, I
+am more than happy to do so.
+
+Cheers,
+Nathan
 
