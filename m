@@ -1,256 +1,250 @@
-Return-Path: <linux-csky+bounces-1255-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1256-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97E669C2506
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 19:46:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 852039C2607
+	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 21:03:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C06A284846
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 18:46:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94C6C1C21909
+	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 20:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBAD9233D96;
-	Fri,  8 Nov 2024 18:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5EE1C1F10;
+	Fri,  8 Nov 2024 20:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OMTL2ujF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="epU1fQiN"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C780233D62
-	for <linux-csky@vger.kernel.org>; Fri,  8 Nov 2024 18:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1451A9B3C;
+	Fri,  8 Nov 2024 20:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731091568; cv=none; b=pO2rAlCxd3+E+znqIvnk6JYIQvMTm+lLiCB69pmI7AP79QfO4xhOg/v4c29aKspuc3EbND7UPSVwd6ONk8ztlaB4AycAMkGSu4bnPU1G4seV+zELjdT6NmQf4BYS+CgYtrjLokm0wZAKm7MYnwEin7JMtFm/FqE6pJL9s7Pg+f4=
+	t=1731096186; cv=none; b=tXWmcFb4L+/UT5Rrp0fXQMYSn7O8+L/K5WnF0hEaqN1U9566Bt18UFzgpyR91UbiWhH2D6S3ucBPxVu+89KCgoRTc3A+4vxiZsQl+VWGALR/2E0x7FDI2erUpq6X9sU1dZSr/fcF4EUHq6jnx77fSuFvV3oEfr1D862KkP1wrFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731091568; c=relaxed/simple;
-	bh=/WS+fI5h/o/kkOA1At/6uiAJlBqvU583Dh59ply0Wnw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uHSj1npda0CKYKu4fcgA9tBSbLVh1ZAOTZEnorpJfO+hdVr4+zi8fg21WyJrBGAdrYkrerd7bW4BbVUoysZC0drHI9pf6gko6iqLJirVQ2Jmf6RPLxw6LUdW7iOzZ/E3Z9JeiSGFUDbf3jmlA5gt8Cbsf4f8UtPlwtP6kHXtp/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OMTL2ujF; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3a3b28ac9a1so4905ab.1
-        for <linux-csky@vger.kernel.org>; Fri, 08 Nov 2024 10:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731091566; x=1731696366; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Oq7W5H+t/LruxWYJFi93XWxZ+SC0sXDXHOurVmQo/Bw=;
-        b=OMTL2ujFUlNAYv8a1Iw5CJ5sVHI6uTRDeryHxBTA+we+Ib2PcZPtqdeIPN1I45++Jq
-         tRmkmM7Py3KDOgBA4MAhvtYsTeQ0rNg+NGf77OatnlTeXRcvTvObmNpGtACRIfWPx5R1
-         2rAADUKUKcFyDY8xG3HyYTejskc+kM7Ogj9h7SaxU6sq1IbGcNX2xo1wUEMSPzUS93sp
-         I7DKzBUzm1ah7vI6f9YzIHi5+06oNlic/B8Rx9lq9Sh8vCmo1KCULBiuXOnz+K/upR/D
-         a0GLUyirARXFW8ZPn5v8VO87NPwKwshzMGq2/JsCB1zBJ0WDlNVqkS40DddcQImHF6ix
-         SnnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731091566; x=1731696366;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Oq7W5H+t/LruxWYJFi93XWxZ+SC0sXDXHOurVmQo/Bw=;
-        b=tyLn43gtDStG9xcPIj7eKd7tkaG0znngTW2aXSSu91MPwsonCY9TpLsS9hTwSSUKYK
-         iLyvloXDJPsGvFkDRq2dWZ0CepolSZ1qdbUPgRPINRvVRe0L5vJ1mZqq10M/ittry7GQ
-         v//VLfBZRe5U5PkX2tyGuF1idgMN0auncDe2yANcWgziDP8s6sd+SVruoKNB/LF8vPj6
-         TajhJUZUW3jbVSKhuNwcyhm55pGMk4jQUDx981+JCtX78r4kp5t8gVwkNgccgL0MUigD
-         6yMwIbNkj/q1V3bw2QcyxidkAoqvW7LMCYOtyKaHlV+jstUT3KrS2mVXphPvYRDjblnk
-         zNHw==
-X-Forwarded-Encrypted: i=1; AJvYcCULR5qB9kp+Xgs1HoOXpPKTkP/o1qBmLxfqxCxRViVJRdlrhVc35mPmaPJMxmQTp9XhZI4WO3lFM0pB@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywxu3tdE9SZWLRPiWZBDzgC/7uYwhs6AU7sUW+O4e+cr+ErhQE5
-	uRK6ptCuFdLe5fVbfjJ9NHsrewvRdaMqnoEnED7xz4SQhWq4Tw6xau+ofydtFMuBdrOTwUJQ9gW
-	4b2fEHQyBvmkYrRbAeTd9DOqcfqfXqA75m6Wr
-X-Gm-Gg: ASbGnctCL5PIe8mMmWRBoY8CU7/+KQ3fRSK1oexaZpJNmN8HcUIvFeRl1O0u5JPubNM
-	EZIQo7Xk6DPXn64JKaLvfXDsZNqaXtlbW
-X-Google-Smtp-Source: AGHT+IHdLRWHy0a2E8ArZqPLt9njQZotEfT+CpO+S5UTw1lpU681rHBzVlJvCzLHGs/O89svRJOnyjbXFrmZAfHjHVI=
-X-Received: by 2002:a05:6e02:1c81:b0:3a6:f43d:a24e with SMTP id
- e9e14a558f8ab-3a6f8a06128mr98245ab.10.1731091565707; Fri, 08 Nov 2024
- 10:46:05 -0800 (PST)
+	s=arc-20240116; t=1731096186; c=relaxed/simple;
+	bh=xX7Im2UhKNKgBE416PaOdSNPECSfPWPArQu7YbQODCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IvX6FG3neJ6KmFBDfTH3yWRvPKS+ZaG4G/zfOk8iuKKpSF2hdfHINhCaxYSiluc4a3Y+bLGZIoVmlgCfymv+MRvlCJrTjNyyJmuutUx2x0BpMqfYrj7T1YDoh/lIAO5AqpAeb2p868bhYEEry2bTJzLZ08KXjYOwgSVq/T75+d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=epU1fQiN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 430B3C4CECD;
+	Fri,  8 Nov 2024 20:03:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731096185;
+	bh=xX7Im2UhKNKgBE416PaOdSNPECSfPWPArQu7YbQODCs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=epU1fQiNqfeFZdEM00F7vtSpMYwYfot9P71+GYdehpaxaLPDaCOqbKUsUO44+7y7Q
+	 o3eR0G3nwWjdXG/LjOV4dfBN0fpiBTfQjkBTXyhZBNO+yusM5c1u7BaRCniZhMJtUc
+	 q0LQVTzSXkt/xN//agdroW9fr4YtNwoqFZiNjQEOxO7G8ZsMBpZAqrwC/td1X3yVI6
+	 ZSmmdmmc6CZDt6uatgD6LkqCfjjGv9p4sNMU/5ZgXRHd74jD11SoWcSVHFWVmpVipt
+	 dxHX0hnw/IAilCJN1DmkNfFpwQXnl86vrupoNsuxdPy9xI7tSKuBpkU6HsTpd7/E8B
+	 18HgSp7ZPgyRw==
+Date: Fri, 8 Nov 2024 12:03:02 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Guo Ren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Nick Terrell <terrelln@fb.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Changbin Du <changbin.du@huawei.com>,
+	Guilherme Amadio <amadio@gentoo.org>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Kajol Jain <kjain@linux.ibm.com>, Atish Patra <atishp@rivosinc.com>,
+	Shenlin Liang <liangshenlin@eswincomputing.com>,
+	Anup Patel <anup@brainfault.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Chen Pei <cp0613@linux.alibaba.com>,
+	Dima Kogan <dima@secretsauce.net>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 10/20] perf dwarf-regs: Move csky dwarf-regs out of
+ arch
+Message-ID: <Zy5udmX6gZAg0wkS@google.com>
+References: <20241017002520.59124-1-irogers@google.com>
+ <20241017002520.59124-11-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241017002520.59124-1-irogers@google.com> <20241017002520.59124-5-irogers@google.com>
- <Zy5Le-xn4gzQ2WLo@google.com> <CAP-5=fXe-gJ6pXwdTgGqScCR+mKS2FBfVDsbih7vL-1kPKAvaA@mail.gmail.com>
- <Zy5aoMnY2nupb7SX@google.com>
-In-Reply-To: <Zy5aoMnY2nupb7SX@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Fri, 8 Nov 2024 10:45:54 -0800
-Message-ID: <CAP-5=fW7m0AVVn42XK9s=RFmAs63mh4Mk5QehpLKLFMAGje+9A@mail.gmail.com>
-Subject: Re: [PATCH v3 04/20] perf disasm: Add e_machine/e_flags to struct arch
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Nick Terrell <terrelln@fb.com>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Changbin Du <changbin.du@huawei.com>, 
-	Guilherme Amadio <amadio@gentoo.org>, Yang Jihong <yangjihong@bytedance.com>, 
-	Aditya Gupta <adityag@linux.ibm.com>, Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Kajol Jain <kjain@linux.ibm.com>, 
-	Atish Patra <atishp@rivosinc.com>, Shenlin Liang <liangshenlin@eswincomputing.com>, 
-	Anup Patel <anup@brainfault.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	"Steinar H. Gunderson" <sesse@google.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
-	Chen Pei <cp0613@linux.alibaba.com>, Dima Kogan <dima@secretsauce.net>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, "David S. Miller" <davem@davemloft.net>, 
-	Alexander Lobakin <aleksander.lobakin@intel.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241017002520.59124-11-irogers@google.com>
 
-On Fri, Nov 8, 2024 at 10:38=E2=80=AFAM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> On Fri, Nov 08, 2024 at 10:19:52AM -0800, Ian Rogers wrote:
-> > On Fri, Nov 8, 2024 at 9:33=E2=80=AFAM Namhyung Kim <namhyung@kernel.or=
-g> wrote:
-> > >
-> > > On Wed, Oct 16, 2024 at 05:25:04PM -0700, Ian Rogers wrote:
-> > > > Currently functions like get_dwarf_regnum only work with the host
-> > > > architecture. Carry the elf machine and flags in struct arch so tha=
-t
-> > > > in disassembly these can be used to allow cross platform disassembl=
-y.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/perf/arch/arc/annotate/instructions.c       | 2 ++
-> > > >  tools/perf/arch/arm/annotate/instructions.c       | 2 ++
-> > > >  tools/perf/arch/arm64/annotate/instructions.c     | 2 ++
-> > > >  tools/perf/arch/csky/annotate/instructions.c      | 7 ++++++-
-> > > >  tools/perf/arch/loongarch/annotate/instructions.c | 2 ++
-> > > >  tools/perf/arch/mips/annotate/instructions.c      | 2 ++
-> > > >  tools/perf/arch/powerpc/annotate/instructions.c   | 2 ++
-> > > >  tools/perf/arch/riscv64/annotate/instructions.c   | 2 ++
-> > > >  tools/perf/arch/s390/annotate/instructions.c      | 2 ++
-> > > >  tools/perf/arch/sparc/annotate/instructions.c     | 2 ++
-> > > >  tools/perf/arch/x86/annotate/instructions.c       | 3 ++-
-> > > >  tools/perf/util/disasm.h                          | 4 ++++
-> > > >  12 files changed, 30 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/tools/perf/arch/arc/annotate/instructions.c b/tools/pe=
-rf/arch/arc/annotate/instructions.c
-> > > > index 2f00e995c7e3..e5619770a1af 100644
-> > > > --- a/tools/perf/arch/arc/annotate/instructions.c
-> > > > +++ b/tools/perf/arch/arc/annotate/instructions.c
-> > > > @@ -5,5 +5,7 @@ static int arc__annotate_init(struct arch *arch, ch=
-ar *cpuid __maybe_unused)
-> > > >  {
-> > > >       arch->initialized =3D true;
-> > > >       arch->objdump.comment_char =3D ';';
-> > > > +     arch->e_machine =3D EM_ARC;
-> > > > +     arch->e_flags =3D 0;
-> > > >       return 0;
-> > > >  }
-> > > > diff --git a/tools/perf/arch/arm/annotate/instructions.c b/tools/pe=
-rf/arch/arm/annotate/instructions.c
-> > > > index 2ff6cedeb9c5..cf91a43362b0 100644
-> > > > --- a/tools/perf/arch/arm/annotate/instructions.c
-> > > > +++ b/tools/perf/arch/arm/annotate/instructions.c
-> > > > @@ -53,6 +53,8 @@ static int arm__annotate_init(struct arch *arch, =
-char *cpuid __maybe_unused)
-> > > >       arch->associate_instruction_ops   =3D arm__associate_instruct=
-ion_ops;
-> > > >       arch->objdump.comment_char        =3D ';';
-> > > >       arch->objdump.skip_functions_char =3D '+';
-> > > > +     arch->e_machine =3D EM_ARM;
-> > > > +     arch->e_flags =3D 0;
-> > > >       return 0;
-> > > >
-> > > >  out_free_call:
-> > > > diff --git a/tools/perf/arch/arm64/annotate/instructions.c b/tools/=
-perf/arch/arm64/annotate/instructions.c
-> > > > index f86d9f4798bd..d465d093e7eb 100644
-> > > > --- a/tools/perf/arch/arm64/annotate/instructions.c
-> > > > +++ b/tools/perf/arch/arm64/annotate/instructions.c
-> > > > @@ -113,6 +113,8 @@ static int arm64__annotate_init(struct arch *ar=
-ch, char *cpuid __maybe_unused)
-> > > >       arch->associate_instruction_ops   =3D arm64__associate_instru=
-ction_ops;
-> > > >       arch->objdump.comment_char        =3D '/';
-> > > >       arch->objdump.skip_functions_char =3D '+';
-> > > > +     arch->e_machine =3D EM_AARCH64;
-> > > > +     arch->e_flags =3D 0;
-> > > >       return 0;
-> > > >
-> > > >  out_free_call:
-> > > > diff --git a/tools/perf/arch/csky/annotate/instructions.c b/tools/p=
-erf/arch/csky/annotate/instructions.c
-> > > > index 5337bfb7d5fc..14270311d215 100644
-> > > > --- a/tools/perf/arch/csky/annotate/instructions.c
-> > > > +++ b/tools/perf/arch/csky/annotate/instructions.c
-> > > > @@ -43,6 +43,11 @@ static int csky__annotate_init(struct arch *arch=
-, char *cpuid __maybe_unused)
-> > > >       arch->initialized =3D true;
-> > > >       arch->objdump.comment_char =3D '/';
-> > > >       arch->associate_instruction_ops =3D csky__associate_ins_ops;
-> > > > -
-> > > > +     arch->e_machine =3D EM_CSKY;
-> > > > +#if defined(__CSKYABIV2__)
-> > > > +     arch->e_flags =3D EF_CSKY_ABIV2;
-> > > > +#else
-> > > > +     arch->e_flags =3D EF_CSKY_ABIV1;
-> > > > +#endif
-> > >
-> > > By moving this into the general code, it should take care of old syst=
-ems
-> > > that doesn't have the macro.
-> > >
-> > >   In file included from util/disasm.c:109:
-> > >   /linux/tools/perf/arch/csky/annotate/instructions.c: In function 'c=
-sky__annotate_init':
-> > >   /linux/tools/perf/arch/csky/annotate/instructions.c:50:25: error: '=
-EF_CSKY_ABIV1' undeclared (first use in this function)
-> > >      50 |         arch->e_flags =3D EF_CSKY_ABIV1;
-> > >         |                         ^~~~~~~~~~~~~
-> > >   /linux/tools/perf/arch/csky/annotate/instructions.c:50:25: note: ea=
-ch undeclared identifier is reported only once for each function it appears=
- in
-> >
-> > EF_CSKY_ABIV1 is defined in elf.h and has been there at least 5 years i=
-n libelf:
-> > https://sourceware.org/git/?p=3Delfutils.git;a=3Dcommit;f=3Dlibelf/elf.=
-h;h=3D9c82942ae7355a3226c53a92c2c73b33193c5e33
-> > I suspected the issue here is missing elf.h include, but the .c file
-> > is included in tools/perf/util/disasm.c and that must have a
-> > transitive dependency given other things are building. Do you want me
-> > to send a patch making this conditional with extra #ifdefs or re-send
-> > the series?
->
-> Yeah, it's unfortunate but I think we can have a small incremental diff
-> here to define them if it's not there.  Then I'll squash it to the
-> patch.
+On Wed, Oct 16, 2024 at 05:25:10PM -0700, Ian Rogers wrote:
+> Move arch/csky/util/dwarf-regs.c to util/dwarf-regs-csky.c and compile
+> in unconditionally. To avoid get_arch_regstr being duplicated, rename
+> to get_csky_regstr and add to get_dwarf_regstr switch.
+> 
+> Update #ifdefs to allow ABI V1 and V2 tables at the same
+> time. Determine the table from the ELF flags.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/arch/csky/util/Build               |  1 -
+>  tools/perf/util/Build                         |  1 +
+>  .../dwarf-regs.c => util/dwarf-regs-csky.c}   | 19 ++++++++++---------
+>  tools/perf/util/dwarf-regs.c                  | 11 +++++++----
+>  tools/perf/util/include/dwarf-regs.h          |  2 ++
+>  5 files changed, 20 insertions(+), 14 deletions(-)
+>  rename tools/perf/{arch/csky/util/dwarf-regs.c => util/dwarf-regs-csky.c} (74%)
+> 
+> diff --git a/tools/perf/arch/csky/util/Build b/tools/perf/arch/csky/util/Build
+> index 1325310cab6a..5e6ea82c4202 100644
+> --- a/tools/perf/arch/csky/util/Build
+> +++ b/tools/perf/arch/csky/util/Build
+> @@ -1,4 +1,3 @@
+>  perf-util-y += perf_regs.o
+>  
+> -perf-util-$(CONFIG_LIBDW) += dwarf-regs.o
+>  perf-util-$(CONFIG_LIBDW_DWARF_UNWIND) += unwind-libdw.o
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index 4c615611b9d7..99ae4e2802b8 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -203,6 +203,7 @@ endif
+>  perf-util-$(CONFIG_LIBDW) += probe-finder.o
+>  perf-util-$(CONFIG_LIBDW) += dwarf-aux.o
+>  perf-util-$(CONFIG_LIBDW) += dwarf-regs.o
+> +perf-util-$(CONFIG_LIBDW) += dwarf-regs-csky.o
+>  perf-util-$(CONFIG_LIBDW) += dwarf-regs-x86.o
+>  perf-util-$(CONFIG_LIBDW) += debuginfo.o
+>  perf-util-$(CONFIG_LIBDW) += annotate-data.o
+> diff --git a/tools/perf/arch/csky/util/dwarf-regs.c b/tools/perf/util/dwarf-regs-csky.c
+> similarity index 74%
+> rename from tools/perf/arch/csky/util/dwarf-regs.c
+> rename to tools/perf/util/dwarf-regs-csky.c
+> index ca86ecaeacbb..d38ef1f07f3e 100644
+> --- a/tools/perf/arch/csky/util/dwarf-regs.c
+> +++ b/tools/perf/util/dwarf-regs-csky.c
+> @@ -5,9 +5,8 @@
+>  #include <stddef.h>
+>  #include <dwarf-regs.h>
+>  
+> -#if defined(__CSKYABIV2__)
+> -#define CSKY_MAX_REGS 73
+> -const char *csky_dwarf_regs_table[CSKY_MAX_REGS] = {
+> +#define CSKY_ABIV2_MAX_REGS 73
+> +const char *csky_dwarf_regs_table_abiv2[CSKY_ABIV2_MAX_REGS] = {
+>  	/* r0 ~ r8 */
+>  	"%a0", "%a1", "%a2", "%a3", "%regs0", "%regs1", "%regs2", "%regs3",
+>  	/* r9 ~ r15 */
+> @@ -26,9 +25,9 @@ const char *csky_dwarf_regs_table[CSKY_MAX_REGS] = {
+>  	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+>  	"%epc",
+>  };
+> -#else
+> -#define CSKY_MAX_REGS 57
+> -const char *csky_dwarf_regs_table[CSKY_MAX_REGS] = {
+> +
+> +#define CSKY_ABIV1_MAX_REGS 57
+> +const char *csky_dwarf_regs_table_abiv1[CSKY_ABIV1_MAX_REGS] = {
+>  	/* r0 ~ r8 */
+>  	"%sp", "%regs9", "%a0", "%a1", "%a2", "%a3", "%regs0", "%regs1",
+>  	/* r9 ~ r15 */
+> @@ -41,9 +40,11 @@ const char *csky_dwarf_regs_table[CSKY_MAX_REGS] = {
+>  	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+>  	"%epc",
+>  };
+> -#endif
+>  
+> -const char *get_arch_regstr(unsigned int n)
+> +const char *get_csky_regstr(unsigned int n, unsigned int flags)
+>  {
+> -	return (n < CSKY_MAX_REGS) ? csky_dwarf_regs_table[n] : NULL;
+> +	if (flags & EF_CSKY_ABIV2)
 
-Thanks, sgtm. Could you also explicitly include elf.h into disasm.c
-rather than depending on the transitive #include? There's obviously
-tech debt to not have .c files including each other to work around the
-build system.
+Hmm.. you need it here as well.
 
-Ian
 
-> >
-> > > Also, I think __CSKYABIV2__ is defined only when the host is csky.  S=
-o
-> > > it'll use ABI v1 on cross env.  I'm not sure if it's a problem.  We m=
-ay
-> > > need to save the ABI somewhere in the metadata later.
-> >
-> > Agreed. In general we should read e_machine and e_flags from the ELF
-> > file, so I'm not sure new metadata is needed. This patch is trying to
-> > lay groundwork for that.
->
-> I understand that.  Yeah it should come from the binary.
->
-> Thanks,
-> Namhyung
->
+> +		return (n < CSKY_ABIV2_MAX_REGS) ? csky_dwarf_regs_table_abiv2[n] : NULL;
+> +
+> +	return (n < CSKY_ABIV1_MAX_REGS) ? csky_dwarf_regs_table_abiv1[n] : NULL;
+>  }
+> diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
+> index fd21f9e90e40..9a76f83af62c 100644
+> --- a/tools/perf/util/dwarf-regs.c
+> +++ b/tools/perf/util/dwarf-regs.c
+> @@ -29,17 +29,18 @@
+>  #define __get_dwarf_regstr(tbl, n) (((n) < ARRAY_SIZE(tbl)) ? (tbl)[(n)] : NULL)
+>  
+>  /* Return architecture dependent register string (for kprobe-tracer) */
+> -const char *get_dwarf_regstr(unsigned int n, unsigned int machine,
+> -			     unsigned int flags __maybe_unused)
+> +const char *get_dwarf_regstr(unsigned int n, unsigned int machine, unsigned int flags)
+>  {
+> -#if EM_HOST == EM_X86_64 || EM_HOST == EM_386 || EM_HOST == EM_AARCH64 || EM_HOST == EM_ARM
+> +#if EM_HOST == EM_X86_64 || EM_HOST == EM_386 || EM_HOST == EM_AARCH64 || EM_HOST == EM_ARM \
+> +    || EM_HOST == EM_CSKY
+
+And here too.  It seems you also need a rebase.
+
+At this point, I'm giving up.  Can you please refresh the series with
+a fix?
+
+Thanks,
+Namhyung
+
+
+>  	if (machine == EM_NONE) {
+>  		/* Generic arch - use host arch */
+>  		machine = EM_HOST;
+>  	}
+>  #endif
+>  	switch (machine) {
+> -#if EM_HOST != EM_X86_64 && EM_HOST != EM_386 && EM_HOST != EM_AARCH64 && EM_HOST != EM_ARM
+> +#if EM_HOST != EM_X86_64 && EM_HOST != EM_386 && EM_HOST != EM_AARCH64 && EM_HOST != EM_ARM \
+> +    && EM_HOST != EM_CSKY
+>  	case EM_NONE:	/* Generic arch - use host arch */
+>  		return get_arch_regstr(n);
+>  #endif
+> @@ -51,6 +52,8 @@ const char *get_dwarf_regstr(unsigned int n, unsigned int machine,
+>  		return __get_dwarf_regstr(arm_regstr_tbl, n);
+>  	case EM_AARCH64:
+>  		return __get_dwarf_regstr(aarch64_regstr_tbl, n);
+> +	case EM_CSKY:
+> +		return get_csky_regstr(n, flags);
+>  	case EM_SH:
+>  		return __get_dwarf_regstr(sh_regstr_tbl, n);
+>  	case EM_S390:
+> diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/include/dwarf-regs.h
+> index 0b533409d82a..b72d9d308ce4 100644
+> --- a/tools/perf/util/include/dwarf-regs.h
+> +++ b/tools/perf/util/include/dwarf-regs.h
+> @@ -83,6 +83,8 @@
+>  const char *get_arch_regstr(unsigned int n);
+>  #endif
+>  
+> +const char *get_csky_regstr(unsigned int n, unsigned int flags);
+> +
+>  /**
+>   * get_dwarf_regstr() - Returns ftrace register string from DWARF regnum.
+>   * @n: DWARF register number.
+> -- 
+> 2.47.0.105.g07ac214952-goog
+> 
 
