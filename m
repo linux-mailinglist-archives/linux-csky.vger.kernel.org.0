@@ -1,72 +1,72 @@
-Return-Path: <linux-csky+bounces-1261-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1262-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2898E9C2845
-	for <lists+linux-csky@lfdr.de>; Sat,  9 Nov 2024 00:46:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 324C59C2846
+	for <lists+linux-csky@lfdr.de>; Sat,  9 Nov 2024 00:47:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B56EE281CB3
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 23:46:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6AC6CB2246A
+	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 23:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E19F20DD52;
-	Fri,  8 Nov 2024 23:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4599420DD67;
+	Fri,  8 Nov 2024 23:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1hDNKJ3K"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NZq3zu/+"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBF320B80B
-	for <linux-csky@vger.kernel.org>; Fri,  8 Nov 2024 23:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823E320DD50
+	for <linux-csky@vger.kernel.org>; Fri,  8 Nov 2024 23:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731109580; cv=none; b=f+Qbp+jKg3TI6fwymWh2QMz562J3put1GrXUwNRi+0+dKV9KNUjHOaruNj8ey1pR7WKPYHdvE1sCq6govzYFbjQj4MjXfz/d/S45RpIzgK1W7aDK6bFVJNN4X6HTw4MmCMKTwzFkyuy4Eoz/C9b76gKGNPGvkxsWc7fkxq7UFWA=
+	t=1731109582; cv=none; b=r23ncVwFy1O86PrDUjq2G6LZQ9XXXn0NEDBYEBjHLOg1q1r37AOMrSAnAn9XS9N6xhIJdAKkRzJLHhWKJgW11eFlFxXbbU998L7XB4XvNgvNozHTHSclQBy/ZS7Q+iUHVAV6/6FoCiCrtIYpR7jgQ2+sTQATfY7mKC/dCzrHV/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731109580; c=relaxed/simple;
-	bh=OwDjlEcg+VsWUJdyq+jgB5rvXnEcuLkLZjSg4pCEQeA=;
+	s=arc-20240116; t=1731109582; c=relaxed/simple;
+	bh=69ZCkIknxwz1LbqUVzw2Tr9y6pSCOiCgn8w870jj4Y4=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=OqJ7XGeQzE0qcmFzbkh2OPCY4oaaoDNSfTu0vT3ANZaqAN0RcRwOgwvU1mTg90qFwQtnkQsVp+tSmJ9y7ZTnPe3wsgYd/nA8kQW1OPOKA0z0KmRXUvj5AKGytzCWXatJ6C2gXRR4LrXL8Q76l4M+I9MxdAriD2hyKNECQiJpvYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1hDNKJ3K; arc=none smtp.client-ip=209.85.219.202
+	 To:Content-Type; b=YXlUM+lZrvsxz/rd9w55xwIEz97/UOLwVQbzilnpQBrPlK8xo1l3tII1hrLR3pq23wWP6XjKplLR6y29sgGzNe1S0aTfbtVjIwiG79cRrUd/J2AZXlK4NsTJqkUOmDNzJLONX/i4yFueuoFXN5FCnZ9NluJAN/q0KqA6IUYmC28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NZq3zu/+; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e30daaf5928so5241384276.1
-        for <linux-csky@vger.kernel.org>; Fri, 08 Nov 2024 15:46:17 -0800 (PST)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ea863ecfe9so55455377b3.3
+        for <linux-csky@vger.kernel.org>; Fri, 08 Nov 2024 15:46:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731109577; x=1731714377; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1731109579; x=1731714379; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=g82RToWDBgAxXg56Q2NaJKBXk5A1APOL73D1eJS6XJQ=;
-        b=1hDNKJ3K8cszdNB0APsaw/N6QzrcnvqvcB674YZz3OMo2eg9Z2SkvHdwtE26teFEj+
-         7ZMCuLjOIxrfwC1AY+g2sIIw/htRhFh7Obm/Sv4dCDhvy1aGnSqnJGB9wZNkOAotHTkU
-         d15rs84B/Z4ejTfoC9SlVjmuKJCf6+69g86JxVQn2GfXFag4o8dUxmlr9Z1rxkl+wNbG
-         FpMBl87IJFzwmeTMnnQIt9zR3PEtx8HaYo+DqBuw4SXFKkYJJA2ECv3Psv4PEA3UR4Co
-         JOQ+lieoOoNR8v4hSUWWyrnlrQw0A6RU9T/P4QaYmucEloOG+6djvN/qizqy3z+Ut9bm
-         azSw==
+        bh=WqfEj71qwDvDkOaRaAnJba0Q5cD+cxzhGu3trqLHupE=;
+        b=NZq3zu/+FD1PKJ1PO9EDEnUELTKOofvlT/hTU3+4OSZ7QsbT1UJBVqZtGMU1iIhlur
+         UQDfExt1JmzoN/MfBa9eOi/FK3vCYrPonpO81+s+PkCFQXS6JZlwbQDrKpetmbIdN712
+         hMURVxhi30+PVRMmUh3G8uQAsyDcJN9IEd7DKDjAVlNPnq9pA8W0PI7S5sHzPAtQwn6Q
+         OlEeW/R1OkNzaPzVqVRG6aGJ3iihhW9fSpSE7vg65jSXL0EiNnbVF+iorOMsV62qRoAI
+         UHLFwwUOxslYkJVDuNNS4fRmvCdRVosh4Isi9hnmOd+reQ7JQPIB6qMYUmjs3WAySClz
+         bnJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731109577; x=1731714377;
+        d=1e100.net; s=20230601; t=1731109579; x=1731714379;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g82RToWDBgAxXg56Q2NaJKBXk5A1APOL73D1eJS6XJQ=;
-        b=dmtkrMgyVctSI20n2VzqUAFYBtdWzWSIbov2G+8cfx2oWliGQ9/SzPkX37/XzGdvxQ
-         QaGeEDZjTmjRa8r7oq4Pf2LapvGkVsmO850LyWyyCLMMib5NWEKBiNVAt0garxuAyIdI
-         leAYcLb4B+TEIrTHdCI3k1mfhN8fWa+7EFNjORSqDNIZdoHU2DE1gqzGz8X76gUaiYp/
-         65UQqJpykmUMAymHYxc7IoRxQQ/Hnvt07Rlb7nyuK56lGb2BkOZkjQGVz6qK2Mdkj6n+
-         g6cI9t6KR/v7HbBs4ZM/IfEqA8Fubt6t/jBiewZfwTNcKJKiwRngJA9YBj64Qv2S150F
-         icpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW3KnYRCPqb696knjrJIPvbeNTjjG1UW+vYuKk4jyyf5z4zjzkhz1vJn73kGcQ/D5pL9jYCAA2UPFs4@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUOxy35jqYgh7RhYOYF+x71siN3Q80rMj2NNs9cNahZJBPM/Eu
-	VXdGmkliMfAYpcT7VIKWHTXu3BWwjeEqifhtDtZjdogg2PGeCwZHSFcxWktwT5Pv9rbmi3L7rmy
-	ge5VaqA==
-X-Google-Smtp-Source: AGHT+IElDJGck4lM83rJ1PEL9nymEB4MsWS2o56lAC0eXJqXdZF9OIb7Wse2J+4ISIY+n+Ta53vUnbF5wBR0
+        bh=WqfEj71qwDvDkOaRaAnJba0Q5cD+cxzhGu3trqLHupE=;
+        b=CHRSAaW4PudaB/SfcZDoG61k6ba8C17Lsz39hEblNnhKqfprERKxmafvtAWb3Ux4CQ
+         yz/WhcnINPRx3pZJMlSZ16UxYEXGu4voc6WmpYpqT3aiq1/HrQp1DgWMKU/35I+WE0so
+         ksDsF5fdOWBaa6acLwNeOucjozcF/Sbkt4AT8RI2ZV6kSvh/cAPUfDCp2ZLhpftQAMtA
+         dn0hG/riB9d/MFsjwQfB18QxnVPxkVkm2H8yYbnO7OGYn/xVsaA7WC0kXQrDO4bifUFF
+         XuFxJwbD6knEwL9Pcxsmz8CWfV4wdJB0DdCR/O9Lz0EpMKvBczqyhkazkxU4ofhP1bcm
+         ncXg==
+X-Forwarded-Encrypted: i=1; AJvYcCWvU8a3TDHMcEKPZV7tIS07lrHUDmDlEGcKsQwwcme2sDF5XKMKMBSLSCgn3D7PnzlMjpb1ZTgDJ04H@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZKxkXwldHSOXfwa0AURm2UIJes/BLnAE+C7Rmnk1V9mubIr2J
+	lU42wGjKGBZfjczwcla/aGiNFnOhOMPMQ6AxwfI6FRIJk4lSk2W5AdkkTf3pb+Xwv6hvT+uC2Lb
+	I90Qz2Q==
+X-Google-Smtp-Source: AGHT+IFG/coLtc60xe7I+tUPVMErNFQ95tPpAKZEYNJPxy2g446wDwL8CjW44zY00BE7dZq8D8riH1qdukJU
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:6fd2:1e36:6d8c:7c49])
- (user=irogers job=sendgmr) by 2002:a5b:142:0:b0:e29:6df8:ef58 with SMTP id
- 3f1490d57ef6-e337f861ec6mr5903276.4.1731109576800; Fri, 08 Nov 2024 15:46:16
+ (user=irogers job=sendgmr) by 2002:a25:949:0:b0:e1d:912e:9350 with SMTP id
+ 3f1490d57ef6-e337f8beb2amr10471276.6.1731109579378; Fri, 08 Nov 2024 15:46:19
  -0800 (PST)
-Date: Fri,  8 Nov 2024 15:45:48 -0800
+Date: Fri,  8 Nov 2024 15:45:49 -0800
 In-Reply-To: <20241108234606.429459-1-irogers@google.com>
-Message-Id: <20241108234606.429459-4-irogers@google.com>
+Message-Id: <20241108234606.429459-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241108234606.429459-1-irogers@google.com>
 X-Mailer: git-send-email 2.47.0.277.g8800431eea-goog
-Subject: [PATCH v4 03/20] perf dwarf-regs: Add EM_HOST and EF_HOST defines
+Subject: [PATCH v4 04/20] perf disasm: Add e_machine/e_flags to struct arch
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -102,148 +102,189 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 
-Computed from the build architecture defines, EM_HOST and EF_HOST give
-values that can be used in dwarf register lookup. Place in
-dwarf-regs.h so the value can be shared. Move some dwarf-regs.c
-constants used for EM_HOST to dwarf-regs.h. Add CSky constants that
-may be missing.
-
-In disasm.c add an include of dwarf-regs.h as the included
-arch/*/annotate/instructions.c files make use of the constants and we
-want the elf.h/dwarf-regs.h dependency to be explicit.
+Currently functions like get_dwarf_regnum only work with the host
+architecture. Carry the elf machine and flags in struct arch so that
+in disassembly these can be used to allow cross platform disassembly.
 
 Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/disasm.c             |  1 +
- tools/perf/util/dwarf-regs.c         |  8 ---
- tools/perf/util/include/dwarf-regs.h | 82 ++++++++++++++++++++++++++++
- 3 files changed, 83 insertions(+), 8 deletions(-)
+ tools/perf/arch/arc/annotate/instructions.c       | 2 ++
+ tools/perf/arch/arm/annotate/instructions.c       | 2 ++
+ tools/perf/arch/arm64/annotate/instructions.c     | 2 ++
+ tools/perf/arch/csky/annotate/instructions.c      | 7 ++++++-
+ tools/perf/arch/loongarch/annotate/instructions.c | 2 ++
+ tools/perf/arch/mips/annotate/instructions.c      | 2 ++
+ tools/perf/arch/powerpc/annotate/instructions.c   | 2 ++
+ tools/perf/arch/riscv64/annotate/instructions.c   | 2 ++
+ tools/perf/arch/s390/annotate/instructions.c      | 2 ++
+ tools/perf/arch/sparc/annotate/instructions.c     | 2 ++
+ tools/perf/arch/x86/annotate/instructions.c       | 3 ++-
+ tools/perf/util/disasm.h                          | 4 ++++
+ 12 files changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-index bd98fec903f7..a525b80b934f 100644
---- a/tools/perf/util/disasm.c
-+++ b/tools/perf/util/disasm.c
-@@ -18,6 +18,7 @@
- #include "disasm.h"
- #include "disasm_bpf.h"
- #include "dso.h"
-+#include "dwarf-regs.h"
- #include "env.h"
- #include "evsel.h"
- #include "map.h"
-diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
-index 5b7f86c0063f..7c01bc4d7e5b 100644
---- a/tools/perf/util/dwarf-regs.c
-+++ b/tools/perf/util/dwarf-regs.c
-@@ -13,14 +13,6 @@
- #include <errno.h>
- #include <linux/kernel.h>
+diff --git a/tools/perf/arch/arc/annotate/instructions.c b/tools/perf/arch/arc/annotate/instructions.c
+index 2f00e995c7e3..e5619770a1af 100644
+--- a/tools/perf/arch/arc/annotate/instructions.c
++++ b/tools/perf/arch/arc/annotate/instructions.c
+@@ -5,5 +5,7 @@ static int arc__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ {
+ 	arch->initialized = true;
+ 	arch->objdump.comment_char = ';';
++	arch->e_machine = EM_ARC;
++	arch->e_flags = 0;
+ 	return 0;
+ }
+diff --git a/tools/perf/arch/arm/annotate/instructions.c b/tools/perf/arch/arm/annotate/instructions.c
+index 2ff6cedeb9c5..cf91a43362b0 100644
+--- a/tools/perf/arch/arm/annotate/instructions.c
++++ b/tools/perf/arch/arm/annotate/instructions.c
+@@ -53,6 +53,8 @@ static int arm__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 	arch->associate_instruction_ops   = arm__associate_instruction_ops;
+ 	arch->objdump.comment_char	  = ';';
+ 	arch->objdump.skip_functions_char = '+';
++	arch->e_machine = EM_ARM;
++	arch->e_flags = 0;
+ 	return 0;
  
--#ifndef EM_AARCH64
--#define EM_AARCH64	183  /* ARM 64 bit */
--#endif
+ out_free_call:
+diff --git a/tools/perf/arch/arm64/annotate/instructions.c b/tools/perf/arch/arm64/annotate/instructions.c
+index f86d9f4798bd..d465d093e7eb 100644
+--- a/tools/perf/arch/arm64/annotate/instructions.c
++++ b/tools/perf/arch/arm64/annotate/instructions.c
+@@ -113,6 +113,8 @@ static int arm64__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
+ 	arch->objdump.comment_char	  = '/';
+ 	arch->objdump.skip_functions_char = '+';
++	arch->e_machine = EM_AARCH64;
++	arch->e_flags = 0;
+ 	return 0;
+ 
+ out_free_call:
+diff --git a/tools/perf/arch/csky/annotate/instructions.c b/tools/perf/arch/csky/annotate/instructions.c
+index 5337bfb7d5fc..14270311d215 100644
+--- a/tools/perf/arch/csky/annotate/instructions.c
++++ b/tools/perf/arch/csky/annotate/instructions.c
+@@ -43,6 +43,11 @@ static int csky__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 	arch->initialized = true;
+ 	arch->objdump.comment_char = '/';
+ 	arch->associate_instruction_ops = csky__associate_ins_ops;
 -
--#ifndef EM_LOONGARCH
--#define EM_LOONGARCH	258 /* LoongArch */
--#endif
--
- /* Define const char * {arch}_register_tbl[] */
- #define DEFINE_DWARF_REGSTR_TABLE
- #include "../arch/x86/include/dwarf-regs-table.h"
-diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/include/dwarf-regs.h
-index fbdd7307e0c2..ce9f10b3282d 100644
---- a/tools/perf/util/include/dwarf-regs.h
-+++ b/tools/perf/util/include/dwarf-regs.h
-@@ -2,6 +2,88 @@
- #ifndef _PERF_DWARF_REGS_H_
- #define _PERF_DWARF_REGS_H_
- #include "annotate.h"
-+#include <elf.h>
-+
-+#ifndef EM_AARCH64
-+#define EM_AARCH64	183  /* ARM 64 bit */
-+#endif
-+
-+#ifndef EM_CSKY
-+#define EM_CSKY		252  /* C-SKY */
-+#endif
-+#ifndef EF_CSKY_ABIV1
-+#define EF_CSKY_ABIV1	0X10000000
-+#endif
-+#ifndef EF_CSKY_ABIV2
-+#define EF_CSKY_ABIV2	0X20000000
-+#endif
-+
-+#ifndef EM_LOONGARCH
-+#define EM_LOONGARCH	258 /* LoongArch */
-+#endif
-+
-+/* EM_HOST gives the ELF machine for host, EF_HOST gives additional flags. */
-+#if defined(__x86_64__)
-+  #define EM_HOST EM_X86_64
-+#elif defined(__i386__)
-+  #define EM_HOST EM_386
-+#elif defined(__aarch64__)
-+  #define EM_HOST EM_AARCH64
-+#elif defined(__arm__)
-+  #define EM_HOST EM_ARM
-+#elif defined(__alpha__)
-+  #define EM_HOST EM_ALPHA
-+#elif defined(__arc__)
-+  #define EM_HOST EM_ARC
-+#elif defined(__AVR__)
-+  #define EM_HOST EM_AVR
-+#elif defined(__AVR32__)
-+  #define EM_HOST EM_AVR32
-+#elif defined(__bfin__)
-+  #define EM_HOST EM_BLACKFIN
-+#elif defined(__csky__)
-+  #define EM_HOST EM_CSKY
-+  #if defined(__CSKYABIV2__)
-+    #define EF_HOST EF_CSKY_ABIV2
-+  #else
-+    #define EF_HOST EF_CSKY_ABIV1
-+  #endif
-+#elif defined(__cris__)
-+  #define EM_HOST EM_CRIS
-+#elif defined(__hppa__) // HP PA-RISC
-+  #define EM_HOST EM_PARISC
-+#elif defined(__loongarch__)
-+  #define EM_HOST EM_LOONGARCH
-+#elif defined(__mips__)
-+  #define EM_HOST EM_MIPS
-+#elif defined(__m32r__)
-+  #define EM_HOST EM_M32R
-+#elif defined(__microblaze__)
-+  #define EM_HOST EM_MICROBLAZE
-+#elif defined(__MSP430__)
-+  #define EM_HOST EM_MSP430
-+#elif defined(__powerpc64__)
-+  #define EM_HOST EM_PPC64
-+#elif defined(__powerpc__)
-+  #define EM_HOST EM_PPC
-+#elif defined(__riscv)
-+  #define EM_HOST EM_RISCV
-+#elif defined(__s390x__)
-+  #define EM_HOST EM_S390
-+#elif defined(__sh__)
-+  #define EM_HOST EM_SH
-+#elif defined(__sparc64__) || defined(__sparc__)
-+  #define EM_HOST EM_SPARC
-+#elif defined(__xtensa__)
-+  #define EM_HOST EM_XTENSA
++	arch->e_machine = EM_CSKY;
++#if defined(__CSKYABIV2__)
++	arch->e_flags = EF_CSKY_ABIV2;
 +#else
-+  /* Unknown host ELF machine type. */
-+  #define EM_HOST EM_NONE
++	arch->e_flags = EF_CSKY_ABIV1;
 +#endif
-+
-+#if !defined(EF_HOST)
-+  #define EF_HOST 0
-+#endif
+ 	return 0;
+ }
+diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/perf/arch/loongarch/annotate/instructions.c
+index ab43b1ab51e3..70262d5f1444 100644
+--- a/tools/perf/arch/loongarch/annotate/instructions.c
++++ b/tools/perf/arch/loongarch/annotate/instructions.c
+@@ -131,6 +131,8 @@ int loongarch__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 		arch->associate_instruction_ops = loongarch__associate_ins_ops;
+ 		arch->initialized = true;
+ 		arch->objdump.comment_char = '#';
++		arch->e_machine = EM_LOONGARCH;
++		arch->e_flags = 0;
+ 	}
  
- #define DWARF_REG_PC  0xd3af9c /* random number */
- #define DWARF_REG_FB  0xd3affb /* random number */
+ 	return 0;
+diff --git a/tools/perf/arch/mips/annotate/instructions.c b/tools/perf/arch/mips/annotate/instructions.c
+index 340993f2a897..b50b46c613d6 100644
+--- a/tools/perf/arch/mips/annotate/instructions.c
++++ b/tools/perf/arch/mips/annotate/instructions.c
+@@ -40,6 +40,8 @@ int mips__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 		arch->associate_instruction_ops = mips__associate_ins_ops;
+ 		arch->initialized = true;
+ 		arch->objdump.comment_char = '#';
++		arch->e_machine = EM_MIPS;
++		arch->e_flags = 0;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/perf/arch/powerpc/annotate/instructions.c b/tools/perf/arch/powerpc/annotate/instructions.c
+index 54478cf5cccc..ca567cfdcbdb 100644
+--- a/tools/perf/arch/powerpc/annotate/instructions.c
++++ b/tools/perf/arch/powerpc/annotate/instructions.c
+@@ -309,6 +309,8 @@ static int powerpc__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 		arch->associate_instruction_ops = powerpc__associate_instruction_ops;
+ 		arch->objdump.comment_char      = '#';
+ 		annotate_opts.show_asm_raw = true;
++		arch->e_machine = EM_PPC;
++		arch->e_flags = 0;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/perf/arch/riscv64/annotate/instructions.c b/tools/perf/arch/riscv64/annotate/instructions.c
+index 869a0eb28953..55cf911633f8 100644
+--- a/tools/perf/arch/riscv64/annotate/instructions.c
++++ b/tools/perf/arch/riscv64/annotate/instructions.c
+@@ -28,6 +28,8 @@ int riscv64__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 		arch->associate_instruction_ops = riscv64__associate_ins_ops;
+ 		arch->initialized = true;
+ 		arch->objdump.comment_char = '#';
++		arch->e_machine = EM_RISCV;
++		arch->e_flags = 0;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/perf/arch/s390/annotate/instructions.c b/tools/perf/arch/s390/annotate/instructions.c
+index eeac25cca699..c61193f1e096 100644
+--- a/tools/perf/arch/s390/annotate/instructions.c
++++ b/tools/perf/arch/s390/annotate/instructions.c
+@@ -166,6 +166,8 @@ static int s390__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 			if (s390__cpuid_parse(arch, cpuid))
+ 				err = SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_CPUID_PARSING;
+ 		}
++		arch->e_machine = EM_S390;
++		arch->e_flags = 0;
+ 	}
+ 
+ 	return err;
+diff --git a/tools/perf/arch/sparc/annotate/instructions.c b/tools/perf/arch/sparc/annotate/instructions.c
+index 2614c010c235..68c31580ccfc 100644
+--- a/tools/perf/arch/sparc/annotate/instructions.c
++++ b/tools/perf/arch/sparc/annotate/instructions.c
+@@ -163,6 +163,8 @@ static int sparc__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+ 		arch->initialized = true;
+ 		arch->associate_instruction_ops = sparc__associate_instruction_ops;
+ 		arch->objdump.comment_char = '#';
++		arch->e_machine = EM_SPARC;
++		arch->e_flags = 0;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/perf/arch/x86/annotate/instructions.c b/tools/perf/arch/x86/annotate/instructions.c
+index c869abe3c31d..ae94b1f0b9cc 100644
+--- a/tools/perf/arch/x86/annotate/instructions.c
++++ b/tools/perf/arch/x86/annotate/instructions.c
+@@ -202,7 +202,8 @@ static int x86__annotate_init(struct arch *arch, char *cpuid)
+ 		if (x86__cpuid_parse(arch, cpuid))
+ 			err = SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_CPUID_PARSING;
+ 	}
+-
++	arch->e_machine = EM_X86_64;
++	arch->e_flags = 0;
+ 	arch->initialized = true;
+ 	return err;
+ }
+diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
+index 486c269b29ba..c135db2416b5 100644
+--- a/tools/perf/util/disasm.h
++++ b/tools/perf/util/disasm.h
+@@ -44,6 +44,10 @@ struct arch {
+ 				struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				struct disasm_line *dl);
+ #endif
++	/** @e_machine: ELF machine associated with arch. */
++	unsigned int e_machine;
++	/** @e_flags: Optional ELF flags associated with arch. */
++	unsigned int e_flags;
+ };
+ 
+ struct ins {
 -- 
 2.47.0.277.g8800431eea-goog
 
