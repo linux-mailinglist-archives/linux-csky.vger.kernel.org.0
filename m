@@ -1,106 +1,303 @@
-Return-Path: <linux-csky+bounces-1250-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1251-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1A3E9C2070
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 16:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86DA39C2355
+	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 18:37:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7545C1F20F5E
-	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 15:30:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 176B81F20F51
+	for <lists+linux-csky@lfdr.de>; Fri,  8 Nov 2024 17:37:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C20206E9D;
-	Fri,  8 Nov 2024 15:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C6E1AA1D1;
+	Fri,  8 Nov 2024 17:33:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="HaUjtcWH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYhI/IQi"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42FCC1F4295;
-	Fri,  8 Nov 2024 15:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F701AA1CD;
+	Fri,  8 Nov 2024 17:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731079834; cv=none; b=DCWsry9uIw6l0+CRGwm0c41CRBfSaCdpNa+dRgCWHbjHoQ2RGrxVuomZmg10OrY0zyQWoMKTLIYLxBRDetv6ZRXcahTj57QsPJ5ebG7P/T0HR92j1sZg3XGONHp10W8ne1IdDXWNMiTk9k88ojH8NlL3OzzwUCbRwlv2I4iHs0s=
+	t=1731087231; cv=none; b=YN6Vzyi2iNSj6f7gKvbyDmclV0Q1jx92FLZz+IPelouF19lDYGpFvz8BQbLIsJKPsd1Co0khCH7+woFMubbz2pF3OL2NlLlwit0HyacDQFJpftsFqoL+GyO+MTSSCbUr3kf4lFyUMg1/uBBPPKyl7KTBo1V9OwVTJnzqrpLsHq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731079834; c=relaxed/simple;
-	bh=YBes01HIGxCY9uAMUwOSqshjVdaMRIIeY82NB1cajGY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=vFjeymaqXBr2CrJAXe6rIeWUV5BOq6QzUh0BRlH4MNZWrrOo0f7DUV4weQA/Rb1Iavsq2265VslXxBES7yO7oX73z3nwpdwUN/86gG5HV4JP6NMXWilg5EZUGC+cEwOfru+DzLeeQD8yuzJEpElZ3f9t8ScxNN1IldXan7ZJ4Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=HaUjtcWH reason="signature verification failed"; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=iQMcJa4BmFPVqKmXobn4cIhRx4UhLAzJDxklpcxlLI8=; b=H
-	aUjtcWHDFt1bKqSXkqJGs1dRc5kfURcXD/snEVL02VfzHVmJDJvgfdNFSH25sFJS
-	e/QmXTeDXcuNeFVAyRIvkZptmIV0qg/a2iU0Q4ogCM+qEHNRN03W89MpCkKtr4sE
-	EYlKvW6V2O6HdedRW0CAf+PWbdmw0x1Jl4G7mFEXQs=
-Received: from 00107082$163.com ( [111.35.191.191] ) by
- ajax-webmail-wmsvr-40-148 (Coremail) ; Fri, 8 Nov 2024 23:28:00 +0800 (CST)
-Date: Fri, 8 Nov 2024 23:28:00 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Thomas Gleixner" <tglx@linutronix.de>
-Cc: richard.henderson@linaro.org, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, guoren@kernel.org, chenhuacai@kernel.org, 
-	kernel@xen0n.name, James.Bottomley@HansenPartnership.com, 
-	deller@gmx.de, mpe@ellerman.id.au, paul.walmsley@sifive.com, 
-	ysato@users.sourceforge.jp, dalias@libc.org, 
-	glaubitz@physik.fu-berlin.de, davem@davemloft.net, 
-	andreas@gaisler.com, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net, 
-	jcmvbkbc@gmail.com, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org
-Subject: Re: [PATCH] kernel/irq/proc: performance: replace seq_printf with
- seq_put_decimal_ull_width
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <87r07lol9y.ffs@tglx>
-References: <20241103080552.4787-1-00107082@163.com> <87r07lol9y.ffs@tglx>
-X-NTES-SC: AL_Qu2YA/yctk4j5iSfbOkZnEYQheY4XMKyuPkg1YJXOp80uSbP/wc5cnBJEkHY4sOvLTmSvxeqUTR3+8t1RrNYQqbBTxgILkv4stMHL//JBWTB
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=arc-20240116; t=1731087231; c=relaxed/simple;
+	bh=U5J1HmfJsWmud23RBXlyYA8mRtwKa7CaZ254KKiPaio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pwdx4wjNxBHWZdmdW4acTBE+RQHsFAVfCOU14H6YqU8bg9KBZdDLIzltku5du409+zRaoBJ6Nx2X8w8saRRReDrKR8lXXNsDvb7lI6pPI3vz7jMd6N1vg4ydVrw31598ByHYxUdI8RGzNdzc97fsOGkgdbik2nX6SN8T8UgeNLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYhI/IQi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8A1C4CED9;
+	Fri,  8 Nov 2024 17:33:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731087231;
+	bh=U5J1HmfJsWmud23RBXlyYA8mRtwKa7CaZ254KKiPaio=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XYhI/IQiTwP+svRp9j6ppeDtUjiZbL+XIVA8SFmxzZXTL+6Y8I9WcltJCTbN8MBM6
+	 TdJI0vR4tRR2cRB98Hvw2ep5PeJ9YhwQHJS+Aak9JpZRypAWFDR8xeLuZOSbxLVQAx
+	 GZQKtIdJzyJHT7THgFXN1JvGtT/td339FW18Vz8P39l10RXarGv1vy3RYVQWP9r3XM
+	 WgQ8PVfxU6h8SrnVDvHRU9EaUciHhPkQTOzxIMzT7Oo7mrBYnzgLAl0Wrk+UD9eCEI
+	 +OXS79c/n9QJYzfw8aiWs5Nv5tgva46uSpuu/YUgcfAf9zoVZ4a+pcs+A6nXuCHPTp
+	 a4HSaA3Ko9SBg==
+Date: Fri, 8 Nov 2024 09:33:47 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Guo Ren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Nick Terrell <terrelln@fb.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Changbin Du <changbin.du@huawei.com>,
+	Guilherme Amadio <amadio@gentoo.org>,
+	Yang Jihong <yangjihong@bytedance.com>,
+	Aditya Gupta <adityag@linux.ibm.com>,
+	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Kajol Jain <kjain@linux.ibm.com>, Atish Patra <atishp@rivosinc.com>,
+	Shenlin Liang <liangshenlin@eswincomputing.com>,
+	Anup Patel <anup@brainfault.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	"Steinar H. Gunderson" <sesse@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Chen Pei <cp0613@linux.alibaba.com>,
+	Dima Kogan <dima@secretsauce.net>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 04/20] perf disasm: Add e_machine/e_flags to struct
+ arch
+Message-ID: <Zy5Le-xn4gzQ2WLo@google.com>
+References: <20241017002520.59124-1-irogers@google.com>
+ <20241017002520.59124-5-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <3319cd6e.b980.1930c63b1e5.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:lCgvCgD3fwoBLi5nnLAiAA--.7283W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqQKRqmcuF0eQdwACss
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241017002520.59124-5-irogers@google.com>
 
-SGksICAKCkF0IDIwMjQtMTEtMDggMjI6MjU6MTMsICJUaG9tYXMgR2xlaXhuZXIiIDx0Z2x4QGxp
-bnV0cm9uaXguZGU+IHdyb3RlOgo+RGF2aWQhCj4KPk9uIFN1biwgTm92IDAzIDIwMjQgYXQgMTY6
-MDUsIERhdmlkIFdhbmcgd3JvdGU6Cj4KPiRTdWJqZWN0OiBbUEFUQ0hdIGtlcm5lbC9pcnEvcHJv
-YzogcGVyZm9ybWFuY2U6IC4uLgo+Cj5UaGF0J3Mgbm90IGEgdmFsaWQgc3Vic3lzdGVtIHByZWZp
-eC4KCmNvcHkgdGhhdH4KCj4KPj4gc2VxX3ByaW50ZiBpcyBjb3N0eSwgd2hlbiBzdHJlc3MgcmVh
-ZGluZyAvcHJvYy9pbnRlcnJ1cHRzLCBwcm9maWxpbmcgaW5kaWNhdGVzCj4+IHNlcV9wcmludGYg
-dGFrZXMgYWJvdXQgfjQ3JSBvZiBzaG93X2ludGVycnVwdHMgc2FtcGxlczoKPgo+QWxzbyBwbGVh
-c2UgZm9sbG93IHRoZSBkb2N1bWVudGF0aW9uIGZvciBkZW5vdGluZyBmdW5jdGlvbnMgaW4gY2hh
-bmdlCj5sb2dzOgo+Cj5odHRwczovL3d3dy5rZXJuZWwub3JnL2RvYy9odG1sL2xhdGVzdC9wcm9j
-ZXNzL21haW50YWluZXItdGlwLmh0bWwjZnVuY3Rpb24tcmVmZXJlbmNlcy1pbi1jaGFuZ2Vsb2dz
-Cj4KCmNvcHkgdGhhdH4KCj4+ICBhcmNoL2FscGhhL2tlcm5lbC9pcnEuYyAgICAgfCAgIDggKy0t
-Cj4+ICBhcmNoL2FybS9rZXJuZWwvc21wLmMgICAgICAgfCAgIDQgKy0KPj4gIGFyY2gvYXJtNjQv
-a2VybmVsL3NtcC5jICAgICB8ICAgMyArLQo+PiAgYXJjaC9jc2t5L2tlcm5lbC9zbXAuYyAgICAg
-IHwgICA0ICstCj4+ICBhcmNoL2xvb25nYXJjaC9rZXJuZWwvc21wLmMgfCAgIDIgKy0KPj4gIGFy
-Y2gvcGFyaXNjL2tlcm5lbC9pcnEuYyAgICB8ICAzNCArKysrKystLS0tLS0KPj4gIGFyY2gvcG93
-ZXJwYy9rZXJuZWwvaXJxLmMgICB8ICA0NCArKysrKysrKy0tLS0tLS0tCj4+ICBhcmNoL3Jpc2N2
-L2tlcm5lbC9zbXAuYyAgICAgfCAgIDMgKy0KPj4gIGFyY2gvc2gva2VybmVsL2lycS5jICAgICAg
-ICB8ICAgNCArLQo+PiAgYXJjaC9zcGFyYy9rZXJuZWwvaXJxXzMyLmMgIHwgIDEyICsrLS0tCj4+
-ICBhcmNoL3NwYXJjL2tlcm5lbC9pcnFfNjQuYyAgfCAgIDQgKy0KPj4gIGFyY2gveDg2L2tlcm5l
-bC9pcnEuYyAgICAgICB8IDEwMCArKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0K
-Pj4gIGFyY2gveHRlbnNhL2tlcm5lbC9pcnEuYyAgICB8ICAgMiArLQo+PiAgYXJjaC94dGVuc2Ev
-a2VybmVsL3NtcC5jICAgIHwgICA0ICstCj4+ICBrZXJuZWwvaXJxL3Byb2MuYyAgICAgICAgICAg
-fCAgIDYgKystCj4KPlRoZXJlIGlzIG5vIGRlcGVuZGVuY3kgb24gdGhlc2UgY2hhbmdlcy4gU28g
-cGxlYXNlIHNwbGl0IHRoZW0gdXAgaW50bwo+c2VwZXJhdGUgcGF0Y2hlcyBmb3IgY29yZSBhbmQg
-dGhlIGluZGl2aWR1YWwgYXJjaGl0ZWN0dXJlcy5hbgoKVGhhbmtzIGZvciBhbGwgdGhlIHJldmll
-dywgSSB3aWxsIG1ha2UgYSBwYXRjaHNldCBmb3IgdGhpcy4KPgo+VGhhbmtzLAo+Cj4gICAgICAg
-IHRnbHgKCgpEYXZpZA==
+On Wed, Oct 16, 2024 at 05:25:04PM -0700, Ian Rogers wrote:
+> Currently functions like get_dwarf_regnum only work with the host
+> architecture. Carry the elf machine and flags in struct arch so that
+> in disassembly these can be used to allow cross platform disassembly.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/arch/arc/annotate/instructions.c       | 2 ++
+>  tools/perf/arch/arm/annotate/instructions.c       | 2 ++
+>  tools/perf/arch/arm64/annotate/instructions.c     | 2 ++
+>  tools/perf/arch/csky/annotate/instructions.c      | 7 ++++++-
+>  tools/perf/arch/loongarch/annotate/instructions.c | 2 ++
+>  tools/perf/arch/mips/annotate/instructions.c      | 2 ++
+>  tools/perf/arch/powerpc/annotate/instructions.c   | 2 ++
+>  tools/perf/arch/riscv64/annotate/instructions.c   | 2 ++
+>  tools/perf/arch/s390/annotate/instructions.c      | 2 ++
+>  tools/perf/arch/sparc/annotate/instructions.c     | 2 ++
+>  tools/perf/arch/x86/annotate/instructions.c       | 3 ++-
+>  tools/perf/util/disasm.h                          | 4 ++++
+>  12 files changed, 30 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/arch/arc/annotate/instructions.c b/tools/perf/arch/arc/annotate/instructions.c
+> index 2f00e995c7e3..e5619770a1af 100644
+> --- a/tools/perf/arch/arc/annotate/instructions.c
+> +++ b/tools/perf/arch/arc/annotate/instructions.c
+> @@ -5,5 +5,7 @@ static int arc__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  {
+>  	arch->initialized = true;
+>  	arch->objdump.comment_char = ';';
+> +	arch->e_machine = EM_ARC;
+> +	arch->e_flags = 0;
+>  	return 0;
+>  }
+> diff --git a/tools/perf/arch/arm/annotate/instructions.c b/tools/perf/arch/arm/annotate/instructions.c
+> index 2ff6cedeb9c5..cf91a43362b0 100644
+> --- a/tools/perf/arch/arm/annotate/instructions.c
+> +++ b/tools/perf/arch/arm/annotate/instructions.c
+> @@ -53,6 +53,8 @@ static int arm__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  	arch->associate_instruction_ops   = arm__associate_instruction_ops;
+>  	arch->objdump.comment_char	  = ';';
+>  	arch->objdump.skip_functions_char = '+';
+> +	arch->e_machine = EM_ARM;
+> +	arch->e_flags = 0;
+>  	return 0;
+>  
+>  out_free_call:
+> diff --git a/tools/perf/arch/arm64/annotate/instructions.c b/tools/perf/arch/arm64/annotate/instructions.c
+> index f86d9f4798bd..d465d093e7eb 100644
+> --- a/tools/perf/arch/arm64/annotate/instructions.c
+> +++ b/tools/perf/arch/arm64/annotate/instructions.c
+> @@ -113,6 +113,8 @@ static int arm64__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
+>  	arch->objdump.comment_char	  = '/';
+>  	arch->objdump.skip_functions_char = '+';
+> +	arch->e_machine = EM_AARCH64;
+> +	arch->e_flags = 0;
+>  	return 0;
+>  
+>  out_free_call:
+> diff --git a/tools/perf/arch/csky/annotate/instructions.c b/tools/perf/arch/csky/annotate/instructions.c
+> index 5337bfb7d5fc..14270311d215 100644
+> --- a/tools/perf/arch/csky/annotate/instructions.c
+> +++ b/tools/perf/arch/csky/annotate/instructions.c
+> @@ -43,6 +43,11 @@ static int csky__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  	arch->initialized = true;
+>  	arch->objdump.comment_char = '/';
+>  	arch->associate_instruction_ops = csky__associate_ins_ops;
+> -
+> +	arch->e_machine = EM_CSKY;
+> +#if defined(__CSKYABIV2__)
+> +	arch->e_flags = EF_CSKY_ABIV2;
+> +#else
+> +	arch->e_flags = EF_CSKY_ABIV1;
+> +#endif
+
+By moving this into the general code, it should take care of old systems
+that doesn't have the macro.
+
+  In file included from util/disasm.c:109:                                        
+  /linux/tools/perf/arch/csky/annotate/instructions.c: In function 'csky__annotate_init':
+  /linux/tools/perf/arch/csky/annotate/instructions.c:50:25: error: 'EF_CSKY_ABIV1' undeclared (first use in this function)
+     50 |         arch->e_flags = EF_CSKY_ABIV1;                                  
+        |                         ^~~~~~~~~~~~~                                   
+  /linux/tools/perf/arch/csky/annotate/instructions.c:50:25: note: each undeclared identifier is reported only once for each function it appears in
+
+Also, I think __CSKYABIV2__ is defined only when the host is csky.  So
+it'll use ABI v1 on cross env.  I'm not sure if it's a problem.  We may
+need to save the ABI somewhere in the metadata later.
+
+Thanks,
+Namhyung
+
+
+>  	return 0;
+>  }
+> diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/perf/arch/loongarch/annotate/instructions.c
+> index ab43b1ab51e3..70262d5f1444 100644
+> --- a/tools/perf/arch/loongarch/annotate/instructions.c
+> +++ b/tools/perf/arch/loongarch/annotate/instructions.c
+> @@ -131,6 +131,8 @@ int loongarch__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  		arch->associate_instruction_ops = loongarch__associate_ins_ops;
+>  		arch->initialized = true;
+>  		arch->objdump.comment_char = '#';
+> +		arch->e_machine = EM_LOONGARCH;
+> +		arch->e_flags = 0;
+>  	}
+>  
+>  	return 0;
+> diff --git a/tools/perf/arch/mips/annotate/instructions.c b/tools/perf/arch/mips/annotate/instructions.c
+> index 340993f2a897..b50b46c613d6 100644
+> --- a/tools/perf/arch/mips/annotate/instructions.c
+> +++ b/tools/perf/arch/mips/annotate/instructions.c
+> @@ -40,6 +40,8 @@ int mips__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  		arch->associate_instruction_ops = mips__associate_ins_ops;
+>  		arch->initialized = true;
+>  		arch->objdump.comment_char = '#';
+> +		arch->e_machine = EM_MIPS;
+> +		arch->e_flags = 0;
+>  	}
+>  
+>  	return 0;
+> diff --git a/tools/perf/arch/powerpc/annotate/instructions.c b/tools/perf/arch/powerpc/annotate/instructions.c
+> index 54478cf5cccc..ca567cfdcbdb 100644
+> --- a/tools/perf/arch/powerpc/annotate/instructions.c
+> +++ b/tools/perf/arch/powerpc/annotate/instructions.c
+> @@ -309,6 +309,8 @@ static int powerpc__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  		arch->associate_instruction_ops = powerpc__associate_instruction_ops;
+>  		arch->objdump.comment_char      = '#';
+>  		annotate_opts.show_asm_raw = true;
+> +		arch->e_machine = EM_PPC;
+> +		arch->e_flags = 0;
+>  	}
+>  
+>  	return 0;
+> diff --git a/tools/perf/arch/riscv64/annotate/instructions.c b/tools/perf/arch/riscv64/annotate/instructions.c
+> index 869a0eb28953..55cf911633f8 100644
+> --- a/tools/perf/arch/riscv64/annotate/instructions.c
+> +++ b/tools/perf/arch/riscv64/annotate/instructions.c
+> @@ -28,6 +28,8 @@ int riscv64__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  		arch->associate_instruction_ops = riscv64__associate_ins_ops;
+>  		arch->initialized = true;
+>  		arch->objdump.comment_char = '#';
+> +		arch->e_machine = EM_RISCV;
+> +		arch->e_flags = 0;
+>  	}
+>  
+>  	return 0;
+> diff --git a/tools/perf/arch/s390/annotate/instructions.c b/tools/perf/arch/s390/annotate/instructions.c
+> index eeac25cca699..c61193f1e096 100644
+> --- a/tools/perf/arch/s390/annotate/instructions.c
+> +++ b/tools/perf/arch/s390/annotate/instructions.c
+> @@ -166,6 +166,8 @@ static int s390__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  			if (s390__cpuid_parse(arch, cpuid))
+>  				err = SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_CPUID_PARSING;
+>  		}
+> +		arch->e_machine = EM_S390;
+> +		arch->e_flags = 0;
+>  	}
+>  
+>  	return err;
+> diff --git a/tools/perf/arch/sparc/annotate/instructions.c b/tools/perf/arch/sparc/annotate/instructions.c
+> index 2614c010c235..68c31580ccfc 100644
+> --- a/tools/perf/arch/sparc/annotate/instructions.c
+> +++ b/tools/perf/arch/sparc/annotate/instructions.c
+> @@ -163,6 +163,8 @@ static int sparc__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
+>  		arch->initialized = true;
+>  		arch->associate_instruction_ops = sparc__associate_instruction_ops;
+>  		arch->objdump.comment_char = '#';
+> +		arch->e_machine = EM_SPARC;
+> +		arch->e_flags = 0;
+>  	}
+>  
+>  	return 0;
+> diff --git a/tools/perf/arch/x86/annotate/instructions.c b/tools/perf/arch/x86/annotate/instructions.c
+> index c869abe3c31d..ae94b1f0b9cc 100644
+> --- a/tools/perf/arch/x86/annotate/instructions.c
+> +++ b/tools/perf/arch/x86/annotate/instructions.c
+> @@ -202,7 +202,8 @@ static int x86__annotate_init(struct arch *arch, char *cpuid)
+>  		if (x86__cpuid_parse(arch, cpuid))
+>  			err = SYMBOL_ANNOTATE_ERRNO__ARCH_INIT_CPUID_PARSING;
+>  	}
+> -
+> +	arch->e_machine = EM_X86_64;
+> +	arch->e_flags = 0;
+>  	arch->initialized = true;
+>  	return err;
+>  }
+> diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
+> index 486c269b29ba..c135db2416b5 100644
+> --- a/tools/perf/util/disasm.h
+> +++ b/tools/perf/util/disasm.h
+> @@ -44,6 +44,10 @@ struct arch {
+>  				struct data_loc_info *dloc, Dwarf_Die *cu_die,
+>  				struct disasm_line *dl);
+>  #endif
+> +	/** @e_machine: ELF machine associated with arch. */
+> +	unsigned int e_machine;
+> +	/** @e_flags: Optional ELF flags associated with arch. */
+> +	unsigned int e_flags;
+>  };
+>  
+>  struct ins {
+> -- 
+> 2.47.0.105.g07ac214952-goog
+> 
 
