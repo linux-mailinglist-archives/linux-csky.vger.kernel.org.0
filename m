@@ -1,106 +1,118 @@
-Return-Path: <linux-csky+bounces-1279-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1280-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A85DB9C33C7
-	for <lists+linux-csky@lfdr.de>; Sun, 10 Nov 2024 17:08:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40BB19D17FB
+	for <lists+linux-csky@lfdr.de>; Mon, 18 Nov 2024 19:24:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9C551C2039D
-	for <lists+linux-csky@lfdr.de>; Sun, 10 Nov 2024 16:08:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD40D1F2228C
+	for <lists+linux-csky@lfdr.de>; Mon, 18 Nov 2024 18:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5C37A13A;
-	Sun, 10 Nov 2024 16:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYgrwdei"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95181E0DE4;
+	Mon, 18 Nov 2024 18:24:39 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2191C55C29;
-	Sun, 10 Nov 2024 16:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E9E1DFDA5;
+	Mon, 18 Nov 2024 18:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731254901; cv=none; b=FKdmMKc2qTbXIONZ2miGUEqtqjpgi2t9OyHthMIjajRjXOaDkdnWZDPUi+MlbPO2bNromNws1rv36Bg57uGjEBq+N1efofrK1ZplKH9f2fEpT/l5jXpyOEDgtRTY2QHZrFtBN5/ygZdLDQOfyv9ERQmQUQRizlsVIJlG2WNiXDE=
+	t=1731954279; cv=none; b=gQfUq8IVWK2EbRx91uyRHDMpB3vq867GnQgodRsC/jdO/PrV89zIR2wMPzkxL5Sco8NJm7ObA9jOv33+xl31Qo3qw7rNZKICHihHaroVLcSxGd/zn8RVygW4giBP2ItjCVGqRxfwxPyUlw4FyNBtfxZAuQV6BiEQbfI5IbPgLr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731254901; c=relaxed/simple;
-	bh=JBXIFanmQXeLs3qZ6yNho/Yd2mSxSWulQTXSJ8lku+M=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=obNcouRRRGhp2RrGhbXia3N05f2rNwcZam0SahDTzwUEuBYeTf/MU1qFp8kemAlxWCrRz1/3WHwSo/tPTX/eWcooGalGFv2tqKtwHknu/qXL7cl1XMwJsc4QARcovhKfkc/754GfPnY2OWg8QyB9vXYeFLZd3GfMNFRhStGypCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYgrwdei; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538ADC4CECD;
-	Sun, 10 Nov 2024 16:08:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731254900;
-	bh=JBXIFanmQXeLs3qZ6yNho/Yd2mSxSWulQTXSJ8lku+M=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=OYgrwdeiIbXgYq4lpWU8ck843JRk9VLM45YTC7B+syAZuDHLWzeSXy8jy54D0SXY1
-	 2aoJMvK+L+f5iVh4sLEOi/bRCiVORQoDSM6NNekqjJBEvfHI1of6mQNEn3EgNn8L85
-	 AfRb3ISkyebM37b/j7yo8ZRhkfbedxURnqeUrBKP6D/Vup9fGQ+A8jHwvx44NRBxtS
-	 S0n0DuUj8R9FDw3hURr7PPOKFctKxhTFKHPToz8KuH2tQmek/1WYWFl60NFULDOV3h
-	 o59uDdwi/v47HNFGKV2O7MpNY07k/w7XupIoS1OJrg3QHE94bd7+10rD4Iy1j5egAh
-	 4sV5WlXAgbO2A==
-From: Namhyung Kim <namhyung@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
- Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
- Will Deacon <will@kernel.org>, James Clark <james.clark@linaro.org>, 
- Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>, 
- Guo Ren <guoren@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Nick Terrell <terrelln@fb.com>, 
- "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
- Changbin Du <changbin.du@huawei.com>, Guilherme Amadio <amadio@gentoo.org>, 
- Yang Jihong <yangjihong@bytedance.com>, 
- Aditya Gupta <adityag@linux.ibm.com>, 
- Athira Rajeev <atrajeev@linux.vnet.ibm.com>, 
- Masahiro Yamada <masahiroy@kernel.org>, Bibo Mao <maobibo@loongson.cn>, 
- Huacai Chen <chenhuacai@kernel.org>, Kajol Jain <kjain@linux.ibm.com>, 
- Atish Patra <atishp@rivosinc.com>, 
- Shenlin Liang <liangshenlin@eswincomputing.com>, 
- Anup Patel <anup@brainfault.org>, Oliver Upton <oliver.upton@linux.dev>, 
- "Steinar H. Gunderson" <sesse@google.com>, 
- "Dr. David Alan Gilbert" <linux@treblig.org>, 
- Chen Pei <cp0613@linux.alibaba.com>, Dima Kogan <dima@secretsauce.net>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
- linux-riscv@lists.infradead.org, Ian Rogers <irogers@google.com>
-In-Reply-To: <20241108234606.429459-1-irogers@google.com>
-References: <20241108234606.429459-1-irogers@google.com>
-Subject: Re: [PATCH v4 00/20] Remove PERF_HAVE_DWARF_REGS
-Message-Id: <173125489927.241089.8450722244768775739.b4-ty@kernel.org>
-Date: Sun, 10 Nov 2024 08:08:19 -0800
+	s=arc-20240116; t=1731954279; c=relaxed/simple;
+	bh=QTNu1OGAPgNOZxJIMvW3IuS7XmGuX4ZDJPj5EOOKtxU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TFmFNszOSjbsxDOFsE/Zc6FhpTeXtyaJk0uTJdlnoM4mnBW4LQ7ZTYaZgL1ThGYTHZcyfcW9mJd0ohmWAQWHk3Vwe0223YODAjO4hrZGbE9nS3YIWiKETr1LJIsUs9NWP2K17XHd0t4iyhsPuUBifz6VdQd9642wl/DlUubWT5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA4F3C4CECC;
+	Mon, 18 Nov 2024 18:24:30 +0000 (UTC)
+Date: Mon, 18 Nov 2024 13:25:01 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski
+ <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
+ <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
+ Hellwig <hch@infradead.org>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
+ <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
+ Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
+ <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>, Max Filippov
+ <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek
+ <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, Richard
+ Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu
+ <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Suren Baghdasaryan
+ <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v7 0/8] x86/module: use large ROX pages for text
+ allocations
+Message-ID: <20241118132501.4eddb46c@gandalf.local.home>
+In-Reply-To: <20241023162711.2579610-1-rppt@kernel.org>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c04d2
 
-On Fri, 08 Nov 2024 15:45:45 -0800, Ian Rogers wrote:
+On Wed, 23 Oct 2024 19:27:03 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-> These changes were originally on top of:
-> https://lore.kernel.org/lkml/20241017001354.56973-1-irogers@google.com/
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Prior to these patches PERF_HAVE_DWARF_REGS indicated the presence of
-> dwarf-regs.c in the arch directory. dwarf-regs.c provided upto 4
-> functions:
+> Hi,
 > 
-> [...]
+> This is an updated version of execmem ROX caches.
+> 
 
-Applied to perf-tools-next, thanks!
+FYI, I booted a kernel before and after applying these patches with my
+change:
 
-Best regards,
-Namhyung
+  https://lore.kernel.org/20241017113105.1edfa943@gandalf.local.home
 
+Before these patches:
+
+ # cat /sys/kernel/tracing/dyn_ftrace_total_info
+57695 pages:231 groups: 9
+ftrace boot update time = 14733459 (ns)
+ftrace module total update time = 449016 (ns)
+
+After:
+
+ # cat /sys/kernel/tracing/dyn_ftrace_total_info
+57708 pages:231 groups: 9
+ftrace boot update time = 47195374 (ns)
+ftrace module total update time = 592080 (ns)
+
+Which caused boot time to slowdown by over 30ms. That may not seem like
+much, but we are very concerned about boot time and are fighting every ms
+we can get.
+
+-- Steve
 
