@@ -1,199 +1,185 @@
-Return-Path: <linux-csky+bounces-1281-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1282-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3C039D1841
-	for <lists+linux-csky@lfdr.de>; Mon, 18 Nov 2024 19:40:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A7EC9D4696
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Nov 2024 05:22:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47FBA282BC3
-	for <lists+linux-csky@lfdr.de>; Mon, 18 Nov 2024 18:40:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD1951F22299
+	for <lists+linux-csky@lfdr.de>; Thu, 21 Nov 2024 04:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6381E0E1B;
-	Mon, 18 Nov 2024 18:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59DC149011;
+	Thu, 21 Nov 2024 04:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeOY29sz"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="lJ5xHgVr"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1811DFD90;
-	Mon, 18 Nov 2024 18:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34A92309B6
+	for <linux-csky@vger.kernel.org>; Thu, 21 Nov 2024 04:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731955230; cv=none; b=C65iEmiUVNqCwMaoI0xEolVaaDqIyPk+QR/WbrMk2gxMvPF1NsvExIAEOKa25Bkenyqnc0u+JwtDI56pzF6fQF4fxUEMdPpKR9GP6sx8bLEHjI5oVgQYOs4/6Z2OnpXFrzS/A2Dk7piVDjvhotJBUPuMcSKMnUOmkcgTmEI2W1E=
+	t=1732162949; cv=none; b=eKsk/0/QqqVbC8JMrSnlEM8qbH9nPUQiAedrP3PhMmWYFNdLWJ5i4ltyXgsaDNIzb7ilXB9ZXe1c6J015OdDTXbyVqvuJvHpkcLL93W0ps5E67fnU+c7Tn+juQQnpIFyyKI/CedttR+MqaSiFNO9+KBvi/7ZHn+lhFrxErjPVr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731955230; c=relaxed/simple;
-	bh=PgWfk6zhBX25rXxPAwmwUJeghk+GajLkQHlk+OfGUQc=;
+	s=arc-20240116; t=1732162949; c=relaxed/simple;
+	bh=SpAAQo3l0wT/aBxSUBDG8LR2a69OhY7lZutFyWBoaSI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dUl06Od+kI3Nql2XFM4vsiJo7mK/t6pCi3zKmH/5DldJo9ZraThxrfbpDIvVtVlgZhhXsbn9AS6MLXdjGkmGPVJli7kgfLza/gkK9cBktTW4FYe9EBidYJiAGHvbmSy//lz+zv7VthyoC2689Pzlf/7FSmly5M+R+KDM4FEUzpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GeOY29sz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5AEC4CECC;
-	Mon, 18 Nov 2024 18:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731955229;
-	bh=PgWfk6zhBX25rXxPAwmwUJeghk+GajLkQHlk+OfGUQc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GeOY29szPjdxa0xm+vV9DTg2e5TPlxk7huuBMuJbtT+hTn5kPCdRWZ2oKgkC8UpSt
-	 VKEpF1/SK1ceIDW9rYbK4e2lrKnmmaewrajrem/5hOE+eL2aJiJwe2Mq1uUh3lhZ50
-	 bF8KJonZOhyM89MpbuLHVivYouTUSuZbDmGNuIIUU6Sz4PBRF7AffgUgRIMQ22WWof
-	 8/hSFdkboAANibLeqfLmV82IhRXIdNitXrU+lzbag6jN3GbbRMHw4voatyzJmOaEVn
-	 LYCc2cjDCBvkB/fCKjeR1Y3G/eBzyCxZ8foJEVKOfJ+JG689X8AaWtSJSKfiAkucWY
-	 LfgB8UgFNVmrQ==
-Date: Mon, 18 Nov 2024 10:40:26 -0800
-From: Mike Rapoport <rppt@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=HX7FpLHgw2R/mYEGWnGCwKvS4JEy7gm81cxGutOmwHLy05WUpEiCwItDUq0aeS99ArvgXEbae2glNzVjU627q4kAWhij4mtmOfq1vEgXr/27ceDqxr+0JKhi7kNt3moNo0arAQUPUI/gZ7mIchbXIMiV79moX0v2YOTJAz170Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=lJ5xHgVr; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6ee6a2ae6ecso3966297b3.3
+        for <linux-csky@vger.kernel.org>; Wed, 20 Nov 2024 20:22:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1732162947; x=1732767747; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cP3Um0hz7Gv16Gtk91dL7DlYT6sIqAVCB2yrXnpMevM=;
+        b=lJ5xHgVrpeJelHGu3h+m+kpP+CpJio03F91Rbvepr+CWIi+9zzppZNlKGNpp8Ygsm3
+         Sjn3pfi0iup6FCY6VRUX/gvK0tToQVNp0Q1qdmUuwb3oyNDO0x+aTkFXUbPDPq2+uMYV
+         6Kkw1xQI1Og8AGiNWJdTkgrqygfd4mt9dNclhjlQwoslCkM4OjYkdA0dHkCZnDnLbXxN
+         1nxctHciljQ+3LXCJ/9o80XgWTNvdelIrPEluX+jd/rnZxIX0fjubBWinpxABfVVzOI3
+         0bzGibPw4zzKvqUUMZGV+0LajHL2/tYGbJNQKduNU2tQl84HB9kxxSB40UKEfbU5hHC1
+         Fthg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732162947; x=1732767747;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cP3Um0hz7Gv16Gtk91dL7DlYT6sIqAVCB2yrXnpMevM=;
+        b=PUgZdrTf0eladIyNVXc4/mBi4B6X8sCC/LF4xA+BI+lcORAeEQc2CYqsbf3yclUnkH
+         DoRxlr847Gj6FLKvs/9Q/ObcK4P/yIlHsADHQCeI695Ivzzxyenv9bCmg5Xc2t12amqn
+         NhxbG59bltIImLm/KB9Q27uzrpCy0QVUoifPX/y7X6La8WrAvq/7Vfsygj/dIupp/h0w
+         0VE1Nbp4FRJm0C5x9nDFJQe7LK8ASsVFS6QWvtvKsOLxfTuoTM7oyvNNM74eS+CPSxuN
+         xmZAnukwcxzbSTOCIEk4f5LCY7ONUf6K0mbTn70O1/1Cof+ZGKoISmMSDS8U284xzTTS
+         O2Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCVqY9igTYgl1d8ROoPFd7o/mfO5muvg5oAB76ATl3o7xlkJEGFJX7kC3KwuSYRZJhi88ocZuD81tdnG@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsPpcg0OAIKG0ngWicsqLYGJPO75Omz8SxeUSlQX/jgITOzlw8
+	Np/9sasdPXTDZfdiP9FkzWDzp0l4ys2II5/qxPzLnRG6NEI0/MUFJI+6vxri9+g=
+X-Google-Smtp-Source: AGHT+IFG/0lmdLf+PuJVUiUVDthedJQkU+yi8kvRYeLAcyp/RSQ9OGzeQL0b0Fr9yTqYmM0khQUKNg==
+X-Received: by 2002:a05:690c:5a15:b0:6ee:5068:7510 with SMTP id 00721157ae682-6eecc57b073mr20304047b3.26.1732162946630;
+        Wed, 20 Nov 2024 20:22:26 -0800 (PST)
+Received: from ghost ([50.146.0.9])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ee71341e4dsm25749277b3.90.2024.11.20.20.22.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2024 20:22:25 -0800 (PST)
+Date: Wed, 20 Nov 2024 20:22:23 -0800
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Ian Rogers <irogers@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v7 0/8] x86/module: use large ROX pages for text
- allocations
-Message-ID: <ZzuKGoj99rIuMaBE@kernel.org>
-References: <20241023162711.2579610-1-rppt@kernel.org>
- <20241118132501.4eddb46c@gandalf.local.home>
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Christian Brauner <brauner@kernel.org>, guoren <guoren@kernel.org>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH RFT 00/16] perf tools: Use generic syscall scripts for
+ all archs
+Message-ID: <Zz61f02p8s52G6ba@ghost>
+References: <20241104-perf_syscalltbl-v1-0-9adae5c761ef@rivosinc.com>
+ <3b56fc50-4c6c-4520-adba-461797a3b5ec@app.fastmail.com>
+ <Zyk9hX8CB_2rbWsi@ghost>
+ <CAP-5=fUdZRbCp+2ghEUdp+qJ1BuMDuTtw9R+dFAaom+3oqQV_g@mail.gmail.com>
+ <ZylaRaMqEsEjYjs6@ghost>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241118132501.4eddb46c@gandalf.local.home>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZylaRaMqEsEjYjs6@ghost>
 
-On Mon, Nov 18, 2024 at 01:25:01PM -0500, Steven Rostedt wrote:
-> On Wed, 23 Oct 2024 19:27:03 +0300
-> Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Mon, Nov 04, 2024 at 03:35:33PM -0800, Charlie Jenkins wrote:
+> On Mon, Nov 04, 2024 at 02:03:28PM -0800, Ian Rogers wrote:
+> > On Mon, Nov 4, 2024 at 1:32 PM Charlie Jenkins <charlie@rivosinc.com> wrote:
+> > >
+> > > On Mon, Nov 04, 2024 at 10:13:18PM +0100, Arnd Bergmann wrote:
+> > > > On Mon, Nov 4, 2024, at 22:06, Charlie Jenkins wrote:
+> > > > > Standardize the generation of syscall headers around syscall tables.
+> > > > > Previously each architecture independently selected how syscall headers
+> > > > > would be generated, or would not define a way and fallback onto
+> > > > > libaudit. Convert all architectures to use a standard syscall header
+> > > > > generation script and allow each architecture to override the syscall
+> > > > > table to use if they do not use the generic table.
+> > > > >
+> > > > > As a result of these changes, no architecture will require libaudit, and
+> > > > > so the fallback case of using libaudit is removed by this series.
+> > > > >
+> > > > > Testing:
+> > > > >
+> > > > > I have tested that the syscall mappings of id to name generation works
+> > > > > as expected for every architecture, but I have only validated that perf
+> > > > > trace compiles and runs as expected on riscv, arm64, and x86_64.
+> > > > >
+> > > > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > > >
+> > > > Thanks for doing this, I had plans to do this myself, but hadn't
+> > > > completed that bit so far. I'm travelling at the moment, so I'm
+> > > > not sure I have time to look at it in enough detail this week.
+> > > >
+> > > > One problem I ran into doing this previously was the incompatible
+> > > > format of the tables for x86 and s390, which have conflicting
+> > > > interpretations of what the '-' character means. It's possible
+> > > > that this is only really relevant for the in-kernel table,
+> > > > not the version in tools.
+> > > >
+> > >
+> > > I don't think that is an issue for this usecase because the only
+> > > information that is taken from the syscall table is the number and the
+> > > name of the syscall. '-' doesn't appear in either of these columns!
 > > 
-> > Hi,
+> > This is cool stuff. An area that may not be immediately apparent for
+> > improvement is that the x86-64 build only has access to the 64-bit
+> > syscall table. Perhaps all the syscall tables should always be built
+> > and then at runtime the architecture of the perf.data file, etc. used
+> > to choose the appropriate one. The cleanup to add an ELF host #define
+> > could help with this:
+> > https://lore.kernel.org/linux-perf-users/20241017002520.59124-1-irogers@google.com/
+> 
+> Oh that's a great idea! I think these changes will make it more seamless
+> to make that a reality.
+> 
 > > 
-> > This is an updated version of execmem ROX caches.
+> > Ultimately I'd like to see less arch code as it inherently makes cross
+> > platform worker harder. That doesn't impact this work which I'm happy
+> > to review.
+> 
+> Yeah I agree. Reducing arch code was the motivation for this change.
+> There was the issue a couple weeks ago that caused all architectures
+> that used libaudit to break from commit 7a2fb5619cc1fb53 ("perf trace:
+> Fix iteration of syscall ids in syscalltbl->entries"), so this change
+> will eliminate that source of difference between architectures.
+> 
+> - Charlie
+> 
 > > 
-> 
-> FYI, I booted a kernel before and after applying these patches with my
-> change:
-> 
->   https://lore.kernel.org/20241017113105.1edfa943@gandalf.local.home
-> 
-> Before these patches:
-> 
->  # cat /sys/kernel/tracing/dyn_ftrace_total_info
-> 57695 pages:231 groups: 9
-> ftrace boot update time = 14733459 (ns)
-> ftrace module total update time = 449016 (ns)
-> 
-> After:
-> 
->  # cat /sys/kernel/tracing/dyn_ftrace_total_info
-> 57708 pages:231 groups: 9
-> ftrace boot update time = 47195374 (ns)
-> ftrace module total update time = 592080 (ns)
-> 
-> Which caused boot time to slowdown by over 30ms. That may not seem like
-> much, but we are very concerned about boot time and are fighting every ms
-> we can get.
+> > Thanks,
+> > Ian
 
-Hmm, looks like this change was lost in rebase :/
+Let me know if you have any feedback on this series!
 
-@Andrew, should I send it as a patch on top of mm-stable?
+- Charlie
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 8da0e66ca22d..859902dd06fc 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -111,17 +111,22 @@ static int ftrace_verify_code(unsigned long ip, const char *old_code)
-  */
- static int __ref
- ftrace_modify_code_direct(unsigned long ip, const char *old_code,
--			  const char *new_code)
-+			  const char *new_code, struct module *mod)
- {
- 	int ret = ftrace_verify_code(ip, old_code);
- 	if (ret)
- 		return ret;
- 
- 	/* replace the text with the new text */
--	if (ftrace_poke_late)
-+	if (ftrace_poke_late) {
- 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
--	else
-+	} else if (!mod) {
- 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
-+	} else {
-+		mutex_lock(&text_mutex);
-+		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
-+		mutex_unlock(&text_mutex);
-+	}
- 	return 0;
- }
- 
-@@ -142,7 +147,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec, unsigned long ad
- 	 * just modify the code directly.
- 	 */
- 	if (addr == MCOUNT_ADDR)
--		return ftrace_modify_code_direct(ip, old, new);
-+		return ftrace_modify_code_direct(ip, old, new, mod);
- 
- 	/*
- 	 * x86 overrides ftrace_replace_code -- this function will never be used
-@@ -161,7 +166,7 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
- 	new = ftrace_call_replace(ip, addr);
- 
- 	/* Should only be called when module is loaded */
--	return ftrace_modify_code_direct(rec->ip, old, new);
-+	return ftrace_modify_code_direct(rec->ip, old, new, NULL);
- }
- 
- /*
-
-
-> -- Steve
-
--- 
-Sincerely yours,
-Mike.
 
