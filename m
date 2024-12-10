@@ -1,185 +1,162 @@
-Return-Path: <linux-csky+bounces-1282-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1283-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A7EC9D4696
-	for <lists+linux-csky@lfdr.de>; Thu, 21 Nov 2024 05:22:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 788009EA54A
+	for <lists+linux-csky@lfdr.de>; Tue, 10 Dec 2024 03:41:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD1951F22299
-	for <lists+linux-csky@lfdr.de>; Thu, 21 Nov 2024 04:22:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16032284CF1
+	for <lists+linux-csky@lfdr.de>; Tue, 10 Dec 2024 02:41:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59DC149011;
-	Thu, 21 Nov 2024 04:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C69B419E993;
+	Tue, 10 Dec 2024 02:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="lJ5xHgVr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1D1tjxUu"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34A92309B6
-	for <linux-csky@vger.kernel.org>; Thu, 21 Nov 2024 04:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EECE19E802
+	for <linux-csky@vger.kernel.org>; Tue, 10 Dec 2024 02:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732162949; cv=none; b=eKsk/0/QqqVbC8JMrSnlEM8qbH9nPUQiAedrP3PhMmWYFNdLWJ5i4ltyXgsaDNIzb7ilXB9ZXe1c6J015OdDTXbyVqvuJvHpkcLL93W0ps5E67fnU+c7Tn+juQQnpIFyyKI/CedttR+MqaSiFNO9+KBvi/7ZHn+lhFrxErjPVr8=
+	t=1733798486; cv=none; b=f4OIKrIpiyeMcWdSgHjPQq5Dwj1FUglKTTmYmMIECDKGTGtUUgOv+ySZvbjKfl6UGN95o9zZIDys87KiP4amP2Va7B/9DDfR7lNS2NLBV/Ii0VLqJSxnioluX555MvBCLs0Rcczgs4V2iCHmtFyE6JIQ2yxhm/B5RijOgVYZ2Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732162949; c=relaxed/simple;
-	bh=SpAAQo3l0wT/aBxSUBDG8LR2a69OhY7lZutFyWBoaSI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HX7FpLHgw2R/mYEGWnGCwKvS4JEy7gm81cxGutOmwHLy05WUpEiCwItDUq0aeS99ArvgXEbae2glNzVjU627q4kAWhij4mtmOfq1vEgXr/27ceDqxr+0JKhi7kNt3moNo0arAQUPUI/gZ7mIchbXIMiV79moX0v2YOTJAz170Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=lJ5xHgVr; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6ee6a2ae6ecso3966297b3.3
-        for <linux-csky@vger.kernel.org>; Wed, 20 Nov 2024 20:22:27 -0800 (PST)
+	s=arc-20240116; t=1733798486; c=relaxed/simple;
+	bh=ggOOMFEQ9uCyBPLNj8pMCOzsrPNAOhGLml70owUEuAQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=qFjXYGB3Ae4+Lk8wA6Nwh1Byeyvihjvrus72kowsjwePvQ2dciZqmbATKtVcHx8n0qAX9mUKnD7swsy/xBW9hdTbnHvlY5STAzWljAugb6BMb2HADrzx1zJ0hkNqRioGl4jjBeUqPm/R82Y1xm/w6AvLbBukw+MIPvz4F3IgENg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1D1tjxUu; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2166855029eso7658965ad.0
+        for <linux-csky@vger.kernel.org>; Mon, 09 Dec 2024 18:41:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1732162947; x=1732767747; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cP3Um0hz7Gv16Gtk91dL7DlYT6sIqAVCB2yrXnpMevM=;
-        b=lJ5xHgVrpeJelHGu3h+m+kpP+CpJio03F91Rbvepr+CWIi+9zzppZNlKGNpp8Ygsm3
-         Sjn3pfi0iup6FCY6VRUX/gvK0tToQVNp0Q1qdmUuwb3oyNDO0x+aTkFXUbPDPq2+uMYV
-         6Kkw1xQI1Og8AGiNWJdTkgrqygfd4mt9dNclhjlQwoslCkM4OjYkdA0dHkCZnDnLbXxN
-         1nxctHciljQ+3LXCJ/9o80XgWTNvdelIrPEluX+jd/rnZxIX0fjubBWinpxABfVVzOI3
-         0bzGibPw4zzKvqUUMZGV+0LajHL2/tYGbJNQKduNU2tQl84HB9kxxSB40UKEfbU5hHC1
-         Fthg==
+        d=google.com; s=20230601; t=1733798484; x=1734403284; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bf22iGP6jf2y7qifILZ5XtpYUOy94hbxgtZW13umpxY=;
+        b=1D1tjxUujPUi/Ia3tAgiZZGc99IJQI6LLokQ3clTqe/glu84xRweia9vkmAjAc1Rky
+         x1x0AAY4CJcH0FIg6ESUBP6dvJu0JQZ2Wx3mUgD54mNzzKfh2emgVVcI4d0gO6hg2mrv
+         yGFSi3nA7AiegHUrLZD7oxUUNvqIHOCi1ySqnGbDgI2Sk9zekBas83zd0Aex+Rv9u8lU
+         SL3GQqi4mNMcOUH5gnCwBawMRaL41S2EHw70I4hS8oY5S8OASq8pLUgC8AZwjlkcxmMX
+         bhj0wKcYnG6e5RpUkiJLB93u+hCqnLzBhdUXTuTFNgSMe5rZYcH4za/cSzG6SyJDoNp2
+         a4Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732162947; x=1732767747;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cP3Um0hz7Gv16Gtk91dL7DlYT6sIqAVCB2yrXnpMevM=;
-        b=PUgZdrTf0eladIyNVXc4/mBi4B6X8sCC/LF4xA+BI+lcORAeEQc2CYqsbf3yclUnkH
-         DoRxlr847Gj6FLKvs/9Q/ObcK4P/yIlHsADHQCeI695Ivzzxyenv9bCmg5Xc2t12amqn
-         NhxbG59bltIImLm/KB9Q27uzrpCy0QVUoifPX/y7X6La8WrAvq/7Vfsygj/dIupp/h0w
-         0VE1Nbp4FRJm0C5x9nDFJQe7LK8ASsVFS6QWvtvKsOLxfTuoTM7oyvNNM74eS+CPSxuN
-         xmZAnukwcxzbSTOCIEk4f5LCY7ONUf6K0mbTn70O1/1Cof+ZGKoISmMSDS8U284xzTTS
-         O2Fg==
-X-Forwarded-Encrypted: i=1; AJvYcCVqY9igTYgl1d8ROoPFd7o/mfO5muvg5oAB76ATl3o7xlkJEGFJX7kC3KwuSYRZJhi88ocZuD81tdnG@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsPpcg0OAIKG0ngWicsqLYGJPO75Omz8SxeUSlQX/jgITOzlw8
-	Np/9sasdPXTDZfdiP9FkzWDzp0l4ys2II5/qxPzLnRG6NEI0/MUFJI+6vxri9+g=
-X-Google-Smtp-Source: AGHT+IFG/0lmdLf+PuJVUiUVDthedJQkU+yi8kvRYeLAcyp/RSQ9OGzeQL0b0Fr9yTqYmM0khQUKNg==
-X-Received: by 2002:a05:690c:5a15:b0:6ee:5068:7510 with SMTP id 00721157ae682-6eecc57b073mr20304047b3.26.1732162946630;
-        Wed, 20 Nov 2024 20:22:26 -0800 (PST)
-Received: from ghost ([50.146.0.9])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ee71341e4dsm25749277b3.90.2024.11.20.20.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 20:22:25 -0800 (PST)
-Date: Wed, 20 Nov 2024 20:22:23 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Ian Rogers <irogers@google.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Christian Brauner <brauner@kernel.org>, guoren <guoren@kernel.org>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH RFT 00/16] perf tools: Use generic syscall scripts for
- all archs
-Message-ID: <Zz61f02p8s52G6ba@ghost>
-References: <20241104-perf_syscalltbl-v1-0-9adae5c761ef@rivosinc.com>
- <3b56fc50-4c6c-4520-adba-461797a3b5ec@app.fastmail.com>
- <Zyk9hX8CB_2rbWsi@ghost>
- <CAP-5=fUdZRbCp+2ghEUdp+qJ1BuMDuTtw9R+dFAaom+3oqQV_g@mail.gmail.com>
- <ZylaRaMqEsEjYjs6@ghost>
+        d=1e100.net; s=20230601; t=1733798484; x=1734403284;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bf22iGP6jf2y7qifILZ5XtpYUOy94hbxgtZW13umpxY=;
+        b=KLpLF8bXApMxEG6UC2irsNruCWIBCuRPWW2hWX74Rnb92+I7Q9MtgZpBG1iXk+ML8x
+         W5jYMuZwpodMV5T6WMSQbtsDzKuEqmK9aEd6ZLpvdwP7aUCxEpx6ufgSEdojN+qjQsye
+         25PXk+03MrYOBascrDg/bEDcRqu9YLMBI6fi5mC+mkjVAcycNbOiwngFQlqhJ4D627Cs
+         npVsQNPiN2B/sXrH5fW8EBWCNujdGHLIwvIitfX0RnhE8llC0iCF+4tRs+mj/K5XB5+Q
+         wckbitB2bxdsRQfTk22lvb7n1VKkCYj3OfHd0djLZoulsWDe8TIE0zGu2e5HQpCZLZs9
+         zyyw==
+X-Forwarded-Encrypted: i=1; AJvYcCWMMTt50znsJ9vEb61nXUBqMYPixZ++tfRz7BW4Ueud56fWTdMVsqvAXQrdDXiIO4i4TYbnHWv9vHR1@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYRjo3ON7JQgayOmflnFfNpOrN9614XWcaefRjYRiZhZmZBWp/
+	b6zOYmHODkhWtXdVt9EM65uHc8MKTCXsK26TeYIH+zIi3sSo6F4w1Xvg6nCQFO0w9sXM4W16wNB
+	5Z67SE5lKz4pROF57pvhmNA==
+X-Google-Smtp-Source: AGHT+IGmbMdmRSsqJri2ZoaLC+TQ8CWMLTK/EMvjfytSTGvuy8K5dpGza4XliOvDgrJOHh+vT9vCZPym9dpOQZfD/Q==
+X-Received: from plbmk12.prod.google.com ([2002:a17:903:2bcc:b0:215:5607:bc71])
+ (user=kaleshsingh job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:f64a:b0:216:2b14:b625 with SMTP id d9443c01a7336-2166a01e172mr48609585ad.31.1733798483773;
+ Mon, 09 Dec 2024 18:41:23 -0800 (PST)
+Date: Mon,  9 Dec 2024 18:41:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZylaRaMqEsEjYjs6@ghost>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
+Message-ID: <20241210024119.2488608-1-kaleshsingh@google.com>
+Subject: [PATCH mm-unstable 00/17] mm: Introduce arch_mmap_hint()
+From: Kalesh Singh <kaleshsingh@google.com>
+To: akpm@linux-foundation.org, vbabka@suse.cz, yang@os.amperecomputing.com, 
+	riel@surriel.com, david@redhat.com
+Cc: linux@armlinux.org.uk, tsbogend@alpha.franken.de, 
+	James.Bottomley@HansenPartnership.com, ysato@users.sourceforge.jp, 
+	dalias@libc.org, glaubitz@physik.fu-berlin.de, davem@davemloft.net, 
+	andreas@gaisler.com, tglx@linutronix.de, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net, 
+	jcmvbkbc@gmail.com, bhelgaas@google.com, jason.andryuk@amd.com, 
+	leitao@debian.org, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org, 
+	kernel-team@android.com, android-mm@google.com, 
+	Kalesh Singh <kaleshsingh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 04, 2024 at 03:35:33PM -0800, Charlie Jenkins wrote:
-> On Mon, Nov 04, 2024 at 02:03:28PM -0800, Ian Rogers wrote:
-> > On Mon, Nov 4, 2024 at 1:32 PM Charlie Jenkins <charlie@rivosinc.com> wrote:
-> > >
-> > > On Mon, Nov 04, 2024 at 10:13:18PM +0100, Arnd Bergmann wrote:
-> > > > On Mon, Nov 4, 2024, at 22:06, Charlie Jenkins wrote:
-> > > > > Standardize the generation of syscall headers around syscall tables.
-> > > > > Previously each architecture independently selected how syscall headers
-> > > > > would be generated, or would not define a way and fallback onto
-> > > > > libaudit. Convert all architectures to use a standard syscall header
-> > > > > generation script and allow each architecture to override the syscall
-> > > > > table to use if they do not use the generic table.
-> > > > >
-> > > > > As a result of these changes, no architecture will require libaudit, and
-> > > > > so the fallback case of using libaudit is removed by this series.
-> > > > >
-> > > > > Testing:
-> > > > >
-> > > > > I have tested that the syscall mappings of id to name generation works
-> > > > > as expected for every architecture, but I have only validated that perf
-> > > > > trace compiles and runs as expected on riscv, arm64, and x86_64.
-> > > > >
-> > > > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > > >
-> > > > Thanks for doing this, I had plans to do this myself, but hadn't
-> > > > completed that bit so far. I'm travelling at the moment, so I'm
-> > > > not sure I have time to look at it in enough detail this week.
-> > > >
-> > > > One problem I ran into doing this previously was the incompatible
-> > > > format of the tables for x86 and s390, which have conflicting
-> > > > interpretations of what the '-' character means. It's possible
-> > > > that this is only really relevant for the in-kernel table,
-> > > > not the version in tools.
-> > > >
-> > >
-> > > I don't think that is an issue for this usecase because the only
-> > > information that is taken from the syscall table is the number and the
-> > > name of the syscall. '-' doesn't appear in either of these columns!
-> > 
-> > This is cool stuff. An area that may not be immediately apparent for
-> > improvement is that the x86-64 build only has access to the 64-bit
-> > syscall table. Perhaps all the syscall tables should always be built
-> > and then at runtime the architecture of the perf.data file, etc. used
-> > to choose the appropriate one. The cleanup to add an ELF host #define
-> > could help with this:
-> > https://lore.kernel.org/linux-perf-users/20241017002520.59124-1-irogers@google.com/
-> 
-> Oh that's a great idea! I think these changes will make it more seamless
-> to make that a reality.
-> 
-> > 
-> > Ultimately I'd like to see less arch code as it inherently makes cross
-> > platform worker harder. That doesn't impact this work which I'm happy
-> > to review.
-> 
-> Yeah I agree. Reducing arch code was the motivation for this change.
-> There was the issue a couple weeks ago that caused all architectures
-> that used libaudit to break from commit 7a2fb5619cc1fb53 ("perf trace:
-> Fix iteration of syscall ids in syscalltbl->entries"), so this change
-> will eliminate that source of difference between architectures.
-> 
-> - Charlie
-> 
-> > 
-> > Thanks,
-> > Ian
+Hi all,
 
-Let me know if you have any feedback on this series!
+This series introduces aarch_mmap_hint() to handle allocating VA space
+for the hint address.
 
-- Charlie
+Patches 1-16 introduce this new helper and Patch 17 uses it to fix the
+issue of mmap hint being ignored in some cases due to THP alignment [1]
+
+[1] https://lore.kernel.org/r/20241118214650.3667577-1-kaleshsingh@google.com/
+
+Thanks,
+Kalesh
+
+Kalesh Singh (17):
+  mm: Introduce generic_mmap_hint()
+  mm: x86: Introduce arch_mmap_hint()
+  mm: arm: Introduce arch_mmap_hint()
+  mm: alpha: Introduce arch_mmap_hint()
+  mm: arc: Use generic_mmap_hint()
+  mm: csky: Introduce arch_mmap_hint()
+  mm: loongarch: Introduce arch_mmap_hint()
+  mm: mips: Introduce arch_align_mmap_hint()
+  mm: parisc: Introduce arch_align_mmap_hint()
+  mm: s390: Introduce arch_mmap_hint()
+  mm: sh: Introduce arch_mmap_hint()
+  mm: sparc32: Introduce arch_mmap_hint()
+  mm: sparc64: Introduce arch_mmap_hint()
+  mm: xtensa: Introduce arch_mmap_hint()
+  mm: powerpc: Introduce arch_mmap_hint()
+  mm: Fallback to generic_mmap_hint()
+  mm: Respect mmap hint before THP alignment if allocation is possible
+
+ arch/alpha/include/asm/pgtable.h           |  1 +
+ arch/alpha/kernel/osf_sys.c                | 29 ++++++++++--
+ arch/arc/mm/mmap.c                         | 12 ++---
+ arch/arm/include/asm/pgtable.h             |  1 +
+ arch/arm/mm/mmap.c                         | 54 ++++++++++++---------
+ arch/csky/abiv1/inc/abi/pgtable-bits.h     |  1 +
+ arch/csky/abiv1/mmap.c                     | 38 ++++++++++-----
+ arch/loongarch/include/asm/pgtable.h       |  1 +
+ arch/loongarch/mm/mmap.c                   | 40 ++++++++++------
+ arch/mips/include/asm/pgtable.h            |  1 +
+ arch/mips/mm/mmap.c                        | 39 +++++++++------
+ arch/parisc/include/asm/pgtable.h          |  1 +
+ arch/parisc/kernel/sys_parisc.c            | 37 ++++++++++-----
+ arch/powerpc/include/asm/book3s/64/slice.h |  1 +
+ arch/powerpc/mm/book3s64/slice.c           | 31 ++++++++++++
+ arch/s390/include/asm/pgtable.h            |  1 +
+ arch/s390/mm/mmap.c                        | 32 ++++++-------
+ arch/sh/include/asm/pgtable.h              |  1 +
+ arch/sh/mm/mmap.c                          | 48 ++++++++++---------
+ arch/sparc/include/asm/pgtable_32.h        |  1 +
+ arch/sparc/include/asm/pgtable_64.h        |  1 +
+ arch/sparc/kernel/sys_sparc_32.c           | 21 +++++++--
+ arch/sparc/kernel/sys_sparc_64.c           | 47 +++++++++++++-----
+ arch/x86/include/asm/pgtable_64.h          |  1 +
+ arch/x86/kernel/sys_x86_64.c               | 49 ++++++++++---------
+ arch/xtensa/include/asm/pgtable.h          |  1 +
+ arch/xtensa/kernel/syscall.c               | 26 +++++++++-
+ include/linux/sched/mm.h                   |  8 ++++
+ mm/huge_memory.c                           | 15 +++---
+ mm/mmap.c                                  | 55 ++++++++++++++--------
+ 30 files changed, 401 insertions(+), 193 deletions(-)
+
+-- 
+2.47.0.338.g60cca15819-goog
 
 
