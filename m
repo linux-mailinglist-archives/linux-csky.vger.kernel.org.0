@@ -1,346 +1,255 @@
-Return-Path: <linux-csky+bounces-1337-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1338-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 831879EFF8C
-	for <lists+linux-csky@lfdr.de>; Thu, 12 Dec 2024 23:53:34 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FD8D9F00D3
+	for <lists+linux-csky@lfdr.de>; Fri, 13 Dec 2024 01:33:15 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 106F7285BC6
-	for <lists+linux-csky@lfdr.de>; Thu, 12 Dec 2024 22:53:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62646162C13
+	for <lists+linux-csky@lfdr.de>; Fri, 13 Dec 2024 00:33:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5051DE8AA;
-	Thu, 12 Dec 2024 22:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2112114;
+	Fri, 13 Dec 2024 00:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jxEXSEKi";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="td5Yp3w4"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="xcrmqTaH"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCE91DE4F0;
-	Thu, 12 Dec 2024 22:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734044004; cv=fail; b=Xj85LEP++HhK+y/KE3hPp7GR5PJT/QT7Jc85JDOoskcxef7q08XN12jWufXgLVvblgctLF4XkDxt7vD054GZEEmVJcigWMz/7AJBFCkRFSOZ74eA7yh3TdaJ7WsYrroT0g/VUtVpJb00QGYmPaaknVta8rcp8jDA+0CmmA8VWKg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734044004; c=relaxed/simple;
-	bh=KwpiwAz2ohzJR4/XQ25hUNq7eT1qinuIL2zXfeKYHqM=;
-	h=Date:From:To:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EJeN5VOithXTAtJpM5uwP00gGMFJcwUvUitpDYeMR/DKrmZcTuL23dJY33g/3IJqJlQSM0FmuENQfhqPe++1nSwSCwBxPp7oZAvyOdnE2CFKjP7XwdhZVQfbzbJ1efFehL1FfJ/kxpXFUR0BEkpPJP/HAGa1yAGnlc1Wr0bgmJU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jxEXSEKi; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=td5Yp3w4; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BCMgCKc023113;
-	Thu, 12 Dec 2024 22:51:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=bnlxJ0qxYgOZ9Im+ef
-	CrHalg4ItFI/zq87QP6zYwQx4=; b=jxEXSEKiiBnD/Ouzn0DdbFRGoqKuD25PFa
-	Mc+d0OHFDSkb0YSciYf7JHgLuL39MYXicckmf2UKJXFYjZCt1d5VjZxfJcLoXYTS
-	bwF/3XY4cFiF3paBNGRDfUsMjS5Q81b/ndeY/7GwC6fSYCxWsnMmR2Sttzx3tVuD
-	1BvUciSNeEWTkNNTDnKJ9yjUKmoUwaIs1z4W2U1wVWJ+zbAU6rCGvRfOUg0DIET3
-	a8HK2wB3q3YaPmK5s99BnWx2kg6dkeMW4msPFJwGIXjs9yFyng2k3HHOy2QpqCwb
-	aOWa9ww1twYpOmfTfGnlNBexWom9eVXbXU3IGmYGHHuYcQZiPsJQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 43cewtcen1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Dec 2024 22:51:44 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4BCLe6dw019258;
-	Thu, 12 Dec 2024 22:51:43 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2047.outbound.protection.outlook.com [104.47.55.47])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 43cctc1hdd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Dec 2024 22:51:43 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=X0Mv+wmBRp1+tpPH6KQxUB0ffeMV9uPxbVNUa8xxJDo2olu7s7Pz2nCSVQuyJAPa9RsjoDtsxyzcb67smrhp74g2aX5Dzw9pq0v3vodNJjrFeCKQq4Rvmt+5ROIM9luUA3YB732gkQBJk4IiT7uil3cmoAAGBXBeoc8AqfNW7cBQEM9gWRnmOqExxqgWRRTUhhQXVjicea8IbaYpyzKOvd8CSz5qaDKa0kWO1NGHWB9lX4g6wHn76UmBlUbCthKEQKytdmjY7VHxCxQ/DtDVxdrqVMbJfeTC3WTEEdtkZxo+HvED07rAv4YmT8ZJq8zye8H6JYJR4hDiXtHipEPOsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bnlxJ0qxYgOZ9Im+efCrHalg4ItFI/zq87QP6zYwQx4=;
- b=CGY1HF+ZzjoLG9W8YzNpMCR/qaheUvMHNmvfe3tgbv2LtdtqF9WwbCJKU+KQ7H9GrJ6r6MOeeCuCdOU88isvOIKwE73HfxAuc1ZLgq7PSy0aBDs5nLnF5I7Toh8XSIux2rO5ei4mQNoIXxnw6zSPjmHMW2sxsn9Bfc1ZoIV+QiGPji78+egFvKeq+8/ltXTsaJZvvRqYFdoXAi8WnqwS21DEpq9/t5my4KhAnuOfR1oOtlcj5mVy+/acdnLDRUWlYH2TgejNGO1wsb/4NZc28+9xeRses+/KtAeMOfHutNwDaCZ/qoIBDgiljVcVfdfDO90ByuJI2jPzoD5r1/BtXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D71524C
+	for <linux-csky@vger.kernel.org>; Fri, 13 Dec 2024 00:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734049990; cv=none; b=O2k455obfBexwPUrxgRPlwb5hyVVh3mcsMwJRt0H0SP04pmxNHwGSos0n+nmbmCcVSmMgrULg9x0GVY6grhvGXkEScW3MonUA81YXDVLOzPFmMtkjxzi0oIV43ExYg0wxG0RrIVrYCvQRazm/2FavFnKbxnN+un8owKmuvCkqvs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734049990; c=relaxed/simple;
+	bh=WZq3jkoID8QunDd/Lk9gkIo3P2ul9rqI69DPd+QU7VY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XcnXv4rklm7jpEYhgnQzlX+7RAP9kvUMnTIocUuczSGN6HGg+aZmD0tNEFX+syNyt9q84JCnQima/k/KU4voGndC1QqItaobZQwOTGlXZbQ2W4i4oR+gpa3yDZVe6vxMWOOoC5y+9J2xrxAtnlDWtN/Tr8L6LbpLZyembPoLyMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=xcrmqTaH; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ee76befe58so1049292a91.2
+        for <linux-csky@vger.kernel.org>; Thu, 12 Dec 2024 16:33:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bnlxJ0qxYgOZ9Im+efCrHalg4ItFI/zq87QP6zYwQx4=;
- b=td5Yp3w4GJw9L9U7ZwBjp0cPdTv+yTUBXmNpGgZQnxC+91+N3m7cLMS83OFdEVO6pAgAvcYdMqXH9gCmwfToP8d+/rl6mP4fdTmdra63zWF+1/usoUDbm8rykTmSxgToCwcYSsgHRvq5IaP4nMxNqjSvogniHpaXzmM0S2YiLT0=
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
- by SA2PR10MB4521.namprd10.prod.outlook.com (2603:10b6:806:117::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.16; Thu, 12 Dec
- 2024 22:51:38 +0000
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9%7]) with mapi id 15.20.8251.008; Thu, 12 Dec 2024
- 22:51:38 +0000
-Date: Thu, 12 Dec 2024 22:51:34 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, yang@os.amperecomputing.com, riel@surriel.com,
-        david@redhat.com, minchan@kernel.org, jyescas@google.com,
-        linux@armlinux.org.uk, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        andreas@gaisler.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net,
-        jcmvbkbc@gmail.com, bhelgaas@google.com, jason.andryuk@amd.com,
-        leitao@debian.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-mm@kvack.org,
-        kernel-team@android.com, android-mm@google.com,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH mm-unstable v2 00/16] mm: Introduce arch_mmap_hint()
-Message-ID: <1818e2ea-f170-4a9c-8d93-2a24f2755a41@lucifer.local>
-References: <20241211232754.1583023-1-kaleshsingh@google.com>
- <hmuzfspqjzb36xlj2x44keihacrrhzj5madqrfbcnhqouzredv@wo75achgkuh5>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <hmuzfspqjzb36xlj2x44keihacrrhzj5madqrfbcnhqouzredv@wo75achgkuh5>
-X-ClientProxiedBy: LO4P265CA0104.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c3::8) To BYAPR10MB3366.namprd10.prod.outlook.com
- (2603:10b6:a03:14f::25)
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1734049988; x=1734654788; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QJpXILRLfXKK0+MdF5T9u9jkQmQMEKo5rgup6DDy1VM=;
+        b=xcrmqTaHu99U1yAcZFSRxwAwkcR2hVmCgIqspwP8JL5Fhd+zL9KylVFCrtr8wl6BbY
+         IvaCIsMsIHgKqcZicqVDsLVIZczYxz1HzpoHlmwrWOLLS2f9yraGyXtVfbZiOmg9T/Ja
+         emBxTEjcnDIc7Kg7POyEsefmFzCo6mLC86gKsaI0oFOCCfx7/7mK/xZV70OWKjrfK2XW
+         OuD37a3i7TVJdcVS9yeL3ibkEvt6RZUVn5E/50aCkQhHMG9e2NFCw5PAeDi2vxjhOC97
+         ze8rg1L5kHkyUQozSaeFcdbzJb4xoMv2e5dVnjRDcDF0TETBd2/EfHIT9u2fWhH66fLC
+         nb7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734049988; x=1734654788;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QJpXILRLfXKK0+MdF5T9u9jkQmQMEKo5rgup6DDy1VM=;
+        b=po5aZvKcOSgMEVmr7Ctkv0S67FrsTa3lFni7zB7n8Zeb046BYr1JHWWKht0E5zl4rb
+         t1IyYpgce5PAuaF6L/EiaPMFH/5cLbin0/Nfq3cFqwkDIxN90wU6UuYfpANfn4BugwV7
+         rswnhT3DJTy3QQj0+diMmAf6YUB/MbNLaCEdCAD8qOADx6/dwiQ7s4GcGMOE0ZsIB66a
+         0w99zt53r+6R/J7/eSH0yl4uvBZr4OdezUdE1wlGtRE5PzKRqCywt6B8JFMKVi1vMyY5
+         BsQL0EdM0b/XW5ZPFvYerOx/Nr1bjgLovh8lJHSIhTN2Nl+DGzbuQ4/L8sn6YgNg3SPt
+         GaGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXHpmEnexOczeQRJWT/2va/T/SdPDxN9ymuIRye8U98qgG3HWVTc4kbJ2VaNy7e0J7B26zRaqjt9lC@vger.kernel.org
+X-Gm-Message-State: AOJu0YwV2naEJwQ3iztEfml7OYOTcByB5+IrTPwcOUJ6jj/xpH2A/xiY
+	08nGF5QAceUkatR+B52Q29cogBYwWK6dqRsIXtzt/DxYF/WcdancaYjWgzBAcNc=
+X-Gm-Gg: ASbGnctL6sJ8/cJLnPXbQepI4KBBB7qduXdt8IZac9QIsjuIYox847kopWdBDqwI24u
+	Qa/me8Yn9RAkC+RA+9qKeDl/4AGFF7xAKwBsoJtX2Ni9EpgxxAd7Sr6g7Ds/G+/Bv+hgr8C+Kzw
+	iYrtYp0yA6SAEGvI9/+t+YQGZXVPdr/65AYsJ7gTCwQD3O6YWmu7osiaCBXWhpGxjbdzPQv3dVt
+	9yHPjgOWi1ZdyGrUrcX2tXmyE1jLKLkeOBk1RDAIPCNHo/zfvfDRvgQCHHm0rWDODWQa1w9
+X-Google-Smtp-Source: AGHT+IG9JHkY7uaO8cnj26AhO6FgsLiu0T95fS/O5OYFvSj2rewtkHH5sLKhgnXsj2ZgFA4t6YukOA==
+X-Received: by 2002:a17:90b:3b48:b0:2ee:7415:4768 with SMTP id 98e67ed59e1d1-2f28fd6f5c1mr1368966a91.17.1734049988177;
+        Thu, 12 Dec 2024 16:33:08 -0800 (PST)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142e0ce50sm1934462a91.39.2024.12.12.16.33.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2024 16:33:07 -0800 (PST)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Subject: [PATCH v2 00/16] perf tools: Use generic syscall scripts for all
+ archs
+Date: Thu, 12 Dec 2024 16:32:50 -0800
+Message-Id: <20241212-perf_syscalltbl-v2-0-f8ca984ffe40@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|SA2PR10MB4521:EE_
-X-MS-Office365-Filtering-Correlation-Id: e71b4607-5fd4-453a-2ca8-08dd1aff8970
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|1800799024|376014|366016|921020|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?XvXyyntWcT9X4fy+8awqqhelSxZTkYsjZfO6xT21jaa8pkPCoznyfuNbv7CJ?=
- =?us-ascii?Q?IfxgQItdbtZEdPVqGsdtfiXKvcmvL0zP3/4znxtZWz7QRG0PGFD2fRz/N41v?=
- =?us-ascii?Q?hwHetYaFLNchGTcH/4lPuJNIBuOfMOn1Vbt3wyPHPfdWi31OtymJpav3nUAV?=
- =?us-ascii?Q?keLNVKs0VMA0qGqe3PZ4o9Ist0xnFenF5p0oUdLZzPwAlz87cWyIQGWrw9Lo?=
- =?us-ascii?Q?jKC79L4B1VfT/e0/vlq1cRjJk/d7B0mhtUAjRfc/3uqmuGyt8TG+4Qo+27py?=
- =?us-ascii?Q?8O+Hau5XhwW+/h2d+XFlq7xEXog49fOFmQ8BPTYopNg8aBDmvZBE78CSCGgE?=
- =?us-ascii?Q?fkmdqMZlgSonMV/+jjpvufItmSk6ZgIHIoHQ9iWEYcfmMJNutoXTX+x3uKuO?=
- =?us-ascii?Q?S2RKnsle9BCDkQBO8Fp0XbP2MFHq/TuyBUafhQFpWEQ1E6FEh9e5lCDycEcb?=
- =?us-ascii?Q?lxLboi695oXEy6YD5/AsQnoqaWqLJf/tnj+sdn6tOIeLozQIpKuAlVOqCFTZ?=
- =?us-ascii?Q?NcWs6h/lR5NkxOnWS1S/r6psQP52CHOrP/PjmKfWQu4eZY3u76L+YR4YwayR?=
- =?us-ascii?Q?k1ggB2rLj9KLEwdtqQs834m+RABxiY/i/LZPhz7c9E9ZCI1tQWZXHoyON3jG?=
- =?us-ascii?Q?iM4A/cm8j93NmEqJ2pGHmkwOylv0Jg8/JuDPoqhNpRDf5Jt1yJHJMEmFmQve?=
- =?us-ascii?Q?DI0G45V57kyv/D2GbsolllQ411igYyOEDyc1Btk+iBPUH35nBWd4T2GSxQGF?=
- =?us-ascii?Q?kAYiqn6mdxY47z8eT4lSgd2QPOW4gWtzl2pV2pKoluAMFoGRMtQykEe16ewZ?=
- =?us-ascii?Q?MrlwubJnVrT4fI0IZARuQLdISGLrR44f/yisUsk2yBV/DCMEZoR4+zPc+HNr?=
- =?us-ascii?Q?kiJ4NZCTjKRlti2HjmqrX6gfQ7OwfE3fgOtkiwB7muty5BlLSPg33670D9fZ?=
- =?us-ascii?Q?5g/M00DVrWACWBVYryK4XRhZuoydlZHuPACeWrO5qeW+NvHuFFmaiyU3LxvR?=
- =?us-ascii?Q?yradFpMvk5PUcx6/ELvxmw5txTrw1DsE8Hd0QnvESzpQXTVskZCbf6GHgpKs?=
- =?us-ascii?Q?krFx+5tABDlrmnl1GqSLvlhm7DrnePZ4MDD5o3ceMGMDlBd+8B1MWYgV+YaS?=
- =?us-ascii?Q?XKCerVOdiqKppN8NKUVUHCDV8TS8UAMBSiNvzFA4Iz4ma+lXZURdlW639yxh?=
- =?us-ascii?Q?oyC0x0uQ50Tje/4VifPHpY1dNJ0wxPq7vMRz8q2t+lUC01e8NhllhCTRwx0b?=
- =?us-ascii?Q?o0i4PUJz7DYClymW0IybwvV+uZdt1/5BDkfrovgC65DGz8ySetfKbTKPKAGd?=
- =?us-ascii?Q?IWoN+Ef4RMX7mev5trXeVrOltxZKGoVJDqNRoJDnlQat+2eJO9HhfjmrcD74?=
- =?us-ascii?Q?4g59IBCxJhN7cxPSjVullgyiJjNGJJ2xTEhs/8zSTXGgbmSmID14um19aW7i?=
- =?us-ascii?Q?UdxN3U1DgxEbXlPOvwGT6gNl6j20mho/?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?2dujTpFwwQ2JbBHbnIvGbZ3v+R4iXeuG0BHsfv01RVR1mba1OHMfoAAIfDYl?=
- =?us-ascii?Q?bgE+5lZ8SqgyBr79ZC3Tv70oLxpRHP2uHvnOEjqbN96P9i5jac1zZocQa2rQ?=
- =?us-ascii?Q?qjg7jeS78uO+84cl1PuZoh9+A0vks09oTiTqlUwud1Iphb+66K/tJfP5AIXW?=
- =?us-ascii?Q?AuCKeI4gNEs23Cg2pE0vk4eSz46ud/SUPmP66yMalxtDXcFgT8L8AumNRiF/?=
- =?us-ascii?Q?1r2tH63qLBcxjOtW6n8ZeUu2EEWuFHKzj5s6/LvdzTe/uSzjXlyxKwdP3yIs?=
- =?us-ascii?Q?3VFdrhf+ExVZT78k0H841TafFgzA3ZkJ/KUwhBwRPag5ALa//seL4WGsUFxc?=
- =?us-ascii?Q?fo4d9GssMhaa/uoiw8jAnxj7SMzG3rRTi2hoVqSJ4sxKcQVNvLFfLsifgqpI?=
- =?us-ascii?Q?OMvea0hRFNFbYEqJqIw5H8JqCHi3zhBODFYq2G2lFeiXOowyP28xBm4aYFJ1?=
- =?us-ascii?Q?2vMxkJw/YQpA7Gotny5eDMFFDuVL+77KkD6u40SsxHIaShm66yro750VK1Ji?=
- =?us-ascii?Q?GX586UXUXigYw2GBLnjQ+rRrjByPUFtjEIY2Vn+ierHf6YMLz/ec2+WNv1Dp?=
- =?us-ascii?Q?g+4zaKpnJH5QUuNXcmOz3dRJ73qd2+mvZ5BTRc2/HI6MGw05djuRiuJtrAfO?=
- =?us-ascii?Q?m7+cIq46gBvPaacHGN+5fQAaxdPr8FKX/YoNOoRH6T/19+UbqBo0+B1Y7tvk?=
- =?us-ascii?Q?iBcFTApuSftq7UAZd1gfICbffRl9BTHNaGJoA+j5Kc82lXdRGdY3ODCuchgp?=
- =?us-ascii?Q?ipIt/Fg1B/q1H71oxBgkqLV0a5tBzYzkiyYVuRsfIYJZrwLV2y8V7qNSIsAU?=
- =?us-ascii?Q?eHcJ8aBkz8juL0eIHDkArlbBF+ilDfst4/jCFuseaT/DEanCCfMa7AKptPda?=
- =?us-ascii?Q?knkY+BGQzEWnAfIWlMhR5GNWwEyY21YTemTfMgNB5IvpkY4x10KnofZFCO9v?=
- =?us-ascii?Q?YgAZmTqMuCigHQLAsRSun4NklUazzlyY4++b0yM28f/FH9WzNqnjIuXKC1oR?=
- =?us-ascii?Q?kynoShJQY5zi3XkhlOoSR8b37a8X5T4ly54ek/lSsIDDs36TwoKoaeCtGhOB?=
- =?us-ascii?Q?uTH+BN+OP1GP3cEhjldfG6qljN1zc8+G6cQH1I6JfecHSPPQLNPonIyIXUW3?=
- =?us-ascii?Q?lxRkTgM7Vn2eFTr3OTMq1NQlSiIsX9oT95dpbTcO/I62rC7pzvQ4t+IoTV1L?=
- =?us-ascii?Q?B9ysjMvgvdoyU/95iUc9Ouft5ae8tnYbeDftCSXLbkr+vutno4meMWUhRyMv?=
- =?us-ascii?Q?YX0nw4mQyanb47NgdPV9hjVGZazmEXUz0PIDU+njbymPuq2b1h8goT1ND010?=
- =?us-ascii?Q?9bmnmZh2sQ8hghLm1VvRgCxNRElcuLc9iVxiL4mXrdKj8ftlI5Cq7lfWpTcg?=
- =?us-ascii?Q?mzohYPnVM/vsJK0Zy9/tJm+FbNF1YdSHQCf6fI31Wa5elgRa14OvXbp9r/9h?=
- =?us-ascii?Q?LHLRnrJf07gQuYY1POha5AYPe686u/ExBw6487DrzbNch3mpeBvay9gU49Ck?=
- =?us-ascii?Q?7ZJRCVPAvHAMLWUeOn26Khf5q9iZHa2FRsVPBx8ojk2jlqbh8T1mVFcUyziG?=
- =?us-ascii?Q?0LWu+YkMYgZFnDVCGVI2tsyiN3LHGUw4oMQaSv/4+piuCB1wG5X2R4eKTMEW?=
- =?us-ascii?Q?6g=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	XUPgrODeX1GP5LXCz3T9TRq5heOBws7XOg+qToZM9Fy09Vk9IrcjXgrTEstJY4UvrvyX9b9ALwN512H6R93jLFj9ko2phk7cvQS2bq+SsMOvUd+TujYaCVmXBBjcwUzm+YwSGgf9QKuke2WLKZ7dwe7BO2clsZMC3HZC9Cz7Mrtb76yvJmcJoo9LiyxqHJNMRPfPHTWX4AKAg3MV+UP5pkzJUNzj1uigbmwTSdK+RDKTEBw32UgPJC/y/ZHxq4LKDPdwlwYaSYWIvuGu4x8LVDjWC6dI3ZIoPgH/o1kMbM65cYyNPVvA8i+44JpNNZI4/rrkzmXW75OgR2/MjXSwftuRs3woXukIFtdjOClDE8KyBrhqSS/hAw3cQoJctnJj5sgZVAk9HrOZBeEm/nIfoYQRbCvaY0ngUVHgKvHr6lx6lfxCsXet23QuDRHFwYZgf9xCDf7zwL1WgR+XUfZ2KzkYwEeyRQ/6b/bxeSz/Cnge0mVZXdvTvqWgAVSRgs/4d0tGvdkg/a0MeYgM0p2RVxo8SsHev3NFl0yv+/lORqZ8Vgy14q8yyXYTayNdSl1RUVUpt1m7DdmaZxidgWjRWLgqM2URpxpqF9BVGkIONwY=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e71b4607-5fd4-453a-2ca8-08dd1aff8970
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2024 22:51:38.4118
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kfIhQJWQbroVXGszNVBZQFjIZ44YH7hLh0L4E+zaVp8e891Q32+FBpnhFGa7wBSeeVdpqNcwTrrWynoRqanur4ShYNOhFMCEZs1619bKuP0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4521
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-12_10,2024-12-12_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2411120000 definitions=main-2412120164
-X-Proofpoint-ORIG-GUID: QC3GH825H80zpVuMC3twZ-SXgnV2ksM5
-X-Proofpoint-GUID: QC3GH825H80zpVuMC3twZ-SXgnV2ksM5
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALKAW2cC/2WNQQ6CMBBFr0JmbU2LgOLKexhi6jCVSbAlHdJIC
+ He3snX5XvLfX0EoMglcixUiJRYOPkN5KAAH61+kuM8MpS4r3ZqTmii6hyyCdhzn56ga1156coi
+ NqyGvpkiOP3vx3mUeWOYQl/0gmZ/dW8bo6q+VjNKqtb2lGs+NIXeLnIKwxyOGN3Tbtn0Br+Vo5
+ LEAAAA=
+X-Change-ID: 20240913-perf_syscalltbl-6f98defcc6f5
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>, 
+ John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
+ James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
+ Leo Yan <leo.yan@linux.dev>, Jonathan Corbet <corbet@lwn.net>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>, 
+ Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-csky@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7428; i=charlie@rivosinc.com;
+ h=from:subject:message-id; bh=WZq3jkoID8QunDd/Lk9gkIo3P2ul9rqI69DPd+QU7VY=;
+ b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ3p0w7aTgWd5pnZ/dZ3zhM/4IM9yXcsqu3SRWaUCUtzCO
+ 5vf8U3rKGVhEONgkBVTZOG51sDceke/7Kho2QSYOaxMIEMYuDgFYCK9/IwMzXFPkxqubI248pU9
+ c9HS4/ej7Wcdck6u0kgR6mvs+j1dgpGhryyV5SP7/mXevnGM7//87Dw6vfhr+q72gz5Ce5W/OCr
+ yAAA=
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 
-NACK.
+Standardize the generation of syscall headers around syscall tables.
+Previously each architecture independently selected how syscall headers
+would be generated, or would not define a way and fallback onto
+libaudit. Convert all architectures to use a standard syscall header
+generation script and allow each architecture to override the syscall
+table to use if they do not use the generic table.
 
-Resend this _as an RFC_, _with the correct maintainers and reviewers cc'd_.
+As a result of these changes, no architecture will require libaudit, and
+so the fallback case of using libaudit is removed by this series.
 
-You've fundamentally violated kernel process and etiquette. I'd be more
-forgiving, but this is at v2 and you've not cc'd KEY people. Twice. This is
-totally unacceptable. See [0] if you are unsure of how to do so.
+Testing:
 
-You've also sent a 16 patch series (!) immediately prior to the holidays
-(!!) introducing an arch hook (!!!), which is strictly something we want to
-try to avoid or lessen in future, which you'd know, had you followed basic
-kernel etiquette and process and cc'd us on v1.
+I have tested that the syscall mappings of id to name generation works
+as expected for every architecture, but I have only validated that perf
+trace compiles and runs as expected on riscv, arm64, and x86_64.
 
-Any discussion that will be had here with others we won't be cc'd on, it's
-16 patches, this isn't workable.
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+---
+Changes in v2:
+- Rebase onto 6.13-rc2
+- Fix output path so it generates to /tools/perf/arch properly
+- Link to v1: https://lore.kernel.org/r/20241104-perf_syscalltbl-v1-0-9adae5c761ef@rivosinc.com
 
-I'm on holiday from next week, it's not really fair to put this all on Liam
-immediately prior to Christmas, so let's just examine this as an RFC first.
+---
+Charlie Jenkins (16):
+      perf tools: Create generic syscall table support
+      perf tools: arc: Support generic syscall headers
+      perf tools: csky: Support generic syscall headers
+      perf tools: arm: Support syscall headers
+      perf tools: sh: Support syscall headers
+      perf tools: sparc: Support syscall headers
+      perf tools: xtensa: Support syscall header
+      perf tools: x86: Use generic syscall scripts
+      perf tools: alpha: Support syscall header
+      perf tools: parisc: Support syscall header
+      perf tools: arm64: Use syscall table
+      perf tools: loongarch: Use syscall table
+      perf tools: mips: Use generic syscall scripts
+      perf tools: powerpc: Use generic syscall table scripts
+      perf tools: s390: Use generic syscall table scripts
+      perf tools: Remove dependency on libaudit
 
-I hate to think that I need to set lei rules to catch stuff like this, but
-clearly, I do. I will be updating these to check on all relevant
-files. Sigh.
+ Documentation/admin-guide/workload-tracing.rst     |   2 +-
+ tools/build/feature/Makefile                       |   4 -
+ tools/build/feature/test-libaudit.c                |  11 -
+ tools/perf/Documentation/perf-check.txt            |   1 -
+ tools/perf/Makefile.config                         |  39 +-
+ tools/perf/Makefile.perf                           |  12 +-
+ tools/perf/arch/alpha/entry/syscalls/Kbuild        |   2 +
+ .../arch/alpha/entry/syscalls/Makefile.syscalls    |   5 +
+ tools/perf/arch/alpha/entry/syscalls/syscall.tbl   | 504 ++++++++++++++++++++
+ tools/perf/arch/alpha/include/syscall_table.h      |   2 +
+ tools/perf/arch/arc/entry/syscalls/Kbuild          |   2 +
+ .../perf/arch/arc/entry/syscalls/Makefile.syscalls |   3 +
+ tools/perf/arch/arc/include/syscall_table.h        |   2 +
+ tools/perf/arch/arm/entry/syscalls/Kbuild          |   4 +
+ .../perf/arch/arm/entry/syscalls/Makefile.syscalls |   2 +
+ tools/perf/arch/arm/entry/syscalls/syscall.tbl     | 483 +++++++++++++++++++
+ tools/perf/arch/arm/include/syscall_table.h        |   2 +
+ tools/perf/arch/arm64/Makefile                     |  22 -
+ tools/perf/arch/arm64/entry/syscalls/Kbuild        |   3 +
+ .../arch/arm64/entry/syscalls/Makefile.syscalls    |   6 +
+ tools/perf/arch/arm64/entry/syscalls/mksyscalltbl  |  46 --
+ .../perf/arch/arm64/entry/syscalls/syscall_32.tbl  | 476 +++++++++++++++++++
+ .../perf/arch/arm64/entry/syscalls/syscall_64.tbl  |   1 +
+ tools/perf/arch/arm64/include/syscall_table.h      |   8 +
+ tools/perf/arch/csky/entry/syscalls/Kbuild         |   2 +
+ .../arch/csky/entry/syscalls/Makefile.syscalls     |   3 +
+ tools/perf/arch/csky/include/syscall_table.h       |   2 +
+ tools/perf/arch/loongarch/Makefile                 |  22 -
+ tools/perf/arch/loongarch/entry/syscalls/Kbuild    |   2 +
+ .../loongarch/entry/syscalls/Makefile.syscalls     |   3 +
+ .../arch/loongarch/entry/syscalls/mksyscalltbl     |  45 --
+ tools/perf/arch/loongarch/include/syscall_table.h  |   2 +
+ tools/perf/arch/mips/entry/syscalls/Kbuild         |   2 +
+ .../arch/mips/entry/syscalls/Makefile.syscalls     |   5 +
+ tools/perf/arch/mips/entry/syscalls/mksyscalltbl   |  32 --
+ tools/perf/arch/mips/include/syscall_table.h       |   2 +
+ tools/perf/arch/parisc/entry/syscalls/Kbuild       |   3 +
+ .../arch/parisc/entry/syscalls/Makefile.syscalls   |   6 +
+ tools/perf/arch/parisc/entry/syscalls/syscall.tbl  | 463 +++++++++++++++++++
+ tools/perf/arch/parisc/include/syscall_table.h     |   8 +
+ tools/perf/arch/powerpc/Makefile                   |  25 -
+ tools/perf/arch/powerpc/entry/syscalls/Kbuild      |   3 +
+ .../arch/powerpc/entry/syscalls/Makefile.syscalls  |   6 +
+ .../perf/arch/powerpc/entry/syscalls/mksyscalltbl  |  39 --
+ tools/perf/arch/powerpc/include/syscall_table.h    |   8 +
+ tools/perf/arch/riscv/Makefile                     |  22 -
+ tools/perf/arch/riscv/entry/syscalls/Kbuild        |   2 +
+ .../arch/riscv/entry/syscalls/Makefile.syscalls    |   4 +
+ tools/perf/arch/riscv/entry/syscalls/mksyscalltbl  |  47 --
+ tools/perf/arch/riscv/include/syscall_table.h      |   8 +
+ tools/perf/arch/s390/Makefile                      |  21 -
+ tools/perf/arch/s390/entry/syscalls/Kbuild         |   2 +
+ .../arch/s390/entry/syscalls/Makefile.syscalls     |   5 +
+ tools/perf/arch/s390/entry/syscalls/mksyscalltbl   |  32 --
+ tools/perf/arch/s390/include/syscall_table.h       |   2 +
+ tools/perf/arch/sh/entry/syscalls/Kbuild           |   2 +
+ .../perf/arch/sh/entry/syscalls/Makefile.syscalls  |   4 +
+ tools/perf/arch/sh/entry/syscalls/syscall.tbl      | 472 +++++++++++++++++++
+ tools/perf/arch/sh/include/syscall_table.h         |   2 +
+ tools/perf/arch/sparc/entry/syscalls/Kbuild        |   3 +
+ .../arch/sparc/entry/syscalls/Makefile.syscalls    |   5 +
+ tools/perf/arch/sparc/entry/syscalls/syscall.tbl   | 514 +++++++++++++++++++++
+ tools/perf/arch/sparc/include/syscall_table.h      |   8 +
+ tools/perf/arch/x86/Build                          |   1 -
+ tools/perf/arch/x86/Makefile                       |  25 -
+ tools/perf/arch/x86/entry/syscalls/Kbuild          |   3 +
+ .../perf/arch/x86/entry/syscalls/Makefile.syscalls |   6 +
+ tools/perf/arch/x86/entry/syscalls/syscalltbl.sh   |  42 --
+ tools/perf/arch/x86/include/syscall_table.h        |   8 +
+ tools/perf/arch/xtensa/entry/syscalls/Kbuild       |   2 +
+ .../arch/xtensa/entry/syscalls/Makefile.syscalls   |   4 +
+ tools/perf/arch/xtensa/entry/syscalls/syscall.tbl  | 439 ++++++++++++++++++
+ tools/perf/arch/xtensa/include/syscall_table.h     |   2 +
+ tools/perf/builtin-check.c                         |   1 -
+ tools/perf/builtin-help.c                          |   2 -
+ tools/perf/builtin-trace.c                         |  30 --
+ tools/perf/check-headers.sh                        |   9 +
+ tools/perf/perf.c                                  |   6 +-
+ tools/perf/scripts/Makefile.syscalls               |  60 +++
+ tools/perf/scripts/syscalltbl.sh                   |  86 ++++
+ tools/perf/tests/make                              |   7 +-
+ tools/perf/util/env.c                              |   4 +-
+ tools/perf/util/generate-cmdlist.sh                |   4 +-
+ tools/perf/util/syscalltbl.c                       |  91 +---
+ tools/scripts/syscall.tbl                          | 409 ++++++++++++++++
+ 85 files changed, 4101 insertions(+), 620 deletions(-)
+---
+base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
+change-id: 20240913-perf_syscalltbl-6f98defcc6f5
+-- 
+- Charlie
 
-[0]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#select-the-recipients-for-your-patch
-
-On Thu, Dec 12, 2024 at 04:02:31PM -0500, Liam R. Howlett wrote:
->
-> + Lorenzo
->
-> Can you please Cc the people listed in the maintainers on the files you
-> are submitting against?  You seemed to Cc everyone but the mmap.c file
-> maintainers?
-
-Thanks Liam.
-
-Also +Jann, another reviewer Kalesh missed (he only got Vlastimil and
-Andrew so 2/5... of those required...)
-
->
->
-> * Kalesh Singh <kaleshsingh@google.com> [241211 18:28]:
-> > Hi all,
-> >
-> > This is v2 othe the arch_mmap_hint() series.
-> >
-> > Changes in v2:
-> >   - MAP_FIXED case is also handled in arch_mmap_hint() since this is just a
-> >     special case of the hint addr being "enforced", per Yang Shi.
-> >   - Consolidate most of the error handling in arch_mmap_hint().
-> >   - Patch 16 ("mm: Fallback to generic_mmap_hint()") was folded into
-> >     Patch 2 ("mm: x86: Introduce arch_mmap_hint()")
-> >
-> > v1: https://lore.kernel.org/r/20241210024119.2488608-1-kaleshsingh@google.com/
-> >
-> > =======
-> >
-> > This series introduces arch_mmap_hint() to handle allocating VA space
-> > for the hint address.
->
-> Why?  Could we get more details in your cover letter please?  This
-> entire email has as much detail as the subject line.
-
-Yes the cover letter is ridiculously small for what that is doing.
-
->
-> I don't want more arch_ anything.  If we can do this in a more generic
-> way, then we should.
-
-ENTIRELY agreed.
-
->
-> >
-> > Patches 1-16 introduce this new helper and Patch 17 uses it to fix the
-> > issue of mmap hint being ignored in some cases due to THP alignment [1]
-> >
-> > [1] https://lore.kernel.org/r/20241118214650.3667577-1-kaleshsingh@google.com/
-> >
-> > Thanks,
-> > Kalesh
-> >
-> >
-> > Kalesh Singh (16):
-> >   mm: Introduce generic_mmap_hint()
-> >   mm: x86: Introduce arch_mmap_hint()
-> >   mm: arm: Introduce arch_mmap_hint()
-> >   mm: alpha: Introduce arch_mmap_hint()
-> >   mm: arc: Use generic_mmap_hint()
-> >   mm: csky: Introduce arch_mmap_hint()
-> >   mm: loongarch: Introduce arch_mmap_hint()
-> >   mm: mips: Introduce arch_align_mmap_hint()
-> >   mm: parisc: Introduce arch_align_mmap_hint()
-> >   mm: s390: Use generic_mmap_hint()
-> >   mm: sh: Introduce arch_mmap_hint()
-> >   mm: sparc32: Introduce arch_mmap_hint()
-> >   mm: sparc64: Introduce arch_mmap_hint()
-> >   mm: xtensa: Introduce arch_mmap_hint()
-> >   mm: powerpc: Introduce arch_mmap_hint()
-> >   mm: Respect mmap hint before THP alignment if allocation is possible
-> >
-> >  arch/alpha/include/asm/pgtable.h           |   1 +
-> >  arch/alpha/kernel/osf_sys.c                |  31 +++---
-> >  arch/arc/include/asm/pgtable.h             |   1 +
-> >  arch/arc/mm/mmap.c                         |  43 +++++----
-> >  arch/arm/include/asm/pgtable.h             |   1 +
-> >  arch/arm/mm/mmap.c                         | 107 +++++++++------------
-> >  arch/csky/abiv1/inc/abi/pgtable-bits.h     |   1 +
-> >  arch/csky/abiv1/mmap.c                     |  68 +++++++------
-> >  arch/loongarch/include/asm/pgtable.h       |   1 +
-> >  arch/loongarch/mm/mmap.c                   |  49 +++++-----
-> >  arch/mips/include/asm/pgtable.h            |   1 +
-> >  arch/mips/mm/mmap.c                        |  50 +++++-----
-> >  arch/parisc/include/asm/pgtable.h          |   1 +
-> >  arch/parisc/kernel/sys_parisc.c            |  53 +++++-----
-> >  arch/powerpc/include/asm/book3s/64/slice.h |   1 +
-> >  arch/powerpc/mm/book3s64/slice.c           |  31 ++++++
-> >  arch/s390/include/asm/pgtable.h            |   1 +
-> >  arch/s390/mm/mmap.c                        |  51 +++++-----
-> >  arch/sh/include/asm/pgtable.h              |   1 +
-> >  arch/sh/mm/mmap.c                          |  83 ++++++----------
-> >  arch/sparc/include/asm/pgtable_32.h        |   1 +
-> >  arch/sparc/include/asm/pgtable_64.h        |   1 +
-> >  arch/sparc/kernel/sys_sparc_32.c           |  33 ++++---
-> >  arch/sparc/kernel/sys_sparc_64.c           |  96 +++++++-----------
-> >  arch/x86/include/asm/pgtable_64.h          |   1 +
-> >  arch/x86/kernel/sys_x86_64.c               |  64 ++++++------
-> >  arch/xtensa/kernel/syscall.c               |  31 ++++--
-> >  include/linux/sched/mm.h                   |   9 ++
-> >  mm/huge_memory.c                           |  17 ++--
-> >  mm/mmap.c                                  |  86 +++++++++++------
-> >  30 files changed, 491 insertions(+), 424 deletions(-)
-
-Yuck. Is this copy/paste really necessary...
-
-> >
-> > --
-> > 2.47.0.338.g60cca15819-goog
-> >
-> >
 
