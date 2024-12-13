@@ -1,183 +1,362 @@
-Return-Path: <linux-csky+bounces-1361-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1362-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F1989F133E
-	for <lists+linux-csky@lfdr.de>; Fri, 13 Dec 2024 18:08:49 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37A089F19D1
+	for <lists+linux-csky@lfdr.de>; Sat, 14 Dec 2024 00:22:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B10816ADDB
+	for <lists+linux-csky@lfdr.de>; Fri, 13 Dec 2024 23:22:55 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC4381B4F15;
+	Fri, 13 Dec 2024 23:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jubRRjX+"
+X-Original-To: linux-csky@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEACE28412D
-	for <lists+linux-csky@lfdr.de>; Fri, 13 Dec 2024 17:08:47 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08BD1E47DB;
-	Fri, 13 Dec 2024 17:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="29b4MEey"
-X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B812C1E377E
-	for <linux-csky@vger.kernel.org>; Fri, 13 Dec 2024 17:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9B52E62B;
+	Fri, 13 Dec 2024 23:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734109718; cv=none; b=Eq8CxNMCZBTRlIaL0EYM4igO4ydKQxPegGo3/npfKVQr/PyRZgyfRZRlR0gtAIbJFpsCX+LZrAqDThWII1TAmi2FK6l+YG8PVy6sUlr6PQGDJfLhBIiPEBxB0ncoZ4zoPztF89XcSMYTsjHC9YGPZQRuEuXf6l5vh45LARCwWVU=
+	t=1734132176; cv=none; b=jk0hnmWcOqO3dIqv6vsPIFCEtrkAImGv8vg9xehPwoMZlzdvjm2ijbiB4Z76Krf8CSFIG2DI+4bVYhhgnEaTo+75fGMQ/o7nK0XndN6/kHO919LN8W/OTy8jR8yZj3ivG/4AVBuVctTulg+fflXSXuMeUIpb6btb8Du0DRsHA6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734109718; c=relaxed/simple;
-	bh=wE+q7QeqF7YQbDHKzcLUrEGn0D/xKRMVNiL8FZYTzQM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=DpsyLdFSV8qivmHtUk93gVsBYxayVGxd5Ws74NWf/Bq61b6agV628NM6eqAaFBpI8LbKQCwWkNVzEa+/KuUUF3tAHx4pd4+13BT9j8sbS2A0cIiEwUutd/DWdppxBbttjC5+IR1kuef8lO0aWG6pPIHkRlV+QXQpkfcZrgN6ar8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=29b4MEey; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so9579a12.1
-        for <linux-csky@vger.kernel.org>; Fri, 13 Dec 2024 09:08:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734109715; x=1734714515; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7A4zwHQX+g8AxxOfbgXufhzVAB4FWsc6ZChZM+91J+Q=;
-        b=29b4MEeyBWkVqUolfzYcE3Jdwe7eQHVydzI7lGKVgmmConI+6fH8W2P+q2VO49uDZU
-         C9TfKKZuLFMdARUuq6mANwRls3tczCxmzBvg0mpeB6exQq5q1UNiToBEPR2Aq/s9jcUv
-         4X1t3MRrxJK8Ow8Tix1kwDBH7MzB65liCWjkSHJGGm6SyeQr0FuJCa/NhsUzZQz3Kivz
-         k3keI7cVj46jO3yV1rZim5teLqYabD+WToJTOWQT73CAEj6tSajtmdWGmMK9kFijo5FW
-         JOn6Wat/cc96//d75BRW2AX3jCfi9sNSZdMpfV2KRsuza6meR3S4Ufr7evF5pJ5tMOr2
-         xycg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734109715; x=1734714515;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7A4zwHQX+g8AxxOfbgXufhzVAB4FWsc6ZChZM+91J+Q=;
-        b=FGLbGztViKQYD4Jel2syGOILFsZe9xqolqz1dYdW0lYVk6FTPtpnIaCsU/5pfrLa1w
-         mAKERnb2E5V7P3QOtO/aJzqbR20A6dX9JlT4KkD0dW6tul3AwQ4a2WUFrPrTyUO4FeqS
-         ntYUU+XCrlsl8duljHxbdP1xHXPMmmDjk0nKyvn9rYaMSu8eBonmY/xg8FmHeltut2ZL
-         3xkwrrAfJE750+C3rm7lOTTikalSc88pq2OByY0SUlY5YTBR52KDRXUNNwUl6wjBsGsp
-         EZ6m4wOBR4QjcaqOvZDgWNXkcyr26QEQMsVDSiudpmnWr6NDK+BGtaiCZyJIpKV2bPUY
-         T9xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZhV0a2nDO4E9ITX8FgDbNCu7OXHuQ8sNzLXXIt6L8k/i4/hEGkICKtF76AderUff4mRZWbz5RzOI5@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhuJySYh7Im5Q7Imdu8JRFCtbOWB7aqkg5g7/8QdfEYhPcxULw
-	rZc17lFCMrDMdCtBCg7uXzWS9SAnPaRq0eRWMkY9puO0Wc3a5QIn7rujTYFz0PmB0rflRkPBIsv
-	cHjlyG5eauqaHubrHwQ5DX3nRz9zCwAyQuuAv
-X-Gm-Gg: ASbGncvUbpKIXPf1AeDWZChpqsjIXKuXe7Xmf6dceZO55k3FpFRf26HiJZKPCi+eCTZ
-	tzc7zhUDQH/kwDMNsjBTeQaPC4/7nUmilYjneEg==
-X-Google-Smtp-Source: AGHT+IE0pzRAvhpWcDoHVTc25a7VJDPqOoxFfUFUvV3kZNJPG0d3Y6hVFQO+pd+M5jbFDlDiTJn/R0kKY+NzL+UHXcQ=
-X-Received: by 2002:a05:6402:1517:b0:5d0:b20c:2063 with SMTP id
- 4fb4d7f45d1cf-5d63c09e36emr92135a12.7.1734109713373; Fri, 13 Dec 2024
- 09:08:33 -0800 (PST)
+	s=arc-20240116; t=1734132176; c=relaxed/simple;
+	bh=VGdzHQIi3fVgtagYbzv6Ua/Y+Cdp0udMv+eqeWy9bXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=As1hBNfEr4Qa24v4N3GbOFDsAzQ8oDQmA6XQvGco/utYwDIMPPgLT1/AEG9T6Hz+6CLQ7XzkeqanvB4OsZ/DAE3ud7fSoxuGEed9GwWyOh+pHnlwKnh6qnNI+P+V2o0jd7ZuMkry6P12QNaXomLJvNQKsCL7iRTCr1DOOyFgr24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jubRRjX+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353EEC4CED0;
+	Fri, 13 Dec 2024 23:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734132176;
+	bh=VGdzHQIi3fVgtagYbzv6Ua/Y+Cdp0udMv+eqeWy9bXk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jubRRjX+AKkzfqbkZzXRkcxswbL+z2aT8lM9vqwYGJhS8OBivPuLZfbQtqWHoMw5+
+	 bXjSKS7gASj0tV738dhDH8ZK7uZC0/eRB/CA6Qpw5bvg5K1bQWc7ARtFPcPTO2rYHU
+	 HA4+OKVlxjHCWOCAvSQn7SKnpXDb5qHg8j2JIA6A0Fq0q+vZG7gRjIjzqcjeaedXQX
+	 zF/I+30UgrdwBOtPv4MlDhB5LOSqbfcauvM53kSSZi6IAhIxtruy9q/jQTNa/XLB4g
+	 iIKtgUyGZsVg9KQ68LZhtqaCkSnkBIqHn5Du5hJ5eYG9d/NfswVAJa0TPE8F7Bnflc
+	 i7aSiujMxgj0A==
+Date: Fri, 13 Dec 2024 15:22:53 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
+	Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Jonathan Corbet <corbet@lwn.net>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 01/16] perf tools: Create generic syscall table support
+Message-ID: <Z1zBzTgEYXw1DbEL@google.com>
+References: <20241212-perf_syscalltbl-v2-0-f8ca984ffe40@rivosinc.com>
+ <20241212-perf_syscalltbl-v2-1-f8ca984ffe40@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241211232754.1583023-1-kaleshsingh@google.com>
- <hmuzfspqjzb36xlj2x44keihacrrhzj5madqrfbcnhqouzredv@wo75achgkuh5>
- <1818e2ea-f170-4a9c-8d93-2a24f2755a41@lucifer.local> <20241212173609.afd41d1dffbefe0d731ed4ed@linux-foundation.org>
- <695eabb8-ba28-4031-bc4d-66dc4f1d096f@lucifer.local> <CAC_TJvcdz854DmBoVRkb_B5j+u-t=4zHkLtHVeB5RJ=bXcBJag@mail.gmail.com>
- <9675c409-b495-46a5-a90c-c952892b4121@lucifer.local> <x2y7rewvmri25wj72qaeuunqqsqj7pqcliahoxkprcbfxg5owv@icvnojkhrdch>
-In-Reply-To: <x2y7rewvmri25wj72qaeuunqqsqj7pqcliahoxkprcbfxg5owv@icvnojkhrdch>
-From: Kalesh Singh <kaleshsingh@google.com>
-Date: Fri, 13 Dec 2024 12:08:18 -0500
-Message-ID: <CAC_TJvdZxQ0-O3Y1bzH0-XdjQYuJPkkpn-umVan--Z6As-tSow@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v2 00/16] mm: Introduce arch_mmap_hint()
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Kalesh Singh <kaleshsingh@google.com>, Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz, 
-	yang@os.amperecomputing.com, riel@surriel.com, david@redhat.com, 
-	minchan@kernel.org, jyescas@google.com, linux@armlinux.org.uk, 
-	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, tglx@linutronix.de, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net, 
-	jcmvbkbc@gmail.com, bhelgaas@google.com, jason.andryuk@amd.com, 
-	leitao@debian.org, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org, 
-	kernel-team@android.com, android-mm@google.com, Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241212-perf_syscalltbl-v2-1-f8ca984ffe40@rivosinc.com>
 
-On Fri, Dec 13, 2024 at 11:45=E2=80=AFAM 'Liam R. Howlett' via kernel-team
-<kernel-team@android.com> wrote:
->
-> * Lorenzo Stoakes <lorenzo.stoakes@oracle.com> [241213 10:16]:
-> > On Fri, Dec 13, 2024 at 10:06:55AM -0500, Kalesh Singh wrote:
-> > > On Fri, Dec 13, 2024 at 4:00=E2=80=AFAM Lorenzo Stoakes
-> > > <lorenzo.stoakes@oracle.com> wrote:
->
-> ...
->
-> > >
-> > > On the technical side, Liam is right that the copy-pasted arch code
-> > > has inconsistencies (missing checks, order of checks, ...). I agree
-> > > there=E2=80=99s room for further consolidation. I=E2=80=99ll take ano=
-ther stab at it
-> > > and resend it as an RFC with an updated cover letter, as Lorenzo and
-> > > others suggested.
->
-> Thanks.  Can you please include what platforms you have tested in your
-> cover letter (and level of testing - booting, running something, etc).
->
-> If you have not tested them, then it might be worth it to have it as an
-> RFC to point this out - at least initially.  Some of these are very
-> difficult to set up for testing, but it is also possible that you did
-> that and the maintainers/people who usually test these things will
-> assume it's fine if you don't spell out what's going on.
->
+Hello,
 
-I build-tested most of these except (csky and loongarch) and ran
-android runtime (ART) tests on arm64 and x86. I can try to spin up a
-few of the others and will add it to the description.
+On Thu, Dec 12, 2024 at 04:32:51PM -0800, Charlie Jenkins wrote:
+> Currently each architecture in perf independently generates syscall
+> headers. Adapt the work that has gone into unifying syscall header
+> implementations in the kernel to work with perf tools. Introduce this
+> framework with riscv at first. riscv previously relied on libaudit, but
+> with this change, perf tools for riscv no longer needs this external
+> dependency.
 
-> >
-> > The most useful thing here as well to help us understand would be to wr=
-ite
-> > more in the cover letter to expand on what it is you ultimately what to
-> > achieve here - it seems like an extension on the existing THP work on a
-> > per-arch basis (I may be wrong)? So adding more detail would be super
-> > useful here! :)
-> >
-> > We do hope to avoid arch hooks if at all possible explicitly for the re=
-ason
-> > that they can be applied at unfortunate times in terms of locking/wheth=
-er
-> > the objects in question are fully/partially instantiated, VMA visibilit=
-y
-> > etc. etc. based on having had issues in these areas before.
-> >
-> > Also if a hook means 'anything' can happen at a certain point, it means=
- we
-> > can't make any assumptions about what has/hasn't and have to account fo=
-r
-> > anything which seriously complicates things.
-> >
-> > Ideally we'd find a means to achieve the same thing while also exposing=
- us
-> > as little as possible to what may be mutated.
->
->
-> Yes, I'm not sure of what your plans are, but I would like to see all of
-> these custom functions removed, if at all possible.
+Nice work!
 
-Initially I think we can remove the mmap hint portion of the logic;
-and follow up with removing arch_get_unmapped_area[_topdown](). Some
-of those may not make sense to consolidate e.g. powerpc's
-slice_get_unmapped_area() which doesn't share much in common with the
-rest.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  tools/perf/Makefile.config                         |  11 +-
+>  tools/perf/Makefile.perf                           |   4 +
+>  tools/perf/arch/riscv/Makefile                     |  22 --
+>  tools/perf/arch/riscv/entry/syscalls/Kbuild        |   2 +
+>  .../arch/riscv/entry/syscalls/Makefile.syscalls    |   4 +
+>  tools/perf/arch/riscv/entry/syscalls/mksyscalltbl  |  47 ---
+>  tools/perf/arch/riscv/include/syscall_table.h      |   8 +
+>  tools/perf/check-headers.sh                        |   1 +
+>  tools/perf/scripts/Makefile.syscalls               |  60 +++
+>  tools/perf/scripts/syscalltbl.sh                   |  86 +++++
+>  tools/perf/util/syscalltbl.c                       |   8 +-
+>  tools/scripts/syscall.tbl                          | 409 +++++++++++++++++++++
+>  12 files changed, 585 insertions(+), 77 deletions(-)
+> 
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index 2916d59c88cd08b299202a48ddb42fa32aac04a6..a72f25162714f0117a88d94474da336814d4f030 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -35,6 +35,13 @@ ifneq ($(NO_SYSCALL_TABLE),1)
+>      NO_SYSCALL_TABLE := 0
+>    endif
+>  
+> +  # architectures that use the generic syscall table scripts
+> +  ifeq ($(SRCARCH),riscv)
+> +    NO_SYSCALL_TABLE := 0
+> +    CFLAGS += -DGENERIC_SYSCALL_TABLE
+> +    CFLAGS += -I$(OUTPUT)/tools/perf/arch/$(SRCARCH)/include/generated
+> +  endif
+> +
+>    ifneq ($(NO_SYSCALL_TABLE),1)
+>      CFLAGS += -DHAVE_SYSCALL_TABLE_SUPPORT
+>    endif
+> @@ -83,10 +90,6 @@ ifeq ($(ARCH),mips)
+>    LIBUNWIND_LIBS = -lunwind -lunwind-mips
+>  endif
+>  
+> -ifeq ($(ARCH),riscv)
+> -  CFLAGS += -I$(OUTPUT)arch/riscv/include/generated
+> -endif
+> -
+>  # So far there's only x86 and arm libdw unwind support merged in perf.
+>  # Disable it on all other architectures in case libdw unwind
+>  # support is detected in system. Add supported architectures
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index d74241a151313bd09101aabb5d765a5a0a6efc84..f5278ed9f778f928436693a14e016c5c3c5171c1 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -310,6 +310,10 @@ ifeq ($(filter feature-dump,$(MAKECMDGOALS)),feature-dump)
+>  FEATURE_TESTS := all
+>  endif
+>  endif
+> +# architectures that use the generic syscall table
+> +ifeq ($(SRCARCH),riscv)
+> +include $(srctree)/tools/perf/scripts/Makefile.syscalls
+> +endif
+>  include Makefile.config
+>  endif
+>  
+> diff --git a/tools/perf/arch/riscv/Makefile b/tools/perf/arch/riscv/Makefile
+> index 18ad078000e2bba595f92efc5d97a63fdb83ef45..087e099fb453a9236db34878077a51f711881ce0 100644
+> --- a/tools/perf/arch/riscv/Makefile
+> +++ b/tools/perf/arch/riscv/Makefile
+> @@ -1,25 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  PERF_HAVE_JITDUMP := 1
+>  HAVE_KVM_STAT_SUPPORT := 1
+> -
+> -#
+> -# Syscall table generation for perf
+> -#
+> -
+> -out    := $(OUTPUT)arch/riscv/include/generated/asm
+> -header := $(out)/syscalls.c
+> -incpath := $(srctree)/tools
+> -sysdef := $(srctree)/tools/arch/riscv/include/uapi/asm/unistd.h
+> -sysprf := $(srctree)/tools/perf/arch/riscv/entry/syscalls/
+> -systbl := $(sysprf)/mksyscalltbl
+> -
+> -# Create output directory if not already present
+> -$(shell [ -d '$(out)' ] || mkdir -p '$(out)')
+> -
+> -$(header): $(sysdef) $(systbl)
+> -	$(Q)$(SHELL) '$(systbl)' '$(CC)' '$(HOSTCC)' $(incpath) $(sysdef) > $@
+> -
+> -clean::
+> -	$(call QUIET_CLEAN, riscv) $(RM) $(header)
+> -
+> -archheaders: $(header)
+> diff --git a/tools/perf/arch/riscv/entry/syscalls/Kbuild b/tools/perf/arch/riscv/entry/syscalls/Kbuild
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..9a41e3572c3afd4f202321fd9e492714540e8fd3
+> --- /dev/null
+> +++ b/tools/perf/arch/riscv/entry/syscalls/Kbuild
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +syscall-y += syscalls_64.h
+> diff --git a/tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls b/tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..9668fd1faf60e828ed2786c2ee84739ac1f153fc
+> --- /dev/null
+> +++ b/tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +syscall_abis_32 += riscv memfd_secret
+> +syscall_abis_64 += riscv rlimit memfd_secret
+> diff --git a/tools/perf/arch/riscv/entry/syscalls/mksyscalltbl b/tools/perf/arch/riscv/entry/syscalls/mksyscalltbl
+> deleted file mode 100755
+> index c59f5e852b97712a9a879b89e6ef6999ed4b6cd7..0000000000000000000000000000000000000000
+> --- a/tools/perf/arch/riscv/entry/syscalls/mksyscalltbl
+> +++ /dev/null
+> @@ -1,47 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -#
+> -# Generate system call table for perf. Derived from
+> -# powerpc script.
+> -#
+> -# Copyright IBM Corp. 2017
+> -# Author(s):  Hendrik Brueckner <brueckner@linux.vnet.ibm.com>
+> -# Changed by: Ravi Bangoria <ravi.bangoria@linux.vnet.ibm.com>
+> -# Changed by: Kim Phillips <kim.phillips@arm.com>
+> -# Changed by: Björn Töpel <bjorn@rivosinc.com>
+> -
+> -gcc=$1
+> -hostcc=$2
+> -incpath=$3
+> -input=$4
+> -
+> -if ! test -r $input; then
+> -	echo "Could not read input file" >&2
+> -	exit 1
+> -fi
+> -
+> -create_sc_table()
+> -{
+> -	local sc nr max_nr
+> -
+> -	while read sc nr; do
+> -		printf "%s\n" "	[$nr] = \"$sc\","
+> -		max_nr=$nr
+> -	done
+> -
+> -	echo "#define SYSCALLTBL_RISCV_MAX_ID $max_nr"
+> -}
+> -
+> -create_table()
+> -{
+> -	echo "#include \"$input\""
+> -	echo "static const char *const syscalltbl_riscv[] = {"
+> -	create_sc_table
+> -	echo "};"
+> -}
+> -
+> -$gcc -E -dM -x c -I $incpath/include/uapi $input \
+> -	|awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
+> -		sub("^#define __NR(3264)?_", "");
+> -		print | "sort -k2 -n"}' \
+> -	|create_table
+> diff --git a/tools/perf/arch/riscv/include/syscall_table.h b/tools/perf/arch/riscv/include/syscall_table.h
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..7ff51b783000d727ec48be960730b81ecdb05575
+> --- /dev/null
+> +++ b/tools/perf/arch/riscv/include/syscall_table.h
+> @@ -0,0 +1,8 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#include <asm/bitsperlong.h>
+> +
+> +#if __BITS_PER_LONG == 64
+> +#include <asm/syscalls_64.h>
+> +#else
+> +#include <asm/syscalls_32.h>
+> +#endif
+> diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
+> index a05c1c105c51bf1bd18a59195220894598eb7461..692f48db810ccbef229e240db29261f0c60db632 100755
+> --- a/tools/perf/check-headers.sh
+> +++ b/tools/perf/check-headers.sh
+> @@ -71,6 +71,7 @@ FILES=(
+>    "include/uapi/asm-generic/ioctls.h"
+>    "include/uapi/asm-generic/mman-common.h"
+>    "include/uapi/asm-generic/unistd.h"
+> +  "scripts/syscall.tbl"
+>  )
+>  
+>  declare -a SYNC_CHECK_FILES
+> diff --git a/tools/perf/scripts/Makefile.syscalls b/tools/perf/scripts/Makefile.syscalls
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..e2b0c4b513d5c42c8e9ac51a9ea774c34a1311b7
+> --- /dev/null
+> +++ b/tools/perf/scripts/Makefile.syscalls
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# This Makefile generates tools/perf/arch/$(SRCARCH)/include/generated/asm from
+> +# the generic syscall table if that is supported by the architecture, otherwise
+> +# from the architecture's defined syscall table.
+> +
+> +PHONY := all
+> +all:
+> +
+> +obj := $(OUTPUT)/tools/perf/arch/$(SRCARCH)/include/generated/asm
+> +
+> +syscall_abis_32  += common,32
+> +syscall_abis_64  += common,64
+
+Couldn't it be := instead of += ?
+
+
+> +syscalltbl := $(srctree)/tools/scripts/syscall.tbl
+> +
+> +# let architectures override $(syscall_abis_%) and $(syscalltbl)
+> +-include $(srctree)/tools/perf/arch/$(SRCARCH)/entry/syscalls/Makefile.syscalls
+> +include $(srctree)/scripts/Kbuild.include
+> +-include $(srctree)/tools/perf/arch/$(SRCARCH)/entry/syscalls/Kbuild
+> +
+> +systbl := $(srctree)/tools/perf/scripts/syscalltbl.sh
+> +
+> +syscall-y   := $(addprefix $(obj)/, $(syscall-y))
+> +
+> +# Remove stale wrappers when the corresponding files are removed from generic-y
+> +old-headers := $(wildcard $(obj)/*.c)
+> +unwanted    := $(filter-out $(syscall-y),$(old-headers))
+
+Can you elaborate?  What's the stable wrappers?
+
+I think syscall-y and old-headers have .h files but the wildcard above
+is called for .c files?
 
 Thanks,
-Kalesh
+Namhyung
 
->
-> Thanks,
-> Liam
->
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+> +
+> +quiet_cmd_remove = REMOVE  $(unwanted)
+> +      cmd_remove = rm -f $(unwanted)
+> +
+> +quiet_cmd_systbl = SYSTBL  $@
+> +      cmd_systbl = $(CONFIG_SHELL) $(systbl) \
+> +		   $(if $(systbl-args-$*),$(systbl-args-$*),$(systbl-args)) \
+> +		   --abis $(subst $(space),$(comma),$(strip $(syscall_abis_$*))) \
+> +		   $< $@
+> +
+> +all: $(syscall-y)
+> +	$(if $(unwanted),$(call cmd,remove))
+> +	@:
+> +
+> +$(obj)/syscalls_%.h: $(syscalltbl) $(systbl) FORCE
+> +	$(call if_changed,systbl)
+> +
+> +targets := $(syscall-y)
+> +
+> +# Create output directory. Skip it if at least one old header exists
+> +# since we know the output directory already exists.
+> +ifeq ($(old-headers),)
+> +$(shell mkdir -p $(obj))
+> +endif
+> +
+> +PHONY += FORCE
+> +
+> +FORCE:
+> +
+> +existing-targets := $(wildcard $(sort $(targets)))
+> +
+> +-include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
+> +
+> +.PHONY: $(PHONY)
 
