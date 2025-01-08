@@ -1,79 +1,79 @@
-Return-Path: <linux-csky+bounces-1534-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1535-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18082A0503A
-	for <lists+linux-csky@lfdr.de>; Wed,  8 Jan 2025 03:11:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31B8FA05040
+	for <lists+linux-csky@lfdr.de>; Wed,  8 Jan 2025 03:12:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 911E7188681B
-	for <lists+linux-csky@lfdr.de>; Wed,  8 Jan 2025 02:11:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1AB9164AAF
+	for <lists+linux-csky@lfdr.de>; Wed,  8 Jan 2025 02:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C861AA1EC;
-	Wed,  8 Jan 2025 02:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 871C21AA1D9;
+	Wed,  8 Jan 2025 02:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="nTZlJDAK"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="A1g01yRr"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFB3189F3F
-	for <linux-csky@vger.kernel.org>; Wed,  8 Jan 2025 02:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F441A9B58
+	for <linux-csky@vger.kernel.org>; Wed,  8 Jan 2025 02:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736302121; cv=none; b=q/AzDpsNwxmC7Lmjys570wPllqi4v8m98MR2VonoMlhUeQW84MMBTWdPnOhAeEs7CDPspqCLrBAKxwWLXNbhADA7q4uJitNZpvCtp5irHHqg6d7KEqO4Yk0yjX8jKYDYzbk1JGPrvayqRn/WLGAH+cErsigHH5cjGtp697OC3GM=
+	t=1736302123; cv=none; b=ENub2ZsVvfMv9QVZt5qSa3HXVUYpIn4jRJSDtRNg4nMLq9GJBV4IXEBp90p59zntXP2168cKq37tntQVFnVxlOK0rpbGotxE6lRh7NI0n8/6w+8Lf6zyFPypcNgNEJXyDzyUY9eo3Z5z05V/qvrzw4Hr6OicqwpuKdl3GOj9iHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736302121; c=relaxed/simple;
-	bh=L4oRiXOJ86zww3VT7aG+83yHqK1Y5r7akUnGrL/Ll2Q=;
+	s=arc-20240116; t=1736302123; c=relaxed/simple;
+	bh=1DxWrtrDP0aS/Gfe9epTRxAlgriq5hGWv0IFvaoNd/w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=X6tqSmhLUj2f+x9SgO6jKMuF1su704FEo76PlDh3rr+OfQqHbjKpyzzJ5L/CmpZ3Bo1b4a513pJoDuqQxndZ5Cb2eiXPXT8/jSieQa1OnpaymQsLWEN+e5KGQvFU75rI0GcwXXlTTaKku+JBjvm0aae2FazXN11za+1QPHTN38Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=nTZlJDAK; arc=none smtp.client-ip=209.85.214.172
+	 In-Reply-To:To:Cc; b=tFWNLLFy4GOsZ8uOPsF3YpOZH6EOJNp8khOiKfw2KN1FVNATxdhiQCOjYclaLCCOX7US0LnT1+f48hXdhEKKH5cMJYX9fH+kTWW5ovtnfKZz4NUFhNACWEeudbyV1vg7Xwh6VzMljlprOlvrKnhA8p71BcRI/MRUcghBD9ibJMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=A1g01yRr; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2164b1f05caso235337105ad.3
-        for <linux-csky@vger.kernel.org>; Tue, 07 Jan 2025 18:08:38 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2164b662090so211144035ad.1
+        for <linux-csky@vger.kernel.org>; Tue, 07 Jan 2025 18:08:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1736302118; x=1736906918; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1736302121; x=1736906921; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pA0XkH7PdVSxIVYHuuTAafWWIYQPvi18jX0+XT4OOpc=;
-        b=nTZlJDAKpLyWfevouNemZvRnUQUCaXBEikE7YPPiQ/7kxD5fymFlNN0A8K/HBb7qR2
-         I0jWRSZ+b2SYbFiKSJNHZo72zoYf73rNp3SlWaUOLaLTcPnPCo+fbtEWXL/h7Y8mtfPS
-         P0L4s6wY3yN/aQP7FeU7mc58/J1EFm8W6TeqZ3j4aVjwvqilFEIPI6Sh6IGk1pwdB5kx
-         RDADrlI7XKdPikPuoQLKkcpsszbSYOYsvRcQLEpjqgeenCoIKrYtYwJxVH+IpaWcaNjA
-         gDXTT62aGdbKeGrogxuA9L4Nut5JMjQrwQnTleG+jL9vEFzbd3STkxGEk3leVJX3iKNQ
-         sbuQ==
+        bh=c8uNJ/vXA7NGF0yxSiSP2RkC1jPs5fLciqUxBAB6Mg4=;
+        b=A1g01yRr4OGolRWKgbrTPHlLD1DE9Fo1fP0OSr9anYUL/QaAjmuXsFPuJw3d7sD+JF
+         VgSlHalAZCg5cTQYnJV+5QGdwACWgPxZAn2N71v3PBHEcRpEYPhIMsAmJy26VpJWXstg
+         /fysczTiW+vCo4rC/jAEqvsjMOmv73lT6Eiq8HfLJMn8VFKtE2sjCMfOfMhxNFczYleu
+         OCQz0E2Yhrvql2Bi/tiaK/pyzdS1m9kwIjQXjlNswpRasMA7uJX2lrug+rnkOzqmlgz4
+         SvzVKE9of9i4/Kg7NDNx9Q61FxF4zSU+7XsYfAnISKwULnyB8CKV9K8BggUNrIAKXQL5
+         JgAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736302118; x=1736906918;
+        d=1e100.net; s=20230601; t=1736302121; x=1736906921;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pA0XkH7PdVSxIVYHuuTAafWWIYQPvi18jX0+XT4OOpc=;
-        b=qDSqxn168cNgTNGMz2yLmU2LAUs6fxBG9tYoB6FF5bvV5OO47GQChhguHTCs7XukBP
-         ZLGLpE+EBbu442y5fe+itd10LtzJpT0oUb8ikCZPmydH1HzWArAN85ib61WWFuSU3PCQ
-         LeLTpCNEfHYfpOYbP/TD/segbJDIVhaWQRVCzrJ6ldr+nuSGqglX91peWA1A6rx9zicm
-         8TTW19mNiiVSVFe/GSo3eKKPkMyvJZEy2IXPJUN5+nBBT1PNLdkb1UB5e47UWGgVDslc
-         YALVzAKLWZQbgwB+cxRFvvsJ7V9arNVZwdZ0b996aQk9DvFc+mbLauMD+lw0+7exp5ri
-         qMeA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/83Qtd65wO3QxB+JPQgEGGORshz/SnXTqoGbTGLRxYT+gG+mm7drZ3/WTT+JmixPrZFZh6nQ+myLw@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEBP9DVj6uF5CUqHYk8zSjBC1T3wUOch3AC43TUO5ZgiT+9lPv
-	J2mgASFKFCxuTTwR2pN7wAD+f33xzY1Kh11JrSJWC+aHYnIvlC0qPZE3j8OMmr0=
-X-Gm-Gg: ASbGncvGNH55qfINX+HgGcyqHvdPy1aEPY5BFaIAfJ2y8IVFW3QPKqA6gvDRPNwtUh8
-	/akhGqu+9HFKZrcApwxkgFp20fGY8PJWO44T84cDQ6f1SP71mtCnle7rpr84DVXLyGJkoyf2T+t
-	uUWeKgqo7DWB+qnA+muATvsO6NLLD72RW3Bvn5vl7pczMCPstuyWSsA0otjdltmwWS0hqnFRZFM
-	8U0kPY6k5M86+RcZ2Tl6SDIohEhNZ+1V07BNbGWj61BaFhOu/4861svh2iK6AtCSwszDVkG
-X-Google-Smtp-Source: AGHT+IEGParDWx7tGlZPv5khaVguAtASGRwsj03/LoHyOukL5lw17Qwcs3eAEQTm1NOjcjaRamVJ5A==
-X-Received: by 2002:a17:903:2342:b0:212:1ebf:9a03 with SMTP id d9443c01a7336-21a83f4b0c9mr18572915ad.2.1736302118109;
-        Tue, 07 Jan 2025 18:08:38 -0800 (PST)
+        bh=c8uNJ/vXA7NGF0yxSiSP2RkC1jPs5fLciqUxBAB6Mg4=;
+        b=vHsAXQa5Q90SV5srbqYNMfQxmvo4IgmU407YS+/RTrcyiEmDajhFXIbHgSAjMT3sRk
+         9x7EVc5U3CQQYrD5UfLu4eqYIVJERjgOKxA+OMcyd9JNdM2twYVtjZT2zFlxtqFv5I9B
+         bT3fg4dmD8KuwkcVK5s0dkfDTfrprKZSBBltPDbGhEJJ0nvrOmrtGChezdXqxAuY1eN1
+         K5Zhru9PbjG3r64PtbvsqdP6uGJgf98x0SA/AwIjbwLfw0R7ktrOqRh178IWySEEYg8t
+         KmHG0q26bJq3qlP17wd6darAcKWZfF1Pfm4XmccZYj3AByBR6bQ+jbaRUbs2yTNE+baG
+         v2Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCWhVPRVLsxq9jV3Jj/FGLMUerfvy06JhIzwERTHR4IXP/aBKmqx4v8Jg6Lzm0HuLM0uYCsr/lSRVUo3@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTRr2W7jJnFj04x19ZzR/8FHdbYzh3X7mIIOfOgOPCFvr2Ut2g
+	x1vPft81kIwwgm/H6AfGbvpVuacJ35W+n4c4DS+1n1Y+Is3zNi+rGRoCjD8W4IE=
+X-Gm-Gg: ASbGncuYh/EwrbQNVtewXXvc5SpsBSRece3ZniGr4s8eOHAPdLwU74s9CDLNHWwX2jI
+	VvRKTKRSQsONfYuMZ1PT+7jYYTLPDDCa2EThZX0bLH54tyOCb6wOadhAemYKG7gHtKN36KG58oD
+	XtvDcYbL5JkVF5v262DJHCdOq/f3xIpCOU09q/MrKt8Ufwdr7ROxInR1/7In59nKlNgN1hwDI60
+	CvQYTvflLuXn6W1BWaiVDnkPtpEYssh6pbP2jDqcmfiUc2o8A0Z1+eSkJpMeeTJzZUfsbDj
+X-Google-Smtp-Source: AGHT+IFDydFgEV/GNLZvcTlJ2ShF70+JdSjTRhD9Fjo1he6KAYSzA0gH3X1xLwKHfEXLdhfx9ra61A==
+X-Received: by 2002:a17:902:ec8f:b0:211:efa9:a4e6 with SMTP id d9443c01a7336-21a83f5d8b7mr15310275ad.23.1736302120625;
+        Tue, 07 Jan 2025 18:08:40 -0800 (PST)
 Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca0282fsm316662405ad.259.2025.01.07.18.08.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca0282fsm316662405ad.259.2025.01.07.18.08.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 18:08:37 -0800 (PST)
+        Tue, 07 Jan 2025 18:08:39 -0800 (PST)
 From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Tue, 07 Jan 2025 18:08:00 -0800
-Subject: [PATCH v5 12/16] perf tools: loongarch: Use syscall table
+Date: Tue, 07 Jan 2025 18:08:01 -0800
+Subject: [PATCH v5 13/16] perf tools: mips: Use generic syscall scripts
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250107-perf_syscalltbl-v5-12-935de46d3175@rivosinc.com>
+Message-Id: <20250107-perf_syscalltbl-v5-13-935de46d3175@rivosinc.com>
 References: <20250107-perf_syscalltbl-v5-0-935de46d3175@rivosinc.com>
 In-Reply-To: <20250107-perf_syscalltbl-v5-0-935de46d3175@rivosinc.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
@@ -106,181 +106,140 @@ Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
  Charlie Jenkins <charlie@rivosinc.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6453; i=charlie@rivosinc.com;
- h=from:subject:message-id; bh=L4oRiXOJ86zww3VT7aG+83yHqK1Y5r7akUnGrL/Ll2Q=;
- b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ3rtPebWY4a7onwZzJL0xcqLZY6cKkmJ387tedAge82//
- BdyLXc7SlkYxDgYZMUUWXiuNTC33tEvOypaNgFmDisTyBAGLk4BmMhVfob/GTevWAS8yJL6Mn29
- /vzHR7imTXidq3B959LEGLbqhf17bjEyrD3C4Hwv/9uHK8rr1zIefVt4TDj16FxO3UvM29ZVi3o
- VMgMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5143; i=charlie@rivosinc.com;
+ h=from:subject:message-id; bh=1DxWrtrDP0aS/Gfe9epTRxAlgriq5hGWv0IFvaoNd/w=;
+ b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ3rtPRaB/fOFNls6FczkSz3MpCSqyeyls1BXYAa77crlJ
+ bZTVzt1lLIwiHEwyIopsvBca2BuvaNfdlS0bALMHFYmkCEMXJwCMBG1WYwMy8XtnnNkt+hdMRGS
+ Svh87YrKTpnHVr33JzwoXXcg++d2XkaGWQqTA/YWbrivetC0JuesdYuWsxBT06cXH+uDtcIUpz9
+ jAQA=
 X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
  fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 
-loongarch uses a syscall table, use that in perf instead of using unistd.h.
+Use the generic scripts to generate headers from the syscall table for
+mips.
 
 Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
  tools/perf/Makefile.config                         |  3 +-
  tools/perf/Makefile.perf                           |  2 +-
- tools/perf/arch/loongarch/Makefile                 | 22 -----------
- tools/perf/arch/loongarch/entry/syscalls/Kbuild    |  2 +
- .../loongarch/entry/syscalls/Makefile.syscalls     |  3 ++
- .../arch/loongarch/entry/syscalls/mksyscalltbl     | 45 ----------------------
- tools/perf/arch/loongarch/include/syscall_table.h  |  2 +
- tools/perf/util/syscalltbl.c                       |  4 --
- 8 files changed, 9 insertions(+), 74 deletions(-)
+ tools/perf/arch/mips/entry/syscalls/Kbuild         |  2 ++
+ .../arch/mips/entry/syscalls/Makefile.syscalls     |  5 ++++
+ tools/perf/arch/mips/entry/syscalls/mksyscalltbl   | 32 ----------------------
+ tools/perf/arch/mips/include/syscall_table.h       |  2 ++
+ tools/perf/util/syscalltbl.c                       |  4 ---
+ 7 files changed, 11 insertions(+), 39 deletions(-)
 
 diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 7cfec8c46a4fb35c80c8b207ef1e94f38fd4fc8d..8b0595da9402c7d69aef1e120e815d320ecf006c 100644
+index 8b0595da9402c7d69aef1e120e815d320ecf006c..e053a2304f40f6cd06a9fd022ba863b5bf2efa5e 100644
 --- a/tools/perf/Makefile.config
 +++ b/tools/perf/Makefile.config
 @@ -31,7 +31,7 @@ $(call detected_var,SRCARCH)
  ifneq ($(NO_SYSCALL_TABLE),1)
    NO_SYSCALL_TABLE := 1
  
--  ifeq ($(SRCARCH),$(filter $(SRCARCH),powerpc s390 mips loongarch))
-+  ifeq ($(SRCARCH),$(filter $(SRCARCH),powerpc s390 mips))
+-  ifeq ($(SRCARCH),$(filter $(SRCARCH),powerpc s390 mips))
++  ifeq ($(SRCARCH),$(filter $(SRCARCH),powerpc s390))
      NO_SYSCALL_TABLE := 0
    endif
  
-@@ -85,7 +85,6 @@ ifeq ($(SRCARCH),arm64)
+@@ -95,7 +95,6 @@ ifeq ($(ARCH),s390)
  endif
  
- ifeq ($(SRCARCH),loongarch)
--  CFLAGS += -I$(OUTPUT)arch/loongarch/include/generated
+ ifeq ($(ARCH),mips)
+-  CFLAGS += -I$(OUTPUT)arch/mips/include/generated
    ifndef NO_LIBUNWIND
-     LIBUNWIND_LIBS = -lunwind -lunwind-loongarch64
+     LIBUNWIND_LIBS = -lunwind -lunwind-mips
    endif
 diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 84bda059b417acbeaec4c303acd2eb5ee1b61992..558f1425a09d536c3b85798840e173067c3da463 100644
+index 558f1425a09d536c3b85798840e173067c3da463..84d23f147365d5a57c83fe16a2faedf45f4e2f70 100644
 --- a/tools/perf/Makefile.perf
 +++ b/tools/perf/Makefile.perf
 @@ -311,7 +311,7 @@ FEATURE_TESTS := all
  endif
  endif
  # architectures that use the generic syscall table
--generic_syscall_table_archs := riscv arc csky arm sh sparc xtensa x86 alpha parisc arm64
-+generic_syscall_table_archs := riscv arc csky arm sh sparc xtensa x86 alpha parisc arm64 loongarch
+-generic_syscall_table_archs := riscv arc csky arm sh sparc xtensa x86 alpha parisc arm64 loongarch
++generic_syscall_table_archs := riscv arc csky arm sh sparc xtensa x86 alpha parisc arm64 loongarch mips
  ifneq ($(filter $(SRCARCH), $(generic_syscall_table_archs)),)
  include $(srctree)/tools/perf/scripts/Makefile.syscalls
  endif
-diff --git a/tools/perf/arch/loongarch/Makefile b/tools/perf/arch/loongarch/Makefile
-index 52544d59245bab5a0fb2baa1e962b2ad4bf25332..087e099fb453a9236db34878077a51f711881ce0 100644
---- a/tools/perf/arch/loongarch/Makefile
-+++ b/tools/perf/arch/loongarch/Makefile
-@@ -1,25 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- PERF_HAVE_JITDUMP := 1
- HAVE_KVM_STAT_SUPPORT := 1
--
--#
--# Syscall table generation for perf
--#
--
--out    := $(OUTPUT)arch/loongarch/include/generated/asm
--header := $(out)/syscalls.c
--incpath := $(srctree)/tools
--sysdef := $(srctree)/tools/arch/loongarch/include/uapi/asm/unistd.h
--sysprf := $(srctree)/tools/perf/arch/loongarch/entry/syscalls/
--systbl := $(sysprf)/mksyscalltbl
--
--# Create output directory if not already present
--$(shell [ -d '$(out)' ] || mkdir -p '$(out)')
--
--$(header): $(sysdef) $(systbl)
--	$(Q)$(SHELL) '$(systbl)' '$(CC)' '$(HOSTCC)' $(incpath) $(sysdef) > $@
--
--clean::
--	$(call QUIET_CLEAN, loongarch) $(RM) $(header)
--
--archheaders: $(header)
-diff --git a/tools/perf/arch/loongarch/entry/syscalls/Kbuild b/tools/perf/arch/loongarch/entry/syscalls/Kbuild
+diff --git a/tools/perf/arch/mips/entry/syscalls/Kbuild b/tools/perf/arch/mips/entry/syscalls/Kbuild
 new file mode 100644
 index 0000000000000000000000000000000000000000..9a41e3572c3afd4f202321fd9e492714540e8fd3
 --- /dev/null
-+++ b/tools/perf/arch/loongarch/entry/syscalls/Kbuild
++++ b/tools/perf/arch/mips/entry/syscalls/Kbuild
 @@ -0,0 +1,2 @@
 +# SPDX-License-Identifier: GPL-2.0
 +syscall-y += syscalls_64.h
-diff --git a/tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls b/tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls
+diff --git a/tools/perf/arch/mips/entry/syscalls/Makefile.syscalls b/tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
 new file mode 100644
-index 0000000000000000000000000000000000000000..47d32da2aed8d67a7ac026271600e84723031a6b
+index 0000000000000000000000000000000000000000..9ee914bdfb05860fdd37a49f1ced03fcf2c9ed78
 --- /dev/null
-+++ b/tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls
-@@ -0,0 +1,3 @@
++++ b/tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
+@@ -0,0 +1,5 @@
 +# SPDX-License-Identifier: GPL-2.0
 +
-+syscall_abis_64 +=
-diff --git a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
-deleted file mode 100755
-index c10ad3580aef25e48ff0682eca4217cbafdfa333..0000000000000000000000000000000000000000
---- a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
++syscall_abis_64 += n64
++
++syscalltbl = $(srctree)/tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl
+diff --git a/tools/perf/arch/mips/entry/syscalls/mksyscalltbl b/tools/perf/arch/mips/entry/syscalls/mksyscalltbl
+deleted file mode 100644
+index c0d93f959c4e1b8c12edcb5624bbc131231df7e3..0000000000000000000000000000000000000000
+--- a/tools/perf/arch/mips/entry/syscalls/mksyscalltbl
 +++ /dev/null
-@@ -1,45 +0,0 @@
+@@ -1,32 +0,0 @@
 -#!/bin/sh
 -# SPDX-License-Identifier: GPL-2.0
 -#
 -# Generate system call table for perf. Derived from
--# powerpc script.
+-# s390 script.
 -#
--# Author(s):  Ming Wang <wangming01@loongson.cn>
--# Author(s):  Huacai Chen <chenhuacai@loongson.cn>
--# Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+-# Author(s):  Hendrik Brueckner <brueckner@linux.vnet.ibm.com>
+-# Changed by: Tiezhu Yang <yangtiezhu@loongson.cn>
 -
--gcc=$1
--hostcc=$2
--incpath=$3
--input=$4
+-SYSCALL_TBL=$1
 -
--if ! test -r $input; then
+-if ! test -r $SYSCALL_TBL; then
 -	echo "Could not read input file" >&2
 -	exit 1
 -fi
 -
--create_sc_table()
--{
--	local sc nr max_nr
--
--	while read sc nr; do
--		printf "%s\n" "	[$nr] = \"$sc\","
--		max_nr=$nr
--	done
--
--	echo "#define SYSCALLTBL_LOONGARCH_MAX_ID $max_nr"
--}
--
 -create_table()
 -{
--	echo "#include \"$input\""
--	echo "static const char *const syscalltbl_loongarch[] = {"
--	create_sc_table
--	echo "};"
+-	local max_nr nr abi sc discard
+-
+-	echo 'static const char *const syscalltbl_mips_n64[] = {'
+-	while read nr abi sc discard; do
+-		printf '\t[%d] = "%s",\n' $nr $sc
+-		max_nr=$nr
+-	done
+-	echo '};'
+-	echo "#define SYSCALLTBL_MIPS_N64_MAX_ID $max_nr"
 -}
 -
--$gcc -E -dM -x c -I $incpath/include/uapi $input \
--	|awk '$2 ~ "__NR" && $3 !~ "__NR3264_" {
--		sub("^#define __NR(3264)?_", "");
--		print | "sort -k2 -n"}' \
+-grep -E "^[[:digit:]]+[[:space:]]+(n64)" $SYSCALL_TBL	\
+-	|sort -k1 -n					\
 -	|create_table
-diff --git a/tools/perf/arch/loongarch/include/syscall_table.h b/tools/perf/arch/loongarch/include/syscall_table.h
+diff --git a/tools/perf/arch/mips/include/syscall_table.h b/tools/perf/arch/mips/include/syscall_table.h
 new file mode 100644
-index 0000000000000000000000000000000000000000..9d0646d3455cdaf1a3db8c8565af8eba9a8df8c6
+index 0000000000000000000000000000000000000000..b53e31c15805319a01719c22d489c4037378b02b
 --- /dev/null
-+++ b/tools/perf/arch/loongarch/include/syscall_table.h
++++ b/tools/perf/arch/mips/include/syscall_table.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+#include <asm/syscall_table_64.h>
++#include <asm/syscalls_64.h>
 diff --git a/tools/perf/util/syscalltbl.c b/tools/perf/util/syscalltbl.c
-index b7c0a4b9245a94b3b245fea59af79081b1f91081..3001386e13a502be5279aa6e4742af0b96202b35 100644
+index 3001386e13a502be5279aa6e4742af0b96202b35..675702d686d0d1b53dd3ee2017cc9695686b9c63 100644
 --- a/tools/perf/util/syscalltbl.c
 +++ b/tools/perf/util/syscalltbl.c
-@@ -30,10 +30,6 @@ static const char *const *syscalltbl_native = syscalltbl_powerpc_32;
- #include <asm/syscalls_n64.c>
- const int syscalltbl_native_max_id = SYSCALLTBL_MIPS_N64_MAX_ID;
- static const char *const *syscalltbl_native = syscalltbl_mips_n64;
--#elif defined(__loongarch__)
--#include <asm/syscalls.c>
--const int syscalltbl_native_max_id = SYSCALLTBL_LOONGARCH_MAX_ID;
--static const char *const *syscalltbl_native = syscalltbl_loongarch;
+@@ -26,10 +26,6 @@ static const char *const *syscalltbl_native = syscalltbl_powerpc_64;
+ #include <asm/syscalls_32.c>
+ const int syscalltbl_native_max_id = SYSCALLTBL_POWERPC_32_MAX_ID;
+ static const char *const *syscalltbl_native = syscalltbl_powerpc_32;
+-#elif defined(__mips__)
+-#include <asm/syscalls_n64.c>
+-const int syscalltbl_native_max_id = SYSCALLTBL_MIPS_N64_MAX_ID;
+-static const char *const *syscalltbl_native = syscalltbl_mips_n64;
  #elif defined(GENERIC_SYSCALL_TABLE)
  #include <syscall_table.h>
  const int syscalltbl_native_max_id = SYSCALLTBL_MAX_ID;
