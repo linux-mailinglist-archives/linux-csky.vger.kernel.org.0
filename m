@@ -1,165 +1,291 @@
-Return-Path: <linux-csky+bounces-1641-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1644-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42CCBA09A94
-	for <lists+linux-csky@lfdr.de>; Fri, 10 Jan 2025 19:54:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1067A09BEB
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Jan 2025 20:31:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CCB1188A699
-	for <lists+linux-csky@lfdr.de>; Fri, 10 Jan 2025 18:54:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD8BA3A2BC7
+	for <lists+linux-csky@lfdr.de>; Fri, 10 Jan 2025 19:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE2C8228CA3;
-	Fri, 10 Jan 2025 18:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD0E214A95;
+	Fri, 10 Jan 2025 19:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4qXm0akH"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="tSu2E6MA"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D12421D593
-	for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 18:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7CA213E77
+	for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 19:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736534544; cv=none; b=R3i09mqfz775Mb0RlrdLoicUol6RvXyosIBYDw3eJNYKfoqVjlQT/J+4c3c1KWT1Po0dQaDiZaOdegAzpLai3dW3wDvbOUIQ8VjwVk5Y0G88LyLyBWau/Muq5lPT0wNOeVWMpXIaEGo708Yk0Hoij8keHe2oxweXycO9j3nZfrE=
+	t=1736537468; cv=none; b=Q01kF6Iye4On8J9TLLlvJyCVJf44yRigY8zOqWlrISS3VkQIkYCBF1nAKs1XTp356x3miFs3gvlFQQ+Rj10gW9A07yH23keKkqwaqrDMP2gSuNIlUWAP4QnV7Ir8DCDv2g7XCcWYbW7vEE2rRZXLM2XDlb0V3vs8Wetcutn47EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736534544; c=relaxed/simple;
-	bh=yFE2RvhsdHiuE5lhdo52Dzo1ojzSWSiC8Ss1voWwr0o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uhEDDIQlkkkrFHV5Su+mdqHR/fZLXMrHXMOCam+ZJh/yznZETuQLa4BEdaSg7rF4Wv3xTjgAmkReZSWl8aKarJ76oZ7wVRLD9Z9VFQcuM37oTat4q3OncTw8EhfW8AOJU66RSBWKOY2JiSAyjc6wkyVCevjopp5o5hNdx99LHjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4qXm0akH; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-436723db6c4so16407875e9.3
-        for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 10:41:56 -0800 (PST)
+	s=arc-20240116; t=1736537468; c=relaxed/simple;
+	bh=cCIVRRQWwHdObE52/2AeeqNAiuegHaviOd3IMjq/QRo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aLcS8R3+gQiSNDADZIauQgbMARFlA0AMBR9b+NRmKUFMaRMGtsM5Ea7u4hJD8yTkSLXGuJbPc2pZUXfNDdJHSwthZBQN5giL11TjGGCCCnZ/ZZMlS6uIWT8oIHAku4iR1nAbqBraU4qGtC4LFcdsM1/wdNQSGFwj6i69TUIGfdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=tSu2E6MA; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21619108a6bso41589435ad.3
+        for <linux-csky@vger.kernel.org>; Fri, 10 Jan 2025 11:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736534511; x=1737139311; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t56obMWOlMyKyO7q6Si1cnEbfn2qyXwrpnzxR+4ONcI=;
-        b=4qXm0akHB0cuC/EDQ8VuOoCpDXwtoPfxrekyuf3Jr5mxf6WGp7rbhmhHeDIXklqxd6
-         T9lxWQyVYIV47B5OJUReQPTb2cO2OVBUtcNSPlShJjCRvFudrMBkxkEdOt7YD8B8s+2v
-         Xr3EQaZc/p07fpcwbTqNiK+qV7HY0Toaji/thgJjB5yEeJhTxg1FeoYSHEY8Jfy2/8EZ
-         jiZa5Ti+Lb8moW5SGa97W3jyG6bI8MyoEEfqB2DFyV9BFxFzztzkYfBsUkAjDJ+UDd9H
-         nFSU4xK+FYnLvbOSILO7311XYQqvF516GEImEec3eyOp+/ymIWgUdw/GtFKY2TxOmoyN
-         vLJw==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1736537465; x=1737142265; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T624wPcrhS1JgwTBcPosmdXx4gdcuulJGOQvqM6CtCw=;
+        b=tSu2E6MApWWyRAjxThkZm6dBGIpcVvlkndK1huEUSPlaSuauaq88exVzi50fOJABSo
+         JQ0oPPUa3COfjtA+6kmCOR+cibNzw7HT5j12XuAdIO1UFcelO7Uzsou5ntmkrDakWaJV
+         tD//deniHkeE6jNJxaKe7DcwEA9pLfsvlAjQWllk8xOhSIFRqQPOg2cwnPeNjGPzADEg
+         YMOo7rGGYJRTGu8CkDVyNLA3wtO3r8rTB5wJp4OpoOuppAyBsdMwa0e7NhO6mrgYtQnX
+         Weu1u8Yu+YjpQxpzeBAcPZIbm1inGgEaF+eeQEcxnORM8t5M8jW3a1HZrrVzj/SrFoAj
+         f7Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736534511; x=1737139311;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t56obMWOlMyKyO7q6Si1cnEbfn2qyXwrpnzxR+4ONcI=;
-        b=qLnYEtKNvdFxxNaoD8RiCPD33yPNy9Ps9Z01fS7aODI+5IxHmQ4Iz4V1lSuPi0xJu/
-         rvN21RMKuOKajye13T+1jVUA65ziaHJYzZGZ/HDrVqb8HfcCtOwRE5QjFay3A5se+4CH
-         JzFdbF2xA/s3jv04ziYC6HKwaEPpljnPGzn5FXtRh0v20DEalwhxstbgkRGyi7TgHoWB
-         K64n3zlNShl4egXcay7xOz8zjzxhF73hHlhc7k8HkYfKMFdPNGh5ZAh5mQxwKx6bMN3b
-         vF7Fr/ADtnd4O66Sc/72Xd0/NltMxvkzvqxgrAOfEpkYyt+nhM+OxFJrv9gqtSyZm9sK
-         z/3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWHi6UHnLSxk4fTOoQmAI8ehdsU2n2Mx83h+3vvcwbsbKip9Tul4nNcy3N3nC+i8H1aXkQjgFHTy9FV@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvYHmgR0SitquSNiVOZJnLhFnneWjO8eEhPeGZoJUbHwwDF7dw
-	pMHjpN+eoJNHHStOI7oXYjBDQ0k+d2gSkebD6+7DhbE6F1eMO+Iim3lnQPxnXpk1glqk3RaR0Zf
-	PwfselTEoDA==
-X-Google-Smtp-Source: AGHT+IHNze04KHr3mNrPu4oWzk1uJr6kUgfUG8uUPvBwU8SZTj2uxyjbDaOwELGdGilpgEGrHE3bExV1JNVQyA==
-X-Received: from wmba16.prod.google.com ([2002:a05:600c:6dd0:b0:434:f350:9fc])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:70a:b0:38a:4184:1519 with SMTP id ffacd0b85a97d-38a873051e1mr10550801f8f.23.1736534511095;
- Fri, 10 Jan 2025 10:41:51 -0800 (PST)
-Date: Fri, 10 Jan 2025 18:40:55 +0000
-In-Reply-To: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+        d=1e100.net; s=20230601; t=1736537465; x=1737142265;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T624wPcrhS1JgwTBcPosmdXx4gdcuulJGOQvqM6CtCw=;
+        b=TdoyajWS0X/wprRSXAp7uLhr2GlzLFS96vNX/syj89IT7rXFRP2puAiMh9s2N48MKV
+         PEic7NXC/nKMaxW13Q36XcRooPyPe3TWLN7x5Y5vRoox3hTRTTaz2fCbTK/4hv76DkCk
+         eYU9aNv9WzEIlqvKnkNEgGPb5CEvIXU8p7bTenQiR9uSuYCfof7jGqovIuuSD55YzmZc
+         62ag4fkRUoDdEj/d5pqqhnISVBYlUkpiNUrpzvYl0rD8c5BWJqCNSNpxODfPDS2xawJq
+         ed6HXTpTw8Q1fgOFmUCcW3ZNTcXsPvJelgHiuaGH1WvBwn9zMB1ketG3EV91gjArhKmm
+         Er2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXT+tQDNMzMy9c57JmQjJvzIUBGWXU6C8dIYYDLoYCOsbYHQ2Jl2HUeXQw8LOxAWskYyJi3eXjMJj8S@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQzT8KFXWDVhWkLYXmCHXSkzPgOv62b0514f36GZWza+gJgpSd
+	Lfy6jscTamtZDzrGRpZD/w600lopfYCDNQqRRosXZREBGhHzXTJsbTP4nH51hWU=
+X-Gm-Gg: ASbGncveTi1bUFCrNZ1QK5pL1XbwEXw/wH22LcBUTMB2AD1XEgztqa5vxSF8Psh/XeL
+	46nOxn0WJWdxeDH0nkJE5hQYUL4Za+gWGU71L14PbyAWsPmZpAnS/6QrdQzIYp6WXf/UhtNGLPz
+	VHaJ5stwP+PWNvckGKnBs2fYDC9D2qMs8ROLZUFi+6BH3urdTOoTOqIn/dnfuBNb0XW3lQdOZBU
+	wSAtCRZu0dei7PcUrnH5cks2sflOgbil0jsT61BdTwE+bnf1rQi
+X-Google-Smtp-Source: AGHT+IEre0AsdJDUsGl4k/O1aF6vQLIHA3Knu3Spyy4azSMvw1UNUQEJLtptbRCNfCZV9aZHSRvhEg==
+X-Received: by 2002:a17:903:124f:b0:215:83e1:99ff with SMTP id d9443c01a7336-21a83f63f68mr150756545ad.27.1736537464834;
+        Fri, 10 Jan 2025 11:31:04 -0800 (PST)
+Received: from ghost ([2601:647:6700:64d0:4bc7:d274:c14b:fde8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219a94sm16883985ad.129.2025.01.10.11.31.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 11:31:04 -0800 (PST)
+Date: Fri, 10 Jan 2025 11:31:01 -0800
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	Jonathan Corbet <corbet@lwn.net>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v6 00/16] perf tools: Use generic syscall scripts for all
+ archs
+Message-ID: <Z4F1dXQLPGZ3JFI5@ghost>
+References: <20250108-perf_syscalltbl-v6-0-7543b5293098@rivosinc.com>
+ <Z3_ybwWW3QZvJ4V6@x1>
+ <Z4AoFA974kauIJ9T@ghost>
+ <Z4A2Y269Ffo0ERkS@x1>
+ <Z4BEygdXmofWBr0-@x1>
+ <Z4BVK3D7sN-XYg2o@ghost>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
-X-Mailer: b4 0.15-dev
-Message-ID: <20250110-asi-rfc-v2-v2-29-8419288bc805@google.com>
-Subject: [PATCH RFC v2 29/29] mm: asi: Stop ignoring asi=on cmdline flag
-From: Brendan Jackman <jackmanb@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Chris Zankel <chris@zankel.net>, 
-	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mike Rapoport <rppt@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-efi@vger.kernel.org, 
-	Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z4BVK3D7sN-XYg2o@ghost>
 
-At this point the minimum requirements are in place for the kernel to
-operate correctly with ASI enabled.
+On Thu, Jan 09, 2025 at 03:00:59PM -0800, Charlie Jenkins wrote:
+> On Thu, Jan 09, 2025 at 06:51:06PM -0300, Arnaldo Carvalho de Melo wrote:
+> > On Thu, Jan 09, 2025 at 05:49:42PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > BTW this series is already pushed out to perf-tools-next:
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/log/?h=perf-tools-next
+> > 
+> > Hey, now I noticed that with this latest version we see:
+> > 
+> > ⬢ [acme@toolbox perf-tools-next]$ m
+> > make: Entering directory '/home/acme/git/perf-tools-next/tools/perf'
+> >   BUILD:   Doing 'make -j28' parallel build
+> > Warning: Kernel ABI header differences:
+> >   diff -u tools/arch/arm64/include/uapi/asm/unistd.h arch/arm64/include/uapi/asm/unistd.h
+> > 
+> > Auto-detecting system features:
+> > ...                                   libdw: [ on  ]
+> > ...                                   glibc: [ on  ]
+> > ...                                  libbfd: [ on  ]
+> > ...                          libbfd-buildid: [ on  ]
+> > ...                                  libelf: [ on  ]
+> > ...                                 libnuma: [ on  ]
+> > ...                  numa_num_possible_cpus: [ on  ]
+> > ...                                 libperl: [ on  ]
+> > ...                               libpython: [ on  ]
+> > ...                               libcrypto: [ on  ]
+> > ...                               libunwind: [ on  ]
+> > ...                             libcapstone: [ on  ]
+> > ...                               llvm-perf: [ on  ]
+> > ...                                    zlib: [ on  ]
+> > ...                                    lzma: [ on  ]
+> > ...                               get_cpuid: [ on  ]
+> > ...                                     bpf: [ on  ]
+> > ...                                  libaio: [ on  ]
+> > ...                                 libzstd: [ on  ]
+> > 
+> >    /home/acme/git/perf-tools-next/tools/perf/scripts/syscalltbl.sh  --abis common,32,i386 /home/acme/git/perf-tools-next/tools/perf/arch/x86/entry/syscalls/syscall_32.tbl /tmp/build/perf-tools-next/arch/x86/include/generated/asm/syscalls_32.h
+> >    /home/acme/git/perf-tools-next/tools/perf/scripts/syscalltbl.sh  --abis common,64 /home/acme/git/perf-tools-next/tools/perf/arch/x86/entry/syscalls/syscall_64.tbl /tmp/build/perf-tools-next/arch/x86/include/generated/asm/syscalls_64.h
+> >   GEN     /tmp/build/perf-tools-next/common-cmds.h
+> >   GEN     /tmp/build/perf-tools-next/arch/arm64/include/generated/asm/sysreg-defs.h
+> >   PERF_VERSION = 6.13.rc2.gd73982c39183
+> >   GEN     perf-archive
+> >   GEN     perf-iostat
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> >   MKDIR   /tmp/build/perf-tools-next/jvmti/
+> > 
+> > 
+> > While with the previous one we would see something like SYSCALLTBL as
+> > the step name, like we have GEN, MKDIR, etc, can you take a look?
+> 
+> Ooh okay I see, the quiet commands were being ignored as-is. We could
+> add the lines to handle this to Makefile.syscalls, but I think the
+> better solution is to move the lines from Makefile.build to
+> Makefile.perf to be more generically available. Here is a patch for
+> that. I also added the comment from the kernel Makefile describing what
+> this does.
+> 
+> From 8dcec7f5d937ede3d33c687573dc2f1654ddc59e Mon Sep 17 00:00:00 2001
+> From: Charlie Jenkins <charlie@rivosinc.com>
+> Date: Thu, 9 Jan 2025 14:36:40 -0800
+> Subject: [PATCH] perf tools: Expose quiet/verbose variables in Makefile.perf
+> 
+> The variables to make builds silent/verbose live inside
+> tools/build/Makefile.build. Move those variables to the top-level
+> Makefile.perf to be generally available.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  tools/build/Makefile.build | 20 --------------------
+>  tools/perf/Makefile.perf   | 37 ++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 36 insertions(+), 21 deletions(-)
+> 
+> diff --git a/tools/build/Makefile.build b/tools/build/Makefile.build
+> index 5fb3fb3d97e0..e710ed67a1b4 100644
+> --- a/tools/build/Makefile.build
+> +++ b/tools/build/Makefile.build
+> @@ -12,26 +12,6 @@
+>  PHONY := __build
+>  __build:
+>  
+> -ifeq ($(V),1)
+> -  quiet =
+> -  Q =
+> -else
+> -  quiet=quiet_
+> -  Q=@
+> -endif
+> -
+> -# If the user is running make -s (silent mode), suppress echoing of commands
+> -# make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
+> -ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> -short-opts := $(firstword -$(MAKEFLAGS))
+> -else
+> -short-opts := $(filter-out --%,$(MAKEFLAGS))
+> -endif
+> -
+> -ifneq ($(findstring s,$(short-opts)),)
+> -  quiet=silent_
+> -endif
+> -
+>  build-dir := $(srctree)/tools/build
+>  
+>  # Define $(fixdep) for dep-cmd function
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index a449d0015536..55d6ce9ea52f 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -161,12 +161,47 @@ export VPATH
+>  SOURCE := $(shell ln -sf $(srctree)/tools/perf $(OUTPUT)/source)
+>  endif
+>  
+> +# Beautify output
+> +# ---------------------------------------------------------------------------
+> +#
+> +# Most of build commands in Kbuild start with "cmd_". You can optionally define
+> +# "quiet_cmd_*". If defined, the short log is printed. Otherwise, no log from
+> +# that command is printed by default.
+> +#
+> +# e.g.)
+> +#    quiet_cmd_depmod = DEPMOD  $(MODLIB)
+> +#          cmd_depmod = $(srctree)/scripts/depmod.sh $(DEPMOD) $(KERNELRELEASE)
+> +#
+> +# A simple variant is to prefix commands with $(Q) - that's useful
+> +# for commands that shall be hidden in non-verbose mode.
+> +#
+> +#    $(Q)$(MAKE) $(build)=scripts/basic
+> +#
+> +# To put more focus on warnings, be less verbose as default
+> +# Use 'make V=1' to see the full commands
+> +
+>  ifeq ($(V),1)
+> +  quiet =
+>    Q =
+>  else
+> -  Q = @
+> +  quiet=quiet_
+> +  Q=@
+>  endif
+>  
+> +# If the user is running make -s (silent mode), suppress echoing of commands
+> +# make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
+> +ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> +short-opts := $(firstword -$(MAKEFLAGS))
+> +else
+> +short-opts := $(filter-out --%,$(MAKEFLAGS))
+> +endif
+> +
+> +ifneq ($(findstring s,$(short-opts)),)
+> +  quiet=silent_
+> +endif
+> +
+> +export quiet Q
+> +
+>  # Do not use make's built-in rules
+>  # (this improves performance and avoids hard-to-debug behaviour);
+>  MAKEFLAGS += -r
+> -- 
+> 2.34.1
+> 
+> 
+> - Charlie
 
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
- arch/x86/mm/asi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Let me know how you want to handle this, I can send this out as a
+separate patch if that's better.
 
-diff --git a/arch/x86/mm/asi.c b/arch/x86/mm/asi.c
-index f10f6614b26148e5ba423d8a44f640674573ee40..3e3956326936ea8550308ad004dbbb3738546f9f 100644
---- a/arch/x86/mm/asi.c
-+++ b/arch/x86/mm/asi.c
-@@ -207,14 +207,14 @@ void __init asi_check_boottime_disable(void)
- 		pr_info("ASI disabled through kernel command line.\n");
- 	} else if (ret == 2 && !strncmp(arg, "on", 2)) {
- 		enabled = true;
--		pr_info("Ignoring asi=on param while ASI implementation is incomplete.\n");
-+		pr_info("ASI enabled through kernel command line.\n");
- 	} else {
- 		pr_info("ASI %s by default.\n",
- 			enabled ? "enabled" : "disabled");
- 	}
- 
- 	if (enabled)
--		pr_info("ASI enablement ignored due to incomplete implementation.\n");
-+		setup_force_cpu_cap(X86_FEATURE_ASI);
- }
- 
- /*
+- Charlie
 
--- 
-2.47.1.613.gc27f4b7a9f-goog
-
+> 
+> > 
+> > All is out there in perf-tools-next.
+> > 
+> > - Arnaldo
 
