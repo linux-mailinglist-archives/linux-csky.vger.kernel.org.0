@@ -1,139 +1,148 @@
-Return-Path: <linux-csky+bounces-1651-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1652-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EF5BA0BAD9
-	for <lists+linux-csky@lfdr.de>; Mon, 13 Jan 2025 16:02:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C806A0BC71
+	for <lists+linux-csky@lfdr.de>; Mon, 13 Jan 2025 16:47:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5ABF7A3C2A
-	for <lists+linux-csky@lfdr.de>; Mon, 13 Jan 2025 15:00:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B17C1165D04
+	for <lists+linux-csky@lfdr.de>; Mon, 13 Jan 2025 15:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0027522980F;
-	Mon, 13 Jan 2025 14:55:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB13720AF97;
+	Mon, 13 Jan 2025 15:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ljKxA0aF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CaYg3fuh"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D88229808;
-	Mon, 13 Jan 2025 14:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF481CA8D;
+	Mon, 13 Jan 2025 15:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736780105; cv=none; b=C0hOxr8sKPc2fpBjFwWsGxhoAaupK4JTV2+EFQxjjEJfb2QhvDYIL7RrkmmrPu/nRR2psZZ+Y1kif1N+YtkeRr+BgDtL4HNaxiCyzDT9ag6F9wH1/UOizyAWoFYB+oExRJP6dfy8EcOrYZop8hWuZ8JIP6s17+CcKWAew6Supgs=
+	t=1736783148; cv=none; b=ESuW8UcZNsUCqayUfUiw2L7xGilfAxnzNIaIx4OyPX9D0gGTo584UYYop8CLhzUoljUAugGxgsF9zoYpI3Kx8ljQ6Po/WDRnVnNx0BWrj7psvhYcPegxXUiggrWjn9ErLeH6ySwQx7e5gL8KbKlapdo4EVJl0s9rSfPRZcLIRI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736780105; c=relaxed/simple;
-	bh=rMXm59SPTsrymD3C2yxFqEbLQ1YAvMyEOn3UiB05slc=;
+	s=arc-20240116; t=1736783148; c=relaxed/simple;
+	bh=60LzQbPzHHlZESJ4NVxt/prktxqPSG6D4w8hg7eDv0s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CFyompBHsOUSwU1TUrXceIB8Rs65E5ZOi/vwU7ovAGIZ3O1IN1lmt6Dgm2R3AW9KP3YRsg5eSxfQq2XY/zxaFVG+jWdst7fo6bcAKBSP4h0MWeuqfOQ4Vc+NGpyMT7zdFGNK7pLrTd+f5v7cY0Ac6HYSrDoBHsCw5e5D+iCttfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ljKxA0aF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB7AC4CEE2;
-	Mon, 13 Jan 2025 14:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736780105;
-	bh=rMXm59SPTsrymD3C2yxFqEbLQ1YAvMyEOn3UiB05slc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ljKxA0aFAxh2ONCcjbhbD784GF9s1PYXJEEhRvReBgZEd6mDOgNWpdwwkyWfeJtFD
-	 ms5xEGQtINBAIYgUytnrPynqhAUDRqfv74ujLH6UCshPh2cTPoJ8hPIZXvR3svIiA7
-	 o7F2SGfoA9kSXA0z25eLW/4YvTTMEneP+GangqZLdQgRreaEQhitpVt0fc/v6k9WRZ
-	 cHiPMwk4/ZkoSkgvizHC3Z1Z7DkSrh/HkjwDNIqWHODpNSrreAduK5Y/WeqkUAORaC
-	 kmspZTxOCvVnKX0NexSwAos/8QKdXhniXRbJetXIy518kJYNu8Z9wNyrPdc2P/rmCr
-	 sNZbLt631SwvQ==
-Date: Mon, 13 Jan 2025 11:55:02 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Namhyung Kim <namhyung@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=lMVVRI1Kwb87wJnK14x7oTRyEZ4ZzkV20rjaJc2Np2AgV8nuKqICXBgInkuBoH/i8ai+1cduoEZAMKQv7ZcU6EfHABnHMfz5TQo/FqpfZ8FulpAU0MA9N8N58EQJ7cRKcyipo/VSVzHpfqyX6uaa4zcWeewCqzby/KOajuzRY54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CaYg3fuh; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736783147; x=1768319147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=60LzQbPzHHlZESJ4NVxt/prktxqPSG6D4w8hg7eDv0s=;
+  b=CaYg3fuhcxr4GemQ4Txnf8G1L7Idva5ZgdhvG+4fhnZ/GB33X/fSERO3
+   iJ9sIUHGaVCT+VS58317Va0bLii7n8BOIMuTTkwvOa6elLZg3CD1lBK4i
+   Zmxe70ncX81GoeC/crdPlLARMuMET83kGht3tYuwDSK/hhgjuotbDXojJ
+   4oqRHZUl6O0zkpHpyCBufhynujiSuVB/UfDuynPEXmz4SmUpwRb1w4imy
+   BsTkLUsRVJfz+gQ414FJdTzvABynsA+T2g/2RMICnJHFDqNCYAtHavoZ8
+   MrBOD1Eu3mdhS35sazKw0lyBy+2QTEO78EQvt+gK+lMDB6/ZjfSysYxn+
+   A==;
+X-CSE-ConnectionGUID: HRt2wGq8R4SGirM2oZ6T/w==
+X-CSE-MsgGUID: /LhkySK1QSa43thfN/MF6g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="36340461"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="36340461"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 07:45:45 -0800
+X-CSE-ConnectionGUID: Ol8QfgiyQwSLVDwPBFYHzA==
+X-CSE-MsgGUID: hKZ+hXyrRXSC8nJOTWvklg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="104692355"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.74])
+  by fmviesa008.fm.intel.com with SMTP; 13 Jan 2025 07:45:33 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 13 Jan 2025 17:45:32 +0200
+Date: Mon, 13 Jan 2025 17:45:32 +0200
+From: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
 	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 00/16] perf tools: Use generic syscall scripts for all
- archs
-Message-ID: <Z4UpRqywqYPZSUM_@x1>
-References: <20250108-perf_syscalltbl-v6-0-7543b5293098@rivosinc.com>
- <Z3_ybwWW3QZvJ4V6@x1>
- <Z4AoFA974kauIJ9T@ghost>
- <Z4A2Y269Ffo0ERkS@x1>
- <Z4BEygdXmofWBr0-@x1>
- <Z4BVK3D7sN-XYg2o@ghost>
- <Z4F1dXQLPGZ3JFI5@ghost>
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.o
+Subject: Re: [REGRESSION] Re: [PATCH v7 8/8] x86/module: enable ROX caches
+ for module text on 64 bit
+Message-ID: <Z4U1HGUfFLJH8Y55@intel.com>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+ <20241023162711.2579610-9-rppt@kernel.org>
+ <Z4QM_RFfhNX_li_C@intel.com>
+ <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Z4F1dXQLPGZ3JFI5@ghost>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
+X-Patchwork-Hint: comment
 
-On Fri, Jan 10, 2025 at 11:31:01AM -0800, Charlie Jenkins wrote:
-> On Thu, Jan 09, 2025 at 03:00:59PM -0800, Charlie Jenkins wrote:
-> > Ooh okay I see, the quiet commands were being ignored as-is. We could
-> > add the lines to handle this to Makefile.syscalls, but I think the
-> > better solution is to move the lines from Makefile.build to
-> > Makefile.perf to be more generically available. Here is a patch for
-> > that. I also added the comment from the kernel Makefile describing what
-> > this does.
-
-> > From 8dcec7f5d937ede3d33c687573dc2f1654ddc59e Mon Sep 17 00:00:00 2001
-> > From: Charlie Jenkins <charlie@rivosinc.com>
-> > Date: Thu, 9 Jan 2025 14:36:40 -0800
-> > Subject: [PATCH] perf tools: Expose quiet/verbose variables in Makefile.perf
+On Sun, Jan 12, 2025 at 08:07:55PM +0100, Borislav Petkov wrote:
+> On Sun, Jan 12, 2025 at 08:42:05PM +0200, Ville Syrjälä wrote:
+> > On Wed, Oct 23, 2024 at 07:27:11PM +0300, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > 
+> > > Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
+> > > text allocations on 64 bit.
 > > 
-> > The variables to make builds silent/verbose live inside
-> > tools/build/Makefile.build. Move those variables to the top-level
-> > Makefile.perf to be generally available.
+> > Hi,
+> > 
+> > This breaks resume from hibernation on my Alderlake laptop.
+> > 
+> > Fortunately this still reverts cleanly.
+> 
+> Does that hunk in the mail here fix it?
+> 
+> https://lore.kernel.org/all/Z4DwPkcYyZ-tDKwY@kernel.org/
 
-<SNIP applied patch>
- 
-> Let me know how you want to handle this, I can send this out as a
-> separate patch if that's better.
+Still blows up with that one.
 
-I used the patch you provided above after hand editing the message
-before feeding it to 'git am', added these comments:
-
-    Committer testing:
-    
-    See the SYSCALL lines, now they are consistent with the other
-    operations in other lines:
-    
-      SYSTBL  /tmp/build/perf-tools-next/arch/x86/include/generated/asm/syscalls_32.h
-      SYSTBL  /tmp/build/perf-tools-next/arch/x86/include/generated/asm/syscalls_64.h
-      GEN     /tmp/build/perf-tools-next/common-cmds.h
-      GEN     /tmp/build/perf-tools-next/arch/arm64/include/generated/asm/sysreg-defs.h
-      PERF_VERSION = 6.13.rc2.g3d94bb6ed1d0
-      GEN     perf-archive
-      MKDIR   /tmp/build/perf-tools-next/jvmti/
-      MKDIR   /tmp/build/perf-tools-next/jvmti/
-      MKDIR   /tmp/build/perf-tools-next/jvmti/
-      MKDIR   /tmp/build/perf-tools-next/jvmti/
-      GEN     perf-iostat
-      CC      /tmp/build/perf-tools-next/jvmti/libjvmti.o
-      CC      /tmp/build/perf-tools-next/jvmti/jvmti_agent.o
-    
-    Reported-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-    Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-    Tested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-Thanks,
-
-- Arnaldo
+-- 
+Ville Syrjälä
+Intel
 
