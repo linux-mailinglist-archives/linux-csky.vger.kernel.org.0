@@ -1,206 +1,173 @@
-Return-Path: <linux-csky+bounces-1681-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1682-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A60AA19A44
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Jan 2025 22:19:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 740E5A1A4E3
+	for <lists+linux-csky@lfdr.de>; Thu, 23 Jan 2025 14:28:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 690A616A80F
-	for <lists+linux-csky@lfdr.de>; Wed, 22 Jan 2025 21:19:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 083973AB4F7
+	for <lists+linux-csky@lfdr.de>; Thu, 23 Jan 2025 13:28:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A6B1C5D72;
-	Wed, 22 Jan 2025 21:19:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D1620F998;
+	Thu, 23 Jan 2025 13:28:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MD/1i4r7"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="PlC3Yor4"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA761C232B;
-	Wed, 22 Jan 2025 21:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BA220E329
+	for <linux-csky@vger.kernel.org>; Thu, 23 Jan 2025 13:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737580787; cv=none; b=nsUus/0LdjiA7Dw8HeBb+pm4UPdL58s4V9G10MjMnKBz5UblcAoxb+a84DapM347OVTw1Zbu2dr0KThFzEngD5D5/ZXR+l4x3wjCp6qtk0KYzgdj8kLYao95wuyBJIxpy3zgKAEkHSJlZmWxecNQu++oMzrD/gnQEUOx0SDzZgY=
+	t=1737638902; cv=none; b=Jmh+Li+qSi+Hayi/OoFpRZJ4VQIyA593BpKbCZqVdwW6KtSpaK+dqwtfe5/p8cCCM2ptdpbLFXt/Jg9C5eznw3uavTVz83Djirv3W4uv00OcxCUNpvIrU7s8TAuwbSPDc4+c4HxtcivG8fOHpHi7Z5bk0RRQ5WmSRep4hz8hH+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737580787; c=relaxed/simple;
-	bh=GqP6QXYud4OFUY8hX1TkxW/BI1wPl7mETljhzkHTP/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwBbDpk5VYBM4E6dYeLmRs8BuPrN1UEJyX9M0g6+Lz0rwuXy5ob/bQYfCxxj53Jo42Uhw3jTeCaa0MlYh9NbLcUei+2ZtJNqabiXD0DZ5UPYYK0o6jJXpiBwWlMfZj8bp9qUqKggxwFnszcyCNYwp2gwFAOap3nzwrHyidt822M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MD/1i4r7; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50MHQxkg012829;
-	Wed, 22 Jan 2025 21:17:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=esFAzaN6g7njZiCCkaClyDhZIQCDyB
-	L4ZttyeT6NCzw=; b=MD/1i4r7lMchVZDMxCd4+OmTL+gqvz4EsoCc3lhjzl61q/
-	dWCbk7Dc9E+/mkxibxIfcO+5M2miNjCQj+Zb6N7aFJSgK9pEAqx6PGNDi1udxJ2D
-	5GRkpG+GUOuS40Gu4kk1nLVzuQ6b0Ms8Wu06boltLFfDgJ845roakAZxLi7ece1K
-	21P0Y61Gf0j8zaE10R3dSPAxGJBBECX5J1pPuXnnL27yt6dWzGu7RpbRMXnWFft4
-	1i9lfntcbQEcz44pnsvGFWB7JR/kgZ5jistInR187FAC2imqV46/9k08iOuxZ7q0
-	9o0IVrdT0Bd2ZHNbMuzwATcn0fOtey6n4VrpyBow==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44avcp3s7s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 21:17:07 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50MKlol5019223;
-	Wed, 22 Jan 2025 21:17:06 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 448pmsjk01-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 21:17:06 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50MLH4Kc13697392
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Jan 2025 21:17:04 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6C62A2004D;
-	Wed, 22 Jan 2025 21:17:04 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A40CD20043;
-	Wed, 22 Jan 2025 21:17:00 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.77.114])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 22 Jan 2025 21:17:00 +0000 (GMT)
-Date: Wed, 22 Jan 2025 22:16:58 +0100
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Heiko Carstens <hca@linux.ibm.com>, Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>, linux-alpha@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, loongarch@lists.linux.dev,
-        x86@kernel.org
-Subject: Re: [PATCH v2 6/6] mm: Introduce ctor/dtor at PGD level
-Message-ID: <Z5FgSn0y/c9pItED@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20250103184415.2744423-1-kevin.brodsky@arm.com>
- <20250103184415.2744423-7-kevin.brodsky@arm.com>
- <Z4/NTRDBXEEimdvc@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <20250122074954.8685-A-hca@linux.ibm.com>
- <Z5D7TSR3AttkC0Jf@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+	s=arc-20240116; t=1737638902; c=relaxed/simple;
+	bh=2QT8xw8Hnr0PZ0li5OKVWEtgoR+SI3nKyV65SN+WB9w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=vAuFBR+Vr4wQWXSPizjOik9cxPpNDU8efy3nRplawGRHbCu0FCpxegUyOZmWOkSy8FM82oXYNKSiYkDLPCCUDkYumqTw0v9Epd4fZT3eE8GkSfcb8kJ+egtPxG0Zmv3Jw8wlObDGrLh6OqDTaOgBJFNz+6yFIfkFJiNfKqucvb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=PlC3Yor4; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21636268e43so18732995ad.2
+        for <linux-csky@vger.kernel.org>; Thu, 23 Jan 2025 05:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1737638899; x=1738243699; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fcMJmKKEtX+iYg+m7hTSfwAHD3Zpn1mRc3DXgtsxucU=;
+        b=PlC3Yor4kuIjyynz0ZpYQd2kUV2zjcprsHeUzmmQfysdjL9qIP1XqAkx1MpbxGP6Wo
+         P9tPiOG/2khvgZJ1N5PKmsmAXJzaM3jbHdmHRCBDWEj8vq0bOvs0Gb6c92RTcg1ZHj2Z
+         8C3yUvQ3zlvSmi4TI2HzJ7S2DihwA2CT0m/nd2ywaOvVSOySSesNu/YnO3WGLI2hkRpm
+         h0EYQlcugmmDQJkyfwsIDXnbOVr1PYcQhoWvuOmVhxHGDBAqAAi2JE26CUqjSr0nDk0t
+         PXiRjzfXYuM/HET3s4Ht5OLmekBLIAO1uIDZwRaN9Lyfe7TILowl7RWNgpNi2cEiY+gy
+         qpCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737638899; x=1738243699;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fcMJmKKEtX+iYg+m7hTSfwAHD3Zpn1mRc3DXgtsxucU=;
+        b=UhMQZT8td1XiwQq5NzkyROdnrJAVbAdVgSf1CiB73vRUqwXC6lDrAkU9XinbBk7ZCi
+         dCkCJL2C+xoEvCmNxw43w7Ayr8dKYEAMZRmy0NmeMio9ZMh7d+tpjc7Jb0WzS6kK8RfO
+         jVWaxSldMwo2KyqdRygzHjharfQrLvr/x13Oi3n6zZCCcG4unHXlypLyZg1xYlZ9OLfa
+         LZns990trnxo4FLGX0fZcGMwn1O2qTCoqiwq3fTvHvp71f0x7d11dsu9gCdJbVYPjcIu
+         ZNWvs7o93/uuBcLKc/+C4Aldnk5epDHI2Agwopfj2UJqTO6Ys46fdScjlUuocBd3UkNI
+         acVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJ10NgxKq3wYS2t6csAp92iYb8QiTEe64x2Iu0ceJse44CSJl7TGNIWiL5gmA3xytjukWkIM/Hk//o@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoNDGfcfChWk306doTCmELXHjVqeCLznAJw2AP/mddt4CItroA
+	3Q34EtpIRfaTNZP7uyxcRkIx55fSKkoq3ZINKM+WO29r75soMSyYVM4I4dHo3Mc=
+X-Gm-Gg: ASbGncvM8B/OsEXQU42M7304a1S9Fe0hLWyYFJ+vMCfR1kB4Jj9w72UrAO4+Jjc0DxU
+	8Df5Fj/kmaAdH8ew8AgPmTRf9+jQa3q8q1Sb5Ko1nnP9TLDsxZ9hnsBRI4fuhFflZzvWLGYC81X
+	kn5Fzbtmqg0eKYt3tUF/f5tFdgRJuQ6aZ5r7j24ne8ZDjlxqFEN+1qqRUqOuxWk8I+CKhHr3rf1
+	Z7ESq9mztD3jSQOW8rwzRTN0viiSO1m9fMO5nzKjcs3DjdrsLVpogcQKWYcLQ5ljlnGifIRsYUi
+	6mbpqWD33xx7c4JgAT3R/ZDXSu6LW6YstGgePeKMmmnV
+X-Google-Smtp-Source: AGHT+IEganAe939WGDJlfH9nAWVZpA3TvM5SaYn7UYpmBsqsQlG5HSrZSGt5JfnUpmvzTx71ZR7Ekg==
+X-Received: by 2002:a17:902:f545:b0:215:6e01:ad19 with SMTP id d9443c01a7336-21c35587f37mr410676135ad.29.1737638898793;
+        Thu, 23 Jan 2025 05:28:18 -0800 (PST)
+Received: from C02DW0BEMD6R.bytedance.net ([63.216.146.178])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2d3ac3e2sm111583655ad.139.2025.01.23.05.28.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 05:28:18 -0800 (PST)
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+To: peterz@infradead.org,
+	kevin.brodsky@arm.com,
+	riel@surriel.com,
+	vishal.moola@gmail.com,
+	david@redhat.com,
+	jannh@google.com,
+	hughd@google.com,
+	willy@infradead.org,
+	yuzhao@google.com,
+	muchun.song@linux.dev,
+	akpm@linux-foundation.org,
+	will@kernel.org,
+	aneesh.kumar@kernel.org,
+	npiggin@gmail.com,
+	arnd@arndb.de,
+	dave.hansen@linux.intel.com,
+	rppt@kernel.org,
+	alexghiti@rivosinc.com
+Cc: linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	x86@kernel.org,
+	linux-riscv@lists.infradead.org,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH 0/5] remove tlb_remove_page_ptdesc()
+Date: Thu, 23 Jan 2025 21:26:13 +0800
+Message-Id: <cover.1737637631.git.zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z5D7TSR3AttkC0Jf@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: lJbHIFaitD84VbMmVKAwv1LP_Khu2fra
-X-Proofpoint-GUID: lJbHIFaitD84VbMmVKAwv1LP_Khu2fra
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-22_09,2025-01-22_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- bulkscore=0 mlxlogscore=925 spamscore=0 phishscore=0 mlxscore=0
- suspectscore=0 lowpriorityscore=0 priorityscore=1501 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501220151
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 22, 2025 at 03:06:05PM +0100, Alexander Gordeev wrote:
+Hi all,
 
-Hi Kevin,
+As suggested by Peter Zijlstra below [1], this series aims to remove
+tlb_remove_page_ptdesc().
 
-> On Wed, Jan 22, 2025 at 08:49:54AM +0100, Heiko Carstens wrote:
-> > > >  static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-> > > >  {
-> > > > -	return (pgd_t *) crst_table_alloc(mm);
-> > > > +	unsigned long *table = crst_table_alloc(mm);
-> > > > +
-> > > > +	if (!table)
-> > > > +		return NULL;
-> > > 
-> > > I do not know status of this series, but FWIW, this call is missed:
-> > > 
-> > > 	crst_table_init(table, _REGION1_ENTRY_EMPTY); 
-> > 
-> > Why is that missing?
-> 
-> Because the follow-up pagetable_pgd_ctor() is called against uninitialized
-> page table, while other pagetable_pXd_ctor() variants are called against
-> initialized one. I could imagine complications as result of that.
-> 
-> Whether Region1 table is the right choice is a big question though, as you
-> noticed below.
+: Fundamentally tlb_remove_page() is about removing *pages* as from a PTE,
+: there should not be a page-table anywhere near here *ever*.
+:
+: Yes, some architectures use tlb_remove_page() for page-tables too, but
+: that is more or less an implementation detail that can be fixed.
 
-As discussed with Heiko, we do not want to add the extra crst_table_init() call
-at least due to performance impact. So please ignore my comment.
+After this series, all architectures use tlb_remove_table() or tlb_remove_ptdesc()
+to remove the page table pages. In the future, once all architectures using
+tlb_remove_table() have also converted to using struct ptdesc (eg. powerpc), it
+may be possible to use only tlb_remove_ptdesc().
 
-> > A pgd table can be a Region1, Region2, or Region3 table. The only caller of
-> > this function is mm_init() via mm_alloc_pgd(); and right after mm_alloc_pgd()
-> > there is a call to init_new_context() which will initialize the pgd correctly.
-> 
-> init_new_context() is in a way a constructor as well, so whole thing looks odd
-> to me. But I do not immedeately see a better way :(
-> 
-> > I guess what really gets odd, and might be broken (haven't checked yet) is
-> > what happens on dynamic upgrade of page table levels (->crst_table_upgrade()).
-> 
-> Hmm, that is a good point.
-> 
-> > With that a pgd may become a pud, and with that we get an imbalance with
-> > the ctor/dtor calls for the various page table levels when they get freed
-> 
-> The ctor/dtor mismatch should not be a problem, as pagetable_pgd|p4d|pud_ctor()
-> are the same and there is one pagetable_dtor() for all top levels as of now.
-> But if it ever comes to separate implementations, then we are in the world
-> of pain.
-> 
-> > again. Plus, at first glance, it looks also broken that we have open-coded
-> > crst_alloc() calls instead of using the "proper" page table allocation API
-> > within crst_table_upgrade(), which again would cause an imbalance.
-> 
-> This is a good point too.
+Note: there will be some overlap between my patch #4 and Rik van Riel's patch #1 [2],
+      once his patch is merged into the next branch, I can rebase onto his patch.
+      And patch #4 can actually make x86 use tlb_remove_ptdesc(), but due to the
+      above situation, I have not done so yet.
 
-The below bits are seems to be missed. We will test it and send a patch.
+This series is based on next-20250122.
 
-diff --git a/arch/s390/mm/pgalloc.c b/arch/s390/mm/pgalloc.c
-index a4e761902093..d33f55b7ee98 100644
---- a/arch/s390/mm/pgalloc.c
-+++ b/arch/s390/mm/pgalloc.c
-@@ -88,12 +88,14 @@ int crst_table_upgrade(struct mm_struct *mm, unsigned long end)
- 		if (unlikely(!p4d))
- 			goto err_p4d;
- 		crst_table_init(p4d, _REGION2_ENTRY_EMPTY);
-+		pagetable_p4d_ctor(virt_to_ptdesc(p4d));
- 	}
- 	if (end > _REGION1_SIZE) {
- 		pgd = crst_table_alloc(mm);
- 		if (unlikely(!pgd))
- 			goto err_pgd;
- 		crst_table_init(pgd, _REGION1_ENTRY_EMPTY);
-+		pagetable_pgd_ctor(virt_to_ptdesc(pgd));
- 	}
- 
- 	spin_lock_bh(&mm->page_table_lock);
-@@ -130,6 +132,7 @@ int crst_table_upgrade(struct mm_struct *mm, unsigned long end)
- 	return 0;
- 
- err_pgd:
-+	pagetable_dtor(virt_to_ptdesc(p4d));
- 	crst_table_free(mm, p4d);
- err_p4d:
- 	return -ENOMEM;
+Comments and suggestions are welcome!
 
-Thanks!
+Thanks,
+Qi
+
+[1]. https://lore.kernel.org/linux-mm/20250103111457.GC22934@noisy.programming.kicks-ass.net/
+[2]. https://lore.kernel.org/lkml/20250123042447.2259648-2-riel@surriel.com/
+
+Qi Zheng (5):
+  mm: pgtable: make generic tlb_remove_table() use struct ptdesc
+  mm: pgtable: convert some architectures to use tlb_remove_ptdesc()
+  riscv: pgtable: unconditionally use tlb_remove_ptdesc()
+  x86: pgtable: unconditionally use tlb_remove_table()
+  mm: pgtable: remove tlb_remove_page_ptdesc()
+
+ arch/csky/include/asm/pgalloc.h      |  3 +--
+ arch/hexagon/include/asm/pgalloc.h   |  3 +--
+ arch/loongarch/include/asm/pgalloc.h |  3 +--
+ arch/m68k/include/asm/sun3_pgalloc.h |  3 +--
+ arch/mips/include/asm/pgalloc.h      |  3 +--
+ arch/nios2/include/asm/pgalloc.h     |  9 ++++-----
+ arch/openrisc/include/asm/pgalloc.h  |  3 +--
+ arch/riscv/include/asm/pgalloc.h     | 26 ++++----------------------
+ arch/sh/include/asm/pgalloc.h        |  3 +--
+ arch/um/include/asm/pgalloc.h        |  9 +++------
+ arch/x86/kernel/paravirt.c           | 17 +----------------
+ arch/x86/mm/pgtable.c                | 11 -----------
+ include/asm-generic/tlb.h            | 12 +++---------
+ 13 files changed, 22 insertions(+), 83 deletions(-)
+
+-- 
+2.20.1
+
 
