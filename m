@@ -1,247 +1,228 @@
-Return-Path: <linux-csky+bounces-1700-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1701-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9DA4A22C99
-	for <lists+linux-csky@lfdr.de>; Thu, 30 Jan 2025 12:38:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CCB1A2476A
+	for <lists+linux-csky@lfdr.de>; Sat,  1 Feb 2025 08:15:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 381541626E4
-	for <lists+linux-csky@lfdr.de>; Thu, 30 Jan 2025 11:38:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E9EA3A79BE
+	for <lists+linux-csky@lfdr.de>; Sat,  1 Feb 2025 07:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C720D1C5F2E;
-	Thu, 30 Jan 2025 11:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0F1F50F;
+	Sat,  1 Feb 2025 07:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="py0si/7i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QRCoe+1O"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FC51AB507;
-	Thu, 30 Jan 2025 11:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA7F13D502
+	for <linux-csky@vger.kernel.org>; Sat,  1 Feb 2025 07:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738237125; cv=none; b=MFmy5Qm5UPUqK+6pfIIjlRvuPdoionzD1jMSusVQFLZW0qKFMt8ylz5wbt3S9Qg8Csa7wHysfw00E8p8/S4ZXyrIwHv3vo4Uvqu4wrZ916G5buB9v8RxeGvUQA087+3D795AHZShc7rkuroAh/m5aGp7J2tTKC1rJX+Q6svxjLY=
+	t=1738394111; cv=none; b=oPxwMhqd8sVMMDft3pZjM3xTKdFXH9L2TPv0RxC4Zb3jYHxn4eKIWA6yMrtcnAP/Hbsd0c7TyXIDBJuqHFpN4LNdnFHmrQsvk1eIG6zju0c6p1sCE/29vU8wNhOVAgs5l+fNZ2f1QMyqaSdsgR9YqolxXgERUaI4DhRHLfhyTF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738237125; c=relaxed/simple;
-	bh=jmiaRDktbJa4wMJVa0qU3LftfvlPnAN8/Soy8xz+2dw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Q5h28uomGtKf9LzkYrpXFn9xJT4asW1MUj4lbYhCt1/YX7d3P+1oS+riLsMoVjiip1IQVKoHnK3h+WByLMDFuMO0Bvz0t/q+qf4efkCpVFasf10otOqkzUrK/KzPeZzoG5DdMe637HHJ42Z3W2HsDrj/ZT9z0n7uIGuaWicuJVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=py0si/7i; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50U3S03G009805;
-	Thu, 30 Jan 2025 11:36:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=BpEfUaBr1Cw8QWsiOsJ1W6pndXsaAO
-	xt2vlVbbXMbZU=; b=py0si/7i7sYpYpgY+Cd85pkVNtrLlOqwSMEhmRUcKRZj7F
-	AdWm9g97BBEh/k1QMz1gyW8k5eUcYgkXR7GTOMktSJAFpG3LMbyg98XYXGPU8sUo
-	eqeaQ4p53wCU0NhpBpfouxy1ummA3PnohqoCPPT9kZK6xXqL8bMd1HPK3stTNTCc
-	i9hgrzpbOa8Oy7fd/8G+IJIcqiisWNhctW460864Z4NJPiiQN3G8K0UqP+6d4dzH
-	cmzmA7ITybYy/TOKFRbQlq2Z27a5FDfLohiHJU8VcETS6330kiMTctNfd+g/5c0g
-	zhFPjq0jgTlDsz9Dp+ySr7XDG4pHCTnnLQrHeZDw==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44fq5tvqhw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jan 2025 11:36:36 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50UBWjRY023426;
-	Thu, 30 Jan 2025 11:36:35 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44fq5tvqhs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jan 2025 11:36:35 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50U947Bm022193;
-	Thu, 30 Jan 2025 11:36:34 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44dcgjwkcf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jan 2025 11:36:34 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50UBaU8D29491780
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Jan 2025 11:36:30 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B3743200BB;
-	Thu, 30 Jan 2025 11:36:30 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2B194200BC;
-	Thu, 30 Jan 2025 11:36:30 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 30 Jan 2025 11:36:30 +0000 (GMT)
-From: Sven Schnelle <svens@linux.ibm.com>
-To: "Dmitry V. Levin" <ldv@strace.io>
-Cc: linux-snps-arc@lists.infradead.org, Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andreas Larsson
- <andreas@gaisler.com>,
-        John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>,
-        x86@kernel.org, Arnd Bergmann
- <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, WANG Xuerui
- <kernel@xen0n.name>,
-        Will Deacon <will@kernel.org>,
-        Eugene Syromyatnikov
- <evgsyr@gmail.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jonas Bonn <jonas@southpole.se>, linux-s390@vger.kernel.org,
-        Alexander
- Gordeev <agordeev@linux.ibm.com>,
-        Madhavan Srinivasan
- <maddy@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yoshinori Sato
- <ysato@users.sourceforge.jp>, linux-sh@vger.kernel.org,
-        Michael Ellerman
- <mpe@ellerman.id.au>, Helge Deller <deller@gmx.de>,
-        Huacai Chen
- <chenhuacai@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen
- <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Vineet
- Gupta <vgupta@kernel.org>,
-        Christian Borntraeger
- <borntraeger@linux.ibm.com>,
-        strace-devel@lists.strace.io, linux-arch@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>, Mike
- Frysinger <vapier@gentoo.org>,
-        Davide Berardi <berardi.dav@gmail.com>,
-        Renzo Davoli <renzo@cs.unibo.it>, linux-um@lists.infradead.org,
-        Heiko
- Carstens <hca@linux.ibm.com>,
-        Charlie Jenkins <charlie@rivosinc.com>,
-        Naveen N Rao <naveen@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Borislav Petkov
- <bp@alien8.de>, loongarch@lists.linux.dev,
-        Paul Walmsley
- <paul.walmsley@sifive.com>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, Brian Cain <bcain@quicinc.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-parisc@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Oleg
- Nesterov <oleg@redhat.com>, Dinh Nguyen <dinguyen@kernel.org>,
-        linux-riscv@lists.infradead.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Richard Weinberger <richard@nod.at>,
-        Johannes Berg
- <johannes@sipsolutions.net>,
-        Alexey Gladkov <legion@kernel.org>,
-        "David
- S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3 2/6] syscall.h: add syscall_set_arguments() and
- syscall_set_return_value()
-In-Reply-To: <20250130112207.GA6617@strace.io> (Dmitry V. Levin's message of
-	"Thu, 30 Jan 2025 13:22:07 +0200")
-References: <20250128091626.GB8601@strace.io> <yt9dwmecya4g.fsf@linux.ibm.com>
-	<20250130112207.GA6617@strace.io>
-Date: Thu, 30 Jan 2025 12:36:29 +0100
-Message-ID: <yt9dsep0y1mq.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1738394111; c=relaxed/simple;
+	bh=zGV4mn0iwxTiPxDyziTVrF21ceTtMUu/t5b1S6ZpVHA=;
+	h=Date:Message-Id:Mime-Version:Subject:From:To:Content-Type; b=Z6bfSkFZ7xtqeHbtCczUElTJSo7OF0q9BgRbTZV5LVKgj//gURrbyUXbTykZCQrn/GyS9p+lxz7uwcdBeUYZO0CgD0cXE2dduoukL3KDWf1G3trX/K/rUYAJ6GrlNwFbld9b0RvnP2dp/TO2wRVCR9un7s4S1nyHts3fZluHUJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QRCoe+1O; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6effbb8ca1fso23745097b3.1
+        for <linux-csky@vger.kernel.org>; Fri, 31 Jan 2025 23:15:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738394109; x=1738998909; darn=vger.kernel.org;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iUNVJGwBAqxvEF7ZMPLYXjVyjjt8WOjLqzPXbEq6nWs=;
+        b=QRCoe+1OdtxbrJzYMmqJr79ypjffGMmmwA/P5I/OnpHyv8b2NO8IY0Mk9fy4janqNx
+         JdYHprDIApYD8sL8rlGQJcIDnqGBtQvVHDcId+Y6SN3EFqjw3DovbpaOkO/nN2NR1q8l
+         iQ+BSQ20agpD9E2D2azk4Oinp4+rRWotWTiqR5hbMDs6Zikt6JPPB0+6MOc+oAa0lRQi
+         4xL6keZrucmqmVc/A00sLMAKMUeK8Jzwkiz8bK1PkgMKb5U9vsmp+yTgSakTAY3sHEMb
+         tX9ALx0LxRc3B9vKrJKFw4OuqvMif8yE0CfhLQJ/KW8slHkwYfiH3jtKGgFIGTeo2v0j
+         Z2Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738394109; x=1738998909;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iUNVJGwBAqxvEF7ZMPLYXjVyjjt8WOjLqzPXbEq6nWs=;
+        b=pJjUnW46N578F5CTFr4XaWghm8D74lu+3Y6C5s6RdzApxG1HI2MXRn/2c09zzeJybA
+         PakkC89svxWKwveU+vhhnTXYgNhPioyO1LW5cnBCFXSi2Ha2zUm6/UHzI3SndNp8c5xA
+         oWsr7KLOwiLEfTrBj5YJwNdhv4b71DgzGDgxreuamzruxhncUYu6J+ArzD8yJvoJuG58
+         iO9TiMwYJ4y6a1avk6dbo2rVYHPKxmgtCAbJV6NMGnfsxMFVCzGV4sweSlxZVj51599d
+         Ye62p68GxsapQjVt9NBW0g/MucU12IguuwthMWULeg8zDE6Zcsn47+Ss9j5RqQFkNC9K
+         EIlA==
+X-Forwarded-Encrypted: i=1; AJvYcCViSED+2Fcyl9QdhAXfeXj+XZdNOE4XfSM0eqmrRRL1gfBosMrPja/un+o1muhh5X/FkedneymFSPzE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVCOROQRD7MyyAxhH4/mHZW2QVqWbqWunmUACXVb5LhEvpl7Rq
+	bev7UVhCfGv2YXTOu2TNmKoRPtCoXCM7ic24IqNaoLOuBnOH3LbY2ub4LrPsiVpkpZK5/nJTAYE
+	nDbWkIg==
+X-Google-Smtp-Source: AGHT+IHw17KlTAiCvIn1dGvS2XBYI6zxa6M0wAMsY0DW7Sy+TKElEih/y4zIaq3dQlg3kBeMN04hCMIv5Zjn
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:de26:87db:e4d0:62b6])
+ (user=irogers job=sendgmr) by 2002:a05:690c:4a83:b0:6f6:c8ad:88ed with SMTP
+ id 00721157ae682-6f7a841e412mr173227b3.6.1738394108888; Fri, 31 Jan 2025
+ 23:15:08 -0800 (PST)
+Date: Fri, 31 Jan 2025 23:14:48 -0800
+Message-Id: <20250201071455.718247-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3aUZNse446PGQfVafhK1HcR2G4gnMUaQ
-X-Proofpoint-ORIG-GUID: 64WUIlsja2UYCCT0QvJj0Ow022g8u5FP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-30_06,2025-01-30_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=982 lowpriorityscore=0 impostorscore=0 phishscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 mlxscore=0 malwarescore=0
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501300089
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.362.g079036d154-goog
+Subject: [PATCH v1 0/7] perf: Support multiple system call tables in the build
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
+	Will Deacon <will@kernel.org>, James Clark <james.clark@linaro.org>, 
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Charlie Jenkins <charlie@rivosinc.com>, 
+	Bibo Mao <maobibo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=" <bjorn@rivosinc.com>, Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-"Dmitry V. Levin" <ldv@strace.io> writes:
+This work builds on the clean up of system call tables and removal of
+libaudit by Charlie Jenkins <charlie@rivosinc.com>.
 
-> On Thu, Jan 30, 2025 at 09:33:03AM +0100, Sven Schnelle wrote:
->> "Dmitry V. Levin" <ldv@strace.io> writes:
->> 
->> > These functions are going to be needed on all HAVE_ARCH_TRACEHOOK
->> > architectures to implement PTRACE_SET_SYSCALL_INFO API.
->> >
->> > This partially reverts commit 7962c2eddbfe ("arch: remove unused
->> > function syscall_set_arguments()") by reusing some of old
->> > syscall_set_arguments() implementations.
->> >
->> > Signed-off-by: Dmitry V. Levin <ldv@strace.io>
->> > Tested-by: Charlie Jenkins <charlie@rivosinc.com>
->> > Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
->> > ---
->> >  arch/arc/include/asm/syscall.h        | 14 +++++++++++
->> >  arch/arm/include/asm/syscall.h        | 13 ++++++++++
->> >  arch/arm64/include/asm/syscall.h      | 13 ++++++++++
->> >  arch/csky/include/asm/syscall.h       | 13 ++++++++++
->> >  arch/hexagon/include/asm/syscall.h    | 14 +++++++++++
->> >  arch/loongarch/include/asm/syscall.h  |  8 ++++++
->> >  arch/mips/include/asm/syscall.h       | 32 ++++++++++++++++++++++++
->> >  arch/nios2/include/asm/syscall.h      | 11 ++++++++
->> >  arch/openrisc/include/asm/syscall.h   |  7 ++++++
->> >  arch/parisc/include/asm/syscall.h     | 12 +++++++++
->> >  arch/powerpc/include/asm/syscall.h    | 10 ++++++++
->> >  arch/riscv/include/asm/syscall.h      |  9 +++++++
->> >  arch/s390/include/asm/syscall.h       | 12 +++++++++
->> >  arch/sh/include/asm/syscall_32.h      | 12 +++++++++
->> >  arch/sparc/include/asm/syscall.h      | 10 ++++++++
->> >  arch/um/include/asm/syscall-generic.h | 14 +++++++++++
->> >  arch/x86/include/asm/syscall.h        | 36 +++++++++++++++++++++++++++
->> >  arch/xtensa/include/asm/syscall.h     | 11 ++++++++
->> >  include/asm-generic/syscall.h         | 16 ++++++++++++
->> >  19 files changed, 267 insertions(+)
->> >
->> > diff --git a/arch/s390/include/asm/syscall.h b/arch/s390/include/asm/syscall.h
->> > index 27e3d804b311..b3dd883699e7 100644
->> > --- a/arch/s390/include/asm/syscall.h
->> > +++ b/arch/s390/include/asm/syscall.h
->> > @@ -78,6 +78,18 @@ static inline void syscall_get_arguments(struct task_struct *task,
->> >  	args[0] = regs->orig_gpr2 & mask;
->> >  }
->> >  
->> > +static inline void syscall_set_arguments(struct task_struct *task,
->> > +					 struct pt_regs *regs,
->> > +					 const unsigned long *args)
->> > +{
->> > +	unsigned int n = 6;
->> > +
->> > +	while (n-- > 0)
->> > +		if (n > 0)
->> > +			regs->gprs[2 + n] = args[n];
->> > +	regs->orig_gpr2 = args[0];
->> > +}
->> 
->> Could that be changed to something like:
->> 
->> for (int n = 1; n < 6; n++)
->>         regs->gprs[2 + n] = args[n];
->> regs->orig_gpr2 = args[0];
->> 
->> I think this is way easier to parse.
->
-> I don't mind changing syscall_set_arguments() this way, but it just
-> mirrors syscall_get_arguments(), so I think it would be better if these
-> two functions were written in the same style.  Would you like to change
-> syscall_get_arguments() as well?
+The system call table in perf trace is used to map system call numbers
+to names and vice versa. Prior to these changes, a single table
+matching the perf binary's build was present. The table would be
+incorrect if tracing say a 32-bit binary from a 64-bit version of
+perf, the names and numbers wouldn't match.
 
-Oh. I'll prepare a patch for syscall_get_arguments(), wasn't aware
-that this function looks the same. I'll send this via the s390 tree, so
-it's independent of your patch series. Thanks!
+Change the build so that a single system call file is built and the
+potentially multiple tables are identifiable from the ELF machine type
+of the process being examined. To determine the ELF machine type, the
+executable's header is read from /proc/pid/exe with fallbacks to using
+the perf's binary type when unknown.
+
+Remove some runtime types used by the system call tables and make
+equivalents generated at build time.
+
+Ian Rogers (7):
+  perf syscalltble: Remove syscall_table.h
+  perf trace: Reorganize syscalls
+  perf syscalltbl: Remove struct syscalltbl
+  perf thread: Add support for reading the e_machine type for a thread
+  perf trace beauty: Add syscalltbl.sh generating all system call tables
+  perf syscalltbl: Use lookup table containing multiple architectures
+  perf build: Remove Makefile.syscalls
+
+ tools/perf/Makefile.perf                      |  10 +-
+ tools/perf/arch/alpha/entry/syscalls/Kbuild   |   2 -
+ .../alpha/entry/syscalls/Makefile.syscalls    |   5 -
+ tools/perf/arch/alpha/include/syscall_table.h |   2 -
+ tools/perf/arch/arc/entry/syscalls/Kbuild     |   2 -
+ .../arch/arc/entry/syscalls/Makefile.syscalls |   3 -
+ tools/perf/arch/arc/include/syscall_table.h   |   2 -
+ tools/perf/arch/arm/entry/syscalls/Kbuild     |   4 -
+ .../arch/arm/entry/syscalls/Makefile.syscalls |   2 -
+ tools/perf/arch/arm/include/syscall_table.h   |   2 -
+ tools/perf/arch/arm64/entry/syscalls/Kbuild   |   3 -
+ .../arm64/entry/syscalls/Makefile.syscalls    |   6 -
+ tools/perf/arch/arm64/include/syscall_table.h |   8 -
+ tools/perf/arch/csky/entry/syscalls/Kbuild    |   2 -
+ .../csky/entry/syscalls/Makefile.syscalls     |   3 -
+ tools/perf/arch/csky/include/syscall_table.h  |   2 -
+ .../perf/arch/loongarch/entry/syscalls/Kbuild |   2 -
+ .../entry/syscalls/Makefile.syscalls          |   3 -
+ .../arch/loongarch/include/syscall_table.h    |   2 -
+ tools/perf/arch/mips/entry/syscalls/Kbuild    |   2 -
+ .../mips/entry/syscalls/Makefile.syscalls     |   5 -
+ tools/perf/arch/mips/include/syscall_table.h  |   2 -
+ tools/perf/arch/parisc/entry/syscalls/Kbuild  |   3 -
+ .../parisc/entry/syscalls/Makefile.syscalls   |   6 -
+ .../perf/arch/parisc/include/syscall_table.h  |   8 -
+ tools/perf/arch/powerpc/entry/syscalls/Kbuild |   3 -
+ .../powerpc/entry/syscalls/Makefile.syscalls  |   6 -
+ .../perf/arch/powerpc/include/syscall_table.h |   8 -
+ tools/perf/arch/riscv/entry/syscalls/Kbuild   |   2 -
+ .../riscv/entry/syscalls/Makefile.syscalls    |   4 -
+ tools/perf/arch/riscv/include/syscall_table.h |   8 -
+ tools/perf/arch/s390/entry/syscalls/Kbuild    |   2 -
+ .../s390/entry/syscalls/Makefile.syscalls     |   5 -
+ tools/perf/arch/s390/include/syscall_table.h  |   2 -
+ tools/perf/arch/sh/entry/syscalls/Kbuild      |   2 -
+ .../arch/sh/entry/syscalls/Makefile.syscalls  |   4 -
+ tools/perf/arch/sh/include/syscall_table.h    |   2 -
+ tools/perf/arch/sparc/entry/syscalls/Kbuild   |   3 -
+ .../sparc/entry/syscalls/Makefile.syscalls    |   5 -
+ tools/perf/arch/sparc/include/syscall_table.h |   8 -
+ tools/perf/arch/x86/entry/syscalls/Kbuild     |   3 -
+ .../arch/x86/entry/syscalls/Makefile.syscalls |   6 -
+ tools/perf/arch/x86/include/syscall_table.h   |   8 -
+ tools/perf/arch/xtensa/entry/syscalls/Kbuild  |   2 -
+ .../xtensa/entry/syscalls/Makefile.syscalls   |   4 -
+ .../perf/arch/xtensa/include/syscall_table.h  |   2 -
+ tools/perf/builtin-trace.c                    | 275 +++++++++++-------
+ tools/perf/scripts/Makefile.syscalls          |  61 ----
+ tools/perf/scripts/syscalltbl.sh              |  86 ------
+ tools/perf/trace/beauty/syscalltbl.sh         | 274 +++++++++++++++++
+ tools/perf/util/syscalltbl.c                  | 142 ++++-----
+ tools/perf/util/syscalltbl.h                  |  22 +-
+ tools/perf/util/thread.c                      |  50 ++++
+ tools/perf/util/thread.h                      |  14 +-
+ 54 files changed, 598 insertions(+), 506 deletions(-)
+ delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/alpha/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/arc/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/arc/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/arm/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/arm/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/arm/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/arm64/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/csky/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/csky/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/csky/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/loongarch/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/mips/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/mips/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/parisc/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/powerpc/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/riscv/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/s390/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/s390/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/s390/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/sh/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/sh/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/sh/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/sparc/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/x86/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/x86/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/x86/include/syscall_table.h
+ delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Kbuild
+ delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Makefile.syscalls
+ delete mode 100644 tools/perf/arch/xtensa/include/syscall_table.h
+ delete mode 100644 tools/perf/scripts/Makefile.syscalls
+ delete mode 100755 tools/perf/scripts/syscalltbl.sh
+ create mode 100755 tools/perf/trace/beauty/syscalltbl.sh
+
+-- 
+2.48.1.362.g079036d154-goog
+
 
