@@ -1,92 +1,86 @@
-Return-Path: <linux-csky+bounces-1744-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1745-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D453A27B04
-	for <lists+linux-csky@lfdr.de>; Tue,  4 Feb 2025 20:17:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E34A28004
+	for <lists+linux-csky@lfdr.de>; Wed,  5 Feb 2025 01:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F4351886DF4
-	for <lists+linux-csky@lfdr.de>; Tue,  4 Feb 2025 19:18:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B83D918879D4
+	for <lists+linux-csky@lfdr.de>; Wed,  5 Feb 2025 00:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A8E212D83;
-	Tue,  4 Feb 2025 19:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B239195;
+	Wed,  5 Feb 2025 00:12:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XhvGioqw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZsoRV1oT"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A6120A5DA
-	for <linux-csky@vger.kernel.org>; Tue,  4 Feb 2025 19:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5105A173;
+	Wed,  5 Feb 2025 00:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738696674; cv=none; b=kenhcLOjj5gYau6gOmQZmbXDhtGA97lBDPQUzTAnuh9DBIyLhnYLl+rnmyNnulqIUN/XzPftd9DqYauzEMhohd4R6MkATjb9o7lI8ctqQodihRUoCNAS2NjqVno1FbqXHbogB1OH/aV9e3l/wbQlvS1H4LzuGw8w6rEU9FNL0Vc=
+	t=1738714338; cv=none; b=TkBe0k2bevo9csqg1/TA1M44v2vAzFVcgll5tzxh6M+eV7UMJWhszBq+SHCqGP8buswMKipbZEov8DRamBjwwx44Jjd/BIZcKfzUSpvLF8Z6Fo5MNLqTHGbU1Slk1N0UdAQgpLmCaZFvuMRROUmQBI8c2UydC5+mMU0UmiulJis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738696674; c=relaxed/simple;
-	bh=i18llDbp3q6y0/w+gTxZyxhvyOXPpj+iA3QfM/7JUT4=;
+	s=arc-20240116; t=1738714338; c=relaxed/simple;
+	bh=BQ7KDqiMBAjM5ZEMMzNCF9Kq/cWzWjI8o8r4yiZ717c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nyAixJXe9bezCC5enhJVJ7FmRZxv+QFuLkIdrGO7apmVXf16pPrgcqZlz7PoOMxmjtao9RhdFOjuJtfxceFetg7SQBbf3/AJT4tq+zbXI4CrtJ47OzFO0nozhvdod6Vx+vC8pKTTNhOMch6NAo1m9umAu/sxw6GaeIpk7MBGO68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XhvGioqw; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3d04e5bd797so25805ab.1
-        for <linux-csky@vger.kernel.org>; Tue, 04 Feb 2025 11:17:52 -0800 (PST)
+	 To:Cc:Content-Type; b=nKs7x9cSLpncz7pGRjDRbU9SFzhQw2ubBnld3TicI4DsdWyTIPuP5hCXdGr7NAxOa5H6J7DPAfrQSoJHPK867JlSYopRusgyN/4rITGH3XJw3ghKCDLKBYMSyqJHjrLUyMyzy0jNIVkj9EGL1mzYOvXeqguzfMXw8YRyreWpBUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZsoRV1oT; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6f974a5e5e3so14630447b3.0;
+        Tue, 04 Feb 2025 16:12:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738696671; x=1739301471; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738714335; x=1739319135; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i18llDbp3q6y0/w+gTxZyxhvyOXPpj+iA3QfM/7JUT4=;
-        b=XhvGioqw8wbDDdZiYjaZFR3Tc7r7sRfCJ7EEoWcmnSeLPrnjl2je5GBz9I90Kv+VMP
-         ur5gvU7Wyy6JvmZCY1gPYFaR8KyEaxcdbQy+hxYyxs1UcpXMQNfPMMCrBlho+rJ7WaIN
-         xn+PLhsNNKNbmv1sR7kgl/5iieqAvE4cRJNbGx+aQs9mhy4x5Lf573L9P2+Xf5Gzf4ko
-         agQnrcUEwOTxdEBIpS25Ke9fMp5byC7vqRNQGCtnMM8DBrRaEKlEIO9K7ChJ5ZquFr6l
-         BKQWYimGqX4d2elyP4qo0D091ESyd3Z45OMyW9FnCK2ciQo9y4e6wd4ruTI0k+it8FXK
-         19oA==
+        bh=MpTKFbLMSoKrPhXAQQBFXwIc5BgdqJVRd6V21V7NRDM=;
+        b=ZsoRV1oTBk5snmcco9LiK4gbaRW9g91mpGQpII07MqkftRky54qW23taKKqjzyTxSM
+         ZIeM1BMWlDutgaGHjzG9/2rFrisnFsZ0fLzgTOM/yEqnTgh5NK3G5PMEAFSQdfQJfYMJ
+         bj/cI4jG0fLMeeWMEPvGxHj1zkN7Br6kSgS0pq9bIgyKnHdyx/HWjqi5kI0k/RyorGzK
+         KpiumBju2R1lL958H9iszx0EvvkARU0TQ0FWjmURg778LB8YNA13pyirO0XAmkkHOujg
+         CwzP6JtQGlkDWyQYTkYYN3VXEHghYu0/FDeHHXuwa0EJfK/NDWUxYzOynFThebzxozFN
+         EqfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738696671; x=1739301471;
+        d=1e100.net; s=20230601; t=1738714335; x=1739319135;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i18llDbp3q6y0/w+gTxZyxhvyOXPpj+iA3QfM/7JUT4=;
-        b=ZovFXQVMMmGOkiOy2k2qurhlyKzlKK1OSvakHf/eoEnFz4xhFTl4Wuj6I+E3zM0IuW
-         GTJhZKdalO1PcduIyZ2hjmERy6GQW8Agn6F3yyh40eSo4zfWFDf2tsHv4wRw5e/AIsLs
-         95RENTmwQwHgoHmXo4VGgdFdrk2bPF/3NLaQdcRkgDDT8rYBqTa5bYwjkV+VgIM95+5z
-         hOWEQMtq3gvuld+V6QFhsiCVWNS+mk5KPGzyFntJVK+JEQAV8fUVrm6hmJyJqWlT/UqE
-         SAhbfSIcFAG/Vp52dNosgauaVMtB2Q/kflYRJCqyg8eYAVZT2VjO+NBvhYZeEE8xTd46
-         u8BA==
-X-Forwarded-Encrypted: i=1; AJvYcCXrkQV5yT01dT0Bq06hJ+qHoQSCj15xhgJ0yrFZZS5FQ6Ad+yzRByc7CAbF/pXIUPMTry7OhSMgI4fL@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ+YLqkI6fBvAgq4zIMw/4V3jcT2Kev7pdNH6tp5wLg7Ix5w06
-	8V6TPOoGVejL4eZnx7RwNIfZ9YLsmCuCymJTnvIbnXioLcP4jxeJDMwIvjsILwKthXmXiFZpYSt
-	6JtGskNGupNkYzZztA3DDtVNlqWb7nGGwJSNV
-X-Gm-Gg: ASbGnctuinZoIem33+z7Uerm9M4cztfiSr5NVO00Z+NLg97b0lG0DW10P2BoujvYNxX
-	5F0g2XH1Ktgnh0oSYxj4dBy/8cuGuirjalDjKWa3aQpfN455mnyqgFyaX1jCTZ76XU22lAPndCs
-	NXznwbW+1v2pM4pMdowzvVDQ8=
-X-Google-Smtp-Source: AGHT+IFolYWpFTnQsRdsrwOlOifUaBgvwudGG5wYq6BOxOFUog2J180QiONTDBpKLqE0BXd+LTekoBGthx3cwhLK2l0=
-X-Received: by 2002:a05:6e02:1b03:b0:3d0:a9b:bf4b with SMTP id
- e9e14a558f8ab-3d03fbc124emr4771915ab.12.1738696671064; Tue, 04 Feb 2025
- 11:17:51 -0800 (PST)
+        bh=MpTKFbLMSoKrPhXAQQBFXwIc5BgdqJVRd6V21V7NRDM=;
+        b=KVdkG0TKm14mo7WQWKkICX/t98JU7wXFxjnc8NqLvdNrOegqLx0YqE0BA+ymxjEbJj
+         7h8grCzlBMsDEE24afCUtQnLqjtuYbeRPAuhOPIG/Pnyvp43kTt6ynh945tJbFr3/TU2
+         UKsyfhBIxPRtjqtWDjEKlHCQRkhxKSr0myuUVPr7H3WFwD189G5SjPdkcy29iPMia7n7
+         r1LG3n53I/fI1SurHWugIShuhQnmfInn7r1Ba+fq+npiVULUG1f+mVwIOWt1vsV3C2i5
+         mUS23Ccd1E5YxVoesESZtvfAZ9yYXIEmtjyKVcZryEoKKzJUK6ZpW8SHwYd2YfXg7myn
+         2H8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUoji9vPFdndNtPxxIzKRk4cXWvoVGG7G7UGqMOLRtzSrp+1vUN10d3+NC7w6fHEcJPZKHjwOlweij6OTKFMW9/mg==@vger.kernel.org, AJvYcCV6HoDFhrNpKwHJfkpc0DrESgAYQaNMJGsXx1+DMvV/36BlJAbmnz/kZwX6kHBV/VDCW5y/NS8GGSD+@vger.kernel.org, AJvYcCWw7Ir9kEXw5p7jofBq9hBKVLpt3Kp2EvrMSqCjKUEZxfNOCtSKi3zT0Fky0otnIfJBwHt8Zgjoj2l1kMjR@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjQgyu434PJmPGuCyaUquMC8HPL3IGX67IZd+9faa1WWT0JNmx
+	XuzTTCYC/HNMi8kpYiXT+4UAi2ovEo6FgfOW+mFEzasrhoCSoZzqj3VGmKQ4FtlM0GMRITT9SF4
+	XNwmSWL0LCdEhNdvUi+LbmHCQVhc=
+X-Gm-Gg: ASbGnctTpW32ZMgZQL+oprETbnHiaZvjdqJQMQuoFJT8MUcrZDVhH4eh+Ey1N4nd3jY
+	cKn20/oegrbxOk8AqZ6fmxqh+D9uM6BwgOeux0ne7dv1i2vipW0MZzB+KSesHtoq9+DKR5vk=
+X-Google-Smtp-Source: AGHT+IHZDxWlHKGGnBPgCLgl8zvxhRaHlC2bhE3+pL8he5Wjieca/BQSaBN5v36SLdGsq1w/fGUvHTp8rgDgGCRQniE=
+X-Received: by 2002:a05:690c:3385:b0:6f9:7d7d:a725 with SMTP id
+ 00721157ae682-6f989f86a5bmr8707697b3.33.1738714334971; Tue, 04 Feb 2025
+ 16:12:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250201071455.718247-1-irogers@google.com> <Z6EStkn-YZ8zaO7u@ghost>
- <CAP-5=fXRz_8CKNz4Fr-=0yhKbf_QE2ND+PPykSAO5p8wcUz7xA@mail.gmail.com>
- <Z6EVwaOVYaKtaK1j@ghost> <CAP-5=fX1hCNWWmGJPKYxj93S=zM1-eRucqzb4WW5fB_sZBCRLg@mail.gmail.com>
- <Z6Eh1QLuqTbUKLCc@ghost> <CAP-5=fXZr8L4Z=Lb28QDZF8cbv2eJJEHSb0H9zcqSOB9cn5-9g@mail.gmail.com>
- <Z6FLDHz6V5L-HGR7@ghost> <CAP-5=fVk6N=FVXsJ9xRJZhYSh2sbmUkEPr5HqRd-pR7mbGts+w@mail.gmail.com>
- <Z6Jk_UN9i69QGqUj@ghost>
-In-Reply-To: <Z6Jk_UN9i69QGqUj@ghost>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 4 Feb 2025 11:17:39 -0800
-X-Gm-Features: AWEUYZlVFnxotEtPCBotMGFHsGHFGTZrWjMIjpLeZvUSs1sflhNc56tRZVilEN8
-Message-ID: <CAP-5=fVXAt3jbiTTBNwNVqWMmAc=9U_XatgC_o854kyUGjkg0Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/7] perf: Support multiple system call tables in the build
-To: Charlie Jenkins <charlie@rivosinc.com>
+References: <20250201071455.718247-1-irogers@google.com> <20250201071455.718247-3-irogers@google.com>
+In-Reply-To: <20250201071455.718247-3-irogers@google.com>
+From: Howard Chu <howardchu95@gmail.com>
+Date: Tue, 4 Feb 2025 16:12:04 -0800
+X-Gm-Features: AWEUYZnrLPcAVatH_8hMj0vAgavMm9A_MK2I4QgLyTsUdL2nS8yu-yE3h7vkFJU
+Message-ID: <CAH0uvogeG9rUw+1huquE=8fEq8AdJaSygS94G8a05=cHckjndg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/7] perf trace: Reorganize syscalls
+To: Ian Rogers <irogers@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>, 
@@ -96,155 +90,464 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
 	Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>, 
 	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Bibo Mao <maobibo@loongson.cn>, 
-	Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Charlie Jenkins <charlie@rivosinc.com>, 
+	Bibo Mao <maobibo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, 
 	Catalin Marinas <catalin.marinas@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
 	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 4, 2025 at 11:05=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> On Mon, Feb 03, 2025 at 05:58:29PM -0800, Ian Rogers wrote:
-> > On Mon, Feb 3, 2025 at 3:02=E2=80=AFPM Charlie Jenkins <charlie@rivosin=
-c.com> wrote:
-> > > On Mon, Feb 03, 2025 at 12:54:59PM -0800, Ian Rogers wrote:
-> > [snip]
-> > > > I think it makes sense in the kernel, as the built binary doesn't h=
-ave
-> > > > cross-platform concerns. This is probably also the reason why the p=
-erf
-> > > > tool has an arch directory. Let me know what you think is the right
-> > > > direction for the perf tool syscall table code.
-> > >
-> > > I am hesitant about moving all of the arch-specific syscall generatio=
-n
-> > > flags into a single file.
-> >
-> > In these changes I had a single file to build up a mapping from ELF
-> > machine to syscall table in an array and I wanted to keep the logic to
-> > build the array alongside the logic to build up the components of the
-> > array - so the ifdefs were visually the same. As the scope is a single
-> > file and the variables are static, this can give useful C compiler
-> > "unused definition" warnings. You can trick the linker to give similar
-> > warnings at the scope of a file, so this isn't a deal breaker.
-> >
-> > > There is currently a really clean separation
-> > > between the architectures and it's possible to generate all of the
-> > > syscall tables for all of the architecutures based on the paths to th=
-e
-> > > syscall table.
-> >
-> > This doesn't happen currently as the build of the arch directory is to
-> > add in $(SRCARCH) only. So
-> > tools/perf/arch/arm64/entry/syscalls/Makefile.syscalls will only be
-> > included into the build if SRCARCH=3D=3Darm64. As I've said I'm against
-> > the idea of the arch directory as it nearly always causes cross
-> > platform problems - not an issue in a Linux kernel build. We recently
-> > eliminated dwarf-regs for this reason (and hopefully fixing up cross
-> > platform disassembly issues as a consequence):
-> > https://lore.kernel.org/all/20241108234606.429459-1-irogers@google.com/
-> > We could have the syscall table logic not under arch and generate
-> > multiple files, but we'd be adding extra logic to pull things apart to
-> > then pull things back together again, which feels like unnecessary
-> > complexity.
-> >
-> > It seems in your changes the Kbuild and Makefile.syscalls are running
-> > in the arch directory - this feels like a lot of peculiar and
-> > separated build logic for just iterating over a bunch of arch
-> > directory names and calling a shell function on them - albeit with
-> > some arch specific parameters. There's also an extra C helper
-> > executable in your code.
->
-> Yes, I can understand why you be opposed to that and I don't have a good
-> counterargument.
->
-> > I kind of like that I get a single header
-> > that is the same across all architectures and with no more build
-> > system requirements than to support ifdefs - in fact the ifdefs are
-> > just there to keep the code size down there is a #define to make them
-> > all have no effect. I hear your "clean separation" but I also think
-> > separation across files can make things harder to read, state is in >1
-> > place. I've tried to cleanly separate within the script.
-> >
-> > I do think there is some tech debt in both changes. My:
-> > ```
-> > #if defined(ALL_SYSCALLTBL) || defined(__riscv)
-> > #if __BITS_PER_LONG !=3D 64
-> > EOF
-> > build_tables "$tools_dir/scripts/syscall.tbl" "$outfile"
-> > common,32,riscv,memfd_secret EM_RISCV
-> > echo "#else" >> "$outfile"
-> > build_tables "$tools_dir/scripts/syscall.tbl" "$outfile"
-> > common,64,riscv,rlimit,memfd_secret EM_RISC
-> > V
-> > cat >> "$outfile" <<EOF
-> > #endif //__BITS_PER_LONG !=3D 64
-> > ```
-> > means the perf binary word size determines the syscall table support.
-> > This is because the e_machine in the ELF header isn't unique in these
-> > two cases and having both tables would have no effect. You've moved
-> > this into the env arch name handling, but I think having >1 way to
-> > encode a binary type is suboptimal. There are some ELF flag ABI bits
-> > that resolve disassembler things on csky, so perhaps a resolution is
-> > to pass ELF flags along with the machine type. I'm not clear in your
-> > change how "32_riscv" is generated to solve the same problem. Imo,
-> > it'd kind of be nice not to introduce notions like "64_arm64" as we
-> > seem to be always mapping/normalizing/... these different notions and
-> > they feel inherently brittle.
->
-> Maybe it is brittle? It could be mapped to e_machine, but that just
-> might not be reasonable to work into the method from my patch.
->
-> >
-> > > What causes the arch directory to be a pain for Bazel? I
-> > > guess I am mostly confused why it makes sense to change the kernel
-> > > Makefiles in order to accomidate a rewrite of the build system in Baz=
-el
-> > > that isn't planned to be used upstream.
-> >
-> > It's just software and so the issues are resolvable, ie I don't think
-> > bazel should be determining what happens upstream - it motivates me to
-> > some extent. For the bazel build I need to match the Makefile behavior
-> > with bits of script called genrule, the scope and quantity of these
-> > increase with the arch directory model, extra executables to have in
-> > the build etc. I also imagine cross platform stuff will add
-> > complexity, like mapping blaze's notions of machine type to those
-> > introduced in your change. It is all a lot of stuff and I think what's
-> > in these changes keeps things about as simple as they can be. It'd be
-> > nice to integrate the best features of both changes and I think some
-> > of the e_machine stuff here can be added onto your change to get the
-> > i386/x86-64 case to work. I'm not sold on the complexity of the build
-> > in your changes though, multiple files, Kbuild and Makefile.syscalls,
-> > the arch directory not optionally being built, helper executables.
-> > Ultimately it is the same shell logic in both changes, and your
-> > previous work laid out all the ground work for this (I'm very grateful
-> > for it :-) ).
->
-> Thanks for elaborating on this! I do wish we had more of this
-> conversation on the original patch so we could have molded the original
-> patch closer to what this one is doing. I know you did mention you would
-> like to get rid of the arch directory as feedback on that patch but I
-> hadn't realized that this was the direction you were hoping to take
-> this. It does seem like the changes you have made in this patch will
-> lead to a something that is more robust and simpler to maintain, so we
-> can move forward with reviewing this patch and stop reviewing the one I
-> wrote.
+Hello Ian,
 
-Thanks and sorry for work done that may not land - the maintainers may
-prefer the approach in your patch and my opinions matter little to
-them. If it is any consolation I wrote an entire Rust symbol demangler
-[1] that I don't expect to land :-) I also appreciate that you've been
-cleaning up the tools build infrastructure along with your changes,
-something there isn't enough of.
+Thanks for doing this.
+
+On Fri, Jan 31, 2025 at 11:15=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+>
+> Identify struct syscall information in the syscalls table by a machine
+> type and syscall number, not just system call number. Having the
+> machine type means that 32-bit system calls can be differentiated from
+> 64-bit ones on a machine capable of both. Having a table for all
+> machine types and all system call numbers would be too large, so
+> maintain a sorted array of system calls as they are encountered.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-trace.c | 178 +++++++++++++++++++++++++------------
+>  1 file changed, 119 insertions(+), 59 deletions(-)
+>
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index ac97632f13dc..10d3ad0d21f7 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -66,6 +66,7 @@
+>  #include "rb_resort.h"
+>  #include "../perf.h"
+>  #include "trace_augment.h"
+> +#include "dwarf-regs.h"
+>
+>  #include <errno.h>
+>  #include <inttypes.h>
+> @@ -86,6 +87,7 @@
+>
+>  #include <linux/ctype.h>
+>  #include <perf/mmap.h>
+> +#include <tools/libc_compat.h>
+>
+>  #ifdef HAVE_LIBTRACEEVENT
+>  #include <event-parse.h>
+> @@ -143,7 +145,10 @@ struct trace {
+>         struct perf_tool        tool;
+>         struct syscalltbl       *sctbl;
+>         struct {
+> +               /** Sorted sycall numbers used by the trace. */
+>                 struct syscall  *table;
+> +               /** Size of table. */
+> +               size_t          table_size;
+>                 struct {
+>                         struct evsel *sys_enter,
+>                                 *sys_exit,
+> @@ -1445,22 +1450,37 @@ static const struct syscall_fmt *syscall_fmt__fin=
+d_by_alias(const char *alias)
+>         return __syscall_fmt__find_by_alias(syscall_fmts, nmemb, alias);
+>  }
+>
+> -/*
+> - * is_exit: is this "exit" or "exit_group"?
+> - * is_open: is this "open" or "openat"? To associate the fd returned in =
+sys_exit with the pathname in sys_enter.
+> - * args_size: sum of the sizes of the syscall arguments, anything after =
+that is augmented stuff: pathname for openat, etc.
+> - * nonexistent: Just a hole in the syscall table, syscall id not allocat=
+ed
+> +/**
+> + * struct syscall
+>   */
+>  struct syscall {
+> +       /** @e_machine: The ELF machine associated with the entry. */
+> +       int e_machine;
+> +       /** @id: id value from the tracepoint, the system call number. */
+> +       int id;
+>         struct tep_event    *tp_format;
+>         int                 nr_args;
+> +       /**
+> +        * @args_size: sum of the sizes of the syscall arguments, anythin=
+g
+> +        * after that is augmented stuff: pathname for openat, etc.
+> +        */
+> +
+>         int                 args_size;
+>         struct {
+>                 struct bpf_program *sys_enter,
+>                                    *sys_exit;
+>         }                   bpf_prog;
+> +       /** @is_exit: is this "exit" or "exit_group"? */
+>         bool                is_exit;
+> +       /**
+> +        * @is_open: is this "open" or "openat"? To associate the fd retu=
+rned in
+> +        * sys_exit with the pathname in sys_enter.
+> +        */
+>         bool                is_open;
+> +       /**
+> +        * @nonexistent: Name lookup failed. Just a hole in the syscall t=
+able,
+> +        * syscall id not allocated.
+> +        */
+>         bool                nonexistent;
+>         bool                use_btf;
+>         struct tep_format_field *args;
+> @@ -2066,22 +2086,21 @@ static int syscall__set_arg_fmts(struct syscall *=
+sc)
+>         return 0;
+>  }
+>
+> -static int trace__read_syscall_info(struct trace *trace, int id)
+> +static int syscall__read_info(struct syscall *sc, struct trace *trace)
+>  {
+>         char tp_name[128];
+> -       struct syscall *sc;
+> -       const char *name =3D syscalltbl__name(trace->sctbl, id);
+> +       const char *name;
+>         int err;
+>
+> -       if (trace->syscalls.table =3D=3D NULL) {
+> -               trace->syscalls.table =3D calloc(trace->sctbl->syscalls.m=
+ax_id + 1, sizeof(*sc));
+> -               if (trace->syscalls.table =3D=3D NULL)
+> -                       return -ENOMEM;
+> -       }
+> -       sc =3D trace->syscalls.table + id;
+>         if (sc->nonexistent)
+>                 return -EEXIST;
+>
+> +       if (sc->name) {
+> +               /* Info already read. */
+> +               return 0;
+> +       }
+> +
+> +       name =3D syscalltbl__name(trace->sctbl, sc->id);
+>         if (name =3D=3D NULL) {
+>                 sc->nonexistent =3D true;
+>                 return -EEXIST;
+> @@ -2104,11 +2123,12 @@ static int trace__read_syscall_info(struct trace =
+*trace, int id)
+>          */
+>         if (IS_ERR(sc->tp_format)) {
+>                 sc->nonexistent =3D true;
+> -               return PTR_ERR(sc->tp_format);
+> +               err =3D PTR_ERR(sc->tp_format);
+> +               sc->tp_format =3D NULL;
+> +               return err;
+>         }
+>
+> -       if (syscall__alloc_arg_fmts(sc, IS_ERR(sc->tp_format) ?
+> -                                       RAW_SYSCALL_ARGS_NUM : sc->tp_for=
+mat->format.nr_fields))
+> +       if (syscall__alloc_arg_fmts(sc, sc->tp_format->format.nr_fields))
+
+Makes sense because IS_ERR(sc->tp_format) is checked a few lines
+above. However, nr_fields can be 7 with the __syscall_nr prefix. I
+sent a patch to fix this, but it's not included here... Never mind,
+it's off-topic. This patch looks good.
 
 Thanks,
-Ian
+Howard
 
-[1] https://lore.kernel.org/lkml/20250129193037.573431-1-irogers@google.com=
-/
+>                 return -ENOMEM;
+>
+>         sc->args =3D sc->tp_format->format.fields;
+> @@ -2397,13 +2417,67 @@ static size_t syscall__scnprintf_args(struct sysc=
+all *sc, char *bf, size_t size,
+>         return printed;
+>  }
+>
+> +static void syscall__init(struct syscall *sc, int e_machine, int id)
+> +{
+> +       memset(sc, 0, sizeof(*sc));
+> +       sc->e_machine =3D e_machine;
+> +       sc->id =3D id;
+> +}
+> +
+> +static void syscall__exit(struct syscall *sc)
+> +{
+> +       if (!sc)
+> +               return;
+> +
+> +       zfree(&sc->arg_fmt);
+> +}
+> +
+> +static int syscall__cmp(const void *va, const void *vb)
+> +{
+> +       const struct syscall *a =3D va, *b =3D vb;
+> +
+> +       if (a->e_machine !=3D b->e_machine)
+> +               return a->e_machine - b->e_machine;
+> +
+> +       return a->id - b->id;
+> +}
+> +
+> +static struct syscall *trace__find_syscall(struct trace *trace, int e_ma=
+chine, int id)
+> +{
+> +       struct syscall key =3D {
+> +               .e_machine =3D e_machine,
+> +               .id =3D id,
+> +       };
+> +       struct syscall *sc, *tmp;
+> +
+> +       sc =3D bsearch(&key, trace->syscalls.table, trace->syscalls.table=
+_size,
+> +                    sizeof(struct syscall), syscall__cmp);
+> +       if (sc)
+> +               return sc;
+> +
+> +       tmp =3D reallocarray(trace->syscalls.table, trace->syscalls.table=
+_size + 1,
+> +                          sizeof(struct syscall));
+> +       if (!tmp)
+> +               return NULL;
+> +
+> +       trace->syscalls.table =3D tmp;
+> +       sc =3D &trace->syscalls.table[trace->syscalls.table_size++];
+> +       syscall__init(sc, e_machine, id);
+> +       qsort(trace->syscalls.table, trace->syscalls.table_size, sizeof(s=
+truct syscall),
+> +             syscall__cmp);
+> +       sc =3D bsearch(&key, trace->syscalls.table, trace->syscalls.table=
+_size,
+> +                    sizeof(struct syscall), syscall__cmp);
+> +       return sc;
+> +}
+> +
+>  typedef int (*tracepoint_handler)(struct trace *trace, struct evsel *evs=
+el,
+>                                   union perf_event *event,
+>                                   struct perf_sample *sample);
+>
+> -static struct syscall *trace__syscall_info(struct trace *trace,
+> -                                          struct evsel *evsel, int id)
+> +static struct syscall *trace__syscall_info(struct trace *trace, struct e=
+vsel *evsel,
+> +                                          int e_machine, int id)
+>  {
+> +       struct syscall *sc;
+>         int err =3D 0;
+>
+>         if (id < 0) {
+> @@ -2428,28 +2502,20 @@ static struct syscall *trace__syscall_info(struct=
+ trace *trace,
+>
+>         err =3D -EINVAL;
+>
+> -       if (id > trace->sctbl->syscalls.max_id) {
+> -               goto out_cant_read;
+> -       }
+> -
+> -       if ((trace->syscalls.table =3D=3D NULL || trace->syscalls.table[i=
+d].name =3D=3D NULL) &&
+> -           (err =3D trace__read_syscall_info(trace, id)) !=3D 0)
+> -               goto out_cant_read;
+> +       sc =3D trace__find_syscall(trace, e_machine, id);
+> +       if (sc)
+> +               err =3D syscall__read_info(sc, trace);
+>
+> -       if (trace->syscalls.table && trace->syscalls.table[id].nonexisten=
+t)
+> -               goto out_cant_read;
+> -
+> -       return &trace->syscalls.table[id];
+> -
+> -out_cant_read:
+> -       if (verbose > 0) {
+> +       if (err && verbose > 0) {
+>                 char sbuf[STRERR_BUFSIZE];
+> -               fprintf(trace->output, "Problems reading syscall %d: %d (=
+%s)", id, -err, str_error_r(-err, sbuf, sizeof(sbuf)));
+> -               if (id <=3D trace->sctbl->syscalls.max_id && trace->sysca=
+lls.table[id].name !=3D NULL)
+> -                       fprintf(trace->output, "(%s)", trace->syscalls.ta=
+ble[id].name);
+> +
+> +               fprintf(trace->output, "Problems reading syscall %d: %d (=
+%s)", id, -err,
+> +                       str_error_r(-err, sbuf, sizeof(sbuf)));
+> +               if (sc && sc->name)
+> +                       fprintf(trace->output, "(%s)", sc->name);
+>                 fputs(" information\n", trace->output);
+>         }
+> -       return NULL;
+> +       return err ? NULL : sc;
+>  }
+>
+>  struct syscall_stats {
+> @@ -2596,14 +2662,6 @@ static void *syscall__augmented_args(struct syscal=
+l *sc, struct perf_sample *sam
+>         return NULL;
+>  }
+>
+> -static void syscall__exit(struct syscall *sc)
+> -{
+> -       if (!sc)
+> -               return;
+> -
+> -       zfree(&sc->arg_fmt);
+> -}
+> -
+>  static int trace__sys_enter(struct trace *trace, struct evsel *evsel,
+>                             union perf_event *event __maybe_unused,
+>                             struct perf_sample *sample)
+> @@ -2615,7 +2673,7 @@ static int trace__sys_enter(struct trace *trace, st=
+ruct evsel *evsel,
+>         int id =3D perf_evsel__sc_tp_uint(evsel, id, sample), err =3D -1;
+>         int augmented_args_size =3D 0;
+>         void *augmented_args =3D NULL;
+> -       struct syscall *sc =3D trace__syscall_info(trace, evsel, id);
+> +       struct syscall *sc =3D trace__syscall_info(trace, evsel, EM_HOST,=
+ id);
+>         struct thread_trace *ttrace;
+>
+>         if (sc =3D=3D NULL)
+> @@ -2689,7 +2747,7 @@ static int trace__fprintf_sys_enter(struct trace *t=
+race, struct evsel *evsel,
+>         struct thread_trace *ttrace;
+>         struct thread *thread;
+>         int id =3D perf_evsel__sc_tp_uint(evsel, id, sample), err =3D -1;
+> -       struct syscall *sc =3D trace__syscall_info(trace, evsel, id);
+> +       struct syscall *sc =3D trace__syscall_info(trace, evsel, EM_HOST,=
+ id);
+>         char msg[1024];
+>         void *args, *augmented_args =3D NULL;
+>         int augmented_args_size;
+> @@ -2764,7 +2822,7 @@ static int trace__sys_exit(struct trace *trace, str=
+uct evsel *evsel,
+>         struct thread *thread;
+>         int id =3D perf_evsel__sc_tp_uint(evsel, id, sample), err =3D -1,=
+ callchain_ret =3D 0, printed =3D 0;
+>         int alignment =3D trace->args_alignment;
+> -       struct syscall *sc =3D trace__syscall_info(trace, evsel, id);
+> +       struct syscall *sc =3D trace__syscall_info(trace, evsel, EM_HOST,=
+ id);
+>         struct thread_trace *ttrace;
+>
+>         if (sc =3D=3D NULL)
+> @@ -3117,7 +3175,7 @@ static int trace__event_handler(struct trace *trace=
+, struct evsel *evsel,
+>
+>         if (evsel =3D=3D trace->syscalls.events.bpf_output) {
+>                 int id =3D perf_evsel__sc_tp_uint(evsel, id, sample);
+> -               struct syscall *sc =3D trace__syscall_info(trace, evsel, =
+id);
+> +               struct syscall *sc =3D trace__syscall_info(trace, evsel, =
+EM_HOST, id);
+>
+>                 if (sc) {
+>                         fprintf(trace->output, "%s(", sc->name);
+> @@ -3622,7 +3680,7 @@ static struct bpf_program *trace__find_syscall_bpf_=
+prog(struct trace *trace, str
+>
+>  static void trace__init_syscall_bpf_progs(struct trace *trace, int id)
+>  {
+> -       struct syscall *sc =3D trace__syscall_info(trace, NULL, id);
+> +       struct syscall *sc =3D trace__syscall_info(trace, NULL, EM_HOST, =
+id);
+>
+>         if (sc =3D=3D NULL)
+>                 return;
+> @@ -3633,20 +3691,20 @@ static void trace__init_syscall_bpf_progs(struct =
+trace *trace, int id)
+>
+>  static int trace__bpf_prog_sys_enter_fd(struct trace *trace, int id)
+>  {
+> -       struct syscall *sc =3D trace__syscall_info(trace, NULL, id);
+> +       struct syscall *sc =3D trace__syscall_info(trace, NULL, EM_HOST, =
+id);
+>         return sc ? bpf_program__fd(sc->bpf_prog.sys_enter) : bpf_program=
+__fd(trace->skel->progs.syscall_unaugmented);
+>  }
+>
+>  static int trace__bpf_prog_sys_exit_fd(struct trace *trace, int id)
+>  {
+> -       struct syscall *sc =3D trace__syscall_info(trace, NULL, id);
+> +       struct syscall *sc =3D trace__syscall_info(trace, NULL, EM_HOST, =
+id);
+>         return sc ? bpf_program__fd(sc->bpf_prog.sys_exit) : bpf_program_=
+_fd(trace->skel->progs.syscall_unaugmented);
+>  }
+>
+>  static int trace__bpf_sys_enter_beauty_map(struct trace *trace, int key,=
+ unsigned int *beauty_array)
+>  {
+>         struct tep_format_field *field;
+> -       struct syscall *sc =3D trace__syscall_info(trace, NULL, key);
+> +       struct syscall *sc =3D trace__syscall_info(trace, NULL, EM_HOST, =
+key);
+>         const struct btf_type *bt;
+>         char *struct_offset, *tmp, name[32];
+>         bool can_augment =3D false;
+> @@ -3744,7 +3802,7 @@ static struct bpf_program *trace__find_usable_bpf_p=
+rog_entry(struct trace *trace
+>  try_to_find_pair:
+>         for (int i =3D 0; i < trace->sctbl->syscalls.nr_entries; ++i) {
+>                 int id =3D syscalltbl__id_at_idx(trace->sctbl, i);
+> -               struct syscall *pair =3D trace__syscall_info(trace, NULL,=
+ id);
+> +               struct syscall *pair =3D trace__syscall_info(trace, NULL,=
+ EM_HOST, id);
+>                 struct bpf_program *pair_prog;
+>                 bool is_candidate =3D false;
+>
+> @@ -3894,7 +3952,7 @@ static int trace__init_syscalls_bpf_prog_array_maps=
+(struct trace *trace)
+>          */
+>         for (int i =3D 0; i < trace->sctbl->syscalls.nr_entries; ++i) {
+>                 int key =3D syscalltbl__id_at_idx(trace->sctbl, i);
+> -               struct syscall *sc =3D trace__syscall_info(trace, NULL, k=
+ey);
+> +               struct syscall *sc =3D trace__syscall_info(trace, NULL, E=
+M_HOST, key);
+>                 struct bpf_program *pair_prog;
+>                 int prog_fd;
+>
+> @@ -4659,7 +4717,11 @@ static size_t thread__dump_stats(struct thread_tra=
+ce *ttrace,
+>                         pct =3D avg ? 100.0 * stddev_stats(&stats->stats)=
+ / avg : 0.0;
+>                         avg /=3D NSEC_PER_MSEC;
+>
+> -                       sc =3D &trace->syscalls.table[syscall_stats_entry=
+->syscall];
+> +                       sc =3D trace__syscall_info(trace, /*evsel=3D*/NUL=
+L, EM_HOST,
+> +                                                syscall_stats_entry->sys=
+call);
+> +                       if (!sc)
+> +                               continue;
+> +
+>                         printed +=3D fprintf(fp, "   %-15s", sc->name);
+>                         printed +=3D fprintf(fp, " %8" PRIu64 " %6" PRIu6=
+4 " %9.3f %9.3f %9.3f",
+>                                            n, stats->nr_failures, syscall=
+_stats_entry->msecs, min, avg);
+> @@ -5067,12 +5129,10 @@ static int trace__config(const char *var, const c=
+har *value, void *arg)
+>
+>  static void trace__exit(struct trace *trace)
+>  {
+> -       int i;
+> -
+>         strlist__delete(trace->ev_qualifier);
+>         zfree(&trace->ev_qualifier_ids.entries);
+>         if (trace->syscalls.table) {
+> -               for (i =3D 0; i <=3D trace->sctbl->syscalls.max_id; i++)
+> +               for (size_t i =3D 0; i < trace->syscalls.table_size; i++)
+>                         syscall__exit(&trace->syscalls.table[i]);
+>                 zfree(&trace->syscalls.table);
+>         }
+> --
+> 2.48.1.362.g079036d154-goog
+>
 
