@@ -1,745 +1,232 @@
-Return-Path: <linux-csky+bounces-1751-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1752-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 710E2A2865D
-	for <lists+linux-csky@lfdr.de>; Wed,  5 Feb 2025 10:20:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F68CA2A49F
+	for <lists+linux-csky@lfdr.de>; Thu,  6 Feb 2025 10:36:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1730161053
-	for <lists+linux-csky@lfdr.de>; Wed,  5 Feb 2025 09:20:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDEC6168A69
+	for <lists+linux-csky@lfdr.de>; Thu,  6 Feb 2025 09:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A5B22A4E5;
-	Wed,  5 Feb 2025 09:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9EB6226553;
+	Thu,  6 Feb 2025 09:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ub5LxYYO"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F027422A1CA;
-	Wed,  5 Feb 2025 09:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D4C226549;
+	Thu,  6 Feb 2025 09:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738747207; cv=none; b=kxGTTXdoj/gh2cgnOCGYpQbiObnTcEo1kz17cCW6XCICGIjG8ihR4TiKIKUlWQJIkXkqKjALOpGqyzdlkjpXZnw/9+1pPcxCYRmRzKjjH1Q8vlvZd7GhqiVCa1Xn6QgnIUvR3QKICHhO6UgvRfSSYnA+8hh5VIBtL6B4R38KF6w=
+	t=1738834373; cv=none; b=QlpRf4Q/dpv8C4fE//1TBJViCvIW/a7XWemcCcfFMC2lWrEQ3hYxjoxB+c5CLDsks8XbUAmQLH8PWC61hS+PvMO4X3fy3j4LGe2Y3FGgWnu/MWe5HNHiermrte+S6E9zaIa93DpZexDrN7fHI1d6dUeWFF9/WZbhRKFXqgEYMPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738747207; c=relaxed/simple;
-	bh=DTfrEUdDnPAie4SJZNttmMPeFhZNYUv3h2rpu70lh74=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nrv3pZ3qrJhpdcW9f/bEfb4ZhUsy8uy7IxPc0kVg+Sz8Et/bT32xUCGiOaBLBqpK4pgxX61JgtLj4KxqHI+6IZT0BfPGLMSLdzsW98yKvIe5q4WfW5s6vJmAmYcYH5es9l0MEDk9Xv8a+om96eSAVUuA/FnkggfSptOC7ondIhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Ynv8K6sMWz9sSs;
-	Wed,  5 Feb 2025 09:50:41 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9hJU2iHJc0Bk; Wed,  5 Feb 2025 09:50:41 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Ynv813NXdz9sSN;
-	Wed,  5 Feb 2025 09:50:25 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 55D338B765;
-	Wed,  5 Feb 2025 09:50:25 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id ZcD0HZPusVX1; Wed,  5 Feb 2025 09:50:25 +0100 (CET)
-Received: from [10.25.207.138] (unknown [10.25.207.138])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id B44D38B763;
-	Wed,  5 Feb 2025 09:50:24 +0100 (CET)
-Message-ID: <a5703632-66ed-4119-873c-6b6901a39a2b@csgroup.eu>
-Date: Wed, 5 Feb 2025 09:50:23 +0100
+	s=arc-20240116; t=1738834373; c=relaxed/simple;
+	bh=o+Z0681jYsiHqmh3U0IYwEJZRDAlvJSN/vbRjprW+rk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WOQtt2RvYoSx5xf60QUgB5TETC7dHmzu55kmJsbaiQwDpeIA33JHiKmqpP035K0ZlvPSOvxSRMcG6qi311w3CL0H7oT46Q5cTF1QsTMWZuDC0sahafz99UhjEUUVbnR9TBMdpACZz1yPzI5n+2DQLAjlOr9dkVzZZ/LdW2Rj+dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Ub5LxYYO; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ygCyX4kIzHTkCMIYfhFggV+w58QHYc5sCxu+XxJ0VuY=; b=Ub5LxYYOtNPsBxcWCz/qYQ+WX4
+	912GkRIsrEX9TSN/bszxcLHH+DpQQY46NZqIZdqBSvshZenQO1rM7ipB/pWGF5WK67YhzgldvIjOS
+	7eebgxztX8C450yP9UK7d8huLYU+VU4SGE9ZwPvNvSJSAJEsRlvhv33RN/UuP93usPGDRk7byAFEY
+	+iM/qVTX3BwYOld1a5a5yz9TwJ7uK61w3cZcjmN9OCacvjJMvPym99zqddq2ryvHsaimV6QMYONQ3
+	Zac1W3JvkwqaP5CP5fHHpHQUCYBAnmfgJNS6m2IgeLj4+GTxjffClRIxzP6B7tthDHyW5qqI8wvpn
+	N6v8/LFA==;
+Received: from [54.239.6.187] (helo=freeip.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tfyEc-00000005lug-1GF0;
+	Thu, 06 Feb 2025 09:31:46 +0000
+Message-ID: <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
+Subject: Re: [PATCH v3 00/18] vDSO: Introduce generic data storage
+From: David Woodhouse <dwmw2@infradead.org>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge
+ Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>,  Thomas Gleixner
+ <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker
+ <frederic@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>, Catalin
+ Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore
+ Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Russell King <linux@armlinux.org.uk>, Heiko Carstens
+ <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman
+ <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,  Arnd Bergmann
+ <arnd@arndb.de>, Guo Ren <guoren@kernel.org>
+Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+ loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>, 
+ linux-csky@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>, "Luu,
+ Ryan" <rluu@amazon.com>, kvm <kvm@vger.kernel.org>
+Date: Thu, 06 Feb 2025 09:31:42 +0000
+In-Reply-To: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
+References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-TLRPvEdtMvxq/eM5U95X"
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 14/18] powerpc/vdso: Switch to generic storage
- implementation
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
- Guo Ren <guoren@kernel.org>
-Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>,
- linux-csky@vger.kernel.org
-References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
- <20250204-vdso-store-rng-v3-14-13a4669dfc8c@linutronix.de>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250204-vdso-store-rng-v3-14-13a4669dfc8c@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+
+
+--=-TLRPvEdtMvxq/eM5U95X
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, 2025-02-04 at 13:05 +0100, Thomas Wei=C3=9Fschuh wrote:
+> Currently each architecture defines the setup of the vDSO data page on
+> its own, mostly through copy-and-paste from some other architecture.
+> Extend the existing generic vDSO implementation to also provide generic
+> data storage.
+> This removes duplicated code and paves the way for further changes to
+> the generic vDSO implementation without having to go through a lot of
+> per-architecture changes.
+>=20
+> Based on v6.14-rc1 and intended to be merged through the tip tree.
+
+Thanks for working on this. Is there a plan to expose the time data
+directly to userspace in a form which is usable *other* than by
+function calls which get the value of the clock at a given moment?
+
+For populating the vmclock device=C2=B9 we need to know the actual
+relationship between the hardware counter (TSC, arch timer, etc.) and
+real time in order to propagate that to the guest.
+
+I see two options for doing this:
+
+ 1. Via userspace, exposing the vdso time data (and a notification when
+    it changes?) and letting the userspace VMM populate the vmclock.
+    This is complex for x86 because of TSC scaling; in fact userspace
+    doesn't currently know the precise scaling from host to guest TSC
+    so we'd have to be able to extract that from KVM.
+
+ 2. In kernel, asking KVM to populate the vmclock structure much like
+    it does other pvclocks shared with the guest. KVM/x86 already uses
+    pvclock_gtod_register_notifier() to hook changes; should we expand
+    on that? The problem with that notifier is that it seems to be
+    called far more frequently than I'd expect.
 
 
 
-Le 04/02/2025 à 13:05, Thomas Weißschuh a écrit :
-> The generic storage implementation provides the same features as the
-> custom one. However it can be shared between architectures, making
-> maintenance easier.
-> 
-> Co-developed-by: Nam Cao <namcao@linutronix.de>
-> Signed-off-by: Nam Cao <namcao@linutronix.de>
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+=C2=B9 https://gitlab.com/qemu-project/qemu/-/commit/3634039b93cc5
 
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+--=-TLRPvEdtMvxq/eM5U95X
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-> ---
->   arch/powerpc/Kconfig                         |   2 +
->   arch/powerpc/include/asm/vdso.h              |   1 +
->   arch/powerpc/include/asm/vdso/arch_data.h    |  37 +++++++++
->   arch/powerpc/include/asm/vdso/getrandom.h    |  11 +--
->   arch/powerpc/include/asm/vdso/gettimeofday.h |  29 +++----
->   arch/powerpc/include/asm/vdso/vsyscall.h     |  13 ---
->   arch/powerpc/include/asm/vdso_datapage.h     |  44 +---------
->   arch/powerpc/kernel/asm-offsets.c            |   1 -
->   arch/powerpc/kernel/time.c                   |   2 +-
->   arch/powerpc/kernel/vdso.c                   | 115 +++------------------------
->   arch/powerpc/kernel/vdso/cacheflush.S        |   2 +-
->   arch/powerpc/kernel/vdso/datapage.S          |   4 +-
->   arch/powerpc/kernel/vdso/gettimeofday.S      |   4 +-
->   arch/powerpc/kernel/vdso/vdso32.lds.S        |   4 +-
->   arch/powerpc/kernel/vdso/vdso64.lds.S        |   4 +-
->   arch/powerpc/kernel/vdso/vgettimeofday.c     |  14 ++--
->   16 files changed, 89 insertions(+), 198 deletions(-)
-> 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 424f188e62d9886ee7f6d2531547f09a0606747d..8a2a6e403eb1e654254100cb7347477a3a82e3f7 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -159,6 +159,7 @@ config PPC
->   	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
->   	select ARCH_HAS_UACCESS_FLUSHCACHE
->   	select ARCH_HAS_UBSAN
-> +	select ARCH_HAS_VDSO_ARCH_DATA
->   	select ARCH_HAVE_NMI_SAFE_CMPXCHG
->   	select ARCH_HAVE_EXTRA_ELF_NOTES        if SPU_BASE
->   	select ARCH_KEEP_MEMBLOCK
-> @@ -209,6 +210,7 @@ config PPC
->   	select GENERIC_PTDUMP
->   	select GENERIC_SMP_IDLE_THREAD
->   	select GENERIC_TIME_VSYSCALL
-> +	select GENERIC_VDSO_DATA_STORE
->   	select GENERIC_VDSO_TIME_NS
->   	select HAS_IOPORT			if PCI
->   	select HAVE_ARCH_AUDITSYSCALL
-> diff --git a/arch/powerpc/include/asm/vdso.h b/arch/powerpc/include/asm/vdso.h
-> index 8d972bc98b55fe916f23488ca9e2a5918046b9aa..1ca23fbfe087ae90b90c4286335f86d9f8121078 100644
-> --- a/arch/powerpc/include/asm/vdso.h
-> +++ b/arch/powerpc/include/asm/vdso.h
-> @@ -3,6 +3,7 @@
->   #define _ASM_POWERPC_VDSO_H
->   
->   #define VDSO_VERSION_STRING	LINUX_2.6.15
-> +#define __VDSO_PAGES		4
->   
->   #ifndef __ASSEMBLY__
->   
-> diff --git a/arch/powerpc/include/asm/vdso/arch_data.h b/arch/powerpc/include/asm/vdso/arch_data.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c240a6b875181ac4159f2e80b11f9bf214e22808
-> --- /dev/null
-> +++ b/arch/powerpc/include/asm/vdso/arch_data.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2002 Peter Bergner <bergner@vnet.ibm.com>, IBM
-> + * Copyright (C) 2005 Benjamin Herrenschmidy <benh@kernel.crashing.org>,
-> + * 		      IBM Corp.
-> + */
-> +#ifndef _ASM_POWERPC_VDSO_ARCH_DATA_H
-> +#define _ASM_POWERPC_VDSO_ARCH_DATA_H
-> +
-> +#include <linux/unistd.h>
-> +#include <linux/types.h>
-> +
-> +#define SYSCALL_MAP_SIZE      ((NR_syscalls + 31) / 32)
-> +
-> +#ifdef CONFIG_PPC64
-> +
-> +struct vdso_arch_data {
-> +	__u64 tb_ticks_per_sec;			/* Timebase tics / sec */
-> +	__u32 dcache_block_size;		/* L1 d-cache block size     */
-> +	__u32 icache_block_size;		/* L1 i-cache block size     */
-> +	__u32 dcache_log_block_size;		/* L1 d-cache log block size */
-> +	__u32 icache_log_block_size;		/* L1 i-cache log block size */
-> +	__u32 syscall_map[SYSCALL_MAP_SIZE];	/* Map of syscalls  */
-> +	__u32 compat_syscall_map[SYSCALL_MAP_SIZE];	/* Map of compat syscalls */
-> +};
-> +
-> +#else /* CONFIG_PPC64 */
-> +
-> +struct vdso_arch_data {
-> +	__u64 tb_ticks_per_sec;		/* Timebase tics / sec */
-> +	__u32 syscall_map[SYSCALL_MAP_SIZE]; /* Map of syscalls */
-> +	__u32 compat_syscall_map[0];	/* No compat syscalls on PPC32 */
-> +};
-> +
-> +#endif /* CONFIG_PPC64 */
-> +
-> +#endif /* _ASM_POWERPC_VDSO_ARCH_DATA_H */
-> diff --git a/arch/powerpc/include/asm/vdso/getrandom.h b/arch/powerpc/include/asm/vdso/getrandom.h
-> index 80ce0709725eb89c1f3b69e0733038b458fbf24f..067a5396aac6e99c1a96f730459ec684bc7785d7 100644
-> --- a/arch/powerpc/include/asm/vdso/getrandom.h
-> +++ b/arch/powerpc/include/asm/vdso/getrandom.h
-> @@ -43,20 +43,21 @@ static __always_inline ssize_t getrandom_syscall(void *buffer, size_t len, unsig
->   			    (unsigned long)len, (unsigned long)flags);
->   }
->   
-> -static __always_inline struct vdso_rng_data *__arch_get_vdso_rng_data(void)
-> +static __always_inline const struct vdso_rng_data *__arch_get_vdso_u_rng_data(void)
->   {
-> -	struct vdso_arch_data *data;
-> +	struct vdso_rng_data *data;
->   
->   	asm (
->   		"	bcl	20, 31, .+4 ;"
->   		"0:	mflr	%0 ;"
-> -		"	addis	%0, %0, (_vdso_datapage - 0b)@ha ;"
-> -		"	addi	%0, %0, (_vdso_datapage - 0b)@l  ;"
-> +		"	addis	%0, %0, (vdso_u_rng_data - 0b)@ha ;"
-> +		"	addi	%0, %0, (vdso_u_rng_data - 0b)@l  ;"
->   		: "=r" (data) : : "lr"
->   	);
->   
-> -	return &data->rng_data;
-> +	return data;
->   }
-> +#define __arch_get_vdso_u_rng_data __arch_get_vdso_u_rng_data
->   
->   ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
->   			     size_t opaque_len);
-> diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-> index c6390890a60c2fdcb608bf321b2945c3fb372f54..dc955f2e0cc51f44d46f488a292aa0dbee3dc16c 100644
-> --- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-> +++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-> @@ -94,22 +94,12 @@ int clock_getres32_fallback(clockid_t _clkid, struct old_timespec32 *_ts)
->   #endif
->   
->   static __always_inline u64 __arch_get_hw_counter(s32 clock_mode,
-> -						 const struct vdso_data *vd)
-> +						 const struct vdso_time_data *vd)
->   {
->   	return get_tb();
->   }
->   
-> -const struct vdso_data *__arch_get_vdso_data(void);
-> -
-> -#ifdef CONFIG_TIME_NS
-> -static __always_inline
-> -const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
-> -{
-> -	return (void *)vd + (1U << CONFIG_PAGE_SHIFT);
-> -}
-> -#endif
-> -
-> -static inline bool vdso_clocksource_ok(const struct vdso_data *vd)
-> +static inline bool vdso_clocksource_ok(const struct vdso_time_data *vd)
->   {
->   	return true;
->   }
-> @@ -135,21 +125,22 @@ static __always_inline u64 vdso_shift_ns(u64 ns, unsigned long shift)
->   
->   #ifdef __powerpc64__
->   int __c_kernel_clock_gettime(clockid_t clock, struct __kernel_timespec *ts,
-> -			     const struct vdso_data *vd);
-> +			     const struct vdso_time_data *vd);
->   int __c_kernel_clock_getres(clockid_t clock_id, struct __kernel_timespec *res,
-> -			    const struct vdso_data *vd);
-> +			    const struct vdso_time_data *vd);
->   #else
->   int __c_kernel_clock_gettime(clockid_t clock, struct old_timespec32 *ts,
-> -			     const struct vdso_data *vd);
-> +			     const struct vdso_time_data *vd);
->   int __c_kernel_clock_gettime64(clockid_t clock, struct __kernel_timespec *ts,
-> -			       const struct vdso_data *vd);
-> +			       const struct vdso_time_data *vd);
->   int __c_kernel_clock_getres(clockid_t clock_id, struct old_timespec32 *res,
-> -			    const struct vdso_data *vd);
-> +			    const struct vdso_time_data *vd);
->   #endif
->   int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
-> -			    const struct vdso_data *vd);
-> +			    const struct vdso_time_data *vd);
->   __kernel_old_time_t __c_kernel_time(__kernel_old_time_t *time,
-> -				    const struct vdso_data *vd);
-> +				    const struct vdso_time_data *vd);
-> +
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* _ASM_POWERPC_VDSO_GETTIMEOFDAY_H */
-> diff --git a/arch/powerpc/include/asm/vdso/vsyscall.h b/arch/powerpc/include/asm/vdso/vsyscall.h
-> index 48560a11955956b8fbb59360334a81972723bd57..c2c9ae1b22e71a3f87e5a1a351699c7ab42b2f95 100644
-> --- a/arch/powerpc/include/asm/vdso/vsyscall.h
-> +++ b/arch/powerpc/include/asm/vdso/vsyscall.h
-> @@ -6,19 +6,6 @@
->   
->   #include <asm/vdso_datapage.h>
->   
-> -static __always_inline
-> -struct vdso_data *__arch_get_k_vdso_data(void)
-> -{
-> -	return vdso_data->data;
-> -}
-> -#define __arch_get_k_vdso_data __arch_get_k_vdso_data
-> -
-> -static __always_inline
-> -struct vdso_rng_data *__arch_get_k_vdso_rng_data(void)
-> -{
-> -	return &vdso_data->rng_data;
-> -}
-> -
->   /* The asm-generic header needs to be included after the definitions above */
->   #include <asm-generic/vdso/vsyscall.h>
->   
-> diff --git a/arch/powerpc/include/asm/vdso_datapage.h b/arch/powerpc/include/asm/vdso_datapage.h
-> index a202f5b63479533a7f45a74df015feb59f3d7c87..95d45a50355d269454dd3e175a5b3844181536b5 100644
-> --- a/arch/powerpc/include/asm/vdso_datapage.h
-> +++ b/arch/powerpc/include/asm/vdso_datapage.h
-> @@ -11,56 +11,18 @@
->   
->   #ifndef __ASSEMBLY__
->   
-> -#include <linux/unistd.h>
-> -#include <linux/time.h>
->   #include <vdso/datapage.h>
->   
-> -#define SYSCALL_MAP_SIZE      ((NR_syscalls + 31) / 32)
-> -
-> -#ifdef CONFIG_PPC64
-> -
-> -struct vdso_arch_data {
-> -	__u64 tb_ticks_per_sec;			/* Timebase tics / sec */
-> -	__u32 dcache_block_size;		/* L1 d-cache block size     */
-> -	__u32 icache_block_size;		/* L1 i-cache block size     */
-> -	__u32 dcache_log_block_size;		/* L1 d-cache log block size */
-> -	__u32 icache_log_block_size;		/* L1 i-cache log block size */
-> -	__u32 syscall_map[SYSCALL_MAP_SIZE];	/* Map of syscalls  */
-> -	__u32 compat_syscall_map[SYSCALL_MAP_SIZE];	/* Map of compat syscalls */
-> -
-> -	struct vdso_rng_data rng_data;
-> -
-> -	struct vdso_data data[CS_BASES] __aligned(1 << CONFIG_PAGE_SHIFT);
-> -};
-> -
-> -#else /* CONFIG_PPC64 */
-> -
-> -struct vdso_arch_data {
-> -	__u64 tb_ticks_per_sec;		/* Timebase tics / sec */
-> -	__u32 syscall_map[SYSCALL_MAP_SIZE]; /* Map of syscalls */
-> -	__u32 compat_syscall_map[0];	/* No compat syscalls on PPC32 */
-> -	struct vdso_rng_data rng_data;
-> -
-> -	struct vdso_data data[CS_BASES] __aligned(1 << CONFIG_PAGE_SHIFT);
-> -};
-> -
-> -#endif /* CONFIG_PPC64 */
-> -
-> -extern struct vdso_arch_data *vdso_data;
-> -
->   #else /* __ASSEMBLY__ */
->   
-> -.macro get_datapage ptr offset=0
-> +.macro get_datapage ptr symbol
->   	bcl	20, 31, .+4
->   999:
->   	mflr	\ptr
-> -	addis	\ptr, \ptr, (_vdso_datapage - 999b + \offset)@ha
-> -	addi	\ptr, \ptr, (_vdso_datapage - 999b + \offset)@l
-> +	addis	\ptr, \ptr, (\symbol - 999b)@ha
-> +	addi	\ptr, \ptr, (\symbol - 999b)@l
->   .endm
->   
-> -#include <asm/asm-offsets.h>
-> -#include <asm/page.h>
-> -
->   #endif /* __ASSEMBLY__ */
->   
->   #endif /* __KERNEL__ */
-> diff --git a/arch/powerpc/kernel/asm-offsets.c b/arch/powerpc/kernel/asm-offsets.c
-> index 7a390bd4f4af3c7408b3e3c5ef6d43b95b3b6463..b3048f6d3822c0c457f4aa2ccb5dc870495ba79b 100644
-> --- a/arch/powerpc/kernel/asm-offsets.c
-> +++ b/arch/powerpc/kernel/asm-offsets.c
-> @@ -334,7 +334,6 @@ int main(void)
->   #endif /* ! CONFIG_PPC64 */
->   
->   	/* datapage offsets for use by vdso */
-> -	OFFSET(VDSO_DATA_OFFSET, vdso_arch_data, data);
->   	OFFSET(CFG_TB_TICKS_PER_SEC, vdso_arch_data, tb_ticks_per_sec);
->   #ifdef CONFIG_PPC64
->   	OFFSET(CFG_ICACHE_BLOCKSZ, vdso_arch_data, icache_block_size);
-> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
-> index 0727332ad86fbcfcf8ca18b344ba04381e827c79..15784c5c95c77f1eccfa948a36ba69386a2c175b 100644
-> --- a/arch/powerpc/kernel/time.c
-> +++ b/arch/powerpc/kernel/time.c
-> @@ -950,7 +950,7 @@ void __init time_init(void)
->   		sys_tz.tz_dsttime = 0;
->   	}
->   
-> -	vdso_data->tb_ticks_per_sec = tb_ticks_per_sec;
-> +	vdso_k_arch_data->tb_ticks_per_sec = tb_ticks_per_sec;
->   #ifdef CONFIG_PPC64_PROC_SYSTEMCFG
->   	systemcfg->tb_ticks_per_sec = tb_ticks_per_sec;
->   #endif
-> diff --git a/arch/powerpc/kernel/vdso.c b/arch/powerpc/kernel/vdso.c
-> index 43379365ce1b37cfba662ea58feca5e73dd5f700..219d67bcf747e79f48d09a50f5cb9624bcc0f7b1 100644
-> --- a/arch/powerpc/kernel/vdso.c
-> +++ b/arch/powerpc/kernel/vdso.c
-> @@ -17,7 +17,7 @@
->   #include <linux/elf.h>
->   #include <linux/security.h>
->   #include <linux/syscalls.h>
-> -#include <linux/time_namespace.h>
-> +#include <linux/vdso_datastore.h>
->   #include <vdso/datapage.h>
->   
->   #include <asm/syscall.h>
-> @@ -32,6 +32,8 @@
->   #include <asm/vdso_datapage.h>
->   #include <asm/setup.h>
->   
-> +static_assert(__VDSO_PAGES == VDSO_NR_PAGES);
-> +
->   /* The alignment of the vDSO */
->   #define VDSO_ALIGNMENT	(1 << 16)
->   
-> @@ -40,24 +42,6 @@ extern char vdso64_start, vdso64_end;
->   
->   long sys_ni_syscall(void);
->   
-> -/*
-> - * The vdso data page (aka. systemcfg for old ppc64 fans) is here.
-> - * Once the early boot kernel code no longer needs to muck around
-> - * with it, it will become dynamically allocated
-> - */
-> -static union {
-> -	struct vdso_arch_data	data;
-> -	u8			page[2 * PAGE_SIZE];
-> -} vdso_data_store __page_aligned_data;
-> -struct vdso_arch_data *vdso_data = &vdso_data_store.data;
-> -
-> -enum vvar_pages {
-> -	VVAR_BASE_PAGE_OFFSET,
-> -	VVAR_TIME_PAGE_OFFSET,
-> -	VVAR_TIMENS_PAGE_OFFSET,
-> -	VVAR_NR_PAGES,
-> -};
-> -
->   static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struct *new_vma,
->   		       unsigned long text_size)
->   {
-> @@ -96,14 +80,6 @@ static void vdso_close(const struct vm_special_mapping *sm, struct vm_area_struc
->   	mm->context.vdso = NULL;
->   }
->   
-> -static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
-> -			     struct vm_area_struct *vma, struct vm_fault *vmf);
-> -
-> -static struct vm_special_mapping vvar_spec __ro_after_init = {
-> -	.name = "[vvar]",
-> -	.fault = vvar_fault,
-> -};
-> -
->   static struct vm_special_mapping vdso32_spec __ro_after_init = {
->   	.name = "[vdso]",
->   	.mremap = vdso32_mremap,
-> @@ -116,73 +92,6 @@ static struct vm_special_mapping vdso64_spec __ro_after_init = {
->   	.close = vdso_close,
->   };
->   
-> -#ifdef CONFIG_TIME_NS
-> -struct vdso_data *arch_get_vdso_data(void *vvar_page)
-> -{
-> -	return vvar_page;
-> -}
-> -
-> -/*
-> - * The vvar mapping contains data for a specific time namespace, so when a task
-> - * changes namespace we must unmap its vvar data for the old namespace.
-> - * Subsequent faults will map in data for the new namespace.
-> - *
-> - * For more details see timens_setup_vdso_data().
-> - */
-> -int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
-> -{
-> -	struct mm_struct *mm = task->mm;
-> -	VMA_ITERATOR(vmi, mm, 0);
-> -	struct vm_area_struct *vma;
-> -
-> -	mmap_read_lock(mm);
-> -	for_each_vma(vmi, vma) {
-> -		if (vma_is_special_mapping(vma, &vvar_spec))
-> -			zap_vma_pages(vma);
-> -	}
-> -	mmap_read_unlock(mm);
-> -
-> -	return 0;
-> -}
-> -#endif
-> -
-> -static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
-> -			     struct vm_area_struct *vma, struct vm_fault *vmf)
-> -{
-> -	struct page *timens_page = find_timens_vvar_page(vma);
-> -	unsigned long pfn;
-> -
-> -	switch (vmf->pgoff) {
-> -	case VVAR_BASE_PAGE_OFFSET:
-> -		pfn = virt_to_pfn(vdso_data);
-> -		break;
-> -	case VVAR_TIME_PAGE_OFFSET:
-> -		if (timens_page)
-> -			pfn = page_to_pfn(timens_page);
-> -		else
-> -			pfn = virt_to_pfn(vdso_data->data);
-> -		break;
-> -#ifdef CONFIG_TIME_NS
-> -	case VVAR_TIMENS_PAGE_OFFSET:
-> -		/*
-> -		 * If a task belongs to a time namespace then a namespace
-> -		 * specific VVAR is mapped with the VVAR_DATA_PAGE_OFFSET and
-> -		 * the real VVAR page is mapped with the VVAR_TIMENS_PAGE_OFFSET
-> -		 * offset.
-> -		 * See also the comment near timens_setup_vdso_data().
-> -		 */
-> -		if (!timens_page)
-> -			return VM_FAULT_SIGBUS;
-> -		pfn = virt_to_pfn(vdso_data->data);
-> -		break;
-> -#endif /* CONFIG_TIME_NS */
-> -	default:
-> -		return VM_FAULT_SIGBUS;
-> -	}
-> -
-> -	return vmf_insert_pfn(vma, vmf->address, pfn);
-> -}
-> -
->   /*
->    * This is called from binfmt_elf, we create the special vma for the
->    * vDSO and insert it into the mm struct tree
-> @@ -191,7 +100,7 @@ static int __arch_setup_additional_pages(struct linux_binprm *bprm, int uses_int
->   {
->   	unsigned long vdso_size, vdso_base, mappings_size;
->   	struct vm_special_mapping *vdso_spec;
-> -	unsigned long vvar_size = VVAR_NR_PAGES * PAGE_SIZE;
-> +	unsigned long vvar_size = VDSO_NR_PAGES * PAGE_SIZE;
->   	struct mm_struct *mm = current->mm;
->   	struct vm_area_struct *vma;
->   
-> @@ -217,9 +126,7 @@ static int __arch_setup_additional_pages(struct linux_binprm *bprm, int uses_int
->   	/* Add required alignment. */
->   	vdso_base = ALIGN(vdso_base, VDSO_ALIGNMENT);
->   
-> -	vma = _install_special_mapping(mm, vdso_base, vvar_size,
-> -				       VM_READ | VM_MAYREAD | VM_IO |
-> -				       VM_DONTDUMP | VM_PFNMAP, &vvar_spec);
-> +	vma = vdso_install_vvar_mapping(mm, vdso_base);
->   	if (IS_ERR(vma))
->   		return PTR_ERR(vma);
->   
-> @@ -299,10 +206,10 @@ static void __init vdso_setup_syscall_map(void)
->   
->   	for (i = 0; i < NR_syscalls; i++) {
->   		if (sys_call_table[i] != (void *)&sys_ni_syscall)
-> -			vdso_data->syscall_map[i >> 5] |= 0x80000000UL >> (i & 0x1f);
-> +			vdso_k_arch_data->syscall_map[i >> 5] |= 0x80000000UL >> (i & 0x1f);
->   		if (IS_ENABLED(CONFIG_COMPAT) &&
->   		    compat_sys_call_table[i] != (void *)&sys_ni_syscall)
-> -			vdso_data->compat_syscall_map[i >> 5] |= 0x80000000UL >> (i & 0x1f);
-> +			vdso_k_arch_data->compat_syscall_map[i >> 5] |= 0x80000000UL >> (i & 0x1f);
->   	}
->   }
->   
-> @@ -352,10 +259,10 @@ static struct page ** __init vdso_setup_pages(void *start, void *end)
->   static int __init vdso_init(void)
->   {
->   #ifdef CONFIG_PPC64
-> -	vdso_data->dcache_block_size = ppc64_caches.l1d.block_size;
-> -	vdso_data->icache_block_size = ppc64_caches.l1i.block_size;
-> -	vdso_data->dcache_log_block_size = ppc64_caches.l1d.log_block_size;
-> -	vdso_data->icache_log_block_size = ppc64_caches.l1i.log_block_size;
-> +	vdso_k_arch_data->dcache_block_size = ppc64_caches.l1d.block_size;
-> +	vdso_k_arch_data->icache_block_size = ppc64_caches.l1i.block_size;
-> +	vdso_k_arch_data->dcache_log_block_size = ppc64_caches.l1d.log_block_size;
-> +	vdso_k_arch_data->icache_log_block_size = ppc64_caches.l1i.log_block_size;
->   #endif /* CONFIG_PPC64 */
->   
->   	vdso_setup_syscall_map();
-> diff --git a/arch/powerpc/kernel/vdso/cacheflush.S b/arch/powerpc/kernel/vdso/cacheflush.S
-> index 0085ae464dac9c32381625a6969a4e422ad34eb7..488d3ade11e64996b30f42777251df8499eda92c 100644
-> --- a/arch/powerpc/kernel/vdso/cacheflush.S
-> +++ b/arch/powerpc/kernel/vdso/cacheflush.S
-> @@ -30,7 +30,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_COHERENT_ICACHE)
->   #ifdef CONFIG_PPC64
->   	mflr	r12
->     .cfi_register lr,r12
-> -	get_datapage	r10
-> +	get_datapage	r10 vdso_u_arch_data
->   	mtlr	r12
->     .cfi_restore	lr
->   #endif
-> diff --git a/arch/powerpc/kernel/vdso/datapage.S b/arch/powerpc/kernel/vdso/datapage.S
-> index db8e167f01667eb95b3dc74f6771e610411bba90..d23b2e8e2a34ca9b142231eb3a492716a49b2248 100644
-> --- a/arch/powerpc/kernel/vdso/datapage.S
-> +++ b/arch/powerpc/kernel/vdso/datapage.S
-> @@ -28,7 +28,7 @@ V_FUNCTION_BEGIN(__kernel_get_syscall_map)
->   	mflr	r12
->     .cfi_register lr,r12
->   	mr.	r4,r3
-> -	get_datapage	r3
-> +	get_datapage	r3 vdso_u_arch_data
->   	mtlr	r12
->   #ifdef __powerpc64__
->   	addi	r3,r3,CFG_SYSCALL_MAP64
-> @@ -52,7 +52,7 @@ V_FUNCTION_BEGIN(__kernel_get_tbfreq)
->     .cfi_startproc
->   	mflr	r12
->     .cfi_register lr,r12
-> -	get_datapage	r3
-> +	get_datapage	r3 vdso_u_arch_data
->   #ifndef __powerpc64__
->   	lwz	r4,(CFG_TB_TICKS_PER_SEC + 4)(r3)
->   #endif
-> diff --git a/arch/powerpc/kernel/vdso/gettimeofday.S b/arch/powerpc/kernel/vdso/gettimeofday.S
-> index 5333848322ca6105018d501952e3bf42475f49df..79c967212444732da50805fd086c6f2a3c75b0cc 100644
-> --- a/arch/powerpc/kernel/vdso/gettimeofday.S
-> +++ b/arch/powerpc/kernel/vdso/gettimeofday.S
-> @@ -33,9 +33,9 @@
->     .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
->   #endif
->   	.ifeq	\call_time
-> -		get_datapage	r5 VDSO_DATA_OFFSET
-> +		get_datapage	r5 vdso_u_time_data
->   	.else
-> -		get_datapage	r4 VDSO_DATA_OFFSET
-> +		get_datapage	r4 vdso_u_time_data
->   	.endif
->   	bl		CFUNC(DOTSYM(\funct))
->   	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-> diff --git a/arch/powerpc/kernel/vdso/vdso32.lds.S b/arch/powerpc/kernel/vdso/vdso32.lds.S
-> index 1a1b0b6d681a9977e4ef8042e52d8d33da61887e..72a1012b8a205c6357cecb4b53d2d8e1ff59b051 100644
-> --- a/arch/powerpc/kernel/vdso/vdso32.lds.S
-> +++ b/arch/powerpc/kernel/vdso/vdso32.lds.S
-> @@ -6,6 +6,7 @@
->   #include <asm/vdso.h>
->   #include <asm/page.h>
->   #include <asm-generic/vmlinux.lds.h>
-> +#include <vdso/datapage.h>
->   
->   #ifdef __LITTLE_ENDIAN__
->   OUTPUT_FORMAT("elf32-powerpcle", "elf32-powerpcle", "elf32-powerpcle")
-> @@ -16,7 +17,8 @@ OUTPUT_ARCH(powerpc:common)
->   
->   SECTIONS
->   {
-> -	PROVIDE(_vdso_datapage = . - 3 * PAGE_SIZE);
-> +	VDSO_VVAR_SYMS
-> +
->   	. = SIZEOF_HEADERS;
->   
->   	.hash          	: { *(.hash) }			:text
-> diff --git a/arch/powerpc/kernel/vdso/vdso64.lds.S b/arch/powerpc/kernel/vdso/vdso64.lds.S
-> index e21b5506cad62b16e677be74fda7921ec917141a..32102a05eaa7e015e0f89e4a94a3c5e31da7d460 100644
-> --- a/arch/powerpc/kernel/vdso/vdso64.lds.S
-> +++ b/arch/powerpc/kernel/vdso/vdso64.lds.S
-> @@ -6,6 +6,7 @@
->   #include <asm/vdso.h>
->   #include <asm/page.h>
->   #include <asm-generic/vmlinux.lds.h>
-> +#include <vdso/datapage.h>
->   
->   #ifdef __LITTLE_ENDIAN__
->   OUTPUT_FORMAT("elf64-powerpcle", "elf64-powerpcle", "elf64-powerpcle")
-> @@ -16,7 +17,8 @@ OUTPUT_ARCH(powerpc:common64)
->   
->   SECTIONS
->   {
-> -	PROVIDE(_vdso_datapage = . - 3 * PAGE_SIZE);
-> +	VDSO_VVAR_SYMS
-> +
->   	. = SIZEOF_HEADERS;
->   
->   	.hash		: { *(.hash) }			:text
-> diff --git a/arch/powerpc/kernel/vdso/vgettimeofday.c b/arch/powerpc/kernel/vdso/vgettimeofday.c
-> index 55a287c9a7366aa59ab4af1e760a8995f588a4d5..6f5167d81af5f3e6e755dbda4307769e45a28421 100644
-> --- a/arch/powerpc/kernel/vdso/vgettimeofday.c
-> +++ b/arch/powerpc/kernel/vdso/vgettimeofday.c
-> @@ -7,43 +7,43 @@
->   
->   #ifdef __powerpc64__
->   int __c_kernel_clock_gettime(clockid_t clock, struct __kernel_timespec *ts,
-> -			     const struct vdso_data *vd)
-> +			     const struct vdso_time_data *vd)
->   {
->   	return __cvdso_clock_gettime_data(vd, clock, ts);
->   }
->   
->   int __c_kernel_clock_getres(clockid_t clock_id, struct __kernel_timespec *res,
-> -			    const struct vdso_data *vd)
-> +			    const struct vdso_time_data *vd)
->   {
->   	return __cvdso_clock_getres_data(vd, clock_id, res);
->   }
->   #else
->   int __c_kernel_clock_gettime(clockid_t clock, struct old_timespec32 *ts,
-> -			     const struct vdso_data *vd)
-> +			     const struct vdso_time_data *vd)
->   {
->   	return __cvdso_clock_gettime32_data(vd, clock, ts);
->   }
->   
->   int __c_kernel_clock_gettime64(clockid_t clock, struct __kernel_timespec *ts,
-> -			       const struct vdso_data *vd)
-> +			       const struct vdso_time_data *vd)
->   {
->   	return __cvdso_clock_gettime_data(vd, clock, ts);
->   }
->   
->   int __c_kernel_clock_getres(clockid_t clock_id, struct old_timespec32 *res,
-> -			    const struct vdso_data *vd)
-> +			    const struct vdso_time_data *vd)
->   {
->   	return __cvdso_clock_getres_time32_data(vd, clock_id, res);
->   }
->   #endif
->   
->   int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz,
-> -			    const struct vdso_data *vd)
-> +			    const struct vdso_time_data *vd)
->   {
->   	return __cvdso_gettimeofday_data(vd, tv, tz);
->   }
->   
-> -__kernel_old_time_t __c_kernel_time(__kernel_old_time_t *time, const struct vdso_data *vd)
-> +__kernel_old_time_t __c_kernel_time(__kernel_old_time_t *time, const struct vdso_time_data *vd)
->   {
->   	return __cvdso_time_data(vd, time);
->   }
-> 
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
+ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
+MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
+a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
+jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
+GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
+aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
+nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
+8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
+HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
+IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
+KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
+BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
+QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
+QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
+ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
+/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
+uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
+xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
+W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
+c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
+VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
+NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
+DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
+sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
+w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
+i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
+kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
+0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
+ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
+blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
+hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
+VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
+HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
+ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
+AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
+cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
+cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
+AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
+aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
+hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
+iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
+8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
+JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
+xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
+EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
+B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
+MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
+KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
+Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
+nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
+WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
+W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
+nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
+g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
+9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
+9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
+sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
+a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
+ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
+AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
+dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
+MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
+YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
+4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
+6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
+QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
+nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
+MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
+VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
+ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI1MDIwNjA5MzE0
+MlowLwYJKoZIhvcNAQkEMSIEIERZMz2IotRdbMhsT9qod1BX+F3d+8SGgb19TKs6OEngMGQGCSsG
+AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
+cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
+VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
+cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAdAWv7/Ma94ZM
+/9Fh3Sdl/S7OhQXyvMc8b43LE3FzqK8DOYqkP/jNcwUKRDutu6swQg1obN06fqixgD9ocNg6jm3y
+iqzKNbqbN37ui3CSU6fOt+/j0NMWTcH8btsG+qcVVz1NPFiuefroouvqP23zYR9x01B1iD4GtvdK
+CxNbkqhWuO90Kv50+8N8vzBPQ7Lus4aOgSWvtlJH61u9NZH9UeyiZ6+L6p2IHK+rDhGG5XDnrTNV
+7Jgr9942WqDnaiqCsCz3kMDpp5eZcdd9pDbtyhMSkLUdR3jjJwkUtQ5wtBmW1+bCxAZMDJ8jkmdh
+ruJQvaJEtgtMdQ3m/4w2zxdwepoQrvCDEMk6X6Cdn1QdR7IZ7iIiUINWq671aFTzSYNkOs64/tEE
+PNB8gSS3jnNV1ipd7QRFtClrO1qzhInJOXrlsNrkf74KthptIJcKBVniPMKN4b+HlGFvnd4cn98u
+yxbecezceueFkvpxTIE+9liAjiY1+hyJHWrMwuzKXR+hOiOvrM9AnG/KNL2bo2uQ7nAgAcsr5tCA
+l8bUeBG5Y80rAo+xp5MZlfa8G+W1DdWdheR51dM1Bh2TLq3llbuByHEX9mqq0xOSU5leYHY1fQOw
+JNMJ5gc7C12R8Sj/7a1SJGGKlxt7G83fq9quuuXIYyfLJkW2jRre3WesN7YavdIAAAAAAAA=
 
+
+--=-TLRPvEdtMvxq/eM5U95X--
 
