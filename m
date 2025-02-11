@@ -1,91 +1,92 @@
-Return-Path: <linux-csky+bounces-1779-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1780-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81664A312D6
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 18:25:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFDE6A31324
+	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 18:32:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA86D1885562
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 17:25:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DD2F3A1DA8
+	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 17:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B44526215F;
-	Tue, 11 Feb 2025 17:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B35FB261572;
+	Tue, 11 Feb 2025 17:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1cTnQzUh"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vQ5ESFzW"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F8C261380
-	for <linux-csky@vger.kernel.org>; Tue, 11 Feb 2025 17:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02335261563
+	for <linux-csky@vger.kernel.org>; Tue, 11 Feb 2025 17:32:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739294706; cv=none; b=IQpgxBVGF4+v1fai3m4gL46VePCTPGpqujf1VEYwX43IudPZJ/9/jLncVcJLnq5Z3LO8lha4HHeJcHOeq3FdsgPU5Kn+lNPc7Rej5ZmzgAvkSjuv4PMseJMiOWKCYlnDTJov36buklOzZiziXPw0LwYyyOKUIWzTETpberRnZEw=
+	t=1739295164; cv=none; b=mgnsQRJ7VJ333tGrDF3AM/vX/tIZKxqdD5BiuKzwNQXD7PoObG3b5E8Pd4RIc9l7TCHRzK6xR/ZjhWOwIJrcPzu2MbdS5D1fnVrqbRWGhJQkGLj2net1MnLwxDPY3iuwwBpD9FN8e6XMU3zUh5EsHycJMmDBWXwwHyq6y/M7KBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739294706; c=relaxed/simple;
-	bh=OVaygMG8VlP4xBkWR28wcsQ/nkYaxyCk2untvEhVW/Y=;
+	s=arc-20240116; t=1739295164; c=relaxed/simple;
+	bh=9VqB6kDe0g1j1EVbwpnZoUYoSv7oUR+TG+IB45BlCtw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qGiRrnhQIdW2zRXqdrW6bM3RLAKEVwdls5OwaJ9Bws+Diw5uaGoai6eQ1rsIPKqZsUXOPX8w1R4tBHpOhHoAecfQ3go2SxxsusOhCWRuTUMTqh95VpqmQH1VEUojZhzECIqqxc0RbJzUswuZjbdBQKMLhMxGH3Z0026FqZ0MkBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1cTnQzUh; arc=none smtp.client-ip=209.85.166.169
+	 To:Cc:Content-Type; b=j7nUe0RRRlyoeQfVaboKCUBKq61LVREKUyKU6ZZd2SLXyYmY4DNK6veeL0H+NQQOgT+MuY/RyJyPt9KKnydBTJcJjIZUpnKlAGoRwR4ApLbFGBqtuRrxcL5cEDziWLJYoHPUsZxz9viWqAr4LCBvT4dbNSbdxPNAhh9tJPVGXDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vQ5ESFzW; arc=none smtp.client-ip=209.85.166.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3d147331fb5so214325ab.0
-        for <linux-csky@vger.kernel.org>; Tue, 11 Feb 2025 09:25:04 -0800 (PST)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3d05815e89dso179925ab.1
+        for <linux-csky@vger.kernel.org>; Tue, 11 Feb 2025 09:32:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739294704; x=1739899504; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1739295162; x=1739899962; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5eUqaFoF/nA3myl/xKceml4ULdmxAvSOjNMKL2mIwQg=;
-        b=1cTnQzUhEccrjkmLQWshEBqOBXVfIQupgovTVYdn/toiwJfDOYcBYYEn3sWt3G8fez
-         up3g9EK91LB4RZretpyV2H0g8HiwlIXXH8cXcmClCGmbToSyXeFuup8k1/bQTw8oFvXU
-         Vl/kPxKJImg0lMrjPhffcp9xotvjz9aarHG2MIPqNkMCma0tnUlWkp4FPRgABk4ZuzyC
-         mo8J4dB0dZpSWf8qqkscyfycoRJVLfmiSDsQbCilulCnpzHIsjjaYT/8dCQWvbpmJtil
-         81GlZ0NeJAyey13mPdTF2f6VzIehwiq5Ur7KDmAB34mQR3pvYFVwxYaYYfhO1fPP5VEu
-         V1RQ==
+        bh=/wQ94efDGzeP+hPazDVZ0s87mMmIX0OkL74nPRKdj5c=;
+        b=vQ5ESFzWQCcv9rLjyZII8Mr5BFQQo1aJWFXvDtGYivKE4O1bJWCDt2vDkUGPg88r1C
+         TnRfmNfhjuJFWYKQmrt2nyrvcGEvofx4BtIkT5kTg3pr5L35D/TgAjuDEO0mzH4FJQ7/
+         jHA9bBurxhCx4CUK/MlHPdK1TcOo5otUqreYAOyhZ/WJZPO4n/CXH/9ouSlImTgHj3ez
+         KfiNRG04JxI8A0qCpcF8o3Q8wXsBOQabOHbppH94M9nrsqi8u+4pPTQbi5hNBymhx30U
+         1asM/XLEwrUN1Er9tQbe2WmZ4wBoEogJcKHru8SuEQu6Lhebx2vFFMgAXVEIuLNxMLLs
+         yJpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739294704; x=1739899504;
+        d=1e100.net; s=20230601; t=1739295162; x=1739899962;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5eUqaFoF/nA3myl/xKceml4ULdmxAvSOjNMKL2mIwQg=;
-        b=vypiJOZs4gOYxEZ4z5Hs3dv3SuvDRc99oxo8tmCGFjOzMyBDE8gyOXaEicaqfJuY5C
-         /JU/f30M9VQ2iHZlXu61fVZEQOQsvfP+yEJQqfrhzFgTbLlr+LjJazvgm6m/swFFHlTR
-         utlybNJr/QfiHKjbJjZeb/j/afNqf8VQ7r7Kxu3xrll+y9Ngeg5QtqTNRD6/yZe2dplW
-         plCwS2yW0XXk7SDxvMFt+ISx8wgK7yPO8cRwc+uZscNEnhMazDXxPnvAAc+8rv459xEy
-         Z8FOqY7mLa0m561lgy7EpP9udABIAoKK3vMwuRL5m309RhKXQi/2+f5lCSLOyS2dMq2p
-         oB3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXBOV/Pc+DLZFHoVnhbz9wSO1l5yX7M9Q4eSCi67WfJqNVRl6OdfOUXPkQcDasTTg7gqWkklNiBUVDx@vger.kernel.org
-X-Gm-Message-State: AOJu0YylBFjHQpI2hIFKIEXb4KnNke88ifHPrORJtFAYuE6jG85orLLn
-	LMB7Vi+282eYZGxmdKQXtYCSGpcQae3zwdvR3L7xbSlEoLPtKAICCHEYpKaQX0JAdkyBMFFxKJy
-	HhSFtdQDbHgi1Bp2EaV4+RDTqzUo1bKdlcxQE
-X-Gm-Gg: ASbGncuJUtVy3+gQHI8xzqtcI7ZgXKWgdMLPRRufJFVBeRH5oAe8WfVKtWU+rwrzmTU
-	TwxB95/nzJVJ2OGwbL08wk6AoCVV1Y1N9F/1VP8HM9f8toiKkvSjxlLxl3ucVoXmJhI3e3W8wbc
-	2qb+WSWiWevfsT82wSrmY8jkIA
-X-Google-Smtp-Source: AGHT+IHulOePOuHEHSpuFuNYO6P65ObrRZws2+5sl7jc3tR3t7l3NjrSWpuzOe7Ugxsa9ph5ihwoodwYrD5QTsiZGu4=
-X-Received: by 2002:a92:c54b:0:b0:3cf:c075:da88 with SMTP id
- e9e14a558f8ab-3d171e3baa4mr3301595ab.23.1739294703579; Tue, 11 Feb 2025
- 09:25:03 -0800 (PST)
+        bh=/wQ94efDGzeP+hPazDVZ0s87mMmIX0OkL74nPRKdj5c=;
+        b=LBghrEDkKsTgseaRhBuROHE4niuNJdHZxJtkZbYgW2ve39H9CeFGhZ6MbnGZdAKjNQ
+         YWeEZ+69DBIkXcpPf/0VnwF+LCsx54xzO1duI8LTaKRQdrzgxlIFO0Rx+0o2V5Ltn4S5
+         aBYS91qRwVclkm/K2asVqPNglq56c2t7nQu5ql03YAd66/NFxl+fk2Xd88EZBwAHI/hS
+         GnacBW6c6yqu24amlL0+JlLDqlXIygOwU+TTzHDcu/XiIj6P20bIUX9TNz9ahzSsoLvI
+         nzywBt66XDTAXCYnUoykL2qMCkblnI3F202vwF2jqG76b0yfJbIsld45nFuuwxhfRNeA
+         uxpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGmlcUQm6ZPBHPvLF4iOu70EvD7GZ1S03j1J32cJLLINPOG/UThujG7Leahf/aMdO/Irp+jUXVbHjI@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTJ5F6t2bzTCC3kctOx1ijykQVA5NKb5nV6BtYFjm6NVyHM5sf
+	DHNf7Ltqsk5+8wA+YZIrB9HcZjNlXg7wZNfXbKb8RZ4ZwU3DGy3ADUWchSunYdE1vl5a8d95MnT
+	2DdLYkeaB/p0URMFl3ofLmojajG3x8fPVL10d
+X-Gm-Gg: ASbGncuL58hLjXYZDtVgWDA47f/aMPUWQMFnxaFzDthrd7Nkk0vvYTXjdbCu+U6XD2v
+	qjYUzY1Tq3gcjPudPSYUbauTuzfB9vJ+x376meixNpN2AHlVFbbv6hR4YNHetr6dgB2MWOr3l1O
+	fbktxmUFRz517NPp2nff7D/DFc
+X-Google-Smtp-Source: AGHT+IFx7gQLpljuW0IlQHJkC2sPOgwjKNSe/p6Gvj27OoKy/WP45l1TbYOsmf4dkw4zbjr78o/5BoHNMYA6pqf60WY=
+X-Received: by 2002:a92:c848:0:b0:3d1:7959:1793 with SMTP id
+ e9e14a558f8ab-3d179591827mr1211895ab.25.1739295161966; Tue, 11 Feb 2025
+ 09:32:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210165108.95894-1-irogers@google.com> <20250210165108.95894-6-irogers@google.com>
- <d47c35dd-9c52-48e7-a00d-135572f11fbb@app.fastmail.com>
-In-Reply-To: <d47c35dd-9c52-48e7-a00d-135572f11fbb@app.fastmail.com>
+References: <20250210165108.95894-1-irogers@google.com> <20250210165108.95894-4-irogers@google.com>
+ <07c5c3ad-5a6d-4eda-95f2-ed16e7504d4c@app.fastmail.com> <CAP-5=fV0AVEp1uEtKjAqOmwqKSRuUzTwrXnBiqc=Lopfj4hBSA@mail.gmail.com>
+ <8ed7dfb2-1e4d-4aa4-a04b-0397a89365d1@app.fastmail.com>
+In-Reply-To: <8ed7dfb2-1e4d-4aa4-a04b-0397a89365d1@app.fastmail.com>
 From: Ian Rogers <irogers@google.com>
-Date: Tue, 11 Feb 2025 09:24:51 -0800
-X-Gm-Features: AWEUYZklUe5R5QefRSuHohckz8hNxM22lvM3Gxp2M1QMZ2_uE8brpR7qpIuJFYo
-Message-ID: <CAP-5=fUi4RYebxCGYZVHVEt0BpWVmUA6+-vDQfbai25_KJRs7A@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] perf trace beauty: Add syscalltbl.sh generating
- all system call tables
-To: Arnd Bergmann <arnd@arndb.de>, Arnaldo Carvalho de Melo <acme@kernel.org>, Howard Chu <howardchu95@gmail.com>
+Date: Tue, 11 Feb 2025 09:32:30 -0800
+X-Gm-Features: AWEUYZkcknJc_ecEWZmGNLleCOMX5hjRpYX4QmTXwPuP9BwndmjrpXk_kZmIMOQ
+Message-ID: <CAP-5=fWjJbg_q3xN0iytcqdBzSuRX+PD7CKp9+rHvFxB1VYxhw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] perf syscalltbl: Remove struct syscalltbl
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
 	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
@@ -96,164 +97,70 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
 	Catalin Marinas <catalin.marinas@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
 	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, 
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
 	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 11, 2025 at 12:09=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
+On Tue, Feb 11, 2025 at 8:34=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
+:
 >
-> On Mon, Feb 10, 2025, at 17:51, Ian Rogers wrote:
+> On Tue, Feb 11, 2025, at 17:18, Ian Rogers wrote:
+> > On Mon, Feb 10, 2025 at 11:48=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
 >
-> > +# Each line of the syscall table should have the following format:
-> > +#
-> > +# NR ABI NAME [NATIVE] [COMPAT]
-> > +#
-> > +# NR       syscall number
-> > +# ABI      ABI name
-> > +# NAME     syscall name
-> > +# NATIVE   native entry point (optional)
-> > +# COMPAT   compat entry point (optional)
+> >> The syscall numbers on mips (and previously on ia64) are offset by
+> >> a large number depending on the ABI (o32/n32/n64). I assume what
+> >> we want here is to have the small numbers without the offset in
+> >> syscall_num_to_name[], but that requires adding the offset during
+> >> the lookup. Can you check if this is handled correctly?
+> >
+> > Thanks Arnd! I agree the tables are large and can be sparse, they'll
+> > also be full of relocations. MIPS doesn't look like an outlier to me
+> > here:
 >
-> On x86, there is now a sixth optional field.
-
-Thanks, I'll add and repost a v3. I had some other questions below so
-I'll try to do everything together to avoid noise.
-
-> > +#if defined(ALL_SYSCALLTBL) || defined(__arm__) || defined(__aarch64__=
-)
-> > +EOF
-> > +build_tables "$tools_dir/perf/arch/arm/entry/syscalls/syscall.tbl"
-> > "$outfile" common,32,oabi EM_ARM
-> > +build_tables
+> Sorry, I should have been clearer what I meant, see
+> arch/mips/include/uapi/asm/unistd.h:
 >
-> The oabi syscalls probably shouldn't be part of the default set here.
-> Technically these are two separate ABIs, though EABI is a subset of
-> OABI for the most most part. Some of the calling conventions are
-> also different.
-
-Ack. I was carrying forward:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/perf/arch/arm/entry/syscalls/Kbuild#n3
-but noticed that we weren't adding this for arm64:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
-ls/perf/arch/arm64/entry/syscalls/Kbuild
-I'm happy to drop and have the ARM64 behavior. I'll make it a separate
-patch in case there is a desire from someone to revert.
-
-> > "$tools_dir/perf/arch/arm64/entry/syscalls/syscall_64.tbl" "$outfile"
-> > common,64,renameat,rlimit,memfd_secret EM_AARCH64
-> > +cat >> "$outfile" <<EOF
-> > +#endif // defined(ALL_SYSCALLTBL) || defined(__arm__) ||
-> > defined(__aarch64__)
+> #if _MIPS_SIM =3D=3D _MIPS_SIM_NABI32
+> #define __NR_Linux      6000
+> #include <asm/unistd_n32.h>
+> #endif
 >
-> Hardcoding the set of ABIs in the middle of the script seems
-> too fragile to me, I'm worried that these get out of sync quickly.
-
-I agree, again this is carrying forward a behavior and at least after
-these changes the location is just one place. Do you have any
-suggestions on how to do better?
-
-Fwiw, I wonder a related problem/question that has come up primarily
-with Arnaldo and Howard is in having a way to determine system call
-argument types so that perf trace can pretty print them. For example,
-if via BTF it is found an argument is a "const char*" then it is
-assumed to be a string, but a "char *" is not as it may just be an out
-argument. There's a source for more information in the syzkaller
-project:
-https://github.com/google/syzkaller/blob/master/sys/linux/sys.txt
-Perhaps there's a way to generate this information from the Linux
-build and feed it into perf's build. It is out-of-scope for what I'm
-trying to do here, but I thought it worth a mention given my general
-ignorance on wider things.
-
-> > +#if defined(ALL_SYSCALLTBL) || defined(__mips__)
-> > +EOF
-> > +build_tables
-> > "$tools_dir/perf/arch/mips/entry/syscalls/syscall_n64.tbl" "$outfile"
-> > common,64,n64 EM_MIPS
-> > +cat >> "$outfile" <<EOF
-> > +#endif // defined(ALL_SYSCALLTBL) || defined(__mips__)
+> and
+> arch/mips/include/generated/uapi/asm/unistd_n32.h
 >
-> What about n32/o32? The syscall tables are completely different here.
-
-So perf hasn't historically supported them and no one is asking for
-support. Generating more tables isn't the problem, but we need to have
-some way of determining which table to use for n32/o32. I see
-EF_MIPS_ABI_O32 and EF_MIPS_ABI_O64, so we could add support by
-extending the lookup of the table to be both of e_machine and e_flags.
-I'm less clear on choosing n32. That said, back in the 90s I was
-working to port MIPS code to Itanium via binary translation. Given now
-Itanium is obsolete, I'm not sure it is worth adding complexity for
-the sake of MIPS. I'm happy to do what others feel is best here, but
-my default position is just to carry what the existing behavior is
-forward.
-
-> > +#if defined(ALL_SYSCALLTBL) || defined(__powerpc__) ||
-> > defined(__powerpc64__)
-> > +EOF
-> > +build_tables "$tools_dir/perf/arch/powerpc/entry/syscalls/syscall.tbl"
-> > "$outfile" common,32,nospu EM_PPC
-> > +build_tables "$tools_dir/perf/arch/powerpc/entry/syscalls/syscall.tbl"
-> > "$outfile" common,64,nospu EM_PPC64
-> > +cat >> "$outfile" <<EOF
-> > +#endif // defined(ALL_SYSCALLTBL) || defined(__powerpc__) ||
-> > defined(__powerpc64__)
+> #define __NR_read (__NR_Linux + 0)
+> #define __NR_write (__NR_Linux + 1)
+> #define __NR_open (__NR_Linux + 2)
 >
-> This skips the SPU table, but I think that's fine.
+> These offsets are 4000/5000/6000 respectively.
 >
-> > +EOF
-> > +build_tables "$tools_dir/perf/arch/s390/entry/syscalls/syscall.tbl"
-> > "$outfile" common,64,renameat,rlimit,memfd_secret EM_S390
-> > +cat >> "$outfile" <<EOF
-> > +#endif // defined(ALL_SYSCALLTBL) || defined(__s390x__)
+> > ```
+> > #if defined(ALL_SYSCALLTBL) || defined(__mips__)
+> > static const char *const syscall_num_to_name_EM_MIPS[] =3D {
+> >        [0] =3D "read",
+> >        [1] =3D "write",
+> >        [2] =3D "open",
+> > ...
+> >         [465] =3D "listxattrat",
+> >         [466] =3D "removexattrat",
+> > };
 >
-> This skips the 32-bit table, though I think that one is already
-> planned to be discontinued in the future.
-
-Thankfully we have awesome s390 devs on the mailing list, hopefully
-they'll shout out if I'm doing things wrong.
-
-> > +#if defined(ALL_SYSCALLTBL) || defined(__i386__) || defined(__x86_64__=
-)
-> > +EOF
-> > +build_tables "$tools_dir/perf/arch/x86/entry/syscalls/syscall_32.tbl"
-> > "$outfile" common,32,i386 EM_386
-> > +build_tables "$tools_dir/perf/arch/x86/entry/syscalls/syscall_64.tbl"
-> > "$outfile" common,64 EM_X86_64
-> > +cat >> "$outfile" <<EOF
-> > +#endif // defined(ALL_SYSCALLTBL) || defined(__i386__) ||
-> > defined(__x86_64__)
+> This means the array is not sparse, but the numbers
+> here do not match the syscall number argument register.
 >
-> This misses the x32 table.
+> The question is whether tracing on mips adds the same
+> per-ABI offset again, or if it tries and fails to look
+> up index 6002 for 'open'.
 
-Again I'm carrying forward a behavior. Would it be worth adding x32?
-
-Context: I handled x86 on Android over 10 years ago. x86 phones were
-64-bit long before ARM or Apple phones, the kernel was 64-bit but the
-userland was forced to be 32-bit. ARM32 has R15 be the program
-counter, Sophie Wilson's idea, and when Android's security folks
-experimented with ASLR they found it to be free as a consequence of
-ARM32. On x86 not x32 then you're in the land of thunk bx, losing a
-register and extra instructions. We never did x32 on Android as it
-became irrelevant when I brought up x86-64 on Android. The desire for
-x32 was for RIP encoding to fix the ASLR issue, not so much the extra
-registers, and because Android used to mandate a 32-bit user land
-(this was so extreme that even the developer's C to generally ARM
-cross-compilers were built as 32-bit binaries). Given x32 was done for
-Android, Android never used it, I have a hard time thinking we should
-be adding support to perf. That said there is likely other context
-that I'm unaware of as I'm surprised x32 still exists. Fwiw, it
-saddens me that the x32 experience means that for APX we're still
-getting the x86-64 ABI moved forward and silly things like the var
-args convention on %al (there for C80 compatibility I once believed -
-not really an issue today). On ARM64 registers there are at least 8
-callee-save general purpose and floating point registers, so the x86
-model of pretty much everything is caller-save means function calls
-are expensive and you may need aggressive inlining. Anyway, sorry for
-going on so much.
+Thanks for clarifying. I believe it will use 6002 and be broken. I
+believe that'd be true without these changes too. I'm not testing on
+MIPS so it'd be nice to have a fix targeted at making it work. Ideally
+we wouldn't use __NR_Linux and instead fudge the id/system call number
+based on e_machine/e_flags. I think it is follow on work, especially
+because I don't find MIPS a very motivating use-case.
 
 Thanks,
 Ian
