@@ -1,70 +1,70 @@
-Return-Path: <linux-csky+bounces-1775-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1776-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52DA1A304D1
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 08:49:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2ECEA30548
+	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 09:09:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA0217A24E3
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 07:48:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0BA83A4BA7
+	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 08:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12551EE029;
-	Tue, 11 Feb 2025 07:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26C01EE7AA;
+	Tue, 11 Feb 2025 08:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="2/HEGcR9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="I4IxVtCn"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JU9ZdgJE";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y/qcIq11"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A181EDA38;
-	Tue, 11 Feb 2025 07:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CB11EE01A;
+	Tue, 11 Feb 2025 08:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739260131; cv=none; b=CROsJjKy8gUPvrSpIZ+jvGshjHHERrQ4sTBiGCqAbRKIufMeMZylwNIp1dhDg5eLjRLsRx7LLoqi8032doDxT3iCK5MimZY6bfIDg3/78Bt1jGzaXHVhV8M5B2GtsBu4qblSrpoJQZqSjOPfuqwow+8V8yvKd9aPV/bHxssu+V0=
+	t=1739261364; cv=none; b=uvSDw51D6fHCj+9SlcVGgx4wSZj8pDq4xMalb8QBaNpveN2Ws4HnmGI5qOmHPI3Vhac7AIhO/GpxYy8roBZXvcQ5NLy0lHsmGuwInU9sQ6rSFdRF5TYvlKJU2NVN3nNWhLwtycQyZvI83aOv2m9+71vf72W3p0S3wwn0GkDnxOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739260131; c=relaxed/simple;
-	bh=i9mApgRl/34Hvnr2FI4liwukHUzLOAV8H28W3dbsKYc=;
+	s=arc-20240116; t=1739261364; c=relaxed/simple;
+	bh=8zbYpb03k265T2/tmJHBW9ZDLDeyG/KjxMcK0OIakq8=;
 	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bi+woWUmhKlvqWLEvJJmXC4iu7ciXbE0ByMCY7SX6f9JtHVg42qXsaWNkgV5KLGydw0CGys/+Zpy28KyOfRTxZ/sHjvkXXjWytuZZBzeLCUDuSFb8D7fFmrjuAFZllob1jJSnFSLUIrQb7MbwDd4RbZ7xE35400bDZUo80+36Ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=2/HEGcR9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=I4IxVtCn; arc=none smtp.client-ip=103.168.172.151
+	 Subject:Content-Type; b=ZIiKg/pFl9aqTP/8Yx9hytZnhvOzcIwtGktSMX8lda9b+MC1lxvfPDR5unrTtAmf8eSU2ZOsytjrKszsM1OBGOYJivnplnWXXentSnph2BC1eCt5KVUIDM/ueZPWLCMRZZl96ZJJikRS9AuEplNbf/oq2QNoVg/RnWw7yy7a5nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JU9ZdgJE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y/qcIq11; arc=none smtp.client-ip=103.168.172.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id B00B513802BF;
-	Tue, 11 Feb 2025 02:48:48 -0500 (EST)
+	by mailfout.phl.internal (Postfix) with ESMTP id DEC151380188;
+	Tue, 11 Feb 2025 03:09:21 -0500 (EST)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Tue, 11 Feb 2025 02:48:48 -0500
+  by phl-compute-10.internal (MEProxy); Tue, 11 Feb 2025 03:09:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:content-transfer-encoding:content-type:content-type:date:date
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1739260128;
-	 x=1739346528; bh=ZxB3/5WwQz68fg3MoEi71/v426Fi20HIksm5loNdxsU=; b=
-	2/HEGcR9OGOaAwRQO6L6sMF2KbOtsNplv7MNsDt/YCxHuhPRcqAYtEiGoZgIwOfc
-	uL3sX3JSq1cawjwJkoxV3QTUgisQ3ya7PSS1ytut1LTD8PGj+BKk96+KJE65RNBW
-	Tsphgr7hCXE4tVIJ34oYnPVbiB4vjSTfc9/NOGeoGbswiwgC1a+6NHKuopy+NWom
-	W8Aye1T6NHlCILvx9Uo/L5Kan0YegyE5vRZFt0JnSxM/E7xAAFXkVMgaJLxHkNSW
-	7vSPcFaDVUCUX03VcnEb5QcRWhgQe/5RuBfnXo/EPUTyYvPI+L0q+ljabvM280SI
-	8+YYDn0Hmr5uRCF9PS3rqw==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1739261361;
+	 x=1739347761; bh=slWw1TiRIa+fnLGWH63JJF/dAx3EWeR1a3tRrHk8+u8=; b=
+	JU9ZdgJE5Tf33djcc75aebLdMNBe8w47L+vuLeLb/AOYoZos8niDLnLZvnGlwalK
+	iYKxL53dmvMiJUFHPtBuHqWiHWxbWmPd2btMeRgMrdLHEfmg3Ve/tZQlW8Fj38Ka
+	phWf+YPSO7iZwTttd0gVP006zPfSQNAfklGZgjGAdmRC7RDDtigLlkbjGyt9f0+4
+	5tF/KbVxl11Y5GefKt4XX3QO2ecovLZwUYeE0kOt4WsIMVaMez9Ft+zSRWiMnfXZ
+	qEqgAS11b3rToDh4XPqx7qrqOMwNH3h7SgOET17njLz8sW96ZE7ca4vUkfBTD0jF
+	XCVhwHmgenRUwofwb3eiXA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:content-transfer-encoding:content-type
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1739260128; x=1739346528; bh=Z
-	xB3/5WwQz68fg3MoEi71/v426Fi20HIksm5loNdxsU=; b=I4IxVtCnnAUwaMwdS
-	HBPGl0s8Bs7N5OvfxUUj7rmVpwUDenuSUtoWA8qW7iOVzTrXUCYnMvk85s2z0xoR
-	WwjfijsoIZ2gTZvqKVWotAOhcud1aPNGWjwV5EUeMHeY8JPZJfZ+Xl8EawFUVWba
-	L3G6vsOf9tVmmeY9c0Wm3+WHg4QEmtkIr425BlwrsmYGhpE/Bmny9s4MR27hsZYL
-	y6+mygr/MkXkIGwZMSloEQsmGVX47ObWdyppCTZAe/elBW2w3wJ2xxOqyqnb6WE1
-	pUlHrn/PNj4fbO2AgIJp64uaid65I+6U3nPUa7F1LIYYVGTHDQvsRUDBL0TAlSC2
-	PtUrg==
-X-ME-Sender: <xms:3wCrZ2JHs4IEKLoCYrrqhDKpD0sECcz6XTbclk5k5JQOCStIbUrLoA>
-    <xme:3wCrZ-KMxcrDJeRW5DKhBWQAbB8In_PeccU4ovCK8v_85BQrb0r0MSUwuSRA9sLTX
-    4SX2c5Sd_RQzhV7q7Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegtdegfecutefuodetggdotefrod
+	:x-me-sender:x-sasl-enc; s=fm3; t=1739261361; x=1739347761; bh=s
+	lWw1TiRIa+fnLGWH63JJF/dAx3EWeR1a3tRrHk8+u8=; b=Y/qcIq11BcnE0QQAy
+	URxL+it+DGPHmzD7SxsY0zqubOCab/kOAhNrAzwI0xZhD42O17aOzTWq29aX1tfu
+	aildwrM8zBsfR1fmUkZAtFpZd2nsZar/uznPC6s31yrISYsLs2jC4SDrK+ykmnNq
+	eWnbN+rt1OdBfvrobmmUZ1iF9vzE9EF9IKwwPqmZm6Yrb+ztogBUrRWqZfQfamdu
+	kRKbPc5XY+LgJ9KYIdUFNBdYBOEoujjti2rbhQcWSq/kb3POnr5LfDgexwpvx5NY
+	ZHSqohe0kVBQacsNbHYpP7TqGymU6X/O1GjdM7Ze6cMkhCFN38iXpb6pDouEJvTP
+	nsFJw==
+X-ME-Sender: <xms:rwWrZ7NrJjhqwazfmoyzQtVyBjqV9iRQwxY4o-dh_ZLO4sOhq_-Q7w>
+    <xme:rwWrZ1_JGDjp4PMLSfSUvNvNXobU9RQHG3IVgTLjF_b-PwbGKAulOazDx2OfSrtqe
+    YRlFJJROZIVSmnMHpQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegtdegjecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
     hnthhsucdlqddutddtmdenucfjughrpefoggffhffvkfgjfhfutgfgsehtjeertdertddt
@@ -80,14 +80,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegtdegfecutefuodetgg
     hglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhg
     pdhrtghpthhtoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtph
     htthhopegrtghmvgeskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:3wCrZ2tgaKZd-r19tJFBLx1c9olIzWTs4ZaRSponWadm2LzZ8pniRQ>
-    <xmx:3wCrZ7abmJIQQGxBya7YEj5PHj7E42WKmlGvJuuqMoyGm5CmplJPQg>
-    <xmx:3wCrZ9aU6yItPSC8xJtXsBq-fJNVShJH7DJB1OOPcE4_GM_L7YKmfw>
-    <xmx:3wCrZ3A_NdBF4H9b_qRB98P-LNzrFo0iZkHCoC5kpllQIinlE4Y6uA>
-    <xmx:4ACrZwlxbCT18wcLzBJjhR0WUz3hezoGAamIPURRlc7nthRHwLvQT-fx>
+X-ME-Proxy: <xmx:rwWrZ6RvbSTCiJfZhcc1wviX371cOxFdxpy1jgK3YWb8t3Ly9O97fg>
+    <xmx:rwWrZ_tM-TyjUy98K7B6J9NsnL96ZP9LPTCHE9Cgaqe3-9tFrg1diQ>
+    <xmx:rwWrZzcN985Xxl6Id4XCdL8uVRy3FAYMAvVIspf2ggoy2F44d2KQBw>
+    <xmx:rwWrZ72mqnYlgFqEb-_n2xkmTnUMexXg2qVZ1hfH-r7-3zCk_FHi5Q>
+    <xmx:sQWrZ_oxO7aagZ_10p5YRjluCqaet_alPpnufAcGM4EYfH3nvoSxklK2>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 374062220072; Tue, 11 Feb 2025 02:48:47 -0500 (EST)
+	id 371CA2220072; Tue, 11 Feb 2025 03:09:19 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -95,7 +95,7 @@ List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 11 Feb 2025 08:48:26 +0100
+Date: Tue, 11 Feb 2025 09:08:58 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Ian Rogers" <irogers@google.com>,
  "Peter Zijlstra" <peterz@infradead.org>,
@@ -122,56 +122,92 @@ To: "Ian Rogers" <irogers@google.com>,
  linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
  linux-riscv@lists.infradead.org
-Message-Id: <07c5c3ad-5a6d-4eda-95f2-ed16e7504d4c@app.fastmail.com>
-In-Reply-To: <20250210165108.95894-4-irogers@google.com>
+Message-Id: <d47c35dd-9c52-48e7-a00d-135572f11fbb@app.fastmail.com>
+In-Reply-To: <20250210165108.95894-6-irogers@google.com>
 References: <20250210165108.95894-1-irogers@google.com>
- <20250210165108.95894-4-irogers@google.com>
-Subject: Re: [PATCH v2 3/7] perf syscalltbl: Remove struct syscalltbl
+ <20250210165108.95894-6-irogers@google.com>
+Subject: Re: [PATCH v2 5/7] perf trace beauty: Add syscalltbl.sh generating all system
+ call tables
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
 On Mon, Feb 10, 2025, at 17:51, Ian Rogers wrote:
-> The syscalltbl held entries of system call name and number pairs,
-> generated from a native syscalltbl at start up. As there are gaps in
-> the system call number there is a notion of index into the
-> table. Going forward we want the system call table to be identifiable
-> by a machine type, for example, i386 vs x86-64. Change the interface
-> to the syscalltbl so (1) a (currently unused machine type of EM_HOST)
-> is passed (2) the index to syscall number and system call name mapping
-> is computed at build time.
->
-> Two tables are used for this, an array of system call number to name,
-> an array of system call numbers sorted by the system call name. The
-> sorted array doesn't store strings in part to save memory and
-> relocations. The index notion is carried forward and is an index into
-> the sorted array of system call numbers, the data structures are
-> opaque (held only in syscalltbl.c), and so the number of indices for a
-> machine type is exposed as a new API.
->
-> The arrays are computed in the syscalltbl.sh script and so no start-up
-> time computation and storage is necessary.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> Reviewed-by: Howard Chu <howardchu95@gmail.com>
 
-Your changes look fine to me, but I noticed one part that may
-be wrong before and after your patch:
+> +# Each line of the syscall table should have the following format:
+> +#
+> +# NR ABI NAME [NATIVE] [COMPAT]
+> +#
+> +# NR       syscall number
+> +# ABI      ABI name
+> +# NAME     syscall name
+> +# NATIVE   native entry point (optional)
+> +# COMPAT   compat entry point (optional)
 
-> 
-> -const int syscalltbl_native_max_id = SYSCALLTBL_MAX_ID;
-> -static const char *const *syscalltbl_native = syscalltbl;
-> +const char *syscalltbl__name(int e_machine __maybe_unused, int id)
-> +{
-> +	if (id >= 0 && id <= (int)ARRAY_SIZE(syscall_num_to_name))
-> +		return syscall_num_to_name[id];
-> +	return NULL;
-> +}
+On x86, there is now a sixth optional field.
 
-The syscall numbers on mips (and previously on ia64) are offset by
-a large number depending on the ABI (o32/n32/n64). I assume what
-we want here is to have the small numbers without the offset in
-syscall_num_to_name[], but that requires adding the offset during
-the lookup. Can you check if this is handled correctly?
+> +#if defined(ALL_SYSCALLTBL) || defined(__arm__) || defined(__aarch64__)
+> +EOF
+> +build_tables "$tools_dir/perf/arch/arm/entry/syscalls/syscall.tbl" 
+> "$outfile" common,32,oabi EM_ARM
+> +build_tables 
 
-      Arnd
+The oabi syscalls probably shouldn't be part of the default set here.
+Technically these are two separate ABIs, though EABI is a subset of
+OABI for the most most part. Some of the calling conventions are
+also different.
+
+> "$tools_dir/perf/arch/arm64/entry/syscalls/syscall_64.tbl" "$outfile" 
+> common,64,renameat,rlimit,memfd_secret EM_AARCH64
+> +cat >> "$outfile" <<EOF
+> +#endif // defined(ALL_SYSCALLTBL) || defined(__arm__) || 
+> defined(__aarch64__)
+
+Hardcoding the set of ABIs in the middle of the script seems
+too fragile to me, I'm worried that these get out of sync quickly.
+
+> +#if defined(ALL_SYSCALLTBL) || defined(__mips__)
+> +EOF
+> +build_tables 
+> "$tools_dir/perf/arch/mips/entry/syscalls/syscall_n64.tbl" "$outfile" 
+> common,64,n64 EM_MIPS
+> +cat >> "$outfile" <<EOF
+> +#endif // defined(ALL_SYSCALLTBL) || defined(__mips__)
+
+What about n32/o32? The syscall tables are completely different here.
+
+> +#if defined(ALL_SYSCALLTBL) || defined(__powerpc__) || 
+> defined(__powerpc64__)
+> +EOF
+> +build_tables "$tools_dir/perf/arch/powerpc/entry/syscalls/syscall.tbl" 
+> "$outfile" common,32,nospu EM_PPC
+> +build_tables "$tools_dir/perf/arch/powerpc/entry/syscalls/syscall.tbl" 
+> "$outfile" common,64,nospu EM_PPC64
+> +cat >> "$outfile" <<EOF
+> +#endif // defined(ALL_SYSCALLTBL) || defined(__powerpc__) || 
+> defined(__powerpc64__)
+
+This skips the SPU table, but I think that's fine.
+
+> +EOF
+> +build_tables "$tools_dir/perf/arch/s390/entry/syscalls/syscall.tbl" 
+> "$outfile" common,64,renameat,rlimit,memfd_secret EM_S390
+> +cat >> "$outfile" <<EOF
+> +#endif // defined(ALL_SYSCALLTBL) || defined(__s390x__)
+
+This skips the 32-bit table, though I think that one is already
+planned to be discontinued in the future.
+
+> +#if defined(ALL_SYSCALLTBL) || defined(__i386__) || defined(__x86_64__)
+> +EOF
+> +build_tables "$tools_dir/perf/arch/x86/entry/syscalls/syscall_32.tbl" 
+> "$outfile" common,32,i386 EM_386
+> +build_tables "$tools_dir/perf/arch/x86/entry/syscalls/syscall_64.tbl" 
+> "$outfile" common,64 EM_X86_64
+> +cat >> "$outfile" <<EOF
+> +#endif // defined(ALL_SYSCALLTBL) || defined(__i386__) || 
+> defined(__x86_64__)
+
+This misses the x32 table.
+
+   Arnd
 
