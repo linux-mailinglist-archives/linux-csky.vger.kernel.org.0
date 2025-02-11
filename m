@@ -1,213 +1,204 @@
-Return-Path: <linux-csky+bounces-1776-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1777-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2ECEA30548
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 09:09:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FDB9A31119
+	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 17:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0BA83A4BA7
-	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 08:09:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CDB2163BCA
+	for <lists+linux-csky@lfdr.de>; Tue, 11 Feb 2025 16:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26C01EE7AA;
-	Tue, 11 Feb 2025 08:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB3B1F91F6;
+	Tue, 11 Feb 2025 16:19:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JU9ZdgJE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y/qcIq11"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Nu7MCfNz"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CB11EE01A;
-	Tue, 11 Feb 2025 08:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2D026BDAB
+	for <linux-csky@vger.kernel.org>; Tue, 11 Feb 2025 16:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739261364; cv=none; b=uvSDw51D6fHCj+9SlcVGgx4wSZj8pDq4xMalb8QBaNpveN2Ws4HnmGI5qOmHPI3Vhac7AIhO/GpxYy8roBZXvcQ5NLy0lHsmGuwInU9sQ6rSFdRF5TYvlKJU2NVN3nNWhLwtycQyZvI83aOv2m9+71vf72W3p0S3wwn0GkDnxOw=
+	t=1739290749; cv=none; b=AFfPgCIK4wYFAly7yLymqVkigo2tojFZoPCjFzPXYiHxo+9fAhljTb9vUb0oNSCC0hFhDXWBVIp75LybsDyUYrHWE4XFX8shqqzvnaD84zr6aWxkYzDW1Za+K/ogFtIjg9xPdEjFPK68xLfctRSfCdvpbmTsxNPO2pLpV5M5fMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739261364; c=relaxed/simple;
-	bh=8zbYpb03k265T2/tmJHBW9ZDLDeyG/KjxMcK0OIakq8=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ZIiKg/pFl9aqTP/8Yx9hytZnhvOzcIwtGktSMX8lda9b+MC1lxvfPDR5unrTtAmf8eSU2ZOsytjrKszsM1OBGOYJivnplnWXXentSnph2BC1eCt5KVUIDM/ueZPWLCMRZZl96ZJJikRS9AuEplNbf/oq2QNoVg/RnWw7yy7a5nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JU9ZdgJE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y/qcIq11; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id DEC151380188;
-	Tue, 11 Feb 2025 03:09:21 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Tue, 11 Feb 2025 03:09:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1739261361;
-	 x=1739347761; bh=slWw1TiRIa+fnLGWH63JJF/dAx3EWeR1a3tRrHk8+u8=; b=
-	JU9ZdgJE5Tf33djcc75aebLdMNBe8w47L+vuLeLb/AOYoZos8niDLnLZvnGlwalK
-	iYKxL53dmvMiJUFHPtBuHqWiHWxbWmPd2btMeRgMrdLHEfmg3Ve/tZQlW8Fj38Ka
-	phWf+YPSO7iZwTttd0gVP006zPfSQNAfklGZgjGAdmRC7RDDtigLlkbjGyt9f0+4
-	5tF/KbVxl11Y5GefKt4XX3QO2ecovLZwUYeE0kOt4WsIMVaMez9Ft+zSRWiMnfXZ
-	qEqgAS11b3rToDh4XPqx7qrqOMwNH3h7SgOET17njLz8sW96ZE7ca4vUkfBTD0jF
-	XCVhwHmgenRUwofwb3eiXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1739261361; x=1739347761; bh=s
-	lWw1TiRIa+fnLGWH63JJF/dAx3EWeR1a3tRrHk8+u8=; b=Y/qcIq11BcnE0QQAy
-	URxL+it+DGPHmzD7SxsY0zqubOCab/kOAhNrAzwI0xZhD42O17aOzTWq29aX1tfu
-	aildwrM8zBsfR1fmUkZAtFpZd2nsZar/uznPC6s31yrISYsLs2jC4SDrK+ykmnNq
-	eWnbN+rt1OdBfvrobmmUZ1iF9vzE9EF9IKwwPqmZm6Yrb+ztogBUrRWqZfQfamdu
-	kRKbPc5XY+LgJ9KYIdUFNBdYBOEoujjti2rbhQcWSq/kb3POnr5LfDgexwpvx5NY
-	ZHSqohe0kVBQacsNbHYpP7TqGymU6X/O1GjdM7Ze6cMkhCFN38iXpb6pDouEJvTP
-	nsFJw==
-X-ME-Sender: <xms:rwWrZ7NrJjhqwazfmoyzQtVyBjqV9iRQwxY4o-dh_ZLO4sOhq_-Q7w>
-    <xme:rwWrZ1_JGDjp4PMLSfSUvNvNXobU9RQHG3IVgTLjF_b-PwbGKAulOazDx2OfSrtqe
-    YRlFJJROZIVSmnMHpQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegtdegjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfekledtffefhffghfetteehuefhgfetgefhtdeu
-    feduueeltefghedtjeeifffhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfedu
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrg
-    hssegrrhhmrdgtohhmpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgt
-    ohhmpdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghpthhtoh
-    eprghouhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopehhohifrghr
-    uggthhhuleehsehgmhgrihhlrdgtohhmpdhrtghpthhtohepihhrohhgvghrshesghhooh
-    hglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhg
-    pdhrtghpthhtoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtph
-    htthhopegrtghmvgeskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:rwWrZ6RvbSTCiJfZhcc1wviX371cOxFdxpy1jgK3YWb8t3Ly9O97fg>
-    <xmx:rwWrZ_tM-TyjUy98K7B6J9NsnL96ZP9LPTCHE9Cgaqe3-9tFrg1diQ>
-    <xmx:rwWrZzcN985Xxl6Id4XCdL8uVRy3FAYMAvVIspf2ggoy2F44d2KQBw>
-    <xmx:rwWrZ72mqnYlgFqEb-_n2xkmTnUMexXg2qVZ1hfH-r7-3zCk_FHi5Q>
-    <xmx:sQWrZ_oxO7aagZ_10p5YRjluCqaet_alPpnufAcGM4EYfH3nvoSxklK2>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 371CA2220072; Tue, 11 Feb 2025 03:09:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1739290749; c=relaxed/simple;
+	bh=ClIVXb1x+2dZfzmgI0PvHc3Nl/BWDi3XQGQRYx+Me5Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j6ZVlzq/OwxkI6G7nqM3K049Z6M5RjyLauJrGzU9opdwrHx5hcLlY7dLu/7eRJ2TRAfZp4rVKY/pXLiEFBjoo01DMSKkkNKj+iWTbOUfXovjQVAKnsIBG7bWMt1bJ5WU2NxhpMIUpUC9DNeouAr/GeQ8B4qKHabFMml9v4O8J7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Nu7MCfNz; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3d146357fb2so184875ab.1
+        for <linux-csky@vger.kernel.org>; Tue, 11 Feb 2025 08:19:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739290747; x=1739895547; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wPuoFgyUqShqiHXq7m4WJY26nDOJr72a7sYiaqDAkZ8=;
+        b=Nu7MCfNza5gHONz9k5muMcFxcI09J+wweV2B3XUUFmLFX6J2XqJsuw/tRhkOczDw4A
+         KwM2Rgg6ZT+U4S5shFHuk8eFfc0wYMEVHf8hcK5isY0teIBz9Ru8z6pp5YVj2iiFSqqj
+         wjqi4EBC/yyPqpl0v00gYT1oYO1PTn0sLIUhpLMKD2YwbJzHkdAKZaCKULe68ZNdIAur
+         2lcUfv65b5Kk1TWKdZj0OHwv0kK2N4N8zJviqN2YvliveGNjydkRUlap/Y5SZVU6GInh
+         /dL5RNBzlbYEzgXhIbZYdy97YIeyL1Hyd8k0c8QWaNqyi43xWUQNpc2AMLcXNa7NArKY
+         931g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739290747; x=1739895547;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wPuoFgyUqShqiHXq7m4WJY26nDOJr72a7sYiaqDAkZ8=;
+        b=YgzCnvTZPW6pGUncm+0plTos7BP223+8IvTP2gdqxUrcX369Dz+UWq+hq8Fnl1OZVL
+         R7wVW5xG48i0QR9HuyBhJt1eEbJPDct0goBXd2gO1n0RlwbJuypkEvi61OlrnCmUs9Ad
+         P/6qIQC8x7OlW/P+M25a1Fv6lysELv3Cv0SJA38yKs37s5vdQ3dnMgYfsPtvdryo4swz
+         +FznIm03rhDYiLIm7ZdbiYBt8ijK5fojpJglXrGD0hE28azu5iehvS8oArTeM9ZU57AB
+         AV4N0ltPcciuOf7c/mgiHYBGLFiOVPrVqq02bk84vh5UillCxJ58sBg6TIp4NcJGJ8ig
+         UG+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVQvHStNpxUEnraSN4OhW418WbKqEljWxsyEoKAIk1PoNZqXCNftpVi0McvgR/Ozg30odtuJy1I84w8@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzh/s2thVnOf1kSuuyA2Bb74/0+kcBcEPDVlYk/fLv+QFFHWrYd
+	+9g5N6SboK/0fQfYu4gZzZGa57/vp8rXcTbAoZGohu4SJhtB7BwfDenAKztyOUaV3e8CqUlgweP
+	6vGr8XywRfZ/EyQt9CQeWnuK7iaiGPdVYVSWL
+X-Gm-Gg: ASbGncsnrTFGHNbxSeJumIJnWAEgG8xeUohSa4FMLlaPJKDAVDzn6RAD+Q0qIEot2Hl
+	+5Umtxgn/n+zM45lDTkw67sm1kIuNGgrBFCGVcQFLmKvO7mTpJj5jV/B9sj9N8stcND21LweowW
+	FuEAGVJ3+uf+HIV9gAb6it6W8l
+X-Google-Smtp-Source: AGHT+IGBRJUYM7eB7GRcv7zbcCLNqRmCzTZKJzAh5FAel3+2vWVb9N+g6mOuPoRoTCDTrgVk0gX8MyeGCqZ63HpU/Co=
+X-Received: by 2002:a05:6e02:1848:b0:3a7:df79:71b3 with SMTP id
+ e9e14a558f8ab-3d171e30ba1mr3350285ab.19.1739290746485; Tue, 11 Feb 2025
+ 08:19:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 11 Feb 2025 09:08:58 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ian Rogers" <irogers@google.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
- "Jiri Olsa" <jolsa@kernel.org>,
- "Adrian Hunter" <adrian.hunter@intel.com>,
- "Kan Liang" <kan.liang@linux.intel.com>,
- "John Garry" <john.g.garry@oracle.com>, "Will Deacon" <will@kernel.org>,
- "James Clark" <james.clark@linaro.org>,
- "Mike Leach" <mike.leach@linaro.org>, "Leo Yan" <leo.yan@linux.dev>,
- guoren <guoren@kernel.org>, "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>,
- "Charlie Jenkins" <charlie@rivosinc.com>,
- "Bibo Mao" <maobibo@loongson.cn>, "Huacai Chen" <chenhuacai@kernel.org>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Jiri Slaby" <jirislaby@kernel.org>,
- =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>,
- "Howard Chu" <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- linux-riscv@lists.infradead.org
-Message-Id: <d47c35dd-9c52-48e7-a00d-135572f11fbb@app.fastmail.com>
-In-Reply-To: <20250210165108.95894-6-irogers@google.com>
-References: <20250210165108.95894-1-irogers@google.com>
- <20250210165108.95894-6-irogers@google.com>
-Subject: Re: [PATCH v2 5/7] perf trace beauty: Add syscalltbl.sh generating all system
- call tables
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250210165108.95894-1-irogers@google.com> <20250210165108.95894-4-irogers@google.com>
+ <07c5c3ad-5a6d-4eda-95f2-ed16e7504d4c@app.fastmail.com>
+In-Reply-To: <07c5c3ad-5a6d-4eda-95f2-ed16e7504d4c@app.fastmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 11 Feb 2025 08:18:54 -0800
+X-Gm-Features: AWEUYZnsI21FqO05tMc19ZFoLQwRQjxl2-W2xUAqGcaU1HeGa3Km7KpVudfKIf8
+Message-ID: <CAP-5=fV0AVEp1uEtKjAqOmwqKSRuUzTwrXnBiqc=Lopfj4hBSA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] perf syscalltbl: Remove struct syscalltbl
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
+	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
+	Leo Yan <leo.yan@linux.dev>, guoren <guoren@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Charlie Jenkins <charlie@rivosinc.com>, 
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 10, 2025, at 17:51, Ian Rogers wrote:
+On Mon, Feb 10, 2025 at 11:48=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
+>
+> On Mon, Feb 10, 2025, at 17:51, Ian Rogers wrote:
+> > The syscalltbl held entries of system call name and number pairs,
+> > generated from a native syscalltbl at start up. As there are gaps in
+> > the system call number there is a notion of index into the
+> > table. Going forward we want the system call table to be identifiable
+> > by a machine type, for example, i386 vs x86-64. Change the interface
+> > to the syscalltbl so (1) a (currently unused machine type of EM_HOST)
+> > is passed (2) the index to syscall number and system call name mapping
+> > is computed at build time.
+> >
+> > Two tables are used for this, an array of system call number to name,
+> > an array of system call numbers sorted by the system call name. The
+> > sorted array doesn't store strings in part to save memory and
+> > relocations. The index notion is carried forward and is an index into
+> > the sorted array of system call numbers, the data structures are
+> > opaque (held only in syscalltbl.c), and so the number of indices for a
+> > machine type is exposed as a new API.
+> >
+> > The arrays are computed in the syscalltbl.sh script and so no start-up
+> > time computation and storage is necessary.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > Reviewed-by: Howard Chu <howardchu95@gmail.com>
+>
+> Your changes look fine to me, but I noticed one part that may
+> be wrong before and after your patch:
+>
+> >
+> > -const int syscalltbl_native_max_id =3D SYSCALLTBL_MAX_ID;
+> > -static const char *const *syscalltbl_native =3D syscalltbl;
+> > +const char *syscalltbl__name(int e_machine __maybe_unused, int id)
+> > +{
+> > +     if (id >=3D 0 && id <=3D (int)ARRAY_SIZE(syscall_num_to_name))
+> > +             return syscall_num_to_name[id];
+> > +     return NULL;
+> > +}
+>
+> The syscall numbers on mips (and previously on ia64) are offset by
+> a large number depending on the ABI (o32/n32/n64). I assume what
+> we want here is to have the small numbers without the offset in
+> syscall_num_to_name[], but that requires adding the offset during
+> the lookup. Can you check if this is handled correctly?
 
-> +# Each line of the syscall table should have the following format:
-> +#
-> +# NR ABI NAME [NATIVE] [COMPAT]
-> +#
-> +# NR       syscall number
-> +# ABI      ABI name
-> +# NAME     syscall name
-> +# NATIVE   native entry point (optional)
-> +# COMPAT   compat entry point (optional)
+Thanks Arnd! I agree the tables are large and can be sparse, they'll
+also be full of relocations. MIPS doesn't look like an outlier to me
+here:
+```
+#if defined(ALL_SYSCALLTBL) || defined(__mips__)
+static const char *const syscall_num_to_name_EM_MIPS[] =3D {
+       [0] =3D "read",
+       [1] =3D "write",
+       [2] =3D "open",
+...
+        [465] =3D "listxattrat",
+        [466] =3D "removexattrat",
+};
+```
+For contrast x86:
+```
+#if defined(ALL_SYSCALLTBL) || defined(__i386__) || defined(__x86_64__)
+static const char *const syscall_num_to_name_EM_386[] =3D {
+        [0] =3D "restart_syscall",
+        [1] =3D "exit",
+        [2] =3D "fork",
+...
+        [464] =3D "getxattrat",
+        [465] =3D "listxattrat",
+        [466] =3D "removexattrat",
+};
+```
+Looking through the tables I see alpha having the highest number
+syscall with 572 being mseal.
 
-On x86, there is now a sixth optional field.
+I don't think this is great but in the current code (on x86-64) we
+have in arch/x86/include/generated/asm/syscalls_64.h:
+```
+static const char *const syscalltbl[] =3D {
+       [0] =3D "read",
+       [1] =3D "write",
+       [2] =3D "open",
+...
+        [465] =3D "listxattrat",
+        [466] =3D "removexattrat",
+};
+#define SYSCALLTBL_MAX_ID 466
+```
+So the change is carrying forward a bad behavior, the table is still
+only around 4kb. We could be more aggressive in compressing the
+strings and pointers, for example how we compress the perf events and
+metrics. I think it is getting out-of-scope here as that logic is
+written in python, with the aid of lots of dictionaries, whilst this
+code is currently a shell script. It becomes more of an issue if we
+enable all of the tables in the build at once.
 
-> +#if defined(ALL_SYSCALLTBL) || defined(__arm__) || defined(__aarch64__)
-> +EOF
-> +build_tables "$tools_dir/perf/arch/arm/entry/syscalls/syscall.tbl" 
-> "$outfile" common,32,oabi EM_ARM
-> +build_tables 
-
-The oabi syscalls probably shouldn't be part of the default set here.
-Technically these are two separate ABIs, though EABI is a subset of
-OABI for the most most part. Some of the calling conventions are
-also different.
-
-> "$tools_dir/perf/arch/arm64/entry/syscalls/syscall_64.tbl" "$outfile" 
-> common,64,renameat,rlimit,memfd_secret EM_AARCH64
-> +cat >> "$outfile" <<EOF
-> +#endif // defined(ALL_SYSCALLTBL) || defined(__arm__) || 
-> defined(__aarch64__)
-
-Hardcoding the set of ABIs in the middle of the script seems
-too fragile to me, I'm worried that these get out of sync quickly.
-
-> +#if defined(ALL_SYSCALLTBL) || defined(__mips__)
-> +EOF
-> +build_tables 
-> "$tools_dir/perf/arch/mips/entry/syscalls/syscall_n64.tbl" "$outfile" 
-> common,64,n64 EM_MIPS
-> +cat >> "$outfile" <<EOF
-> +#endif // defined(ALL_SYSCALLTBL) || defined(__mips__)
-
-What about n32/o32? The syscall tables are completely different here.
-
-> +#if defined(ALL_SYSCALLTBL) || defined(__powerpc__) || 
-> defined(__powerpc64__)
-> +EOF
-> +build_tables "$tools_dir/perf/arch/powerpc/entry/syscalls/syscall.tbl" 
-> "$outfile" common,32,nospu EM_PPC
-> +build_tables "$tools_dir/perf/arch/powerpc/entry/syscalls/syscall.tbl" 
-> "$outfile" common,64,nospu EM_PPC64
-> +cat >> "$outfile" <<EOF
-> +#endif // defined(ALL_SYSCALLTBL) || defined(__powerpc__) || 
-> defined(__powerpc64__)
-
-This skips the SPU table, but I think that's fine.
-
-> +EOF
-> +build_tables "$tools_dir/perf/arch/s390/entry/syscalls/syscall.tbl" 
-> "$outfile" common,64,renameat,rlimit,memfd_secret EM_S390
-> +cat >> "$outfile" <<EOF
-> +#endif // defined(ALL_SYSCALLTBL) || defined(__s390x__)
-
-This skips the 32-bit table, though I think that one is already
-planned to be discontinued in the future.
-
-> +#if defined(ALL_SYSCALLTBL) || defined(__i386__) || defined(__x86_64__)
-> +EOF
-> +build_tables "$tools_dir/perf/arch/x86/entry/syscalls/syscall_32.tbl" 
-> "$outfile" common,32,i386 EM_386
-> +build_tables "$tools_dir/perf/arch/x86/entry/syscalls/syscall_64.tbl" 
-> "$outfile" common,64 EM_X86_64
-> +cat >> "$outfile" <<EOF
-> +#endif // defined(ALL_SYSCALLTBL) || defined(__i386__) || 
-> defined(__x86_64__)
-
-This misses the x32 table.
-
-   Arnd
+Thanks,
+Ian
 
