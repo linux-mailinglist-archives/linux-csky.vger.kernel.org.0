@@ -1,131 +1,141 @@
-Return-Path: <linux-csky+bounces-1783-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1784-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50FD0A327E1
-	for <lists+linux-csky@lfdr.de>; Wed, 12 Feb 2025 15:00:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B8FDA35C9D
+	for <lists+linux-csky@lfdr.de>; Fri, 14 Feb 2025 12:34:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B6607A2F82
-	for <lists+linux-csky@lfdr.de>; Wed, 12 Feb 2025 13:59:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E94AE1656ED
+	for <lists+linux-csky@lfdr.de>; Fri, 14 Feb 2025 11:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCA9020E718;
-	Wed, 12 Feb 2025 13:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678FB2638B9;
+	Fri, 14 Feb 2025 11:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="foJGN7wR"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0VNtTEYh";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WFnwPIfj"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2000220E326;
-	Wed, 12 Feb 2025 13:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91EE5221541;
+	Fri, 14 Feb 2025 11:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739368764; cv=none; b=WI0RSveKx6oOWLbbR1KewAlrpK0MUclQAcPW7R8kHkm9r2LQN1rMKdi8YPQX9RtEXbK/7e42/Y9Ht/Los9wVTUpbhFgTBoJR1URQOxFlo8ycAXeyl/zEdIueC2MK4aST9pDLJQl7Z/IbI6mRPmd+7rNkrtKj2/goE8AaRtU3BqM=
+	t=1739532895; cv=none; b=ppG0Wzpt+Kznpqm62ea8JKVJz6eg3YT7PNFSTkKF3kK6PXRbVDifWpUtmKFWgiDJuouxM/HrkeHKq/0UyA3eDRy+n2U0f0rSMr9Em9gLYctjppwptKpM3gl49q4aTFW3EOFkN6FageJ8Qst0H9VaDfUhSE6R99Ft6Z7/hj5TjB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739368764; c=relaxed/simple;
-	bh=UMusHU1t5zzmDkuA9Xf7Kq0KXr1+7v+GF+RicmDuKyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bgTxa2Hm2x/vTQffbU5MX2jjHvuTIpoLEf4ALstjjANlcQXuEzcg0yyJiJyNloG+wof//pG6r89bsxfOcAY0QQPVIakKfG5ODLue0x+9XZU8o8HBVwL89JAjQEq4blhy/hn9Jgdz+y5/SFgGSJK3/6DdUn59g+ydqOX2Ya/OrFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=foJGN7wR; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-38dcb7122c1so4572215f8f.2;
-        Wed, 12 Feb 2025 05:59:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739368761; x=1739973561; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A+ede4RrUjYL6rNcNJR8w+SRtlFFhYFYyooGZI9RRMA=;
-        b=foJGN7wRFOn6VD5JkJBT5YP9/BgO4pxIDislSwcPkemPIJIh214JQEfXuDn/KYKhBt
-         Sdt36uY2dC4iIIe40biz/UiHuDr3pqEwCDGV1blQw4lnPa0DBzwKz6blxNjkG86FN5hC
-         DmGUvokgRLcJa1h3W+lGUJPg7VunNB9ayxh/N9A5Lu4WnI1UCCycDw4ewIYnZa/tOLVe
-         b3jSSTsqu6kjRhPThzrGVImbOOCG5er56XMcKuLbEwlyRSKK+e7+TH0WD+/AUy7m6ZC9
-         UAxoUZQMhM+hSMMLogE4N5FEPMUNchOONwnoU+3TGfirrGdyCtCzj8hNQgeDpVYZbNHM
-         od7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739368761; x=1739973561;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A+ede4RrUjYL6rNcNJR8w+SRtlFFhYFYyooGZI9RRMA=;
-        b=SFgb0T73Ofvdf6UetX9vskfgPrLtW6ib5AHYTe0JecNwksWv8YIyzVXH26TqH+YZXq
-         hFQW0hCFrbD5fkDp2lZgdsU6HLCVfisaUzu2AwEDDwWxSE6y9OA/TAPU/dU+Q9byfw21
-         4O0sj0HlAvjYQIKDr18IFQbJds5gFA7Y4i2TUR5UNn4JVu3+aCnSZ9qe7TDfkvMTSdfB
-         AwZhw9SlMsR2FdFo9ymeUROXLHtO9+s+fZvYw8Yfz5/mXyUBzAd5RJ/g/VsNzt1wRwmS
-         HvMJmv4K6FMAE8gwamRuApGnFMPobQ2MV1riJHM9E3kc2noAet4KiZZUYh2Htx8AR9GX
-         qiZg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8ulQHsBR4O8o1u0nUsxgf8wDKw7TU2+vnrqrrPw11vq/cw8NzjA7gnjfhExm1OyfW8eKAzaJi4WzNTCgzY0CQxQ==@vger.kernel.org, AJvYcCWfZfFseLlKIN3xh3/DwkOYiq6vmYzxbGJPh5UU1fKNNzayh/Sod7ZRXWXtNtN78gmQT21To1ytaXUbaWgV@vger.kernel.org, AJvYcCXrvHfWiaxUTrXotPy/ViS7Tsv+DavjLXYj0XZ0TQQnDLV33zn/fLY6HbdWLYBUDVZeWxNHoq0uHsC4@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzr4cl7JPz/I6rTgwxioLVZDdoZk0XMNtb3FUEmVV8eiohOMKqf
-	whzLexMzaN7mNurcHUrT+FkDwgtknJtkZThhwEHNdC3e44Uj8v0r
-X-Gm-Gg: ASbGncu0TWWEy22yZFTV6zCsAC7KYLj6xSspqCvGK6fhkBabUHheUCZMSsoxAFczEqW
-	xUw61vpTzr4igRcfXuDzJaNqKUs3i4rWQi4vRnvLTxIw+grmGC2FBzO9I1WzkmkBOx42WKv93u5
-	Jw35Je3Mr837NKiOaHlQtM6/OPYAWH+KL2j8tb7Zta/93/hO8GxU8HBWsi72+FQaj2i51iDKv7x
-	mXaKMocvcFN7nE2l/7uKL/RnoSahH4pnQGie3TwnvyVBOl/mvNgS/ezG087Xr3qzCgAqnqvx+zQ
-	lR50qphCh6qgaQQ3Y9jmDOO/0XGUdz0fQqQ1zaLNzxuMOat8cGKPeg==
-X-Google-Smtp-Source: AGHT+IEKCoDJGY1lmlxzGAZbmqw2zwD51cxjE08/BzvCDXeJUL1uvgupw74+KSMNg7LFxI/1rdLUpQ==
-X-Received: by 2002:a5d:64e2:0:b0:38f:21eb:5d02 with SMTP id ffacd0b85a97d-38f21eb5f2dmr1041208f8f.22.1739368761091;
-        Wed, 12 Feb 2025 05:59:21 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395a058930sm20853795e9.17.2025.02.12.05.59.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 05:59:20 -0800 (PST)
-Date: Wed, 12 Feb 2025 13:59:19 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: "Arnd Bergmann" <arnd@arndb.de>
-Cc: "Ian Rogers" <irogers@google.com>, "Arnaldo Carvalho de Melo"
- <acme@kernel.org>, "Howard Chu" <howardchu95@gmail.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Namhyung Kim"
- <namhyung@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>, "Alexander
- Shishkin" <alexander.shishkin@linux.intel.com>, "Jiri Olsa"
- <jolsa@kernel.org>, "Adrian Hunter" <adrian.hunter@intel.com>, "Kan Liang"
- <kan.liang@linux.intel.com>, "John Garry" <john.g.garry@oracle.com>, "Will
- Deacon" <will@kernel.org>, "James Clark" <james.clark@linaro.org>, "Mike
- Leach" <mike.leach@linaro.org>, "Leo Yan" <leo.yan@linux.dev>, guoren
- <guoren@kernel.org>, "Paul Walmsley" <paul.walmsley@sifive.com>, "Palmer
- Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Charlie Jenkins" <charlie@rivosinc.com>, "Bibo Mao" <maobibo@loongson.cn>,
- "Huacai Chen" <chenhuacai@kernel.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Jiri Slaby" <jirislaby@kernel.org>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, "linux-csky@vger.kernel.org"
- <linux-csky@vger.kernel.org>, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 5/7] perf trace beauty: Add syscalltbl.sh generating
- all system call tables
-Message-ID: <20250212135919.4e7a26fd@pumpkin>
-In-Reply-To: <0195f9a0-5198-4ee0-b4ff-ea7126dc8299@app.fastmail.com>
-References: <20250210165108.95894-1-irogers@google.com>
-	<20250210165108.95894-6-irogers@google.com>
-	<d47c35dd-9c52-48e7-a00d-135572f11fbb@app.fastmail.com>
-	<CAP-5=fUi4RYebxCGYZVHVEt0BpWVmUA6+-vDQfbai25_KJRs7A@mail.gmail.com>
-	<0195f9a0-5198-4ee0-b4ff-ea7126dc8299@app.fastmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1739532895; c=relaxed/simple;
+	bh=ZSR5ExLzPOWzKeKJCYti0FPwPXEtrgPIJBvFt7ageL8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=dwk8NZNh21ayng0IeDKlbnGLtHdZhpGKnFYRvgWmVng7EveNGoEebW5aZzcYEpF8vi01UTRuCpt+0wWcgnprHBBqjjjB49VQ+9cIZ1QpxsUrsIu5xlQXzEcnHDtufMXOYFB5VidtZlmKSiSTI/aeTKviUuYbxNeWRNFwh3Jz970=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0VNtTEYh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WFnwPIfj; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739532886;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WWdSDqLPiHMtkC3qRBjEr7KgW5xesCDv6jmHPBIB4Zc=;
+	b=0VNtTEYhNZqymGENVsUmuk+rnlFfX7RSGT3Ho51Jzxq38FSlmeIElqqU148QkLgRvvbxMF
+	oARriYR4RFpth96NjMkBo5hNBkelucCuzn5JwatniL1M08uy4SKjyhCAdV/qdQ/eba99LI
+	XiEfVSgYOnLLjTtprHlvawcrkXxeqR+m8TpQcRwp+J+sEstFenL0586F5ak1q3mLy7LV6n
+	qnrektVapcPsyxUDFZn8atapF68IW+EhNarZoqS+FgcZ3nF1GslRp9zthgkNswbWYfqivE
+	2J78e9sNA7ZDPletmeb/HsB02wyQreu92A/Zp2E3TtpGj+8SwnWuzKOp2Uz71Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739532886;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WWdSDqLPiHMtkC3qRBjEr7KgW5xesCDv6jmHPBIB4Zc=;
+	b=WFnwPIfjvhMmBrrfQwvQ/cPdgZnaXQkJD4fxKY5hU7USn1NEKaf7iB28bu/zo8sPSUnwBx
+	KGOlqDpRoCYGNWAw==
+To: David Woodhouse <dwmw2@infradead.org>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
+ <thomas.weissschuh@linutronix.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge
+ Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, Vincenzo
+ Frascino <vincenzo.frascino@arm.com>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Catalin
+ Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore
+ Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Russell King <linux@armlinux.org.uk>, Heiko Carstens
+ <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman
+ <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe
+ Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>,
+ Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann
+ <arnd@arndb.de>, Guo Ren <guoren@kernel.org>
+Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>,
+ linux-csky@vger.kernel.org, "Ridoux, Julien" <ridouxj@amazon.com>, "Luu,
+ Ryan" <rluu@amazon.com>, kvm <kvm@vger.kernel.org>
+Subject: Re: [PATCH v3 00/18] vDSO: Introduce generic data storage
+In-Reply-To: <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
+References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
+ <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
+Date: Fri, 14 Feb 2025 12:34:44 +0100
+Message-ID: <87ed00kbe3.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 11 Feb 2025 18:53:14 +0100
-"Arnd Bergmann" <arnd@arndb.de> wrote:
+David!
 
-...
-> I think the way it actually works on mips is that all syscalls are
-> allowed in any task and the actual number identifies both the
-> ABI and the syscall. In some variant, the same is true on arm
-> (oabi/eabi) and x86-64 (64/x32), but oabi and x32 are both too
-> obsolete to put much work into them.
+On Thu, Feb 06 2025 at 09:31, David Woodhouse wrote:
+> Thanks for working on this. Is there a plan to expose the time data
+> directly to userspace in a form which is usable *other* than by
+> function calls which get the value of the clock at a given moment?
+>
+> For populating the vmclock device=C2=B9 we need to know the actual
+> relationship between the hardware counter (TSC, arch timer, etc.) and
+> real time in order to propagate that to the guest.
+>
+> I see two options for doing this:
+>
+>  1. Via userspace, exposing the vdso time data (and a notification when
+>     it changes?) and letting the userspace VMM populate the vmclock.
+>     This is complex for x86 because of TSC scaling; in fact userspace
+>     doesn't currently know the precise scaling from host to guest TSC
+>     so we'd have to be able to extract that from KVM.
 
-IIRC x86-64 processes can also just make i386 system calls.
-Even switching to/from 64bit mode isn't privileged.
+Exposing the raw data is not going to happen as we would create an ABI
+preventing any modifications to the internals. VDSO data is considered a
+fully internal (think kernel) representation and the accessor functions
+create an ABI around it. So if at all you can add a accessor function
+which exposes data to user space so that the internal data
+representation can still be modified as necessary.
 
-	David
+>  2. In kernel, asking KVM to populate the vmclock structure much like
+>     it does other pvclocks shared with the guest. KVM/x86 already uses
+>     pvclock_gtod_register_notifier() to hook changes; should we expand
+>     on that? The problem with that notifier is that it seems to be
+>     called far more frequently than I'd expect.
 
- 
+It's called once per tick to expose the continous updates to the
+conversion factors and related internal data.
+
+Thanks,
+
+        tglx
+
 
