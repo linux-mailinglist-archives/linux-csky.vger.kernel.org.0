@@ -1,616 +1,699 @@
-Return-Path: <linux-csky+bounces-1787-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1788-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4882A37E13
-	for <lists+linux-csky@lfdr.de>; Mon, 17 Feb 2025 10:12:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFCA8A398A5
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Feb 2025 11:21:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DC353AA80A
-	for <lists+linux-csky@lfdr.de>; Mon, 17 Feb 2025 09:10:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8E93188B011
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Feb 2025 10:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F6C21A5B98;
-	Mon, 17 Feb 2025 09:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D7452343C0;
+	Tue, 18 Feb 2025 10:20:16 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AE31A4F21;
-	Mon, 17 Feb 2025 09:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978D323237A;
+	Tue, 18 Feb 2025 10:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739783425; cv=none; b=tI7vnLgsj+vPg0FS0YI0qlN+yH27h1DgjJHSStvREWbd05qmvvd2e1GLxJ5d0gwCYz72A2G+V1/T354iiXfnSjRr8O7howT0lnbrcsdVsqGzv2/8ef6U747O6OJXYdBvDG2NhL34oBLsOvKs1aBCusmAlhNHdnsLERcsckbcHBM=
+	t=1739874016; cv=none; b=ZlawHo7jzWVDMBm2QYYzty+hkbLxo5rCIPZzhZFnvdowAsFHw+TFS8okYIJedO/+ZYZEF/sw+e3M1iJuRXtGIsOZd16MphyhTe3CZZ79FEqqpCP2+b0GJTx3pw+1Rkx+XcYvkMs0xsFZ03Ep+Q+8rIJrM/a33U9pHrZUN+740E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739783425; c=relaxed/simple;
-	bh=1tVmOOMkNUctK2Q9LTQZREqDdL5xcaR/TMSasC5AcBk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=RKmQ8T0ucomyJDM+iU/vT6/udxpG2R/KUGUaAVdNvGDJTaZMDGxvgoNpgbA1RO8plwQ3eTKuM9mB5meac1vJ3PM8Y2+qjsZ7PcT6LzHx0D5qZwQeYft4PBKswDcIdDrywTj8Iwu+2TPXcJ/2GlS4R7AdKesMbFkdEdFJVOmMnnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id C55A672C90B;
-	Mon, 17 Feb 2025 12:10:21 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-	id A41DA7CFF81; Mon, 17 Feb 2025 11:10:21 +0200 (IST)
-Date: Mon, 17 Feb 2025 11:10:21 +0200
-From: "Dmitry V. Levin" <ldv@strace.io>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Alexey Gladkov <legion@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Helge Deller <deller@gmx.de>, Mike Frysinger <vapier@gentoo.org>,
-	Renzo Davoli <renzo@cs.unibo.it>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
-	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	strace-devel@lists.strace.io, linux-snps-arc@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v6 2/6] syscall.h: add syscall_set_arguments()
-Message-ID: <20250217091020.GC18175@strace.io>
+	s=arc-20240116; t=1739874016; c=relaxed/simple;
+	bh=vnlzfbORGowl+04xlYi/6j0LT+jeasXwzvsBE9C6lns=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VsQ0/J/mwfr5yswiTA2C3xLxISsk0loYFOd7afLErvA6mZOYf9o+TXbKA4bgXbImwaC2dX6R693sXC5Jra3dbUp5YlkszRkiheA7D/3WCrvw7MQMN0Y99njSuwvcmek0w3SH5ZK16o+WskGJDvDsV0AUjwHe/+MHCFBikvt96S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C93C613D5;
+	Tue, 18 Feb 2025 02:20:31 -0800 (PST)
+Received: from a077893.arm.com (unknown [10.163.37.233])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A36363F6A8;
+	Tue, 18 Feb 2025 02:20:04 -0800 (PST)
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+To: linux-mm@kvack.org
+Cc: Ryan Roberts <ryan.roberts@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-parisc@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-sh@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: [PATCH] mm/ioremap: Pass pgprot_t to ioremap_prot() instead of unsigned long
+Date: Tue, 18 Feb 2025 15:49:54 +0530
+Message-Id: <20250218101954.415331-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250217090834.GA18175@strace.io>
+Content-Transfer-Encoding: 8bit
 
-This function is going to be needed on all HAVE_ARCH_TRACEHOOK
-architectures to implement PTRACE_SET_SYSCALL_INFO API.
+From: Ryan Roberts <ryan.roberts@arm.com>
 
-This partially reverts commit 7962c2eddbfe ("arch: remove unused
-function syscall_set_arguments()") by reusing some of old
-syscall_set_arguments() implementations.
+ioremap_prot() currently accepts pgprot_val parameter as an unsigned long,
+thus implicitly assuming that pgprot_val and pgprot_t could never be bigger
+than unsigned long. But this assumption soon will not be true on arm64 when
+using D128 pgtables. In 128 bit page table configuration, unsigned long is
+64 bit, but pgprot_t is 128 bit.
 
-Signed-off-by: Dmitry V. Levin <ldv@strace.io>
-Tested-by: Charlie Jenkins <charlie@rivosinc.com>
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-Acked-by: Helge Deller <deller@gmx.de> # parisc
+Passing platform abstracted pgprot_t argument is better as compared to size
+based data types. Let's change the parameter to directly pass pgprot_t like
+another similar helper generic_ioremap_prot().
+
+Without this change in place, D128 configuration does not work on arm64 as
+the top 64 bits gets silently stripped when passing the protection value to
+this function.
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-sh@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+Co-developed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/arc/include/asm/syscall.h        | 14 +++++++++++
- arch/arm/include/asm/syscall.h        | 13 ++++++++++
- arch/arm64/include/asm/syscall.h      | 13 ++++++++++
- arch/csky/include/asm/syscall.h       | 13 ++++++++++
- arch/hexagon/include/asm/syscall.h    |  7 ++++++
- arch/loongarch/include/asm/syscall.h  |  8 ++++++
- arch/mips/include/asm/syscall.h       | 32 ++++++++++++++++++++++++
- arch/nios2/include/asm/syscall.h      | 11 ++++++++
- arch/openrisc/include/asm/syscall.h   |  7 ++++++
- arch/parisc/include/asm/syscall.h     | 12 +++++++++
- arch/powerpc/include/asm/syscall.h    | 10 ++++++++
- arch/riscv/include/asm/syscall.h      |  9 +++++++
- arch/s390/include/asm/syscall.h       |  9 +++++++
- arch/sh/include/asm/syscall_32.h      | 12 +++++++++
- arch/sparc/include/asm/syscall.h      | 10 ++++++++
- arch/um/include/asm/syscall-generic.h | 14 +++++++++++
- arch/x86/include/asm/syscall.h        | 36 +++++++++++++++++++++++++++
- arch/xtensa/include/asm/syscall.h     | 11 ++++++++
- include/asm-generic/syscall.h         | 16 ++++++++++++
- 19 files changed, 257 insertions(+)
+This patch applies on v6.14-rc3 and has been tested on arm64 platform.
+Although it builds on multiple platforms here.
 
-diff --git a/arch/arc/include/asm/syscall.h b/arch/arc/include/asm/syscall.h
-index 9709256e31c8..89c1e1736356 100644
---- a/arch/arc/include/asm/syscall.h
-+++ b/arch/arc/include/asm/syscall.h
-@@ -67,6 +67,20 @@ syscall_get_arguments(struct task_struct *task, struct pt_regs *regs,
- 	}
- }
+ arch/arc/mm/ioremap.c               |  6 ++----
+ arch/arm64/include/asm/io.h         |  6 +++---
+ arch/arm64/kernel/acpi.c            |  2 +-
+ arch/arm64/mm/ioremap.c             |  3 +--
+ arch/csky/include/asm/io.h          |  2 +-
+ arch/loongarch/include/asm/io.h     | 10 +++++-----
+ arch/mips/include/asm/io.h          |  8 ++++----
+ arch/mips/mm/ioremap.c              |  4 ++--
+ arch/mips/mm/ioremap64.c            |  4 ++--
+ arch/parisc/include/asm/io.h        |  2 +-
+ arch/parisc/mm/ioremap.c            |  4 ++--
+ arch/powerpc/include/asm/io.h       |  2 +-
+ arch/powerpc/mm/ioremap.c           |  4 ++--
+ arch/powerpc/platforms/ps3/spu.c    |  4 ++--
+ arch/riscv/include/asm/io.h         |  2 +-
+ arch/riscv/kernel/acpi.c            |  2 +-
+ arch/s390/include/asm/io.h          |  4 ++--
+ arch/s390/pci/pci.c                 |  4 ++--
+ arch/sh/boards/mach-landisk/setup.c |  2 +-
+ arch/sh/boards/mach-lboxre2/setup.c |  2 +-
+ arch/sh/boards/mach-sh03/setup.c    |  2 +-
+ arch/sh/include/asm/io.h            |  2 +-
+ arch/sh/mm/ioremap.c                |  3 +--
+ arch/x86/include/asm/io.h           |  2 +-
+ arch/x86/mm/ioremap.c               |  4 ++--
+ arch/xtensa/include/asm/io.h        |  6 +++---
+ arch/xtensa/mm/ioremap.c            |  4 ++--
+ include/asm-generic/io.h            |  4 ++--
+ mm/ioremap.c                        |  4 ++--
+ mm/memory.c                         |  6 +++---
+ 30 files changed, 55 insertions(+), 59 deletions(-)
+
+diff --git a/arch/arc/mm/ioremap.c b/arch/arc/mm/ioremap.c
+index b07004d53267..fd8897a0e52c 100644
+--- a/arch/arc/mm/ioremap.c
++++ b/arch/arc/mm/ioremap.c
+@@ -32,7 +32,7 @@ void __iomem *ioremap(phys_addr_t paddr, unsigned long size)
+ 		return (void __iomem *)(u32)paddr;
  
-+static inline void
-+syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
-+		      unsigned long *args)
-+{
-+	unsigned long *inside_ptregs = &regs->r0;
-+	unsigned int n = 6;
-+	unsigned int i = 0;
-+
-+	while (n--) {
-+		*inside_ptregs = args[i++];
-+		inside_ptregs--;
-+	}
-+}
-+
- static inline int
- syscall_get_arch(struct task_struct *task)
+ 	return ioremap_prot(paddr, size,
+-			    pgprot_val(pgprot_noncached(PAGE_KERNEL)));
++			    pgprot_noncached(PAGE_KERNEL));
+ }
+ EXPORT_SYMBOL(ioremap);
+ 
+@@ -44,10 +44,8 @@ EXPORT_SYMBOL(ioremap);
+  * might need finer access control (R/W/X)
+  */
+ void __iomem *ioremap_prot(phys_addr_t paddr, size_t size,
+-			   unsigned long flags)
++			   pgprot_t prot)
  {
-diff --git a/arch/arm/include/asm/syscall.h b/arch/arm/include/asm/syscall.h
-index fe4326d938c1..21927fa0ae2b 100644
---- a/arch/arm/include/asm/syscall.h
-+++ b/arch/arm/include/asm/syscall.h
-@@ -80,6 +80,19 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	memcpy(args, &regs->ARM_r0 + 1, 5 * sizeof(args[0]));
+-	pgprot_t prot = __pgprot(flags);
+-
+ 	/* force uncached */
+ 	return generic_ioremap_prot(paddr, size, pgprot_noncached(prot));
  }
+diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
+index 76ebbdc6ffdd..9b96840fb979 100644
+--- a/arch/arm64/include/asm/io.h
++++ b/arch/arm64/include/asm/io.h
+@@ -270,9 +270,9 @@ int arm64_ioremap_prot_hook_register(const ioremap_prot_hook_t hook);
+ #define _PAGE_IOREMAP PROT_DEVICE_nGnRE
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	memcpy(&regs->ARM_r0, args, 6 * sizeof(args[0]));
-+	/*
-+	 * Also copy the first argument into ARM_ORIG_r0
-+	 * so that syscall_get_arguments() would return it
-+	 * instead of the previous value.
-+	 */
-+	regs->ARM_ORIG_r0 = regs->ARM_r0;
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
- {
- 	/* ARM tasks don't change audit architectures on the fly. */
-diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
-index ab8e14b96f68..76020b66286b 100644
---- a/arch/arm64/include/asm/syscall.h
-+++ b/arch/arm64/include/asm/syscall.h
-@@ -73,6 +73,19 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	memcpy(args, &regs->regs[1], 5 * sizeof(args[0]));
- }
+ #define ioremap_wc(addr, size)	\
+-	ioremap_prot((addr), (size), PROT_NORMAL_NC)
++	ioremap_prot((addr), (size), __pgprot(PROT_NORMAL_NC))
+ #define ioremap_np(addr, size)	\
+-	ioremap_prot((addr), (size), PROT_DEVICE_nGnRnE)
++	ioremap_prot((addr), (size), __pgprot(PROT_DEVICE_nGnRnE))
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	memcpy(&regs->regs[0], args, 6 * sizeof(args[0]));
-+	/*
-+	 * Also copy the first argument into orig_x0
-+	 * so that syscall_get_arguments() would return it
-+	 * instead of the previous value.
-+	 */
-+	regs->orig_x0 = regs->regs[0];
-+}
-+
  /*
-  * We don't care about endianness (__AUDIT_ARCH_LE bit) here because
-  * AArch64 has the same system calls both on little- and big- endian.
-diff --git a/arch/csky/include/asm/syscall.h b/arch/csky/include/asm/syscall.h
-index 0de5734950bf..30403f7a0487 100644
---- a/arch/csky/include/asm/syscall.h
-+++ b/arch/csky/include/asm/syscall.h
-@@ -59,6 +59,19 @@ syscall_get_arguments(struct task_struct *task, struct pt_regs *regs,
- 	memcpy(args, &regs->a1, 5 * sizeof(args[0]));
+  * io{read,write}{16,32,64}be() macros
+@@ -293,7 +293,7 @@ static inline void __iomem *ioremap_cache(phys_addr_t addr, size_t size)
+ 	if (pfn_is_map_memory(__phys_to_pfn(addr)))
+ 		return (void __iomem *)__phys_to_virt(addr);
+ 
+-	return ioremap_prot(addr, size, PROT_NORMAL);
++	return ioremap_prot(addr, size, __pgprot(PROT_NORMAL));
  }
  
-+static inline void
-+syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
-+		      const unsigned long *args)
-+{
-+	memcpy(&regs->a0, args, 6 * sizeof(regs->a0));
-+	/*
-+	 * Also copy the first argument into orig_x0
-+	 * so that syscall_get_arguments() would return it
-+	 * instead of the previous value.
-+	 */
-+	regs->orig_a0 = regs->a0;
-+}
-+
- static inline int
- syscall_get_arch(struct task_struct *task)
- {
-diff --git a/arch/hexagon/include/asm/syscall.h b/arch/hexagon/include/asm/syscall.h
-index 951ca0ed8376..1024a6548d78 100644
---- a/arch/hexagon/include/asm/syscall.h
-+++ b/arch/hexagon/include/asm/syscall.h
-@@ -33,6 +33,13 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	memcpy(args, &(&regs->r00)[0], 6 * sizeof(args[0]));
+ /*
+diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
+index e6f66491fbe9..b9a66fc146c9 100644
+--- a/arch/arm64/kernel/acpi.c
++++ b/arch/arm64/kernel/acpi.c
+@@ -379,7 +379,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+ 				prot = __acpi_get_writethrough_mem_attribute();
+ 		}
+ 	}
+-	return ioremap_prot(phys, size, pgprot_val(prot));
++	return ioremap_prot(phys, size, prot);
  }
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 unsigned long *args)
-+{
-+	memcpy(&(&regs->r00)[0], args, 6 * sizeof(args[0]));
-+}
-+
- static inline long syscall_get_error(struct task_struct *task,
- 				     struct pt_regs *regs)
- {
-diff --git a/arch/loongarch/include/asm/syscall.h b/arch/loongarch/include/asm/syscall.h
-index e286dc58476e..ff415b3c0a8e 100644
---- a/arch/loongarch/include/asm/syscall.h
-+++ b/arch/loongarch/include/asm/syscall.h
-@@ -61,6 +61,14 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	memcpy(&args[1], &regs->regs[5], 5 * sizeof(long));
+ /*
+diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
+index 6cc0b7e7eb03..10e246f11271 100644
+--- a/arch/arm64/mm/ioremap.c
++++ b/arch/arm64/mm/ioremap.c
+@@ -15,10 +15,9 @@ int arm64_ioremap_prot_hook_register(ioremap_prot_hook_t hook)
  }
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 unsigned long *args)
-+{
-+	regs->orig_a0 = args[0];
-+	memcpy(&regs->regs[5], &args[1], 5 * sizeof(long));
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot)
++			   pgprot_t pgprot)
  {
- 	return AUDIT_ARCH_LOONGARCH64;
-diff --git a/arch/mips/include/asm/syscall.h b/arch/mips/include/asm/syscall.h
-index 056aa1b713e2..ea050b23d428 100644
---- a/arch/mips/include/asm/syscall.h
-+++ b/arch/mips/include/asm/syscall.h
-@@ -74,6 +74,23 @@ static inline void mips_get_syscall_arg(unsigned long *arg,
+ 	unsigned long last_addr = phys_addr + size - 1;
+-	pgprot_t pgprot = __pgprot(prot);
+ 
+ 	/* Don't allow outside PHYS_MASK */
+ 	if (last_addr & ~PHYS_MASK)
+diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+index ed53f0b47388..536d3bf32ff1 100644
+--- a/arch/csky/include/asm/io.h
++++ b/arch/csky/include/asm/io.h
+@@ -36,7 +36,7 @@
+  */
+ #define ioremap_wc(addr, size) \
+ 	ioremap_prot((addr), (size), \
+-		(_PAGE_IOREMAP & ~_CACHE_MASK) | _CACHE_UNCACHED)
++		__pgprot((_PAGE_IOREMAP & ~_CACHE_MASK) | _CACHE_UNCACHED))
+ 
+ #include <asm-generic/io.h>
+ 
+diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
+index e77a56eaf906..eaff72b38dc8 100644
+--- a/arch/loongarch/include/asm/io.h
++++ b/arch/loongarch/include/asm/io.h
+@@ -23,9 +23,9 @@ extern void __init early_iounmap(void __iomem *addr, unsigned long size);
+ #ifdef CONFIG_ARCH_IOREMAP
+ 
+ static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+-					 unsigned long prot_val)
++					 pgprot_t prot)
+ {
+-	switch (prot_val & _CACHE_MASK) {
++	switch (pgprot_val(prot) & _CACHE_MASK) {
+ 	case _CACHE_CC:
+ 		return (void __iomem *)(unsigned long)(CACHE_BASE + offset);
+ 	case _CACHE_SUC:
+@@ -38,7 +38,7 @@ static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+ }
+ 
+ #define ioremap(offset, size)		\
+-	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL_SUC))
++	ioremap_prot((offset), (size), PAGE_KERNEL_SUC)
+ 
+ #define iounmap(addr) 			((void)(addr))
+ 
+@@ -55,10 +55,10 @@ static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+  */
+ #define ioremap_wc(offset, size)	\
+ 	ioremap_prot((offset), (size),	\
+-		pgprot_val(wc_enabled ? PAGE_KERNEL_WUC : PAGE_KERNEL_SUC))
++		     wc_enabled ? PAGE_KERNEL_WUC : PAGE_KERNEL_SUC)
+ 
+ #define ioremap_cache(offset, size)	\
+-	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL))
++	ioremap_prot((offset), (size), PAGE_KERNEL)
+ 
+ #define mmiowb() wmb()
+ 
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index 0bddb568af7c..4dacf40ebefd 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -126,7 +126,7 @@ static inline unsigned long isa_virt_to_bus(volatile void *address)
+ }
+ 
+ void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+-		unsigned long prot_val);
++			   pgprot_t prot);
+ void iounmap(const volatile void __iomem *addr);
+ 
+ /*
+@@ -141,7 +141,7 @@ void iounmap(const volatile void __iomem *addr);
+  * address.
+  */
+ #define ioremap(offset, size)						\
+-	ioremap_prot((offset), (size), _CACHE_UNCACHED)
++	ioremap_prot((offset), (size), __pgprot(_CACHE_UNCACHED))
+ 
+ /*
+  * ioremap_cache -	map bus memory into CPU space
+@@ -159,7 +159,7 @@ void iounmap(const volatile void __iomem *addr);
+  * memory-like regions on I/O busses.
+  */
+ #define ioremap_cache(offset, size)					\
+-	ioremap_prot((offset), (size), _page_cachable_default)
++	ioremap_prot((offset), (size), __pgprot(_page_cachable_default))
+ 
+ /*
+  * ioremap_wc     -   map bus memory into CPU space
+@@ -180,7 +180,7 @@ void iounmap(const volatile void __iomem *addr);
+  * _CACHE_UNCACHED option (see cpu_probe() method).
+  */
+ #define ioremap_wc(offset, size)					\
+-	ioremap_prot((offset), (size), boot_cpu_data.writecombine)
++	ioremap_prot((offset), (size), __pgprot(boot_cpu_data.writecombine))
+ 
+ #if defined(CONFIG_CPU_CAVIUM_OCTEON)
+ #define war_io_reorder_wmb()		wmb()
+diff --git a/arch/mips/mm/ioremap.c b/arch/mips/mm/ioremap.c
+index d8243d61ef32..c6c4576cd4a8 100644
+--- a/arch/mips/mm/ioremap.c
++++ b/arch/mips/mm/ioremap.c
+@@ -44,9 +44,9 @@ static int __ioremap_check_ram(unsigned long start_pfn, unsigned long nr_pages,
+  * ioremap_prot gives the caller control over cache coherency attributes (CCA)
+  */
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, unsigned long size,
+-		unsigned long prot_val)
++			   pgprot_t prot)
+ {
+-	unsigned long flags = prot_val & _CACHE_MASK;
++	unsigned long flags = pgprot_val(prot) & _CACHE_MASK;
+ 	unsigned long offset, pfn, last_pfn;
+ 	struct vm_struct *area;
+ 	phys_addr_t last_addr;
+diff --git a/arch/mips/mm/ioremap64.c b/arch/mips/mm/ioremap64.c
+index 15e7820d6a5f..acc03ba20098 100644
+--- a/arch/mips/mm/ioremap64.c
++++ b/arch/mips/mm/ioremap64.c
+@@ -3,9 +3,9 @@
+ #include <ioremap.h>
+ 
+ void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+-		unsigned long prot_val)
++			   pgprot_t prot)
+ {
+-	unsigned long flags = prot_val & _CACHE_MASK;
++	unsigned long flags = pgprot_val(prot) & _CACHE_MASK;
+ 	u64 base = (flags == _CACHE_UNCACHED ? IO_BASE : UNCAC_BASE);
+ 	void __iomem *addr;
+ 
+diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+index 3143cf29ce27..04b783e2a6d1 100644
+--- a/arch/parisc/include/asm/io.h
++++ b/arch/parisc/include/asm/io.h
+@@ -131,7 +131,7 @@ static inline void gsc_writeq(unsigned long long val, unsigned long addr)
+ 		       _PAGE_ACCESSED | _PAGE_NO_CACHE)
+ 
+ #define ioremap_wc(addr, size)  \
+-	ioremap_prot((addr), (size), _PAGE_IOREMAP)
++	ioremap_prot((addr), (size), __pgprot(_PAGE_IOREMAP))
+ 
+ #define pci_iounmap			pci_iounmap
+ 
+diff --git a/arch/parisc/mm/ioremap.c b/arch/parisc/mm/ioremap.c
+index fd996472dfe7..0b65c4b3baee 100644
+--- a/arch/parisc/mm/ioremap.c
++++ b/arch/parisc/mm/ioremap.c
+@@ -14,7 +14,7 @@
+ #include <linux/mm.h>
+ 
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot)
++			   pgprot_t prot)
+ {
+ #ifdef CONFIG_EISA
+ 	unsigned long end = phys_addr + size - 1;
+@@ -41,6 +41,6 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+ 		}
+ 	}
+ 
+-	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
++	return generic_ioremap_prot(phys_addr, size, prot);
+ }
+ EXPORT_SYMBOL(ioremap_prot);
+diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
+index fd92ac450169..0436cdc7cfcc 100644
+--- a/arch/powerpc/include/asm/io.h
++++ b/arch/powerpc/include/asm/io.h
+@@ -895,7 +895,7 @@ void __iomem *ioremap_wt(phys_addr_t address, unsigned long size);
+ 
+ void __iomem *ioremap_coherent(phys_addr_t address, unsigned long size);
+ #define ioremap_cache(addr, size) \
+-	ioremap_prot((addr), (size), pgprot_val(PAGE_KERNEL))
++	ioremap_prot((addr), (size), PAGE_KERNEL)
+ 
+ #define iounmap iounmap
+ 
+diff --git a/arch/powerpc/mm/ioremap.c b/arch/powerpc/mm/ioremap.c
+index 7b0afcabd89f..0d6615620ada 100644
+--- a/arch/powerpc/mm/ioremap.c
++++ b/arch/powerpc/mm/ioremap.c
+@@ -41,9 +41,9 @@ void __iomem *ioremap_coherent(phys_addr_t addr, unsigned long size)
+ 	return __ioremap_caller(addr, size, prot, caller);
+ }
+ 
+-void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long flags)
++void __iomem *ioremap_prot(phys_addr_t addr, size_t size, pgprot_t prot)
+ {
+-	pte_t pte = __pte(flags);
++	pte_t pte = __pte(pgprot_val(prot));
+ 	void *caller = __builtin_return_address(0);
+ 
+ 	/* writeable implies dirty for kernel addresses */
+diff --git a/arch/powerpc/platforms/ps3/spu.c b/arch/powerpc/platforms/ps3/spu.c
+index 4a2520ec6d7f..61b37c9400b2 100644
+--- a/arch/powerpc/platforms/ps3/spu.c
++++ b/arch/powerpc/platforms/ps3/spu.c
+@@ -190,10 +190,10 @@ static void spu_unmap(struct spu *spu)
+ static int __init setup_areas(struct spu *spu)
+ {
+ 	struct table {char* name; unsigned long addr; unsigned long size;};
+-	unsigned long shadow_flags = pgprot_val(pgprot_noncached_wc(PAGE_KERNEL_RO));
+ 
+ 	spu_pdata(spu)->shadow = ioremap_prot(spu_pdata(spu)->shadow_addr,
+-					      sizeof(struct spe_shadow), shadow_flags);
++					      sizeof(struct spe_shadow),
++					      pgprot_noncached_wc(PAGE_KERNEL_RO));
+ 	if (!spu_pdata(spu)->shadow) {
+ 		pr_debug("%s:%d: ioremap shadow failed\n", __func__, __LINE__);
+ 		goto fail_ioremap;
+diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
+index 1c5c641075d2..0536846db9b6 100644
+--- a/arch/riscv/include/asm/io.h
++++ b/arch/riscv/include/asm/io.h
+@@ -137,7 +137,7 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
+ 
+ #ifdef CONFIG_MMU
+ #define arch_memremap_wb(addr, size)	\
+-	((__force void *)ioremap_prot((addr), (size), _PAGE_KERNEL))
++	((__force void *)ioremap_prot((addr), (size), __pgprot(_PAGE_KERNEL)))
  #endif
- }
  
-+static inline void mips_set_syscall_arg(unsigned long *arg,
-+	struct task_struct *task, struct pt_regs *regs, unsigned int n)
-+{
-+#ifdef CONFIG_32BIT
-+	switch (n) {
-+	case 0: case 1: case 2: case 3:
-+		regs->regs[4 + n] = *arg;
-+		return;
-+	case 4: case 5: case 6: case 7:
-+		*arg = regs->args[n] = *arg;
-+		return;
-+	}
-+#else
-+	regs->regs[4 + n] = *arg;
-+#endif
-+}
-+
- static inline long syscall_get_error(struct task_struct *task,
- 				     struct pt_regs *regs)
- {
-@@ -120,6 +137,21 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 		mips_get_syscall_arg(args++, task, regs, i++);
- }
- 
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 unsigned long *args)
-+{
-+	unsigned int i = 0;
-+	unsigned int n = 6;
-+
-+	/* O32 ABI syscall() */
-+	if (mips_syscall_is_indirect(task, regs))
-+		i++;
-+
-+	while (n--)
-+		mips_set_syscall_arg(args++, task, regs, i++);
-+}
-+
- extern const unsigned long sys_call_table[];
- extern const unsigned long sys32_call_table[];
- extern const unsigned long sysn32_call_table[];
-diff --git a/arch/nios2/include/asm/syscall.h b/arch/nios2/include/asm/syscall.h
-index fff52205fb65..526449edd768 100644
---- a/arch/nios2/include/asm/syscall.h
-+++ b/arch/nios2/include/asm/syscall.h
-@@ -58,6 +58,17 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	*args   = regs->r9;
- }
- 
-+static inline void syscall_set_arguments(struct task_struct *task,
-+	struct pt_regs *regs, const unsigned long *args)
-+{
-+	regs->r4 = *args++;
-+	regs->r5 = *args++;
-+	regs->r6 = *args++;
-+	regs->r7 = *args++;
-+	regs->r8 = *args++;
-+	regs->r9 = *args;
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
- {
- 	return AUDIT_ARCH_NIOS2;
-diff --git a/arch/openrisc/include/asm/syscall.h b/arch/openrisc/include/asm/syscall.h
-index 903ed882bdec..e6383be2a195 100644
---- a/arch/openrisc/include/asm/syscall.h
-+++ b/arch/openrisc/include/asm/syscall.h
-@@ -57,6 +57,13 @@ syscall_get_arguments(struct task_struct *task, struct pt_regs *regs,
- 	memcpy(args, &regs->gpr[3], 6 * sizeof(args[0]));
- }
- 
-+static inline void
-+syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
-+		      const unsigned long *args)
-+{
-+	memcpy(&regs->gpr[3], args, 6 * sizeof(args[0]));
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
- {
- 	return AUDIT_ARCH_OPENRISC;
-diff --git a/arch/parisc/include/asm/syscall.h b/arch/parisc/include/asm/syscall.h
-index 00b127a5e09b..b146d0ae4c77 100644
---- a/arch/parisc/include/asm/syscall.h
-+++ b/arch/parisc/include/asm/syscall.h
-@@ -29,6 +29,18 @@ static inline void syscall_get_arguments(struct task_struct *tsk,
- 	args[0] = regs->gr[26];
- }
- 
-+static inline void syscall_set_arguments(struct task_struct *tsk,
-+					 struct pt_regs *regs,
-+					 unsigned long *args)
-+{
-+	regs->gr[21] = args[5];
-+	regs->gr[22] = args[4];
-+	regs->gr[23] = args[3];
-+	regs->gr[24] = args[2];
-+	regs->gr[25] = args[1];
-+	regs->gr[26] = args[0];
-+}
-+
- static inline long syscall_get_error(struct task_struct *task,
- 				     struct pt_regs *regs)
- {
-diff --git a/arch/powerpc/include/asm/syscall.h b/arch/powerpc/include/asm/syscall.h
-index 422d7735ace6..521f279e6b33 100644
---- a/arch/powerpc/include/asm/syscall.h
-+++ b/arch/powerpc/include/asm/syscall.h
-@@ -114,6 +114,16 @@ static inline void syscall_get_arguments(struct task_struct *task,
+ #endif /* _ASM_RISCV_IO_H */
+diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+index 2fd29695a788..3f6d5a6789e8 100644
+--- a/arch/riscv/kernel/acpi.c
++++ b/arch/riscv/kernel/acpi.c
+@@ -305,7 +305,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+ 		}
  	}
+ 
+-	return ioremap_prot(phys, size, pgprot_val(prot));
++	return ioremap_prot(phys, size, prot);
  }
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	memcpy(&regs->gpr[3], args, 6 * sizeof(args[0]));
-+
-+	/* Also copy the first argument into orig_gpr3 */
-+	regs->orig_gpr3 = args[0];
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+ #ifdef CONFIG_PCI
+diff --git a/arch/s390/include/asm/io.h b/arch/s390/include/asm/io.h
+index fc9933a743d6..82f1043a4fc3 100644
+--- a/arch/s390/include/asm/io.h
++++ b/arch/s390/include/asm/io.h
+@@ -33,9 +33,9 @@ void unxlate_dev_mem_ptr(phys_addr_t phys, void *addr);
+ #define _PAGE_IOREMAP pgprot_val(PAGE_KERNEL)
+ 
+ #define ioremap_wc(addr, size)  \
+-	ioremap_prot((addr), (size), pgprot_val(pgprot_writecombine(PAGE_KERNEL)))
++	ioremap_prot((addr), (size), pgprot_writecombine(PAGE_KERNEL))
+ #define ioremap_wt(addr, size)  \
+-	ioremap_prot((addr), (size), pgprot_val(pgprot_writethrough(PAGE_KERNEL)))
++	ioremap_prot((addr), (size), pgprot_writethrough(PAGE_KERNEL))
+ 
+ static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
  {
- 	if (is_tsk_32bit_task(task))
-diff --git a/arch/riscv/include/asm/syscall.h b/arch/riscv/include/asm/syscall.h
-index 121fff429dce..8d389ba995c8 100644
---- a/arch/riscv/include/asm/syscall.h
-+++ b/arch/riscv/include/asm/syscall.h
-@@ -66,6 +66,15 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	memcpy(args, &regs->a1, 5 * sizeof(args[0]));
+diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+index 88f72745fa59..9fdcd733d40e 100644
+--- a/arch/s390/pci/pci.c
++++ b/arch/s390/pci/pci.c
+@@ -255,7 +255,7 @@ resource_size_t pcibios_align_resource(void *data, const struct resource *res,
  }
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	regs->orig_a0 = args[0];
-+	args++;
-+	memcpy(&regs->a1, args, 5 * sizeof(regs->a1));
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot)
++			   pgprot_t prot)
  {
- #ifdef CONFIG_64BIT
-diff --git a/arch/s390/include/asm/syscall.h b/arch/s390/include/asm/syscall.h
-index 27e3d804b311..0e3296a32e6a 100644
---- a/arch/s390/include/asm/syscall.h
-+++ b/arch/s390/include/asm/syscall.h
-@@ -78,6 +78,15 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	args[0] = regs->orig_gpr2 & mask;
- }
+ 	/*
+ 	 * When PCI MIO instructions are unavailable the "physical" address
+@@ -265,7 +265,7 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+ 	if (!static_branch_unlikely(&have_mio))
+ 		return (void __iomem *)phys_addr;
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	regs->orig_gpr2 = args[0];
-+	for (int n = 1; n < 6; n++)
-+		regs->gprs[2 + n] = args[n];
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+-	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
++	return generic_ioremap_prot(phys_addr, size, prot);
+ }
+ EXPORT_SYMBOL(ioremap_prot);
+ 
+diff --git a/arch/sh/boards/mach-landisk/setup.c b/arch/sh/boards/mach-landisk/setup.c
+index 2c44b94f82fb..1b3f43c3ac46 100644
+--- a/arch/sh/boards/mach-landisk/setup.c
++++ b/arch/sh/boards/mach-landisk/setup.c
+@@ -58,7 +58,7 @@ static int __init landisk_devices_setup(void)
+ 	/* open I/O area window */
+ 	paddrbase = virt_to_phys((void *)PA_AREA5_IO);
+ 	prot = PAGE_KERNEL_PCC(1, _PAGE_PCC_IO16);
+-	cf_ide_base = ioremap_prot(paddrbase, PAGE_SIZE, pgprot_val(prot));
++	cf_ide_base = ioremap_prot(paddrbase, PAGE_SIZE, prot);
+ 	if (!cf_ide_base) {
+ 		printk("allocate_cf_area : can't open CF I/O window!\n");
+ 		return -ENOMEM;
+diff --git a/arch/sh/boards/mach-lboxre2/setup.c b/arch/sh/boards/mach-lboxre2/setup.c
+index 20d01b430f2a..e95bde207adb 100644
+--- a/arch/sh/boards/mach-lboxre2/setup.c
++++ b/arch/sh/boards/mach-lboxre2/setup.c
+@@ -53,7 +53,7 @@ static int __init lboxre2_devices_setup(void)
+ 	paddrbase = virt_to_phys((void*)PA_AREA5_IO);
+ 	psize = PAGE_SIZE;
+ 	prot = PAGE_KERNEL_PCC(1, _PAGE_PCC_IO16);
+-	cf0_io_base = (u32)ioremap_prot(paddrbase, psize, pgprot_val(prot));
++	cf0_io_base = (u32)ioremap_prot(paddrbase, psize, prot);
+ 	if (!cf0_io_base) {
+ 		printk(KERN_ERR "%s : can't open CF I/O window!\n" , __func__ );
+ 		return -ENOMEM;
+diff --git a/arch/sh/boards/mach-sh03/setup.c b/arch/sh/boards/mach-sh03/setup.c
+index 3901b6031ad5..5c9312f334d3 100644
+--- a/arch/sh/boards/mach-sh03/setup.c
++++ b/arch/sh/boards/mach-sh03/setup.c
+@@ -75,7 +75,7 @@ static int __init sh03_devices_setup(void)
+ 	/* open I/O area window */
+ 	paddrbase = virt_to_phys((void *)PA_AREA5_IO);
+ 	prot = PAGE_KERNEL_PCC(1, _PAGE_PCC_IO16);
+-	cf_ide_base = ioremap_prot(paddrbase, PAGE_SIZE, pgprot_val(prot));
++	cf_ide_base = ioremap_prot(paddrbase, PAGE_SIZE, prot);
+ 	if (!cf_ide_base) {
+ 		printk("allocate_cf_area : can't open CF I/O window!\n");
+ 		return -ENOMEM;
+diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
+index cf5eab840d57..531ec49b878d 100644
+--- a/arch/sh/include/asm/io.h
++++ b/arch/sh/include/asm/io.h
+@@ -299,7 +299,7 @@ unsigned long long poke_real_address_q(unsigned long long addr,
+ #define _PAGE_IOREMAP pgprot_val(PAGE_KERNEL_NOCACHE)
+ 
+ #define ioremap_cache(addr, size)  \
+-	ioremap_prot((addr), (size), pgprot_val(PAGE_KERNEL))
++	ioremap_prot((addr), (size), PAGE_KERNEL)
+ #endif /* CONFIG_MMU */
+ 
+ #include <asm-generic/io.h>
+diff --git a/arch/sh/mm/ioremap.c b/arch/sh/mm/ioremap.c
+index 33d20f34560f..5bbde53fb32d 100644
+--- a/arch/sh/mm/ioremap.c
++++ b/arch/sh/mm/ioremap.c
+@@ -73,10 +73,9 @@ __ioremap_29bit(phys_addr_t offset, unsigned long size, pgprot_t prot)
+ #endif /* CONFIG_29BIT */
+ 
+ void __iomem __ref *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-				 unsigned long prot)
++				 pgprot_t pgprot)
  {
- #ifdef CONFIG_COMPAT
-diff --git a/arch/sh/include/asm/syscall_32.h b/arch/sh/include/asm/syscall_32.h
-index d87738eebe30..cb51a7528384 100644
---- a/arch/sh/include/asm/syscall_32.h
-+++ b/arch/sh/include/asm/syscall_32.h
-@@ -57,6 +57,18 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	args[0] = regs->regs[4];
- }
+ 	void __iomem *mapped;
+-	pgprot_t pgprot = __pgprot(prot);
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	regs->regs[1] = args[5];
-+	regs->regs[0] = args[4];
-+	regs->regs[7] = args[3];
-+	regs->regs[6] = args[2];
-+	regs->regs[5] = args[1];
-+	regs->regs[4] = args[0];
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+ 	mapped = __ioremap_trapped(phys_addr, size);
+ 	if (mapped)
+diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
+index ed580c7f9d0a..0794936ec187 100644
+--- a/arch/x86/include/asm/io.h
++++ b/arch/x86/include/asm/io.h
+@@ -170,7 +170,7 @@ extern void __iomem *ioremap_uc(resource_size_t offset, unsigned long size);
+ #define ioremap_uc ioremap_uc
+ extern void __iomem *ioremap_cache(resource_size_t offset, unsigned long size);
+ #define ioremap_cache ioremap_cache
+-extern void __iomem *ioremap_prot(resource_size_t offset, unsigned long size, unsigned long prot_val);
++extern void __iomem *ioremap_prot(resource_size_t offset, unsigned long size,  pgprot_t prot);
+ #define ioremap_prot ioremap_prot
+ extern void __iomem *ioremap_encrypted(resource_size_t phys_addr, unsigned long size);
+ #define ioremap_encrypted ioremap_encrypted
+diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+index 38ff7791a9c7..d501f0871aa5 100644
+--- a/arch/x86/mm/ioremap.c
++++ b/arch/x86/mm/ioremap.c
+@@ -440,10 +440,10 @@ void __iomem *ioremap_cache(resource_size_t phys_addr, unsigned long size)
+ EXPORT_SYMBOL(ioremap_cache);
+ 
+ void __iomem *ioremap_prot(resource_size_t phys_addr, unsigned long size,
+-				unsigned long prot_val)
++			   pgprot_t prot)
  {
- 	int arch = AUDIT_ARCH_SH;
-diff --git a/arch/sparc/include/asm/syscall.h b/arch/sparc/include/asm/syscall.h
-index 20c109ac8cc9..62a5a78804c4 100644
---- a/arch/sparc/include/asm/syscall.h
-+++ b/arch/sparc/include/asm/syscall.h
-@@ -117,6 +117,16 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	}
+ 	return __ioremap_caller(phys_addr, size,
+-				pgprot2cachemode(__pgprot(prot_val)),
++				pgprot2cachemode(prot),
+ 				__builtin_return_address(0), false);
  }
+ EXPORT_SYMBOL(ioremap_prot);
+diff --git a/arch/xtensa/include/asm/io.h b/arch/xtensa/include/asm/io.h
+index 934e58399c8c..7cdcc2deab3e 100644
+--- a/arch/xtensa/include/asm/io.h
++++ b/arch/xtensa/include/asm/io.h
+@@ -29,7 +29,7 @@
+  * I/O memory mapping functions.
+  */
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot);
++			   pgprot_t prot);
+ #define ioremap_prot ioremap_prot
+ #define iounmap iounmap
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < 6; i++)
-+		regs->u_regs[UREG_I0 + i] = args[i];
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+@@ -40,7 +40,7 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
+ 		return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_BYPASS_VADDR);
+ 	else
+ 		return ioremap_prot(offset, size,
+-			pgprot_val(pgprot_noncached(PAGE_KERNEL)));
++				    pgprot_noncached(PAGE_KERNEL));
+ }
+ #define ioremap ioremap
+ 
+@@ -51,7 +51,7 @@ static inline void __iomem *ioremap_cache(unsigned long offset,
+ 	    && offset - XCHAL_KIO_PADDR < XCHAL_KIO_SIZE)
+ 		return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_CACHED_VADDR);
+ 	else
+-		return ioremap_prot(offset, size, pgprot_val(PAGE_KERNEL));
++		return ioremap_prot(offset, size, PAGE_KERNEL);
+ 
+ }
+ #define ioremap_cache ioremap_cache
+diff --git a/arch/xtensa/mm/ioremap.c b/arch/xtensa/mm/ioremap.c
+index 8ca660b7ab49..26f238fa9d0d 100644
+--- a/arch/xtensa/mm/ioremap.c
++++ b/arch/xtensa/mm/ioremap.c
+@@ -11,12 +11,12 @@
+ #include <asm/io.h>
+ 
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot)
++			   pgprot_t prot)
  {
- #if defined(CONFIG_SPARC64) && defined(CONFIG_COMPAT)
-diff --git a/arch/um/include/asm/syscall-generic.h b/arch/um/include/asm/syscall-generic.h
-index 172b74143c4b..2984feb9d576 100644
---- a/arch/um/include/asm/syscall-generic.h
-+++ b/arch/um/include/asm/syscall-generic.h
-@@ -62,6 +62,20 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	*args   = UPT_SYSCALL_ARG6(r);
+ 	unsigned long pfn = __phys_to_pfn((phys_addr));
+ 	WARN_ON(pfn_valid(pfn));
+ 
+-	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
++	return generic_ioremap_prot(phys_addr, size, prot);
  }
+ EXPORT_SYMBOL(ioremap_prot);
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	struct uml_pt_regs *r = &regs->regs;
-+
-+	UPT_SYSCALL_ARG1(r) = *args++;
-+	UPT_SYSCALL_ARG2(r) = *args++;
-+	UPT_SYSCALL_ARG3(r) = *args++;
-+	UPT_SYSCALL_ARG4(r) = *args++;
-+	UPT_SYSCALL_ARG5(r) = *args++;
-+	UPT_SYSCALL_ARG6(r) = *args;
-+}
-+
- /* See arch/x86/um/asm/syscall.h for syscall_get_arch() definition. */
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index a5cbbf3e26ec..402020b23423 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -1111,7 +1111,7 @@ void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
+ 				   pgprot_t prot);
  
- #endif	/* __UM_SYSCALL_GENERIC_H */
-diff --git a/arch/x86/include/asm/syscall.h b/arch/x86/include/asm/syscall.h
-index 7c488ff0c764..b9c249dd9e3d 100644
---- a/arch/x86/include/asm/syscall.h
-+++ b/arch/x86/include/asm/syscall.h
-@@ -90,6 +90,18 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	args[5] = regs->bp;
- }
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot);
++			   pgprot_t prot);
+ void iounmap(volatile void __iomem *addr);
+ void generic_iounmap(volatile void __iomem *addr);
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	regs->bx = args[0];
-+	regs->cx = args[1];
-+	regs->dx = args[2];
-+	regs->si = args[3];
-+	regs->di = args[4];
-+	regs->bp = args[5];
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+@@ -1120,7 +1120,7 @@ void generic_iounmap(volatile void __iomem *addr);
+ static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
  {
- 	return AUDIT_ARCH_I386;
-@@ -121,6 +133,30 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 	}
+ 	/* _PAGE_IOREMAP needs to be supplied by the architecture */
+-	return ioremap_prot(addr, size, _PAGE_IOREMAP);
++	return ioremap_prot(addr, size, __pgprot(_PAGE_IOREMAP));
  }
+ #endif
+ #endif /* !CONFIG_MMU || CONFIG_GENERIC_IOREMAP */
+diff --git a/mm/ioremap.c b/mm/ioremap.c
+index 3e049dfb28bd..c36dd9f62fd5 100644
+--- a/mm/ioremap.c
++++ b/mm/ioremap.c
+@@ -50,9 +50,9 @@ void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+# ifdef CONFIG_IA32_EMULATION
-+	if (task->thread_info.status & TS_COMPAT) {
-+		regs->bx = *args++;
-+		regs->cx = *args++;
-+		regs->dx = *args++;
-+		regs->si = *args++;
-+		regs->di = *args++;
-+		regs->bp = *args;
-+	} else
-+# endif
-+	{
-+		regs->di = *args++;
-+		regs->si = *args++;
-+		regs->dx = *args++;
-+		regs->r10 = *args++;
-+		regs->r8 = *args++;
-+		regs->r9 = *args;
-+	}
-+}
-+
- static inline int syscall_get_arch(struct task_struct *task)
+ #ifndef ioremap_prot
+ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+-			   unsigned long prot)
++			   pgprot_t prot)
  {
- 	/* x32 tasks should be considered AUDIT_ARCH_X86_64. */
-diff --git a/arch/xtensa/include/asm/syscall.h b/arch/xtensa/include/asm/syscall.h
-index 5ee974bf8330..f9a671cbf933 100644
---- a/arch/xtensa/include/asm/syscall.h
-+++ b/arch/xtensa/include/asm/syscall.h
-@@ -68,6 +68,17 @@ static inline void syscall_get_arguments(struct task_struct *task,
- 		args[i] = regs->areg[reg[i]];
+-	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
++	return generic_ioremap_prot(phys_addr, size, prot);
  }
+ EXPORT_SYMBOL(ioremap_prot);
+ #endif
+diff --git a/mm/memory.c b/mm/memory.c
+index 539c0f7c6d54..76e35979cbc0 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -6636,7 +6636,7 @@ int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
+ 			void *buf, int len, int write)
+ {
+ 	resource_size_t phys_addr;
+-	unsigned long prot = 0;
++	pgprot_t prot = __pgprot(0);
+ 	void __iomem *maddr;
+ 	int offset = offset_in_page(addr);
+ 	int ret = -EINVAL;
+@@ -6646,7 +6646,7 @@ int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
+ retry:
+ 	if (follow_pfnmap_start(&args))
+ 		return -EINVAL;
+-	prot = pgprot_val(args.pgprot);
++	prot = args.pgprot;
+ 	phys_addr = (resource_size_t)args.pfn << PAGE_SHIFT;
+ 	writable = args.writable;
+ 	follow_pfnmap_end(&args);
+@@ -6661,7 +6661,7 @@ int generic_access_phys(struct vm_area_struct *vma, unsigned long addr,
+ 	if (follow_pfnmap_start(&args))
+ 		goto out_unmap;
  
-+static inline void syscall_set_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 const unsigned long *args)
-+{
-+	static const unsigned int reg[] = XTENSA_SYSCALL_ARGUMENT_REGS;
-+	unsigned int i;
-+
-+	for (i = 0; i < 6; ++i)
-+		regs->areg[reg[i]] = args[i];
-+}
-+
- asmlinkage long xtensa_rt_sigreturn(void);
- asmlinkage long xtensa_shmat(int, char __user *, int);
- asmlinkage long xtensa_fadvise64_64(int, int,
-diff --git a/include/asm-generic/syscall.h b/include/asm-generic/syscall.h
-index 182b039ce5fa..292b412f4e9a 100644
---- a/include/asm-generic/syscall.h
-+++ b/include/asm-generic/syscall.h
-@@ -117,6 +117,22 @@ void syscall_set_return_value(struct task_struct *task, struct pt_regs *regs,
- void syscall_get_arguments(struct task_struct *task, struct pt_regs *regs,
- 			   unsigned long *args);
- 
-+/**
-+ * syscall_set_arguments - change system call parameter value
-+ * @task:	task of interest, must be in system call entry tracing
-+ * @regs:	task_pt_regs() of @task
-+ * @args:	array of argument values to store
-+ *
-+ * Changes 6 arguments to the system call.
-+ * The first argument gets value @args[0], and so on.
-+ *
-+ * It's only valid to call this when @task is stopped for tracing on
-+ * entry to a system call, due to %SYSCALL_WORK_SYSCALL_TRACE or
-+ * %SYSCALL_WORK_SYSCALL_AUDIT.
-+ */
-+void syscall_set_arguments(struct task_struct *task, struct pt_regs *regs,
-+			   const unsigned long *args);
-+
- /**
-  * syscall_get_arch - return the AUDIT_ARCH for the current system call
-  * @task:	task of interest, must be blocked
+-	if ((prot != pgprot_val(args.pgprot)) ||
++	if ((pgprot_val(prot) != pgprot_val(args.pgprot)) ||
+ 	    (phys_addr != (args.pfn << PAGE_SHIFT)) ||
+ 	    (writable != args.writable)) {
+ 		follow_pfnmap_end(&args);
 -- 
-ldv
+2.25.1
+
 
