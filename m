@@ -1,108 +1,150 @@
-Return-Path: <linux-csky+bounces-1809-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1810-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0533BA3FA6A
-	for <lists+linux-csky@lfdr.de>; Fri, 21 Feb 2025 17:12:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A8D5A3FDC9
+	for <lists+linux-csky@lfdr.de>; Fri, 21 Feb 2025 18:48:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1AA019E3BC6
-	for <lists+linux-csky@lfdr.de>; Fri, 21 Feb 2025 16:07:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FA417040A3
+	for <lists+linux-csky@lfdr.de>; Fri, 21 Feb 2025 17:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7F3215F77;
-	Fri, 21 Feb 2025 16:00:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="Wd3VgrGl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E20250BF9;
+	Fri, 21 Feb 2025 17:45:36 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06871F1312
-	for <linux-csky@vger.kernel.org>; Fri, 21 Feb 2025 16:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A679250BF0;
+	Fri, 21 Feb 2025 17:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740153647; cv=none; b=CdFZDu87iQ2+WdmS02lAnWc93u5oEp6oxifdQYKX6Yj05NtpBFPPVLeSYx01iu7/sDEIjgLEhSmCZo91cq8szguEmoAR+1PTq/FQSqahp51n/dHbInBTOUlOVJcYk2fklXkpydFsk9uJptDqKnLX7CYZHAsp9KodcxHchhKUZMQ=
+	t=1740159936; cv=none; b=hvVdad7sUTfUIaBY+HGNuvkD166KuHWedC2HHCTclYpwIA585lR7CaY5ZSXTwSyaPxEteHw8lu9mBY0yvBXcAa5+VvQOrhGYQs6y6G/LumaZaav/v472ARzDf6Q/h+hUVwXUcRou1Ba6/0Eq/htw5PXi4SaSATfwObuGco4VgxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740153647; c=relaxed/simple;
-	bh=8JwxSrAkb49WD2mDErfKLvyH0/6S3kZaUGqW2G14m5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QsQNct8VwqZuCtqugIrRadCsckCoGFxrw1zA7c6bqTyxRLt/GMGwMtGvWB1IC5UEsxBQbrsSESmu3M50ae1dCrMo2h8lRbcRgJ9mHFTQrlJMUS5By6vHhTn9Q8HIFrtGiAXEe3HffH2AbzsBplDe/u6mf2+kSz8IP0q52NK/t/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=Wd3VgrGl; arc=none smtp.client-ip=83.166.143.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Yzvx01MRfzhfX;
-	Fri, 21 Feb 2025 17:00:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1740153636;
-	bh=bzQREuWWWsR2CIYsAKZ/AYGR6t2UePv92kGxLbABb24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wd3VgrGl6XF5Mb3O9V4H28Jc/XuZkOXkVlwUk6gWUIiGjwc5DMUVu/Viwn21aOl6p
-	 7YGIL6b7a8D84nOQO/r2Rh0K6IoQ0TY+kB3OskTqKEVoyANhXyDRf82jrZKfoh25Q+
-	 lAgYf5VQLnbtELW6PXW2op7t6A4vdKp1L2QVYRl8=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Yzvwz4GQHzgjK;
-	Fri, 21 Feb 2025 17:00:35 +0100 (CET)
-Date: Fri, 21 Feb 2025 17:00:34 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Kees Cook <kees@kernel.org>, Guo Ren <guoren@kernel.org>
-Cc: linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>, 
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	James Morris <jamorris@linux.microsoft.com>, Jann Horn <jannh@google.com>, linux-csky@vger.kernel.org, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>
-Subject: Re: security/landlock/ruleset.c:96:9: warning: 'memcpy' accessing
- 4294967295 bytes at offsets 20 and 0 overlaps 6442450943 bytes at offset
- -2147483648
-Message-ID: <20250221.ga2OSh6ieZei@digikod.net>
-References: <202501040747.S3LYfvYq-lkp@intel.com>
- <20250106.uu8as0Ha6pof@digikod.net>
- <202501061623.7A617B09@keescook>
+	s=arc-20240116; t=1740159936; c=relaxed/simple;
+	bh=4+8PbmaauA94usuoBxYYzJADa474EnhaILlzpd6EDs4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Pt97MsFn09sp5HCZpFguVmsIzIUpPiNe7885tXYjgljyTN2lmEyhV04Hw0PBht/46llwPUMyPek8K70VptSHYMpGIo7xbVuL4+KG144FqTKPVu/AOk53XUKdA3cRJK0jQIm5m/MNGmRWcuPUVmi7L5GFBFSfM7G71MKVrT4EtHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maskray.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maskray.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f47.google.com with SMTP id ada2fe7eead31-4bd3989f027so1406079137.1;
+        Fri, 21 Feb 2025 09:45:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740159933; x=1740764733;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dVlYG/IbFu9Q/R+V4VeWK18IBK9fWtgJYvhhNDBjzKM=;
+        b=GtDylSPaHFKUB6KBnwxEJns5xa+M7lgN324B0tSh3ZIWmhKvZEz10/RTGlunwfaqGF
+         3Aamn9Xcm/QeT+zmlyVSYYoq2oqejBSaN44WCBSwOhYgkQjsxZISIIo26XNO0OqAGaAx
+         hADxHmrHN1aSig6XxchjS5nQMftZ3SqEFAK0n5o5S9JBxmBia5/tsrqgYdLae4ZugsiR
+         UlJu98giFPAFU6E5l+Bqo/K+F0IO0S3UKiQbOJ9VRmpU613rgRQXz7hQZ5/agzOcMQAA
+         G7eg2vDJC7COQ+FXAUsGcyXpH7TSvefs2TTPL2eUz5gHSUGMptdEoHPhOIWNsZ26i56b
+         Z5nA==
+X-Forwarded-Encrypted: i=1; AJvYcCV6FZlLxp95T6/MHWJQM48xrBUIZwckRGcqQQkw5wPTvDbnA8QqVyrW9Szv5Oo3Kdu0BYQJkn7EaNN/DRBB@vger.kernel.org, AJvYcCWNZ+oTZ6Lv0xb45NJZKFRiaQVY99fTPPXsXfbZS/5MqYbk7RvtLzCZfJNthAwEVDG4FLdSYimmOWKhuw==@vger.kernel.org, AJvYcCWeNOEGxWGcm8EhiTvryPMz+/AnPX9iQ+uKOpzEIekbzUQ7cXEjfOVplv2ijOJvOLKSawXGfHeOHpRe@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFBc73dA02hqwk9Xg9VGlpQi9dto9HtzkLsTKIZrcERXsOOOhS
+	heFGXjz8Yw2sm1swThfGG4pwBQygmHoJeMSfvo5yrkAgfK1cJH8Xw+Fm/tqX
+X-Gm-Gg: ASbGncv6KSKj3N6TpqURhQXiRNml2u5dsJVrKynWxAjQx49Wq3ez4Nlvqh/PBmUxpCN
+	6jwUaYuNeTSKXWbwWGPjc4Bp90/6dXBY/pg6wSTgYx/GEWRKbb/cJsDiBXzc9B8ZYzvT4yXj4KP
+	JlWEQTumBttw11bF+G1t3oNYtDPIlY98mxPmxLvZd9f6XHNw8lrRmX78qZt9Xx9hRUccIeDwEN5
+	nKQI3UV5cqxXnMTEcU09D36Pf5llqgc/0FgX4zjdUlP+IBayPmOPE4cSqLVLaHBlYMryO3tILvg
+	8Pgp33lBV8QWZi1Xwxg3M0J2gna7I9H0egaozujBJEUyftruNLChcA==
+X-Google-Smtp-Source: AGHT+IGlSxppZng25avpxgFndciwOQb1JKOM8XjDAAl7Z8BJ35o5+p2MfXq5dZXfzUYfftnznH9zpA==
+X-Received: by 2002:a05:6102:8025:b0:4bb:baa0:370b with SMTP id ada2fe7eead31-4bfc0f86e72mr2254733137.7.1740159933305;
+        Fri, 21 Feb 2025 09:45:33 -0800 (PST)
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com. [209.85.222.45])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bd3c9acda5sm3185440137.9.2025.02.21.09.45.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Feb 2025 09:45:32 -0800 (PST)
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-86718541914so1806699241.1;
+        Fri, 21 Feb 2025 09:45:32 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVAZEQLUpPSJbwJYUjWuvyQuie6Prw58TtTSNYTkVpIPmrHTvuI6qCse9twCeYj5/qo1lGQ/OmYykKU@vger.kernel.org, AJvYcCVonQAkD76m5iJIYFwaTM2zCK8Y1QqRVWfoC4gbloHr2a4UuK3X1NkEZhoVj01y9SGu++NvsCkP99QFBmV5@vger.kernel.org, AJvYcCXjejikO66foz9A/1+v9kveylVBTM4gYRUPCxkHk7Atzr6+dikKUBAPAhxv44aaaQNj2CRa9dmxPQS65w==@vger.kernel.org
+X-Received: by 2002:a05:6122:608b:b0:520:4d63:72da with SMTP id
+ 71dfb90a1353d-521eeced620mr2485638e0c.6.1740159932550; Fri, 21 Feb 2025
+ 09:45:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202501061623.7A617B09@keescook>
-X-Infomaniak-Routing: alpha
+References: <20250221092523.85632-1-xry111@xry111.site> <CAAhV-H5_bKtO2mAFmfcZvD0pn9RhTA+UPjv7K574uPKxZbxX=g@mail.gmail.com>
+ <f0c15994e7a79f6cd0c82930c0dfebb50458c941.camel@xry111.site> <CAAhV-H4rDXDnzJwUE6PXMyuNGTs1NwUzQDP5eAPMmaHpqftP-Q@mail.gmail.com>
+In-Reply-To: <CAAhV-H4rDXDnzJwUE6PXMyuNGTs1NwUzQDP5eAPMmaHpqftP-Q@mail.gmail.com>
+From: Fangrui Song <i@maskray.me>
+Date: Fri, 21 Feb 2025 09:45:40 -0800
+X-Gmail-Original-Message-ID: <CAN30aBEhnR1OJycVs+F43ocJ6Vyh=Et2r+wo5cWwrtV4x-+zcg@mail.gmail.com>
+X-Gm-Features: AWEUYZkb8iSWdt-9kgykuTb5jDnwB320XaxMTtxedEnbug7aRKVRXx4OPfkuauw
+Message-ID: <CAN30aBEhnR1OJycVs+F43ocJ6Vyh=Et2r+wo5cWwrtV4x-+zcg@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: vDSO: Remove --hash-style=sysv
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Guo Ren <guoren@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, WANG Xuerui <kernel@xen0n.name>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Cc csky developers.
-
-See https://lore.kernel.org/r/202501040747.S3LYfvYq-lkp@intel.com
-
-On Mon, Jan 06, 2025 at 04:27:26PM -0800, Kees Cook wrote:
-> On Mon, Jan 06, 2025 at 06:04:56PM +0100, Mickaël Salaün wrote:
-> > On Sat, Jan 04, 2025 at 07:26:27AM +0800, kernel test robot wrote:
-> > >    security/landlock/ruleset.c: In function 'create_rule':
-> > > >> security/landlock/ruleset.c:96:9: warning: 'memcpy' accessing 4294967295 bytes at offsets 20 and 0 overlaps 6442450943 bytes at offset -2147483648 [-Wrestrict]
-> > >       96 |         memcpy(new_rule->layers, layers,
-> > >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >       97 |                         flex_array_size(new_rule, layers, num_layers));
-> > >          |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This warning seems to only show with the csky architecture.
-
+On Fri, Feb 21, 2025 at 2:26=E2=80=AFAM Huacai Chen <chenhuacai@kernel.org>=
+ wrote:
+>
+> On Fri, Feb 21, 2025 at 6:23=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wr=
+ote:
 > >
-> > I guess the GCC warning is a false positive?
-> > See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116494
-> 
-> Does the warning go away if flex_array_size() is open-coded or if the
-> create_rule prototype uses "*" instead of "[]" syntax for the "layers"
-> argument?
+> > On Fri, 2025-02-21 at 17:47 +0800, Huacai Chen wrote:
+> > > Hi, Ruoyao,
+> > >
+> > > On Fri, Feb 21, 2025 at 5:25=E2=80=AFPM Xi Ruoyao <xry111@xry111.site=
+> wrote:
+> > > >
+> > > > glibc added support for .gnu.hash in 2006 and .hash has been obsole=
+ted
+> > > > far before the first LoongArch CPU was taped.  Using
+> > > > --hash-style=3Dsysv might imply unaddressed issues and confuse read=
+ers.
+> > > >
+> > > > In the past we really had an unaddressed issue: the vdso selftests =
+did
+> > > > not know how to process .gnu.hash.  But it has been addressed by co=
+mmit
+> > > > e0746bde6f82 ("selftests/vDSO: support DT_GNU_HASH") now.
+> > > >
+> > > > Just drop the option and rely on the linker default, which is likel=
+y
+> > > > "both" (AOSC) or "gnu" (Arch, Debian, Gentoo, LFS) on all LoongArch
+> > > > distros.
+> > > What about changing to "--hash-style=3Dboth" as most architectures do=
+?
+> >
+> > IMO we are more close to ARM64 for the aspect that there are no libc
+> > (glibc or musl) releases lacking GNU hash support, so I prefer the ARM6=
+4
+> > way.
+> >
+> > Maybe this should be changed for some of other architectures (RISC-V an=
+d
+> > C-SKY?) as well because I guess the only reason they used "both" was
+> > "hey, without this the self tests don't work on Debian" but this is
+> > resolved now.  Adding a few recipients and Cc for discussion.
+> OK, maybe we can change it for RISC-V/C-SKY and see what they will.
+>
+> Huacai
+>
+> >
+> > --
+> > Xi Ruoyao <xry111@xry111.site>
+> > School of Aerospace Science and Technology, Xidian University
 
-But that would not be correct right?
+Agreed that as selftests has been fixed, --hash-style=3Dsysv can be
+removed from more arches.
+arch/arm64/kernel/vdso/Makefile has already removed the option.
 
-> 
-> The warning is about the "read" part ("accessing"). Using tip-of-tree
-> gcc with -fdiagnostics-details might show more details on the calling
-> path.
-> 
-> -Kees
-> 
-> -- 
-> Kees Cook
-> 
+(
+I probably should add more information to
+https://maskray.me/blog/2022-08-21-glibc-and-dt-gnu-hash :)
+)
 
