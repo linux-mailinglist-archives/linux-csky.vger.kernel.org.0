@@ -1,123 +1,95 @@
-Return-Path: <linux-csky+bounces-1813-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1814-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7CB5A4074C
-	for <lists+linux-csky@lfdr.de>; Sat, 22 Feb 2025 11:14:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2AA8A41D4D
+	for <lists+linux-csky@lfdr.de>; Mon, 24 Feb 2025 12:44:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81C5417F01F
-	for <lists+linux-csky@lfdr.de>; Sat, 22 Feb 2025 10:14:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89D89188EC03
+	for <lists+linux-csky@lfdr.de>; Mon, 24 Feb 2025 11:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2EA7207DFF;
-	Sat, 22 Feb 2025 10:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33ABF23BCF5;
+	Mon, 24 Feb 2025 11:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="E0xbOLPR";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="z74TsqYt"
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="enHf0tfA"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A593A20766E;
-	Sat, 22 Feb 2025 10:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C5D26137C;
+	Mon, 24 Feb 2025 11:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740219269; cv=none; b=HLxKPDO0PKCwa4LpjbJCpQFjRuEgaOl6imvrzmy5jHWcdVFIuWi+qqFOiNPUAcyZbpLrPYzn6/BB+YMaTnuqk/4GCrYWd7H4yRF9KZ2ch3jSMbxvqwsJLhsaYDETZlEro+XlrXZVvh5Wlniuxm8CkOFRxy02ZE3aGdylYi9tUL8=
+	t=1740396065; cv=none; b=H47X4353CiHyNF72tEEXXoiRyRZoFxZy6E6ZT5RYuoYU1q4di68zIClgbPmgxP2WGjlTPO8AlYihzy7jretSwJ1lqvDXBR+k0stw6jQTQtPwaagQRTWgyqmbSt7XToZ6orUqfen8+bco34NzlXVNilu82VJa11m3OYl0yYSgTb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740219269; c=relaxed/simple;
-	bh=ygaPhnEWXxg0PTIQSnFt/u2T3zJiHAt9hR7zOE9Myuo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SflJThYgdUAK1XP1AAmE2Tk2Ph+dTBnkhkvnTIcKNiTl0p9OI0+qxt4hfPyrfn4KfdPFgxpdtCmMEtOUC+uw4e19WrwERiccYJ2iDDq9+X9bbtPPG9L1FEgmqgy6Z5Q7aZQgjg/WZE9PeqnMmA5Yf3U8+Aid1woJV00jw/G837E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=E0xbOLPR; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=z74TsqYt; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1740219265;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NYt57ZYgbjy6ej8hXDty7Cfp9Tf5nA32oYEo7YLt3U4=;
-	b=E0xbOLPRJ+XD/M3Ao9By6szoKCsyLxcxtVTGsSbhAcE5NU1NK5C2+Dfl+zJ4+rpk8p2vce
-	IgpgL+eLpTnyqk83xyrJHvEqqHTXl3g07KURIn1lsZ0aq6OKRUYTD54okHfdjXqNbDsSjC
-	8vSMloBPM2AV4QgA0stwUEWMG6uZx3A9biypqi3p4tS6E2BLtlPpYMDvXniwVQOifJQaz1
-	6Qig6O/uBgxjjBbGrOo71YvA2kL4peLeza5WOnn/Kdf4/Lf3rBALBWYLzmAVI3S8o31rMK
-	Fy+Fe19AlwTl2IsoJXlYAVNRDdBMW1sP8B0maDlcTMTjaB57ZbWi7eIerkehlg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1740219265;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NYt57ZYgbjy6ej8hXDty7Cfp9Tf5nA32oYEo7YLt3U4=;
-	b=z74TsqYtERi/FO28k1WNxuOk/eCrttvKrCalx/NPgzVgRgvry4d1qCKiaSmbcNlhBsMonW
-	bE0L5AunrFXssYCw==
-To: Xi Ruoyao <xry111@xry111.site>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
- <thomas.weissschuh@linutronix.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge
- Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, Vincenzo
- Frascino <vincenzo.frascino@arm.com>, Anna-Maria Behnsen
- <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore
- Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Russell King <linux@armlinux.org.uk>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>,
- Madhavan
- Srinivasan <maddy@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann
- <arnd@arndb.de>, Guo Ren <guoren@kernel.org>
-Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>,
- linux-csky@vger.kernel.org
-Subject: Re: [PATCH v3 09/18] riscv: vdso: Switch to generic storage
- implementation
-In-Reply-To: <1adbf1603237b654a2948ae13692c6b6db0ab7eb.camel@xry111.site>
-References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
- <20250204-vdso-store-rng-v3-9-13a4669dfc8c@linutronix.de>
- <1adbf1603237b654a2948ae13692c6b6db0ab7eb.camel@xry111.site>
-Date: Sat, 22 Feb 2025 11:14:23 +0100
-Message-ID: <87a5aegubk.ffs@tglx>
+	s=arc-20240116; t=1740396065; c=relaxed/simple;
+	bh=Jl/aGD6H8zlfW46eQ8hKfWnP+g4vlfzN/TfC502RuSs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QucdffBVE82JVFVg/Hax9Rxe7AmtnqzIV8aiSL0FmcwM4UVIMpG9p4ZCW4JG8mqomk6xguQWaVrWe8m8/2o0iQy33cypJMgT/gKD6MZXR4cXg6XoMqpd9xmz96oB2kGHOsPvX61tDq/xvu6LGRSXGVUTcs9QkBPlOBObqKkDpZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=enHf0tfA; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
+	s=default; t=1740396055;
+	bh=PEZ+XmHReJkvOO8ckw/Sp6e/Ys54sWdkMmIRDD4VEB0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=enHf0tfAHWymo5wtzHP9lT0kTKne9eaEveqFQg9viuU+wCQ8SziFN2JNJhmVneul8
+	 FGBw9M2ivI2HVxkGGdEjIyaGQnNNAWtIiqIFZ/waj4m5LSMo4Y77cwsuDCeS1jPWWr
+	 J09MQ0ACFxs5EAXS2XHkAtj6nGgiv4v3dyMIEai4=
+Received: from stargazer.. (unknown [IPv6:240e:358:1110:6100:dc73:854d:832e:7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id EFCB21A40EF;
+	Mon, 24 Feb 2025 06:20:49 -0500 (EST)
+From: Xi Ruoyao <xry111@xry111.site>
+To: Guo Ren <guoren@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Fangrui Song <i@maskray.me>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>,
+	linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH 0/3] Drop explicit --hash-style= setting for new
+Date: Mon, 24 Feb 2025 19:20:39 +0800
+Message-ID: <20250224112042.60282-1-xry111@xry111.site>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Feb 22 2025 at 16:17, Xi Ruoyao wrote:
-> On Tue, 2025-02-04 at 13:05 +0100, Thomas Wei=C3=9Fschuh wrote:
->> The generic storage implementation provides the same features as the
->> custom one. However it can be shared between architectures, making
->> maintenance easier.
->>=20
->> Co-developed-by: Nam Cao <namcao@linutronix.de>
->> Signed-off-by: Nam Cao <namcao@linutronix.de>
->> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
->
-> I made a RISC-V vDSO getrandom implementation on top of this and it
-> works fine.  I'll submit it when this is merged.
+For riscv, csky, and LoongArch, GNU hash had already become the de-facto
+standard when they borned, so there's no Glibc/Musl releases for them
+without GNU hash support, and the traditional SysV hash is just wasting
+space for them.
 
-You can submit it right now. If it's reviewed and if Jason agrees, this
-can be merged through the timers/vdso branch on top of the pending
-changes.
+Remove those settings and follow the distro toolchain default, which is
+likely --hash-style=gnu.  In the past it could break vDSO self tests,
+but now the issue has been addressed by commit
+e0746bde6f82 ("selftests/vDSO: support DT_GNU_HASH").
 
-Thanks for testing it!
+Xi Ruoyao (3):
+  riscv: vDSO: Remove --hash-style=both
+  csky: vDSO: Remove --hash-style=both
+  LoongArch: vDSO: Remove --hash-style=sysv
 
-       tglx
+ arch/csky/kernel/vdso/Makefile  | 2 +-
+ arch/loongarch/vdso/Makefile    | 2 +-
+ arch/riscv/kernel/vdso/Makefile | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+-- 
+2.48.1
+
 
