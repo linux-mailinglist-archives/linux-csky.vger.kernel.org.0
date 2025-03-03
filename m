@@ -1,408 +1,203 @@
-Return-Path: <linux-csky+bounces-1869-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1871-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BED6A4D440
-	for <lists+linux-csky@lfdr.de>; Tue,  4 Mar 2025 08:05:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0524A4E777
+	for <lists+linux-csky@lfdr.de>; Tue,  4 Mar 2025 18:04:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEA583A3D6E
-	for <lists+linux-csky@lfdr.de>; Tue,  4 Mar 2025 07:05:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2804189AF06
+	for <lists+linux-csky@lfdr.de>; Tue,  4 Mar 2025 16:58:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA911F5830;
-	Tue,  4 Mar 2025 07:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08FD22C152D;
+	Tue,  4 Mar 2025 16:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U7bzAOd0"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="f4A84WM5"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFEE284B34
+	for <linux-csky@vger.kernel.org>; Tue,  4 Mar 2025 16:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.116
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741106148; cv=pass; b=iN96anOft8lc+I6gQBYO0H1WinOHqtAXrmynfg1PJI0sZjHMKCePG8WoWtVjWmBX0OxOBLmYwZWyES55zgeO0fddPT2SZdRP3gplPVP+cAi5DwYqIVS3qV6KFTdJTS4nRUaywefMKJHrmPR9ePTYjlmgdSAzWMwkeNRnjClaj9E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741106148; c=relaxed/simple;
+	bh=cyZ+Grt5WsWeJ35wJ4Miw4zucqCOoTXmPw42CecotaE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gXvKUZGt0uLW+zpJNjiFCUpmbnTXsu/lHRq4f/8z/Pt3Jl6DeXROUiZmzEnGfe/x2ACNlWdWPt4MxT1++6s2lSzeh8eJbA//76SOeUy8fDhI9S1Ars6Qt1QZvLGbVUANzRlfZMoYHoSyDn+ROLSs82T3DJwJLOKQKHb0KzX72FE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=f4A84WM5; arc=none smtp.client-ip=209.85.214.179; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; arc=pass smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 964E8408B5F3
+	for <linux-csky@vger.kernel.org>; Tue,  4 Mar 2025 19:35:45 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6h936qDVzG3gD
+	for <linux-csky@vger.kernel.org>; Tue,  4 Mar 2025 19:34:31 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id 9A83642722; Tue,  4 Mar 2025 19:34:14 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=f4A84WM5
+X-Envelope-From: <linux-kernel+bounces-541082-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=f4A84WM5
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id DDE1C41FB2
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:15:59 +0300 (+03)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 74D462DCE5
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:15:59 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2628E3A8BAF
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 07:15:41 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424711EA7D7;
+	Mon,  3 Mar 2025 07:15:43 +0000 (UTC)
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3157C18CBF2
-	for <linux-csky@vger.kernel.org>; Tue,  4 Mar 2025 07:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE66D1E501C
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 07:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741071915; cv=none; b=hvfJsNqvrG6c0KS5k4LMmRRYf2xDJOeQNS8WOwmia3NnNuy6MrDUFP3c5F3lk1nAAmLGWY60kzHiaJSCe6dLHhXQWIXP3cJQa3T17dL/iha9Ybc07efe+Xq/IHZoIz/yozPTEqGHR82jxi/VaPZASRAUjIC8IDzstNMudxpt27Y=
+	t=1740986140; cv=none; b=UbnP8lXiaQbal6oVevUpUADIzn+VfpnWPHvmdOCVnmWZhIGKQlH2D8gZGwYBRcvHyDHqu0/9g5vOStcBO5fOg6iL8ck1ZEKXcO7wZV6sBgF13Zwmy7mWeHY2buU9xbgXzvLVQv+gOBYks7o07mEq/9LWCD1Wg2klKJlnbyMoNTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741071915; c=relaxed/simple;
-	bh=gJwcbqZGmwr0Xx2FUFlQA5X6ML1A5+VhLhXfaq+gc/s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=kLM1dqmHOV+ipGNekS9id1TD967SJS/8b1/M32w2aEc0tq11PvgDS5ZUJK+6B8UXdm2omysttvJEEFm7CiAvg/NdgEgnHjh0HRZ0X+qQfWpIoiI7cnVhfjFyjXk1CTcMV2tQqRWOVdeabp5VL7vFX06BBX9PFxaW0eEwnjJ+iXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U7bzAOd0; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-223722270b7so82515ad.1
-        for <linux-csky@vger.kernel.org>; Mon, 03 Mar 2025 23:05:11 -0800 (PST)
+	s=arc-20240116; t=1740986140; c=relaxed/simple;
+	bh=cyZ+Grt5WsWeJ35wJ4Miw4zucqCOoTXmPw42CecotaE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RRHG4qa/A2btEukAcWzbjJwg8W8Kuoy+iOpGKDgvIPrQPOvexp0JvX6PQ9NOi4wb+XpZdVNwFT7YEmXa8FprlkpYnsJ/280Fjl9f9KWQyMG0e75rigIsBwLOMuSYfr3NAxpVVbowAHhb2fI5CXJiYNwj8zH8qxq5j+TmQJBu93k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=f4A84WM5; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2239c066347so17245755ad.2
+        for <linux-kernel@vger.kernel.org>; Sun, 02 Mar 2025 23:15:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741071911; x=1741676711; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1740986137; x=1741590937; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L3JvR8FxNRL+cWCmstDYOjM+Qki5xIGZoD4vNYEAWLw=;
-        b=U7bzAOd0AQa74JJ3SGVVTJzXPJyVqvp27CzsWD04jaskwKZ5AexurnixVrrbl9JXza
-         QnUxwVU449m/e7/DwAC20CL1utyVBTgdH28WD9VFyirUTT08xQ8MEVK4qFkd3d+fPhgq
-         /XW+y1/f+z7FdsCxLwvmrTPQoXR6RLvZM35gr6Ig7pUfKlzuwTzVKPdQMQ9GD8i+5etm
-         zj1764q9jm6PDIMho0t2ebxmtzrR4vT6c8KFREccn7fPDJo2ii9JOgH7mLOTaTV4Vayd
-         MRPFLh/o6UnYe9M8X5XEq588kuzYxr3bmvRGx+ERceS7MyXYo/N9M2ws5oGuFaApcKZT
-         ZMhQ==
+        bh=Z3xf7HJyOLISUqnBF4lpknQTsncyxq6apcdgU1Q2bwI=;
+        b=f4A84WM5UBmOEItKzAifDxDy7QSqQog+5OdOY7cDip+Ifi/SFUtojaXd3nv9N46OkR
+         obbn8XiDHfPwzOhP+v9F4yJio5kY6Fy6S6Dij4j9DhRO+gigEV2oQ1XDcdtvMOTvOPmE
+         WpuxN3y1/iFpfhe6FIe7LgfmoW5WjaSdqf2obCSIVsNV4KU9GPJlIYbIQ+dtrHsEz8Qj
+         obAsvIJ84Xaa/DfhJQP52pW8eNlzAzvKCu3ybiqdRykVPzSYIGvK4+hUWmRrrn+BPGQx
+         E1zuno2Ug6TvBtzOsf/XTEeGekcF2JdKNte3lMVXw8TZSOU37BEEcnrYWZ+wVCIGz6FH
+         p2wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741071911; x=1741676711;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L3JvR8FxNRL+cWCmstDYOjM+Qki5xIGZoD4vNYEAWLw=;
-        b=E1v0idiGL6hLAi25qgN68noSBAl3QIrOQRAHls3EnYVLEeLNvsPgRgbl18DCf9uIlJ
-         0X5XKVJFazDEvHYZEbi9SmQA0CioVU3dFMUkvvv7l763jcFGuYMj78UtshRuGTzlOipK
-         pDSpH37GoJCMIAdJ/jTq6QF7xwF2yf9+Rdt438me/CV/ycdUSBlfdA9Esap2KPZxmgRH
-         WLr9nsvAQYOoPSJ4c4x/dIWy9eYPUGV3C9qZmF309w5sW84uw+DsOc+GGXlpe6hzNh4E
-         0GbYsL94+u8VKb0nNKa18/Uq4++59WHAClUyHu4ye7EcnEx2EL3j7cO0TH857avjmvxY
-         tobg==
-X-Forwarded-Encrypted: i=1; AJvYcCWInRvRWyhpXlFa7UvCr4GOXCg+7kF2dxS2P2kO2ZGIgQ04X+MgUVEoYg+6f1iFASuhYafkTs6JCFJW@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDjzLaj6S8J2NHGNN5mEmwaXHFfQCVFVzH9j8eh7iQ+UGHEoNn
-	fXaO4n6TSkVcZfU+2KueF7Yxb3R4lLmQlV7p3HjzokVRNicmFH7Nzl/aJWE3iyIVRHKALebkmbI
-	0J2eJjDjWdFB6Ov+TeGHu7qhhA69UdQCw4piP
-X-Gm-Gg: ASbGnctsMPyVj9RFpGOu2guRs4b8PusfoMNn1XI64qzsjCluBrm2dAdvf1BYMCFd5Ob
-	vheN4T3TZ1blvFqqZ97udAYD43hOh0hkcEE53RJ4HLGQCmiGeva5JoT2gIjQEHvYbGS8HjLHbQD
-	21RhFVciGA0+oKzT2DZ/dhQc47suI=
-X-Google-Smtp-Source: AGHT+IEupcRqM8Vq6ECdiZG2rhJ+zCRym7mbbPqUL8mmzRnQN6EceWTSYAPo5ifpC6pvsOBjVYM/bwyz/L3Nbkb46ok=
-X-Received: by 2002:a17:903:44d:b0:215:7ced:9d66 with SMTP id
- d9443c01a7336-223d9e003f4mr1996995ad.10.1741071910980; Mon, 03 Mar 2025
- 23:05:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740986137; x=1741590937;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Z3xf7HJyOLISUqnBF4lpknQTsncyxq6apcdgU1Q2bwI=;
+        b=V6hTYAc13n2GGK2+V+SYXFc83ibjM/YRGmA85UVw/yGr+iafh+3DpguMAsi44Msrak
+         Rc8lm9ifmmy+sf3mGvgr1B6wy0DSn5kV6+sYKMFFiC6kWfir/ELsvw7O3ebFT4/plNiF
+         8VLsjaDXmihAF7lP1xahofPIborwDagJoeqfFyIPApmAfp7gKKu7/jyr7kWInzYCWJvz
+         tEHAGLO/EPMfvDII9FwTBJg5WgCxwX3vAHK37a5EMCQjkFnyssyH7780oACaE4iWtmgC
+         +La9TQjcG6evTdCAUkXIEZpfrIPEs3atLIXnyaE+ggB3rnlfr/JI56QmixhSfJXam/Lh
+         YjDA==
+X-Forwarded-Encrypted: i=1; AJvYcCXV3cRahDZLx9qw+XI6/hjlxWyx70R9mfe5cEgYOUph0I/3/IsNXrH29p57t2dLEKBH3UNpJLJ1eCWtAjo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHvdm1NGx4aZ13CwRnIA6mERBF2EhXuLaggrV/Auc1FC6cvuVo
+	nr2bUITGBfheIL8uAXqZVvRA5x9ihLF7WSS+9emZB+17rhn4T5FIKHgFHOXL8+s=
+X-Gm-Gg: ASbGncsJj56blywHiCfNcdRwIByWd/2pab06AUHQujSwG0fw+d8p0GhjeGLweBP+D0y
+	sSNkGjA5UjlQjqdO/ANFgkIpC0WSYzqF9MQQDsUVX43qcaMTZQL+SQl/71Lh/k5Jbg+7HBmMmp6
+	zUdUKTfBt8j8ZvcqQB1fbb0hY6oWdE4AeLfKH1k3g8dPgnVNU3VpqAxKa0VW0nOsqM5dIykEGcQ
+	pUIM6SFTykv4DIOsXjqSKPUAVnmwWEGgrNKYb5ERb5X69TPTg5el5kkUdu6DBARPQVMnn+czTlD
+	D3uEIf7EpqssocI08pKOapluzWZlNpps8uMQ5ZjOSnA7iJAev11JKMJVox4/FCOo0EVH1g==
+X-Google-Smtp-Source: AGHT+IFFzAQLESy+9XTrR371K4l9s8+Ug8zXVzf/oXiEIXCRNjxwSBTp4Oh3Iq6eaMxuwqzsZm0CFA==
+X-Received: by 2002:a17:902:f64a:b0:223:5645:8e1a with SMTP id d9443c01a7336-2236926727dmr181629675ad.51.1740986137075;
+        Sun, 02 Mar 2025 23:15:37 -0800 (PST)
+Received: from [10.68.122.90] ([203.208.167.148])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2235050ce10sm71093955ad.200.2025.03.02.23.15.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Mar 2025 23:15:36 -0800 (PST)
+Message-ID: <4eb93ca8-7526-4709-b43e-2ed9e5583e3b@bytedance.com>
+Date: Mon, 3 Mar 2025 15:15:22 +0800
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250304050305.901167-1-irogers@google.com>
-In-Reply-To: <20250304050305.901167-1-irogers@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 3 Mar 2025 23:04:59 -0800
-X-Gm-Features: AQ5f1Joy4icIYuqqbyMmGmOFRwOYLjNzkqxRwWJFEbT-XwnCdO9iuvX_ulJO_CQ
-Message-ID: <CAP-5=fXFoawZnRD22iSev5FQnx3oyFOhrPf=gZbk84qGtr9NFA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/11] perf: Support multiple system call tables in the build
-To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, guoren <guoren@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-riscv@lists.infradead.org, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/6] riscv: pgtable: unconditionally use
+ tlb_remove_ptdesc()
+To: yunhui cui <cuiyunhui@bytedance.com>
+Cc: peterz@infradead.org, kevin.brodsky@arm.com, riel@surriel.com,
+ vishal.moola@gmail.com, david@redhat.com, jannh@google.com,
+ hughd@google.com, willy@infradead.org, yuzhao@google.com,
+ muchun.song@linux.dev, akpm@linux-foundation.org, will@kernel.org,
+ aneesh.kumar@kernel.org, npiggin@gmail.com, arnd@arndb.de,
+ dave.hansen@linux.intel.com, rppt@kernel.org, alexghiti@rivosinc.com,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-um@lists.infradead.org, x86@kernel.org,
+ linux-riscv@lists.infradead.org
+References: <cover.1740454179.git.zhengqi.arch@bytedance.com>
+ <9025595e895515515c95e48db54b29afa489c41d.1740454179.git.zhengqi.arch@bytedance.com>
+ <CAEEQ3wnvgX=Bq=oAQV6wfg5a7H2jiG7f8P6trbC9agJ8D6t4pA@mail.gmail.com>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CAEEQ3wnvgX=Bq=oAQV6wfg5a7H2jiG7f8P6trbC9agJ8D6t4pA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6h936qDVzG3gD
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741710886.73642@Ht2TSeXsEvBYZic/JEoAvg
+X-ITU-MailScanner-SpamCheck: not spam
 
-On Mon, Mar 3, 2025 at 9:04=E2=80=AFPM Ian Rogers <irogers@google.com> wrot=
-e:
->
-> This work builds on the clean up of system call tables and removal of
-> libaudit by Charlie Jenkins <charlie@rivosinc.com>.
->
-> The system call table in perf trace is used to map system call numbers
-> to names and vice versa. Prior to these changes, a single table
-> matching the perf binary's build was present. The table would be
-> incorrect if tracing say a 32-bit binary from a 64-bit version of
-> perf, the names and numbers wouldn't match.
->
-> Change the build so that a single system call file is built and the
-> potentially multiple tables are identifiable from the ELF machine type
-> of the process being examined. To determine the ELF machine type, the
-> executable's maps are searched and the associated DSOs ELF headers are
-> read. When this fails and when live, /proc/pid/exe's ELF header is
-> read. Fallback to using the perf's binary type when unknown.
->
-> Remove some runtime types used by the system call tables and make
-> equivalents generated at build time.
->
-> v4: Add reading the e_machine from the thread's maps dsos, only read
->     from /proc/pid/exe on failure and when live as requested by
->     Namhyung. Add patches to add dso comments and remove unused
->     dso_data variables that are unused without libunwind.
 
-This has allowed `perf trace record` (not just perf trace) to work
-with binaries with an e_machine that doesn't match that of the perf
-binary. An example:
 
-Before:
-```
-$ file ./a.out
-a.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV),
-dynamically linked, interpreter /lib/ld-linux.so.2
-, BuildID[sha1]=3D3fcd28f85a27a3108941661a91dbc675c06868f9, for
-GNU/Linux 3.2.0, not stripped
-$ perf trace record -- ./a.out
-...
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.059 MB perf.data (60 samples) ]
-$ perf trace -i perf.data
-         ? (         ): a.out/914959  ... [continued]: munmap())
-                                    =3D 0
-    0.019 ( 0.001 ms): a.out/914959 recvfrom(ubuf: 0x2, size:
-4160602092, flags: DONTROUTE|CTRUNC|TRUNC|DONTWAIT|EOR|>
-    0.034 ( 0.002 ms): a.out/914959 lgetxattr(name: 0x2000, value:
-0x3, size: 34)                         =3D 4160352256
-    0.043 ( 0.002 ms): a.out/914959 dup2(oldfd: -134405940, newfd: 4)
-                                   =3D -1 ENOENT>
-    0.047 ( 0.009 ms): a.out/914959 preadv(fd: 4294967196, vec:
-0xf7fce47f, vlen: 557056, pos_h: 4160602092) =3D 3
-    0.058 ( 0.004 ms): a.out/914959 lgetxattr(name: 0x1b5c2, value:
-0x1, size: 2)                         =3D 4160237568
-    0.063 ( 0.000 ms): a.out/914959 lstat(filename: 0x3, statbuf:
-0x1b5c2)                                =3D 0
-    0.071 ( 0.006 ms): a.out/914959 preadv(fd: 4294967196, vec:
-0xf7f9f3e0, vlen: 557056, pos_h: 4160602092) =3D 3
-    0.078 ( 0.001 ms): a.out/914959 close(fd: 3)
-                                   =3D 512
-    0.082 ( 0.002 ms): a.out/914959 lgetxattr(name: 0x23f8d0, value:
-0x1, size: 2050)                     =3D 4157878272
-    0.084 ( 0.006 ms): a.out/914959 lgetxattr(pathname: 0xf7d66000,
-name: 0x18b000, value: 0x5, size: 2066) =3D 4158021>
-    0.091 ( 0.002 ms): a.out/914959 lgetxattr(pathname: 0xf7ef1000,
-name: 0x85000, value: 0x1, size: 2066) =3D 41596395>
-    0.093 ( 0.003 ms): a.out/914959 lgetxattr(pathname: 0xf7f76000,
-name: 0x3000, value: 0x3, size: 2066) =3D 4160184320
-    0.099 ( 0.002 ms): a.out/914959 lgetxattr(pathname: 0xf7f79000,
-name: 0x98d0, value: 0x3, size: 50)   =3D 4160196608
-    0.106 ( 0.000 ms): a.out/914959 lstat(filename: 0x3)
-                                   =3D 0
-    0.112 ( 0.001 ms): a.out/914959 mq_timedreceive(mqdes: 4287979520,
-u_msg_ptr: 0xf7f9fbb0, u_msg_prio: 0xf7fdbfec,>
-    0.113 ( 0.000 ms): a.out/914959 mkdirat(dfd: -134609624, pathname:
-0xf7fdc910, mode: IFSOCK|ISUID|IRUSR|IWGRP|0xf>
-    0.114 ( 0.000 ms): a.out/914959 process_vm_writev(pid: -134609620,
-lvec: 0xc, liovcnt: 4160604432, rvec: 0xf7fa04>
-    0.154 ( 0.003 ms): a.out/914959 capget(header: 4160184320,
-dataptr: 8192)                             =3D 0
-    0.158 ( 0.002 ms): a.out/914959 capget(header: 1448792064,
-dataptr: 4096)                             =3D 0
-    0.163 ( 0.002 ms): a.out/914959 capget(header: 4160593920,
-dataptr: 8192)                             =3D 0
-    0.171 ( 0.001 ms): a.out/914959 getxattr(pathname: 0x3, name:
-0xff955fe4, value: 0xf7f77e14, size: 1) =3D 0
-    0.179 ( 0.005 ms): a.out/914959 fchmod(fd: -134729728, mode:
-IFLNK|IFIFO|ISGID|IRWXU|IWOTH|0x10000)   =3D 0
-    0.193 ( 0.008 ms): a.out/914959 preadv(fd: 4294967196, vec:
-0x565ac008, pos_h: 4160192020)            =3D 3
-    0.202 ( 0.007 ms): a.out/914959 close(fd: 3)
-                                   =3D 1436
-    0.209 ( 0.017 ms): a.out/914959 stat(filename: 0x1, statbuf:
-0xff9552fc)                              =3D 1436
-    0.234 (1000.083 ms): a.out/914959 readlinkat(buf: 0xff955224,
-bufsiz: 4287975964)                       =3D 0
-```
+On 3/3/25 9:45 AM, yunhui cui wrote:
+> Hi Qi,
+> 
 
-After:
-```
-$ file ./a.out
-a.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV),
-dynamically linked, interpreter /lib/ld-linux.so.2
-, BuildID[sha1]=3D3fcd28f85a27a3108941661a91dbc675c06868f9, for
-GNU/Linux 3.2.0, not stripped
-$ perf trace record -- ./a.out
-...
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.059 MB perf.data (60 samples) ]
-$ perf trace -i perf.data
-        ? (         ): a.out/908002  ... [continued]: execve())
-                                   =3D 0
-    0.019 ( 0.001 ms): a.out/908002 brk()
-                                   =3D 0x57680000
-    0.041 ( 0.003 ms): a.out/908002 access(filename: 0xf7f0b0cc, mode:
-R)                                 =3D -1 ENOENT>
-    0.046 ( 0.008 ms): a.out/908002 openat(dfd: CWD, filename:
-0xf7f0747f, flags: RDONLY|CLOEXEC|LARGEFILE) =3D 3
-    0.055 ( 0.001 ms): a.out/908002 statx(dfd: 3, filename:
-0xf7f080f6, flags: NO_AUTOMOUNT|EMPTY_PATH, mask: TYPE|MO>
-    0.061 ( 0.000 ms): a.out/908002 close(fd: 3)
-                                   =3D 0
-    0.070 ( 0.006 ms): a.out/908002 openat(dfd: CWD, filename:
-0xf7ed83e0, flags: RDONLY|CLOEXEC|LARGEFILE) =3D 3
-    0.077 ( 0.001 ms): a.out/908002 read(fd: 3, buf: 0xff80ea50,
-count: 512)                              =3D 512
-    0.079 ( 0.001 ms): a.out/908002 statx(dfd: 3, filename:
-0xf7f080f6, flags: NO_AUTOMOUNT|EMPTY_PATH, mask: TYPE|MO>
-    0.104 ( 0.000 ms): a.out/908002 close(fd: 3)
-                                   =3D 0
-    0.112 ( 0.000 ms): a.out/908002 set_tid_address(tidptr:
-0xf7ed9528)                                   =3D 908002 (a>
-    0.113 ( 0.000 ms): a.out/908002 set_robust_list(head: 0xf7ed952c,
-len: 12)                            =3D 0 (swappe>
-    0.114 ( 0.001 ms): a.out/908002 rseq(rseq: 0xf7ed9960, rseq_len:
-32, sig: 1392848979)                 =3D 0 (swappe>
-    0.153 ( 0.003 ms): a.out/908002 mprotect(start: 0xf7eaf000, len:
-8192, prot: READ)                    =3D 0
-    0.158 ( 0.002 ms): a.out/908002 mprotect(start: 0x565ef000, len:
-4096, prot: READ)                    =3D 0
-    0.163 ( 0.002 ms): a.out/908002 mprotect(start: 0xf7f13000, len:
-8192, prot: READ)                    =3D 0
-    0.177 ( 0.005 ms): a.out/908002 munmap(addr: 0xf7ebc000, len:
-112066)                                 =3D 0
-    0.189 ( 0.009 ms): a.out/908002 openat(dfd: CWD, filename:
-0x565ee008)                                =3D 3
-    0.198 ( 0.006 ms): a.out/908002 read(fd: 3, buf: 0xff80e56c,
-count: 4096)                             =3D 1436
-    0.205 ( 0.017 ms): a.out/908002 write(fd: 1, buf: , count: 1436)
-                                   =3D 1436
-    0.229 (1000.201 ms): a.out/908002 clock_nanosleep(rqtp:
-0xff80e494, rmtp: 0xff80e48c)                   =3D 0
- 1000.486 (         ): a.out/908002 exit_group()
-```
+[...]
 
-Thanks,
-Ian
+>>
+>>
+> 
+> This set of patches mainly refactors the remove page table function
+> interfaces. The comment "riscv_ipi_for_rfence" has been removed, as it
+> was no longer needed, and this patch handles that.
+> 
+> Additionally, whether riscv_use_sbi_for_rfence is true or false, page
+> tables can now be released using RCU. This patch changes the previous
+> synchronous release logic (for !riscv_use_sbi_for_rfence) to an
+> RCU-based release.
+> 
+> So, Reviewed-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> 
+> Based on qemu-system-riscv64, I tested this patch. The log is as follows:
+> ./gup_test
+> TAP version 13
+> 1..1
+> # GUP_FAST_BENCHMARK: Time: get:663365 put:117 us
+> # ok 1 ioctl status 0
+> # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-> v3: Add Charlie's reviewed-by tags. Incorporate feedback from Arnd
->     Bergmann <arnd@arndb.de> on additional optional column and MIPS
->     system call numbering. Rebase past Namhyung's global system call
->     statistics and add comments that they don't yet support an
->     e_machine other than EM_HOST.
->
-> v2: Change the 1 element cache for the last table as suggested by
->     Howard Chu, add Howard's reviewed-by tags.
->     Add a comment and apology to Charlie for not doing better in
->     guiding:
->     https://lore.kernel.org/all/20250114-perf_syscall_arch_runtime-v1-1-5=
-b304e408e11@rivosinc.com/
->     After discussion on v1 and he agreed this patch series would be
->     the better direction.
->
-> Ian Rogers (11):
->   perf dso: Move libunwind dso_data variables into ifdef
->   perf dso: kernel-doc for enum dso_binary_type
->   perf syscalltbl: Remove syscall_table.h
->   perf trace: Reorganize syscalls
->   perf syscalltbl: Remove struct syscalltbl
->   perf dso: Add support for reading the e_machine type for a dso
->   perf thread: Add support for reading the e_machine type for a thread
->   perf trace beauty: Add syscalltbl.sh generating all system call tables
->   perf syscalltbl: Use lookup table containing multiple architectures
->   perf build: Remove Makefile.syscalls
->   perf syscalltbl: Mask off ABI type for MIPS system calls
->
->  tools/perf/Makefile.perf                      |  10 +-
->  tools/perf/arch/alpha/entry/syscalls/Kbuild   |   2 -
->  .../alpha/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/alpha/include/syscall_table.h |   2 -
->  tools/perf/arch/arc/entry/syscalls/Kbuild     |   2 -
->  .../arch/arc/entry/syscalls/Makefile.syscalls |   3 -
->  tools/perf/arch/arc/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm/entry/syscalls/Kbuild     |   4 -
->  .../arch/arm/entry/syscalls/Makefile.syscalls |   2 -
->  tools/perf/arch/arm/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm64/entry/syscalls/Kbuild   |   3 -
->  .../arm64/entry/syscalls/Makefile.syscalls    |   6 -
->  tools/perf/arch/arm64/include/syscall_table.h |   8 -
->  tools/perf/arch/csky/entry/syscalls/Kbuild    |   2 -
->  .../csky/entry/syscalls/Makefile.syscalls     |   3 -
->  tools/perf/arch/csky/include/syscall_table.h  |   2 -
->  .../perf/arch/loongarch/entry/syscalls/Kbuild |   2 -
->  .../entry/syscalls/Makefile.syscalls          |   3 -
->  .../arch/loongarch/include/syscall_table.h    |   2 -
->  tools/perf/arch/mips/entry/syscalls/Kbuild    |   2 -
->  .../mips/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/mips/include/syscall_table.h  |   2 -
->  tools/perf/arch/parisc/entry/syscalls/Kbuild  |   3 -
->  .../parisc/entry/syscalls/Makefile.syscalls   |   6 -
->  .../perf/arch/parisc/include/syscall_table.h  |   8 -
->  tools/perf/arch/powerpc/entry/syscalls/Kbuild |   3 -
->  .../powerpc/entry/syscalls/Makefile.syscalls  |   6 -
->  .../perf/arch/powerpc/include/syscall_table.h |   8 -
->  tools/perf/arch/riscv/entry/syscalls/Kbuild   |   2 -
->  .../riscv/entry/syscalls/Makefile.syscalls    |   4 -
->  tools/perf/arch/riscv/include/syscall_table.h |   8 -
->  tools/perf/arch/s390/entry/syscalls/Kbuild    |   2 -
->  .../s390/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/s390/include/syscall_table.h  |   2 -
->  tools/perf/arch/sh/entry/syscalls/Kbuild      |   2 -
->  .../arch/sh/entry/syscalls/Makefile.syscalls  |   4 -
->  tools/perf/arch/sh/include/syscall_table.h    |   2 -
->  tools/perf/arch/sparc/entry/syscalls/Kbuild   |   3 -
->  .../sparc/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/sparc/include/syscall_table.h |   8 -
->  tools/perf/arch/x86/entry/syscalls/Kbuild     |   3 -
->  .../arch/x86/entry/syscalls/Makefile.syscalls |   6 -
->  tools/perf/arch/x86/include/syscall_table.h   |   8 -
->  tools/perf/arch/xtensa/entry/syscalls/Kbuild  |   2 -
->  .../xtensa/entry/syscalls/Makefile.syscalls   |   4 -
->  .../perf/arch/xtensa/include/syscall_table.h  |   2 -
->  tools/perf/builtin-trace.c                    | 290 +++++++++++-------
->  tools/perf/scripts/Makefile.syscalls          |  61 ----
->  tools/perf/scripts/syscalltbl.sh              |  86 ------
->  tools/perf/trace/beauty/syscalltbl.sh         | 274 +++++++++++++++++
->  tools/perf/util/dso.c                         |  54 ++++
->  tools/perf/util/dso.h                         |  56 ++++
->  tools/perf/util/syscalltbl.c                  | 148 ++++-----
->  tools/perf/util/syscalltbl.h                  |  22 +-
->  tools/perf/util/thread.c                      |  80 +++++
->  tools/perf/util/thread.h                      |  14 +-
->  56 files changed, 756 insertions(+), 509 deletions(-)
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/alpha/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arm/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/arm64/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/csky/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Makefile.sys=
-calls
->  delete mode 100644 tools/perf/arch/loongarch/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/mips/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Makefile.syscal=
-ls
->  delete mode 100644 tools/perf/arch/parisc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Makefile.sysca=
-lls
->  delete mode 100644 tools/perf/arch/powerpc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/riscv/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/s390/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/sh/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Makefile.syscall=
-s
->  delete mode 100644 tools/perf/arch/sparc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/x86/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Makefile.syscal=
-ls
->  delete mode 100644 tools/perf/arch/xtensa/include/syscall_table.h
->  delete mode 100644 tools/perf/scripts/Makefile.syscalls
->  delete mode 100755 tools/perf/scripts/syscalltbl.sh
->  create mode 100755 tools/perf/trace/beauty/syscalltbl.sh
->
-> --
-> 2.48.1.711.g2feabab25a-goog
->
+Nice.
+
+> 
+> So, Tested-by: Yunhui Cui <cuiyunhui@bytedance.com>
+
+Thank you very much for your review and testing!
+
+> 
+> Thanks,
+> Yunhui
+
+
 
