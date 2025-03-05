@@ -1,101 +1,118 @@
-Return-Path: <linux-csky+bounces-1874-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1875-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2351FA5007C
-	for <lists+linux-csky@lfdr.de>; Wed,  5 Mar 2025 14:27:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1FB3A50709
+	for <lists+linux-csky@lfdr.de>; Wed,  5 Mar 2025 18:53:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64C1D188C47B
-	for <lists+linux-csky@lfdr.de>; Wed,  5 Mar 2025 13:27:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21EA2172AA1
+	for <lists+linux-csky@lfdr.de>; Wed,  5 Mar 2025 17:53:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8006248872;
-	Wed,  5 Mar 2025 13:27:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F035251780;
+	Wed,  5 Mar 2025 17:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="gzOp9btd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YgLq2Qph"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375C61E531;
-	Wed,  5 Mar 2025 13:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EFB2505A7;
+	Wed,  5 Mar 2025 17:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741181239; cv=none; b=NuvYumnpRFmhC48h5/3x6mvy08CF+PODkdyNbji7uFHtcZcq/E+psGzklO/e0wJOj/WNKeH95d7bt1I0utlGQN7zkpwK51UEq2Q1OjTxb7U4e9iaRkHAdV2qgxQ+76AVgawnVYPcvqRtCRK93t15OpHIDeLeMtrQs5M6D/ITF38=
+	t=1741197179; cv=none; b=hn13MaTxbNcuzBWtc8bB4Fk50gNBDKl921/YeQgxJFefhPWEVlnrobpnKMEqkjU54Qs+Mk6+6dtuyl+YbEZDOUblX1DOJct8KSluLg7nsfOLj1uJhbFhaJDo/t5oqkg0eR9+XJIDrAYe4GjnKopVeRstYDQK4QutDXT2CNNQ3HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741181239; c=relaxed/simple;
-	bh=cB1DxsX8g+WgYZpFQF3xzyK6n2FY/ODCE60uSgp0XO8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D/73sMzyNpIylG5lzux9jJW+oJBfCf/Q9AjWK1Bcf5poaBdboI0AGOTnBa7M+kzHmpuEowzjhLm/U/HeQcDejKcGiIsx/WHovAseB2KzZZu1Y7hA7J6SjrlsRREUaNLTyfUHRDDQZJZdReuai58p7XfGqdwZ1G56zoFQV1s6UWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=gzOp9btd; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1741181228;
-	bh=cB1DxsX8g+WgYZpFQF3xzyK6n2FY/ODCE60uSgp0XO8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=gzOp9btd675nz7oHVq1TNOboLUEF3CpNFjY2HnMRh/CFxbVp+UUV1zpMNIeuVrIJV
-	 2NQtinq7RTEwKbYykS7zcKl/+SqOfSoGa1qUkNLZpDQiBmmthTgOL8sFunEleETm3k
-	 OUHea7Ij4e5FyjDxJcJV+rZLYptOEKXJd2bfJSAg=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id A784866DBD;
-	Wed,  5 Mar 2025 08:27:06 -0500 (EST)
-Message-ID: <91797ac4bbe27d7d60b89053050e429bcd630db3.camel@xry111.site>
-Subject: Ping: [PATCH 0/3] Drop explicit --hash-style= setting for new
-From: Xi Ruoyao <xry111@xry111.site>
-To: Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG
- Xuerui <kernel@xen0n.name>, Palmer Dabbelt <palmer@dabbelt.com>, Fangrui
- Song <i@maskray.me>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, linux-csky@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 05 Mar 2025 21:27:04 +0800
-In-Reply-To: <20250224112042.60282-1-xry111@xry111.site>
-References: <20250224112042.60282-1-xry111@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 
+	s=arc-20240116; t=1741197179; c=relaxed/simple;
+	bh=hE0MFGTk7bcOjMBBN//SQY7SQOQlJ98ye1JVJhEBqyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pkeSXsEqbWTSapINhtHAGJH1cT2WfsxyR6MOfGIM9QVcnyAPL1V7KJyUq85uu3csGoyLmbiWiklC/rkenzUUtJQIVTOsiw6iUfj2wpnrGpKVLNMXGq+eUUQpweCubMvyeen0WD6MuokEQ0L2EQncBxvPFAow9TgZbKN8yO7rvOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YgLq2Qph; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F10DC4CEE2;
+	Wed,  5 Mar 2025 17:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741197179;
+	bh=hE0MFGTk7bcOjMBBN//SQY7SQOQlJ98ye1JVJhEBqyU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YgLq2Qph/XKnO0vPpE1w+YDPzp+TATFzB/KsCjnTv8bJ7JXTedWgOJQm8tzJLxZgZ
+	 RzNeV1nI8Xc2+E/Er4K/hySns3z7+C89eKgfHDUr6QtPU0P5y01Ba1RBAst0pm+6qU
+	 mFLXKWzxQEy+Po+4p5IUUfdcPnLlJzrVxqdys88Y/3XRAXIVMDX1fqHm7z0wq3oLAc
+	 ji7wVU7OS1ax1G4HnyeM+cI3XG7HBzv9GYCm3VeVF9Nm+ebYUvekUKf7JnvtVEU2qa
+	 DZIqOuEuwea+hBvlg7PkrLq3C9fyIilBiwD1tjINhk+UTQelj1WFnTKgjWxTm/3790
+	 lFk35gC77gIuA==
+Date: Wed, 5 Mar 2025 14:52:56 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	guoren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v4 01/11] perf dso: Move libunwind dso_data variables
+ into ifdef
+Message-ID: <Z8iPeEbldTUqotsQ@x1>
+References: <20250304050305.901167-1-irogers@google.com>
+ <20250304050305.901167-2-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304050305.901167-2-irogers@google.com>
 
-Ping.
+On Mon, Mar 03, 2025 at 09:02:55PM -0800, Ian Rogers wrote:
+> The variables elf_base_addr, debug_frame_offset, eh_frame_hdr_addr and
+> eh_frame_hdr_offset are only accessed in unwind-libunwind-local.c
+> which is conditionally built on having libunwind support. Make the
+> variables conditional on libunwind support too.
 
-On Mon, 2025-02-24 at 19:20 +0800, Xi Ruoyao wrote:
-> For riscv, csky, and LoongArch, GNU hash had already become the de-
-> facto
-> standard when they borned, so there's no Glibc/Musl releases for them
-> without GNU hash support, and the traditional SysV hash is just
-> wasting
-> space for them.
->=20
-> Remove those settings and follow the distro toolchain default, which
-> is
-> likely --hash-style=3Dgnu.=C2=A0 In the past it could break vDSO self tes=
-ts,
-> but now the issue has been addressed by commit
-> e0746bde6f82 ("selftests/vDSO: support DT_GNU_HASH").
->=20
-> Xi Ruoyao (3):
-> =C2=A0 riscv: vDSO: Remove --hash-style=3Dboth
-> =C2=A0 csky: vDSO: Remove --hash-style=3Dboth
-> =C2=A0 LoongArch: vDSO: Remove --hash-style=3Dsysv
->=20
-> =C2=A0arch/csky/kernel/vdso/Makefile=C2=A0 | 2 +-
-> =C2=A0arch/loongarch/vdso/Makefile=C2=A0=C2=A0=C2=A0 | 2 +-
-> =C2=A0arch/riscv/kernel/vdso/Makefile | 2 +-
-> =C2=A03 files changed, 3 insertions(+), 3 deletions(-)
->=20
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Reviewed-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+ 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/dso.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
+> index bb8e8f444054..dfd763a0bd9d 100644
+> --- a/tools/perf/util/dso.h
+> +++ b/tools/perf/util/dso.h
+> @@ -154,10 +154,12 @@ struct dso_data {
+>  	int		 status;
+>  	u32		 status_seen;
+>  	u64		 file_size;
+> +#ifdef HAVE_LIBUNWIND_SUPPORT
+>  	u64		 elf_base_addr;
+>  	u64		 debug_frame_offset;
+>  	u64		 eh_frame_hdr_addr;
+>  	u64		 eh_frame_hdr_offset;
+> +#endif
+>  };
+>  
+>  struct dso_bpf_prog {
+> -- 
+> 2.48.1.711.g2feabab25a-goog
 
