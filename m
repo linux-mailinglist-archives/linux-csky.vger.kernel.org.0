@@ -1,239 +1,165 @@
-Return-Path: <linux-csky+bounces-1895-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1896-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 902AEA56006
-	for <lists+linux-csky@lfdr.de>; Fri,  7 Mar 2025 06:30:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E0ABA56C05
+	for <lists+linux-csky@lfdr.de>; Fri,  7 Mar 2025 16:29:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B76D41895B2F
-	for <lists+linux-csky@lfdr.de>; Fri,  7 Mar 2025 05:30:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03A393A7B88
+	for <lists+linux-csky@lfdr.de>; Fri,  7 Mar 2025 15:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA35198E78;
-	Fri,  7 Mar 2025 05:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD13021CC69;
+	Fri,  7 Mar 2025 15:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aS1r452c"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qKQQC8sC"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95243194C8B
-	for <linux-csky@vger.kernel.org>; Fri,  7 Mar 2025 05:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A4C101F2;
+	Fri,  7 Mar 2025 15:29:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741325428; cv=none; b=QrRc3rPq+K7sfX1BnmjwRUJJE45sku9mcQwBl0qM7xrlsJPVUp/KnN8f6RHWdnGnsoRlEclQGh8rem0S0wYNcCHF/blWRFvy13yi2sm8kDHjBUJsVewcS3P6w9WRhrtyEPmk4G4UyZQbKbN8efZbkM0PJew13cd0i8Skiv3aRZg=
+	t=1741361371; cv=none; b=prTrNJs4Nb9kJI/9e8Am5iyvlF9bM1BsNjlO0AIhY90DYZhEBqj8qLCeZLOvLvXfn+2c99t61LZmPitymVYH2osuEe4I1jCsShk89hLjYP65Dr3iMdozymYw9O9LbKkXg5B6rjpqLjAz3fwtnoRUOtDOVKmqUZlom3IYjiXr314=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741325428; c=relaxed/simple;
-	bh=FTQZUdfUptCa2bLgf3C1tX5NAj4o8RrqNfikG0Y/BmE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mnTmZyRPTCoCmE8xQN7Bom7Zh2pfLNeQYZ5JJW3YeO0RuD/ZxG5EduOSeVAoRxAj0k0uRQLQsozXOSfluyOAUv0y3NI+lhLY1finF0K8gkDINyISs8khMoWw+qjo7O7Se5fvsrXcJPOVDi5KeQGwSz1MQafrnfF3jgsk7HyDYpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aS1r452c; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2242ac37caeso43765ad.1
-        for <linux-csky@vger.kernel.org>; Thu, 06 Mar 2025 21:30:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1741325425; x=1741930225; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mdDEJTsHKwvjyl+F7qkE/MVBBT69xP0JtpsTNjb5e+Q=;
-        b=aS1r452c/rW2K/CaWV7lAQ/OcTUf1157keb7CTdojRCHrnRqr+qkFb7MIU71Emeco8
-         63SDP7mv1vIun9Jr2W3yLDYsyywlVfxKrihnvhn8BAH7+WVk+ytPrr21AuYgwQd/gOmG
-         rKpcXNW1C0zlwg3hhuLATW3ED2VGj1AybEqejQ2kP9UK28FMsKHTqAsGuD6BTnJSNRXG
-         a18coJARO4671xDwixiPK3+J5UUFpXo7/rVr3FVbAR/4islVrUCLzJGtH1PscmgKsLz2
-         WmvytLUuuhK4uW/cZlZdT9Tm8Tsslq8L9Wtu/BoEjrGZkfLLCY8mCYcBg2v0ZC7qLJQ6
-         m3Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741325425; x=1741930225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mdDEJTsHKwvjyl+F7qkE/MVBBT69xP0JtpsTNjb5e+Q=;
-        b=bJzGJVlGYBzuAlmXZ8FCNi4g3MGeUxKA/467BLxK8NFpSw+e5LvTYAJ1/6n02zEOFx
-         JHZqdgornWCgmxsU1pSWfLPtzrPugWQnKiYc3x8junhiq/4KrS7v3leVh3Xe2VZU9KnM
-         257Wlev1p5P2YtcfCQzFBHqAnudR5hzlezDPiJLtxlWky/Ol1Q0Yh7tQH1ajGwyfHWgX
-         vZssj1VvQ8O6otlpqGGk6Ake8FZ6zPp10sIm7SU+etxhJYGGSWVxMXQtRY8muYJyyDwb
-         DJ6bySNWFuNoBPPv6fdjhpo/YTW3lktlSoVSw0uCGFPbmEF2ZVjel4d6wqUEQpj3o16N
-         sxFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWt4p8JzAIjZNSWkE+/juIJx6KoAp9opvD30gZJnCbR0Cx9nLKemvyHamKh/x3BYUclYs/I6osKPnyq@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyxIM2xQroFY8/4lhHgtj090WDmmK8ohY3IqoiGyqgqmnPvbp6
-	heAewX0/fG3XH7McwUFY/Q+zSzDz4Tk2+MRHIM+zTsCUY1RvOqke6OLMjMj+uBFZCDsWE4RsCTa
-	WozJ0fwt1zWMfm0IpLqprjoIl5cvRys6OiZby
-X-Gm-Gg: ASbGncv6Q10Htu/9dGHd+N2HOrpZURqbjMmLvPW7+Ys0m9x+jTmmLpDjZos8K1u9x0C
-	iddXhZB+P0k1dijJgQkb8j8SyMaeV0129wj3GD/7eJV5Ev50VX0I+uC0tGVY1VY4mMguKapiYk1
-	Vt4wvAhW5euJ7ndT4Bwa6Cto2t4Ak=
-X-Google-Smtp-Source: AGHT+IEcodZzFnpZf8m9GKxcrOIuoYtTe9WlblycwKpr+zFPLDPbCwJqYAatYqYzvaFLYn5WJRIGjZXLMcuz4Nbng4s=
-X-Received: by 2002:a17:902:d504:b0:220:ce33:6385 with SMTP id
- d9443c01a7336-2242a6004b6mr1115105ad.9.1741325424567; Thu, 06 Mar 2025
- 21:30:24 -0800 (PST)
+	s=arc-20240116; t=1741361371; c=relaxed/simple;
+	bh=IQGBIqRB4GzYAQ/tDFR+0LkWEAzC++ZVR1ooYLXKi7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oswP1zt/tvvfvx2OTk18YH+EQN+g2AO65nyU7GAlGI+kHHuFK+l48z7OTQHin7SY7qM6MIG/qsflFG+lEvN3ghgGljBJ7+dIXzxuLntbWKE/De836ZzQ3+ehjFaH/nPYqzg7tORHuwdpeloWXJjexs4BPCbBC8mkK+7IEQZnwCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qKQQC8sC; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 527E3AWH028905;
+	Fri, 7 Mar 2025 15:28:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=Y0KvhWxi6k4smjT1a6uHtK0WLe6VaK
+	HOV2hSoWFI5bI=; b=qKQQC8sCg9pR0Rgf2U4SjNR+davwX5FjEufMomgRsB00fg
+	zyRoTfxYxXh4Y8vuiZOJjrJtRUBqHxyVXsqcdfStADiDsVoEhvGXke2IzKBOI/hb
+	WiESqINaMWZlctFARnqnvnWiPTNBO/qTgrLVOx+veNXvwWI6SMXfFRzUxY07Dh9Y
+	p4E9rDCnukHT+Y6EVG26BlOZ16mHO3x7KhgMU6qM64BlKcUlVNv2REetqaorOfxE
+	Hv9tuR0tLZlF0MsbPIllc5+326ZsUeYtZPM3HYRousN2gYIQuhJdn4OFhBw8Ldam
+	BqYL6oneEKifef2Z24hvK1SLIU1JVnxU0/X7HqUg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45827p8e9e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Mar 2025 15:28:26 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 527FOGZe009112;
+	Fri, 7 Mar 2025 15:28:26 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45827p8e9b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Mar 2025 15:28:25 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 527CW0hk013724;
+	Fri, 7 Mar 2025 15:28:24 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 454e2m7eh2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Mar 2025 15:28:24 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 527FSKc034669078
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 7 Mar 2025 15:28:20 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4BC592004D;
+	Fri,  7 Mar 2025 15:28:20 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6CBC420040;
+	Fri,  7 Mar 2025 15:28:17 +0000 (GMT)
+Received: from osiris (unknown [9.171.2.237])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri,  7 Mar 2025 15:28:17 +0000 (GMT)
+Date: Fri, 7 Mar 2025 16:28:15 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
+        Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH 07/13] s390: make setup_zero_pages() use memblock
+Message-ID: <20250307152815.9880Gbd-hca@linux.ibm.com>
+References: <20250306185124.3147510-1-rppt@kernel.org>
+ <20250306185124.3147510-8-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250304050305.901167-1-irogers@google.com> <20250304050305.901167-7-irogers@google.com>
- <Z8pKTE7tOqdqNUdA@google.com>
-In-Reply-To: <Z8pKTE7tOqdqNUdA@google.com>
-From: Ian Rogers <irogers@google.com>
-Date: Thu, 6 Mar 2025 21:30:13 -0800
-X-Gm-Features: AQ5f1JqqAJ5MO97ObltKzRcURCg1d-Uko29NllBm3N5v0f7KDyGvXHVOjRAnU58
-Message-ID: <CAP-5=fXdZZX=wa8EkN-dcpnDjA7J-cQ09BERufAQzoBeoNCT1g@mail.gmail.com>
-Subject: Re: [PATCH v4 06/11] perf dso: Add support for reading the e_machine
- type for a dso
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, guoren <guoren@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, linux-riscv@lists.infradead.org, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250306185124.3147510-8-rppt@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: A6EZhWyKm6a7TATSJL5pnfOrX3P29DY0
+X-Proofpoint-GUID: Cc95RTw9axkwgZElLQM4IM54NfQR-ck-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-07_06,2025-03-06_04,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 clxscore=1011 spamscore=0 mlxlogscore=334
+ malwarescore=0 lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503070115
 
-On Thu, Mar 6, 2025 at 5:22=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> w=
-rote:
->
-> On Mon, Mar 03, 2025 at 09:03:00PM -0800, Ian Rogers wrote:
-> > For ELF file dsos read the e_machine from the ELF header. For kernel
-> > types assume the e_machine matches the perf tool. In other cases
-> > return EM_NONE.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/dso.c | 54 +++++++++++++++++++++++++++++++++++++++++++
-> >  tools/perf/util/dso.h |  1 +
-> >  2 files changed, 55 insertions(+)
-> >
-> > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> > index 5c6e85fdae0d..7f2f1af4f73b 100644
-> > --- a/tools/perf/util/dso.c
-> > +++ b/tools/perf/util/dso.c
-> > @@ -1170,6 +1170,60 @@ ssize_t dso__data_read_offset(struct dso *dso, s=
-truct machine *machine,
-> >       return data_read_write_offset(dso, machine, offset, data, size, t=
-rue);
-> >  }
-> >
-> > +uint16_t dso__e_machine(struct dso *dso, struct machine *machine)
-> > +{
-> > +     uint16_t e_machine =3D EM_NONE;
-> > +     int fd;
-> > +
-> > +     switch (dso__binary_type(dso)) {
-> > +     case DSO_BINARY_TYPE__KALLSYMS:
-> > +     case DSO_BINARY_TYPE__GUEST_KALLSYMS:
-> > +     case DSO_BINARY_TYPE__VMLINUX:
-> > +     case DSO_BINARY_TYPE__GUEST_VMLINUX:
-> > +     case DSO_BINARY_TYPE__GUEST_KMODULE:
-> > +     case DSO_BINARY_TYPE__GUEST_KMODULE_COMP:
-> > +     case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE:
-> > +     case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP:
-> > +     case DSO_BINARY_TYPE__KCORE:
-> > +     case DSO_BINARY_TYPE__GUEST_KCORE:
-> > +     case DSO_BINARY_TYPE__BPF_PROG_INFO:
-> > +     case DSO_BINARY_TYPE__BPF_IMAGE:
-> > +     case DSO_BINARY_TYPE__OOL:
-> > +     case DSO_BINARY_TYPE__JAVA_JIT:
->
-> I think some of them can be possible in recorded data.  But let's go
-> simple with EM_HOST as we haven't supported cross-arch trace.
+On Thu, Mar 06, 2025 at 08:51:17PM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Allocating the zero pages from memblock is simpler because the memory is
+> already reserved.
+> 
+> This will also help with pulling out memblock_free_all() to the generic
+> code and reducing code duplication in arch::mem_init().
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/s390/mm/init.c | 14 +++-----------
+>  1 file changed, 3 insertions(+), 11 deletions(-)
 
-I think you are agreeing with the code, which I think is right :-) I
-don't know a way to go from say /proc/kallsyms text file to an
-e_machine number and inventing a way is getting beyond the scope of
-this series.
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
 
-> > +             return EM_HOST;
-> > +     case DSO_BINARY_TYPE__DEBUGLINK:
-> > +     case DSO_BINARY_TYPE__BUILD_ID_CACHE:
-> > +     case DSO_BINARY_TYPE__BUILD_ID_CACHE_DEBUGINFO:
-> > +     case DSO_BINARY_TYPE__SYSTEM_PATH_DSO:
-> > +     case DSO_BINARY_TYPE__OPENEMBEDDED_DEBUGINFO:
-> > +     case DSO_BINARY_TYPE__FEDORA_DEBUGINFO:
-> > +     case DSO_BINARY_TYPE__UBUNTU_DEBUGINFO:
-> > +     case DSO_BINARY_TYPE__MIXEDUP_UBUNTU_DEBUGINFO:
-> > +     case DSO_BINARY_TYPE__BUILDID_DEBUGINFO:
-> > +             break;
-> > +     case DSO_BINARY_TYPE__NOT_FOUND:
-> > +     default:
-> > +             return EM_NONE;
-> > +     }
-> > +
-> > +     pthread_mutex_lock(&dso__data_open_lock);
->
-> Hmm.. I'm afraid it'd slow down perf trace a bit more.  It sees
-> occasional LOST events.  But it may be ok as it's cached in thread later.
+> -	empty_zero_page = __get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
+> +	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE << order, order);
+>  	if (!empty_zero_page)
+>  		panic("Out of memory in setup_zero_pages");
 
-Agreed, I think the caching will handle this. The lock is pre-existing
-and is used to guard use of the dso_data->fd. The lock could be made
-reader-writer, it could be placed within the dso_data it could also be
-sharded. I've not done any of that here as I believe the processing is
-all handled on a single thread anyway.
-
-> > +
-> > +     /*
-> > +      * dso__data(dso)->fd might be closed if other thread opened anot=
-her
-> > +      * file (dso) due to open file limit (RLIMIT_NOFILE).
-> > +      */
-> > +     try_to_open_dso(dso, machine);
-> > +     fd =3D dso__data(dso)->fd;
-> > +     if (fd >=3D 0) {
-> > +             _Static_assert(offsetof(Elf32_Ehdr, e_machine) =3D=3D 18,=
- "Unexpected offset");
-> > +             _Static_assert(offsetof(Elf64_Ehdr, e_machine) =3D=3D 18,=
- "Unexpected offset");
-> > +             if (pread(fd, &e_machine, sizeof(e_machine), 18) !=3D siz=
-eof(e_machine))
->
-> I think it needs to check the endianess and swap the data.
-
-Agreed. Will send a fix in v5.
-
-Thanks,
-Ian
-
-> Thanks,
-> Namhyung
->
->
-> > +                     e_machine =3D EM_NONE;
-> > +     }
-> > +     pthread_mutex_unlock(&dso__data_open_lock);
-> > +     return e_machine;
-> > +}
-> > +
-> >  /**
-> >   * dso__data_read_addr - Read data from dso address
-> >   * @dso: dso object
-> > diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-> > index f3ca2a5e7670..ba9b83db061a 100644
-> > --- a/tools/perf/util/dso.h
-> > +++ b/tools/perf/util/dso.h
-> > @@ -818,6 +818,7 @@ int dso__data_file_size(struct dso *dso, struct mac=
-hine *machine);
-> >  off_t dso__data_size(struct dso *dso, struct machine *machine);
-> >  ssize_t dso__data_read_offset(struct dso *dso, struct machine *machine=
-,
-> >                             u64 offset, u8 *data, ssize_t size);
-> > +uint16_t dso__e_machine(struct dso *dso, struct machine *machine);
-> >  ssize_t dso__data_read_addr(struct dso *dso, struct map *map,
-> >                           struct machine *machine, u64 addr,
-> >                           u8 *data, ssize_t size);
-> > --
-> > 2.48.1.711.g2feabab25a-goog
-> >
+This could have been converted to memblock_alloc_or_panic(), but I
+guess this can also be done at a later point in time.
 
