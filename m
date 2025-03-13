@@ -1,134 +1,150 @@
-Return-Path: <linux-csky+bounces-1942-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1943-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BB12A5FD72
-	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 18:18:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36A7BA600F1
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 20:21:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B724419C45BC
-	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 17:17:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 817771759CC
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 19:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CB5626AAAD;
-	Thu, 13 Mar 2025 17:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F9B81EF0AC;
+	Thu, 13 Mar 2025 19:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cOimpLfw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NzRoteWb"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610FE26AA9D;
-	Thu, 13 Mar 2025 17:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D2B78C9C;
+	Thu, 13 Mar 2025 19:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741886094; cv=none; b=mq7C5cR89NWZO2QbNmKPA2Vk5q2eVYr9b1tPvwgD+PaFN0w4odEqY6/XAsWRVnRntc4Rx9hkPb3NCqE4pUeQlEEoP/vQRjjhP1fU6VRqudYx5ynxk7T1BkjNcv2N6M8L+sxv7E27XvSnUIypmm55tuaUGoHrmNkfC3kXHS8kHPs=
+	t=1741893700; cv=none; b=mM5iiBjUTNIKWHf3Cj1F1M/HEjmzjBhqk4IdFRkq1MzCnR113EX90wOrn9JDQDrVLzJsIEkDmJtr/uGbroeVT/FPEEZkFkHiR8f/dRcjEqrKGD3IREIKUtkCLxJxYTtH8c6AcGD3XZbnT/NPWuUgdr/ZIIUjr37B4s//RS/fqdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741886094; c=relaxed/simple;
-	bh=Z0R4Knirkvu+jEmc1w5aGtkeADSH26ueKwL0dPhNn7o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jrM1C/1SxxWEQwvuLUGH3P+C0SA3CPCJ1Ye4nHxTjmp+HEMlFym8CMYiyGszj718b1CxKRz/otEVIrRnB1t5iXkkQe9022MGe6fhskwuBay4kh/pbHQaPT+91uQtzA7t22b6uLsSs2Cr7efR8ybfRgnfNm18ruHbiOb1uhL9Iss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cOimpLfw; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2f9d3d0f55dso2228694a91.1;
-        Thu, 13 Mar 2025 10:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741886092; x=1742490892; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3DVX2jUUT8USovuBtaAWfLwoCZG/vTo0soqbEn/R/c=;
-        b=cOimpLfwOsJiKE9zqThVaUQT49FF1dUz73n612/el2IC/OjalZOYFquXY2F5uUEPBP
-         lJlOSdEMkN7v3YXxIYSBk0vEYbo0jxYU41mn9rcxEyrOLw4W+Pvc7Lnl2b32uIYrT7T2
-         XBgS7TpSuPg895A7kcyW4pFB3R1Az2ohe0HfMYT9BxTpWKLCFYRdkrF3+St87a48wl2i
-         kT24xckDqNXwW2rHvGWRn8JVSgykI/gxf+Pk0tQtZF0sYxdpD0LKIvs+s58hzbUYc6qy
-         C5RoSbi+Q4UJ5ifJx4j8VmodUBb4IZFmadkAr+diIyIBt4VusvwCxmQ8WjdP+i82e2uh
-         m1Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741886092; x=1742490892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3DVX2jUUT8USovuBtaAWfLwoCZG/vTo0soqbEn/R/c=;
-        b=JAddBkSY1z7DdLGlC5vn3v9YnuMopgi9sPDxNvGY0JO3faVuY9bNkrBjqdX83umGzU
-         lSOJaeELQPm5D8B1YwWHnpk4+iWxo2XYP0KNdAKLSrngemLhwb08gT0huGlYwxKIz1Yf
-         Vmx+7pBHJB2dFPaXbRfUWspo9V2Jrsc907HfA8NniFsqW7mjkDkwzJUniMbJsHd6lzht
-         LxYp405uatpih/FiTHGcA8iLihqfwbKbcaktqvJGv3aB96HYF/U0fH/Pr5FXBlFJ10k/
-         p5isdlkn6Obsb90tH0bazKP+H9lH8zTdvnQcKmDGTZPKzmllFB9JBwBc/PPWXU08hBlu
-         lm4A==
-X-Forwarded-Encrypted: i=1; AJvYcCU/1Dr4r3BWYRCNy9SSqfbYhfK0+nh+0q1f8CkmQSx15G5iTyRChJfaqXT3dZlnyB4OR/tUlgZdMIOjUQ==@vger.kernel.org, AJvYcCU2KJKyzozYmMbNP2UEV/xf6ZaUz5ewxSaTg2+WY+Arq3nXxI0FHnbb5mLpUdsk4uw+KALC0e4w0BtJiA==@vger.kernel.org, AJvYcCUbI0hZuyaYyhFwZpXBev6+jT8uAbjySuI/WIkfmwv04l68zIRTdw6i84wG7NapMl/6QjzcvpG6xyHfoFBD@vger.kernel.org, AJvYcCUjvCmjXMxrSQvAZC07MG9KjWOqLaOpgWRtX1WMubJeWg6pKxViz72eFrJ3BL26o1QwXN59ng/M0Ubtgg==@vger.kernel.org, AJvYcCUlZnxdyKmA/1rwK2czB7azKTFuh6kPRkyJkMnlKNe8/nDb7pK0t5UwFGIu4I4mUiFHEww0MnRs/zI=@vger.kernel.org, AJvYcCUyPODGAIHCv2N60UzEAHS7K1QY3rbyVJLD3xEFiGRWKzGkU16Y/Al9fsOztjiX2x+zEdijWIXJpEiy9w==@vger.kernel.org, AJvYcCWXoJOCLDyvjvSGTKYUMg413st2pO3GopK60J6uifXq2DyHeszXaAby5K5fAhVZj3ynvXFCiX8PxQK1S3Yw8A==@vger.kernel.org, AJvYcCWY/7BPMC/c0W5T9jpWkyGaqjNa8pC/b9C2hnL4rbgjUaNt1M/DFWn22otkwTT3ZdFkTKk5heH6ak0cqmBY@vger.kernel.org, AJvYcCX066NzYUWvciJP3yhUbZygNkgBPdFPg8kG1m9Q6dHO71FAaEc0tYItJBvZ9cAHns6WNSFxd4zxgfyEng==@vger.kernel.org, AJvYcCXmcd7V1HGb
- 4ilm3c+jPMnLESvzx31Qc+t2i7qGQIZvVCIQFO08Xuq37oys9gaHzOsxOmRapZaKthEUSvqSyxA=@vger.kernel.org, AJvYcCXpXqoHnScRBfMr+wv5nia70nioFqe7GEOsG1HCZM78T3UgNuyEUTFuxRbbhj7eNVXJr/QTLeV9AJWTng==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNmz9YPks/sZFgydvLcrs3S0PNWCJPJOW3w/IUcuwuP7oM2vwA
-	Ur0P/q+CmUu6aQMmKkJrCz0yz2PY7Z/8uw/0ii4gLQCNv8kN6tQ0NkfXTzza5ZXvnOHzNNczBEC
-	XIVc0qV9TrUwg0YYWrDUxQJxBJ+U=
-X-Gm-Gg: ASbGnctnpg+2qwjmPSk8wtEvDxiXiS6zVjAIi9JskCEupmWnbNJqFoPvCX9oe2aAE7p
-	xcN/lT44JW6SBwIVqHSX3CZtiQp+835Q14qsUEi9IaJsseGXfWJt2GF7WWpx5++VLjOOeUJW846
-	V8CPD+c4u4rcbUf7O23aiGZTjDT9M=
-X-Google-Smtp-Source: AGHT+IE1qRePjrPlGe/k7DXmrY+KtJaOvGWQ1A7tyU5eLBTz7VxuSMi4hxEC/EMElopjpnT6L0bRBsC6lDv+GByhQbc=
-X-Received: by 2002:a17:90b:5608:b0:2fe:b8ba:62e1 with SMTP id
- 98e67ed59e1d1-3014ea24aa4mr365923a91.28.1741886091572; Thu, 13 Mar 2025
- 10:14:51 -0700 (PDT)
+	s=arc-20240116; t=1741893700; c=relaxed/simple;
+	bh=IYiWOwwKf+URAc5DyfQcTEda3N2qRFfbrrv01xDgHQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rMbM0muVPBqRNg4p09gamEuvT71AeUk+amsl/Lkk/IlSZ2MsAt9Pxe9abLetfQos3RPIgG8riykwLePvtcASJIShCIsp4yX3BwaW8hb9BBAfFcKMsovpSToy8l8K0NvjWbf+iT13rbqv9+p8u0H+EZ1Ez1t0yj6wPITsBnbMeHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NzRoteWb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325E1C4CEDD;
+	Thu, 13 Mar 2025 19:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741893699;
+	bh=IYiWOwwKf+URAc5DyfQcTEda3N2qRFfbrrv01xDgHQQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NzRoteWbepqPDywTZDbjJoY2BY85XR+U1gJ0nTqL+Pie++q/sD/n18VPLE8gn9Q3J
+	 rbtoK/p63FJzkxrjLkwznrDk4S9cxXcKpSFnV4UappZrog3/DkrsGf2Uxfwy3taih/
+	 RoacYLFFyb9ZNEKwzHui5uUkx/TzcoJdLDjMIKvMeAeUF6XbgHQaR8Y0SwcWFVwb/X
+	 ZWUe6pZS/awCUgDuN9rB526lr7esdyfu16l4YfL/n969WNNktjbYUNBLvEdnMFx+sG
+	 Z2C31KeKoamew8eHXD/O9dRCmgztqNfXVrbzoN4QjPT580ZqvQvTA6RGvInl1MLcyz
+	 nrSePUi8nznnw==
+Date: Thu, 13 Mar 2025 16:21:36 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	guoren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v5 09/11] perf syscalltbl: Use lookup table containing
+ multiple architectures
+Message-ID: <Z9MwQJ5bRu6-N43w@x1>
+References: <20250308003209.234114-1-irogers@google.com>
+ <20250308003209.234114-10-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250313135003.836600-1-rppt@kernel.org> <20250313135003.836600-9-rppt@kernel.org>
-In-Reply-To: <20250313135003.836600-9-rppt@kernel.org>
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 13 Mar 2025 20:14:39 +0300
-X-Gm-Features: AQ5f1JpOtVR6fLnH8b4t6Wo35MeP6GXSndMXHGPmpker_QqVMpVf1FbK9Hm_3_Y
-Message-ID: <CAMo8Bf+_8QdcWmk-k6dpUUnvVtVsYCgcviK+fF=CsKjT3nFxHg@mail.gmail.com>
-Subject: Re: [PATCH v2 08/13] xtensa: split out printing of virtual memory
- layout to a function
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
-	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, 
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Mark Brown <broonie@kernel.org>, Matt Turner <mattst88@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, 
-	Stafford Horne <shorne@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, 
-	Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250308003209.234114-10-irogers@google.com>
 
-On Thu, Mar 13, 2025 at 4:52=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wro=
-te:
->
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->
-> This will help with pulling out memblock_free_all() to the generic
-> code and reducing code duplication in arch::mem_init().
->
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  arch/xtensa/mm/init.c | 97 ++++++++++++++++++++++---------------------
->  1 file changed, 50 insertions(+), 47 deletions(-)
+On Fri, Mar 07, 2025 at 04:32:07PM -0800, Ian Rogers wrote:
+> Switch to use the lookup table containing all architectures rather
+> than tables matching the perf binary.
+> 
+> This fixes perf trace when executed on a 32-bit i386 binary on an
+> x86-64 machine. Note in the following the system call names of the
+> 32-bit i386 binary as seen by an x86-64 perf.
+> 
 
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+Reproduced the results here:
 
---=20
-Thanks.
--- Max
+root@number:/home/acme/c# file faccessat2
+faccessat2: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=8dafcc1549658d57248dce883e8ec7eea3d6e8a5, for GNU/Linux 3.2.0, not stripped
+root@number:/home/acme/c#
+
+root@number:/home/acme/c# strace ./faccessat2 |& head 
+execve("./faccessat2", ["./faccessat2"], 0x7ffce63265e0 /* 39 vars */) = 0
+[ Process PID=2552445 runs in 32 bit mode. ]
+brk(NULL)                               = 0x849a000
+mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xf7fb3000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+statx(3, "", AT_STATX_SYNC_AS_STAT|AT_NO_AUTOMOUNT|AT_EMPTY_PATH, STATX_BASIC_STATS, {stx_mask=STATX_ALL|STATX_MNT_ID|STATX_SUBVOL, stx_attributes=0, stx_mode=S_IFREG|0644, stx_size=85091, ...}) = 0
+mmap2(NULL, 85091, PROT_READ, MAP_PRIVATE, 3, 0) = 0xf7f9e000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib/libc.so.6", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+root@number:/home/acme/c#
+
+Before:
+
+root@number:/home/acme/c# perf trace ./faccessat2 |& head
+faccessat2(123, (null), X_OK, AT_EACCESS | AT_SYMLINK_NOFOLLOW) = -1
+         ? (         ): faccessat2/2552543  ... [continued]: munmap())                                           = 0
+     0.024 ( 0.002 ms): faccessat2/2552543 recvfrom(ubuf: 0x2, size: 4159848428, flags: DONTROUTE|CTRUNC|TRUNC|DONTWAIT|EOR|WAITALL|FIN|SYN|CONFIRM|RST|ERRQUEUE|SOCK_DEVMEM|ZEROCOPY|FASTOPEN|CMSG_CLOEXEC|0x91f20000, addr: 0xe30, addr_len: 0xffcda98c) = 138993664
+     0.047 ( 0.006 ms): faccessat2/2552543 lgetxattr(name: "", value: 0x3, size: 34)                             = 4159602688
+     0.063 ( 0.003 ms): faccessat2/2552543 dup2(oldfd: -135160188, newfd: 4)                                     = -1 ENOENT (No such file or directory)
+     0.071 ( 0.023 ms): faccessat2/2552543 preadv(fd: 4294967196, vec: 0xf7f16420, vlen: 557056, pos_h: 4159848428) = 3
+     0.098 ( 0.004 ms): faccessat2/2552543 lgetxattr(name: "", value: 0x1, size: 2)                              = 4159516672
+     0.104 ( 0.001 ms): faccessat2/2552543 lstat(filename: "", statbuf: 0x14c63)                                 = 0
+     0.114 ( 0.004 ms): faccessat2/2552543 preadv(fd: 4294967196, vec: 0xf7ee8380, vlen: 557056, pos_h: 4159848428) = 3
+     0.118 ( 0.002 ms): faccessat2/2552543 close(fd: 3)                                                          = 512
+root@number:/home/acme/c# 
+
+After:
+
+root@number:/home/acme/c# perf trace ./faccessat2 |& head
+faccessat2(123, (null), X_OK, AT_EACCESS | AT_SYMLINK_NOFOLLOW) = -1
+sh: line 1: perf-read-vdso32: command not found
+         ? (         ): faccessat2/2556897  ... [continued]: execve())                                           = 0
+     0.028 ( 0.002 ms): faccessat2/2556897 brk()                                                                 = 0x8fe4000
+     0.068 ( 0.003 ms): faccessat2/2556897 access(filename: 0xf7ff2e84, mode: R)                                 = -1 ENOENT (No such file or directory)
+     0.080 ( 0.005 ms): faccessat2/2556897 openat(dfd: CWD, filename: "/etc/ld.so.cache", flags: RDONLY|CLOEXEC|LARGEFILE) = 3
+     0.094 ( 0.001 ms): faccessat2/2556897 close(fd: 3)                                                          = 0
+     0.103 ( 0.003 ms): faccessat2/2556897 openat(dfd: CWD, filename: "/lib/libc.so.6", flags: RDONLY|CLOEXEC|LARGEFILE) = 3
+     0.108 ( 0.002 ms): faccessat2/2556897 read(fd: 3, buf: 0xffdd84b0, count: 512)                              = 512
+     0.216 ( 0.001 ms): faccessat2/2556897 close(fd: 3)                                                          = 0
+root@number:/home/acme/c#
+
+And interestingly the openat syscall got its contents obtained via the
+BPF augmenter... better to test this more thoroughly, but I think it
+should come after this series lands.
+
+- Arnaldo
+
 
