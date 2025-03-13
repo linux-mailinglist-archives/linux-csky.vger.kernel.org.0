@@ -1,51 +1,51 @@
-Return-Path: <linux-csky+bounces-1924-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1925-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 347DDA5E335
-	for <lists+linux-csky@lfdr.de>; Wed, 12 Mar 2025 18:57:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19D52A5EC89
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 08:11:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BA1017C57D
-	for <lists+linux-csky@lfdr.de>; Wed, 12 Mar 2025 17:57:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C08971896A2B
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 07:11:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7AB2561C2;
-	Wed, 12 Mar 2025 17:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F291FBCA9;
+	Thu, 13 Mar 2025 07:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nEIcU+Uz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDH4wrX2"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06CC23F369;
-	Wed, 12 Mar 2025 17:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9348E12B17C;
+	Thu, 13 Mar 2025 07:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741802245; cv=none; b=rz9XMnmwOmUDCtlMkH24ZBK7A0FeOEe/NnmqYsF/6p7CNDZLHq+X8PU2Kn+e9mx+Shj0+nF31QB/uSnrVdZmjnA7AcxP3E9esq3gb6Yri3TZPokiIj3xnu197uVI+BZ/FTMMLnlxUyevBLLTKDD1gzGE607q53SUGe+K6BJLLIg=
+	t=1741849903; cv=none; b=BObsDkaWHZ93cI9rXvCHzPxPJqiN9JLpX7niC5U7S7tMeG8wdn3bHTUsNDBWtOzT2nQvweqhJEuZsGtvPwEo2vw5fy9y0sm5m6m8YVejfWgFC8wAY1r5RNhxl3wBTlYkqxSnhNP8OrPP4TfaxpkMxBkJg5Z+8H9jCFOGvPAO9Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741802245; c=relaxed/simple;
-	bh=zljP+mDHAaQAZnFdNotLuiGw3OZI9tbEnF6C6rmzp7s=;
+	s=arc-20240116; t=1741849903; c=relaxed/simple;
+	bh=q9Dl0FHGQmih4lZVAN04K/wTRrdLBiM11KRo6Ki9rEk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c+UbjyaZh3Qyq/LJoD9rgJ7eygZ36EWDT+lXm08i30yg4A8K8+erIT5A6T4qC7GWNUVh6UV42k2wmgGqDM2C+vL9kFNW1Uhvj7RkzPVQGESxnKopoAmt4e8CxS0k7j5wUNWfVsMTW6NfPWcZQXV00Bs8/EvTUmILy2y9amVZf6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nEIcU+Uz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A790C4CEDD;
-	Wed, 12 Mar 2025 17:57:24 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=CjByOSmHf83lyB598VUvH++8IVAU5uAG/nCJD8V1/HQHVV089p+Z/z8F5JzQ3BztfBoGPpXOFgDCFraDXale+N6YW7omHbkqWlOrhxpCaRgBBDYsIshc6t6DBQCWdenA3h1v6FCtLPqfU/k15TCWcSG/tErq6wXvPNVzeEKMW04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDH4wrX2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A1CC4CEDD;
+	Thu, 13 Mar 2025 07:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741802245;
-	bh=zljP+mDHAaQAZnFdNotLuiGw3OZI9tbEnF6C6rmzp7s=;
+	s=k20201202; t=1741849903;
+	bh=q9Dl0FHGQmih4lZVAN04K/wTRrdLBiM11KRo6Ki9rEk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nEIcU+Uz5BcICdmCXOe35LcQyckIKPgl3m2lHMHP2VQ1CnJY195bKoCiO9yxCVBkT
-	 pwER7G7WR4IGxk0JXC6fUwPRTzGaFSnKxRDkvCOTO2Gopg6Y/NA2GGzQ+kNIrBi8x9
-	 hqz/UvuRbAv/N7LHK9hjRpRfnvAnUq8mttoMckvGEgYyQsVrs8Omp6eAnG/k+TPV0W
-	 4DQBEXSc1qtteDUnxE+xgD/TrG9IUibQlaPyTdH8Nn1BfaOCuRPoEPtW/JNriM86R5
-	 IGRAdDG73EdBwnZ9DzAyypEOHpItoHvbWx7zsrPQUfu/Zi1qPAS/WtfJdmh9ooYCRv
-	 l4uH7vHeWlLgw==
-Date: Wed, 12 Mar 2025 14:57:22 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+	b=WDH4wrX262Bl/pXty7Tof6tDNbPo/AyqOM3f7eHVGWpenOwQUTomh+UZnLsJawuPR
+	 etJaZfPdMuc2JgoqLqpKWXh0sxBRNitJhbu/SLtzHqyCU8nynYpyXGmi6Zjk8wR0TZ
+	 mCF/amFQk+Y23iE0bNlSUeMXoTQifpX/TAycLijvkILamzG+uAAksftzSElsS6aJgr
+	 HBuZHnCE6/zHROd/BVVoCoGRUEDfxJE2ZzXRV1fU26svGsncAxCvLdk6QqNvNdvXJY
+	 plkWuxZdnoTsh9vDiR133bIBdp0M5znL3hRUR7tIj1DDFtDVCca9S47/7pg2GeM9B6
+	 SynX5brK73BdQ==
+Date: Thu, 13 Mar 2025 00:11:40 -0700
+From: Namhyung Kim <namhyung@kernel.org>
 To: Ian Rogers <irogers@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Namhyung Kim <namhyung@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
 	Jiri Olsa <jolsa@kernel.org>,
@@ -62,236 +62,219 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Jiri Slaby <jirislaby@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
 	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
 	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v5 06/11] perf dso: Add support for reading the e_machine
- type for a dso
-Message-ID: <Z9HLArg6uGiK8FzM@x1>
+Subject: Re: [PATCH v5 00/11] perf: Support multiple system call tables in
+ the build
+Message-ID: <Z9KFLGpenwOP32q3@google.com>
 References: <20250308003209.234114-1-irogers@google.com>
- <20250308003209.234114-7-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250308003209.234114-7-irogers@google.com>
+In-Reply-To: <20250308003209.234114-1-irogers@google.com>
 
-On Fri, Mar 07, 2025 at 04:32:04PM -0800, Ian Rogers wrote:
-> For ELF file dsos read the e_machine from the ELF header. For kernel
-> types assume the e_machine matches the perf tool. In other cases
-> return EM_NONE.
+On Fri, Mar 07, 2025 at 04:31:58PM -0800, Ian Rogers wrote:
+> This work builds on the clean up of system call tables and removal of
+> libaudit by Charlie Jenkins <charlie@rivosinc.com>.
 > 
-> When reading from the ELF header use DSO__SWAP that may need
-> dso->needs_swap initializing. Factor out dso__swap_init to allow this.
+> The system call table in perf trace is used to map system call numbers
+> to names and vice versa. Prior to these changes, a single table
+> matching the perf binary's build was present. The table would be
+> incorrect if tracing say a 32-bit binary from a 64-bit version of
+> perf, the names and numbers wouldn't match.
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/dso.c        | 88 ++++++++++++++++++++++++++++++++++++
->  tools/perf/util/dso.h        |  3 ++
->  tools/perf/util/symbol-elf.c | 27 -----------
->  3 files changed, 91 insertions(+), 27 deletions(-)
+> Change the build so that a single system call file is built and the
+> potentially multiple tables are identifiable from the ELF machine type
+> of the process being examined. To determine the ELF machine type, the
+> executable's maps are searched and the associated DSOs ELF headers are
+> read. When this fails and when live, /proc/pid/exe's ELF header is
+> read. Fallback to using the perf's binary type when unknown.
 
-This one, due to this having already been merged:
+Now it works well for me!
 
-commit b10f74308e1305275e69ddde711ec817cc69e306 (perf-tools-next/perf-tools-next)
-Author: Stephen Brennan <stephen.s.brennan@oracle.com>
-Date:   Fri Mar 7 15:22:03 2025 -0800
+  $ sudo ./perf trace a32.out
+           ? (         ): a32.out/1267727  ... [continued]: execve())                                           = 0
+           ? (         ): a32.out/1267727  ... [continued]: brk())                                              = 0x57f33000
+       0.062 ( 0.003 ms): a32.out/1267727 access(filename: 0xf7f170cc, mode: R)                                 = -1 ENOENT (No such file or directory)
+       0.070 ( 0.011 ms): a32.out/1267727 openat(dfd: CWD, filename: 0xf7f1347f, flags: RDONLY|CLOEXEC|LARGEFILE) = 3
+       0.070 ( 0.023 ms): a32.out/1267727  ... [continued]: close())                                            = 0
+       0.103 ( 0.009 ms): a32.out/1267727 openat(dfd: CWD, filename: 0xf7ee43e0, flags: RDONLY|CLOEXEC|LARGEFILE) = 3
+       0.113 ( 0.002 ms): a32.out/1267727 read(fd: 3, buf: 0xff854990, count: 512)                              = 512
+       0.113 ( 0.049 ms): a32.out/1267727  ... [continued]: close())                                            = 0
+       0.113 ( 0.060 ms): a32.out/1267727  ... [continued]: set_tid_address())                                  = 1267727 (a32.out)
+       0.175 ( 0.001 ms): a32.out/1267727 set_robust_list(head: 0xf7ee556c, len: 12)                            = 
+       0.222 ( 0.005 ms): a32.out/1267727 mprotect(start: 0xf7ebc000, len: 8192, prot: READ)                    = 0
+       0.230 ( 0.004 ms): a32.out/1267727 mprotect(start: 0x565b1000, len: 4096, prot: READ)                    = 0
+       0.237 ( 0.003 ms): a32.out/1267727 mprotect(start: 0xf7f1f000, len: 8192, prot: READ)                    = 0
+       0.258 ( 0.006 ms): a32.out/1267727 munmap(addr: 0xf7ec9000, len: 108298)                                 = 0
+       0.258 ( 0.027 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f33000
+       0.258 ( 0.031 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f54000
+       0.258 ( 0.033 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f55000
+       0.296 ( 0.008 ms): a32.out/1267727 openat(dfd: CWD, filename: 0x565b000a)                                = 3
+       0.316 ( 0.002 ms): a32.out/1267727 read(fd: 3, buf: 0xff8544a8, count: 4096)                             = 211
+       0.319 ( 0.001 ms): a32.out/1267727 read(fd: 3, buf: 0x57f332e0, count: 4096)                             = 0
+       0.319 ( 0.005 ms): a32.out/1267727  ... [continued]: close())                                            = 0
+       0.319 ( 0.010 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f54000
+       0.337 (         ): a32.out/1267727 exit_group()                                                          = ?
 
-    perf symbol: Support .gnu_debugdata for symbols
+Thanks,
+Namhyung
 
-Needs this so that we read the e_machine from the ELF file:
-
-diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-index 8188ba4d432cd5ac..8d2d8bb22e077bea 100644
---- a/tools/perf/util/dso.c
-+++ b/tools/perf/util/dso.c
-@@ -1203,6 +1203,7 @@ uint16_t dso__e_machine(struct dso *dso, struct machine *machine)
- 	case DSO_BINARY_TYPE__UBUNTU_DEBUGINFO:
- 	case DSO_BINARY_TYPE__MIXEDUP_UBUNTU_DEBUGINFO:
- 	case DSO_BINARY_TYPE__BUILDID_DEBUGINFO:
-+	case DSO_BINARY_TYPE__GNU_DEBUGDATA:
- 		break;
- 	case DSO_BINARY_TYPE__NOT_FOUND:
- 	default:
- 
----
-
-Continuing the review and test.
-
-- Arnaldo
-
-> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> index 5c6e85fdae0d..00fec1bc32bc 100644
-> --- a/tools/perf/util/dso.c
-> +++ b/tools/perf/util/dso.c
-> @@ -1170,6 +1170,67 @@ ssize_t dso__data_read_offset(struct dso *dso, struct machine *machine,
->  	return data_read_write_offset(dso, machine, offset, data, size, true);
->  }
->  
-> +uint16_t dso__e_machine(struct dso *dso, struct machine *machine)
-> +{
-> +	uint16_t e_machine = EM_NONE;
-> +	int fd;
-> +
-> +	switch (dso__binary_type(dso)) {
-> +	case DSO_BINARY_TYPE__KALLSYMS:
-> +	case DSO_BINARY_TYPE__GUEST_KALLSYMS:
-> +	case DSO_BINARY_TYPE__VMLINUX:
-> +	case DSO_BINARY_TYPE__GUEST_VMLINUX:
-> +	case DSO_BINARY_TYPE__GUEST_KMODULE:
-> +	case DSO_BINARY_TYPE__GUEST_KMODULE_COMP:
-> +	case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE:
-> +	case DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP:
-> +	case DSO_BINARY_TYPE__KCORE:
-> +	case DSO_BINARY_TYPE__GUEST_KCORE:
-> +	case DSO_BINARY_TYPE__BPF_PROG_INFO:
-> +	case DSO_BINARY_TYPE__BPF_IMAGE:
-> +	case DSO_BINARY_TYPE__OOL:
-> +	case DSO_BINARY_TYPE__JAVA_JIT:
-> +		return EM_HOST;
-> +	case DSO_BINARY_TYPE__DEBUGLINK:
-> +	case DSO_BINARY_TYPE__BUILD_ID_CACHE:
-> +	case DSO_BINARY_TYPE__BUILD_ID_CACHE_DEBUGINFO:
-> +	case DSO_BINARY_TYPE__SYSTEM_PATH_DSO:
-> +	case DSO_BINARY_TYPE__OPENEMBEDDED_DEBUGINFO:
-> +	case DSO_BINARY_TYPE__FEDORA_DEBUGINFO:
-> +	case DSO_BINARY_TYPE__UBUNTU_DEBUGINFO:
-> +	case DSO_BINARY_TYPE__MIXEDUP_UBUNTU_DEBUGINFO:
-> +	case DSO_BINARY_TYPE__BUILDID_DEBUGINFO:
-> +		break;
-> +	case DSO_BINARY_TYPE__NOT_FOUND:
-> +	default:
-> +		return EM_NONE;
-> +	}
-> +
-> +	pthread_mutex_lock(&dso__data_open_lock);
-> +
-> +	/*
-> +	 * dso__data(dso)->fd might be closed if other thread opened another
-> +	 * file (dso) due to open file limit (RLIMIT_NOFILE).
-> +	 */
-> +	try_to_open_dso(dso, machine);
-> +	fd = dso__data(dso)->fd;
-> +	if (fd >= 0) {
-> +		_Static_assert(offsetof(Elf32_Ehdr, e_machine) == 18, "Unexpected offset");
-> +		_Static_assert(offsetof(Elf64_Ehdr, e_machine) == 18, "Unexpected offset");
-> +		if (dso__needs_swap(dso) == DSO_SWAP__UNSET) {
-> +			unsigned char eidata;
-> +
-> +			if (pread(fd, &eidata, sizeof(eidata), EI_DATA) == sizeof(eidata))
-> +				dso__swap_init(dso, eidata);
-> +		}
-> +		if (dso__needs_swap(dso) != DSO_SWAP__UNSET &&
-> +		    pread(fd, &e_machine, sizeof(e_machine), 18) == sizeof(e_machine))
-> +			e_machine = DSO__SWAP(dso, uint16_t, e_machine);
-> +	}
-> +	pthread_mutex_unlock(&dso__data_open_lock);
-> +	return e_machine;
-> +}
-> +
->  /**
->   * dso__data_read_addr - Read data from dso address
->   * @dso: dso object
-> @@ -1525,6 +1586,33 @@ void dso__put(struct dso *dso)
->  		RC_CHK_PUT(dso);
->  }
->  
-> +int dso__swap_init(struct dso *dso, unsigned char eidata)
-> +{
-> +	static unsigned int const endian = 1;
-> +
-> +	dso__set_needs_swap(dso, DSO_SWAP__NO);
-> +
-> +	switch (eidata) {
-> +	case ELFDATA2LSB:
-> +		/* We are big endian, DSO is little endian. */
-> +		if (*(unsigned char const *)&endian != 1)
-> +			dso__set_needs_swap(dso, DSO_SWAP__YES);
-> +		break;
-> +
-> +	case ELFDATA2MSB:
-> +		/* We are little endian, DSO is big endian. */
-> +		if (*(unsigned char const *)&endian != 0)
-> +			dso__set_needs_swap(dso, DSO_SWAP__YES);
-> +		break;
-> +
-> +	default:
-> +		pr_err("unrecognized DSO data encoding %d\n", eidata);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  void dso__set_build_id(struct dso *dso, struct build_id *bid)
->  {
->  	RC_CHK_ACCESS(dso)->bid = *bid;
-> diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-> index 4aa8c3d36566..38d9e3eac501 100644
-> --- a/tools/perf/util/dso.h
-> +++ b/tools/perf/util/dso.h
-> @@ -730,6 +730,8 @@ bool dso__sorted_by_name(const struct dso *dso);
->  void dso__set_sorted_by_name(struct dso *dso);
->  void dso__sort_by_name(struct dso *dso);
->  
-> +int dso__swap_init(struct dso *dso, unsigned char eidata);
-> +
->  void dso__set_build_id(struct dso *dso, struct build_id *bid);
->  bool dso__build_id_equal(const struct dso *dso, struct build_id *bid);
->  void dso__read_running_kernel_build_id(struct dso *dso,
-> @@ -818,6 +820,7 @@ int dso__data_file_size(struct dso *dso, struct machine *machine);
->  off_t dso__data_size(struct dso *dso, struct machine *machine);
->  ssize_t dso__data_read_offset(struct dso *dso, struct machine *machine,
->  			      u64 offset, u8 *data, ssize_t size);
-> +uint16_t dso__e_machine(struct dso *dso, struct machine *machine);
->  ssize_t dso__data_read_addr(struct dso *dso, struct map *map,
->  			    struct machine *machine, u64 addr,
->  			    u8 *data, ssize_t size);
-> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-> index 66fd1249660a..71df13a5722a 100644
-> --- a/tools/perf/util/symbol-elf.c
-> +++ b/tools/perf/util/symbol-elf.c
-> @@ -1173,33 +1173,6 @@ int filename__read_debuglink(const char *filename, char *debuglink,
->  
->  #endif
->  
-> -static int dso__swap_init(struct dso *dso, unsigned char eidata)
-> -{
-> -	static unsigned int const endian = 1;
-> -
-> -	dso__set_needs_swap(dso, DSO_SWAP__NO);
-> -
-> -	switch (eidata) {
-> -	case ELFDATA2LSB:
-> -		/* We are big endian, DSO is little endian. */
-> -		if (*(unsigned char const *)&endian != 1)
-> -			dso__set_needs_swap(dso, DSO_SWAP__YES);
-> -		break;
-> -
-> -	case ELFDATA2MSB:
-> -		/* We are little endian, DSO is big endian. */
-> -		if (*(unsigned char const *)&endian != 0)
-> -			dso__set_needs_swap(dso, DSO_SWAP__YES);
-> -		break;
-> -
-> -	default:
-> -		pr_err("unrecognized DSO data encoding %d\n", eidata);
-> -		return -EINVAL;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  bool symsrc__possibly_runtime(struct symsrc *ss)
->  {
->  	return ss->dynsym || ss->opdsec;
+> 
+> Remove some runtime types used by the system call tables and make
+> equivalents generated at build time.
+> 
+> v5: Add byte swap to dso__e_machine and fix comment as suggested by
+>     Namhyung.
+> 
+> v4: Add reading the e_machine from the thread's maps dsos, only read
+>     from /proc/pid/exe on failure and when live as requested by
+>     Namhyung. Add patches to add dso comments and remove unused
+>     dso_data variables that are unused without libunwind.
+> 
+> v3: Add Charlie's reviewed-by tags. Incorporate feedback from Arnd
+>     Bergmann <arnd@arndb.de> on additional optional column and MIPS
+>     system call numbering. Rebase past Namhyung's global system call
+>     statistics and add comments that they don't yet support an
+>     e_machine other than EM_HOST.
+> 
+> v2: Change the 1 element cache for the last table as suggested by
+>     Howard Chu, add Howard's reviewed-by tags.
+>     Add a comment and apology to Charlie for not doing better in
+>     guiding:
+>     https://lore.kernel.org/all/20250114-perf_syscall_arch_runtime-v1-1-5b304e408e11@rivosinc.com/
+>     After discussion on v1 and he agreed this patch series would be
+>     the better direction.
+> 
+> Ian Rogers (11):
+>   perf dso: Move libunwind dso_data variables into ifdef
+>   perf dso: kernel-doc for enum dso_binary_type
+>   perf syscalltbl: Remove syscall_table.h
+>   perf trace: Reorganize syscalls
+>   perf syscalltbl: Remove struct syscalltbl
+>   perf dso: Add support for reading the e_machine type for a dso
+>   perf thread: Add support for reading the e_machine type for a thread
+>   perf trace beauty: Add syscalltbl.sh generating all system call tables
+>   perf syscalltbl: Use lookup table containing multiple architectures
+>   perf build: Remove Makefile.syscalls
+>   perf syscalltbl: Mask off ABI type for MIPS system calls
+> 
+>  tools/perf/Makefile.perf                      |  10 +-
+>  tools/perf/arch/alpha/entry/syscalls/Kbuild   |   2 -
+>  .../alpha/entry/syscalls/Makefile.syscalls    |   5 -
+>  tools/perf/arch/alpha/include/syscall_table.h |   2 -
+>  tools/perf/arch/arc/entry/syscalls/Kbuild     |   2 -
+>  .../arch/arc/entry/syscalls/Makefile.syscalls |   3 -
+>  tools/perf/arch/arc/include/syscall_table.h   |   2 -
+>  tools/perf/arch/arm/entry/syscalls/Kbuild     |   4 -
+>  .../arch/arm/entry/syscalls/Makefile.syscalls |   2 -
+>  tools/perf/arch/arm/include/syscall_table.h   |   2 -
+>  tools/perf/arch/arm64/entry/syscalls/Kbuild   |   3 -
+>  .../arm64/entry/syscalls/Makefile.syscalls    |   6 -
+>  tools/perf/arch/arm64/include/syscall_table.h |   8 -
+>  tools/perf/arch/csky/entry/syscalls/Kbuild    |   2 -
+>  .../csky/entry/syscalls/Makefile.syscalls     |   3 -
+>  tools/perf/arch/csky/include/syscall_table.h  |   2 -
+>  .../perf/arch/loongarch/entry/syscalls/Kbuild |   2 -
+>  .../entry/syscalls/Makefile.syscalls          |   3 -
+>  .../arch/loongarch/include/syscall_table.h    |   2 -
+>  tools/perf/arch/mips/entry/syscalls/Kbuild    |   2 -
+>  .../mips/entry/syscalls/Makefile.syscalls     |   5 -
+>  tools/perf/arch/mips/include/syscall_table.h  |   2 -
+>  tools/perf/arch/parisc/entry/syscalls/Kbuild  |   3 -
+>  .../parisc/entry/syscalls/Makefile.syscalls   |   6 -
+>  .../perf/arch/parisc/include/syscall_table.h  |   8 -
+>  tools/perf/arch/powerpc/entry/syscalls/Kbuild |   3 -
+>  .../powerpc/entry/syscalls/Makefile.syscalls  |   6 -
+>  .../perf/arch/powerpc/include/syscall_table.h |   8 -
+>  tools/perf/arch/riscv/entry/syscalls/Kbuild   |   2 -
+>  .../riscv/entry/syscalls/Makefile.syscalls    |   4 -
+>  tools/perf/arch/riscv/include/syscall_table.h |   8 -
+>  tools/perf/arch/s390/entry/syscalls/Kbuild    |   2 -
+>  .../s390/entry/syscalls/Makefile.syscalls     |   5 -
+>  tools/perf/arch/s390/include/syscall_table.h  |   2 -
+>  tools/perf/arch/sh/entry/syscalls/Kbuild      |   2 -
+>  .../arch/sh/entry/syscalls/Makefile.syscalls  |   4 -
+>  tools/perf/arch/sh/include/syscall_table.h    |   2 -
+>  tools/perf/arch/sparc/entry/syscalls/Kbuild   |   3 -
+>  .../sparc/entry/syscalls/Makefile.syscalls    |   5 -
+>  tools/perf/arch/sparc/include/syscall_table.h |   8 -
+>  tools/perf/arch/x86/entry/syscalls/Kbuild     |   3 -
+>  .../arch/x86/entry/syscalls/Makefile.syscalls |   6 -
+>  tools/perf/arch/x86/include/syscall_table.h   |   8 -
+>  tools/perf/arch/xtensa/entry/syscalls/Kbuild  |   2 -
+>  .../xtensa/entry/syscalls/Makefile.syscalls   |   4 -
+>  .../perf/arch/xtensa/include/syscall_table.h  |   2 -
+>  tools/perf/builtin-trace.c                    | 290 +++++++++++-------
+>  tools/perf/scripts/Makefile.syscalls          |  61 ----
+>  tools/perf/scripts/syscalltbl.sh              |  86 ------
+>  tools/perf/trace/beauty/syscalltbl.sh         | 274 +++++++++++++++++
+>  tools/perf/util/dso.c                         |  88 ++++++
+>  tools/perf/util/dso.h                         |  58 ++++
+>  tools/perf/util/symbol-elf.c                  |  27 --
+>  tools/perf/util/syscalltbl.c                  | 148 ++++-----
+>  tools/perf/util/syscalltbl.h                  |  22 +-
+>  tools/perf/util/thread.c                      |  80 +++++
+>  tools/perf/util/thread.h                      |  14 +-
+>  57 files changed, 792 insertions(+), 536 deletions(-)
+>  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/alpha/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/arc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/arm/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/arm64/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/csky/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/loongarch/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/mips/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/parisc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/powerpc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/riscv/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/s390/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/sh/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/sparc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/x86/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/xtensa/include/syscall_table.h
+>  delete mode 100644 tools/perf/scripts/Makefile.syscalls
+>  delete mode 100755 tools/perf/scripts/syscalltbl.sh
+>  create mode 100755 tools/perf/trace/beauty/syscalltbl.sh
+> 
 > -- 
 > 2.49.0.rc0.332.g42c0ae87b1-goog
 > 
