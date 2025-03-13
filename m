@@ -1,281 +1,209 @@
-Return-Path: <linux-csky+bounces-1925-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1926-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19D52A5EC89
-	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 08:11:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B563A5F652
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 14:50:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C08971896A2B
-	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 07:11:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C438D3B92F2
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 13:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3F291FBCA9;
-	Thu, 13 Mar 2025 07:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A00E267B67;
+	Thu, 13 Mar 2025 13:50:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDH4wrX2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBWKPm/h"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9348E12B17C;
-	Thu, 13 Mar 2025 07:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0590A7603F;
+	Thu, 13 Mar 2025 13:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741849903; cv=none; b=BObsDkaWHZ93cI9rXvCHzPxPJqiN9JLpX7niC5U7S7tMeG8wdn3bHTUsNDBWtOzT2nQvweqhJEuZsGtvPwEo2vw5fy9y0sm5m6m8YVejfWgFC8wAY1r5RNhxl3wBTlYkqxSnhNP8OrPP4TfaxpkMxBkJg5Z+8H9jCFOGvPAO9Pc=
+	t=1741873823; cv=none; b=G8lrQ7b3wuR43h2LgsUMdAd/itIPaD6reYek4Zbt2Bxg25pF9gVXAL9k+yWJV5kkQY05UJMcqtraRz3X5BpHto08lnq0PS6fQh2hGOYh2We35Dbi6vElnOu2GBopT20e+7OO1EGacoNT8DMpu0WMHQlbCj9Q/+CayW7B6sX4DOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741849903; c=relaxed/simple;
-	bh=q9Dl0FHGQmih4lZVAN04K/wTRrdLBiM11KRo6Ki9rEk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CjByOSmHf83lyB598VUvH++8IVAU5uAG/nCJD8V1/HQHVV089p+Z/z8F5JzQ3BztfBoGPpXOFgDCFraDXale+N6YW7omHbkqWlOrhxpCaRgBBDYsIshc6t6DBQCWdenA3h1v6FCtLPqfU/k15TCWcSG/tErq6wXvPNVzeEKMW04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDH4wrX2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A1CC4CEDD;
-	Thu, 13 Mar 2025 07:11:41 +0000 (UTC)
+	s=arc-20240116; t=1741873823; c=relaxed/simple;
+	bh=62myLVbZVVZFvzPE89he3yMa/a5QAFc2vHsMKxeLVb8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GIB9bRAf2ZokgW7BIFb32QXwx91mCHg7tLYfrP9Jo0aXmCfmZaonSxHU+w6M8rvQZmfEt/WK00DM7JPIcPBdwNmxF6zz6+9RApC1doafFEB/GYIcYlTxUtbhSlC7pHwOjSrrg6OTnZBf6L1VLiC0V6P0ThVhIZzhNy5Lqj60ZU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBWKPm/h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C704BC4CEEA;
+	Thu, 13 Mar 2025 13:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741849903;
-	bh=q9Dl0FHGQmih4lZVAN04K/wTRrdLBiM11KRo6Ki9rEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WDH4wrX262Bl/pXty7Tof6tDNbPo/AyqOM3f7eHVGWpenOwQUTomh+UZnLsJawuPR
-	 etJaZfPdMuc2JgoqLqpKWXh0sxBRNitJhbu/SLtzHqyCU8nynYpyXGmi6Zjk8wR0TZ
-	 mCF/amFQk+Y23iE0bNlSUeMXoTQifpX/TAycLijvkILamzG+uAAksftzSElsS6aJgr
-	 HBuZHnCE6/zHROd/BVVoCoGRUEDfxJE2ZzXRV1fU26svGsncAxCvLdk6QqNvNdvXJY
-	 plkWuxZdnoTsh9vDiR133bIBdp0M5znL3hRUR7tIj1DDFtDVCca9S47/7pg2GeM9B6
-	 SynX5brK73BdQ==
-Date: Thu, 13 Mar 2025 00:11:40 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	guoren <guoren@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	s=k20201202; t=1741873822;
+	bh=62myLVbZVVZFvzPE89he3yMa/a5QAFc2vHsMKxeLVb8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aBWKPm/h37x/i5+4FCPzxXZYbNjC4QtR+6/uzYQ4j82YaZ0nkwcNlRiBhZ3s4R+Lr
+	 UbF6tAw/GLOmZOSjCm3jrX37f1OqnkT6FdjX3Szfhc1wjS/Zyf835B0imLzLMqYjcF
+	 W5cI3ghKtUKRswhAYc77+5GSp1YmJnwSpf+x4AqcOGMZBAqFa6QHJIit/O7bFjGzmZ
+	 g/lU9Dt6wqDCDU2wFqrq4LXF68UvvU/ytVgt54uUuF2Vagcx8WobuHEk6mGKRWMGKp
+	 aLWh5ch4M9p8CvWw5jWVVvEJFFmiQHZ9S4CLDqJpDLqZJs/1wj2uAhd2lAzYblfH7W
+	 BgZb5J0KHNyow==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Guo Ren <guoren@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Mike Rapoport <rppt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v5 00/11] perf: Support multiple system call tables in
- the build
-Message-ID: <Z9KFLGpenwOP32q3@google.com>
-References: <20250308003209.234114-1-irogers@google.com>
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	x86@kernel.org
+Subject: [PATCH v2 00/13] arch, mm: reduce code duplication in mem_init()
+Date: Thu, 13 Mar 2025 15:49:50 +0200
+Message-ID: <20250313135003.836600-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250308003209.234114-1-irogers@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Mar 07, 2025 at 04:31:58PM -0800, Ian Rogers wrote:
-> This work builds on the clean up of system call tables and removal of
-> libaudit by Charlie Jenkins <charlie@rivosinc.com>.
-> 
-> The system call table in perf trace is used to map system call numbers
-> to names and vice versa. Prior to these changes, a single table
-> matching the perf binary's build was present. The table would be
-> incorrect if tracing say a 32-bit binary from a 64-bit version of
-> perf, the names and numbers wouldn't match.
-> 
-> Change the build so that a single system call file is built and the
-> potentially multiple tables are identifiable from the ELF machine type
-> of the process being examined. To determine the ELF machine type, the
-> executable's maps are searched and the associated DSOs ELF headers are
-> read. When this fails and when live, /proc/pid/exe's ELF header is
-> read. Fallback to using the perf's binary type when unknown.
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Now it works well for me!
+Hi,
 
-  $ sudo ./perf trace a32.out
-           ? (         ): a32.out/1267727  ... [continued]: execve())                                           = 0
-           ? (         ): a32.out/1267727  ... [continued]: brk())                                              = 0x57f33000
-       0.062 ( 0.003 ms): a32.out/1267727 access(filename: 0xf7f170cc, mode: R)                                 = -1 ENOENT (No such file or directory)
-       0.070 ( 0.011 ms): a32.out/1267727 openat(dfd: CWD, filename: 0xf7f1347f, flags: RDONLY|CLOEXEC|LARGEFILE) = 3
-       0.070 ( 0.023 ms): a32.out/1267727  ... [continued]: close())                                            = 0
-       0.103 ( 0.009 ms): a32.out/1267727 openat(dfd: CWD, filename: 0xf7ee43e0, flags: RDONLY|CLOEXEC|LARGEFILE) = 3
-       0.113 ( 0.002 ms): a32.out/1267727 read(fd: 3, buf: 0xff854990, count: 512)                              = 512
-       0.113 ( 0.049 ms): a32.out/1267727  ... [continued]: close())                                            = 0
-       0.113 ( 0.060 ms): a32.out/1267727  ... [continued]: set_tid_address())                                  = 1267727 (a32.out)
-       0.175 ( 0.001 ms): a32.out/1267727 set_robust_list(head: 0xf7ee556c, len: 12)                            = 
-       0.222 ( 0.005 ms): a32.out/1267727 mprotect(start: 0xf7ebc000, len: 8192, prot: READ)                    = 0
-       0.230 ( 0.004 ms): a32.out/1267727 mprotect(start: 0x565b1000, len: 4096, prot: READ)                    = 0
-       0.237 ( 0.003 ms): a32.out/1267727 mprotect(start: 0xf7f1f000, len: 8192, prot: READ)                    = 0
-       0.258 ( 0.006 ms): a32.out/1267727 munmap(addr: 0xf7ec9000, len: 108298)                                 = 0
-       0.258 ( 0.027 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f33000
-       0.258 ( 0.031 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f54000
-       0.258 ( 0.033 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f55000
-       0.296 ( 0.008 ms): a32.out/1267727 openat(dfd: CWD, filename: 0x565b000a)                                = 3
-       0.316 ( 0.002 ms): a32.out/1267727 read(fd: 3, buf: 0xff8544a8, count: 4096)                             = 211
-       0.319 ( 0.001 ms): a32.out/1267727 read(fd: 3, buf: 0x57f332e0, count: 4096)                             = 0
-       0.319 ( 0.005 ms): a32.out/1267727  ... [continued]: close())                                            = 0
-       0.319 ( 0.010 ms): a32.out/1267727  ... [continued]: brk())                                              = 0x57f54000
-       0.337 (         ): a32.out/1267727 exit_group()                                                          = ?
+Every architecture has implementation of mem_init() function and some
+even more than one. All these release free memory to the buddy
+allocator, most of them set high_memory to the end of directly
+addressable memory and many of them set max_mapnr for FLATMEM case.
 
-Thanks,
-Namhyung
+These patches pull the commonalities into the generic code and refactor
+some of the mem_init() implementations so that many of them can be just
+dropped.
 
-> 
-> Remove some runtime types used by the system call tables and make
-> equivalents generated at build time.
-> 
-> v5: Add byte swap to dso__e_machine and fix comment as suggested by
->     Namhyung.
-> 
-> v4: Add reading the e_machine from the thread's maps dsos, only read
->     from /proc/pid/exe on failure and when live as requested by
->     Namhyung. Add patches to add dso comments and remove unused
->     dso_data variables that are unused without libunwind.
-> 
-> v3: Add Charlie's reviewed-by tags. Incorporate feedback from Arnd
->     Bergmann <arnd@arndb.de> on additional optional column and MIPS
->     system call numbering. Rebase past Namhyung's global system call
->     statistics and add comments that they don't yet support an
->     e_machine other than EM_HOST.
-> 
-> v2: Change the 1 element cache for the last table as suggested by
->     Howard Chu, add Howard's reviewed-by tags.
->     Add a comment and apology to Charlie for not doing better in
->     guiding:
->     https://lore.kernel.org/all/20250114-perf_syscall_arch_runtime-v1-1-5b304e408e11@rivosinc.com/
->     After discussion on v1 and he agreed this patch series would be
->     the better direction.
-> 
-> Ian Rogers (11):
->   perf dso: Move libunwind dso_data variables into ifdef
->   perf dso: kernel-doc for enum dso_binary_type
->   perf syscalltbl: Remove syscall_table.h
->   perf trace: Reorganize syscalls
->   perf syscalltbl: Remove struct syscalltbl
->   perf dso: Add support for reading the e_machine type for a dso
->   perf thread: Add support for reading the e_machine type for a thread
->   perf trace beauty: Add syscalltbl.sh generating all system call tables
->   perf syscalltbl: Use lookup table containing multiple architectures
->   perf build: Remove Makefile.syscalls
->   perf syscalltbl: Mask off ABI type for MIPS system calls
-> 
->  tools/perf/Makefile.perf                      |  10 +-
->  tools/perf/arch/alpha/entry/syscalls/Kbuild   |   2 -
->  .../alpha/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/alpha/include/syscall_table.h |   2 -
->  tools/perf/arch/arc/entry/syscalls/Kbuild     |   2 -
->  .../arch/arc/entry/syscalls/Makefile.syscalls |   3 -
->  tools/perf/arch/arc/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm/entry/syscalls/Kbuild     |   4 -
->  .../arch/arm/entry/syscalls/Makefile.syscalls |   2 -
->  tools/perf/arch/arm/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm64/entry/syscalls/Kbuild   |   3 -
->  .../arm64/entry/syscalls/Makefile.syscalls    |   6 -
->  tools/perf/arch/arm64/include/syscall_table.h |   8 -
->  tools/perf/arch/csky/entry/syscalls/Kbuild    |   2 -
->  .../csky/entry/syscalls/Makefile.syscalls     |   3 -
->  tools/perf/arch/csky/include/syscall_table.h  |   2 -
->  .../perf/arch/loongarch/entry/syscalls/Kbuild |   2 -
->  .../entry/syscalls/Makefile.syscalls          |   3 -
->  .../arch/loongarch/include/syscall_table.h    |   2 -
->  tools/perf/arch/mips/entry/syscalls/Kbuild    |   2 -
->  .../mips/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/mips/include/syscall_table.h  |   2 -
->  tools/perf/arch/parisc/entry/syscalls/Kbuild  |   3 -
->  .../parisc/entry/syscalls/Makefile.syscalls   |   6 -
->  .../perf/arch/parisc/include/syscall_table.h  |   8 -
->  tools/perf/arch/powerpc/entry/syscalls/Kbuild |   3 -
->  .../powerpc/entry/syscalls/Makefile.syscalls  |   6 -
->  .../perf/arch/powerpc/include/syscall_table.h |   8 -
->  tools/perf/arch/riscv/entry/syscalls/Kbuild   |   2 -
->  .../riscv/entry/syscalls/Makefile.syscalls    |   4 -
->  tools/perf/arch/riscv/include/syscall_table.h |   8 -
->  tools/perf/arch/s390/entry/syscalls/Kbuild    |   2 -
->  .../s390/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/s390/include/syscall_table.h  |   2 -
->  tools/perf/arch/sh/entry/syscalls/Kbuild      |   2 -
->  .../arch/sh/entry/syscalls/Makefile.syscalls  |   4 -
->  tools/perf/arch/sh/include/syscall_table.h    |   2 -
->  tools/perf/arch/sparc/entry/syscalls/Kbuild   |   3 -
->  .../sparc/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/sparc/include/syscall_table.h |   8 -
->  tools/perf/arch/x86/entry/syscalls/Kbuild     |   3 -
->  .../arch/x86/entry/syscalls/Makefile.syscalls |   6 -
->  tools/perf/arch/x86/include/syscall_table.h   |   8 -
->  tools/perf/arch/xtensa/entry/syscalls/Kbuild  |   2 -
->  .../xtensa/entry/syscalls/Makefile.syscalls   |   4 -
->  .../perf/arch/xtensa/include/syscall_table.h  |   2 -
->  tools/perf/builtin-trace.c                    | 290 +++++++++++-------
->  tools/perf/scripts/Makefile.syscalls          |  61 ----
->  tools/perf/scripts/syscalltbl.sh              |  86 ------
->  tools/perf/trace/beauty/syscalltbl.sh         | 274 +++++++++++++++++
->  tools/perf/util/dso.c                         |  88 ++++++
->  tools/perf/util/dso.h                         |  58 ++++
->  tools/perf/util/symbol-elf.c                  |  27 --
->  tools/perf/util/syscalltbl.c                  | 148 ++++-----
->  tools/perf/util/syscalltbl.h                  |  22 +-
->  tools/perf/util/thread.c                      |  80 +++++
->  tools/perf/util/thread.h                      |  14 +-
->  57 files changed, 792 insertions(+), 536 deletions(-)
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/alpha/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arm/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arm64/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/csky/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/loongarch/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/mips/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/parisc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/powerpc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/riscv/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/s390/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/sh/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/sparc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/x86/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/xtensa/include/syscall_table.h
->  delete mode 100644 tools/perf/scripts/Makefile.syscalls
->  delete mode 100755 tools/perf/scripts/syscalltbl.sh
->  create mode 100755 tools/perf/trace/beauty/syscalltbl.sh
-> 
-> -- 
-> 2.49.0.rc0.332.g42c0ae87b1-goog
-> 
+v2 changes:
+* don't use generic version for setting high_memory on architectures
+  that use that varialble earlier than free_area_init()
+* use memblock_alloc_or_panig() to allocate zero pages on MIPS and s390
+* fix alignment in allocation of zero pages on s390
+* add Acked-by
+
+v1: https://lore.kernel.org/all/20250306185124.3147510-1-rppt@kernel.org
+
+Mike Rapoport (Microsoft) (13):
+  arm: mem_init: use memblock_phys_free() to free DMA memory on SA1111
+  csky: move setup_initrd() to setup.c
+  hexagon: move initialization of init_mm.context init to paging_init()
+  MIPS: consolidate mem_init() for NUMA machines
+  MIPS: make setup_zero_pages() use memblock
+  nios2: move pr_debug() about memory start and end to setup_arch()
+  s390: make setup_zero_pages() use memblock
+  xtensa: split out printing of virtual memory layout to a function
+  arch, mm: set max_mapnr when allocating memory map for FLATMEM
+  arch, mm: set high_memory in free_area_init()
+  arch, mm: streamline HIGHMEM freeing
+  arch, mm: introduce arch_mm_preinit
+  arch, mm: make releasing of memory to page allocator more explicit
+
+ arch/alpha/mm/init.c               |  8 ----
+ arch/arc/mm/init.c                 | 25 +----------
+ arch/arm/mm/init.c                 | 43 +------------------
+ arch/arm64/mm/init.c               | 12 +-----
+ arch/csky/kernel/setup.c           | 43 +++++++++++++++++++
+ arch/csky/mm/init.c                | 67 ------------------------------
+ arch/hexagon/mm/init.c             | 32 ++------------
+ arch/loongarch/kernel/numa.c       |  6 ---
+ arch/loongarch/mm/init.c           |  8 ----
+ arch/m68k/mm/init.c                |  2 -
+ arch/microblaze/mm/init.c          | 25 -----------
+ arch/mips/include/asm/mmzone.h     |  2 -
+ arch/mips/loongson64/numa.c        |  7 ----
+ arch/mips/mm/init.c                | 51 ++++-------------------
+ arch/mips/sgi-ip27/ip27-memory.c   |  9 ----
+ arch/nios2/kernel/setup.c          |  3 +-
+ arch/nios2/mm/init.c               | 16 +------
+ arch/openrisc/mm/init.c            |  6 ---
+ arch/parisc/mm/init.c              |  4 --
+ arch/powerpc/kernel/setup-common.c |  2 -
+ arch/powerpc/mm/mem.c              | 18 +-------
+ arch/riscv/mm/init.c               |  5 +--
+ arch/s390/mm/init.c                | 20 +--------
+ arch/sh/mm/init.c                  | 10 -----
+ arch/sparc/mm/init_32.c            | 31 +-------------
+ arch/sparc/mm/init_64.c            |  4 --
+ arch/um/include/shared/mem_user.h  |  1 -
+ arch/um/kernel/mem.c               |  9 ++--
+ arch/um/kernel/physmem.c           | 12 ------
+ arch/um/kernel/um_arch.c           |  2 -
+ arch/x86/include/asm/highmem.h     |  3 --
+ arch/x86/include/asm/numa.h        |  4 --
+ arch/x86/include/asm/numa_32.h     | 13 ------
+ arch/x86/kernel/setup.c            |  2 -
+ arch/x86/mm/Makefile               |  2 -
+ arch/x86/mm/highmem_32.c           | 34 ---------------
+ arch/x86/mm/init_32.c              | 41 ++----------------
+ arch/x86/mm/init_64.c              |  7 ++--
+ arch/x86/mm/numa_32.c              |  3 --
+ arch/xtensa/mm/init.c              | 66 +++++++----------------------
+ include/asm-generic/memory_model.h |  5 ++-
+ include/linux/memblock.h           |  1 -
+ include/linux/mm.h                 | 13 +-----
+ mm/internal.h                      |  3 +-
+ mm/memblock.c                      |  3 +-
+ mm/memory.c                        | 16 -------
+ mm/mm_init.c                       | 65 +++++++++++++++++++++++++----
+ mm/nommu.c                         |  6 ---
+ 48 files changed, 158 insertions(+), 612 deletions(-)
+ delete mode 100644 arch/x86/include/asm/numa_32.h
+ delete mode 100644 arch/x86/mm/highmem_32.c
+
+
+base-commit: d082ecbc71e9e0bf49883ee4afd435a77a5101b6
+-- 
+2.47.2
+
 
