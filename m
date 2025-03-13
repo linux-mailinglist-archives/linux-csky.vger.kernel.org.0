@@ -1,49 +1,49 @@
-Return-Path: <linux-csky+bounces-1945-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1946-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB061A601B0
-	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 20:56:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD034A6025C
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 21:20:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BA44421DDD
-	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 19:56:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 917F918979C7
+	for <lists+linux-csky@lfdr.de>; Thu, 13 Mar 2025 20:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11031E491B;
-	Thu, 13 Mar 2025 19:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4674C1F4297;
+	Thu, 13 Mar 2025 20:20:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tayN66tO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DyjZmA1S"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E92EADA;
-	Thu, 13 Mar 2025 19:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A12C1F417E;
+	Thu, 13 Mar 2025 20:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741895759; cv=none; b=m4ndWVTS7mCNnUbN+7WK7BWks7Chg4wyRwi6nai04Jr+G1bAHCzmVFi0CREtXwFQm7cX6JX8bqJLfCKlB4wZVGPOfi6OmnUanf9b4hWr7bYn2XWKlKVzU0GEJ9j9PU4wWudyej8GndRMn7CcO+Mr3L6kCROfqn/S39oy2UqrCQM=
+	t=1741897213; cv=none; b=TNyYIVMYKgEodsWH2v75mafsY352xxXxBvBcqbN51gh1D6aGpJrO5woANXN6B9u9sKslb8rdZNex4ztoD47JhkMszwHiC0KrrsAIRY7caF9dHPr7xut0Z/c1nTNxNn1XmN0TH8JvKwvVXwWf8hiWBdWjDDMGcxv3BdXdzlh158Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741895759; c=relaxed/simple;
-	bh=fYqkeQRnWF5f+DKytRvz15lVWn76of85/QsqfnCc3FQ=;
+	s=arc-20240116; t=1741897213; c=relaxed/simple;
+	bh=7PeCj+W4btHHKEEgyWVcs04k5u5DYkGktv3w5M/oHMk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NUKnpIQOpM6OZa0YK4bvPtvo/ckuSQ0e0rvUhwboADzhFEvpkGPSV/5lHXtgKAN2FrE5FGGsAn5SMOhf78sCqWZgkkVHCTZNpYq+7Wd+jnM74CgwJP8w/4lhTOetq/gNjDX5RxqcZ4p+drQhTi9erzPD2yjzTYQDcs54Pk4rRJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tayN66tO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5735BC4CEDD;
-	Thu, 13 Mar 2025 19:55:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=KGMDeMo7jqueghwToFo55G0N2opoNJBgXSbXsPPPsPiFBUsPMARu9FcBdToNc/7GGGU7g3Q1oBZ2f85laGdYAgLQXmeDFG2BOmc8eCZY5ppW7JfHuqs2BHJGF9XRDsQX+xhhyjWSl+4GGzQhLnT+hk375pgegB9vODC1sUQFM5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DyjZmA1S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045BAC4CEE3;
+	Thu, 13 Mar 2025 20:20:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741895759;
-	bh=fYqkeQRnWF5f+DKytRvz15lVWn76of85/QsqfnCc3FQ=;
+	s=k20201202; t=1741897212;
+	bh=7PeCj+W4btHHKEEgyWVcs04k5u5DYkGktv3w5M/oHMk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tayN66tOOF6jMNqkZ5ePRkN7Ee8y31+K7eOP673REb6XV5zLOulLsRfo22a7MqFoR
-	 r05dup9BfCoNTPi13Zt83sIUdU+jQp+O6qGxWwhxvO9rqtQzqhlgsYmC6J6o96heGe
-	 tEZKHpS32417/8hRF8VY9nI86YAlkqCylsTC58mV+N6MaC89xKmr+Fw0aYT1thVWVD
-	 kLLQq6AjOM3w5/E47TIz0UotatLlZ8zec9LhnkXbtISpJG7a5wnaa24YnUNxeOXM36
-	 xdRBDo37cTFAdPfkCSrUG1AI/Z2PyR8BcDXtw87iq3W7zxnUfCSnwF40tvVk3JMEPq
-	 vPcac02Z+5zwA==
-Date: Thu, 13 Mar 2025 12:55:56 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
+	b=DyjZmA1Sv+IEeuEtF6WeykYgVhtgrHpisnROviZ79Bes51/ehhkepJm9b30ri/aw2
+	 3IGI2vdaL46imyaYjy5dC2z6muRAaVhdPk8Vg5uGxEHnvR16gyiFgfsEQhhba/S7Ix
+	 BSUB11Yn1fOJ5/zIvPobTRTnal8ofDK1fmjq91MxpohvmidJctsFPLh0XoIj59acz0
+	 wFKK2zDhMr2lrNRMsQriW9rrQaYNBYtuZ4bjPwkGOUHDKCy6fBNVqOiGIa902KoClS
+	 NwcTEv7WgS/fCcDHfKVBs6rnhJ1Fq/h63yCB/+JoqbsrRtYSn/v9ZjVgFaHJ8p6f+V
+	 1U8RMUKskYSpw==
+Date: Thu, 13 Mar 2025 17:20:09 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
 Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
@@ -61,98 +61,102 @@ Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Jiri Slaby <jirislaby@kernel.org>,
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
 	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
 	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v5 09/11] perf syscalltbl: Use lookup table containing
- multiple architectures
-Message-ID: <Z9M4TIY9HstTLzNs@google.com>
+Subject: Re: [PATCH v5 00/11] perf: Support multiple system call tables in
+ the build
+Message-ID: <Z9M9-YhDJg3NgiUy@x1>
 References: <20250308003209.234114-1-irogers@google.com>
- <20250308003209.234114-10-irogers@google.com>
- <Z9MwQJ5bRu6-N43w@x1>
+ <Z9KFLGpenwOP32q3@google.com>
+ <Z9M24AJzui9lFbGo@x1>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Z9MwQJ5bRu6-N43w@x1>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z9M24AJzui9lFbGo@x1>
 
-On Thu, Mar 13, 2025 at 04:21:36PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Fri, Mar 07, 2025 at 04:32:07PM -0800, Ian Rogers wrote:
-> > Switch to use the lookup table containing all architectures rather
-> > than tables matching the perf binary.
+On Thu, Mar 13, 2025 at 04:49:52PM -0300, Arnaldo Carvalho de Melo wrote:
+> On Thu, Mar 13, 2025 at 12:11:40AM -0700, Namhyung Kim wrote:
+> > On Fri, Mar 07, 2025 at 04:31:58PM -0800, Ian Rogers wrote:
+> > > This work builds on the clean up of system call tables and removal of
+> > > libaudit by Charlie Jenkins <charlie@rivosinc.com>.
+> > > 
+> > > The system call table in perf trace is used to map system call numbers
+> > > to names and vice versa. Prior to these changes, a single table
+> > > matching the perf binary's build was present. The table would be
+> > > incorrect if tracing say a 32-bit binary from a 64-bit version of
+> > > perf, the names and numbers wouldn't match.
+> > > 
+> > > Change the build so that a single system call file is built and the
+> > > potentially multiple tables are identifiable from the ELF machine type
+> > > of the process being examined. To determine the ELF machine type, the
+> > > executable's maps are searched and the associated DSOs ELF headers are
+> > > read. When this fails and when live, /proc/pid/exe's ELF header is
+> > > read. Fallback to using the perf's binary type when unknown.
 > > 
-> > This fixes perf trace when executed on a 32-bit i386 binary on an
-> > x86-64 machine. Note in the following the system call names of the
-> > 32-bit i386 binary as seen by an x86-64 perf.
-> > 
+> > Now it works well for me!
 > 
-> Reproduced the results here:
-> 
-> root@number:/home/acme/c# file faccessat2
-> faccessat2: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=8dafcc1549658d57248dce883e8ec7eea3d6e8a5, for GNU/Linux 3.2.0, not stripped
-> root@number:/home/acme/c#
-> 
-> root@number:/home/acme/c# strace ./faccessat2 |& head 
-> execve("./faccessat2", ["./faccessat2"], 0x7ffce63265e0 /* 39 vars */) = 0
-> [ Process PID=2552445 runs in 32 bit mode. ]
-> brk(NULL)                               = 0x849a000
-> mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xf7fb3000
-> access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
-> openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
-> statx(3, "", AT_STATX_SYNC_AS_STAT|AT_NO_AUTOMOUNT|AT_EMPTY_PATH, STATX_BASIC_STATS, {stx_mask=STATX_ALL|STATX_MNT_ID|STATX_SUBVOL, stx_attributes=0, stx_mode=S_IFREG|0644, stx_size=85091, ...}) = 0
-> mmap2(NULL, 85091, PROT_READ, MAP_PRIVATE, 3, 0) = 0xf7f9e000
-> close(3)                                = 0
-> openat(AT_FDCWD, "/lib/libc.so.6", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
-> root@number:/home/acme/c#
-> 
-> Before:
-> 
-> root@number:/home/acme/c# perf trace ./faccessat2 |& head
-> faccessat2(123, (null), X_OK, AT_EACCESS | AT_SYMLINK_NOFOLLOW) = -1
->          ? (         ): faccessat2/2552543  ... [continued]: munmap())                                           = 0
->      0.024 ( 0.002 ms): faccessat2/2552543 recvfrom(ubuf: 0x2, size: 4159848428, flags: DONTROUTE|CTRUNC|TRUNC|DONTWAIT|EOR|WAITALL|FIN|SYN|CONFIRM|RST|ERRQUEUE|SOCK_DEVMEM|ZEROCOPY|FASTOPEN|CMSG_CLOEXEC|0x91f20000, addr: 0xe30, addr_len: 0xffcda98c) = 138993664
->      0.047 ( 0.006 ms): faccessat2/2552543 lgetxattr(name: "", value: 0x3, size: 34)                             = 4159602688
->      0.063 ( 0.003 ms): faccessat2/2552543 dup2(oldfd: -135160188, newfd: 4)                                     = -1 ENOENT (No such file or directory)
->      0.071 ( 0.023 ms): faccessat2/2552543 preadv(fd: 4294967196, vec: 0xf7f16420, vlen: 557056, pos_h: 4159848428) = 3
->      0.098 ( 0.004 ms): faccessat2/2552543 lgetxattr(name: "", value: 0x1, size: 2)                              = 4159516672
->      0.104 ( 0.001 ms): faccessat2/2552543 lstat(filename: "", statbuf: 0x14c63)                                 = 0
->      0.114 ( 0.004 ms): faccessat2/2552543 preadv(fd: 4294967196, vec: 0xf7ee8380, vlen: 557056, pos_h: 4159848428) = 3
->      0.118 ( 0.002 ms): faccessat2/2552543 close(fd: 3)                                                          = 512
-> root@number:/home/acme/c# 
-> 
-> After:
-> 
-> root@number:/home/acme/c# perf trace ./faccessat2 |& head
-> faccessat2(123, (null), X_OK, AT_EACCESS | AT_SYMLINK_NOFOLLOW) = -1
-> sh: line 1: perf-read-vdso32: command not found
->          ? (         ): faccessat2/2556897  ... [continued]: execve())                                           = 0
->      0.028 ( 0.002 ms): faccessat2/2556897 brk()                                                                 = 0x8fe4000
->      0.068 ( 0.003 ms): faccessat2/2556897 access(filename: 0xf7ff2e84, mode: R)                                 = -1 ENOENT (No such file or directory)
->      0.080 ( 0.005 ms): faccessat2/2556897 openat(dfd: CWD, filename: "/etc/ld.so.cache", flags: RDONLY|CLOEXEC|LARGEFILE) = 3
->      0.094 ( 0.001 ms): faccessat2/2556897 close(fd: 3)                                                          = 0
->      0.103 ( 0.003 ms): faccessat2/2556897 openat(dfd: CWD, filename: "/lib/libc.so.6", flags: RDONLY|CLOEXEC|LARGEFILE) = 3
->      0.108 ( 0.002 ms): faccessat2/2556897 read(fd: 3, buf: 0xffdd84b0, count: 512)                              = 512
->      0.216 ( 0.001 ms): faccessat2/2556897 close(fd: 3)                                                          = 0
-> root@number:/home/acme/c#
-> 
-> And interestingly the openat syscall got its contents obtained via the
-> BPF augmenter... better to test this more thoroughly, but I think it
-> should come after this series lands.
+> Its working for me on x86_64 as well, I'm doing some more tests, the
+> container builds and will do 32-bit tracing on 64-bit ARM (rpi5 aarch64)
+> and then report results here, should be later today as the default
+> kernel for the rpi5 doesn't come with CONFIG_FTRACE_SYSCALLS=y and BTF,
+> so building one with it.
 
-Right, I don't see the filename in openat() in my tests.
+Still building, but noticed this on x86_64:
 
-openat() is 295 on i386 and that's preadv() on x86_64 so BPF won't try
-to augment the argument.  I wonder how it can get the filename.  But
-anyway we can take a look later.
+105: perf trace enum augmentation tests                              : FAILED!
+106: perf trace BTF general tests                                    : FAILED!
+107: perf trace exit race                                            : Ok
+108: perf trace record and replay                                    : FAILED!
 
-Thanks,
-Namhyung
 
+The first doesn´t help that much with verbose mode, haven't checked if
+before this series it was failing :-\
+
+root@x1:~# perf test -vvv 105
+105: perf trace enum augmentation tests:
+--- start ---
+test child forked, pid 19411
+Checking if vmlinux exists
+Tracing syscall landlock_add_rule
+---- end(-1) ----
+105: perf trace enum augmentation tests                              : FAILED!
+root@x1:~#
+
+Ditto for 106:
+
+root@x1:~# perf test -vv 106
+106: perf trace BTF general tests:
+--- start ---
+test child forked, pid 19467
+Checking if vmlinux BTF exists
+Testing perf trace's string augmentation
+Testing perf trace's buffer augmentation
+Buffer augmentation test failed
+---- end(-1) ----
+106: perf trace BTF general tests                                    : FAILED!
+root@x1:~# 
+
+108 works when its the only test:
+
+root@x1:~# perf test 108
+108: perf trace record and replay                                    : Ok
+root@x1:~# perf test 108
+108: perf trace record and replay                                    : Ok
+root@x1:~# perf test 108
+108: perf trace record and replay                                    : Ok
+root@x1:~#
+
+I'll try to check what is happening with the first two later today.
+
+- Arnaldo
 
