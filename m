@@ -1,152 +1,117 @@
-Return-Path: <linux-csky+bounces-1948-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1949-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39887A60867
-	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 06:45:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C67A6098F
+	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 08:13:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 488183B7686
-	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 05:45:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D30B19C375E
+	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 07:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DE527F7FC;
-	Fri, 14 Mar 2025 05:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A1191B0413;
+	Fri, 14 Mar 2025 07:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g9V5wLKv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vl62pJKc"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24E63BBE5;
-	Fri, 14 Mar 2025 05:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A871A83E7
+	for <linux-csky@vger.kernel.org>; Fri, 14 Mar 2025 07:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741931152; cv=none; b=Rlo0JVpe22H93V6pzue26Hj83uqNE9mqWM7PJvkPeDUVT16p9BRh5GIeErYC/xI/lQj7UOK1pQ1Cw7tcA+kSelLxLeryxoHu5ip6fVT7bmfXXLnXmGbw0Y5dRznzuB/BNcVkOsjE2AQu+VN2i25bTpgZBNBgGMWQmeGJ0S+QhTY=
+	t=1741936282; cv=none; b=oQvpfYAmdz6BsvdcLikymu2Kz2ZfVU6FlT/Vr+0wAItAgGs/sEnBVrUtkzBAmIdr/rLkT7xcbStToRXjzFbGb2s5h+FnOuEB/RQ8wkWe4AReo85Z1idW/EiO/IosEb/FJjnsqvR2CaB/tehWJy5ean2Ae252l84ecx5fyOdGa5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741931152; c=relaxed/simple;
-	bh=UIHoxzhPf3e+N6sft1joYHuPe2ZldXQM7xaEMHF8UQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UsR8uvDzKbH/wMp0Y8yng2CE5ypPoHEl89mlkBhCb4MR0ULu2xj6Z8yEllph2bPSBzkuiY2/qNmJg/69EXzQIP1X9XGiT6hU7F5dYYzSACYq8VpyXmxppeAloNTPOs3QMP51bPpXAi8iPYyQhPVPp1Q+6uEsdwvSmSwfERslhCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g9V5wLKv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40296C4CEE3;
-	Fri, 14 Mar 2025 05:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741931152;
-	bh=UIHoxzhPf3e+N6sft1joYHuPe2ZldXQM7xaEMHF8UQM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g9V5wLKvvzdYnmDpHxzPOfq0AxNt5QiDf5RPSpD1Z9RQFIFrZI9gA6Ga/OC4vbrhF
-	 zyDAK/ALK3zLwiZA6+/Q21+00Jl+xwDMvnbK9EKGk9+vsSta0y8nKGItKJlqK8TFK8
-	 Zmt6h+ElRvf3Xdm+rk+dFeLAJn4QCe7tdd5Bcs7zqnaInu6fdUEwMmqvuSl7jzpzlk
-	 y0LjtBD7LCjdJeUA0wCptEUIDygjsTNjui4I1ClM50r1tz72lQWQx5jEp6mYfhYszs
-	 K0h3QOuxoRTchgjOR1QZXwOpfJDwG7nh3cJRlxEKdJeH0c8hGd77+eWDt9B5y6qNkZ
-	 XKaU59OZuTVUg==
-Date: Thu, 13 Mar 2025 22:45:49 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	guoren <guoren@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v5 00/11] perf: Support multiple system call tables in
- the build
-Message-ID: <Z9PCjQ8PhOadVGQ8@google.com>
-References: <20250308003209.234114-1-irogers@google.com>
- <Z9KFLGpenwOP32q3@google.com>
- <Z9M24AJzui9lFbGo@x1>
- <Z9M9-YhDJg3NgiUy@x1>
- <Z9NEX3j_1RUvaFI0@x1>
+	s=arc-20240116; t=1741936282; c=relaxed/simple;
+	bh=uvCiwqcuhHkOe5vwO0XWabYY43G777y7s9f15LVJbDQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=u62iBlBPsrlFMHq4guQf5GgnX1jYZbfIYlrCQ+7f+BTAN+uWIkGtITJe6AHrBEp/ex6Ty+hvXTyL45cOWclRC6LKBS1FpPRjevpgwnH3ufini37xdQPqH3ItU7oFfZ3nCA8hcts02Emxdj/V10V2H/nCgx/1KwH7mKr5hS+o0b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vl62pJKc; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741936279;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PSM8yJGMUJL1V2EgA9kgefSTwIIJGDw1mYV2tXceuL0=;
+	b=Vl62pJKcYOa48wkD3EN0kIADZHHc2SgdqAwvF9/BlEsQqjkw69r0K9nzoGgfMUpWw2XPlS
+	gC7EwypgazOLjn0/CJHHE20XHyBEgHNQRNzkzaEIpm9ignwLu6GjlMNWdaMRWR7XtZnKcM
+	CwCXFVGTZOJgnz1Kua/4qoK0BJxEaA0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-231-eVJSXXQxNviptR228Rt9lw-1; Fri,
+ 14 Mar 2025 03:11:15 -0400
+X-MC-Unique: eVJSXXQxNviptR228Rt9lw-1
+X-Mimecast-MFC-AGG-ID: eVJSXXQxNviptR228Rt9lw_1741936274
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 86A11180025A;
+	Fri, 14 Mar 2025 07:11:14 +0000 (UTC)
+Received: from thuth-p1g4.redhat.com (unknown [10.44.32.82])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3CA6018001DE;
+	Fri, 14 Mar 2025 07:11:10 +0000 (UTC)
+From: Thomas Huth <thuth@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org,
+	Thomas Huth <thuth@redhat.com>,
+	Guo Ren <guoren@kernel.org>,
+	linux-csky@vger.kernel.org
+Subject: [PATCH 10/41] csky: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi header
+Date: Fri, 14 Mar 2025 08:09:41 +0100
+Message-ID: <20250314071013.1575167-11-thuth@redhat.com>
+In-Reply-To: <20250314071013.1575167-1-thuth@redhat.com>
+References: <20250314071013.1575167-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z9NEX3j_1RUvaFI0@x1>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Thu, Mar 13, 2025 at 05:47:27PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Thu, Mar 13, 2025 at 05:20:09PM -0300, Arnaldo Carvalho de Melo wrote:
-> > Still building, but noticed this on x86_64:
-> > 
-> > 105: perf trace enum augmentation tests                              : FAILED!
-> > 106: perf trace BTF general tests                                    : FAILED!
-> > 107: perf trace exit race                                            : Ok
-> > 108: perf trace record and replay                                    : FAILED!
-> > 
-> > 
-> > The first doesn´t help that much with verbose mode, haven't checked if
-> > before this series it was failing :-\
-> > 
-> > root@x1:~# perf test -vvv 105
-> > 105: perf trace enum augmentation tests:
-> > --- start ---
-> > test child forked, pid 19411
-> > Checking if vmlinux exists
-> > Tracing syscall landlock_add_rule
-> > ---- end(-1) ----
-> > 105: perf trace enum augmentation tests                              : FAILED!
-> > root@x1:~#
-> 
-> So:
-> 
-> root@x1:~# perf trace -e landlock_add_rule perf test -w landlock
-> root@x1:~# 
-> 
-> But:
-> 
-> root@x1:~# perf trace perf test -w landlock |& grep landlock_add_rule
->     26.120 ( 0.002 ms): perf/19791 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_PATH_BENEATH, rule_attr: 0x7ffde75e2680, flags: 45) = -1 EINVAL (Invalid argument)
->     26.124 ( 0.001 ms): perf/19791 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_NET_PORT, rule_attr: 0x7ffde75e2690, flags: 45) = -1 EINVAL (Invalid argument)
-> root@x1:~# 
-> 
-> -e is having some trouble, when no event is specified, then it works.
-> 
-> Something in the changes made to:
-> 
-> static int trace__parse_events_option(const struct option *opt, const char *str,
->                                       int unset __maybe_unused)
+__ASSEMBLY__ is only defined by the Makefile of the kernel, so
+this is not really useful for uapi headers (unless the userspace
+Makefile defines it, too). Let's switch to __ASSEMBLER__ which
+gets set automatically by the compiler when compiling assembly
+code.
 
-Thanks for the test, I think this should fix it:
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ arch/csky/include/uapi/asm/ptrace.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Namhyung
-
-
----8<---
-diff --git a/tools/perf/util/syscalltbl.c b/tools/perf/util/syscalltbl.c
-index ace66e69c1bcde1e..67a8ec10e9e4bc8d 100644
---- a/tools/perf/util/syscalltbl.c
-+++ b/tools/perf/util/syscalltbl.c
-@@ -76,7 +76,7 @@ int syscalltbl__id(int e_machine, const char *name)
- {
-        const struct syscalltbl *table = find_table(e_machine);
-        struct syscall_cmp_key key;
--       const int *id;
-+       const uint16_t *id;
+diff --git a/arch/csky/include/uapi/asm/ptrace.h b/arch/csky/include/uapi/asm/ptrace.h
+index 3be9c14334a6e..90a5c36e4345d 100644
+--- a/arch/csky/include/uapi/asm/ptrace.h
++++ b/arch/csky/include/uapi/asm/ptrace.h
+@@ -3,7 +3,7 @@
+ #ifndef _CSKY_PTRACE_H
+ #define _CSKY_PTRACE_H
  
-        if (!table)
-                return -1;
+-#ifndef __ASSEMBLY__
++#ifndef __ASSEMBLER__
+ 
+ struct pt_regs {
+ 	unsigned long	tls;
+@@ -47,5 +47,5 @@ struct user_fp {
+ 	unsigned long	reserved;
+ };
+ 
+-#endif /* __ASSEMBLY__ */
++#endif /* __ASSEMBLER__ */
+ #endif /* _CSKY_PTRACE_H */
+-- 
+2.48.1
 
 
