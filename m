@@ -1,47 +1,47 @@
-Return-Path: <linux-csky+bounces-1953-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1954-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58338A61792
-	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 18:27:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B5DAA61D19
+	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 21:48:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 497044612E4
-	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 17:26:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC02619C4909
+	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 20:48:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC6B2046A8;
-	Fri, 14 Mar 2025 17:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AF3156C71;
+	Fri, 14 Mar 2025 20:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mMsNUN1x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3Ixpg0H"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEC72046A5;
-	Fri, 14 Mar 2025 17:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7512F1E871;
+	Fri, 14 Mar 2025 20:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741973204; cv=none; b=cBZQB52bmsCb6/KMfALyZeyBoF0VqOdOgx/jKIxnb9Y5tCD3F4eoHXvfi1OtKWoK8BlIV/lBs4t1tySOMblbAAFkp+Sq0s3dj9/uGmvBSrBtNLYnAH1tS687wtlrUYLdquTcboZSj498cWZRplP/0FFy1kEvkHFa395VH7vaPf0=
+	t=1741985295; cv=none; b=Jj8PQSdNQhPf1k2WjyZd7WTClR6DVbagUV4dKq+WsLag5PN479/b5TZ7HZd3LrQ3hJ7g5tSnhFPbpBL9glqTqaAZvmEYQ5ukls1r7JKnxKOBNx5kgFloA1kznn2UD9te1Mzc6gdvKlkZu6eW2D9As/wkEVWOt4AHt1PhkmRH0hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741973204; c=relaxed/simple;
-	bh=KkiVUBJqS82/ZAZxfj0qf27tw7VtghnwZimo7bY835Y=;
+	s=arc-20240116; t=1741985295; c=relaxed/simple;
+	bh=QZITLRQh5Pilrk+i/O0RCZEME5s/otaVmwmlBiRuMuc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P8+9a4kQxKE1yN1SwNCZWmBdU/fJhJiZ4slBNB+KSCsGl5muFv6mRpcFdVDO0N6GIBbmsri5MLEgbtSaVVL4WLbaER2oYBKHYFLB4O3GVXcnKWsD7B0ehctCWnzQqtt0FA14vYUq168M6Y9Y6m537RoAceeb2onLoxod5HvpLbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mMsNUN1x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2662C4CEEE;
-	Fri, 14 Mar 2025 17:26:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mnLn0QdN+7AG9UXtmCJh2lgjbWrTCW4tGRSoTavL5ufJAF9XCg09TOnxwTRfO8cuXiIXyv5QjoSyPiMTl/9to/Cz5mNhgsv6xMHi+Q+w03MiSK3JBSWVjlDLvHMqGK+qBfp5VHpvnB8o0/jRD/KbK/YTdLlDrDGTSMSt7CV/G/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3Ixpg0H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6662EC4CEE3;
+	Fri, 14 Mar 2025 20:48:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741973204;
-	bh=KkiVUBJqS82/ZAZxfj0qf27tw7VtghnwZimo7bY835Y=;
+	s=k20201202; t=1741985294;
+	bh=QZITLRQh5Pilrk+i/O0RCZEME5s/otaVmwmlBiRuMuc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mMsNUN1xSLDSyBven2d76R+1AdL+jQP0MK50eptkf3aVcdtQKta9NJ8EbEk+isGge
-	 MTD2FCEo7J6G1Kjca+jijbQWQKEabwqLxg2MC2HxFJgri2riKxWrj1mpGamjfKEVib
-	 zFioHjdgXrG7GkbAE6V7F0J+jQvVe3bGpkNvuPK1KTEGYRgVrUN6MeaP58tj1120zr
-	 qjxMja5IyRQDiFIAAARLh7wWOI7UJD9mllNnB1j3m72i66Ch7wPgghldbzlqurr99b
-	 KwMCbHnuEKMAWfo9RAu1xBqH5ra02axDg8YAPcFarIjbI/v8UDWiAnpLIjdoxdgxou
-	 nT4e2P2pKwefw==
-Date: Fri, 14 Mar 2025 14:26:41 -0300
+	b=L3Ixpg0HJRCUFTfxE27Wt1rf8UBwz/oBrqEwQ9TeF9/iO30PlBJ8WNVSSD5qv5EqV
+	 0QZowG9NQuNgXghNkjEX/Tx//JTcWhTB+KMh7ybKLX5Td2nN+NXi3lYZEhzxwVPsXr
+	 CBZvSaTK2r4/M/SSF53bjnEDUhx9cygiadLNhksopMJag21XS1RvvDrHOOiyQvC4q3
+	 KzpDNpGOq86V8Bs8t/v0iom/0v/rp39B2r7cXw8M5qtlRboDqOAiyuruu8z1dCjK62
+	 g33yb3zw2Yj9QIlS8v0fOot5OPXhLXXBjoIA7/RltVeW6qxvels5qW8AGtYIxV/Lww
+	 tropxqqdJRitQ==
+Date: Fri, 14 Mar 2025 17:48:12 -0300
 From: Arnaldo Carvalho de Melo <acme@kernel.org>
 To: Namhyung Kim <namhyung@kernel.org>
 Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
@@ -69,7 +69,7 @@ Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
 Subject: Re: [PATCH v5 00/11] perf: Support multiple system call tables in
  the build
-Message-ID: <Z9Rm0W6YLpxKIcI1@x1>
+Message-ID: <Z9SWDGsdgagMr8PV@x1>
 References: <20250308003209.234114-1-irogers@google.com>
  <Z9KFLGpenwOP32q3@google.com>
  <Z9M24AJzui9lFbGo@x1>
@@ -77,152 +77,98 @@ References: <20250308003209.234114-1-irogers@google.com>
  <Z9NEX3j_1RUvaFI0@x1>
  <Z9PCjQ8PhOadVGQ8@google.com>
  <Z9RjHpEJGWtj8PAM@x1>
+ <Z9Rm0W6YLpxKIcI1@x1>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z9RjHpEJGWtj8PAM@x1>
+In-Reply-To: <Z9Rm0W6YLpxKIcI1@x1>
 
-On Fri, Mar 14, 2025 at 02:10:57PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Thu, Mar 13, 2025 at 10:45:49PM -0700, Namhyung Kim wrote:
-> > On Thu, Mar 13, 2025 at 05:47:27PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > On Thu, Mar 13, 2025 at 05:20:09PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > Still building, but noticed this on x86_64:
-> > > > 
-> > > > 105: perf trace enum augmentation tests                              : FAILED!
-> > > > 106: perf trace BTF general tests                                    : FAILED!
-> > > > 107: perf trace exit race                                            : Ok
-> > > > 108: perf trace record and replay                                    : FAILED!
-> > > > 
-> > > > 
-> > > > The first doesn´t help that much with verbose mode, haven't checked if
-> > > > before this series it was failing :-\
-> > > > 
-> > > > root@x1:~# perf test -vvv 105
-> > > > 105: perf trace enum augmentation tests:
-> > > > --- start ---
-> > > > test child forked, pid 19411
-> > > > Checking if vmlinux exists
-> > > > Tracing syscall landlock_add_rule
-> > > > ---- end(-1) ----
-> > > > 105: perf trace enum augmentation tests                              : FAILED!
-> > > > root@x1:~#
-> > > 
-> > > So:
-> > > 
-> > > root@x1:~# perf trace -e landlock_add_rule perf test -w landlock
-> > > root@x1:~# 
-> > > 
-> > > But:
-> > > 
-> > > root@x1:~# perf trace perf test -w landlock |& grep landlock_add_rule
-> > >     26.120 ( 0.002 ms): perf/19791 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_PATH_BENEATH, rule_attr: 0x7ffde75e2680, flags: 45) = -1 EINVAL (Invalid argument)
-> > >     26.124 ( 0.001 ms): perf/19791 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_NET_PORT, rule_attr: 0x7ffde75e2690, flags: 45) = -1 EINVAL (Invalid argument)
-> > > root@x1:~# 
-> > > 
-> > > -e is having some trouble, when no event is specified, then it works.
-> > > 
-> > > Something in the changes made to:
-> > > 
-> > > static int trace__parse_events_option(const struct option *opt, const char *str,
-> > >                                       int unset __maybe_unused)
-> > 
-> > Thanks for the test, I think this should fix it:
-> > 
-> 
-> Well, not really:
-> 
-> root@number:~# perf trace -e landlock_add_rule perf test -w landlock
-> perf: Segmentation fault
-> Obtained 10 stack frames.
-> perf() [0x5be761]
-> perf() [0x5be7f9]
-> /lib64/libc.so.6(+0x40fd0) [0x7fe005c4efd0]
-> perf() [0x491bc1]
-> perf() [0x497090]
-> perf() [0x4973ab]
-> perf() [0x413483]
-> /lib64/libc.so.6(+0x2a088) [0x7fe005c38088]
-> /lib64/libc.so.6(__libc_start_main+0x8b) [0x7fe005c3814b]
-> perf() [0x413ad5]
-> Segmentation fault (core dumped)
-> root@number:~#
-> 
-> Time for me to test another patch from Ian, the one symbolizing the
-> above backtrace...
-> 
-> Worked, but didn't help as much, with gdb:
-> 
-> (gdb) run trace -e landlock_add_rule perf test -w landlock
-> Starting program: /root/bin/perf trace -e landlock_add_rule perf test -w landlock
-> 
-> This GDB supports auto-downloading debuginfo from the following URLs:
->   <https://debuginfod.fedoraproject.org/>
-> Enable debuginfod for this session? (y or [n]) y
-> Debuginfod has been enabled.
-> To make this setting permanent, add 'set debuginfod enabled on' to .gdbinit.
-> Downloading 53.88 K separate debug info for system-supplied DSO at 0x7ffff7fc6000
-> Downloading 458.26 K separate debug info for /lib64/libtracefs.so.1                                                                                                                            
-> [Thread debugging using libthread_db enabled]                                                                                                                                                  
-> Using host libthread_db library "/lib64/libthread_db.so.1".
-> [Detaching after fork from child process 39141]
-> 
-> Program received signal SIGSEGV, Segmentation fault.
-> 0x00000000004d0e56 in trace__find_usable_bpf_prog_entry (trace=0x7fffffffa510, sc=0x10fb7b0) at builtin-trace.c:3882
-> 3882				bool is_pointer = field->flags & TEP_FIELD_IS_POINTER,
-> (gdb) p field
-> $1 = (struct tep_format_field *) 0x64656e6769736e75
-> (gdb) bt
-> #0  0x00000000004d0e56 in trace__find_usable_bpf_prog_entry (trace=0x7fffffffa510, sc=0x10fb7b0) at builtin-trace.c:3882
-> #1  0x00000000004cf3de in trace__init_syscalls_bpf_prog_array_maps (trace=0x7fffffffa510, e_machine=62) at builtin-trace.c:4040
-> #2  0x00000000004bf626 in trace__run (trace=0x7fffffffa510, argc=4, argv=0x7fffffffde40) at builtin-trace.c:4473
-> #3  0x00000000004bb7a9 in cmd_trace (argc=4, argv=0x7fffffffde40) at builtin-trace.c:5741
-> #4  0x00000000004d873f in run_builtin (p=0xf83d48 <commands+648>, argc=7, argv=0x7fffffffde40) at perf.c:351
-> #5  0x00000000004d7df3 in handle_internal_command (argc=7, argv=0x7fffffffde40) at perf.c:404
-> #6  0x00000000004d860f in run_argv (argcp=0x7fffffffdc7c, argv=0x7fffffffdc70) at perf.c:448
-> #7  0x00000000004d7a4f in main (argc=7, argv=0x7fffffffde40) at perf.c:556
-> (gdb) list -10
-> 3867		return NULL;
-> 3868	
-> 3869	try_to_find_pair:
-> 3870		for (int i = 0, num_idx = syscalltbl__num_idx(sc->e_machine); i < num_idx; ++i) {
-> 3871			int id = syscalltbl__id_at_idx(sc->e_machine, i);
-> 3872			struct syscall *pair = trace__syscall_info(trace, NULL, sc->e_machine, id);
-> 3873			struct bpf_program *pair_prog;
-> 3874			bool is_candidate = false;
-> 3875	
-> 3876			if (pair == NULL || pair == sc ||
-> (gdb)
+On Fri, Mar 14, 2025 at 02:26:41PM -0300, Arnaldo Carvalho de Melo wrote:
+> it finds the pair, but then its sc->args has a bogus pointer... I'll see
+> where this isn't being initialized...
 
-Humm
-
-(gdb) p i
-$1 = 147
-(gdb) p num_idx
-$2 = 379
-(gdb) p id
-$3 = 192
+Breakpoint 4, trace__find_usable_bpf_prog_entry (trace=0x7fffffffa510, sc=0x1046f10) at builtin-trace.c:3874
+3874			bool is_candidate = false;
+(gdb) n
+3876			if (pair == NULL || pair == sc ||
 (gdb) p pair
-$4 = (struct syscall *) 0x10fe8f0
-(gdb) p *pair
-$5 = {e_machine = 62, id = 192, tp_format = 0x10f6c00, nr_args = 3, args_size = 48, bpf_prog = {sys_enter = 0x0, sys_exit = 0x0}, is_exit = false, is_open = false, nonexistent = false, 
-  use_btf = false, args = 0x10f9480, name = 0x814406 "lgetxattr", fmt = 0x0, arg_fmt = 0x10fa0a0}
-(gdb) p sc
-$6 = (struct syscall *) 0x10fb7b0
+$7 = (struct syscall *) 0x1083c50
+(gdb) p pair->name
+$8 = 0x81478e "accept4"
+(gdb) n
+3877			    pair->bpf_prog.sys_enter == trace->skel->progs.syscall_unaugmented)
+(gdb) p i
+$9 = 1
+(gdb) n
+3876			if (pair == NULL || pair == sc ||
+(gdb) n
+3880			printf("sc=%p\n", sc); fflush(stdout);
+(gdb) n
+sc=0x1046f10
+3881			printf("sc->name=%p\n", sc->name); fflush(stdout);
+(gdb) n
+sc->name=0x6c66202c786c3830
+3882			printf("sc->nr_args=%d, sc->args=%p\n", sc->nr_args, sc->args); fflush(stdout);
+(gdb) p sc->nr_args
+$10 = 1935635045
 (gdb) p sc->args
-$7 = (struct tep_format_field *) 0x64656e6769736e75
-(gdb) p *pair
-$8 = {e_machine = 62, id = 192, tp_format = 0x10f6c00, nr_args = 3, args_size = 48, bpf_prog = {sys_enter = 0x0, sys_exit = 0x0}, is_exit = false, is_open = false, nonexistent = false, 
-  use_btf = false, args = 0x10f9480, name = 0x814406 "lgetxattr", fmt = 0x0, arg_fmt = 0x10fa0a0}
-(gdb)
+$11 = (struct tep_format_field *) 0x257830203a6e656c
+(gdb) p *sc
+$12 = {e_machine = 540697702, id = 807761968, tp_format = 0x657075202c786c38, nr_args = 1935635045, args_size = 1634427759, bpf_prog = {sys_enter = 0x257830203a726464, 
+    sys_exit = 0x7075202c786c3830}, is_exit = 101, is_open = 101, nonexistent = 114, use_btf = 95, args = 0x257830203a6e656c, 
+  name = 0x6c66202c786c3830 <error: Cannot access memory at address 0x6c66202c786c3830>, fmt = 0x257830203a736761, arg_fmt = 0x786c3830}
+(gdb) 
 
-it finds the pair, but then its sc->args has a bogus pointer... I'll see
-where this isn't being initialized...
+Ok, ran out of time, but if I simple avoid the second loop in:
+
+static int trace__init_syscalls_bpf_prog_array_maps(struct trace *trace, int e_machine)
+
+
+I.e. the one that starts with:
+
+        /*
+         * Now lets do a second pass looking for enabled syscalls without
+         * an augmenter that have a signature that is a superset of another
+         * syscall with an augmenter so that we can auto-reuse it.
+
+This:
+
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index e0434f7dc67cb988..3664bb512c70cabf 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -3989,6 +3989,8 @@ static int trace__init_syscalls_bpf_prog_array_maps(struct trace *trace, int e_m
+                        goto out;
+        }
+ 
++       return 0;
++
+        /*
+         * Now lets do a second pass looking for enabled syscalls without
+         * an augmenter that have a signature that is a superset of another
+â¬¢ [acme@toolbox perf-tools-next]$ 
+
+
+Then all works, we don't reuse any BPF program, but then that is an
+heuristic anyway, that is tried becuase landlock_add_rule has a pointer
+argument:
+
+root@number:~# perf trace -e landlock_add_rule perf test -w landlock
+     0.000 ( 0.003 ms): perf/71034 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_PATH_BENEATH, rule_attr: 0x7fff6f2bb550, flags: 45) = -1 EINVAL (Invalid argument)
+     0.004 ( 0.001 ms): perf/71034 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_NET_PORT, rule_attr: 0x7fff6f2bb540, flags: 45) = -1 EINVAL (Invalid argument)
+root@number:~# perf test enum
+105: perf trace enum augmentation tests                              : Ok
+root@number:~#
+
+So its some sort of syncronization on the various new tables, sorted by
+name, etc that then when iterating over the syscalls ends up using a sc
+that is not initialized.
 
 - Arnaldo
 
