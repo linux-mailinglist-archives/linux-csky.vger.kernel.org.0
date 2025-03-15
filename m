@@ -1,174 +1,107 @@
-Return-Path: <linux-csky+bounces-1954-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1955-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B5DAA61D19
-	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 21:48:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A383A62E81
+	for <lists+linux-csky@lfdr.de>; Sat, 15 Mar 2025 15:55:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC02619C4909
-	for <lists+linux-csky@lfdr.de>; Fri, 14 Mar 2025 20:48:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF55A16B3FF
+	for <lists+linux-csky@lfdr.de>; Sat, 15 Mar 2025 14:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AF3156C71;
-	Fri, 14 Mar 2025 20:48:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDD69202F92;
+	Sat, 15 Mar 2025 14:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3Ixpg0H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PmSjBQ9i"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7512F1E871;
-	Fri, 14 Mar 2025 20:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA82D1FC7CF
+	for <linux-csky@vger.kernel.org>; Sat, 15 Mar 2025 14:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741985295; cv=none; b=Jj8PQSdNQhPf1k2WjyZd7WTClR6DVbagUV4dKq+WsLag5PN479/b5TZ7HZd3LrQ3hJ7g5tSnhFPbpBL9glqTqaAZvmEYQ5ukls1r7JKnxKOBNx5kgFloA1kznn2UD9te1Mzc6gdvKlkZu6eW2D9As/wkEVWOt4AHt1PhkmRH0hI=
+	t=1742050545; cv=none; b=AKXrsX7+xifd5rpqPgQCmlIn3SvLAYy7dM2qldNCdde+IV0pju6MObvblNaOGs4Wf2XGQ02yuwgd3GcssFZfdKcWMWY369to2vy9bUG2AvkShxSFSwdmiwKsK5T4ZwR41O0s7hGTaM9gAf+26HwSrQvKNIBpT//kHIKmmKDxoPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741985295; c=relaxed/simple;
-	bh=QZITLRQh5Pilrk+i/O0RCZEME5s/otaVmwmlBiRuMuc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mnLn0QdN+7AG9UXtmCJh2lgjbWrTCW4tGRSoTavL5ufJAF9XCg09TOnxwTRfO8cuXiIXyv5QjoSyPiMTl/9to/Cz5mNhgsv6xMHi+Q+w03MiSK3JBSWVjlDLvHMqGK+qBfp5VHpvnB8o0/jRD/KbK/YTdLlDrDGTSMSt7CV/G/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3Ixpg0H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6662EC4CEE3;
-	Fri, 14 Mar 2025 20:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741985294;
-	bh=QZITLRQh5Pilrk+i/O0RCZEME5s/otaVmwmlBiRuMuc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L3Ixpg0HJRCUFTfxE27Wt1rf8UBwz/oBrqEwQ9TeF9/iO30PlBJ8WNVSSD5qv5EqV
-	 0QZowG9NQuNgXghNkjEX/Tx//JTcWhTB+KMh7ybKLX5Td2nN+NXi3lYZEhzxwVPsXr
-	 CBZvSaTK2r4/M/SSF53bjnEDUhx9cygiadLNhksopMJag21XS1RvvDrHOOiyQvC4q3
-	 KzpDNpGOq86V8Bs8t/v0iom/0v/rp39B2r7cXw8M5qtlRboDqOAiyuruu8z1dCjK62
-	 g33yb3zw2Yj9QIlS8v0fOot5OPXhLXXBjoIA7/RltVeW6qxvels5qW8AGtYIxV/Lww
-	 tropxqqdJRitQ==
-Date: Fri, 14 Mar 2025 17:48:12 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	guoren <guoren@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v5 00/11] perf: Support multiple system call tables in
- the build
-Message-ID: <Z9SWDGsdgagMr8PV@x1>
-References: <20250308003209.234114-1-irogers@google.com>
- <Z9KFLGpenwOP32q3@google.com>
- <Z9M24AJzui9lFbGo@x1>
- <Z9M9-YhDJg3NgiUy@x1>
- <Z9NEX3j_1RUvaFI0@x1>
- <Z9PCjQ8PhOadVGQ8@google.com>
- <Z9RjHpEJGWtj8PAM@x1>
- <Z9Rm0W6YLpxKIcI1@x1>
+	s=arc-20240116; t=1742050545; c=relaxed/simple;
+	bh=XA99tfLBp8bXT73QYWUaMhUBMUYYGtyNQMBwQmFvmFg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 Cc:Content-Type; b=aK6J8SL0vjQXG2E/2aLL0s6rWlMOxXFj5IeOu8aVYjYCUvqsFZyDOIqDGbAZpPXRkh6qvZFktxp5rih3fBGZgdJp8F6qejdu34XMI2eFAzzbUa/f2ZoSVohZotc2iiYTCept0Nfozuu1Q/ZV9oQmFSMLODX0KdR4e30VvK1cWNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PmSjBQ9i; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-225b5448519so55307545ad.0
+        for <linux-csky@vger.kernel.org>; Sat, 15 Mar 2025 07:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742050543; x=1742655343; darn=vger.kernel.org;
+        h=cc:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XA99tfLBp8bXT73QYWUaMhUBMUYYGtyNQMBwQmFvmFg=;
+        b=PmSjBQ9iXnLJUW2idUj4k2rryQQVbg/u4JfQq9Z7sOLQAWkwBeOXLDdObkRKX/YwA5
+         VZKXGNshnwN3FzHVih5sE5LsjfahwEYo8mTxY+LFfphTknebNzB/lfuO8AgeHLHwztzw
+         hsQclR4CmM2Swg9TQqh+7yBxVTAaMFPsWwwstd/omtTWD9gRwkFkiw3zLoYoHumY5V1+
+         OGK3MYKiA74blXWHYoH8LmYf767Z13BBpm0aBv2/F0xio5h/xsfr2n+3+iVpbq4gm1iX
+         bEVfjWwVFbRAM9csDsJGmDcIdCcvalQvxWekpf6eq4XRcvLFvrtmew58O7LnVVFdwxXC
+         yFzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742050543; x=1742655343;
+        h=cc:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XA99tfLBp8bXT73QYWUaMhUBMUYYGtyNQMBwQmFvmFg=;
+        b=dc4P9TUOHUlcRllEIUfQe5enTFG/RwrnvKvhQVor0xLL5DO1KoSGHIFI5QiFsRQYB+
+         nbspQRsuHw1IPz3x6ufGh89JovNEV60LL9Daie85GTFWUFtCn8utBs9srwQMW11evtrL
+         3lBigjWBKaVoTmL28VVAl3igLsqXAJB9wXfgDsRFN4SlOteyLNQ7/l7Zi3TO9DlTBEFL
+         5QfAri/DlTyVyVWJq/5itsD7+zhTJpyBW2TjSqRBXe0kxbKRutBxd9Dm7rOewDzjtVjm
+         +/WH/jAWczCz4iwKDJkKRFEO+Mix04C7ELEOlrbh+HUcXlTHKHdlvQTAQJPy1snc8JAK
+         kYiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXdQUKECrCADAqlCjHdLNY0X3tsY5xJWCDwCV7V3xzV6vFBzavsOZG/FBVPbu2swuj+Cmp8KL1b62cm@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMDSWe7cQjSDsxEDkhqZxLaoZvKffH3sBKX8ZipL2zvxnGTp/p
+	23Sv3JKvvOUXM3xeWc6+qBPFDeD8idXOBezWB6R5avTh4i/7Kvnt6MdlRIOlgpa72WpifwPVjJc
+	4P2rEkwTTk/KHthA3afJaG0qI2K0=
+X-Gm-Gg: ASbGnctT4q3KL4o3uug2uriXf9JjZUlwIAHx7vGCn8buB9LfzXX+Yyb3lFdBf2UYfVw
+	BITcwYJRSP91SWQA8H7tDHPS8YuhPNkzi9eoWjnIzYbwPJouXP9aGgdGopeWDZnYsjvtE5Gp8Jy
+	AankXScIi5ELiRahoTv+Iyo5A=
+X-Received: by 2002:a17:90b:2e44:b0:2f9:d9fe:e72e with SMTP id
+ 98e67ed59e1d1-30151cc2490mt7920209a91.16.1742050543260; Sat, 15 Mar 2025
+ 07:55:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z9Rm0W6YLpxKIcI1@x1>
+References: <20250306185124.3147510-1-rppt@kernel.org> <20250306185124.3147510-11-rppt@kernel.org>
+ <cee346ec-5fa5-4d0b-987b-413ee585dbaa@sirena.org.uk> <Z9CyRHewqfZlmgIo@shell.armlinux.org.uk>
+ <Z9ErEBuMMvd6i2n9@kernel.org>
+In-Reply-To: <Z9ErEBuMMvd6i2n9@kernel.org>
+From: DiTBho Down in The Bunny hole <downinthebunnyhole@gmail.com>
+Date: Sat, 15 Mar 2025 15:55:33 +0100
+X-Gm-Features: AQ5f1Jrmv7KQRCuWBIo_vXTI9aIDRsZr_EQ5uQHAURWeudjXpiSlHPWiANvw4jg
+Message-ID: <CAAZ8i80e6CsD1Y36-sVrVs4QPB-82J1gPOeDvHa_+sQtfUpMtQ@mail.gmail.com>
+Subject: Soekris crypto 1411, where to find ?
+Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc <linux-parisc@vger.kernel.org>, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Mar 14, 2025 at 02:26:41PM -0300, Arnaldo Carvalho de Melo wrote:
-> it finds the pair, but then its sc->args has a bogus pointer... I'll see
-> where this isn't being initialized...
+hi
+this is probably not the right place to ask, but I've been searching
+eBay and similar places for 2 years and haven't found one yet.
+I support older MIPS hardware and need to find a Soekris crypto 1411
+miniPCI module or two, to add VPN acceleration.
 
-Breakpoint 4, trace__find_usable_bpf_prog_entry (trace=0x7fffffffa510, sc=0x1046f10) at builtin-trace.c:3874
-3874			bool is_candidate = false;
-(gdb) n
-3876			if (pair == NULL || pair == sc ||
-(gdb) p pair
-$7 = (struct syscall *) 0x1083c50
-(gdb) p pair->name
-$8 = 0x81478e "accept4"
-(gdb) n
-3877			    pair->bpf_prog.sys_enter == trace->skel->progs.syscall_unaugmented)
-(gdb) p i
-$9 = 1
-(gdb) n
-3876			if (pair == NULL || pair == sc ||
-(gdb) n
-3880			printf("sc=%p\n", sc); fflush(stdout);
-(gdb) n
-sc=0x1046f10
-3881			printf("sc->name=%p\n", sc->name); fflush(stdout);
-(gdb) n
-sc->name=0x6c66202c786c3830
-3882			printf("sc->nr_args=%d, sc->args=%p\n", sc->nr_args, sc->args); fflush(stdout);
-(gdb) p sc->nr_args
-$10 = 1935635045
-(gdb) p sc->args
-$11 = (struct tep_format_field *) 0x257830203a6e656c
-(gdb) p *sc
-$12 = {e_machine = 540697702, id = 807761968, tp_format = 0x657075202c786c38, nr_args = 1935635045, args_size = 1634427759, bpf_prog = {sys_enter = 0x257830203a726464, 
-    sys_exit = 0x7075202c786c3830}, is_exit = 101, is_open = 101, nonexistent = 114, use_btf = 95, args = 0x257830203a6e656c, 
-  name = 0x6c66202c786c3830 <error: Cannot access memory at address 0x6c66202c786c3830>, fmt = 0x257830203a736761, arg_fmt = 0x786c3830}
-(gdb) 
+Anyone have an idea where to buy it?
 
-Ok, ran out of time, but if I simple avoid the second loop in:
+Soekris company went out of business years ago.
 
-static int trace__init_syscalls_bpf_prog_array_maps(struct trace *trace, int e_machine)
-
-
-I.e. the one that starts with:
-
-        /*
-         * Now lets do a second pass looking for enabled syscalls without
-         * an augmenter that have a signature that is a superset of another
-         * syscall with an augmenter so that we can auto-reuse it.
-
-This:
-
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index e0434f7dc67cb988..3664bb512c70cabf 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -3989,6 +3989,8 @@ static int trace__init_syscalls_bpf_prog_array_maps(struct trace *trace, int e_m
-                        goto out;
-        }
- 
-+       return 0;
-+
-        /*
-         * Now lets do a second pass looking for enabled syscalls without
-         * an augmenter that have a signature that is a superset of another
-⬢ [acme@toolbox perf-tools-next]$ 
-
-
-Then all works, we don't reuse any BPF program, but then that is an
-heuristic anyway, that is tried becuase landlock_add_rule has a pointer
-argument:
-
-root@number:~# perf trace -e landlock_add_rule perf test -w landlock
-     0.000 ( 0.003 ms): perf/71034 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_PATH_BENEATH, rule_attr: 0x7fff6f2bb550, flags: 45) = -1 EINVAL (Invalid argument)
-     0.004 ( 0.001 ms): perf/71034 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_NET_PORT, rule_attr: 0x7fff6f2bb540, flags: 45) = -1 EINVAL (Invalid argument)
-root@number:~# perf test enum
-105: perf trace enum augmentation tests                              : Ok
-root@number:~#
-
-So its some sort of syncronization on the various new tables, sorted by
-name, etc that then when iterating over the syscalls ends up using a sc
-that is not initialized.
-
-- Arnaldo
+Let me know.
+D.
 
