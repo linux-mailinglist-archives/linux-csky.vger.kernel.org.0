@@ -1,92 +1,140 @@
-Return-Path: <linux-csky+bounces-1971-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1972-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62945A655CB
-	for <lists+linux-csky@lfdr.de>; Mon, 17 Mar 2025 16:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87B2CA65FAA
+	for <lists+linux-csky@lfdr.de>; Mon, 17 Mar 2025 21:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C32C3AF7BC
-	for <lists+linux-csky@lfdr.de>; Mon, 17 Mar 2025 15:32:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7839C3BAA86
+	for <lists+linux-csky@lfdr.de>; Mon, 17 Mar 2025 20:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BA724A054;
-	Mon, 17 Mar 2025 15:30:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D880E2063CC;
+	Mon, 17 Mar 2025 20:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EhM8veCq"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4453D248891;
-	Mon, 17 Mar 2025 15:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3279205E36;
+	Mon, 17 Mar 2025 20:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742225457; cv=none; b=RSluNHWAN5B3ldHr9fs7Yia75knZS+HgT3mJT6WoqqNAnFmiAe2Bfv3/TZz1awk4+p08T+A1QAhY+N7kMoQ+QUOYRNIfV2aqmg3DzyOoBPUOUuUPc4xxP94lILMB0Uie2dhq9IAHRB0BeeH6R09qvRbbBIkW4V1+ovnOAiAXI+I=
+	t=1742244490; cv=none; b=GfmbfrAHw0681TWJG+Z4jnEYF8NmksWgftIGifA1QmaFVLXW7+xYmmWgMn/sWkenvdbEWIGufz55mtv9vrPwMmPqAfDc3w6qtEmnlsianStjswafU3di8Fb550t8zKmctenkengEWrrH2jTbfKCa8b0zKhaA+/Mn8x5We12e8bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742225457; c=relaxed/simple;
-	bh=E28zglszNSgNs5nxBqGH9ihoTQywx6FCChBvwXjU3Lc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nOwm+cxmKHCETxq0o2YSE43fAPGwjQ+vMU6UQi9hWTbol23Vc1Svr+EfzC3qW7IdmbjyccELFbScEbXjTNPJvgL6vzU/cPNxCLxJTfeS4s3L8H3HT8S4xf4+aiHPYSQzKAvNYkcTLidb8ODpZClS4/hJISQOHnZHjdlRFr9gF0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3164013D5;
-	Mon, 17 Mar 2025 08:31:03 -0700 (PDT)
-Received: from [10.57.84.137] (unknown [10.57.84.137])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 421503F694;
-	Mon, 17 Mar 2025 08:30:49 -0700 (PDT)
-Message-ID: <70349335-84ee-4bca-a3d6-d7cf3c05b92b@arm.com>
-Date: Mon, 17 Mar 2025 15:30:47 +0000
+	s=arc-20240116; t=1742244490; c=relaxed/simple;
+	bh=8pdTXWSW1pT+VXM+eBfg/U6FahxzWexs17ihcIHPMJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NGWtEcnh/YvEtX7dGBXIYdmWgCzIc0FrZVo3uI/O+CPSQxNX69IkpfaWPP6gXjLyaziQyP76w13/pHTPA7X4mWJ49GrbpfMC61vG1qSIjC7EekDAS8j2b9kTN2/d2yhnYTYN3+Plpl1upotX/zMbD9uX/HSSwvRqTMtNFWOX5gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EhM8veCq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A50DC4CEED;
+	Mon, 17 Mar 2025 20:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742244490;
+	bh=8pdTXWSW1pT+VXM+eBfg/U6FahxzWexs17ihcIHPMJ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EhM8veCqfacvRpt+f0Tvr+Tb69xlnreFzyM3CYm4DK4T3+uPl9ru59UEfXTq0ebK0
+	 CFqn/N9smSOGJjxnJp8Q7S4i7UImh1Net50w71WOgCOAVzz2OpwFsYRLV+agzk6Z1C
+	 3LTvtiRUgukYDcBgUBk5iLbCljivyEw6ZCgak1vig2/flA/wQErtA9Pu1GdpMbJYyz
+	 RElF6rdsfJrE/Kj0PJIhJnwP2Q/Uv03S9bGrKUxd3bkKaSRkFnXF6f1oMA2fvj+RKm
+	 mxOb9rT8SCANLJJFg+gkynqiThXDC7UvCVYwLN6XBKjkV7uOvLG7zGq8p2g2kCvRgV
+	 qUsnEfHJIxt6w==
+Date: Mon, 17 Mar 2025 17:48:07 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	guoren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v5 00/11] perf: Support multiple system call tables in
+ the build
+Message-ID: <Z9iKhwoj1GXvH4c9@x1>
+References: <20250308003209.234114-1-irogers@google.com>
+ <Z9KFLGpenwOP32q3@google.com>
+ <Z9M24AJzui9lFbGo@x1>
+ <Z9M9-YhDJg3NgiUy@x1>
+ <Z9NEX3j_1RUvaFI0@x1>
+ <Z9PCjQ8PhOadVGQ8@google.com>
+ <Z9RjHpEJGWtj8PAM@x1>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/11] Always call constructor for kernel page tables
-Content-Language: en-GB
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
- Andreas Larsson <andreas@gaisler.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "David S. Miller" <davem@davemloft.net>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Mark Rutland <mark.rutland@arm.com>, Matthew Wilcox <willy@infradead.org>,
- Michael Ellerman <mpe@ellerman.id.au>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Peter Zijlstra <peterz@infradead.org>, Qi Zheng
- <zhengqi.arch@bytedance.com>, Will Deacon <will@kernel.org>,
- Yang Shi <yang@os.amperecomputing.com>, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-References: <20250317141700.3701581-1-kevin.brodsky@arm.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20250317141700.3701581-1-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z9RjHpEJGWtj8PAM@x1>
 
-On 17/03/2025 14:16, Kevin Brodsky wrote:
-> The complications in those special pgtable allocators beg the question:
-> does it really make sense to treat efi_mm and init_mm differently in
-> e.g. apply_to_pte_range()? Maybe what we really need is a way to tell if
-> an mm corresponds to user memory or not, and never use split locks for
-> non-user mm's. Feedback and suggestions welcome!
+On Fri, Mar 14, 2025 at 02:10:54PM -0300, Arnaldo Carvalho de Melo wrote:
+> On Thu, Mar 13, 2025 at 10:45:49PM -0700, Namhyung Kim wrote:
+> > On Thu, Mar 13, 2025 at 05:47:27PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > On Thu, Mar 13, 2025 at 05:20:09PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > Still building, but noticed this on x86_64:
+> > > > 
+> > > > 105: perf trace enum augmentation tests                              : FAILED!
+> > > > 106: perf trace BTF general tests                                    : FAILED!
+> > > > 107: perf trace exit race                                            : Ok
+> > > > 108: perf trace record and replay                                    : FAILED!
+> > > > 
+> > > > 
+> > > > The first doesn´t help that much with verbose mode, haven't checked if
+> > > > before this series it was failing :-\
+> > > > 
+> > > > root@x1:~# perf test -vvv 105
+> > > > 105: perf trace enum augmentation tests:
+> > > > --- start ---
+> > > > test child forked, pid 19411
+> > > > Checking if vmlinux exists
+> > > > Tracing syscall landlock_add_rule
+> > > > ---- end(-1) ----
+> > > > 105: perf trace enum augmentation tests                              : FAILED!
+> > > > root@x1:~#
 
-The difference in treatment is whether or not the ptl is taken, right? So the
-real question is when calling apply_to_pte_range() for efi_mm, is there already
-a higher level serialization mechanism that prevents racy accesses? For init_mm,
-I think this is handled implicitly because there is no way for user space to
-cause apply_to_pte_range() for an arbitrary piece of kernel memory. Although I
-can't even see where apply_to_page_range() is called for efi_mm.
+This one is now ok:
 
-FWIW, contpte.c has mm_is_user() which is used by arm64.
+     0.004 ( 0.000 ms): perf/200342 landlock_add_rule(ruleset_fd: 11, rule_type: LANDLOCK_RULE_NET_PORT, rule_attr: 0x7ffd649bd0d0, flags: 45) = -1 EINVAL (Invalid argument)
+root@number:~# perf test enum
+105: perf trace enum augmentation tests                              : Ok
+root@number:~#
 
-Thanks,
-Ryan
+now looking at:
+
+root@number:~# perf test -vvvvvvvvv 106
+106: perf trace BTF general tests:
+--- start ---
+test child forked, pid 200467
+Checking if vmlinux BTF exists
+Testing perf trace's string augmentation
+String augmentation test failed
+---- end(-1) ----
+106: perf trace BTF general tests                                    : FAILED!
+root@number:~#
+
+No clue from the test, reading its source code now to see where it is
+failing to try and reproduce the problem.
+
+- Arnaldo
 
