@@ -1,72 +1,72 @@
-Return-Path: <linux-csky+bounces-1975-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1976-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F3B3A6675A
-	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 04:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ED4CA6675C
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 04:32:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C30CD19A2A2A
-	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 03:32:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C0FA19A2A66
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 03:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBC61A8F7F;
-	Tue, 18 Mar 2025 03:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4101B4223;
+	Tue, 18 Mar 2025 03:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xeSiq+qy"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N3OPXfeQ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C144C1684A4
-	for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 03:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C051AAA1C
+	for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 03:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742268720; cv=none; b=klE4e7/+rMyzJrsDzmZ6tGM+AP+wdL/2THpjOl3bnOW8av09P71MC+a2U3Mma/bMovp0xoorfLEMHFaG313O5JCCMTTlwE54cgeI1uwF44t3u9aBJOTkaSXzu8eMJ5NUshg5Ls7owXJr4W3UEnZjqzh021vIJQdMcGIWWKDw1XI=
+	t=1742268722; cv=none; b=s8O3rfdx4bhxSxKohVj2i7T/IO5w1r1LyCZsDHjukaG5WH0Bx+zJnvxOSVnwauCvkHHulW3to5AyaVsFPcrEaRxlqlEOuoBT7ZM0CWxiemgPeRkaW9ird8F3+QHXL2MloR62Y6TNwYE7aIqKlO4bc6QNumD1Rl9QMplSz2zGakU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742268720; c=relaxed/simple;
-	bh=FAwe2RJa38ETcZQHAVHB0U88gFw89Sp4uPb6TswZqkA=;
+	s=arc-20240116; t=1742268722; c=relaxed/simple;
+	bh=STZw1Bjw19Q771EYbZQqedWOSrL0K7Ur9RZXt0e5AHA=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Cc:Content-Type; b=ms1YnTIS4MO8ssrFY+5gxvspVdf2C0lDBdaS0bLfNukXmPju9LW1Ew+NZYkrXdmBYtMctih5au50gaKHd6EbqeT7rhGeU6jPJskBgDtKe4DIVhicj2MQNY6UQ4NCiArqS2UOOhgJuLX4l/k299bariayiKM+sC9r//Xt054sh6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xeSiq+qy; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=NkkNigvDk2mJ41pCUZxhIzY+MGjcqgocsRs9pv2IDrtXnctmJQvte+txxfitTBsn4Vow4GeMhIT4lV8mZddpamrNmCur/j+QXAE1ZazPSIJMBkPVionRuVzJHp9VphlEeBwi5vC1OUk+VLSOGN9J9UjavNAcfJzvJ2AmkzHJEEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N3OPXfeQ; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e643f233fbeso1361710276.0
-        for <linux-csky@vger.kernel.org>; Mon, 17 Mar 2025 20:31:58 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6f788a1de55so87410967b3.3
+        for <linux-csky@vger.kernel.org>; Mon, 17 Mar 2025 20:32:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742268718; x=1742873518; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1742268720; x=1742873520; darn=vger.kernel.org;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jHN6hEmKYf/vVKEYrUtFE+mgr5gUEvxeDu0SIFOEKqg=;
-        b=xeSiq+qyZ3irjmwuxb2Vf7IYIGarJInnfgyErKNUOUvDoourmOgqxf6monn5igSne5
-         /v9pOTJxGm5UGZY0EmkSbCu7btrby+TdDMmSScueI3G9SdxxUgfjcLDOLm3kuFr2vveb
-         dpgaqlMSuyhJTJpPMyJj19VNFcMlz6En9wmVj+4Ea95OpEL0OOvZtY1Fi4vN4dgAxNgF
-         Zi5HUHbnMhGLLygz1wp+iE1m1j8fdlTcf9D+h+jiWUmvw3J/c1aUVDXxPeltItTzL7qs
-         i2iCMjdwa9+7Gv/QPiLRXV5x9Y/AuyQmiY16c6V2gjtPJ0ktlT5y69qweYxI27kz/znw
-         lYUQ==
+        bh=A69ioGJOUHmvkvhrZ8F6wG6aTOsdrViQselBOQOdPcE=;
+        b=N3OPXfeQu8TB2zvVLhhaGwBs3V7RbiN1ZjnzXeA8o9nTz1U3LTD15kTEiRKo1eJQe5
+         FkVt/UsJwneIzzKhwBU2lct45UCDV2pNoRVWVwIbBJRFdI0g146VPThS+1fCE2uP/XVt
+         Ilsbj3wP8Wwa5OYXmQFvjSMocAu/xPdYK/0zZJm+9uoEqorMYxNIh/iTRTkyLSSLyCIR
+         g1FDZCfG2K9lYxX4vkwSnfKHjo07cRColoJwupwr87O4y/hoTKO/+XGh6ioHgpJlq8kL
+         Be2US6LjqXwTuSIHuLzLG3tQmlR/uzsWlCtDn2jk24pRX03HywJQpsYYBu9zZORLPmnu
+         D2Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742268718; x=1742873518;
+        d=1e100.net; s=20230601; t=1742268720; x=1742873520;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jHN6hEmKYf/vVKEYrUtFE+mgr5gUEvxeDu0SIFOEKqg=;
-        b=epfDPx1S9XdFpmmzBMWz5n7ctHb3dOPYDK3XJccOfKOhIucb2aIU69lHlbb+bn7lE/
-         YHS3waopEGh9Av8GbSxc2hECgVFDjRM4mITjQDSsDgJ9rjUYNtBEJ8zotbTxkBHpHdHB
-         2OQDBKV+AU3IPIXCZ5wiy6kUcDCb5bPDWXSlgRAnOzBLB/TGA0LQC0W/23vYjmoUN309
-         bYV9QjsfAVGVN87hzVwGQz4e0bhZQvOIEa2LYigrcWTG/J3AdTqUKmvzCXzJ/zRuFfYM
-         jvpIbAycx0rvx5lUHHTeGdxjAAWAYQbeDA1hE9PZpnizLj9GoT4jKrGyJzbQsK3iRxGy
-         MKew==
-X-Forwarded-Encrypted: i=1; AJvYcCVrUeGBq8xKmhKJFDiAIZuwX39K8AW9SYL7MyL4mEYO2xzRZLjJoE8CJkfXCJUkD/yC8Et0o53eDtTG@vger.kernel.org
-X-Gm-Message-State: AOJu0YymuIw7/Vub7D2uTd9j/shCqWSCoZBKR6KXFMI5yhBcWtIzYo4W
-	824UVtAtlHdq7i+WVZCCI58L2tC4vO43wofXbEwJUzAhs/J7236tTcF5wp+FI+cjuPpln48nCtx
-	Pn5G3aQ==
-X-Google-Smtp-Source: AGHT+IEPuBvIcSfk3bbRhT/J8hpoCiqCQuC68IEKcGtvvMui3F+mkYkW6NsNtcusm463jvYm7WncQRBYK9L1
+        bh=A69ioGJOUHmvkvhrZ8F6wG6aTOsdrViQselBOQOdPcE=;
+        b=eDm2hOoCCs5TSwvsNjkwKOCATWvGopAyGp+Qbg0J3YdeVwPd8jH76oNxcCreCb9tFL
+         mlH7hWj656KeEj+4frz/kN22zRDWKvt7dx1GaiNsJAkRv8vE67aP1Cy8R2RX+snf5mZi
+         zVutTc4n21S8wq1bHsRGCWTXsqbdcK26UWn9O5oIUjp/jgmiuNqq+abVScpe1zDP2NA+
+         z7C0GGSEw9QA3Acd27o7rL8KDot4rz7iSo9CLQxiD9uAuZsRP4lZaoxsBT6mBGzTx4Vj
+         9Rfp+hK0Z0p9NysF1BgeBGKOHDUnBVbHNuayXACGQdJyhmo7l6bp2DO5QEAYzKs6pvEh
+         Oe+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUf73FlPzUO0n6UW2rZybhgkxjMwjd14Dfed9fBeuasAbaN81G+wYBkANWo9Ukq4ZeVB204IUlGiP9p@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLiAQ5RDo59KY8L3j3ZqoEF5ZobOB9Mt5OD9awyrYqFhKFaDY6
+	XD3lRz8Jl3WQIipmY4uLpEzlFA3J+qPtZ+EfAwIu0LtatwCxCVZUdobJXEq6jn6rORkrrgyU8Fo
+	iwqPVFw==
+X-Google-Smtp-Source: AGHT+IE3ZJL4GSNnIUYjYXin+nq3sIUiJWZsJuj2clMks5QUPBOUXFWSLFwUXVdVYx4JbmoqgLKe/pg7sAQj
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:ef29:15ce:a42a:b69f])
- (user=irogers job=sendgmr) by 2002:a25:9006:0:b0:e64:3d36:bec1 with SMTP id
- 3f1490d57ef6-e65118d8296mr1167276.1.1742268717723; Mon, 17 Mar 2025 20:31:57
- -0700 (PDT)
-Date: Mon, 17 Mar 2025 20:31:38 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:4043:b0:6fe:afd0:2083 with SMTP
+ id 00721157ae682-6ff4600fb4amr364807b3.3.1742268720034; Mon, 17 Mar 2025
+ 20:32:00 -0700 (PDT)
+Date: Mon, 17 Mar 2025 20:31:39 -0700
 In-Reply-To: <20250318033150.119174-1-irogers@google.com>
-Message-Id: <20250318033150.119174-2-irogers@google.com>
+Message-Id: <20250318033150.119174-3-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250318033150.119174-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.rc1.451.g8f38331e32-goog
-Subject: [PATCH v6 01/13] perf dso: Move libunwind dso_data variables into ifdef
+Subject: [PATCH v6 02/13] perf dso: kernel-doc for enum dso_binary_type
 From: Ian Rogers <irogers@google.com>
 To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -96,34 +96,108 @@ To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 
-The variables elf_base_addr, debug_frame_offset, eh_frame_hdr_addr and
-eh_frame_hdr_offset are only accessed in unwind-libunwind-local.c
-which is conditionally built on having libunwind support. Make the
-variables conditional on libunwind support too.
+There are many and non-obvious meanings to the dso_binary_type enum
+values. Add kernel-doc to speed interpretting their meanings.
 
-Reviewed-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Acked-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/dso.h | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/perf/util/dso.h | 57 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
 diff --git a/tools/perf/util/dso.h b/tools/perf/util/dso.h
-index 84d5aac666aa..14e4ac21a1d3 100644
+index 14e4ac21a1d3..fcb2898e0f49 100644
 --- a/tools/perf/util/dso.h
 +++ b/tools/perf/util/dso.h
-@@ -155,10 +155,12 @@ struct dso_data {
- 	int		 status;
- 	u32		 status_seen;
- 	u64		 file_size;
-+#ifdef HAVE_LIBUNWIND_SUPPORT
- 	u64		 elf_base_addr;
- 	u64		 debug_frame_offset;
- 	u64		 eh_frame_hdr_addr;
- 	u64		 eh_frame_hdr_offset;
-+#endif
+@@ -20,31 +20,88 @@ struct perf_env;
+ #define DSO__NAME_KALLSYMS	"[kernel.kallsyms]"
+ #define DSO__NAME_KCORE		"[kernel.kcore]"
+ 
++/**
++ * enum dso_binary_type - The kind of DSO generally associated with a memory
++ *                        region (struct map).
++ */
+ enum dso_binary_type {
++	/** @DSO_BINARY_TYPE__KALLSYMS: Symbols from /proc/kallsyms file. */
+ 	DSO_BINARY_TYPE__KALLSYMS = 0,
++	/** @DSO_BINARY_TYPE__GUEST_KALLSYMS: Guest /proc/kallsyms file. */
+ 	DSO_BINARY_TYPE__GUEST_KALLSYMS,
++	/** @DSO_BINARY_TYPE__VMLINUX: Path to kernel /boot/vmlinux file. */
+ 	DSO_BINARY_TYPE__VMLINUX,
++	/** @DSO_BINARY_TYPE__GUEST_VMLINUX: Path to guest kernel /boot/vmlinux file. */
+ 	DSO_BINARY_TYPE__GUEST_VMLINUX,
++	/** @DSO_BINARY_TYPE__JAVA_JIT: Symbols from /tmp/perf.map file. */
+ 	DSO_BINARY_TYPE__JAVA_JIT,
++	/**
++	 * @DSO_BINARY_TYPE__DEBUGLINK: Debug file readable from the file path
++	 * in the .gnu_debuglink ELF section of the dso.
++	 */
+ 	DSO_BINARY_TYPE__DEBUGLINK,
++	/**
++	 * @DSO_BINARY_TYPE__BUILD_ID_CACHE: File named after buildid located in
++	 * the buildid cache with an elf filename.
++	 */
+ 	DSO_BINARY_TYPE__BUILD_ID_CACHE,
++	/**
++	 * @DSO_BINARY_TYPE__BUILD_ID_CACHE_DEBUGINFO: File named after buildid
++	 * located in the buildid cache with a debug filename.
++	 */
+ 	DSO_BINARY_TYPE__BUILD_ID_CACHE_DEBUGINFO,
++	/**
++	 * @DSO_BINARY_TYPE__FEDORA_DEBUGINFO: Debug file in /usr/lib/debug
++	 * with .debug suffix.
++	 */
+ 	DSO_BINARY_TYPE__FEDORA_DEBUGINFO,
++	/** @DSO_BINARY_TYPE__UBUNTU_DEBUGINFO: Debug file in /usr/lib/debug. */
+ 	DSO_BINARY_TYPE__UBUNTU_DEBUGINFO,
++	/**
++	 * @DSO_BINARY_TYPE__MIXEDUP_UBUNTU_DEBUGINFO: dso__long_name debuginfo
++	 * file in /usr/lib/debug/lib rather than the expected
++	 * /usr/lib/debug/usr/lib.
++	 */
+ 	DSO_BINARY_TYPE__MIXEDUP_UBUNTU_DEBUGINFO,
++	/**
++	 * @DSO_BINARY_TYPE__BUILDID_DEBUGINFO: File named after buildid located
++	 * in /usr/lib/debug/.build-id/.
++	 */
+ 	DSO_BINARY_TYPE__BUILDID_DEBUGINFO,
++	/**
++	 * @DSO_BINARY_TYPE__GNU_DEBUGDATA: MiniDebuginfo where a compressed
++	 * ELF file is placed in a .gnu_debugdata section.
++	 */
+ 	DSO_BINARY_TYPE__GNU_DEBUGDATA,
++	/** @DSO_BINARY_TYPE__SYSTEM_PATH_DSO: A regular executable/shared-object file. */
+ 	DSO_BINARY_TYPE__SYSTEM_PATH_DSO,
++	/** @DSO_BINARY_TYPE__GUEST_KMODULE: Guest kernel module .ko file. */
+ 	DSO_BINARY_TYPE__GUEST_KMODULE,
++	/** @DSO_BINARY_TYPE__GUEST_KMODULE_COMP: Guest kernel module .ko.gz file. */
+ 	DSO_BINARY_TYPE__GUEST_KMODULE_COMP,
++	/** @DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE: Kernel module .ko file. */
+ 	DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE,
++	/** @DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP: Kernel module .ko.gz file. */
+ 	DSO_BINARY_TYPE__SYSTEM_PATH_KMODULE_COMP,
++	/** @DSO_BINARY_TYPE__KCORE: /proc/kcore file. */
+ 	DSO_BINARY_TYPE__KCORE,
++	/** @DSO_BINARY_TYPE__GUEST_KCORE: Guest /proc/kcore file. */
+ 	DSO_BINARY_TYPE__GUEST_KCORE,
++	/**
++	 * @DSO_BINARY_TYPE__OPENEMBEDDED_DEBUGINFO: Openembedded/Yocto -dbg
++	 * package debug info.
++	 */
+ 	DSO_BINARY_TYPE__OPENEMBEDDED_DEBUGINFO,
++	/** @DSO_BINARY_TYPE__BPF_PROG_INFO: jitted BPF code. */
+ 	DSO_BINARY_TYPE__BPF_PROG_INFO,
++	/** @DSO_BINARY_TYPE__BPF_IMAGE: jitted BPF trampoline or dispatcher code. */
+ 	DSO_BINARY_TYPE__BPF_IMAGE,
++	/**
++	 * @DSO_BINARY_TYPE__OOL: out of line code such as kprobe-replaced
++	 * instructions or optimized kprobes or ftrace trampolines.
++	 */
+ 	DSO_BINARY_TYPE__OOL,
++	/** @DSO_BINARY_TYPE__NOT_FOUND: Unknown DSO kind. */
+ 	DSO_BINARY_TYPE__NOT_FOUND,
  };
  
- struct dso_bpf_prog {
 -- 
 2.49.0.rc1.451.g8f38331e32-goog
 
