@@ -1,107 +1,125 @@
-Return-Path: <linux-csky+bounces-1988-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-1989-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AECC9A6739C
-	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 13:15:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4728A67C8F
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 20:04:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E69FB881385
-	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 12:14:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C9F53A85A7
+	for <lists+linux-csky@lfdr.de>; Tue, 18 Mar 2025 19:04:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0764220B7E7;
-	Tue, 18 Mar 2025 12:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA075207E0B;
+	Tue, 18 Mar 2025 19:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEJkeNyn"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ACF9207A2A;
-	Tue, 18 Mar 2025 12:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAACC1531E1;
+	Tue, 18 Mar 2025 19:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742300073; cv=none; b=kBpIEWGjSdIkvYRQZ46U/b//DpKHXPUPr6sY11l6+2tARXnpnOKpj2OQDItps4RnkMceiGLfi8XV71E2Y2L5JeZCMFTeCGNrXMc9r7km3J4gsAlAlOHsGULaK7L/p+SUcoaxUJtF6HtLNeR9Ubw+pJ26YpjYhPthrZwsFvJzekI=
+	t=1742324663; cv=none; b=kavPx6uzWfs1VZtsdlSfJ9/ykSThLnOP9JumzpNgIUj0Yi0HclCk/hieAd/ejMosrfQ7QIYsivhCTzAOpjZlbPTXsdh0Suf0SCamRRzmllXU4cDWkhNPdGBtwiUj/TDZ8GPLuypVh7s/4mBy7CqfpWPhtUFknkMJdhItlZ72P+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742300073; c=relaxed/simple;
-	bh=64IIiCxSmb90ZQ6fmueb4xJ3WQaFIC2OATzJjR0a98k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lb4bg8Lxm72ZgZtTw1mAFX4wKq72MKdllVCyRi7AmvchSybPt4cmKJ4nOWyn0aLFzFfxwcrQzSsPrTI6/8fBSUVVrgeNDoBAWEaLupA7aaqf8QJMFRhzFoQujRU1VRtJLTdfwIRriEl4n/7+r9g5pcWt7HAzIaVdrq550gRlJCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E278013D5;
-	Tue, 18 Mar 2025 05:14:38 -0700 (PDT)
-Received: from [10.57.85.104] (unknown [10.57.85.104])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7AF4D3F673;
-	Tue, 18 Mar 2025 05:14:22 -0700 (PDT)
-Message-ID: <e79f9aa9-ce1b-4d42-8a61-aebaae1744fc@arm.com>
-Date: Tue, 18 Mar 2025 13:14:18 +0100
+	s=arc-20240116; t=1742324663; c=relaxed/simple;
+	bh=q8oOp41cHl33YfGvOaDk6/xbHYWsX2yx6+8wUa0yDHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uuaQHkQ0j9iushXNRNmrgNhrfp87LXdOZixhcvb8svELO4kUP2jxLM+FUZ9L3fLPv01hHDLmQxKkSF+qpvFLFCfspsqNJP1jHGW79hjywVCz1lhOiwL2qYkBYyaOJSnMMywlIBmIq19ESrTcbhscAoWpYXfTPoFP3qbr3lby+TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEJkeNyn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9514CC4CEDD;
+	Tue, 18 Mar 2025 19:04:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742324663;
+	bh=q8oOp41cHl33YfGvOaDk6/xbHYWsX2yx6+8wUa0yDHg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AEJkeNyn8a4ZrsAPb8DRhFNwI2U050JwzDRxBsfpmEsMpvv9kTob/NUbhpWIIugn5
+	 4cpDRdE+pN1pJ0QvBuA3rlcH/Qzak7OZmUVOQ5BJcb1p1n5t8NKwnY8YseJ93ATUyY
+	 YyUqD3Np3LvcrBf+IlDFQB90KXtymd4mnuXx1vS56gFlTS+M2KoOS09izWC03RpDVq
+	 x6MNaW+CiHXW5tYTHhFn+hC0XYyo//h7PKFixoeb0hJOK2BGF0WNebgpWo5u1gN2VQ
+	 LABMVs/ujFoE9y9A57vJnVsPaa+W/SSmd4GIumkSbtXvoLjYoZOZvE736hJPm49vd7
+	 vs3CB19du7HEw==
+Date: Tue, 18 Mar 2025 16:04:20 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	guoren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v6 13/13] perf trace: Fix BTF memory leak
+Message-ID: <Z9nDtMyoARGiHAGg@x1>
+References: <20250318033150.119174-1-irogers@google.com>
+ <20250318033150.119174-14-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/11] Always call constructor for kernel page tables
-To: Ryan Roberts <ryan.roberts@arm.com>, linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
- Andreas Larsson <andreas@gaisler.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "David S. Miller" <davem@davemloft.net>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Mark Rutland <mark.rutland@arm.com>, Matthew Wilcox <willy@infradead.org>,
- Michael Ellerman <mpe@ellerman.id.au>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Peter Zijlstra <peterz@infradead.org>, Qi Zheng
- <zhengqi.arch@bytedance.com>, Will Deacon <will@kernel.org>,
- Yang Shi <yang@os.amperecomputing.com>, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-openrisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-References: <20250317141700.3701581-1-kevin.brodsky@arm.com>
- <70349335-84ee-4bca-a3d6-d7cf3c05b92b@arm.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <70349335-84ee-4bca-a3d6-d7cf3c05b92b@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250318033150.119174-14-irogers@google.com>
 
-On 17/03/2025 16:30, Ryan Roberts wrote:
-> On 17/03/2025 14:16, Kevin Brodsky wrote:
->> The complications in those special pgtable allocators beg the question:
->> does it really make sense to treat efi_mm and init_mm differently in
->> e.g. apply_to_pte_range()? Maybe what we really need is a way to tell if
->> an mm corresponds to user memory or not, and never use split locks for
->> non-user mm's. Feedback and suggestions welcome!
-> The difference in treatment is whether or not the ptl is taken, right? So the
-> real question is when calling apply_to_pte_range() for efi_mm, is there already
-> a higher level serialization mechanism that prevents racy accesses? For init_mm,
-> I think this is handled implicitly because there is no way for user space to
-> cause apply_to_pte_range() for an arbitrary piece of kernel memory. Although I
-> can't even see where apply_to_page_range() is called for efi_mm.
+On Mon, Mar 17, 2025 at 08:31:50PM -0700, Ian Rogers wrote:
+> Add missing btf__free in trace__exit.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-trace.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index a5f31472980b..d4bbb6a1e817 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -5339,6 +5339,12 @@ static void trace__exit(struct trace *trace)
+>  		zfree(&trace->syscalls.table);
+>  	}
+>  	zfree(&trace->perfconfig_events);
+> +#ifdef HAVE_LIBBPF_SUPPORT
+> +	if (trace->btf != NULL) {
 
-The commit I mentioned above, 61444cde9170 ("ARM: 8591/1: mm: use fully
-constructed struct pages for EFI pgd allocations"), shows that
-apply_to_page_range() is called from efi_set_mapping_permissions(), and
-this indeed hasn't changed. It is itself called from efi_virtmap_init().
-I would expect that no locking at all is necessary here, since the
-mapping has just been created and surely isn't used yet. Now the
-question is where exactly init_mm is special-cased in this manner. I can
-see that walk_page_range() does something similar, there may be more
-cases. And the other question is whether those functions are ever used
-on special mm's, aside from efi_set_mapping_permissions().
-> FWIW, contpte.c has mm_is_user() which is used by arm64.
+No need for the check, btf__free() does:
 
-Interesting! But not pretty, that's basically checking that the mm is
-not &init_mm or &efi_mm... which wouldn't work for a generic
-implementation. It feels like adding some attribute to mm_struct
-wouldn't hurt. It looks like we've run out of MMF_* flags though :/
+void btf__free(struct btf *btf)
+{
+        if (IS_ERR_OR_NULL(btf))
+                return;
 
-- Kevin
+Up to Namhyung to turn this into the simpler:
+
+	btf__free(trace->btf);
+	trace->btf = NULL;
+
+> +		btf__free(trace->btf);
+> +		trace->btf = NULL;
+> +	}
+> +#endif
+>  }
+>  
+>  #ifdef HAVE_BPF_SKEL
+> -- 
+> 2.49.0.rc1.451.g8f38331e32-goog
 
