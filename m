@@ -1,72 +1,72 @@
-Return-Path: <linux-csky+bounces-2002-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2004-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68B8DA6847C
-	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 06:11:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BE83A68479
+	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 06:10:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3A7217DDD8
-	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 05:10:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23CEF3AE3B3
+	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 05:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8EEF252903;
-	Wed, 19 Mar 2025 05:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D035253334;
+	Wed, 19 Mar 2025 05:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s714uWxu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mTs64ygf"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F472528F8
-	for <linux-csky@vger.kernel.org>; Wed, 19 Mar 2025 05:08:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3273252915
+	for <linux-csky@vger.kernel.org>; Wed, 19 Mar 2025 05:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742360898; cv=none; b=kTsLHy63vDITBl89g0D6XrimmUG2K4J+SWPYr3hyFr+4uABSfN+2qaLbIRnAqNXPGeadrQpB2cBfOVNBgT5QY4c0KHZWshXHT/8nxd1zvArvME4QHJ/RKx34EQyBjGXjmuJy9ZxEQR+kAq5xUKh1eKPtgFKy58wJe3eE1dynewo=
+	t=1742360901; cv=none; b=OrJ5KlyqlapYVRsGcRDwXrdxs3rDyC5W1wcvCMQW+xmt3teYgK2KQ8EgsH4hm3URNhmcPVVPLp1wZOvls4Efe09LPDfJzIR1cI/L1VXvBdf4y4pvGilkJCSqVbGGpSVWaZ/Qe2hlaSJjQJYORO1KEjWXJgR0ODfyiQEk1LAN/xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742360898; c=relaxed/simple;
-	bh=tSOlzIg1yXOwUyw6zWCMnGwqLZhjjUkDbEkMOcp7FiY=;
+	s=arc-20240116; t=1742360901; c=relaxed/simple;
+	bh=FwwCUQYWW0iPLjUpMdjojzAG65ocZ3jEUzcBFQsWjIY=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=dS9pwMtdbNatOAKdzSFsFsuCDQ41/CXdb+GZxcUQdWFFVgo7FE/TFvFg3+f3WJ/wFx+RAsL2T6kucikIERuxK9ZCPD/zgNY0NYu9zLurB02uaj6zR66zT1/GuVYxY51R5FUTVcNLmxkyglS1tlbD6+yMTjklAwjvJFkF29JF+Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s714uWxu; arc=none smtp.client-ip=209.85.128.202
+	 To:Content-Type; b=a2QcaTiq+5SoW/REj5mu8f+uFrcq+xhW8X/kqwvsmEFqbWMsRcMt+4azHRIFjiHu9RhsKknFEQG5pKidHu4yDhyBGLrqElkF/N6pSsiNDb+ttVNHRVYe0gXyJTPC1tTIh4v8XOW0a/wlOPBzpXMdvPJz0L87CtHyv+lFweQbqIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mTs64ygf; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6f27dd44f86so86920397b3.0
-        for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 22:08:17 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6fecdb96e52so91524527b3.2
+        for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 22:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742360896; x=1742965696; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1742360899; x=1742965699; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=y38GESo485gGDIFJ1xMbGn6kWCzBk3/syJLY+zfYrVg=;
-        b=s714uWxuhF3pTlhV44GX3YgG/HhG8jtQv+CQJQokWHeM++q0E5estCCtU2madufD53
-         SZMwWHm0DRiARV3I1U556Y3TLAiHwfB3Rs4fAg83bIuwhOnBjYIUbX8MkDM2FIomdT5R
-         63kFygiCzpda8COv65Lf3dTw515mN6wJzMAnQ0M/ihvnaHtZBa70+iiT5Cfnlit+QS2y
-         jcTqw+w8ZPkwhzWFJuF7VBGhTx4dA7NM+7dOWquoBqdApGiTM5mRSzsu9ZNyf3i91I5U
-         nOOjQT6tGoMMcg+FuA+gq6Q+hdGti89OwRoOOU9OvcoCI3SwPFkMDSN1dYppy2Ijkm2Y
-         /kBA==
+        bh=jGnh5R7F2nGjibuMN1IiOugHr5YAQ01+XconQh81ims=;
+        b=mTs64ygfkHOpOUAgupDi4Vjty844ukF4nAIVX11Ymk/TgNL93v9sOI72KOUy3ovoFx
+         6lC2l8B2Mxg6ifGjYF2tRHE3BKppM8pYNlP8b/wvRHDP3FiHEL5V64M0vtW1NkOU7SWL
+         vLtT28jgPlWb7M8PtjWtR2rJmuQIN1K3QNYTrZ8MMev9tg6ex6KeyTCb3vR8yXcz0uTj
+         jnfOWCjNQZyvzgCP2mVuwKpWA8NpwRTj8puDdMIGPLZsekKpN1TBWnSwW9pb6Oa3nPBt
+         Eq0UGGlD8h0K6c9Aesc4mLJqFL3X94OUGmiJhJ3C+1XWy2eHjwVMU6lf3LRWk7iHGJss
+         ccbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742360896; x=1742965696;
+        d=1e100.net; s=20230601; t=1742360899; x=1742965699;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y38GESo485gGDIFJ1xMbGn6kWCzBk3/syJLY+zfYrVg=;
-        b=taChiUWEZa/DUNfHYJcAPomUsnz+lOp0shMbqWwXY0D0KdJksE0IzmtHrGMO35W/A2
-         6NBJ2u5SVYCJGNAG1sbS0lPP1QPRmU+BEmpr0u1WaeCGI7oB3JAvlRA5ac2RxElONdc2
-         pTDVvjVLAQrWdpYgAgh/UOjKL8zL3gyjSm8xN5gJICR2ln14RSQobAoa5xe3KaFIm0Dy
-         g7q+OotUYsqh7qyX1kFZ0MzQ7bl10kbs0dpCBTufl4JV/RI0jzTsEnGw0SAdpjOmS1Nd
-         ao5y0zcZCDwAaRbZxOMmTvXT1twL8NM2AxFntuysmbhmfNhIsJ5Qf2/dUanF9txe4vBO
-         83Dw==
-X-Forwarded-Encrypted: i=1; AJvYcCXa+bnEcmLScQtVCju7km2DsSW3pW9XeVeZg024uBkirtoFOttFo8L3WIMAmg2ewnqEfcRSxQhRw40E@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym+XSFcqpOb1X5ChM9JTZGv10bKvpBhFHrNOm4YII+/w0BWLYy
-	hXwVFlRcP+cypG4YfEJc1S9C84F5SNrhqHvSGCgB6GdgFS4XrFJUQXlZhoqyDi7gSbDcB5K/J5c
-	KRGyxAw==
-X-Google-Smtp-Source: AGHT+IFPFakwCyr0uM1/sz8X8s9dtQflbQjZm9fJ42RkwL6er5xIYEKy4XS6bbEhodJ8Ew/JRCn4+wa1XjLm
+        bh=jGnh5R7F2nGjibuMN1IiOugHr5YAQ01+XconQh81ims=;
+        b=MvDaW6VXpsiSqY3pOsZ3iPXGnBETZ7wiRDK/Kzn2CDPMwk7hEqJPiG+fvwaeSrQbap
+         niiwRPtNlmAZBgecUnAWhOtsdPQFTmMZm0lHq07DDOu0LE9pON/2Ld5ksFrQm+ooFv10
+         CiBdwjXo0rRuY6Ld0m5EqciXAYAtMFhtMSzV/nPhqc3vd/BCxCssDN6cA2T6+WhERN0t
+         OaEZjVPJFjiLBSNvqCDYsvXlJMVZ7V6Ir001vjhZ3mqY/z8JSQMRfcGmhed1X0IGIDMF
+         yNuVd7gBc7hDoaXw5Mx3SRV9dgVyRn+87HiNmtesERBF9uRbks35gTc0SPmnKwGT9Jn4
+         fHrw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXzOXeKAzq4IjGLzXYeM749RDZCKOKz3UwiyTqSqBN2L0QGWecPNloTTIHmlImA200bUP0oE/dQPv6@vger.kernel.org
+X-Gm-Message-State: AOJu0YypEWxqjCUGWESsKO6BIiVR6Zwl+hfVZ3uuhJUTG4n7P4S55ZJf
+	ndqg8z4q/2W5K/nqr7JJnT4mciR3u+8BZQwxbi1dnFT0FZsnvZOgSGph8etarAfc2O7ezBSIVmh
+	9BkgOOQ==
+X-Google-Smtp-Source: AGHT+IHv1nfcfv3Ye5fOTqwhfAPWbuVvzkQzn8h4pmksBhQF9eFLTiSxCvjG8QByREOpkefDEY1DbG6A3hXY
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:8a11:10b5:af90:6031])
- (user=irogers job=sendgmr) by 2002:a05:690c:d8e:b0:6fe:e77c:7741 with SMTP id
- 00721157ae682-7009c211810mr6127b3.8.1742360896116; Tue, 18 Mar 2025 22:08:16
+ (user=irogers job=sendgmr) by 2002:a25:dc03:0:b0:e63:699a:4e6b with SMTP id
+ 3f1490d57ef6-e667b41463bmr514276.4.1742360898600; Tue, 18 Mar 2025 22:08:18
  -0700 (PDT)
-Date: Tue, 18 Mar 2025 22:07:40 -0700
+Date: Tue, 18 Mar 2025 22:07:41 -0700
 In-Reply-To: <20250319050741.269828-1-irogers@google.com>
-Message-Id: <20250319050741.269828-14-irogers@google.com>
+Message-Id: <20250319050741.269828-15-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250319050741.269828-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.rc1.451.g8f38331e32-goog
-Subject: [PATCH v7 13/14] perf trace: Fix BTF memory leak
+Subject: [PATCH v7 14/14] perf trace: Fix evlist memory leak
 From: Ian Rogers <irogers@google.com>
 To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -95,28 +95,41 @@ To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 
-Add missing btf__free in trace__exit.
+Leak sanitizer was reporting a memory leak in the "perf record and
+replay" test. Add evlist__delete to trace__exit, also ensure
+trace__exit is called after trace__record.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-trace.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/perf/builtin-trace.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index a5f31472980b..1d4ad5d19b10 100644
+index 1d4ad5d19b10..a102748bd0c9 100644
 --- a/tools/perf/builtin-trace.c
 +++ b/tools/perf/builtin-trace.c
-@@ -5339,6 +5339,10 @@ static void trace__exit(struct trace *trace)
+@@ -5339,6 +5339,8 @@ static void trace__exit(struct trace *trace)
  		zfree(&trace->syscalls.table);
  	}
  	zfree(&trace->perfconfig_events);
-+#ifdef HAVE_LIBBPF_SUPPORT
-+	btf__free(trace->btf);
-+	trace->btf = NULL;
-+#endif
- }
++	evlist__delete(trace->evlist);
++	trace->evlist = NULL;
+ #ifdef HAVE_LIBBPF_SUPPORT
+ 	btf__free(trace->btf);
+ 	trace->btf = NULL;
+@@ -5719,8 +5721,10 @@ int cmd_trace(int argc, const char **argv)
+ 		}
+ 	}
  
- #ifdef HAVE_BPF_SKEL
+-	if ((argc >= 1) && (strcmp(argv[0], "record") == 0))
+-		return trace__record(&trace, argc-1, &argv[1]);
++	if ((argc >= 1) && (strcmp(argv[0], "record") == 0)) {
++		err = trace__record(&trace, argc-1, &argv[1]);
++		goto out;
++	}
+ 
+ 	/* Using just --errno-summary will trigger --summary */
+ 	if (trace.errno_summary && !trace.summary && !trace.summary_only)
 -- 
 2.49.0.rc1.451.g8f38331e32-goog
 
