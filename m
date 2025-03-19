@@ -1,72 +1,72 @@
-Return-Path: <linux-csky+bounces-2001-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2003-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D323EA6847B
-	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 06:10:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FCB9A6847F
+	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 06:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F3A8421623
-	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 05:10:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BACBE19C7AF8
+	for <lists+linux-csky@lfdr.de>; Wed, 19 Mar 2025 05:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5714C24F599;
-	Wed, 19 Mar 2025 05:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025A42528F3;
+	Wed, 19 Mar 2025 05:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0SeleJNv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v0bA5oXx"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFD625178A
-	for <linux-csky@vger.kernel.org>; Wed, 19 Mar 2025 05:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59892517A5
+	for <linux-csky@vger.kernel.org>; Wed, 19 Mar 2025 05:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742360894; cv=none; b=bZHymSY48oRrFkJyM8vpnEidnyBCXO1TH+s3zvQ0GURFDyyJNyydYEpBmp9Sm8YoQxgmFUck5Ym3gbiLsnDCvWsL5atKurlCfS+j39zHY/DPAAOZ8BjwpNrvaW9n4CIuMZsO/YtjHt3fp+XnzC5AZzVVJJiVgoto1hmsG98pvlw=
+	t=1742360898; cv=none; b=uUlxrh+1MTJtw7IrNgnOaFUu0dK3pRV9kwEJ6j1fsfN/Mg2mYWvQWYUq9Ph00FP+glaMGv5K6nLP6cdZnc6Q3cUzVpr2+D4jjbZRGlJ1hfq8tNyyxGVK2Ck89do3MqVenDXMaLVAwmeAJuBsB+L7uTcASGs3OMGDfzdZXTL5mlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742360894; c=relaxed/simple;
-	bh=3uu7CB6A8C3yWHCi12pQmud6FUTrY1STEruRjCdoigM=;
+	s=arc-20240116; t=1742360898; c=relaxed/simple;
+	bh=GbxsG9MTzjhI/k4irKic5R/3koEfGE1mTaI8yVw4hYk=;
 	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=qA3eghNMNE47qj7hGb6hu2she/+sTqSb3TxbiaICtJIKLpTGpCCbSEkvlBa56Z0bkk1f2WMCntGzAXYAPa6t/MIrhw1YSACvEhRXq3gHoJGacMy/hzJy1jsT58vgV5weSf/M8CRXnPz6co+N7VyxJjkTuLljSwyzOplB5YcEO6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0SeleJNv; arc=none smtp.client-ip=209.85.128.202
+	 To:Content-Type; b=CFtSvkDymVBrp61+IAMXMvQKmNMXfPewUPJivMW0maXaDMekpZY8KRq/LbQQZzfJNvysBKfPyXWc9D5CONHTPSqqREQh4W9aqxFtb8zBPccwQiaH38h0clBbFoywl5VCb3gblEKHcFG8VczuLnWomEeCv8H4rBDg08Y/aWfgukc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v0bA5oXx; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6fed889e353so102181067b3.3
-        for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 22:08:12 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6fd541f4b43so70089957b3.0
+        for <linux-csky@vger.kernel.org>; Tue, 18 Mar 2025 22:08:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742360891; x=1742965691; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1742360894; x=1742965694; darn=vger.kernel.org;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ncdSM+lbXMb9xe65qVg6II6RWpGKh15ceN/q8SVr8Hw=;
-        b=0SeleJNvxxWnXXSrOY/Xgfr6Zax5pF4XwRqQRai5S1/gVjgztBe1yxwoB0q2d6Ef00
-         pedwSaPGfjf18aydB51XZQ7zxDgfOGXSC7L++reIRvqm75+9oqrylEcdZ3Pr+8AH8dTR
-         MzgD9o/IkscTFHUCjGiTLmKYBjaNrlSVmV2hkmhvNfAV57Sifmy2Zjt2KdtpApMyogl6
-         ogaHKTPiVsaJidy7hHRB6e6pYSRp5+5gVJ2bugvtJpgiQNdUnPN32OZQtRfC/HMESj5B
-         e/uETKpygwoC2osce+jkhe5NiHJJhymcDVDXkcQ/j6WdALh7pBWf7QYD+mAOI7PyvY0K
-         HtXg==
+        bh=L7xBPeAI1ZGK/na4YhBc+S5M0v2o7F6+AZ1yRtBTaOg=;
+        b=v0bA5oXxduq8hu5ZaHmP+Ec6uKeiavXOWxlt6YFB/Ra/mjds3esYOr7zmyPXrYxl1S
+         mvNyb/WOnb/irLREtf9Ku1IcWE4XfoxrRDZdDkH0v79Aca+WakM8PF+Fd0tOrt6H1LV5
+         UFtb5HWSqNq9SN7/pyz09UVXcJtbascqW7v8p9pXtCEdyf19ahpIEYOZYVnL2dCRewsK
+         l0Znc8wYHkUF3hzfUgzFiEgQhtWTtl9dTzlBN/zP2+h30suUiQ5ndCmd8Z6zbuMdMc6S
+         92woIVMHf5TdzomEHbE4FMPD7Co0v3c56SkAMkoeeaSeMmRmIdLmVusZpCquWKcVrIqi
+         YKNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742360891; x=1742965691;
+        d=1e100.net; s=20230601; t=1742360894; x=1742965694;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncdSM+lbXMb9xe65qVg6II6RWpGKh15ceN/q8SVr8Hw=;
-        b=kdxLKrw8pj9QVRT25CHuT2oz5fOlrDs+Cp5WIsH85ti6BR+2N1CQPMB2k1w+U1Eq/Y
-         RYTbKuxSEkwWEcnWwQXqkh0sO0YITdOG/wSfsBcUoWzBlQrTqz+e/56MU6u4mpQvicb5
-         8WXrypBg8ptd53A38IYEVj1zLyJQ92XUeisDb0uFqOd5TchZ3zXWUWfEyPVFY1wTDXUX
-         4iMkJUSVGMUJYNNxm4AZZNH/xO8wpIhDS2UiYd0ilUamODV1AUMD8xKTh49OyJGHBYlz
-         4wiL4wqngMOk8NGT6ldmyO7k69yzJKDgEN7SMJK4nDmOMMLkli4GMjb4/LTxfpOKu0ts
-         WRoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5NSnFRYehkoobalwifzVr63MbVnNkeZjDvVzGN3tUzdD0f4ZnjcAOLH3qQpRItIxjU4QyuBb3vsvI@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa6UB3gMZpeoeLfrYnQkpvDd6sT3Np6AMyyfurREVnc9sBMyQK
-	wLG0uzXvtptSQZCUQzZrPkz+Pie7wHeqK5ByPq0Pl9gGhLlMLvNAn4E+plAEYxlYklhciLPpY7c
-	h7v7tDA==
-X-Google-Smtp-Source: AGHT+IE7t62G3L9y/1w7Zr4bPbVHFfW94O8jbx7xn/oloQNZ3Xii0SOFszp47Hze8CWLQYL2UBnV/ggmaf2X
+        bh=L7xBPeAI1ZGK/na4YhBc+S5M0v2o7F6+AZ1yRtBTaOg=;
+        b=ewIjQWB0WOwdTPKXgid7nr6GWb5oYc0+MbbVIuv9X+wUKUUTxQIOcKIrOssCtfoik0
+         Kn+yHuwP9y/gBYwG+TDN1XKxed+XkfHFrGFmP/6RQw/jTOkDYiGAAqWOyqPjnFuf+m4W
+         IPP35hkoZ1M9YBxQvcsCpxbVai9qAoDbaNVXqUPjqGy9G67bS3K/o/YciGs4hBvzeuZy
+         fJWt70+xaTjL8TWD1mPnXCOvS3YWlxgDCWq74RbPFtgyvYJ/JDF87LtwWoI/i34IPaZ+
+         4diH+mQFckX0CfMwefSLoknmJ+ZL+YF7AHAbiZtTlDdFp2WliloWRCa6/6WSaAWK2umO
+         hgeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVj9HNE93lOuzHiJB6GQg1h18Kw/D3RuuZra8IgKH/2vNKT7u1Pn5mCZOV4hBxveUUap4Q1VHcqOAJd@vger.kernel.org
+X-Gm-Message-State: AOJu0YxghcTv57Ut1cHwfAbs6tyNbw0L8Hv5hioXD+PtwGAfrVjhNQ8S
+	lXKk0DxCHUUFTGkCtHlzof1fpjxHE0otD4WdOO9GYpvJk1ibHUZuJ0yOSAUIrmZ3hC6y2vhieDX
+	gyDxAqw==
+X-Google-Smtp-Source: AGHT+IED/ZLlykbehWpsCbnxI7/VEXCzdceMElPMiVtqa8xKpgrgI1AFRxFexUYRexGCPPRyPnT6SSPwC/n+
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2c5:11:8a11:10b5:af90:6031])
- (user=irogers job=sendgmr) by 2002:a05:690c:6501:b0:6ff:1fac:c4fd with SMTP
- id 00721157ae682-7009bf39905mr12697b3.2.1742360891193; Tue, 18 Mar 2025
- 22:08:11 -0700 (PDT)
-Date: Tue, 18 Mar 2025 22:07:38 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:1824:b0:e5b:33c4:7279 with SMTP
+ id 3f1490d57ef6-e667b432965mr506276.4.1742360893839; Tue, 18 Mar 2025
+ 22:08:13 -0700 (PDT)
+Date: Tue, 18 Mar 2025 22:07:39 -0700
 In-Reply-To: <20250319050741.269828-1-irogers@google.com>
-Message-Id: <20250319050741.269828-12-irogers@google.com>
+Message-Id: <20250319050741.269828-13-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250319050741.269828-1-irogers@google.com>
 X-Mailer: git-send-email 2.49.0.rc1.451.g8f38331e32-goog
-Subject: [PATCH v7 11/14] perf syscalltbl: Mask off ABI type for MIPS system calls
+Subject: [PATCH v7 12/14] perf trace: Make syscall table stable
 From: Ian Rogers <irogers@google.com>
 To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
@@ -95,36 +95,198 @@ To: Ian Rogers <irogers@google.com>, Peter Zijlstra <peterz@infradead.org>,
 	Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 
-Arnd Bergmann described that MIPS system calls don't necessarily start
-from 0 as an ABI prefix is applied:
-https://lore.kernel.org/lkml/8ed7dfb2-1e4d-4aa4-a04b-0397a89365d1@app.fastmail.com/
-When decoding the "id" (aka system call number) for MIPS ignore values
-greater-than 1000.
+Namhyung fixed the syscall table being reallocated and moving by
+reloading the system call pointer after a move:
+https://lore.kernel.org/lkml/Z9YHCzINiu4uBQ8B@google.com/
+This could be brittle so this patch changes the syscall table to be an
+array of pointers of "struct syscall" that don't move. Remove
+unnecessary copies and searches with this change.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/syscalltbl.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/perf/builtin-trace.c | 87 +++++++++++++++++++++++---------------
+ 1 file changed, 53 insertions(+), 34 deletions(-)
 
-diff --git a/tools/perf/util/syscalltbl.c b/tools/perf/util/syscalltbl.c
-index 4e6018e2e0b3..67a8ec10e9e4 100644
---- a/tools/perf/util/syscalltbl.c
-+++ b/tools/perf/util/syscalltbl.c
-@@ -46,6 +46,14 @@ const char *syscalltbl__name(int e_machine, int id)
- {
- 	const struct syscalltbl *table = find_table(e_machine);
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index 1c080d95c1e2..a5f31472980b 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -151,7 +151,7 @@ struct trace {
+ 	struct perf_tool	tool;
+ 	struct {
+ 		/** Sorted sycall numbers used by the trace. */
+-		struct syscall  *table;
++		struct syscall  **table;
+ 		/** Size of table. */
+ 		size_t		table_size;
+ 		struct {
+@@ -2473,24 +2473,41 @@ static size_t syscall__scnprintf_args(struct syscall *sc, char *bf, size_t size,
+ 	return printed;
+ }
  
-+	if (e_machine == EM_MIPS && id > 1000) {
-+		/*
-+		 * MIPS may encode the N32/64/O32 type in the high part of
-+		 * syscall number. Mask this off if present. See the values of
-+		 * __NR_N32_Linux, __NR_64_Linux, __NR_O32_Linux and __NR_Linux.
-+		 */
-+		id = id % 1000;
+-static void syscall__init(struct syscall *sc, int e_machine, int id)
++static struct syscall *syscall__new(int e_machine, int id)
+ {
+-	memset(sc, 0, sizeof(*sc));
++	struct syscall *sc = zalloc(sizeof(*sc));
++
++	if (!sc)
++		return NULL;
++
+ 	sc->e_machine = e_machine;
+ 	sc->id = id;
++	return sc;
+ }
+ 
+-static void syscall__exit(struct syscall *sc)
++static void syscall__delete(struct syscall *sc)
+ {
+ 	if (!sc)
+ 		return;
+ 
+-	zfree(&sc->arg_fmt);
++	free(sc->arg_fmt);
++	free(sc);
++}
++
++static int syscall__bsearch_cmp(const void *key, const void *entry)
++{
++	const struct syscall *a = key, *b = *((const struct syscall **)entry);
++
++	if (a->e_machine != b->e_machine)
++		return a->e_machine - b->e_machine;
++
++	return a->id - b->id;
+ }
+ 
+ static int syscall__cmp(const void *va, const void *vb)
+ {
+-	const struct syscall *a = va, *b = vb;
++	const struct syscall *a = *((const struct syscall **)va);
++	const struct syscall *b = *((const struct syscall **)vb);
+ 
+ 	if (a->e_machine != b->e_machine)
+ 		return a->e_machine - b->e_machine;
+@@ -2504,27 +2521,33 @@ static struct syscall *trace__find_syscall(struct trace *trace, int e_machine, i
+ 		.e_machine = e_machine,
+ 		.id = id,
+ 	};
+-	struct syscall *sc, *tmp;
++	struct syscall *sc, **tmp;
+ 
+ 	if (trace->syscalls.table) {
+-		sc = bsearch(&key, trace->syscalls.table, trace->syscalls.table_size,
+-			     sizeof(struct syscall), syscall__cmp);
+-		if (sc)
+-			return sc;
++		struct syscall **sc_entry = bsearch(&key, trace->syscalls.table,
++						    trace->syscalls.table_size,
++						    sizeof(trace->syscalls.table[0]),
++						    syscall__bsearch_cmp);
++
++		if (sc_entry)
++			return *sc_entry;
+ 	}
+ 
++	sc = syscall__new(e_machine, id);
++	if (!sc)
++		return NULL;
++
+ 	tmp = reallocarray(trace->syscalls.table, trace->syscalls.table_size + 1,
+-			   sizeof(struct syscall));
+-	if (!tmp)
++			   sizeof(trace->syscalls.table[0]));
++	if (!tmp) {
++		syscall__delete(sc);
+ 		return NULL;
 +	}
- 	if (table && id >= 0 && id < table->num_to_name_len)
- 		return table->num_to_name[id];
+ 
+ 	trace->syscalls.table = tmp;
+-	sc = &trace->syscalls.table[trace->syscalls.table_size++];
+-	syscall__init(sc, e_machine, id);
+-	qsort(trace->syscalls.table, trace->syscalls.table_size, sizeof(struct syscall),
++	trace->syscalls.table[trace->syscalls.table_size++] = sc;
++	qsort(trace->syscalls.table, trace->syscalls.table_size, sizeof(trace->syscalls.table[0]),
+ 	      syscall__cmp);
+-	sc = bsearch(&key, trace->syscalls.table, trace->syscalls.table_size,
+-		     sizeof(struct syscall), syscall__cmp);
+ 	return sc;
+ }
+ 
+@@ -3855,14 +3878,14 @@ static int trace__bpf_sys_enter_beauty_map(struct trace *trace, int e_machine, i
+ 	return -1;
+ }
+ 
+-static struct bpf_program *trace__find_usable_bpf_prog_entry(struct trace *trace, struct syscall *_sc)
++static struct bpf_program *trace__find_usable_bpf_prog_entry(struct trace *trace,
++							     struct syscall *sc)
+ {
+-	struct syscall sc = *_sc; /* Copy as trace__syscall_info may invalidate pointer. */
+ 	struct tep_format_field *field, *candidate_field;
+ 	/*
+ 	 * We're only interested in syscalls that have a pointer:
+ 	 */
+-	for (field = sc.args; field; field = field->next) {
++	for (field = sc->args; field; field = field->next) {
+ 		if (field->flags & TEP_FIELD_IS_POINTER)
+ 			goto try_to_find_pair;
+ 	}
+@@ -3870,18 +3893,17 @@ static struct bpf_program *trace__find_usable_bpf_prog_entry(struct trace *trace
  	return NULL;
+ 
+ try_to_find_pair:
+-	for (int i = 0, num_idx = syscalltbl__num_idx(sc.e_machine); i < num_idx; ++i) {
+-		int id = syscalltbl__id_at_idx(sc.e_machine, i);
+-		/* calling trace__syscall_info() may invalidate '_sc' */
+-		struct syscall *pair = trace__syscall_info(trace, NULL, sc.e_machine, id);
++	for (int i = 0, num_idx = syscalltbl__num_idx(sc->e_machine); i < num_idx; ++i) {
++		int id = syscalltbl__id_at_idx(sc->e_machine, i);
++		struct syscall *pair = trace__syscall_info(trace, NULL, sc->e_machine, id);
+ 		struct bpf_program *pair_prog;
+ 		bool is_candidate = false;
+ 
+-		if (pair == NULL || pair->id == sc.id ||
++		if (pair == NULL || pair->id == sc->id ||
+ 		    pair->bpf_prog.sys_enter == trace->skel->progs.syscall_unaugmented)
+ 			continue;
+ 
+-		for (field = sc.args, candidate_field = pair->args;
++		for (field = sc->args, candidate_field = pair->args;
+ 		     field && candidate_field; field = field->next, candidate_field = candidate_field->next) {
+ 			bool is_pointer = field->flags & TEP_FIELD_IS_POINTER,
+ 			     candidate_is_pointer = candidate_field->flags & TEP_FIELD_IS_POINTER;
+@@ -3948,7 +3970,8 @@ static struct bpf_program *trace__find_usable_bpf_prog_entry(struct trace *trace
+ 				goto next_candidate;
+ 		}
+ 
+-		pr_debug("Reusing \"%s\" BPF sys_enter augmenter for \"%s\"\n", pair->name, sc.name);
++		pr_debug("Reusing \"%s\" BPF sys_enter augmenter for \"%s\"\n", pair->name,
++			 sc->name);
+ 		return pair_prog;
+ 	next_candidate:
+ 		continue;
+@@ -4044,11 +4067,7 @@ static int trace__init_syscalls_bpf_prog_array_maps(struct trace *trace, int e_m
+ 		pair_prog = trace__find_usable_bpf_prog_entry(trace, sc);
+ 		if (pair_prog == NULL)
+ 			continue;
+-		/*
+-		 * Get syscall info again as find usable entry above might
+-		 * modify the syscall table and shuffle it.
+-		 */
+-		sc = trace__syscall_info(trace, NULL, e_machine, key);
++
+ 		sc->bpf_prog.sys_enter = pair_prog;
+ 
+ 		/*
+@@ -5316,7 +5335,7 @@ static void trace__exit(struct trace *trace)
+ 	zfree(&trace->ev_qualifier_ids.entries);
+ 	if (trace->syscalls.table) {
+ 		for (size_t i = 0; i < trace->syscalls.table_size; i++)
+-			syscall__exit(&trace->syscalls.table[i]);
++			syscall__delete(trace->syscalls.table[i]);
+ 		zfree(&trace->syscalls.table);
+ 	}
+ 	zfree(&trace->perfconfig_events);
 -- 
 2.49.0.rc1.451.g8f38331e32-goog
 
