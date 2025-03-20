@@ -1,204 +1,271 @@
-Return-Path: <linux-csky+bounces-2007-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2008-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1B67A6A3E9
-	for <lists+linux-csky@lfdr.de>; Thu, 20 Mar 2025 11:44:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9698A6B1E5
+	for <lists+linux-csky@lfdr.de>; Fri, 21 Mar 2025 01:01:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3B6E7AFFD0
-	for <lists+linux-csky@lfdr.de>; Thu, 20 Mar 2025 10:43:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0239189911A
+	for <lists+linux-csky@lfdr.de>; Thu, 20 Mar 2025 23:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AB42224258;
-	Thu, 20 Mar 2025 10:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A2722B5A5;
+	Thu, 20 Mar 2025 23:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kdj3JpaA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rs0DPUV9"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB7F22423A
-	for <linux-csky@vger.kernel.org>; Thu, 20 Mar 2025 10:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E1C22B595;
+	Thu, 20 Mar 2025 23:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742467484; cv=none; b=Cs5D2x7+lDtSHBu3cVK0/K2lDjVEUCSUzr1W0e+G4lg2EJ4KArXNLxzcSyQZRpZ2ZX924Me8Qsq9I6Xe+G4AKSJSMQgD+b/YOViScxSdar2nBnt+pP6eVVxTilpyD8O0254vrDVbQDca9KcDGaaWznmPbgvrR82tcd+VqESZdi0=
+	t=1742515160; cv=none; b=uDAP0RqCpqgLTTYU87MzkjKXjFv3Bhq3PCY1uWQUxi3q7UyAf18g0MKNYhOEtt9TOr+wx5CZyzVUsv8d5mVAw83uJ2VT4obgh6xLoQeMpIzu9NsoF++pGryhUtQT18ACsdECiFwXvaAtBMeWOZwDv9w9Y52AqoxV0TvOQNWmPo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742467484; c=relaxed/simple;
-	bh=O8zyyL1p84aMCSSYT842uw6SFy2rTfsgAblLzeFkCR0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lJ8eonGPsmPvyK72szt0OP3t+VTT6Pr0d/d1GNxdhK5JZzVvTCtz3bDuf3KkjD3/+387AghssP/h9R+6nx+ZJBeJM3bBCP1huby4+jMl2QlGiZ6p2zGWzoqNhvOIExGZaoJ9aKTNEZD7qGKJ8YYR+iQg1J/3iUbngcTi7FtKXJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kdj3JpaA; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-43d22c304adso7494505e9.0
-        for <linux-csky@vger.kernel.org>; Thu, 20 Mar 2025 03:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1742467480; x=1743072280; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j11DFSETqOLtc+vMOz1k4rHgXFA118EedepjEdU8Zqw=;
-        b=Kdj3JpaAcTMsJX0fWv0whfnlnrjaZjQkUoIxaVNNWymywgQ1lxYjwO8r7iq1JNp6QM
-         Ojbu13PJrvGpih/A3lZ8h//bm+lQo87tlhkP9QV9OC12v7CPJ6kEgjQXJce0C5ni+hLc
-         WK8hRYGR3L0Fg1Ms6LVwx4HmFLLx967l5J71fKJh2+DS8uT7oCIJlhzicsDfSOQYSkWF
-         sHWVXfORZG9aTGDrruW97o37vT+nFRgMDzAibG+h4BCecMAJVWL9zR8i+Q2//u9V8cvF
-         qTDTgtuLxb6b7EYFGNlNI/IdDW+67sG2wCaCd7GvxlgTKp/aIF7rCtp1mbYDuCw4iql2
-         FLfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742467480; x=1743072280;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j11DFSETqOLtc+vMOz1k4rHgXFA118EedepjEdU8Zqw=;
-        b=O83t3NufugMDEv+BKqN7gJszoFtyOHF1oUXTTGD3zNv+lOi6Xmo6u6GbI8Dz7jQcJy
-         NrwvbHyVmfplVRE6TRKi4IH+dm42UMv2JhtLvsUefnnZz9U4bonnwEsWZrDYJbp3TU6l
-         X5L5YOR6fvkJ6k3+oBe4efou98dq6JWPinoXctyJedtzgnC+z17TeN6w59sVVzeCInwM
-         7ZvBtx3dfammpGsVoJ85UcaGeCwymskjxXnTC09OGPmdCnucHAalpbHeKSwPNneI8UD2
-         gQVdY9AZV3iu7OYRqtGfMiFk81xtPYzsH9vUISw7HAbOKrHdI0kjRF9KHi89aWmL3+/y
-         2dTA==
-X-Forwarded-Encrypted: i=1; AJvYcCXEMcZYRMf6EhGDTNijDzVp7UW1Jl5VNzZJwIQ2VZaJdUNegZX//muv4UpHW0k+ckJCsjNOgHvOo2Uc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy74DOWvr/Jb7Mx2yvrwfjrOHnr8rqVYMFOGo4+CyHwjAvfmS8X
-	qyGVA9Vh6mujUx8Ar6zG+UDKLbdeYG1yTB1BLg80m/7KfjGt31L4NDwo7172c79w6t2DSsn/Kii
-	ZQCH3oGTlsQ==
-X-Google-Smtp-Source: AGHT+IHmhdHTuCMOMffmpvyIMCzJObzjHJotMPvb7/CKZriBN1WJ2Qe2CHVhTxdEuiWThlixsbw8H9oOiShQMA==
-X-Received: from wmgg15.prod.google.com ([2002:a05:600d:f:b0:43b:c450:ea70])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:1da2:b0:439:5f04:4f8d with SMTP id 5b1f17b1804b1-43d49187ba9mr20806165e9.12.1742467480075;
- Thu, 20 Mar 2025 03:44:40 -0700 (PDT)
-Date: Thu, 20 Mar 2025 10:44:38 +0000
-In-Reply-To: <Z9sRQ0cK0rupEiT-@google.com>
+	s=arc-20240116; t=1742515160; c=relaxed/simple;
+	bh=evM+amhGbjZ9x7OIKn/QbuenV/Wj5MsmMJhPkJ8VTjY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uRl2INdqIq3fyOkS6w074tlO5tQSPnmWx43gnVC1uLv2eKN+1K+nvLAyEWQbuDSZX3+mqMogRmVLavp8rCMzapS7T5VyaKsK31f1RE4V2dhsewO+bu8Bt8JpR5UMk1dL6kaoTeVjJLkkWmDXPrCqhm9OtJMVfyN4xN/f7sE5Kmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rs0DPUV9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2221C4CEE3;
+	Thu, 20 Mar 2025 23:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742515160;
+	bh=evM+amhGbjZ9x7OIKn/QbuenV/Wj5MsmMJhPkJ8VTjY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rs0DPUV9zV0Uh3UJUVAaqOSZ8/AXf7YpZaSg3W5xA2NUU1AUIhYHnewaUWoEqnIoI
+	 Y0WJnRxRrJ9S1x3G4bAM9ETNT4nEz5N0ENjmdtPSMkyWC7BmoodOjSRQfD6CHjsUp+
+	 F1dL60Sqi+VsMHv3ZJGxutJNf0bdeaxmk9d9RK+WDeNI6iouW/TwreD/0gT/8VPWPu
+	 /DXBXlAAVg28MxmvIPQIyMOPEf1l11zmBbmB6raXMn5YxfCa0p4BMhytQyYa63mi05
+	 VNvu3dKS87nWgN+l+eRy8aKFQzzzOx3ltasno+/aFng3wMLttpShWjnUFAlnm/mM0S
+	 n4T3x8sQPeM3g==
+Date: Thu, 20 Mar 2025 16:59:17 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
+	guoren <guoren@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v7 00/14] perf: Support multiple system call tables in
+ the build
+Message-ID: <Z9yr1dnrX0DgDHgn@google.com>
+References: <20250319050741.269828-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
- <20250110-asi-rfc-v2-v2-4-8419288bc805@google.com> <20250319172935.GMZ9r-_zzXhyhHBLfj@fat_crate.local>
- <Z9sRQ0cK0rupEiT-@google.com>
-X-Mailer: aerc 0.18.2
-Message-ID: <D8L164U8HBTB.G5MS86AIISLM@google.com>
-Subject: Re: [PATCH RFC v2 04/29] mm: asi: Add infrastructure for boot-time enablement
-From: Brendan Jackman <jackmanb@google.com>
-To: Yosry Ahmed <yosry.ahmed@linux.dev>, Borislav Petkov <bp@alien8.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
-	<x86@kernel.org>, <linux-kernel@vger.kernel.org>, 
-	<linux-alpha@vger.kernel.org>, <linux-snps-arc@lists.infradead.org>, 
-	<linux-arm-kernel@lists.infradead.org>, <linux-csky@vger.kernel.org>, 
-	<linux-hexagon@vger.kernel.org>, <loongarch@lists.linux.dev>, 
-	<linux-m68k@lists.linux-m68k.org>, <linux-mips@vger.kernel.org>, 
-	<linux-openrisc@vger.kernel.org>, <linux-parisc@vger.kernel.org>, 
-	<linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>, 
-	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>, 
-	<sparclinux@vger.kernel.org>, <linux-um@lists.infradead.org>, 
-	<linux-arch@vger.kernel.org>, <linux-mm@kvack.org>, 
-	<linux-trace-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>, 
-	<kvm@vger.kernel.org>, <linux-efi@vger.kernel.org>, 
-	Junaid Shahid <junaids@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250319050741.269828-1-irogers@google.com>
 
-On Wed Mar 19, 2025 at 6:47 PM UTC, Yosry Ahmed wrote:
-> On Wed, Mar 19, 2025 at 06:29:35PM +0100, Borislav Petkov wrote:
-> > On Fri, Jan 10, 2025 at 06:40:30PM +0000, Brendan Jackman wrote:
-> > > Add a boot time parameter to control the newly added X86_FEATURE_ASI.
-> > > "asi=on" or "asi=off" can be used in the kernel command line to enable
-> > > or disable ASI at boot time. If not specified, ASI enablement depends
-> > > on CONFIG_ADDRESS_SPACE_ISOLATION_DEFAULT_ON, which is off by default.
-> > 
-> > I don't know yet why we need this default-on thing...
->
-> It's a convenience to avoid needing to set asi=on if you want ASI to be
-> on by default. It's similar to HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
-> or ZSWAP_DEFAULT_ON.
->
-> [..]
-> > > @@ -175,7 +184,11 @@ static __always_inline bool asi_is_restricted(void)
-> > >  	return (bool)asi_get_current();
-> > >  }
-> > >  
-> > > -/* If we exit/have exited, can we stay that way until the next asi_enter? */
-> > > +/*
-> > > + * If we exit/have exited, can we stay that way until the next asi_enter?
-> > 
-> > What is that supposed to mean here?
->
-> asi_is_relaxed() checks if the thread is outside an ASI critical
-> section.
->
-> I say "the thread" because it will also return true if we are executing
-> an interrupt that arrived during the critical section, even though the
-> interrupt handler is not technically part of the critical section.
->
-> Now the reason it says "if we exit we stay that way" is probably
-> referring to the fact that an asi_exit() when interrupting a critical
-> section will be undone in the interrupt epilogue by re-entering ASI.
->
-> I agree the wording here is confusing. We should probably describe this
-> more explicitly and probably rename the function after the API
-> discussions you had in the previous patch.
+On Tue, Mar 18, 2025 at 10:07:27PM -0700, Ian Rogers wrote:
+> This work builds on the clean up of system call tables and removal of
+> libaudit by Charlie Jenkins <charlie@rivosinc.com>.
+> 
+> The system call table in perf trace is used to map system call numbers
+> to names and vice versa. Prior to these changes, a single table
+> matching the perf binary's build was present. The table would be
+> incorrect if tracing say a 32-bit binary from a 64-bit version of
+> perf, the names and numbers wouldn't match.
+> 
+> Change the build so that a single system call file is built and the
+> potentially multiple tables are identifiable from the ELF machine type
+> of the process being examined. To determine the ELF machine type, the
+> executable's maps are searched and the associated DSOs ELF headers are
+> read. When this fails and when live, /proc/pid/exe's ELF header is
+> read. Fallback to using the perf's binary type when unknown.
+> 
+> Remove some runtime types used by the system call tables and make
+> equivalents generated at build time.
+> 
+> v7: Rebase for dso data locking changes. Don't NULL check before
+>     btf__free (Arnaldo). Add patch to clean up perf trace's evlist to
+>     make leak sanitizer happier.
+> 
+> v6: Incorporate Namhyung's fixes:
+>     https://lore.kernel.org/lkml/Z9PCjQ8PhOadVGQ8@google.com/
+>     https://lore.kernel.org/lkml/Z9YHCzINiu4uBQ8B@google.com/
+>     Which highlighted an issue with syscall pointers becoming
+>     stale. Add a patch 12 to make the syscall table a table of
+>     pointers that don't move so that struct syscalls don't move. Add a
+>     patch 13 fixing a BTF memory leak.
+> 
+> v5: Add byte swap to dso__e_machine and fix comment as suggested by
+>     Namhyung.
+> 
+> v4: Add reading the e_machine from the thread's maps dsos, only read
+>     from /proc/pid/exe on failure and when live as requested by
+>     Namhyung. Add patches to add dso comments and remove unused
+>     dso_data variables that are unused without libunwind.
+> 
+> v3: Add Charlie's reviewed-by tags. Incorporate feedback from Arnd
+>     Bergmann <arnd@arndb.de> on additional optional column and MIPS
+>     system call numbering. Rebase past Namhyung's global system call
+>     statistics and add comments that they don't yet support an
+>     e_machine other than EM_HOST.
+> 
+> v2: Change the 1 element cache for the last table as suggested by
+>     Howard Chu, add Howard's reviewed-by tags.
+>     Add a comment and apology to Charlie for not doing better in
+>     guiding:
+>     https://lore.kernel.org/all/20250114-perf_syscall_arch_runtime-v1-1-5b304e408e11@rivosinc.com/
+>     After discussion on v1 and he agreed this patch series would be
+>     the better direction.
+> 
+> Ian Rogers (14):
+>   perf dso: Move libunwind dso_data variables into ifdef
+>   perf dso: kernel-doc for enum dso_binary_type
+>   perf syscalltbl: Remove syscall_table.h
+>   perf trace: Reorganize syscalls
+>   perf syscalltbl: Remove struct syscalltbl
+>   perf dso: Add support for reading the e_machine type for a dso
+>   perf thread: Add support for reading the e_machine type for a thread
+>   perf trace beauty: Add syscalltbl.sh generating all system call tables
+>   perf syscalltbl: Use lookup table containing multiple architectures
+>   perf build: Remove Makefile.syscalls
+>   perf syscalltbl: Mask off ABI type for MIPS system calls
+>   perf trace: Make syscall table stable
+>   perf trace: Fix BTF memory leak
+>   perf trace: Fix evlist memory leak
 
-Yeah, this is confusing. It's trying to very concisely define the
-concept of "relaxed" but now I see it through Boris' eyes I realise
-it's really unhelpful to try and do that. And yeah we should probably
-just rework the terminology/API.
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
 
-To re-iterate what Yosry said, aside from my too-clever comment style
-the more fundamental thing that's confusing here is that, using the
-terminology currently in the code there are two concepts at play:
+Thanks,
+Namhyung
 
-- The critical section: this is the path from asi_enter() to
-  asi_relax(). The critical section can be interrupted, and code
-  running in those interupts is not said to be "in the critical
-  section".
-
-- Being "tense" vs "relaxed". Being "tense" means the _task_ is in a
-  critical section, but the current code might not be.
-
-This distinction is theoretically relevant because e.g. it's a bug to
-access sensitive data in a critical section, but it's OK to access it
-while in the tense state (we will switch to the restricted address
-space, but this is OK because we will have a chance to asi_enter()
-again before we get back to the untrusted code). 
-
-BTW, just to be clear:
-
-1. Both of these are only relevant to code that's pretty deeply aware
-   of ASI. (TLB flushing code, entry code, stuff like that).
-
-2. To be honest whenever you write:
-
-     if (asi_in_critical_section())
-
-   You probably mean:
-
-     if (WARN_ON(asi_in_critical_section()))
-
-   For example if we try to flush the TLB in the critical section,
-   there's a thing we can do to handle it. But that really shouldn't
-   be necessary.  We want the critical section code to be very small
-   and straight-line code.
-
-   And indeed in the present code we don't use
-   asi_in_critical_section() for anything bur WARNing.
-
-> asi_is_relaxed() checks if the thread is outside an ASI critical
-> section.
-
-Now I see it written this way, this is probably the best way to
-conceptualise it. Instead of having two concepts "tense/relaxed" vs
-"ASI critical section" we could just say "the task is in a critical
-section" vs "the CPU is in a critical section". So we could have
-something like:
-
-bool asi_task_critical(void);
-bool asi_cpu_critical(void);
-
-(They could also accept an argument for the task/CPU, but I can't see
-any reason why you'd peek at another context like that).
-
---
-
-For everything else, Ack to Boris or +1 to Yosry respectively.
+> 
+>  tools/perf/Makefile.perf                      |  10 +-
+>  tools/perf/arch/alpha/entry/syscalls/Kbuild   |   2 -
+>  .../alpha/entry/syscalls/Makefile.syscalls    |   5 -
+>  tools/perf/arch/alpha/include/syscall_table.h |   2 -
+>  tools/perf/arch/arc/entry/syscalls/Kbuild     |   2 -
+>  .../arch/arc/entry/syscalls/Makefile.syscalls |   3 -
+>  tools/perf/arch/arc/include/syscall_table.h   |   2 -
+>  tools/perf/arch/arm/entry/syscalls/Kbuild     |   4 -
+>  .../arch/arm/entry/syscalls/Makefile.syscalls |   2 -
+>  tools/perf/arch/arm/include/syscall_table.h   |   2 -
+>  tools/perf/arch/arm64/entry/syscalls/Kbuild   |   3 -
+>  .../arm64/entry/syscalls/Makefile.syscalls    |   6 -
+>  tools/perf/arch/arm64/include/syscall_table.h |   8 -
+>  tools/perf/arch/csky/entry/syscalls/Kbuild    |   2 -
+>  .../csky/entry/syscalls/Makefile.syscalls     |   3 -
+>  tools/perf/arch/csky/include/syscall_table.h  |   2 -
+>  .../perf/arch/loongarch/entry/syscalls/Kbuild |   2 -
+>  .../entry/syscalls/Makefile.syscalls          |   3 -
+>  .../arch/loongarch/include/syscall_table.h    |   2 -
+>  tools/perf/arch/mips/entry/syscalls/Kbuild    |   2 -
+>  .../mips/entry/syscalls/Makefile.syscalls     |   5 -
+>  tools/perf/arch/mips/include/syscall_table.h  |   2 -
+>  tools/perf/arch/parisc/entry/syscalls/Kbuild  |   3 -
+>  .../parisc/entry/syscalls/Makefile.syscalls   |   6 -
+>  .../perf/arch/parisc/include/syscall_table.h  |   8 -
+>  tools/perf/arch/powerpc/entry/syscalls/Kbuild |   3 -
+>  .../powerpc/entry/syscalls/Makefile.syscalls  |   6 -
+>  .../perf/arch/powerpc/include/syscall_table.h |   8 -
+>  tools/perf/arch/riscv/entry/syscalls/Kbuild   |   2 -
+>  .../riscv/entry/syscalls/Makefile.syscalls    |   4 -
+>  tools/perf/arch/riscv/include/syscall_table.h |   8 -
+>  tools/perf/arch/s390/entry/syscalls/Kbuild    |   2 -
+>  .../s390/entry/syscalls/Makefile.syscalls     |   5 -
+>  tools/perf/arch/s390/include/syscall_table.h  |   2 -
+>  tools/perf/arch/sh/entry/syscalls/Kbuild      |   2 -
+>  .../arch/sh/entry/syscalls/Makefile.syscalls  |   4 -
+>  tools/perf/arch/sh/include/syscall_table.h    |   2 -
+>  tools/perf/arch/sparc/entry/syscalls/Kbuild   |   3 -
+>  .../sparc/entry/syscalls/Makefile.syscalls    |   5 -
+>  tools/perf/arch/sparc/include/syscall_table.h |   8 -
+>  tools/perf/arch/x86/entry/syscalls/Kbuild     |   3 -
+>  .../arch/x86/entry/syscalls/Makefile.syscalls |   6 -
+>  tools/perf/arch/x86/include/syscall_table.h   |   8 -
+>  tools/perf/arch/xtensa/entry/syscalls/Kbuild  |   2 -
+>  .../xtensa/entry/syscalls/Makefile.syscalls   |   4 -
+>  .../perf/arch/xtensa/include/syscall_table.h  |   2 -
+>  tools/perf/builtin-trace.c                    | 339 ++++++++++++------
+>  tools/perf/scripts/Makefile.syscalls          |  61 ----
+>  tools/perf/scripts/syscalltbl.sh              |  86 -----
+>  tools/perf/trace/beauty/syscalltbl.sh         | 274 ++++++++++++++
+>  tools/perf/util/dso.c                         |  89 +++++
+>  tools/perf/util/dso.h                         |  62 ++++
+>  tools/perf/util/symbol-elf.c                  |  27 --
+>  tools/perf/util/syscalltbl.c                  | 148 ++++----
+>  tools/perf/util/syscalltbl.h                  |  22 +-
+>  tools/perf/util/thread.c                      |  80 +++++
+>  tools/perf/util/thread.h                      |  14 +-
+>  57 files changed, 839 insertions(+), 543 deletions(-)
+>  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/alpha/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/arc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/arm/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/arm64/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/csky/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/loongarch/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/mips/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/parisc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/powerpc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/riscv/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/s390/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/sh/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/sparc/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/x86/include/syscall_table.h
+>  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Kbuild
+>  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Makefile.syscalls
+>  delete mode 100644 tools/perf/arch/xtensa/include/syscall_table.h
+>  delete mode 100644 tools/perf/scripts/Makefile.syscalls
+>  delete mode 100755 tools/perf/scripts/syscalltbl.sh
+>  create mode 100755 tools/perf/trace/beauty/syscalltbl.sh
+> 
+> -- 
+> 2.49.0.rc1.451.g8f38331e32-goog
+> 
 
