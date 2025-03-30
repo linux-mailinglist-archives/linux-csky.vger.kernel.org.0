@@ -1,94 +1,123 @@
-Return-Path: <linux-csky+bounces-2011-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2012-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AC6CA6D65F
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Mar 2025 09:39:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FB49A7593B
+	for <lists+linux-csky@lfdr.de>; Sun, 30 Mar 2025 11:55:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D68A37A5CD5
-	for <lists+linux-csky@lfdr.de>; Mon, 24 Mar 2025 08:38:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A707C188AEEB
+	for <lists+linux-csky@lfdr.de>; Sun, 30 Mar 2025 09:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA55C2D7BF;
-	Mon, 24 Mar 2025 08:39:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654B9199FAC;
+	Sun, 30 Mar 2025 09:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LVwYvOID"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17F9EFC1D;
-	Mon, 24 Mar 2025 08:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3811D3232;
+	Sun, 30 Mar 2025 09:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742805542; cv=none; b=s7tvfm7FLLq+WALDee5jsSTDbSxkBiCegreD77eTJs/MxmtAUxdWQ7juc+isBxHPu7QhLcfnAMb2RMUyYhzerfpDxC8Ba99M8vOaoALcDjEhHvESwv0vJ5xt6s+UEbnmieMuQ6MvkBDjJUNIFUsFQ6e6UM9j7g2lqeEBJJd6wBo=
+	t=1743328519; cv=none; b=VUS9mrRF8/p0mp6+BEkKDKAqjIC9ffu0Vf+jDt6m8Ejv4UNWSpAaKDifsaCsGK5z+3Ogx6ltafkJSUAyoJ+mUgmy9TcW6aDoezQ35zzhH9vFMjhbDD0S2ODxqKjIVNJO5ZwVWOGbfSxGQzlAqZwQt/KYjhQbnhAastlXsjFyrTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742805542; c=relaxed/simple;
-	bh=WFJMT0e0Wx2d4fqga/UUx/kJofGh0hGb/MxIjebVoZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r/jU+AWxxZ+3XQeo8tCdm4EUyLnXBlsPAvDKDrjQWuRv/ofPpKDz785i5pjVvY5Uz0d7zXZORwc+RXcLXFb/a8AdMJG6jOCwzmAftgV7Iwo4hO6aT4AGxI2RVTUODHqlRRm2ZkK1mHnlcU7EF4fBuO+Flk44DRJoqwv1y1LF5eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A3C51A2D;
-	Mon, 24 Mar 2025 01:39:05 -0700 (PDT)
-Received: from [10.57.41.67] (unknown [10.57.41.67])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53A833F58B;
-	Mon, 24 Mar 2025 01:38:53 -0700 (PDT)
-Message-ID: <efc72f28-0dcb-4811-a20c-73bcdbdf28fb@arm.com>
-Date: Mon, 24 Mar 2025 09:37:56 +0100
+	s=arc-20240116; t=1743328519; c=relaxed/simple;
+	bh=5JcLcytBRlmqq09jrH9DsNQgRgGQPz51SsbBw3q5JSM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jxoyufvwoRumKlPIpTU4IjeQCwx+o2HoBcZpaL8nY88LSC3T/woOOsKMPDz8E9A5mrMatXOP4iA/uLKsKcQ63Ipc2v2fdP93gpYY6gcqaAQUNz62UfPtzMrOl0dW6jlCeq4mB0fF4+2QV7T4KTsWnlvymi8lLdKCXY4YGe2jrv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LVwYvOID; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7102C4CEED;
+	Sun, 30 Mar 2025 09:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743328518;
+	bh=5JcLcytBRlmqq09jrH9DsNQgRgGQPz51SsbBw3q5JSM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LVwYvOIDxdCP0Z9BjL3B1PAHmQd53fCbPCe/8WOgLcx1ljiuXcCB9ADzvsgrEEe7N
+	 J94UI9F1F43dVael8ZKw1WrBuL3Z8/K01PAuFyK7QiPLBN6nFeQ/4lCtBWE6PGKg+k
+	 AATkpLpk7JltkfNCvra7WIZyxcrPpu0ZfnDz+0crF5lR6jU3TahgKiKt29zC974P/p
+	 BLnyAJcEmlTXSgR0RsYJfH/b43X7GogMb1dfG3N44taBxdk6Pkt2UaoeKV31gy9kPC
+	 bUQX4ziINEwxmfZh6H2syHazgTlPuXw7zvRmWKCwu4l5B/eufTJ22wNH9Q0ywZ3M1d
+	 Zeam7t1/znD7A==
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5eb5ecf3217so6579228a12.3;
+        Sun, 30 Mar 2025 02:55:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU69d1Ayxz6FFh6uTEWIxsfek783QOEbjCBFrb8VtmDI7ZCdhDhCL9fHj0S6/nEg326BjmYbvcEIVVB@vger.kernel.org, AJvYcCVk/kxmCwFg8UdoJt0MyD4E4xoWMlDWF8PcnBoa9qaNXjaIxbKs9qrVSx2wo1oSJrvOXDFkDrTTJnBJMn+s@vger.kernel.org, AJvYcCWfTXWMF22e+mu073QbZ0njNa+PIs1au3Q3xqIAdqWh2VaiHqaQTD6bTXpQAzttp/BOciLcAWfcvJS+IA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH53+Mze8qeUZ1KKPlGs6qKYrrdeSFdzqLb2ExewKdxyWlWMix
+	4n+entGa5TjepzNSEWPE27aJu5C/lF5Tr53bRQ0aRoNd534vOWRhGKg2u0Cf4yN/GAQDEIi5fzT
+	Wh03WZncWoon1hy5JLnsbZ2z/jfg=
+X-Google-Smtp-Source: AGHT+IE+jFr2hSf27y/s5sTiGjkAaHOpg05In4illWNF6eBuAiUU/eLj5n9SWJwueOHAvvfk8n3IXs3JbaDs3TMErMA=
+X-Received: by 2002:a17:907:6092:b0:abf:3cb2:1c04 with SMTP id
+ a640c23a62f3a-ac738a0f3b3mr442616566b.9.1743328517187; Sun, 30 Mar 2025
+ 02:55:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/11] mm: Call ctor/dtor for kernel PTEs
-To: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
- Andreas Larsson <andreas@gaisler.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- "David S. Miller" <davem@davemloft.net>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Mark Rutland <mark.rutland@arm.com>, Matthew Wilcox <willy@infradead.org>,
- Michael Ellerman <mpe@ellerman.id.au>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Peter Zijlstra <peterz@infradead.org>, Qi Zheng
- <zhengqi.arch@bytedance.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Will Deacon <will@kernel.org>, Yang Shi <yang@os.amperecomputing.com>,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-openrisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- sparclinux@vger.kernel.org
-References: <20250317141700.3701581-1-kevin.brodsky@arm.com>
- <20250317141700.3701581-3-kevin.brodsky@arm.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <20250317141700.3701581-3-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250224112042.60282-1-xry111@xry111.site> <20250224112042.60282-4-xry111@xry111.site>
+In-Reply-To: <20250224112042.60282-4-xry111@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sun, 30 Mar 2025 17:55:05 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5-h3iJSDAkXz2dnW6JQRGJm03EFG2KLL_Ak1q83LMKAA@mail.gmail.com>
+X-Gm-Features: AQ5f1JoPN8zLi6dXxQbDVe9ayOBCDaGT24wARYK2-Hg0w9-96JHC_84wcc-aObw
+Message-ID: <CAAhV-H5-h3iJSDAkXz2dnW6JQRGJm03EFG2KLL_Ak1q83LMKAA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] LoongArch: vDSO: Remove --hash-style=sysv
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Guo Ren <guoren@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Fangrui Song <i@maskray.me>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 17/03/2025 15:16, Kevin Brodsky wrote:
-> diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-> index e164ca66f0f6..3c8ec3bfea44 100644
-> --- a/include/asm-generic/pgalloc.h
-> +++ b/include/asm-generic/pgalloc.h
-> @@ -23,6 +23,11 @@ static inline pte_t *__pte_alloc_one_kernel_noprof(struct mm_struct *mm)
->  
->  	if (!ptdesc)
->  		return NULL;
-> +	if (!pagetable_pte_ctor(mm, ptdesc)) {
+Applied, thanks.
 
-As reported by the CI [1], this can cause trouble on x86 because dtor
-calls are missing in pud_free_pmd_page() and pmd_free_pte_page(). Will
-fix in the next version.
+Huacai
 
-- Kevin
-
-[1] https://lore.kernel.org/oe-lkp/202503211612.e11bd73f-lkp@intel.com/
+On Mon, Feb 24, 2025 at 7:21=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrot=
+e:
+>
+> glibc added support for .gnu.hash in 2006 and .hash has been obsoleted
+> far before the first LoongArch CPU was taped.  Using
+> --hash-style=3Dsysv might imply unaddressed issues and confuse readers.
+>
+> Some architectures use an explicit --hash-style=3Dboth here, but
+> DT_GNU_HASH has already been supported by Glibc and Musl and become the
+> de-facto standard of the distros when the first LoongArch CPU was taped.
+> So DT_HASH seems just wasting storage space for LoongArch.
+>
+> Just drop the option and rely on the linker default, which is likely
+> "gnu" (Arch, Debian, Gentoo, LFS) on all LoongArch distros (confirmed on
+> Arch, Debian, Gentoo, and LFS; AOSC now defaults to "both" but it seems
+> just an oversight).
+>
+> Following the logic of commit 48f6430505c0
+> ("arm64/vdso: Remove --hash-style=3Dsysv").
+>
+> Link: https://github.com/AOSC-Dev/aosc-os-abbs/pull/9796
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> ---
+>  arch/loongarch/vdso/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+> index fdde1bcd4e26..abaf87c58f9d 100644
+> --- a/arch/loongarch/vdso/Makefile
+> +++ b/arch/loongarch/vdso/Makefile
+> @@ -37,7 +37,7 @@ endif
+>  # VDSO linker flags.
+>  ldflags-y :=3D -Bsymbolic --no-undefined -soname=3Dlinux-vdso.so.1 \
+>         $(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
+> -       --hash-style=3Dsysv --build-id -T
+> +       --build-id -T
+>
+>  #
+>  # Shared build commands.
+> --
+> 2.48.1
+>
 
