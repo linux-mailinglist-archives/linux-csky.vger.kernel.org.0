@@ -1,38 +1,38 @@
-Return-Path: <linux-csky+bounces-2029-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2025-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0FDDA7FACB
-	for <lists+linux-csky@lfdr.de>; Tue,  8 Apr 2025 12:04:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A784A7FAE4
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Apr 2025 12:06:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B6E517F9A1
-	for <lists+linux-csky@lfdr.de>; Tue,  8 Apr 2025 10:02:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 919BC19E3491
+	for <lists+linux-csky@lfdr.de>; Tue,  8 Apr 2025 10:01:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A41426E17E;
-	Tue,  8 Apr 2025 09:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51DBE26B2C5;
+	Tue,  8 Apr 2025 09:53:45 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94A6A266594;
-	Tue,  8 Apr 2025 09:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C033726B2B1;
+	Tue,  8 Apr 2025 09:53:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744106044; cv=none; b=WvYWItFOgREYQqxUjlA8akjkBQEva0FkeCN5BMjTjFM9iDPKoMXW/pvFxWApJOGQhwE4LsxFCp7gcYCNk3Sd2GOGNJBy2IqklY4k0wLAINrT6mUTg0Nw92ZnuRX3DULJMWIyxJcyBPFWYX4ztIKCPyVKIy+jtVPSk6y9wbE0EXk=
+	t=1744106025; cv=none; b=YSO+QRBfOSDPG8dmUGDmWuYaMHrkXw4M9Ln8gj7/ep+RejstkuIhRIRLMo4xhI/QeVxUdahpe/Xm4gIJoWyRgoz7izM9MHZKzBJFvNv35AUYQzvqmFuRLdooBkDzka8vx15MVhDOuS6WrXk1yRqP09LvFVgMdUexKKD3knp4OaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744106044; c=relaxed/simple;
-	bh=WdNFcns4b/N7GiHf3jzJmDFe1Zzo1ZGJlpJuMOsolT8=;
+	s=arc-20240116; t=1744106025; c=relaxed/simple;
+	bh=VN9QPRYao3EbcBaeo7qDPwRxCJ3ZhUtuefFyVfJ6bnE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G3wo3AZZABbCGwWbysr8ElEhsMcTwCWJlsTJONxCUtl21WOnTRqBaU9zOO7HwPigtJCFkTLMtJmexoPDVkL7dyoXwNxpKpyh3uP0qq0nEgVLSa9Yn2ssHwcf9Dc1yjhaxXxkPbjnW68+BEW9cglpXoKd0BVx304WvEBUapSCaCY=
+	 MIME-Version; b=HF2F3lhoml4JcYwuCbebiSO3GxNAk2Rh7UhMwE2afkSXyOkVQarTrMszRUhl3iD2hC29Jm9cnS695GtVEc/NQzNV621xzC7w+Lh9mx3mPO24iUAk8UCBdrjBpQzqJ/54LyRdMW8gng9AdtA0b+PncJI4Y+aln79SmNWG959hvUQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15DC122FA;
-	Tue,  8 Apr 2025 02:54:03 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3EB2B2328;
+	Tue,  8 Apr 2025 02:53:44 -0700 (PDT)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA25B3F6A8;
-	Tue,  8 Apr 2025 02:53:57 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F29D83F6A8;
+	Tue,  8 Apr 2025 02:53:38 -0700 (PDT)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org,
@@ -67,9 +67,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v2 11/12] arm64: mm: Call PUD/P4D ctor in __create_pgd_mapping()
-Date: Tue,  8 Apr 2025 10:52:21 +0100
-Message-ID: <20250408095222.860601-12-kevin.brodsky@arm.com>
+Subject: [PATCH v2 07/12] mm: Skip ptlock_init() for kernel PMDs
+Date: Tue,  8 Apr 2025 10:52:17 +0100
+Message-ID: <20250408095222.860601-8-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20250408095222.860601-1-kevin.brodsky@arm.com>
 References: <20250408095222.860601-1-kevin.brodsky@arm.com>
@@ -81,32 +81,40 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Constructors for PUD/P4D-level pgtables were recently introduced.
-They should be called for all pgtables; make sure they are called
-for special kernel mappings created by __create_pgd_mapping() too.
+Split page table locks are not used for pgtables associated to
+init_mm, at any level. pte_alloc_kernel() does not call
+ptlock_init() as a result. There is however no separate alloc/free
+functions for kernel PMDs, and pmd_ptlock_init() is called
+unconditionally. When ALLOC_SPLIT_PTLOCKS is true (e.g. 32-bit
+architectures or if CONFIG_PREEMPT_RT is selected), this results in
+unnecessary dynamic memory allocation every time a kernel PMD is
+allocated.
+
+Now that pagetable_pmd_ctor() is passed the associated mm, we can
+easily remove this overhead by skipping pmd_ptlock_init() if the
+pgtable is associated to init_mm. No special-casing is needed on the
+dtor path, as ptlock_free() is already called unconditionally for
+all levels. (ptlock_free() is a no-op unless a ptlock was allocated
+for the given PTP.)
 
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- arch/arm64/mm/mmu.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/linux/mm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 51cfc891f6a1..8fcf59ba39db 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -497,7 +497,11 @@ static phys_addr_t __pgd_pgtable_alloc(struct mm_struct *mm,
- 	case TABLE_PMD:
- 		BUG_ON(!pagetable_pmd_ctor(mm, ptdesc));
- 		break;
--	default:
-+	case TABLE_PUD:
-+		pagetable_pud_ctor(ptdesc);
-+		break;
-+	case TABLE_P4D:
-+		pagetable_p4d_ctor(ptdesc);
- 		break;
- 	}
- 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 3f48e449574a..ef420f4dc72c 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3210,7 +3210,7 @@ static inline spinlock_t *pmd_lock(struct mm_struct *mm, pmd_t *pmd)
+ static inline bool pagetable_pmd_ctor(struct mm_struct *mm,
+ 				      struct ptdesc *ptdesc)
+ {
+-	if (!pmd_ptlock_init(ptdesc))
++	if (mm != &init_mm && !pmd_ptlock_init(ptdesc))
+ 		return false;
+ 	ptdesc_pmd_pts_init(ptdesc);
+ 	__pagetable_ctor(ptdesc);
 -- 
 2.47.0
 
