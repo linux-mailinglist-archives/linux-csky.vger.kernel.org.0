@@ -1,56 +1,57 @@
-Return-Path: <linux-csky+bounces-2040-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2041-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F6A8AA9644
-	for <lists+linux-csky@lfdr.de>; Mon,  5 May 2025 16:49:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A5B4AAB94D
+	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 08:55:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F90D3BBCA0
-	for <lists+linux-csky@lfdr.de>; Mon,  5 May 2025 14:48:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 536F41C2389B
+	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 06:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C61C1266581;
-	Mon,  5 May 2025 14:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8C6627BF8F;
+	Tue,  6 May 2025 04:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBEn/1vP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRt1JKLY"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A07025DB02;
-	Mon,  5 May 2025 14:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE77B300296;
+	Tue,  6 May 2025 02:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746456403; cv=none; b=ItUseNvZJwCMzjTGuhND/LnxGKLuBT7K4fkK3mMKbtj0myd2aeHvT9eVYUfEpWM9NLhLesRdZaJjda+2gm041lvghA2lxmEMc/t5iIhoYpwGjFtNS4I75hFOBnw3UneHbY0HcYRYYTefnO6enZyeNjh3HRJ92xCA9XHkLMV8XCI=
+	t=1746498148; cv=none; b=kcwAPEdIEToeiliHRJZ+V0z6W4Dgfan2ui0dXoFcX6BOUr99oc5vrVNQIgoYxUnwI8WjkTIsbr/fTwm2kEi2Brmm7sfH1wSPJbSOaW+2tAXv0XOXHwCW3fdKc+7mNLNUFKm3408Zsgiy5lCuFAp40mSzgRAULchteBPISOPXhtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746456403; c=relaxed/simple;
-	bh=pyOvFuMD8C4oTY5PeHf5lb+a9f9S175JCHNvx48j63w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HeTJS8o69kKCMCtcU9T3jFSHSFQhmevcCX0glUds6Tk43eGIbNsntzIXP51cpbrbNrNKFm4ySWtFiMEGS43deg+2/bd2YhOGoEIa4N5/Sba7PVjsOT0d88AaXUfs6xEWuH2MCbveFbrnxWumMWY3ZYQtGDLs4fQvcHmvYaz9CxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBEn/1vP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F22AC4CEE4;
-	Mon,  5 May 2025 14:46:43 +0000 (UTC)
+	s=arc-20240116; t=1746498148; c=relaxed/simple;
+	bh=iw+EcWCNPov4bxyPeoD8LUh/hbyYCdRWN30dNiEaW4I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g7vVSOXcn5yvVcalgV1IV7Qcwu5Qze/OXOFeSE6G7qFZqYXeGlTDoZOgwjNwv0TVPWFHGu4qSrq4S2XcBqyJPZsTRYzi7E6LkMk1X/UAezR5cyf2QQHgzSOeZVYRXz3uCm8EGraeRBWtwYxiFbhyr8biXD1Jpb8s4DY2/92O61Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRt1JKLY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93FEAC4CEE4;
+	Tue,  6 May 2025 02:22:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746456403;
-	bh=pyOvFuMD8C4oTY5PeHf5lb+a9f9S175JCHNvx48j63w=;
+	s=k20201202; t=1746498146;
+	bh=iw+EcWCNPov4bxyPeoD8LUh/hbyYCdRWN30dNiEaW4I=;
 	h=From:To:Cc:Subject:Date:From;
-	b=TBEn/1vPExlbbZmD+r6RMmK4M9nIBR1FjPrP3IfgnyL6N5G0tPv5E68wgmN6/NJjc
-	 CYm3wK3WeGTEJZRRvidAEuRKyCjmUX7sBitj238XhA55yY+auZlTSBv68BXXUhwalE
-	 VSpVoHYQbsiAxkiRlGuCgHmRH/9Fej2l0QM95vbduLviSMcOi8oxcwXSrmqlxSj+Ey
-	 YwhfVfbdIyvcNkDp2UV//T31XICDzB7VzgrP33CH+XFdr+dcehj0e8iL1/ATt9XGkU
-	 9qVN3AAV1og/3Gmb3Q5x6KAI89LsZ6QfzDAFAIgX3CSgR4ZBNOv8On/PGUtBWr7VM4
-	 52zlaREkiJbaA==
+	b=JRt1JKLY/FNMEunKzVOTOarJkaSa5zegAItguo2V1rLuwfJD5ocIuqWWtDCNra99E
+	 MuWT4ugi5oa4XFZI2Qn7bagPuRhynfTAxPYD3BlrdEXzaQz1ldxPlmC4rgbDqsyAyj
+	 ElyutpOYa6fYodib9LTYd917wQh9/uJ7qWhoaM8Xcq/cIaDLcsOKoUEJwYmh0oOz+t
+	 PGqVJliuZhCsrK3wUhmcWLoOI3RNH4mfy4AWtGJxfOoENSvwiVPApac/W9VdXHCQxD
+	 /2CmsGboUPYpbVCVA2yQUt+QJW03zFBIxUnKQNQTRumdLVu2q87qIT3cgWN04youSi
+	 fwLg42F/tgqKg==
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>,
+To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Guo Ren <guoren@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-csky@vger.kernel.org
-Subject: [PATCH] dt-bindings: interrupt-controller: Convert csky,mpintc to DT schema
-Date: Mon,  5 May 2025 09:46:39 -0500
-Message-ID: <20250505144640.1288458-1-robh@kernel.org>
+Subject: [PATCH] dt-bindings: timer: Convert csky,gx6605s-timer to DT schema
+Date: Mon,  5 May 2025 21:22:23 -0500
+Message-ID: <20250506022224.2586860-1-robh@kernel.org>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -60,124 +61,110 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert the C-SKY Multi-processor interrupt controller binding to schema
-format. It's a straight-forward conversion of the typical interrupt
-controller.
+Convert the C-SKY gx6605s timer binding to DT schema format. It's a
+straight-forward conversion.
 
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- .../interrupt-controller/csky,mpintc.txt      | 52 -------------------
- .../interrupt-controller/csky,mpintc.yaml     | 43 +++++++++++++++
- 2 files changed, 43 insertions(+), 52 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.yaml
+ .../bindings/timer/csky,gx6605s-timer.txt     | 42 -------------------
+ .../bindings/timer/csky,gx6605s-timer.yaml    | 40 ++++++++++++++++++
+ 2 files changed, 40 insertions(+), 42 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/timer/csky,gx6605s-timer.txt
+ create mode 100644 Documentation/devicetree/bindings/timer/csky,gx6605s-timer.yaml
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt b/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt
+diff --git a/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.txt b/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.txt
 deleted file mode 100644
-index e6bbcae4d07f..000000000000
---- a/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.txt
+index 6b04344f4bea..000000000000
+--- a/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.txt
 +++ /dev/null
-@@ -1,52 +0,0 @@
--===========================================
--C-SKY Multi-processors Interrupt Controller
--===========================================
+@@ -1,42 +0,0 @@
+-=================
+-gx6605s SOC Timer
+-=================
 -
--C-SKY Multi-processors Interrupt Controller is designed for ck807/ck810/ck860
--SMP soc, and it also could be used in non-SMP system.
+-The timer is used in gx6605s soc as system timer and the driver
+-contain clk event and clk source.
 -
--Interrupt number definition:
--  0-15  : software irq, and we use 15 as our IPI_IRQ.
-- 16-31  : private  irq, and we use 16 as the co-processor timer.
-- 31-1024: common irq for soc ip.
+-==============================
+-timer node bindings definition
+-==============================
 -
--Interrupt trigger mode: (Defined in dt-bindings/interrupt-controller/irq.h)
-- IRQ_TYPE_LEVEL_HIGH (default)
-- IRQ_TYPE_LEVEL_LOW
-- IRQ_TYPE_EDGE_RISING
-- IRQ_TYPE_EDGE_FALLING
--
--=============================
--intc node bindings definition
--=============================
--
--	Description: Describes SMP interrupt controller
+-	Description: Describes gx6605s SOC timer
 -
 -	PROPERTIES
 -
 -	- compatible
 -		Usage: required
 -		Value type: <string>
--		Definition: must be "csky,mpintc"
--	- #interrupt-cells
+-		Definition: must be "csky,gx6605s-timer"
+-	- reg
+-		Usage: required
+-		Value type: <u32 u32>
+-		Definition: <phyaddr size> in soc from cpu view
+-	- clocks
+-		Usage: required
+-		Value type: phandle + clock specifier cells
+-		Definition: must be input clk node
+-	- interrupt
 -		Usage: required
 -		Value type: <u32>
--		Definition: <2>
--	- interrupt-controller:
--		Usage: required
+-		Definition: must be timer irq num defined by soc
 -
--Examples: ("interrupts = <irq_num IRQ_TYPE_XXX>")
+-Examples:
 ----------
--#include <dt-bindings/interrupt-controller/irq.h>
 -
--	intc: interrupt-controller {
--		compatible = "csky,mpintc";
--		#interrupt-cells = <2>;
--		interrupt-controller;
--	};
--
--	device: device-example {
--		...
--		interrupts = <34 IRQ_TYPE_EDGE_RISING>;
+-	timer0: timer@20a000 {
+-		compatible = "csky,gx6605s-timer";
+-		reg = <0x0020a000 0x400>;
+-		clocks = <&dummy_apb_clk>;
+-		interrupts = <10>;
 -		interrupt-parent = <&intc>;
 -	};
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.yaml b/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.yaml
+diff --git a/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.yaml b/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.yaml
 new file mode 100644
-index 000000000000..3df7739e31c4
+index 000000000000..888fc8113996
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/csky,mpintc.yaml
-@@ -0,0 +1,43 @@
++++ b/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.yaml
+@@ -0,0 +1,40 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/interrupt-controller/csky,mpintc.yaml#
++$id: http://devicetree.org/schemas/timer/csky,gx6605s-timer.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: C-SKY Multi-processors Interrupt Controller
++title: gx6605s SOC Timer
 +
 +maintainers:
 +  - Guo Ren <guoren@kernel.org>
 +
-+description: >
-+  C-SKY Multi-processors Interrupt Controller is designed for ck807/ck810/ck860
-+  SMP soc, and it also could be used in non-SMP system.
-+
-+  Interrupt number definition:
-+    0-15  : software irq, and we use 15 as our IPI_IRQ.
-+    16-31  : private  irq, and we use 16 as the co-processor timer.
-+    31-1024: common irq for soc ip.
-+
 +properties:
 +  compatible:
-+    const: csky,mpintc
++    const: csky,gx6605s-timer
 +
-+  '#interrupt-cells':
-+    const: 2
++  reg:
++    maxItems: 1
 +
-+  interrupt-controller: true
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
 +
 +required:
 +  - compatible
-+  - "#interrupt-cells"
-+  - interrupt-controller
++  - reg
++  - clocks
++  - interrupts
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    interrupt-controller {
-+        compatible = "csky,mpintc";
-+        #interrupt-cells = <2>;
-+        interrupt-controller;
++    timer@20a000 {
++        compatible = "csky,gx6605s-timer";
++        reg = <0x0020a000 0x400>;
++        clocks = <&dummy_apb_clk>;
++        interrupts = <10>;
 +    };
 -- 
 2.47.2
