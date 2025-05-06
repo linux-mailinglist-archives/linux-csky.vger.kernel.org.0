@@ -1,209 +1,446 @@
-Return-Path: <linux-csky+bounces-2044-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2045-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C929AABAEE
-	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 09:31:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6B3AACE63
+	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 21:49:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F02A84E1A40
-	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 07:28:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90A161C28037
+	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 19:49:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D19A28D8CE;
-	Tue,  6 May 2025 05:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95091FECD3;
+	Tue,  6 May 2025 19:49:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkCmDIOq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DzXuxoQN"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEBD278143;
-	Tue,  6 May 2025 05:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5BA42AA9;
+	Tue,  6 May 2025 19:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746510216; cv=none; b=ADuUto+Y51Udyv3TtuZke9p83AQkGHHUnHhYmS6TOawm7qYpvMnZVgwYDAj3Ae0p56++MOSeJce6kBLYkVoO8xiYwtfoZFwkseapnsFb30znm3IVNfIWawfeI9LLT/x8UgFghe9Ts+ZU2FcbCXLWSFXDfIkafNEyBeBoajX8K9I=
+	t=1746560957; cv=none; b=YhgsTNLQcEB6Z6omsFFCVNF5mBEhBKPR6TMEjKjuaFFTbHtH1Tq+8LaRkKMUqnZPhTiN8ztXu4Ipxy5TtrkyVpEmrT3/63b5TxQxymj4MhDitiIzoapTa6pY0gqOYROQYp/mg6t1QNYQTJFFjZoHWej5vrv76Gu3XacFpuajq7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746510216; c=relaxed/simple;
-	bh=7XwLIBHNyaR4D3EHao4WqBfo3YlsWI6g5g0z8mcQuAI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TPUj/8z4PmLbLY78BIVEbFVlkd3NYJrRoJkT/Ca1OYGLq0gsXXShlkhGN31al9YaFUiZrlbLBOh9YPuKNG33ZmJ6adcKDwVYWpybYZZixA4ITnGXMcouvnq336jWAhmUHvWfbc9d92YW/YbdOhIpkI/RGEmYhTMUUkMRo9qzoIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkCmDIOq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D9C9C4CEF0;
-	Tue,  6 May 2025 05:43:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746510214;
-	bh=7XwLIBHNyaR4D3EHao4WqBfo3YlsWI6g5g0z8mcQuAI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SkCmDIOqI0esO8WwYORNQWVsD+ASzXtF9fcdP1BYxhuVHgim17Kg8UvPcWD4rAuyC
-	 eyRaPgyJAwsG4QDGIsj/OvQqdlSgBhTgu06atySEJ8hCz8aKXFiMrLpA5tI2PW1/yf
-	 De2kHwbyH2LR4645YqNSpHvXKfKeVJE+82zERkzp/6DaeUI4UKWZrZPfkjUE17cVt9
-	 Llr++TQdPqHSe4PMcWATPBaQDES6Jk4FyVXpNGUeqdwVXrCNLIbXzaaUaYxAi651oi
-	 QTLH0mDvwWbtMgZRCPErAkTJMar5JFdbP0m/W0XfLclQRlcmdKcO6qS/V+9jSD07m7
-	 ieh1oeQu4BvwA==
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cf257158fso28091515e9.2;
-        Mon, 05 May 2025 22:43:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUWplyKV8y7Fo6ZR/Ov4lGwA1Wadx4fSnEUJHkZB7qQbk3RI6gD88yIKDhjJuG0a02vEzmh5fkXsJTPLA==@vger.kernel.org, AJvYcCVQei97h4XAIvq1jRbtKqPUHHzNvpIgBDJAOWQQk8u9PTaMKE1fh4ceBuFz1GFFZomlIFbrCzW6PDUSWgdK@vger.kernel.org, AJvYcCVrhtEyP9e605NP/yD1nUzq9gEWKBALYZxyCbD2RF4MnVf2x0yvweMHvj6IKRgG9D23KD/9Rblo1WdQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWr5SArbegQESHEsAWtnD7TnKMIkSfmqYIkpz0xTWu6u5Ft439
-	rpv1inodLXGfN1lAkdrzOc4AYfowDqtoY8HlKVcQrASHyvth8yUUo08xDhaGAQGDvVEIAVctEeb
-	ZLstvISpORN8d27U/k5ZZjAiS42M=
-X-Google-Smtp-Source: AGHT+IHEBOSh22wh5ytRtsODpOSzl48x8Ut967As0R1wo2tOnP0ve4mwXy2I3o+AVTldsnmSd3AW0XCK1qG32tMyPqc=
-X-Received: by 2002:a05:600c:34c9:b0:43c:f85d:1245 with SMTP id
- 5b1f17b1804b1-441d050c216mr15057885e9.17.1746510212996; Mon, 05 May 2025
- 22:43:32 -0700 (PDT)
+	s=arc-20240116; t=1746560957; c=relaxed/simple;
+	bh=N1ft1MCs11AqOF3ScLkba3Ks9VBNPAuD5bz4Yit63z0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kM/Yr8s9BzsdUBfqdfx7B0uZilcL/xDHiM2X5riiaNKZRh3MAs2SrTQKjJ9mztilq8/BWxZm0Pjn8eKq9zimfdExojsDflUw+HIwS85rL4NOeVWFfNEqeN3nWNNhB8IoRkIuDzHDDseaDcYMYSnRlRB+93TlbGDXPtnSlhvLzFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DzXuxoQN; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7390d21bb1cso6484412b3a.2;
+        Tue, 06 May 2025 12:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746560955; x=1747165755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dZ5089g5fcxDtK8RW4HG6ld5BJ4Ih76RBmbnYmG1YBs=;
+        b=DzXuxoQNtZHRRY+suKdAptrBjnxHUDc9X1FjX/689c8Le00dk6XzRWV2Vk8hW2dOOR
+         1rvGBVwoNOSWyJgRluFWIXndbt5tAQK9AxZ4VhJUOHMANd0+FmsKIXRZEijGFzpATCA/
+         MNGnxTv5RcuFvOzuplf1oYPiTa/GK09gZr0FCAZxelsJAcCvbqXoXNWetDJ1kU7SSGm1
+         K5Yj1asFkzUovcEgBeMg+WSgaZh4iXrIGlCWN3pRvg6CdZAG7Mg3XH8/A1ljz04NbjLz
+         kXCrqjwNYJ/d7dM3rz/dnrivnYketAuWfJ09LdUEOBxa8fpJk5ombvGbVqWZKszZQwCP
+         fI6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746560955; x=1747165755;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dZ5089g5fcxDtK8RW4HG6ld5BJ4Ih76RBmbnYmG1YBs=;
+        b=h6H6+3J20nY69NMVKLT6QXQOiPeBn/4TZUgftXyjQ8zGGXA9zH29zyVIU87ZAn74nP
+         tpE1/m0/a7CIki+e2jdWErlUWmufrgPOx1g6X2Oil0zl0TnO3i9JAW+eN1TqS1Kuacl1
+         rU23cJlhJX4OjLH52YPfrXBCIeW2YqWTLwAvolV3RvjEONALNnkVXIhQQGaiBbXpBuFZ
+         0LUPf7UlfaDmFIUvRHxf5EtpdOKLIMyIvA+gKjVMbU9g7YRwZ9fGROv8HorIrJ1DUAfN
+         XQsJhuhhbHpLdThd4yJd3tHzT3/NRyHYeIwM5oWGP+nWPOfLzlXdFVxxG2Bm2w/M43dr
+         xjTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUSSFo3rUtPzDmpp+ZfBFSZJHkQyWVLy2Hw0JmpPtnhj2vgWqpmjejX9FkNccjLxcSCrhImDaBEeC+wH0AY5g==@vger.kernel.org, AJvYcCVafwDrYuwKtKmRUOE70ysFVEAqSxhG+DE9vwjU0fWHngaa5fteGpG1CfWZlt7um6eVgGrQ2m3HDWzpJ7gT8Xg=@vger.kernel.org, AJvYcCWHEAIS8Bhhq30rz3CnI61dZe0OXcsTyPmCqbsK7lAER7vutc8WfuRxpst4/cA6jiFc/JioABIst3FU@vger.kernel.org, AJvYcCWKTkJkGvKy40QhN2MxfUt6IWrKJxERwZVF5yqHAp4OJS352b34tcPAnaWNYNRbxmebcxE2KGiYKWMz@vger.kernel.org, AJvYcCWS3lCx0BceEG8wpGwPiNJThxhyDz4OKCdv2dgDNyov2DUJwitLBiN+vaT9v6V56KjBYxLLmNg7aZXC@vger.kernel.org, AJvYcCWfqnjmWGWATE6i4ru90Jt3CQdGavkJAqcX8NVR8sHtpovNU/i614y6a/O0rySd0JvBUnvv0tYdK5visA1K@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYtsa66y/f02EUo0qQuO0Rdin9kZP2ccHiBV2HrRH59clLv3kq
+	I8KHdjqpWr5Q1I3eAqOFYRwwzbRhqQF9Y2XrmW2cI3MD7suzi6WM
+X-Gm-Gg: ASbGnctnRT7LKYhCLKXyrXM50+vLI+Cgpxa0+pSzibgBzLaQo/+OZd44KWBNGI/ib1y
+	yjthTG/2p1HNVkR1EseXpmUwk6fsuLO+Lr7zOSbRLZ/Y9Sg92t3oA7d/O5GtVhmLk6jf9DyQwHH
+	JnTXKRz8PxxZ15z8Fw9u+2vYc8tZijjuNVYCz39rWLdn7+RhMJIqa6nTx1/3tjj86+xHswb22RB
+	kCBrBZm9AcKK7+bNy2LzlsCI6PhDjrxUtzzw2bcPl90IChqIeEKR2Tcw+cHOhxukpmyaeIjGad0
+	YL7T2IaIAz8lzb/CcIeDmHgrouSS2qzJ2folbCqcc0ap1oQEy34Y
+X-Google-Smtp-Source: AGHT+IF5NliMgAkD005uOw+1owSmpP0uGKxfxNXpPz2R7hfi06C85Yyah/G4yQkzTWZpYJUeU1a68w==
+X-Received: by 2002:a05:6a20:6f87:b0:203:c461:dd36 with SMTP id adf61e73a8af0-2148b113868mr730085637.6.1746560954804;
+        Tue, 06 May 2025 12:49:14 -0700 (PDT)
+Received: from localhost.localdomain ([104.28.249.218])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74058d7a473sm9686059b3a.18.2025.05.06.12.49.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 May 2025 12:49:14 -0700 (PDT)
+From: Jesung Yang <y.j3ms.n@gmail.com>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Vineet Gupta <vgupta@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Guo Ren <guoren@kernel.org>,
+	Brian Cain <bcain@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-openrisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	workflows@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jesung Yang <y.j3ms.n@gmail.com>
+Subject: [PATCH] docs: align with scripts/syscall.tbl migration
+Date: Wed,  7 May 2025 04:48:41 +0900
+Message-ID: <20250506194841.1567737-1-y.j3ms.n@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250506022228.2587029-1-robh@kernel.org>
-In-Reply-To: <20250506022228.2587029-1-robh@kernel.org>
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 6 May 2025 13:43:21 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQO-EP6ht=jh5aLrMSy8YUddgXzbN2n4JO5YhSBnPRPmA@mail.gmail.com>
-X-Gm-Features: ATxdqUFnK1iDC-lJ4GruNVQYuUDUrz8Y8vCPRWcvgcW0BDO0JeVowJP6Z6s56jU
-Message-ID: <CAJF2gTQO-EP6ht=jh5aLrMSy8YUddgXzbN2n4JO5YhSBnPRPmA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: timer: Convert csky,mptimer to DT schema
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Flavio Suligoi <f.suligoi@asem.it>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-csky@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Acked-by: Guo Ren <guoren@kernel.org>
+Update the documentation to reflect the migration of the following
+architectures to the centralized syscall table format:
 
-On Tue, May 6, 2025 at 10:22=E2=80=AFAM Rob Herring (Arm) <robh@kernel.org>=
- wrote:
->
-> Convert the C-SKY Multi-processor timer binding to DT schema format.
-> It's a straight-forward conversion.
->
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  .../bindings/timer/csky,mptimer.txt           | 42 -----------------
->  .../bindings/timer/csky,mptimer.yaml          | 46 +++++++++++++++++++
->  2 files changed, 46 insertions(+), 42 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/csky,mptimer.=
-txt
->  create mode 100644 Documentation/devicetree/bindings/timer/csky,mptimer.=
-yaml
->
-> diff --git a/Documentation/devicetree/bindings/timer/csky,mptimer.txt b/D=
-ocumentation/devicetree/bindings/timer/csky,mptimer.txt
-> deleted file mode 100644
-> index f5c7e99cf52b..000000000000
-> --- a/Documentation/devicetree/bindings/timer/csky,mptimer.txt
-> +++ /dev/null
-> @@ -1,42 +0,0 @@
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> -C-SKY Multi-processors Timer
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> -
-> -C-SKY multi-processors timer is designed for C-SKY SMP system and the
-> -regs is accessed by cpu co-processor 4 registers with mtcr/mfcr.
-> -
-> - - PTIM_CTLR "cr<0, 14>" Control reg to start reset timer.
-> - - PTIM_TSR  "cr<1, 14>" Interrupt cleanup status reg.
-> - - PTIM_CCVR "cr<3, 14>" Current counter value reg.
-> - - PTIM_LVR  "cr<6, 14>" Window value reg to trigger next event.
-> -
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> -timer node bindings definition
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> -
-> -       Description: Describes SMP timer
-> -
-> -       PROPERTIES
-> -
-> -       - compatible
-> -               Usage: required
-> -               Value type: <string>
-> -               Definition: must be "csky,mptimer"
-> -       - clocks
-> -               Usage: required
-> -               Value type: <node>
-> -               Definition: must be input clk node
-> -       - interrupts
-> -               Usage: required
-> -               Value type: <u32>
-> -               Definition: must be timer irq num defined by soc
-> -
-> -Examples:
-> ----------
-> -
-> -       timer: timer {
-> -               compatible =3D "csky,mptimer";
-> -               clocks =3D <&dummy_apb_clk>;
-> -               interrupts =3D <16>;
-> -               interrupt-parent =3D <&intc>;
-> -       };
-> diff --git a/Documentation/devicetree/bindings/timer/csky,mptimer.yaml b/=
-Documentation/devicetree/bindings/timer/csky,mptimer.yaml
-> new file mode 100644
-> index 000000000000..12cc5282c8f8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/csky,mptimer.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/csky,mptimer.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: C-SKY Multi-processors Timer
-> +
-> +maintainers:
-> +  - Flavio Suligoi <f.suligoi@asem.it>
-> +  - Guo Ren <guoren@kernel.org>
-> +
-> +description: |
-> +  C-SKY multi-processors timer is designed for C-SKY SMP system and the =
-regs are
-> +  accessed by cpu co-processor 4 registers with mtcr/mfcr.
-> +
-> +   - PTIM_CTLR "cr<0, 14>" Control reg to start reset timer.
-> +   - PTIM_TSR  "cr<1, 14>" Interrupt cleanup status reg.
-> +   - PTIM_CCVR "cr<3, 14>" Current counter value reg.
-> +   - PTIM_LVR  "cr<6, 14>" Window value reg to trigger next event.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: csky,mptimer
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    timer {
-> +        compatible =3D "csky,mptimer";
-> +        clocks =3D <&dummy_apb_clk>;
-> +        interrupts =3D <16>;
-> +    };
-> --
-> 2.47.2
->
+  arc, arm64, csky, hexagon, loongarch, nios2, openrisc, riscv
 
+As of commit 3db80c999debbad ("riscv: convert to generic syscall table"),
+these architectures no longer rely on include/uapi/asm-generic/unistd.h.
+Instead, syscall table headers (syscall_table_{32,64}.h) are generated by
+scripts/syscalltbl.sh based on entries in scripts/syscall.tbl, with ABIs
+specified in arch/*/kernel/Makefile.syscalls.
 
---=20
-Best Regards
- Guo Ren
+For the convenience of developers working with older kernel versions, the
+original documentation is fully retained, with new sections added to
+cover the scripts/syscall.tbl approach.
+
+Verified with `make htmldocs`.
+
+Signed-off-by: Jesung Yang <y.j3ms.n@gmail.com>
+Link: https://lore.kernel.org/lkml/20240704143611.2979589-1-arnd@kernel.org
+---
+
+I have tested all the listed architectures except hexagon and nios2.
+
+Hexagon was skipped because no system-level emulator appears to be
+available.
+
+For nios2, QEMU removed support for both user and system emulation as of
+version 9.1. With older versions (9.0.4 and 5.2.0), the kernel appears to
+boot but gets stuck alternating between `get_cycles` and `__const_udelay`
+during execution. Additionally, I could not find sufficient documentation
+to enable runtime testing for nios2.
+
+Any guidance on how to proceed with testing for hexagon or nios2 would be
+appreciated.
+
+Testing Summary:
+
+- Linux kernel: 6.15.0-rc4-next-20250501
+- System call number: 468
+- System call name: xyzzy
+- System call implementation:
+    SYSCALL_DEFINE1(xyzzy, u64, d)
+    {
+    	printk("Hi, SYSCALL_DEFINE1\n");
+    	return d;
+    }
+
+    COMPAT_SYSCALL_DEFINE2(xyzzy, compat_arg_u64_dual(d))
+    {
+    	printk("Hi, COMPAT_SYSCALL_DEFINE2\n");
+    	return compat_arg_u64_glue(d);
+    }
+- Test userspace program:
+    #include <unistd.h>
+    int main(void) {
+        long r = syscall(468, 17, 39);
+        return 0;
+    }
+
+Each architecture was tested using the following steps:
+  - Add the following entry to scripts/syscall.tbl:
+      468	common	xyzzy			sys_xyzzy		compat_sys_xyzzy
+  - Compile the kernel with the new syscall implementation
+  - Verify that arch/*/include/generated/uapi/asm/unistd_*.h contains:
+      #define __NR_xyzzy 468
+  - Verify that arch/*/include/generated/asm/syscall_table_*.h contains:
+      __SYSCALL_WITH_COMPAT(468, sys_xyzzy, compat_sys_xyzzy)
+  - Boot the kernel under QEMU
+  - Invoke sys_xyzzy() using the test program
+
+Detailed Results:
+
+1. arc
+  - Kernel config: haps_hs_defconfig
+  - QEMU target: qemu-system-arc -M virt -cpu archs
+    - Src: https://github.com/foss-for-synopsys-dwc-arc-processors/qemu
+    - Commit hash: 76e0fa9053b4184a29c9077959d484047eefe521
+    - Version: 7.0.0
+  - Result:
+    - The following files were correctly generated
+      - arch/arc/include/generated/asm/syscall_table_32.h
+      - arch/arc/include/generated/uapi/asm/unistd_32.h
+    - The system call was successfully invoked with output:
+        "Hi, SYSCALL_DEFINE1\n"
+    - The above output is expected due to a macro override in
+      arch/arc/kernel/sys.c:
+        #define __SYSCALL_WITH_COMPAT(nr, native, compat) \
+                __SYSCALL(nr, native)
+  - Notes:
+    - Modified arch/arc/Makefile:
+        - tune-mcpu-def-$(CONFIG_ISA_ARCV2)	:= -mcpu=hs38
+        + tune-mcpu-def-$(CONFIG_ISA_ARCV2)	:= -mcpu=archs
+
+2. arm64
+  - Kernel config: defconfig
+  - QEMU target: qemu-system-aarch64 -M virt -cpu cortex-a53
+    - Src: https://github.com/qemu/qemu
+    - Commit hash: a17976b04f2117e1bab64358f873b36fe4561520
+    - Version: 9.0.4
+  - Result:
+    - The following files were correctly generated
+      - arch/arm64/include/generated/asm/syscall_table_32.h
+      - arch/arm64/include/generated/asm/syscall_table_64.h
+      - arch/arm64/include/generated/asm/unistd_32.h
+      - arch/arm64/include/generated/asm/unistd_compat_32.h
+        - contains #define __NR_compat32_xyzzy 468
+      - arch/arm64/include/generated/uapi/asm/unistd_64.h
+    - 32-bit userspace process successfully invoked the system call with
+      output:
+        "Hi, COMPAT_SYSCALL_DEFINE2\n"
+    - 64-bit userspace process successfully invoked the system call with
+      output:
+        "Hi, SYSCALL_DEFINE1\n"
+
+3. csky
+  - Kernel config: defconfig
+  - QEMU target: qemu-system-cskyv2 -M virt -cpu ck807
+    - Src: https://github.com/XUANTIE-RV/qemu/tree/xuantie-qemu-9.0
+    - Commit hash: e0ace167effcd36d1f82c7ccb4522b3126011479
+    - Version: 8.2.94
+  - Result:
+    - The following files were correctly generated
+      - arch/csky/include/generated/asm/syscall_table_32.h
+      - arch/csky/include/generated/uapi/asm/unistd_32.h
+    - The system call was successfully invoked with output:
+        "Hi, SYSCALL_DEFINE1\n"
+    - The above output is expected due to a macro override in
+      arch/csky/kernel/syscall_table.c:
+        #define __SYSCALL_WITH_COMPAT(nr, native, compat) \
+                __SYSCALL(nr, native)
+
+4. hexagon
+  - Kernel config: defconfig
+  - QEMU target: N/A
+  - Result:
+    - The following files were correctly generated
+      - arch/hexagon/include/generated/asm/syscall_table_32.h
+      - arch/hexagon/include/generated/uapi/asm/unistd_32.h
+
+5. loongarch
+  - Kernel config: loongson3_defconfig
+  - QEMU target: qemu-system-loongarch64 -machine virt -cpu la464
+    - Src: https://github.com/qemu/qemu
+    - Commit hash: a17976b04f2117e1bab64358f873b36fe4561520
+    - Version: 9.0.4
+  - Result:
+    - The following files were correctly generated
+      - arch/loongarch/include/generated/asm/syscall_table_64.h
+      - arch/loongarch/include/generated/uapi/asm/unistd_64.h
+    - The system call was successfully invoked with output:
+        "Hi, SYSCALL_DEFINE1\n"
+    - The above output is expected due to a macro override in
+      arch/loongarch/kernel/syscall.c:
+        #define __SYSCALL_WITH_COMPAT(nr, native, compat) \
+                __SYSCALL(nr, native)
+
+6. nios2
+  - Kernel config: 10m50_defconfig
+  - QEMU target: qemu-system-nios2 -machine 10m50-ghrd
+    - Src: https://github.com/qemu/qemu
+    - Commit hash (9.0.4): a17976b04f2117e1bab64358f873b36fe4561520
+    - Commit hash (5.2.0): 553032db17440f8de011390e5a1cfddd13751b0b
+    - Version: 9.0.4, 5.2.0
+  - Result:
+    - The following files were correctly generated
+      - arch/nios2/include/generated/asm/syscall_table_32.h
+      - arch/nios2/include/generated/uapi/asm/unistd_32.h
+
+7. openrisc
+  - Kernel config: virt_defconfig
+  - QEMU target: qemu-system-or1k -machine virt -cpu or1200
+    - Src: https://github.com/qemu/qemu
+    - Commit hash: a17976b04f2117e1bab64358f873b36fe4561520
+    - Version: 9.0.4
+  - Result:
+    - The following files were correctly generated
+      - arch/openrisc/include/generated/asm/syscall_table_32.h
+      - arch/openrisc/include/generated/uapi/asm/unistd_32.h
+    - The system call was successfully invoked with output:
+        "Hi, SYSCALL_DEFINE1\n"
+    - The above output is expected due to a macro override in
+      arch/openrisc/kernel/sys_call_table.c:
+        #define __SYSCALL_WITH_COMPAT(nr, native, compat) \
+                __SYSCALL(nr, native)
+
+8. riscv (32-bit)
+  - Kernel config: defconfig + 32-bit.config
+  - QEMU target: qemu-system-riscv32 -M virt -cpu rv32
+    - Src: https://github.com/qemu/qemu
+    - Commit hash: a17976b04f2117e1bab64358f873b36fe4561520
+    - Version: 9.0.4
+  - Result:
+    - The following files were correctly generated
+      - arch/riscv/include/generated/asm/syscall_table_32.h
+      - arch/riscv/include/generated/uapi/asm/unistd_32.h
+    - The system call was successfully invoked with output:
+        "Hi, SYSCALL_DEFINE1\n"
+    - The above output is expected due to a macro override in
+      arch/riscv/kernel/syscall_table.c:
+        #define __SYSCALL_WITH_COMPAT(nr, native, compat) \
+                __SYSCALL(nr, native)
+
+9. riscv (64-bit)
+  - Kernel config: defconfig + 64-bit.config
+  - QEMU target: qemu-system-riscv64 -M virt -cpu rv64
+    - Src: https://github.com/qemu/qemu
+    - Commit hash: a17976b04f2117e1bab64358f873b36fe4561520
+    - Version: 9.0.4
+  - Result:
+    - The following files were correctly generated
+      - arch/riscv/include/generated/asm/syscall_table_32.h
+      - arch/riscv/include/generated/asm/syscall_table_64.h
+      - arch/riscv/include/generated/uapi/asm/unistd_32.h
+      - arch/riscv/include/generated/uapi/asm/unistd_64.h
+    - 32-bit userspace process successfully invoked the system call with
+      output:
+        "Hi, COMPAT_SYSCALL_DEFINE2\n"
+    - 64-bit userspace process successfully invoked the system call with
+      output:
+        "Hi, SYSCALL_DEFINE1\n"
+
+ Documentation/process/adding-syscalls.rst | 84 +++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
+
+diff --git a/Documentation/process/adding-syscalls.rst b/Documentation/process/adding-syscalls.rst
+index 906c47f1a9e5..fc0b0bbcd34d 100644
+--- a/Documentation/process/adding-syscalls.rst
++++ b/Documentation/process/adding-syscalls.rst
+@@ -248,6 +248,52 @@ To summarize, you need a commit that includes:
+  - fallback stub in ``kernel/sys_ni.c``
+ 
+ 
++.. _syscall_generic_6_11:
++
++Since 6.11
++~~~~~~~~~~
++
++Starting with kernel version 6.11, general system call implementation for the
++following architectures no longer requires modifications to
++``include/uapi/asm-generic/unistd.h``:
++
++ - arc
++ - arm64
++ - csky
++ - hexagon
++ - loongarch
++ - nios2
++ - openrisc
++ - riscv
++
++Instead, you need to update ``scripts/syscall.tbl`` and, if applicable, adjust
++``arch/*/kernel/Makefile.syscalls``.
++
++As ``scripts/syscall.tbl`` serves as a common syscall table across multiple
++architectures, a new entry is required in this table::
++
++    468   common   xyzzy     sys_xyzzy
++
++Note that adding an entry to ``scripts/syscall.tbl`` with the "common" ABI
++also affects all architectures that share this table. For more limited or
++architecture-specific changes, consider using an architecture-specific ABI or
++defining a new one.
++
++If a new ABI, say ``xyz``, is introduced, the corresponding updates should be
++made to ``arch/*/kernel/Makefile.syscalls`` as well::
++
++    syscall_abis_{32,64} += xyz (...)
++
++To summarize, you need a commit that includes:
++
++ - ``CONFIG`` option for the new function, normally in ``init/Kconfig``
++ - ``SYSCALL_DEFINEn(xyzzy, ...)`` for the entry point
++ - corresponding prototype in ``include/linux/syscalls.h``
++ - new entry in ``scripts/syscall.tbl``
++ - (if needed) Makefile updates in ``arch/*/kernel/Makefile.syscalls``
++ - fallback stub in ``kernel/sys_ni.c``
++
++
+ x86 System Call Implementation
+ ------------------------------
+ 
+@@ -353,6 +399,41 @@ To summarize, you need:
+    ``include/uapi/asm-generic/unistd.h``
+ 
+ 
++Since 6.11
++~~~~~~~~~~
++
++This applies to all the architectures listed in :ref:`Since 6.11<syscall_generic_6_11>`
++under "Generic System Call Implementation", except arm64. See
++:ref:`Compatibility System Calls (arm64)<compat_arm64>` for more information.
++
++You need to extend the entry in ``scripts/syscall.tbl`` with an extra column
++to indicate that a 32-bit userspace program running on a 64-bit kernel should
++hit the compat entry point::
++
++    468   common     xyzzy     sys_xyzzy    compat_sys_xyzzy
++
++To summarize, you need:
++
++ - ``COMPAT_SYSCALL_DEFINEn(xyzzy, ...)`` for the compat entry point
++ - corresponding prototype in ``include/linux/compat.h``
++ - modification of the entry in ``scripts/syscall.tbl`` to include an extra
++   "compat" column
++ - (if needed) 32-bit mapping struct in ``include/linux/compat.h``
++
++
++.. _compat_arm64:
++
++Compatibility System Calls (arm64)
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++On arm64, there is a dedicated syscall table for compatibility system calls
++targeting 32-bit (AArch32) userspace: ``arch/arm64/tools/syscall_32.tbl``.
++You need to add an additional line to this table specifying the compat
++entry point::
++
++    468   common     xyzzy     sys_xyzzy    compat_sys_xyzzy
++
++
+ Compatibility System Calls (x86)
+ --------------------------------
+ 
+@@ -575,3 +656,6 @@ References and Sources
+  - Recommendation from Linus Torvalds that x32 system calls should prefer
+    compatibility with 64-bit versions rather than 32-bit versions:
+    https://lore.kernel.org/r/CA+55aFxfmwfB7jbbrXxa=K7VBYPfAvmu3XOkGrLbB1UFjX1+Ew@mail.gmail.com
++ - Patch series revising system call table infrastructure to use
++   scripts/syscall.tbl across multiple architectures:
++   https://lore.kernel.org/lkml/20240704143611.2979589-1-arnd@kernel.org
+-- 
+2.43.0
+
 
