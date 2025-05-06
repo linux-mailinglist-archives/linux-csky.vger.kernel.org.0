@@ -1,179 +1,199 @@
-Return-Path: <linux-csky+bounces-2042-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2043-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93299AAB93E
-	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 08:53:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E2E8AABB09
+	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 09:33:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 744D0500EBA
-	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 06:50:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 173671C437AA
+	for <lists+linux-csky@lfdr.de>; Tue,  6 May 2025 07:28:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86742882C8;
-	Tue,  6 May 2025 04:01:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF66293469;
+	Tue,  6 May 2025 05:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQoO6tMo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GgPykVIP"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A138B332EDA;
-	Tue,  6 May 2025 02:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2DE27C17B;
+	Tue,  6 May 2025 05:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746498152; cv=none; b=pUS/UfhSp8aBhrzpqx3qRT1MHfIpYKwtKBvBO6/5QdBvxKqw18Fy9g0n2qHwEqzrZlyMB7OKBwS8dVKJcW1nB72lDRd+OyYK2+/XN8N0gS30oVMQf6aU0aRNyE7WluktmuQEWqd95XTgK2iXIuJx6xUJhh9iWsFj1KMh9miiQT4=
+	t=1746510177; cv=none; b=aMW0G/S0mNySqawz4YsvH8bJXd1aYEALpTmAaUZ83Hxj3iOPZQcw1ZAaQQeAZOeejnvC8WcLgJs5Tj1ySfHNb70jwzmdBEiyojvq/oRsAZ36jvuVBSO9X6zogE7GG7/8h7KF9ladStpFx5o3ndHk93wH3nSPY0JKofXO9viBJeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746498152; c=relaxed/simple;
-	bh=TXg77fIcMszeWDgtEPPpFgS7yt4IHhAZAxH2auE6e2o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GY7yjqDz50rKpPPk3WRQHNBun+osIlJG1666KW/3IMGtktcUwOuCgXtWBUdzPGKNktQR8tMuvBOaFFMaMo0nHZar2VlBUFLA4lO+QiF5KeBS2l1XcDtTq5wyKOHwduz11BKWi57Q1jEnGjQpOX8Z/UygQnp92OWqPLnv6hPcT4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQoO6tMo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE190C4CEE4;
-	Tue,  6 May 2025 02:22:30 +0000 (UTC)
+	s=arc-20240116; t=1746510177; c=relaxed/simple;
+	bh=vN6313YRStxLjwbXfk+PPA3holHWjj2ITlnRmUb5ZBU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mOkbfMTsumIXBFQFjsH1oRMgtFSy1/og/rTqrib8DuhGdzUznmZf5MlIKIGS2pFN4yGqMyEwYI3VWY+KZb/OT1LNPWVI6iReL/mEz7e/wZ5GMNtyru43WmPm3JscER0cW0TCaRn2sRAvk02jaAjRdC5JCiiP+02GEL/ufqHOAmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GgPykVIP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 042BBC4CEE4;
+	Tue,  6 May 2025 05:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746498151;
-	bh=TXg77fIcMszeWDgtEPPpFgS7yt4IHhAZAxH2auE6e2o=;
-	h=From:To:Cc:Subject:Date:From;
-	b=iQoO6tMooFiAZDEiGjY3eZm0f6ND04tPzi8f1IDuWajXlxE3biUqCUwYpm83oERYa
-	 Mjggjca7RuuT/+1hPqFRyUVuCQri5x6ZvjtbYoFQuZeBDmviB8xHgo/jIESZgzjOHN
-	 ru25CUdI1pukBv1SjbpTpkbhwW5/HLecmH8TVB4EvDcyi0uG0N0ZFNJucPKKNx6GHN
-	 u+SK8Bsmj0PpGJ6cqWnJaBIacB/9st7i5htByItFKdDUDwOgCROA/zFR++Txbc1h5V
-	 jJxfU/CX8WXn8V88NolVLYLkDtLXlpcBBl2Gl1Lg7ZqJ6ziRcWRW9EamvT5qdQ8UFG
-	 no1c7xYdTGCuA==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Guo Ren <guoren@kernel.org>,
-	Flavio Suligoi <f.suligoi@asem.it>
-Cc: linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-csky@vger.kernel.org
-Subject: [PATCH] dt-bindings: timer: Convert csky,mptimer to DT schema
-Date: Mon,  5 May 2025 21:22:27 -0500
-Message-ID: <20250506022228.2587029-1-robh@kernel.org>
-X-Mailer: git-send-email 2.47.2
+	s=k20201202; t=1746510177;
+	bh=vN6313YRStxLjwbXfk+PPA3holHWjj2ITlnRmUb5ZBU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GgPykVIPIFvYa6lcW6so/5gmR+sPv1LIg53CU35mihZMiYF7f1DjhhyqOvt8RWSkQ
+	 nOU7OU2MMQ9Q5/IRp0Jm7nbY+JFmNP/SYdD0zbABP3KJo+Bu8Ieh+tprDQlVTlLBIQ
+	 3kvXRJcuKcwqQIkpFBJaWlGXAgZ12j4hYwmXgdrOpOfEJ4qSCKR5mA4vug091ZwxGO
+	 hAJKvvVSEFZjIQlAWGfwlSJE9GREqonUbLm5jP4tu6SudxBK6ZWUCeucRiVwm9edgJ
+	 CbWMRcfwaO/MO1Y5UXiCtIh8tFjuoRKEizy+TRyRXZx5SXkOHXDJPOY+wonD41ee8L
+	 6AKpCKjsh5ZoQ==
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-39c266c2dd5so6230495f8f.3;
+        Mon, 05 May 2025 22:42:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUvwxmmr3PRib2iBP/xPlzst7umlShvTrxWIZ3PiO3x735crLnPBfEvYagNvWD30bon+O6d5pTMcP1V8Q==@vger.kernel.org, AJvYcCWKlMKKZaf7/ua/IpD0v6+RXKIqdhJCm3QS1/AcMoiw1urhZLELvehaHRh2Qiu8uD1BRbnxkdXigkSL7+Zb@vger.kernel.org, AJvYcCXoK8BOdieE2bn9Ce3IkUuBpwQPkRGvVLite0RJZZzxZhYRQwSK4kQybKvY00e1iZjLfOIruAQUjwUm@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ8+g0AQg2a/jnyKBPoXwZpB89iXmPRCZ5FsaqcMVqzQQDWO6t
+	qqI/nnaAoDHgseRHMhXkAZLfO71Ckx6zXxoFAwwcu1BDNddG6yqG+AgQEuJPPcgmD0f9aX4N/5N
+	HE319O6Il2iy4EmV0ZqZJjItpk1Y=
+X-Google-Smtp-Source: AGHT+IEpne/77MYjT2Ew1y+GK/Ne9FQBzPV4ltq1REufnqRMiBjfdX96WgGK09ltaOF3qSD7ILtJuRl9aTL2JHnwEy0=
+X-Received: by 2002:a05:6000:186c:b0:39f:9f:a177 with SMTP id
+ ffacd0b85a97d-3a09fd88c00mr7020990f8f.17.1746510175603; Mon, 05 May 2025
+ 22:42:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250506022224.2586860-1-robh@kernel.org>
+In-Reply-To: <20250506022224.2586860-1-robh@kernel.org>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 6 May 2025 13:42:42 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRXiCi2D1XZzqiFKEMY3YF5T7E-m_3hrxDuEvjgOSEptQ@mail.gmail.com>
+X-Gm-Features: ATxdqUFaAs6SdDiDuHIesuJYu7wwDfGnchyldojMY3YXo-OIVDNnvvy0Vt8uxCM
+Message-ID: <CAJF2gTRXiCi2D1XZzqiFKEMY3YF5T7E-m_3hrxDuEvjgOSEptQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: timer: Convert csky,gx6605s-timer to DT schema
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-csky@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Convert the C-SKY Multi-processor timer binding to DT schema format.
-It's a straight-forward conversion.
+Acked-by: Guo Ren <guoren@kernel.org>
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- .../bindings/timer/csky,mptimer.txt           | 42 -----------------
- .../bindings/timer/csky,mptimer.yaml          | 46 +++++++++++++++++++
- 2 files changed, 46 insertions(+), 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/csky,mptimer.txt
- create mode 100644 Documentation/devicetree/bindings/timer/csky,mptimer.yaml
+On Tue, May 6, 2025 at 10:22=E2=80=AFAM Rob Herring (Arm) <robh@kernel.org>=
+ wrote:
+>
+> Convert the C-SKY gx6605s timer binding to DT schema format. It's a
+> straight-forward conversion.
+>
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
+>  .../bindings/timer/csky,gx6605s-timer.txt     | 42 -------------------
+>  .../bindings/timer/csky,gx6605s-timer.yaml    | 40 ++++++++++++++++++
+>  2 files changed, 40 insertions(+), 42 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/timer/csky,gx6605s-=
+timer.txt
+>  create mode 100644 Documentation/devicetree/bindings/timer/csky,gx6605s-=
+timer.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.t=
+xt b/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.txt
+> deleted file mode 100644
+> index 6b04344f4bea..000000000000
+> --- a/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.txt
+> +++ /dev/null
+> @@ -1,42 +0,0 @@
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> -gx6605s SOC Timer
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> -
+> -The timer is used in gx6605s soc as system timer and the driver
+> -contain clk event and clk source.
+> -
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> -timer node bindings definition
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> -
+> -       Description: Describes gx6605s SOC timer
+> -
+> -       PROPERTIES
+> -
+> -       - compatible
+> -               Usage: required
+> -               Value type: <string>
+> -               Definition: must be "csky,gx6605s-timer"
+> -       - reg
+> -               Usage: required
+> -               Value type: <u32 u32>
+> -               Definition: <phyaddr size> in soc from cpu view
+> -       - clocks
+> -               Usage: required
+> -               Value type: phandle + clock specifier cells
+> -               Definition: must be input clk node
+> -       - interrupt
+> -               Usage: required
+> -               Value type: <u32>
+> -               Definition: must be timer irq num defined by soc
+> -
+> -Examples:
+> ----------
+> -
+> -       timer0: timer@20a000 {
+> -               compatible =3D "csky,gx6605s-timer";
+> -               reg =3D <0x0020a000 0x400>;
+> -               clocks =3D <&dummy_apb_clk>;
+> -               interrupts =3D <10>;
+> -               interrupt-parent =3D <&intc>;
+> -       };
+> diff --git a/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.y=
+aml b/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.yaml
+> new file mode 100644
+> index 000000000000..888fc8113996
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/csky,gx6605s-timer.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/csky,gx6605s-timer.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: gx6605s SOC Timer
+> +
+> +maintainers:
+> +  - Guo Ren <guoren@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: csky,gx6605s-timer
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    timer@20a000 {
+> +        compatible =3D "csky,gx6605s-timer";
+> +        reg =3D <0x0020a000 0x400>;
+> +        clocks =3D <&dummy_apb_clk>;
+> +        interrupts =3D <10>;
+> +    };
+> --
+> 2.47.2
+>
 
-diff --git a/Documentation/devicetree/bindings/timer/csky,mptimer.txt b/Documentation/devicetree/bindings/timer/csky,mptimer.txt
-deleted file mode 100644
-index f5c7e99cf52b..000000000000
---- a/Documentation/devicetree/bindings/timer/csky,mptimer.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--============================
--C-SKY Multi-processors Timer
--============================
--
--C-SKY multi-processors timer is designed for C-SKY SMP system and the
--regs is accessed by cpu co-processor 4 registers with mtcr/mfcr.
--
-- - PTIM_CTLR "cr<0, 14>" Control reg to start reset timer.
-- - PTIM_TSR  "cr<1, 14>" Interrupt cleanup status reg.
-- - PTIM_CCVR "cr<3, 14>" Current counter value reg.
-- - PTIM_LVR  "cr<6, 14>" Window value reg to trigger next event.
--
--==============================
--timer node bindings definition
--==============================
--
--	Description: Describes SMP timer
--
--	PROPERTIES
--
--	- compatible
--		Usage: required
--		Value type: <string>
--		Definition: must be "csky,mptimer"
--	- clocks
--		Usage: required
--		Value type: <node>
--		Definition: must be input clk node
--	- interrupts
--		Usage: required
--		Value type: <u32>
--		Definition: must be timer irq num defined by soc
--
--Examples:
-----------
--
--	timer: timer {
--		compatible = "csky,mptimer";
--		clocks = <&dummy_apb_clk>;
--		interrupts = <16>;
--		interrupt-parent = <&intc>;
--	};
-diff --git a/Documentation/devicetree/bindings/timer/csky,mptimer.yaml b/Documentation/devicetree/bindings/timer/csky,mptimer.yaml
-new file mode 100644
-index 000000000000..12cc5282c8f8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/csky,mptimer.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/csky,mptimer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: C-SKY Multi-processors Timer
-+
-+maintainers:
-+  - Flavio Suligoi <f.suligoi@asem.it>
-+  - Guo Ren <guoren@kernel.org>
-+
-+description: |
-+  C-SKY multi-processors timer is designed for C-SKY SMP system and the regs are
-+  accessed by cpu co-processor 4 registers with mtcr/mfcr.
-+
-+   - PTIM_CTLR "cr<0, 14>" Control reg to start reset timer.
-+   - PTIM_TSR  "cr<1, 14>" Interrupt cleanup status reg.
-+   - PTIM_CCVR "cr<3, 14>" Current counter value reg.
-+   - PTIM_LVR  "cr<6, 14>" Window value reg to trigger next event.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: csky,mptimer
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - clocks
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    timer {
-+        compatible = "csky,mptimer";
-+        clocks = <&dummy_apb_clk>;
-+        interrupts = <16>;
-+    };
--- 
-2.47.2
 
+--=20
+Best Regards
+ Guo Ren
 
