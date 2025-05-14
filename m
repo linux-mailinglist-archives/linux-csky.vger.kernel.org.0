@@ -1,115 +1,124 @@
-Return-Path: <linux-csky+bounces-2048-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2049-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED26FAB5728
-	for <lists+linux-csky@lfdr.de>; Tue, 13 May 2025 16:29:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C47CAB6F9F
+	for <lists+linux-csky@lfdr.de>; Wed, 14 May 2025 17:24:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 254B51893E8D
-	for <lists+linux-csky@lfdr.de>; Tue, 13 May 2025 14:30:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 875B48C26F0
+	for <lists+linux-csky@lfdr.de>; Wed, 14 May 2025 15:18:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002F02BE0EE;
-	Tue, 13 May 2025 14:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B761289E3F;
+	Wed, 14 May 2025 15:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UUcAa+Qk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IT4W/YU8"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1170B269D1B
-	for <linux-csky@vger.kernel.org>; Tue, 13 May 2025 14:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795702749F1;
+	Wed, 14 May 2025 15:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747146581; cv=none; b=Q7WEOt/agwbK5+X9Zmpvrb/gqfblBIzTa15MpYD9WyXyF6k6wHoSBL59JheBZSVMErTzXpDecDTi4vCbP4mCnKXRYmuNnJn4IrbpeI5NczO7c7z3TndwZUV4h3UnIv8oYyhWFAD2ENaQzYit5rcueiPMNj/vCZSVg6Q0TaCVPJc=
+	t=1747235693; cv=none; b=ayL1G2ifggn/E/mfaSO+Em09P4OFl3B99RfQWn9lCss2m/iAXmnXR4qwQcPEAVJXVfv0JgQGy3+hLr3lOeuVw9do8rmSYXFL3N4Qrl4wVM9S9QCWYceuEj+L/qxfUyKehQ32Nc2ZVMpsS1rrupAHV+qGSRjpIjlGUIBOA50jlqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747146581; c=relaxed/simple;
-	bh=3r6EFmRwIAg4Ct9GeTXJ9nBhaVARUyeX0iflKOCi8wY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cvv6Fdk+VDMwXScCIAeDbjXc+SiOrMYwannPkVEa0SnaLV5omRtqRObjF84B1j8I8rYwwRaZem3dGbPZC1+B2167oWZtPR4ie4ogH1l8Rm48kHK5S8HObjC4k00grmCCG7TPlM33oZv2QvHh+CyGynsmYloCjxBhmDk2RRxvNtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UUcAa+Qk; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a0b135d18eso3305672f8f.2
-        for <linux-csky@vger.kernel.org>; Tue, 13 May 2025 07:29:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747146577; x=1747751377; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5T5EVqvVCDoHXLH6Qk0C5AKC1Zmg5QpTMVhHdRjdkFc=;
-        b=UUcAa+QkCp+fZPLlvv7OIr5fbXBFHoMrmO7NVPxyGuZBdlK29VO8ZL2CGQj3VU6YHj
-         9HKVKeDCmtaBunrunEXcHrxxKSvKQDaw7DEogOOvxvjeQtseua4ghGwH2I28cVWGR0KA
-         VmDkp0EuZj82xiRaFc2wi5ElZyF5akhnR5dqeUSiMZUrAJC4v4aX8m60QZLmlWP6C/DH
-         OP82jZcNYfK+0+xn3rM90zwc6yIN9BVbAaSFTTNr835PV/xP6WZbBtHNBNlJ2mRxXh2i
-         SkvaD1Bt+sU/mlpM4jmkXnpdgLxKyYP6tb7B6V9MrX0DMwUB9e3uA1lotMUeuU3V0Yjd
-         IqNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747146577; x=1747751377;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5T5EVqvVCDoHXLH6Qk0C5AKC1Zmg5QpTMVhHdRjdkFc=;
-        b=jHlE83g36ILxRBqTpkgJAwyZQhIfSYV2QHTklwYPKHivTy0kcm0rjPbtKwWne/lPAq
-         svAgVz9MAb0MjRQZmC7o2E9ou6Bj7zaWknhxDG180cF/6cMPPph+c2bslUvvE/Z3TDX+
-         FTwsAL5bhSM3Ix0Q6VYJFP0kNNYUEPchTQ5PiLKtWg9OS5TelpeJR5RpUJygdwUi9OIZ
-         NKnI2J7p11kxfUUVWJbDeerANKSit1RvgYjmRSwv3tT96g1iK51mAgtHxVabSwkYIht2
-         E7UwbQHnuXgypqREhQzVMmo/MCK7Vi37rjUrUClo2y5o6Q/o2L0KOHfkoITBdyXzlLv9
-         J1aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV4CcEjjQK9caIxh4tg0xzfOa6iunljiuWzbelx84zFkJTGxR0dF0dnKWFsGClwP3DUKOILTXU0zWtC@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIU3XitB09ydTDhjHCAh/9o06H6i4AYXz2V/y+EU4aNcbpkvCF
-	N8VrqKealqrzhhFXXV3Jth8zW+an4FO7qLrcrg1X1dDaSCA3Bh29BZ9MVnVwFuE=
-X-Gm-Gg: ASbGnctX4xxmOjljq3rT0VtEDhi4aacptx6sM30kO81JoqxZqzxvacKH9QVV70vvPTP
-	ClwKgukxFO1zt6tdXSJfYRGxIEu7z2fjgvqEv7SsB4xBoor6sFuiZVO18pPVWEBfrASmASodD66
-	PO7qOOKqhq2zA6AdNk5fDZwZINh70CcE4x9QWLsM3q83qocR1E1bgcG+ppiOlxnesachcZbD/SY
-	5W2QgTlslfWLufnrS9PEcGD/JGp0UipHMjyfY15cokMFKn0ZVaP4VVWmvbjpCK8RoegEdoc/9gC
-	Q4VfxTs8olrKRSreQXBz9jj/OL2NaADlVbox8j7UWJr9nlNXIbsFYTWM8Ckb0vsSvHnanJ7GN3d
-	HHw+Y18Yzj6Z3H43L11HeBxq0
-X-Google-Smtp-Source: AGHT+IHNQc8VSkvMb+be4xShmhohsEns4BbUI6HrioDELteMpaN+j7jH2OMJqSpLg6IVq7ISGUZrlg==
-X-Received: by 2002:a5d:5f82:0:b0:399:71d4:a2 with SMTP id ffacd0b85a97d-3a1f6430752mr14506029f8f.14.1747146577463;
-        Tue, 13 May 2025 07:29:37 -0700 (PDT)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f58ecadfsm16347307f8f.22.2025.05.13.07.29.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 07:29:36 -0700 (PDT)
-Date: Tue, 13 May 2025 16:29:34 +0200
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Guo Ren <guoren@kernel.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	s=arc-20240116; t=1747235693; c=relaxed/simple;
+	bh=UsduOhasYm/HfIIj9WN3RQZEbqTT0MBS3lHLGt9ZIsE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZVnT18/aEBfPiwoM3Fs7/okANg05bBtVN/xWnobiAK9FwslCAw+JjqYuK0nvjZVcNiMgJc3Iy1cUGGABsYFv1Wucv4lZl0ORV2GuDyjynMWg9PXMhBWF7OcOYQZdVCWVNuxdoh4F30zQzbRTMoiR2Z2eFRRoIDKAr/pMFt9BceE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IT4W/YU8; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747235691; x=1778771691;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=UsduOhasYm/HfIIj9WN3RQZEbqTT0MBS3lHLGt9ZIsE=;
+  b=IT4W/YU81HnNynSQ6sbg/u9hROl17aQAl+wjUWzEBO0E3YtnYNH+iJjH
+   v0vOF6kBn2DPfwHY+yQN7mBWElNBZeXGZFOyA3V/CVKGeafYqhbRZpAS2
+   lR1z3O5N1XnFARNnnPVXT0T+jyaDQEe1kcuslzqsdK6A2Hyae9eN2SQ94
+   47tC8IypOXBfTwY6eEBKfqtT7kAiTjpvxotzwpSi8bHh80IZsYyNqrWZX
+   kzUhzUYDb2HQTPFsbofY+FwlicnpRYmo952p25KKvjeBf3FE/yI33JOjh
+   9Q3BB1S3266mU+L391RPx7QtuqTfr8Hsy3sn5CJ2BqtBpHXrgtdRVf0Rp
+   A==;
+X-CSE-ConnectionGUID: fOJn6xEaTZ+PBbySguwSbA==
+X-CSE-MsgGUID: WmMpWnuhTT6ECc8iGF0syQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="49072782"
+X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
+   d="scan'208";a="49072782"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 08:14:47 -0700
+X-CSE-ConnectionGUID: 2sZf2b5/RXG+mXmpRA20iw==
+X-CSE-MsgGUID: tembz7sPSrmxQ6jxfscfVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
+   d="scan'208";a="142939175"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmviesa005.fm.intel.com with ESMTP; 14 May 2025 08:14:46 -0700
+From: kan.liang@linux.intel.com
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	namhyung@kernel.org,
+	irogers@google.com,
+	mark.rutland@arm.com,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Cc: eranian@google.com,
+	ctshao@google.com,
+	tmricht@linux.ibm.com,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Mao Han <han_mao@c-sky.com>,
+	Guo Ren <ren_guo@c-sky.com>,
 	linux-csky@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: timer: Convert csky,gx6605s-timer to DT
- schema
-Message-ID: <aCNXTvpa-R6S1LZZ@mai.linaro.org>
-References: <20250506022224.2586860-1-robh@kernel.org>
+Subject: [PATCH V2 11/15] csky/perf: Remove driver-specific throttle support
+Date: Wed, 14 May 2025 08:13:57 -0700
+Message-Id: <20250514151401.2547932-12-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20250514151401.2547932-1-kan.liang@linux.intel.com>
+References: <20250514151401.2547932-1-kan.liang@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250506022224.2586860-1-robh@kernel.org>
 
-On Mon, May 05, 2025 at 09:22:23PM -0500, Rob Herring wrote:
-> Convert the C-SKY gx6605s timer binding to DT schema format. It's a
-> straight-forward conversion.
-> 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Applied, thanks!
+The throttle support has been added in the generic code. Remove
+the driver-specific throttle support.
 
+Besides the throttle, perf_event_overflow may return true because of
+event_limit. It already does an inatomic event disable. The pmu->stop
+is not required either.
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mao Han <han_mao@c-sky.com>
+Cc: Guo Ren <ren_guo@c-sky.com>
+Cc: linux-csky@vger.kernel.org
+---
+ arch/csky/kernel/perf_event.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
+index e5f18420ce64..e0a36acd265b 100644
+--- a/arch/csky/kernel/perf_event.c
++++ b/arch/csky/kernel/perf_event.c
+@@ -1139,8 +1139,7 @@ static irqreturn_t csky_pmu_handle_irq(int irq_num, void *dev)
+ 		perf_sample_data_init(&data, 0, hwc->last_period);
+ 		csky_pmu_event_set_period(event);
+ 
+-		if (perf_event_overflow(event, &data, regs))
+-			csky_pmu_stop_event(event);
++		perf_event_overflow(event, &data, regs);
+ 	}
+ 
+ 	csky_pmu_enable(&csky_pmu.pmu);
 -- 
+2.38.1
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
