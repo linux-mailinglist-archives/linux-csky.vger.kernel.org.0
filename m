@@ -1,124 +1,123 @@
-Return-Path: <linux-csky+bounces-2049-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2050-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C47CAB6F9F
-	for <lists+linux-csky@lfdr.de>; Wed, 14 May 2025 17:24:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 089ECAB7E1D
+	for <lists+linux-csky@lfdr.de>; Thu, 15 May 2025 08:35:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 875B48C26F0
-	for <lists+linux-csky@lfdr.de>; Wed, 14 May 2025 15:18:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A15D7AD98E
+	for <lists+linux-csky@lfdr.de>; Thu, 15 May 2025 06:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B761289E3F;
-	Wed, 14 May 2025 15:14:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2969C296FC9;
+	Thu, 15 May 2025 06:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IT4W/YU8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QiX7F27m"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795702749F1;
-	Wed, 14 May 2025 15:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2F08F6B;
+	Thu, 15 May 2025 06:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747235693; cv=none; b=ayL1G2ifggn/E/mfaSO+Em09P4OFl3B99RfQWn9lCss2m/iAXmnXR4qwQcPEAVJXVfv0JgQGy3+hLr3lOeuVw9do8rmSYXFL3N4Qrl4wVM9S9QCWYceuEj+L/qxfUyKehQ32Nc2ZVMpsS1rrupAHV+qGSRjpIjlGUIBOA50jlqs=
+	t=1747290908; cv=none; b=hZ7iwb7EwCfE2j28OAdBcV8SDMt3D5XOuq983ne1JVUhxLfViRa6OUNRBxHRxk5PkK01slUGbAJDqJsWJ2pMqH4nlP2hme32wk8H1mAAJ7O1NYIPCSJAkDuusUtlKAVF2WzLSiRILV5HoEPSjRVGiyaGrJVlmjEmsaRmy/UfHXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747235693; c=relaxed/simple;
-	bh=UsduOhasYm/HfIIj9WN3RQZEbqTT0MBS3lHLGt9ZIsE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZVnT18/aEBfPiwoM3Fs7/okANg05bBtVN/xWnobiAK9FwslCAw+JjqYuK0nvjZVcNiMgJc3Iy1cUGGABsYFv1Wucv4lZl0ORV2GuDyjynMWg9PXMhBWF7OcOYQZdVCWVNuxdoh4F30zQzbRTMoiR2Z2eFRRoIDKAr/pMFt9BceE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IT4W/YU8; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747235691; x=1778771691;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UsduOhasYm/HfIIj9WN3RQZEbqTT0MBS3lHLGt9ZIsE=;
-  b=IT4W/YU81HnNynSQ6sbg/u9hROl17aQAl+wjUWzEBO0E3YtnYNH+iJjH
-   v0vOF6kBn2DPfwHY+yQN7mBWElNBZeXGZFOyA3V/CVKGeafYqhbRZpAS2
-   lR1z3O5N1XnFARNnnPVXT0T+jyaDQEe1kcuslzqsdK6A2Hyae9eN2SQ94
-   47tC8IypOXBfTwY6eEBKfqtT7kAiTjpvxotzwpSi8bHh80IZsYyNqrWZX
-   kzUhzUYDb2HQTPFsbofY+FwlicnpRYmo952p25KKvjeBf3FE/yI33JOjh
-   9Q3BB1S3266mU+L391RPx7QtuqTfr8Hsy3sn5CJ2BqtBpHXrgtdRVf0Rp
-   A==;
-X-CSE-ConnectionGUID: fOJn6xEaTZ+PBbySguwSbA==
-X-CSE-MsgGUID: WmMpWnuhTT6ECc8iGF0syQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="49072782"
-X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
-   d="scan'208";a="49072782"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2025 08:14:47 -0700
-X-CSE-ConnectionGUID: 2sZf2b5/RXG+mXmpRA20iw==
-X-CSE-MsgGUID: tembz7sPSrmxQ6jxfscfVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,288,1739865600"; 
-   d="scan'208";a="142939175"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by fmviesa005.fm.intel.com with ESMTP; 14 May 2025 08:14:46 -0700
-From: kan.liang@linux.intel.com
-To: peterz@infradead.org,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	irogers@google.com,
-	mark.rutland@arm.com,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Cc: eranian@google.com,
-	ctshao@google.com,
-	tmricht@linux.ibm.com,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Mao Han <han_mao@c-sky.com>,
-	Guo Ren <ren_guo@c-sky.com>,
-	linux-csky@vger.kernel.org
-Subject: [PATCH V2 11/15] csky/perf: Remove driver-specific throttle support
-Date: Wed, 14 May 2025 08:13:57 -0700
-Message-Id: <20250514151401.2547932-12-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20250514151401.2547932-1-kan.liang@linux.intel.com>
-References: <20250514151401.2547932-1-kan.liang@linux.intel.com>
+	s=arc-20240116; t=1747290908; c=relaxed/simple;
+	bh=MSr4YD5vSH4lNI7mt0HBLXYbePuFkhW1qFm0gecuRME=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lQbPiC15eoOu/zjsqh7YtJqR+8ds6xmEeWEH92olUurXkUzEsj3Cg2IX3+Fcy1dP9PMNK6XK0hTeN0+UDOtaM3McQhy94gFD4ie9AcAwL/0fZ4CNblKfHrTf8S4bxlpr18NOjtlmIIjMOBk+i00sKu7Zwy4OMNDm9OLJREoP57M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QiX7F27m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F683C4AF09;
+	Thu, 15 May 2025 06:35:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747290907;
+	bh=MSr4YD5vSH4lNI7mt0HBLXYbePuFkhW1qFm0gecuRME=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QiX7F27mVMR9T79j8DQ7z8gQkgcSQEv0mf/vft1q9VdKuieQaHGE0DzgKhumDV8rB
+	 QQrsOUqSaxLbVGQCdPdGymB5MqmDFu0oKJxO4WlqyfLoS/3rqptcS8yPZT9FXVsvzZ
+	 jTv03wGzqNbZLJEKGyd5tC2MgX1Q2qxVNT4yC3cld+fQQIprTu0rHmYGY5c6W2LAT/
+	 W5Bl6inEAEsJI4guQOQcFN10dHZVFY7bEkByvOVZVwXVPX4QUpc7LyxXkuuCbkUpYb
+	 gUHoJ0tJ8Af1XiqvPOsqNZKtHSotvxy9sBxBV7BfmxSyFavJHeqHBINmfbYn136VQk
+	 Aj7CF1fL3DFHw==
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3a0b7fbdde7so450282f8f.2;
+        Wed, 14 May 2025 23:35:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+9dRE6yx6RVn3S8d3oVMZQbzCAbqObXCQ+7UA0GG+MrRQaAiLIDxabkOT1A3sJS+r8ll1kGCv2oyR@vger.kernel.org, AJvYcCV8Z7MMwXYnFl44OTjfOazVPmctGuNb/udkAYjUeKJwmubnL7LdgfNnReYEi/O1ecf7UyH0S+6iptx6t6CJ@vger.kernel.org, AJvYcCX5IxzLec5Gp0vlMTQJf5SNs3cM4aocglJzY2c3CPOIjv8F2Xr5/8Eo3ayq8iV3I01Fh6mcPX83xVmHmNzZjVrKyA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5bfN6DK/JoXN570b/drXVVaGt3nrfuPdwOpYZoBJO/0aIKW8h
+	zf0Ynj4z22KXycaFYjZ/cjt6DP8HiE2dnVJxZ4VT6AbUPxITjD+YjQ+K1zyujjPaY7LCmsYn2Iu
+	BeA01NI1zwhsf9a1+QNvmzRTmk5Q=
+X-Google-Smtp-Source: AGHT+IFGLHb7ySos/FnFUiLC+79eVlvbF+XUlDMy0ikXTR7voaegX8lHIiEjUdPYRkwNprzSQchX3TU4Sk49muf6LHU=
+X-Received: by 2002:a5d:5f46:0:b0:3a3:582f:efaf with SMTP id
+ ffacd0b85a97d-3a3582ff088mr403353f8f.26.1747290905872; Wed, 14 May 2025
+ 23:35:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250514151401.2547932-1-kan.liang@linux.intel.com> <20250514151401.2547932-12-kan.liang@linux.intel.com>
+In-Reply-To: <20250514151401.2547932-12-kan.liang@linux.intel.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Thu, 15 May 2025 08:34:53 +0200
+X-Gmail-Original-Message-ID: <CAJF2gTSKyhzVMeWA9DN7wjaOfKW+K8XiO56c10kim6eesJYDDg@mail.gmail.com>
+X-Gm-Features: AX0GCFtDQK1cgru_NYx59vfBOI0EV2TaEiyZ3thPCPW0dP3lU5WeJSfw_X1WhWs
+Message-ID: <CAJF2gTSKyhzVMeWA9DN7wjaOfKW+K8XiO56c10kim6eesJYDDg@mail.gmail.com>
+Subject: Re: [PATCH V2 11/15] csky/perf: Remove driver-specific throttle support
+To: kan.liang@linux.intel.com
+Cc: peterz@infradead.org, mingo@redhat.com, namhyung@kernel.org, 
+	irogers@google.com, mark.rutland@arm.com, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, eranian@google.com, ctshao@google.com, 
+	tmricht@linux.ibm.com, Mao Han <han_mao@c-sky.com>, Guo Ren <ren_guo@c-sky.com>, 
+	linux-csky@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On Wed, May 14, 2025 at 6:49=E2=80=AFPM <kan.liang@linux.intel.com> wrote:
+>
+> From: Kan Liang <kan.liang@linux.intel.com>
+>
+> The throttle support has been added in the generic code. Remove
+> the driver-specific throttle support.
+Acked-by: Guo Ren <guoren@kernel.org>
 
-The throttle support has been added in the generic code. Remove
-the driver-specific throttle support.
+>
+> Besides the throttle, perf_event_overflow may return true because of
+> event_limit. It already does an inatomic event disable. The pmu->stop
+> is not required either.
+>
+> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+> Cc: Mao Han <han_mao@c-sky.com>
+> Cc: Guo Ren <ren_guo@c-sky.com>
+> Cc: linux-csky@vger.kernel.org
+> ---
+>  arch/csky/kernel/perf_event.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.=
+c
+> index e5f18420ce64..e0a36acd265b 100644
+> --- a/arch/csky/kernel/perf_event.c
+> +++ b/arch/csky/kernel/perf_event.c
+> @@ -1139,8 +1139,7 @@ static irqreturn_t csky_pmu_handle_irq(int irq_num,=
+ void *dev)
+>                 perf_sample_data_init(&data, 0, hwc->last_period);
+>                 csky_pmu_event_set_period(event);
+>
+> -               if (perf_event_overflow(event, &data, regs))
+> -                       csky_pmu_stop_event(event);
+> +               perf_event_overflow(event, &data, regs);
+>         }
+>
+>         csky_pmu_enable(&csky_pmu.pmu);
+> --
+> 2.38.1
+>
+>
 
-Besides the throttle, perf_event_overflow may return true because of
-event_limit. It already does an inatomic event disable. The pmu->stop
-is not required either.
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: Mao Han <han_mao@c-sky.com>
-Cc: Guo Ren <ren_guo@c-sky.com>
-Cc: linux-csky@vger.kernel.org
----
- arch/csky/kernel/perf_event.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index e5f18420ce64..e0a36acd265b 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -1139,8 +1139,7 @@ static irqreturn_t csky_pmu_handle_irq(int irq_num, void *dev)
- 		perf_sample_data_init(&data, 0, hwc->last_period);
- 		csky_pmu_event_set_period(event);
- 
--		if (perf_event_overflow(event, &data, regs))
--			csky_pmu_stop_event(event);
-+		perf_event_overflow(event, &data, regs);
- 	}
- 
- 	csky_pmu_enable(&csky_pmu.pmu);
--- 
-2.38.1
-
+--=20
+Best Regards
+ Guo Ren
 
