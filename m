@@ -1,127 +1,112 @@
-Return-Path: <linux-csky+bounces-2053-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2054-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 599BFABA2DC
-	for <lists+linux-csky@lfdr.de>; Fri, 16 May 2025 20:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B396ABC2B4
+	for <lists+linux-csky@lfdr.de>; Mon, 19 May 2025 17:40:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1A953BC9C3
-	for <lists+linux-csky@lfdr.de>; Fri, 16 May 2025 18:31:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC0597A163F
+	for <lists+linux-csky@lfdr.de>; Mon, 19 May 2025 15:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9BD281356;
-	Fri, 16 May 2025 18:29:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462A6286401;
+	Mon, 19 May 2025 15:40:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YGJ5sR8w"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="XIqp4KIr"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E867A27AC4D;
-	Fri, 16 May 2025 18:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1DA281346;
+	Mon, 19 May 2025 15:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747420171; cv=none; b=dEo/lb45YDKj/cE46BtycnaX1aoZ+Tl1J3TwqEAXhwB3A8dlmAh5ZuyLwS4dGTQgcQoOBfyB5k0ZJkDc2Y4I671VcU/8FZa+M8T7lKgn5J29gTbEdYwwEaKNM48vshKSYJdbMjvGLzD/D+SiLHlQ53QWMBUgM6SKCri5WkvGh8k=
+	t=1747669222; cv=none; b=QurPCTXyk/LC8lOYms/CYCT/+IE2Xat8FpeAQ859EVLDoCHj8UYuNq3kVFZSUOUTaS+J+u8gvW5x1CVC/hlrSxaBVxEFfcWMZb9nRj2osEfN7Dw9q/pu0VpwLJdy27xRia2hDmz3PTToSlAlB+pahthwbEq9h+vcgi+TaBDunlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747420171; c=relaxed/simple;
-	bh=rrfPQWQxUpl+1TbJT7SuB/unJ120m8U+rV6GjI5dzKk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sumlo0PW3LyZVohNJPK0PRqCS4e3Jg15LklScmB/HrdRfqzRbrp2GSHqTmAbX3N8HMmwZNr47YA0dUeNuRyJ87jkTJuoDaRB+QhRaJkGYq39K8UmZwpjLxRMR6aiGRyn9waaeHKVmpVgZMNcWly1BjswisIy5q98/2RvbMZVbz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YGJ5sR8w; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747420169; x=1778956169;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rrfPQWQxUpl+1TbJT7SuB/unJ120m8U+rV6GjI5dzKk=;
-  b=YGJ5sR8wF/UzJ9iCWR9ltnypemNTkBkqJ9FBfCzsAIMC5uNTdZ+qk3Yd
-   t0gkqH37tXsdY2XFK0ox8SKDSSrUw1tbS6Ws7k5aua3yCdkyKcqtnWS3h
-   7fJDDh5gsW/2ob8K8kBe2HsD4F5EEoY4kSRjctuSlniXZpS0t1x8jBZXG
-   IM7RK0VrIg+BcfNRmG/BEc749Vbt/Iwv6CHBDZFusCBQvu81TtaEUAlkZ
-   ccJoEPFsLjCEygUa2hS8IxtbtBBPpcJDYx89/LIn1QHbYq5ten93+xTI/
-   UwqnpZApEIjAfLcHCN7tBFDMZYjCuVpvediph3NG7RqTOqGEZHE9018bz
-   g==;
-X-CSE-ConnectionGUID: Kd8ALGHrTZWLRwyh095PCw==
-X-CSE-MsgGUID: EapHDjHVTZq6peo+QpUNBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11435"; a="49328884"
-X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
-   d="scan'208";a="49328884"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 11:29:24 -0700
-X-CSE-ConnectionGUID: b9INNUNXTxm5M/F446xQug==
-X-CSE-MsgGUID: HTzrRv8lTLa9qlfqYLfWLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,294,1739865600"; 
-   d="scan'208";a="169802619"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by fmviesa001.fm.intel.com with ESMTP; 16 May 2025 11:29:24 -0700
-From: kan.liang@linux.intel.com
-To: peterz@infradead.org,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	irogers@google.com,
-	mark.rutland@arm.com,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Cc: eranian@google.com,
-	ctshao@google.com,
-	tmricht@linux.ibm.com,
-	leo.yan@arm.com,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Guo Ren <guoren@kernel.org>,
-	Mao Han <han_mao@c-sky.com>,
-	Guo Ren <ren_guo@c-sky.com>,
-	linux-csky@vger.kernel.org
-Subject: [PATCH V3 12/16] csky/perf: Remove driver-specific throttle support
-Date: Fri, 16 May 2025 11:28:49 -0700
-Message-Id: <20250516182853.2610284-13-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20250516182853.2610284-1-kan.liang@linux.intel.com>
-References: <20250516182853.2610284-1-kan.liang@linux.intel.com>
+	s=arc-20240116; t=1747669222; c=relaxed/simple;
+	bh=BM/Dl5qWCkMnJg16IPiFKB0N4stAnTqyudz0G2oBd3Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pA9e0f2RDtLHu8xnABNNQs56LoW+DcyF/ZUJpbjmrmg6wxhxpTbpjLYTwcMuQcVwPUmjABA+GcSBCOm4S6HXwzw8hOYlj+ZAWjG/an4o4OVCKX+RA60hkSEicjWSNJ7l5dAmyEYKc7MnnR73jw0ZYnsfrAGh0Yoy/yHRFBAFvLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=XIqp4KIr; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 61B3D41AA1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1747669219; bh=NsIpsnCHMaMX+L15e7tjvSysbCwRgG5P+DOALl6smkY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=XIqp4KIrZbxWevhvMsGnazsroPPopIYmYQ4Zp9YyfirCSncs81GyuxYz1djcggK5T
+	 U0vTUgwiADRBmVVqZkVVF4JDwtg0TcmUsPn3gWNUy7b4cK0Y6kmZhAToo/TuLfR/Ha
+	 TRhxzxWOPQu7zLmfZOqSSOHQluSk8D5coBz6oW7ePMXtaXaX32JIiuc0OalkEHSGMM
+	 1JwVon9qVfrjkkWeT72fDD6Q6RyLqsnfbJhQUHvfkFntRmYAZhV5f+vKtfdVp63lJw
+	 yHT/EAA8VeKjQzlYblZ+O5zbmS/sdgINTkI9QJorwZ/2XNWmHyEtuejRvdC+D3Igfk
+	 flbFcoIS7Q2bg==
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 61B3D41AA1;
+	Mon, 19 May 2025 15:40:18 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Jesung Yang <y.j3ms.n@gmail.com>
+Cc: Vineet Gupta <vgupta@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren
+ <guoren@kernel.org>, Brian Cain <bcain@kernel.org>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Dinh Nguyen
+ <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, Stefan
+ Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne
+ <shorne@gmail.com>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-openrisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jesung Yang <y.j3ms.n@gmail.com>
+Subject: Re: [PATCH] docs: align with scripts/syscall.tbl migration
+In-Reply-To: <20250506194841.1567737-1-y.j3ms.n@gmail.com>
+References: <20250506194841.1567737-1-y.j3ms.n@gmail.com>
+Date: Mon, 19 May 2025 09:40:15 -0600
+Message-ID: <87ldqsip7k.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Kan Liang <kan.liang@linux.intel.com>
+Jesung Yang <y.j3ms.n@gmail.com> writes:
 
-The throttle support has been added in the generic code. Remove
-the driver-specific throttle support.
+> Update the documentation to reflect the migration of the following
+> architectures to the centralized syscall table format:
+>
+>   arc, arm64, csky, hexagon, loongarch, nios2, openrisc, riscv
+>
+> As of commit 3db80c999debbad ("riscv: convert to generic syscall table"),
+> these architectures no longer rely on include/uapi/asm-generic/unistd.h.
+> Instead, syscall table headers (syscall_table_{32,64}.h) are generated by
+> scripts/syscalltbl.sh based on entries in scripts/syscall.tbl, with ABIs
+> specified in arch/*/kernel/Makefile.syscalls.
+>
+> For the convenience of developers working with older kernel versions, the
+> original documentation is fully retained, with new sections added to
+> cover the scripts/syscall.tbl approach.
+>
+> Verified with `make htmldocs`.
+>
+> Signed-off-by: Jesung Yang <y.j3ms.n@gmail.com>
+> Link: https://lore.kernel.org/lkml/20240704143611.2979589-1-arnd@kernel.org
 
-Besides the throttle, perf_event_overflow may return true because of
-event_limit. It already does an inatomic event disable. The pmu->stop
-is not required either.
+I'm not sure anybody has looked at this ... but nobody has complained,
+anyway.
 
-Acked-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: Mao Han <han_mao@c-sky.com>
-Cc: Guo Ren <ren_guo@c-sky.com>
-Cc: linux-csky@vger.kernel.org
----
- arch/csky/kernel/perf_event.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+I have applied it but ... it seems like this document needs a more
+thorough refresh rather than just adding some "actually, don't do it
+that way on these architectures" notes?  Hopefully somebody will find
+the energy to do that at some point.
 
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index e5f18420ce64..e0a36acd265b 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -1139,8 +1139,7 @@ static irqreturn_t csky_pmu_handle_irq(int irq_num, void *dev)
- 		perf_sample_data_init(&data, 0, hwc->last_period);
- 		csky_pmu_event_set_period(event);
- 
--		if (perf_event_overflow(event, &data, regs))
--			csky_pmu_stop_event(event);
-+		perf_event_overflow(event, &data, regs);
- 	}
- 
- 	csky_pmu_enable(&csky_pmu.pmu);
--- 
-2.38.1
+Thanks,
 
+jon
 
