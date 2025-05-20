@@ -1,129 +1,127 @@
-Return-Path: <linux-csky+bounces-2056-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2057-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F936ABC57A
-	for <lists+linux-csky@lfdr.de>; Mon, 19 May 2025 19:20:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02373ABE275
+	for <lists+linux-csky@lfdr.de>; Tue, 20 May 2025 20:19:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CF937AA57D
-	for <lists+linux-csky@lfdr.de>; Mon, 19 May 2025 17:18:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FA307A1D0E
+	for <lists+linux-csky@lfdr.de>; Tue, 20 May 2025 18:18:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EAB6244699;
-	Mon, 19 May 2025 17:20:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B09002882A5;
+	Tue, 20 May 2025 18:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nv6a6o/9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZH35E+Zt"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DEF1DE2DF;
-	Mon, 19 May 2025 17:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03487285412;
+	Tue, 20 May 2025 18:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747675209; cv=none; b=nzmdV7pdP3ZqRQcDjNmd+hDZ+c0HQu+Up+tVHBWPoO+LiuRJa8SiZWy65vZdNOQpA/iK0XVIPMbbt5zybdhNoHiHI/cNqmAHE2L0X10m6O27s6EwmX92eOfOyZ1XaRo2oE8IIvGXgBXOxFrgOBXu6dUEFFbRnIEa6XQQd/i9CjQ=
+	t=1747765042; cv=none; b=u4zKEGCPG4ARj1vRlB4RHJkcCXwXGwvwiKRKB69B/YUZ1JQQrDvqJ9I9Z3JIaHrSF5zjUvaTz7WmR/VnbAmiglFj0r4DG0CDZyB72CrFuNF8bXePpkFSkEkyrt4ErCW9WZyYJ9ydqVfiiZHAACkj69nyoyr+c0cM73d0S9fr08g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747675209; c=relaxed/simple;
-	bh=/qDPGAJe6QWZQRFh5mkIaN3rUECBPrvhVDophOu0STQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kDsIzr/h8OwM3S8fzRfwd/auHPBxqnubkI86JW5C5n+qO8fxXY5mlWvOtqDpvlRZDXRuruys3PudRSuSyVdMzsxV2dbG8SV+IMsIBBXrXa9mUJS9Pc9iw0+26i0+8KWprzLHPZ+w8UYWg7E2isrgyp0sG13GsICfwfaIIe7W2fI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nv6a6o/9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0486C4CEE4;
-	Mon, 19 May 2025 17:19:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747675208;
-	bh=/qDPGAJe6QWZQRFh5mkIaN3rUECBPrvhVDophOu0STQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nv6a6o/9GXqFce+WdqziKMZrgOnXd14Xk3g4S1nNlUHZltfdV2rEB9RDQCOmCeSgK
-	 ebQsjcpfmgR6sWVWBw5dta/I6m1xLYkae6rTJ4OSb859vEywgddyloj50eaFEjRTPe
-	 8FJ2qDU6rfYPGiDk1ORLqVzTGk/lQ8qlSrYclPnaRHuqKyuUafe4DFZ6lMgRdY6Wt1
-	 dRptEgZtQ8qGZDrQUwGD8JbkbioWwAY9aSpa8iIJWxNVsecoqluy1Xci9uIALX28U6
-	 ObnLi7IgFlid4DAXOMe7kw3cQbAB55J7ruXkv/fKErQRWuv0MXWPHfuo3pZS732DBZ
-	 yyZPReh2t/BVw==
-Date: Mon, 19 May 2025 20:19:48 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Alexandre Ghiti <alex@ghiti.fr>
-Cc: Pratyush Yadav <ptyadav@amazon.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mark Brown <broonie@kernel.org>, Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Stafford Horne <shorne@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>, Praveen Kumar <pravkmr@amazon.de>,
-	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH v2 10/13] arch, mm: set high_memory in free_area_init()
-Message-ID: <aCtoNLf1FbtqijGr@kernel.org>
-References: <20250313135003.836600-1-rppt@kernel.org>
- <20250313135003.836600-11-rppt@kernel.org>
- <mafs05xi0o9ri.fsf@amazon.de>
- <aCdveN2w9ThjVhae@kernel.org>
- <dc4e60dc-9b78-473a-9c18-3a2f128a02d2@ghiti.fr>
+	s=arc-20240116; t=1747765042; c=relaxed/simple;
+	bh=rrfPQWQxUpl+1TbJT7SuB/unJ120m8U+rV6GjI5dzKk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=QdYn2gsPdIgS3+VAnBG6iHIJGN3Taz1+eOns4qOxXKvmmJzbEvphoSIydH06PbxRXazb5iN4+fXn2man/K5L3rmrIbWvYyQZ2m16HIhSRKRZ9Roc2jmhVPxfaqb1rKVGKPIdI4U2iVbN9sVHlTNoDHpKanfkhrcE/DqXzErEa90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZH35E+Zt; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747765041; x=1779301041;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rrfPQWQxUpl+1TbJT7SuB/unJ120m8U+rV6GjI5dzKk=;
+  b=ZH35E+Zt23/1HV2TA6TpierBNxActOiuaH4u+zK4/BH4yqSFVpHHRagr
+   Ufbi2znWpWd+Ix4s+9IIoTU7e2aCWj1WbyL8wZXb8dDdeJwxufMy5iv8B
+   98v1e++6VWAIvEwylljMxzEjznABnZIHgtWmB5VSXC5ysPfvD5VP38EoM
+   iYXRYH+PD/211dew7ZaGuxQZwa3osNMu3mAaixtOYLLLG2dIh4Bg6fzdc
+   eAiSlQNmhtZ1ebkZe0eN6T3NpmiJRGebDeEkIlgzgLC/YG/y4ARvsTLeX
+   0452BxLirUKv24rEFztE02Ypq2ZVFQFsvxjS8u04Ue0XuTv/7O2Kr/RbJ
+   Q==;
+X-CSE-ConnectionGUID: olNzmwJPTj6N5vzuvz1d/Q==
+X-CSE-MsgGUID: WxBKMJsVTTW7QWigf35iGQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="49848034"
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="49848034"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 11:17:14 -0700
+X-CSE-ConnectionGUID: HPiXoGeHQsGm9bdl/h2sWw==
+X-CSE-MsgGUID: 32SONy88R0i1xY+3Fd5/qA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
+   d="scan'208";a="144514720"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orviesa003.jf.intel.com with ESMTP; 20 May 2025 11:17:13 -0700
+From: kan.liang@linux.intel.com
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	namhyung@kernel.org,
+	irogers@google.com,
+	mark.rutland@arm.com,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Cc: eranian@google.com,
+	ctshao@google.com,
+	tmricht@linux.ibm.com,
+	leo.yan@arm.com,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Guo Ren <guoren@kernel.org>,
+	Mao Han <han_mao@c-sky.com>,
+	Guo Ren <ren_guo@c-sky.com>,
+	linux-csky@vger.kernel.org
+Subject: [PATCH V4 12/16] csky/perf: Remove driver-specific throttle support
+Date: Tue, 20 May 2025 11:16:40 -0700
+Message-Id: <20250520181644.2673067-13-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20250520181644.2673067-1-kan.liang@linux.intel.com>
+References: <20250520181644.2673067-1-kan.liang@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dc4e60dc-9b78-473a-9c18-3a2f128a02d2@ghiti.fr>
+Content-Transfer-Encoding: 8bit
 
-Hi Alexandre,
+From: Kan Liang <kan.liang@linux.intel.com>
 
-On Mon, May 19, 2025 at 05:54:23PM +0200, Alexandre Ghiti wrote:
-> Hi Mike,
-> 
-> I encountered the same error as Pratyush and the above diff fixes it: do you
-> plan on sending this fix for 6.15?
-> 
-> If so, you can add:
-> 
-> Tested-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+The throttle support has been added in the generic code. Remove
+the driver-specific throttle support.
 
-Thanks!
-Here's the patch:
-https://lore.kernel.org/linux-mm/20250519171805.1288393-1-rppt@kernel.org
+Besides the throttle, perf_event_overflow may return true because of
+event_limit. It already does an inatomic event disable. The pmu->stop
+is not required either.
 
-> Thanks,
-> Alex
+Acked-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mao Han <han_mao@c-sky.com>
+Cc: Guo Ren <ren_guo@c-sky.com>
+Cc: linux-csky@vger.kernel.org
+---
+ arch/csky/kernel/perf_event.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
+index e5f18420ce64..e0a36acd265b 100644
+--- a/arch/csky/kernel/perf_event.c
++++ b/arch/csky/kernel/perf_event.c
+@@ -1139,8 +1139,7 @@ static irqreturn_t csky_pmu_handle_irq(int irq_num, void *dev)
+ 		perf_sample_data_init(&data, 0, hwc->last_period);
+ 		csky_pmu_event_set_period(event);
+ 
+-		if (perf_event_overflow(event, &data, regs))
+-			csky_pmu_stop_event(event);
++		perf_event_overflow(event, &data, regs);
+ 	}
+ 
+ 	csky_pmu_enable(&csky_pmu.pmu);
 -- 
-Sincerely yours,
-Mike.
+2.38.1
+
 
