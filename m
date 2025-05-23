@@ -1,127 +1,171 @@
-Return-Path: <linux-csky+bounces-2057-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2058-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02373ABE275
-	for <lists+linux-csky@lfdr.de>; Tue, 20 May 2025 20:19:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78ECDAC1AF6
+	for <lists+linux-csky@lfdr.de>; Fri, 23 May 2025 06:27:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FA307A1D0E
-	for <lists+linux-csky@lfdr.de>; Tue, 20 May 2025 18:18:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 327A116FC0B
+	for <lists+linux-csky@lfdr.de>; Fri, 23 May 2025 04:27:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B09002882A5;
-	Tue, 20 May 2025 18:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCD0221F25;
+	Fri, 23 May 2025 04:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZH35E+Zt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+B/SzNJ"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03487285412;
-	Tue, 20 May 2025 18:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706561F4171;
+	Fri, 23 May 2025 04:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747765042; cv=none; b=u4zKEGCPG4ARj1vRlB4RHJkcCXwXGwvwiKRKB69B/YUZ1JQQrDvqJ9I9Z3JIaHrSF5zjUvaTz7WmR/VnbAmiglFj0r4DG0CDZyB72CrFuNF8bXePpkFSkEkyrt4ErCW9WZyYJ9ydqVfiiZHAACkj69nyoyr+c0cM73d0S9fr08g=
+	t=1747974465; cv=none; b=KAxzQFsNGa8BVK3ef6gs6a4fPyx5h6xHzvumny30l4gdl8cb1MhztDikCXBJ2VIo4Vui62chQiE7t4w4DmE2nNWMbzB5A+mDygmHqhsUcDFfvD+Jv/4BktR0gH9dlFVqRGlb8iuOw6Ecffao26WIVbrEsdAKNbVOVG9yeb0LjZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747765042; c=relaxed/simple;
-	bh=rrfPQWQxUpl+1TbJT7SuB/unJ120m8U+rV6GjI5dzKk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QdYn2gsPdIgS3+VAnBG6iHIJGN3Taz1+eOns4qOxXKvmmJzbEvphoSIydH06PbxRXazb5iN4+fXn2man/K5L3rmrIbWvYyQZ2m16HIhSRKRZ9Roc2jmhVPxfaqb1rKVGKPIdI4U2iVbN9sVHlTNoDHpKanfkhrcE/DqXzErEa90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZH35E+Zt; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747765041; x=1779301041;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rrfPQWQxUpl+1TbJT7SuB/unJ120m8U+rV6GjI5dzKk=;
-  b=ZH35E+Zt23/1HV2TA6TpierBNxActOiuaH4u+zK4/BH4yqSFVpHHRagr
-   Ufbi2znWpWd+Ix4s+9IIoTU7e2aCWj1WbyL8wZXb8dDdeJwxufMy5iv8B
-   98v1e++6VWAIvEwylljMxzEjznABnZIHgtWmB5VSXC5ysPfvD5VP38EoM
-   iYXRYH+PD/211dew7ZaGuxQZwa3osNMu3mAaixtOYLLLG2dIh4Bg6fzdc
-   eAiSlQNmhtZ1ebkZe0eN6T3NpmiJRGebDeEkIlgzgLC/YG/y4ARvsTLeX
-   0452BxLirUKv24rEFztE02Ypq2ZVFQFsvxjS8u04Ue0XuTv/7O2Kr/RbJ
-   Q==;
-X-CSE-ConnectionGUID: olNzmwJPTj6N5vzuvz1d/Q==
-X-CSE-MsgGUID: WxBKMJsVTTW7QWigf35iGQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="49848034"
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="49848034"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 11:17:14 -0700
-X-CSE-ConnectionGUID: HPiXoGeHQsGm9bdl/h2sWw==
-X-CSE-MsgGUID: 32SONy88R0i1xY+3Fd5/qA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="144514720"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orviesa003.jf.intel.com with ESMTP; 20 May 2025 11:17:13 -0700
-From: kan.liang@linux.intel.com
-To: peterz@infradead.org,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	irogers@google.com,
-	mark.rutland@arm.com,
+	s=arc-20240116; t=1747974465; c=relaxed/simple;
+	bh=lgNiU/m3wYgiNRPskBdobdPyMkNUXLHcj+PUPwYu7p8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fsIGqHCoIjqYO0kJv+yRIcp0QeMKx0JJa8/Fqi0J9oYYekKrDvYNDBBBknXq9s9qQ4bpyYyo0lJFaTsN6XmmTdMJMi/emVLaocvCHkIqBmzS5uBeWV6twineUPp8ow0xTJpHAE7BdTnHvPGsQlZttMOPQeC66a8fxaKgXgrzG5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+B/SzNJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCD5BC4CEE9;
+	Fri, 23 May 2025 04:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747974464;
+	bh=lgNiU/m3wYgiNRPskBdobdPyMkNUXLHcj+PUPwYu7p8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=T+B/SzNJxphWY2GG9zFVT3cEtSuXG/3fv0dKVNvIPpxej47fxitxDAbfaDYIh7Ek5
+	 bBXdQj4UFjzbDc8JnQB7iwIV+ZiXdeTuIIaHHaU0+tZSkcNyVmYn4YomvBt/98wlgC
+	 ZuN/gDlxPPlQq10TSci24yv62X/e8SF5XEyhNkLmT2Xhhm0j9xi5QLnLwDrdwALdyt
+	 alAOlCFORFDfZCZJ+L8NJ/l9fR+ZLh9GZfwg3EM20T5jHhpO4kzKNiDGdYUApiHPZi
+	 pwSQColQQQ2AxWkHF3PpejWIBk8Q7Kdw/+UE6H3hUSsjmlLjMTRbUv+AlCKNhvlD7T
+	 d0tQ3J3lx4OCQ==
+From: Kees Cook <kees@kernel.org>
+To: Guo Ren <guoren@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Yan Zhao <yan.y.zhao@intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	linux-csky@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Cc: eranian@google.com,
-	ctshao@google.com,
-	tmricht@linux.ibm.com,
-	leo.yan@arm.com,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Guo Ren <guoren@kernel.org>,
-	Mao Han <han_mao@c-sky.com>,
-	Guo Ren <ren_guo@c-sky.com>,
-	linux-csky@vger.kernel.org
-Subject: [PATCH V4 12/16] csky/perf: Remove driver-specific throttle support
-Date: Tue, 20 May 2025 11:16:40 -0700
-Message-Id: <20250520181644.2673067-13-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20250520181644.2673067-1-kan.liang@linux.intel.com>
-References: <20250520181644.2673067-1-kan.liang@linux.intel.com>
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] csky: string.h: Provide basic sanity checks for fallback memcpy()
+Date: Thu, 22 May 2025 21:27:39 -0700
+Message-Id: <20250523042738.work.777-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3446; i=kees@kernel.org; h=from:subject:message-id; bh=lgNiU/m3wYgiNRPskBdobdPyMkNUXLHcj+PUPwYu7p8=; b=owGbwMvMwCVmps19z/KJym7G02pJDBn6P60PNV3uXLDJVV/Xdc7Jq/s+WN2Okntz3OaO/vaND jWxf06UdZSyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEzkSQjDP1XGzXIqJkknGA5E q0nGRUv+a1hlk71LVdz59nQPk79ajxj+JzY7fPONlzTnKunU7ltaMdfo9abEVdX52d/sVh9vPSz FAAA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-From: Kan Liang <kan.liang@linux.intel.com>
+Add basic sanity checking for pathological "size" arguments to
+memcpy(). Besides the run-time checking benefit, this avoids
+GCC trying to be very smart about value range tracking[1] when
+CONFIG_PROFILE_ALL_BRANCHES=y but FORTIFY_SOURCE=n.
 
-The throttle support has been added in the generic code. Remove
-the driver-specific throttle support.
+Additionally avoid duplicate memcpy definitions in page.h.
 
-Besides the throttle, perf_event_overflow may return true because of
-event_limit. It already does an inatomic event disable. The pmu->stop
-is not required either.
-
-Acked-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: Mao Han <han_mao@c-sky.com>
-Cc: Guo Ren <ren_guo@c-sky.com>
-Cc: linux-csky@vger.kernel.org
+Link: https://lore.kernel.org/all/202505191117.C094A90F88@keescook/ [1]
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/all/202501040747.S3LYfvYq-lkp@intel.com/
+Signed-off-by: Kees Cook <kees@kernel.org>
 ---
- arch/csky/kernel/perf_event.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ v2: split this off to csky
+ v1: https://lore.kernel.org/lkml/20250520163320.work.924-kees@kernel.org/
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: Yan Zhao <yan.y.zhao@intel.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: <linux-csky@vger.kernel.org>
+---
+ arch/csky/abiv1/inc/abi/string.h | 11 +++++++++++
+ arch/csky/abiv2/inc/abi/string.h | 11 +++++++++++
+ arch/csky/include/asm/page.h     |  4 +---
+ 3 files changed, 23 insertions(+), 3 deletions(-)
 
-diff --git a/arch/csky/kernel/perf_event.c b/arch/csky/kernel/perf_event.c
-index e5f18420ce64..e0a36acd265b 100644
---- a/arch/csky/kernel/perf_event.c
-+++ b/arch/csky/kernel/perf_event.c
-@@ -1139,8 +1139,7 @@ static irqreturn_t csky_pmu_handle_irq(int irq_num, void *dev)
- 		perf_sample_data_init(&data, 0, hwc->last_period);
- 		csky_pmu_event_set_period(event);
+diff --git a/arch/csky/abiv1/inc/abi/string.h b/arch/csky/abiv1/inc/abi/string.h
+index de50117b904d..9e780877d8ab 100644
+--- a/arch/csky/abiv1/inc/abi/string.h
++++ b/arch/csky/abiv1/inc/abi/string.h
+@@ -6,6 +6,17 @@
+ #define __HAVE_ARCH_MEMCPY
+ extern void *memcpy(void *, const void *, __kernel_size_t);
  
--		if (perf_event_overflow(event, &data, regs))
--			csky_pmu_stop_event(event);
-+		perf_event_overflow(event, &data, regs);
- 	}
++#ifndef CONFIG_FORTIFY_SOURCE
++#define memcpy(t, f, n)					\
++	({						\
++		typeof(n) __n = (n);			\
++		/* Skip impossible sizes. */		\
++		if (!(__n < 0 || __n == SIZE_MAX))	\
++			__builtin_memcpy(t, f, __n);	\
++		(t);					\
++	})
++#endif /* !CONFIG_FORTIFY_SOURCE */
++
+ #define __HAVE_ARCH_MEMMOVE
+ extern void *memmove(void *, const void *, __kernel_size_t);
  
- 	csky_pmu_enable(&csky_pmu.pmu);
+diff --git a/arch/csky/abiv2/inc/abi/string.h b/arch/csky/abiv2/inc/abi/string.h
+index f01bad2ac4fb..e66d5d2f7e52 100644
+--- a/arch/csky/abiv2/inc/abi/string.h
++++ b/arch/csky/abiv2/inc/abi/string.h
+@@ -9,6 +9,17 @@ extern int memcmp(const void *, const void *, __kernel_size_t);
+ #define __HAVE_ARCH_MEMCPY
+ extern void *memcpy(void *, const void *, __kernel_size_t);
+ 
++#ifndef CONFIG_FORTIFY_SOURCE
++#define memcpy(t, f, n)					\
++	({						\
++		typeof(n) __n = (n);			\
++		/* Skip impossible sizes. */		\
++		if (!(__n < 0 || __n == SIZE_MAX))	\
++			__builtin_memcpy(t, f, __n);	\
++		(t);					\
++	})
++#endif /* !CONFIG_FORTIFY_SOURCE */
++
+ #define __HAVE_ARCH_MEMMOVE
+ extern void *memmove(void *, const void *, __kernel_size_t);
+ 
+diff --git a/arch/csky/include/asm/page.h b/arch/csky/include/asm/page.h
+index 4911d0892b71..069971389ce6 100644
+--- a/arch/csky/include/asm/page.h
++++ b/arch/csky/include/asm/page.h
+@@ -5,6 +5,7 @@
+ 
+ #include <asm/setup.h>
+ #include <asm/cache.h>
++#include <asm/string.h>
+ #include <linux/const.h>
+ 
+ #include <vdso/page.h>
+@@ -33,9 +34,6 @@
+ #define virt_addr_valid(kaddr)  ((void *)(kaddr) >= (void *)PAGE_OFFSET && \
+ 			(void *)(kaddr) < high_memory)
+ 
+-extern void *memset(void *dest, int c, size_t l);
+-extern void *memcpy(void *to, const void *from, size_t l);
+-
+ #define clear_page(page)	memset((page), 0, PAGE_SIZE)
+ #define copy_page(to, from)	memcpy((to), (from), PAGE_SIZE)
+ 
 -- 
-2.38.1
+2.34.1
 
 
