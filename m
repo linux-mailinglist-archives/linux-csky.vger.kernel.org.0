@@ -1,241 +1,261 @@
-Return-Path: <linux-csky+bounces-2076-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2077-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B73FAFA373
-	for <lists+linux-csky@lfdr.de>; Sun,  6 Jul 2025 09:33:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A41FAFDF0C
+	for <lists+linux-csky@lfdr.de>; Wed,  9 Jul 2025 07:13:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D679617AE07
-	for <lists+linux-csky@lfdr.de>; Sun,  6 Jul 2025 07:33:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEB0F1BC6B14
+	for <lists+linux-csky@lfdr.de>; Wed,  9 Jul 2025 05:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 947731B425C;
-	Sun,  6 Jul 2025 07:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B446269D11;
+	Wed,  9 Jul 2025 05:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K3JWObOH"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="P+9TWd4x"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57ADF19F127
-	for <linux-csky@vger.kernel.org>; Sun,  6 Jul 2025 07:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0F174C08;
+	Wed,  9 Jul 2025 05:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751787203; cv=none; b=ro+cKQP/I7s7CsZVRkozHTRiNfGQSdmU7A9pRdsYDe2F8VbRWwIdJFT+C5LY6O4hADnvUsNgFYhm3/sHgWwlGpcBco52PVDxg1dzH2cQuoFStFPO3N2usJLepTiwvk87qiVeO6CzYiTm93aHE0iMOZUW5QZgg4wTuhwAsXOxm4c=
+	t=1752038034; cv=none; b=cYNceocUiHN7nmUHZm3xfZqQ9l+jSV8and5OxWDnUgOUb7IHSi1Sdy0XkjEBHzy5Q2m6v0uBFRd+X613+2tB9LV5xSxdwRJeaC10G0vRoseQ1XO7X2sAbSGZQfCk7YiAErXR8tEZ751T+qeSanFDNxz4acBxGvJ7NxkVApq9lMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751787203; c=relaxed/simple;
-	bh=buNIGFf1lCBRvWJHK8Ks2oaVbbxjToutmKFJesXy8Kg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NwuxqZoE409cLR30W+uOq7Pxm+d0fUT9cQ9f2P2uN4zfPmg3EI4KpjSyWJWKRVf4bD7RhCeAn8eQTVRsKTPowKTxJ5lKHinL57X66iFCYL8cwDdGVMU87XBVnqiYlpXeYNMIwcAkpI0kH3O1LM8uvmiK2I8BAGnu8OGjuTs8LtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K3JWObOH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751787200;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8nB4u3VvYj2b+Y+Hwszg9Nkd9mXoAr8FE8T9wmkbC1U=;
-	b=K3JWObOHaxPJrh00RaFFPvSUSdUHp4hrN6Y4zYIfyC6S2t1v7BJ+PRKjF587paLM+09+6x
-	RUMda6iER2Ne/M3OmP1e3EUXnmRoIsB4VbafPVs4CcWEpZO8HcmQ+bDTwoMFT+Iq8aiD4l
-	HUt/clNvIgCKHg7UJVf+wep6XL+dE1M=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-632-9oS8QYOAMK6SSRy4-1y3RA-1; Sun, 06 Jul 2025 03:33:18 -0400
-X-MC-Unique: 9oS8QYOAMK6SSRy4-1y3RA-1
-X-Mimecast-MFC-AGG-ID: 9oS8QYOAMK6SSRy4-1y3RA_1751787197
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-ae0a3511145so136127666b.3
-        for <linux-csky@vger.kernel.org>; Sun, 06 Jul 2025 00:33:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751787197; x=1752391997;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8nB4u3VvYj2b+Y+Hwszg9Nkd9mXoAr8FE8T9wmkbC1U=;
-        b=f7RPCc8bnMjT7L7YTPQnJ2L8A6x4LMORGUJwSyc7Gh4ej0R+kgTo7W4vl3ZagpaWMW
-         KxhrZbM1ZYtR5wfbXYrDxB0sZdlHsqpIk+g+MLA8sP6bul+b+ZMdHJbHV/CVdhHyHhlC
-         KBUB4k8DyiaaHVnoHFKg9LR0PonTxUyxpmkdBbgd4t9J+R2EA993Rk4aLyKqsTfL+F+x
-         xc5xRin4Kbvw9YU8LrRbX7x5D+bEz4Oec3riuj4fMtO+dcm30MU7SqO1aov+znQnKa0d
-         Z4objfajEv//PzsTlQ6X0Qiffg9211HnKMHQ17Lul71rh6Ycvvt4+rcazC9v72gLOT0/
-         x3dg==
-X-Forwarded-Encrypted: i=1; AJvYcCXLn9ycPTwDumqOTp6SDHXuz3P+Wp99xeRfM6JZDKEO3pmDQ+CIYKUYxzviAowrmdU77alUNjEckhcW@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiI6QtZF7LXApHGd0UFDQf88y1mmtCaehv2z94l2ZBcMg6zOsh
-	nCwuTV/w2EW+/Lw32/BfvJVmH6RFk1NQ3e2P/7tjmLP4KvEWSHrOygx2Dr/wHiwnJY/rMVttvX3
-	uqKUjE8iI5LAuwTdMrLxHkpkkxMx3pbJ5ijs3HL2rabBblOIjFfze4ApnLYqPecU=
-X-Gm-Gg: ASbGncuJbmwYs6wrOHRXwQAK4eAS8l0ymuWcKe2V5j5o3BvYdozMqRFWY7uUPYVeMkg
-	dcswqsN7hinL+ft3BAr4nKt7+8gZoURI5bK5E2UHymtqvQ41FAmcLu24axhxgjMgsK2SMsiZwYO
-	/dNTqkWwCX6ZvBCKsgq+/JkxsqamlIuzcyhuXaCDFdH4NEGUN5np7B7MfTSnA1vsa7ClyO4wqpG
-	eqgHau9mbrgyXpfYAvyJKw8PEd9Txh2GsRza/QSJYGVEAomsFkQbs1E8QAbsClECfNUrX5LBj5w
-	QJiHCta8pHw=
-X-Received: by 2002:a17:907:7b89:b0:ae3:6bd5:ebe7 with SMTP id a640c23a62f3a-ae4108e67e2mr471998766b.54.1751787197006;
-        Sun, 06 Jul 2025 00:33:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEdZ/RWKxvyH+k3bokX/8Ejj0weppgHWahqBm0Uq3RrWgxm0cO5cbf+Z5pa5I7Iul+H4ix2hw==
-X-Received: by 2002:a17:907:7b89:b0:ae3:6bd5:ebe7 with SMTP id a640c23a62f3a-ae4108e67e2mr471995966b.54.1751787196403;
-        Sun, 06 Jul 2025 00:33:16 -0700 (PDT)
-Received: from redhat.com ([31.187.78.69])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f6b5e839sm470754566b.157.2025.07.06.00.33.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Jul 2025 00:33:15 -0700 (PDT)
-Date: Sun, 6 Jul 2025 03:33:12 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
-	Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-	oe-kbuild-all@lists.linux.dev,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Yuri Benditovich <yuri.benditovich@daynix.com>,
-	Akihiko Odaki <akihiko.odaki@daynix.com>,
-	Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 net-next 4/9] vhost-net: allow configuring extended
- features
-Message-ID: <20250706032944-mutt-send-email-mst@kernel.org>
-References: <23e46bff5333015d92bf0876033750d9fbf555a0.1750753211.git.pabeni@redhat.com>
- <202506271443.G9cAx8PS-lkp@intel.com>
- <eca0952c-d96c-4d80-8f07-86c8d4caae0b@redhat.com>
- <27f1275a-aaff-4cc2-896c-b2c34f08ab73@redhat.com>
+	s=arc-20240116; t=1752038034; c=relaxed/simple;
+	bh=EN5ByLBGywGLTiCp1bK3fyTglM7Zbn5pwSVlzcDFN2s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pGaipwUU/aWjK1ythTQJVB8GAk8/oF60HBsfg6QT1XCQjprEGRFucFBWqmHYIaM3ejuBgZ/jCUyxmBwom6aUfqrJ0vh1E8NKq2nX79cFGQHyA9TWijFUzHMFWfgbCQzhY4jrJSPu8MAc6O0OLzDJm7f+MPTYH/P8/ezZAE14tFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=P+9TWd4x reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+Received: from [157.82.206.39] ([157.82.206.39])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 56955rZV065688
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Wed, 9 Jul 2025 14:05:53 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=4clTUl4sMeFn+3+ZKeZuCK2i1/1ZYbUuPzsuXuco86k=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=Message-ID:Date:Subject:To:From;
+        s=rs20250326; t=1752037554; v=1;
+        b=P+9TWd4xgbOJt4IAGxHHsFZCUP5mU2LruCqB6XvGSTxPuNiG88lEdFqKSI5e8GV9
+         IZQ027gIzqE6R884yIAbqFDeeb+QV4d98ETFvdXUnoX+FYopiMFnNscVsB2zI9Wa
+         2l2RcZyKqEBQDUjGZTaMI0r6Rf5IedBu6hCBpXk/895FEVdR2zQg58ehwJmyxgfF
+         XT9yXnMK/B98pfOeSBYxC5A9B18qaCU6AclyvtM00Ovo46CMOeuPcCCb07Ssut/I
+         yGZrAOC9hnteaFT0HuEm66QoaIAFlJenYdCL8L9SlWdVr/Lxm01+5vFw0NVbVwNR
+         jKgFire83dealgPIcgL8rg==
+Message-ID: <36c0213c-6b14-4ad2-969e-3d8e356bb680@rsg.ci.i.u-tokyo.ac.jp>
+Date: Wed, 9 Jul 2025 14:05:53 +0900
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27f1275a-aaff-4cc2-896c-b2c34f08ab73@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/23] binfmt_elf,arch/*: Use elf.h for coredump note
+ names
+To: Dave Martin <Dave.Martin@arm.com>, linux-kernel@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, "H. Peter Anvin"
+ <hpa@zytor.com>,
+        "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandre Ghiti <alex@ghiti.fr>, Andreas Larsson <andreas@gaisler.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dinh Nguyen
+ <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Jonas Bonn <jonas@southpole.se>, Kees Cook <kees@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Max Filippov
+ <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley
+ <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>, Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+References: <20250701135616.29630-1-Dave.Martin@arm.com>
+Content-Language: en-US
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <20250701135616.29630-1-Dave.Martin@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 27, 2025 at 04:36:14PM +0200, Paolo Abeni wrote:
-> On 6/27/25 3:11 PM, Paolo Abeni wrote:
-> > +csky maintainer
-> > On 6/27/25 8:41 AM, kernel test robot wrote:
-> >> Hi Paolo,
-> >>
-> >> kernel test robot noticed the following build warnings:
-> >>
-> >> [auto build test WARNING on net-next/main]
-> >>
-> >> url:    https://github.com/intel-lab-lkp/linux/commits/Paolo-Abeni/scripts-kernel_doc-py-properly-handle-VIRTIO_DECLARE_FEATURES/20250624-221751
-> >> base:   net-next/main
-> >> patch link:    https://lore.kernel.org/r/23e46bff5333015d92bf0876033750d9fbf555a0.1750753211.git.pabeni%40redhat.com
-> >> patch subject: [PATCH v6 net-next 4/9] vhost-net: allow configuring extended features
-> >> config: csky-randconfig-001-20250627 (https://download.01.org/0day-ci/archive/20250627/202506271443.G9cAx8PS-lkp@intel.com/config)
-> >> compiler: csky-linux-gcc (GCC) 15.1.0
-> >> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250627/202506271443.G9cAx8PS-lkp@intel.com/reproduce)
-> >>
-> >> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> >> the same patch/commit), kindly add following tags
-> >> | Reported-by: kernel test robot <lkp@intel.com>
-> >> | Closes: https://lore.kernel.org/oe-kbuild-all/202506271443.G9cAx8PS-lkp@intel.com/
-> >>
-> >> All warnings (new ones prefixed by >>):
-> >>
-> >>    In file included from include/linux/uaccess.h:12,
-> >>                     from include/linux/sched/task.h:13,
-> >>                     from include/linux/sched/signal.h:9,
-> >>                     from include/linux/rcuwait.h:6,
-> >>                     from include/linux/percpu-rwsem.h:7,
-> >>                     from include/linux/fs.h:34,
-> >>                     from include/linux/compat.h:17,
-> >>                     from drivers/vhost/net.c:8:
-> >>    arch/csky/include/asm/uaccess.h: In function '__get_user_fn.constprop':
-> >>>> arch/csky/include/asm/uaccess.h:147:9: warning: 'retval' is used uninitialized [-Wuninitialized]
-> >>      147 |         __asm__ __volatile__(                           \
-> >>          |         ^~~~~~~
-> >>    arch/csky/include/asm/uaccess.h:187:17: note: in expansion of macro '__get_user_asm_64'
-> >>      187 |                 __get_user_asm_64(x, ptr, retval);
-> >>          |                 ^~~~~~~~~~~~~~~~~
-> >>    arch/csky/include/asm/uaccess.h:170:13: note: 'retval' was declared here
-> >>      170 |         int retval;
-> >>          |             ^~~~~~
-> >>
-> >>
-> >> vim +/retval +147 arch/csky/include/asm/uaccess.h
-> >>
-> >> da551281947cb2c Guo Ren 2018-09-05  141  
-> >> e58a41c2226847f Guo Ren 2021-04-21  142  #define __get_user_asm_64(x, ptr, err)			\
-> >> da551281947cb2c Guo Ren 2018-09-05  143  do {							\
-> >> da551281947cb2c Guo Ren 2018-09-05  144  	int tmp;					\
-> >> e58a41c2226847f Guo Ren 2021-04-21  145  	int errcode;					\
-> >> e58a41c2226847f Guo Ren 2021-04-21  146  							\
-> >> e58a41c2226847f Guo Ren 2021-04-21 @147  	__asm__ __volatile__(				\
-> >> e58a41c2226847f Guo Ren 2021-04-21  148  	"1:   ldw     %3, (%2, 0)     \n"		\
-> >> da551281947cb2c Guo Ren 2018-09-05  149  	"     stw     %3, (%1, 0)     \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  150  	"2:   ldw     %3, (%2, 4)     \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  151  	"     stw     %3, (%1, 4)     \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  152  	"     br      4f              \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  153  	"3:   mov     %0, %4          \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  154  	"     br      4f              \n"		\
-> >> da551281947cb2c Guo Ren 2018-09-05  155  	".section __ex_table, \"a\"   \n"		\
-> >> da551281947cb2c Guo Ren 2018-09-05  156  	".align   2                   \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  157  	".long    1b, 3b              \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  158  	".long    2b, 3b              \n"		\
-> >> da551281947cb2c Guo Ren 2018-09-05  159  	".previous                    \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  160  	"4:                           \n"		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  161  	: "=r"(err), "=r"(x), "=r"(ptr),		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  162  	  "=r"(tmp), "=r"(errcode)			\
-> >> e58a41c2226847f Guo Ren 2021-04-21  163  	: "0"(err), "1"(x), "2"(ptr), "3"(0),		\
-> >> e58a41c2226847f Guo Ren 2021-04-21  164  	  "4"(-EFAULT)					\
-> >> da551281947cb2c Guo Ren 2018-09-05  165  	: "memory");					\
-> >> da551281947cb2c Guo Ren 2018-09-05  166  } while (0)
-> >> da551281947cb2c Guo Ren 2018-09-05  167  
-> > 
-> > The intel test report reported the above compile warning on this series:
-> > 
-> > https://lore.kernel.org/netdev/20250627084609-mutt-send-email-mst@kernel.org/T/#md788de2b3a4e9da23ac93b5f1c773a6070b5b4fb
-> > 
-> > specifically, in patch 4:
-> > 
-> > +                       if (get_user(features, featurep + 1 + i))
-> > +                               return -EFAULT;
-> > 
-> > AFAICS such statement is legit, and the bot points to some problem in
-> > the arch specific get_user() implementation. Could you please have a look?
+On 2025/07/01 22:55, Dave Martin wrote:
+> This series aims to clean up an aspect of coredump generation:
 > 
-> Out of sheer ignorance on my side, I fail to see how the csky get_user()
-> could work correctly without something alike the following (which indeed
-> fixes the issue here).
+> ELF coredumps contain a set of notes describing the state of machine
+> registers and other information about the dumped process.
 > 
-> /P
-> ---
-> diff --git a/arch/csky/include/asm/uaccess.h
-> b/arch/csky/include/asm/uaccess.h
-> index 2e927c21d8a1..ae0864ad59a3 100644
-> --- a/arch/csky/include/asm/uaccess.h
-> +++ b/arch/csky/include/asm/uaccess.h
-> @@ -167,7 +167,7 @@ do {							\
+> Notes are identified by a numeric identifier n_type and a "name"
+> string, although this terminology is somewhat misleading.  Officially,
+> the "name" of a note is really an "originator" or namespace identifier
+> that indicates how to interpret n_type [1], although in practice it is
+> often used more loosely.
 > 
->  static inline int __get_user_fn(size_t size, const void __user *ptr,
-> void *x)
->  {
-> -	int retval;
-> +	int retval = 0;
->  	u32 tmp;
+> Either way, each kind of note needs _both_ a specific "name" string and
+> a specific n_type to identify it robustly.
 > 
->  	switch (size) {
+> To centralise this knowledge in one place and avoid the need for ad-hoc
+> code to guess the correct name for a given note, commit 7da8e4ad4df0
+> ("elf: Define note name macros") [2] added an explicit NN_<foo> #define
+> in elf.h to give the name corresponding to each named note type
+> NT_<foo>.
+> 
+> Now that the note name for each note is specified explicitly, the
+> remaining guesswork for determining the note name for common and
+> arch-specific regsets in ELF core dumps can be eliminated.
+> 
+> This series aims to do just that:
+> 
+>   * Patch 2 adds a user_regset field to specify the note name, and a
+>     helper macro to populate it correctly alongside the note type.
+> 
+>   * Patch 3 ports away the ad-hoc note names in the common coredump
+>     code.
+> 
+>   * Patches 4-22 make the arch-specific changes.  (This is pretty
+>     mechanical for most arches.)
+> 
+>   * The final patch adds a WARN() when no note name is specified,
+>     and simplifies the fallback guess.  This should only be applied
+>     when all arches have ported across.
+> 
+> See the individual patches for details.
+> 
+> 
+> Testing:
+> 
+>   * x86, arm64: Booted in a VM and triggered a core dump with no WARN(),
+>     and verified that the dumped notes are the same.
+> 
+>   * arm: Build-tested only (for now).
+> 
+>   * Other arches: not tested yet
+> 
+> Any help with testing is appreciated.  If the following generates the
+> same notes (as dumped by readelf -n core) and doesn't trigger a WARN,
+> then we are probably good.
+> 
+> $ sleep 60 &
+> $ kill -QUIT $!
+> 
+> (Register content might differ between runs, but it should be safe to
+> ignore that -- this series only deals with the note names and types.)
+> 
+> Cheers
+> ---Dave
+> 
+> 
+> [1] System V Application Binary Interface, Edition 4.1,
+> Section 5 (Program Loading and Dynamic Linking) -> "Note Section"
+> 
+> https://refspecs.linuxfoundation.org/elf/gabi41.pdf
+> 
+> [2] elf: Define note name macros
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/uapi/linux/elf.h?id=7da8e4ad4df0dd12f37357af62ce1b63e75ae2e6
+> 
+> 
+> Dave Martin (23):
+>    regset: Fix kerneldoc for struct regset_get() in user_regset
+>    regset: Add explicit core note name in struct user_regset
+>    binfmt_elf: Dump non-arch notes with strictly matching name and type
+>    ARC: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    ARM: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    arm64: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    csky: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    hexagon: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    LoongArch: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    m68k: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    MIPS: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    nios2: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    openrisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    parisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    powerpc/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    riscv: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    s390/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    sh: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    sparc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    x86/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    um: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+>    xtensa: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note
+>      names
+>    binfmt_elf: Warn on missing or suspicious regset note names
+> 
+>   arch/arc/kernel/ptrace.c                 |  4 +-
+>   arch/arm/kernel/ptrace.c                 |  6 +-
+>   arch/arm64/kernel/ptrace.c               | 52 ++++++++---------
+>   arch/csky/kernel/ptrace.c                |  4 +-
+>   arch/hexagon/kernel/ptrace.c             |  2 +-
+>   arch/loongarch/kernel/ptrace.c           | 16 ++---
+>   arch/m68k/kernel/ptrace.c                |  4 +-
+>   arch/mips/kernel/ptrace.c                | 20 +++----
+>   arch/nios2/kernel/ptrace.c               |  2 +-
+>   arch/openrisc/kernel/ptrace.c            |  4 +-
+>   arch/parisc/kernel/ptrace.c              |  8 +--
+>   arch/powerpc/kernel/ptrace/ptrace-view.c | 74 ++++++++++++------------
+>   arch/riscv/kernel/ptrace.c               | 12 ++--
+>   arch/s390/kernel/ptrace.c                | 42 +++++++-------
+>   arch/sh/kernel/ptrace_32.c               |  4 +-
+>   arch/sparc/kernel/ptrace_32.c            |  4 +-
+>   arch/sparc/kernel/ptrace_64.c            |  8 +--
+>   arch/x86/kernel/ptrace.c                 | 22 +++----
+>   arch/x86/um/ptrace.c                     | 10 ++--
+>   arch/xtensa/kernel/ptrace.c              |  4 +-
+>   fs/binfmt_elf.c                          | 36 +++++++-----
+>   fs/binfmt_elf_fdpic.c                    | 17 +++---
+>   include/linux/regset.h                   | 12 +++-
+>   23 files changed, 194 insertions(+), 173 deletions(-)
+> 
+> 
+> base-commit: 86731a2a651e58953fc949573895f2fa6d456841
 
-Given there's no reaction from the arch maintainers,
-I see two options:
+For the whole series:
+Reviewed-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
 
-- go back to copy_from_user - nothing wrong with it, and the code
-in question is off data path.
-
-- go ahead and include this patch in the series, even though
-  I'm just as unsure it's right as you are.
-
-
-Up to you really, but I think it's one of the two.
-
-
-
--- 
-MST
-
+Regards,
+Akihiko Odaki
 
