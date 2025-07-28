@@ -1,202 +1,182 @@
-Return-Path: <linux-csky+bounces-2083-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2084-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E006B12CA8
-	for <lists+linux-csky@lfdr.de>; Sat, 26 Jul 2025 23:39:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8BCDB13A1F
+	for <lists+linux-csky@lfdr.de>; Mon, 28 Jul 2025 13:57:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3112C189982E
-	for <lists+linux-csky@lfdr.de>; Sat, 26 Jul 2025 21:39:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CD533A940B
+	for <lists+linux-csky@lfdr.de>; Mon, 28 Jul 2025 11:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F1F21D3D6;
-	Sat, 26 Jul 2025 21:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC7526056E;
+	Mon, 28 Jul 2025 11:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XHrb3axi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InW/quMj"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81EC19F135;
-	Sat, 26 Jul 2025 21:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BF3218858;
+	Mon, 28 Jul 2025 11:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753565961; cv=none; b=AYW6DX/jJbWAa/YeYROeslCdtVtKC3bgtd7uXQOAV/TeuLZEybb7ml7pBNz3Jpfqr+bcUW/UtU7YuFe2L3V1WM+a+JvLXfXM/ADNXnE3TNkUWfng9gNC6LBWexsCRrMADEvgeSy/qpIAc7jcauOFOaaza4km8rODsW5RVxyPuTQ=
+	t=1753703867; cv=none; b=GMCAN7ua93nqiJnR0f5eolZxIQNmJ7iC5hMGA4+B/IsPelgpX0N31uGCeYWScE7p2sqAGGctjGa+4FyTIOuWBXWbZgNPWW6A5kvUKRGOgcuTNsYByQN5lrDXr/jz22HVIdEEbaNZLuCCkkbzKMuXAcfEX0ZcPGSckyxMVgzeG+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753565961; c=relaxed/simple;
-	bh=bE8gOgUvTZi4vI0lg9qUYLnf/GEXOkxooNHihx3vuJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sBGjGdkGKPUtN645G7k253uakuUi42RnGpsHMRz2Y/seKy898lgIfL+Xit52iEESYEqlo3cryRrQI5O7taXO8jUkJWHOmH7aKWnib+Kug1OKvwSxjrS6c829qpIFbi/ydI3HdKw0bBQEFkWaW04FtVU3Js1b6qmrRm9DgZP1UYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XHrb3axi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85239C4CEF4;
-	Sat, 26 Jul 2025 21:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753565960;
-	bh=bE8gOgUvTZi4vI0lg9qUYLnf/GEXOkxooNHihx3vuJw=;
-	h=Date:From:To:Cc:Subject:From;
-	b=XHrb3axiSsGzIoF2z2Ix7pQjSMf1Hy42ar894fKLOABDtiMSiJhU7EOw7iJrgd6tB
-	 IbaRdb5qeWEpZin3fRvADFhKWu6rwXZK251hn0vmJbDMaGw9ALbzwGt5jlO4g1Ev/5
-	 38kyT5jk9ILeJA/C732uod/apU+rxyQj7EYgW1D/FfLwRv3xciKcU+EEYDtA1K1HQw
-	 89qGLSJb5I1UF5EVZNysHbVA4poyaagUpDWiSn+7w1Wkxrul3aS8xbgWpQmDVmq97o
-	 1XX7DFiDUydJ2ZJduymhDp4XdKL9MxP2XYT1rwFJYEc0IFFTjUHBVSjh8qB39SdIcg
-	 FmVRs5hgMDysg==
-Date: Sat, 26 Jul 2025 14:39:20 -0700
-From: Kees Cook <kees@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, Akihiko Odaki <akihiko.odaki@daynix.com>,
-	Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Chris Zankel <chris@zankel.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dave Martin <Dave.Martin@arm.com>,
-	David Hildenbrand <david@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Dishank Jogi <dishank.jogi@siqol.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>, "H. Peter Anvin" <hpa@zytor.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonas Bonn <jonas@southpole.se>, Kees Cook <kees@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-um@lists.infradead.org, loongarch@lists.linux.dev,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>,
-	Russell King <linux@armlinux.org.uk>, sparclinux@vger.kernel.org,
-	Stafford Horne <shorne@gmail.com>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-	x86@kernel.org, Yin Fengwei <fengwei_yin@linux.alibaba.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [GIT PULL] execve updates for v6.17
-Message-ID: <202507261437.F2079B3B7@keescook>
+	s=arc-20240116; t=1753703867; c=relaxed/simple;
+	bh=ZtT1le3P289gYN9XnvFtj8YV9WSOW1LkgpFqykFEcqI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=G0MnipJg6fq2ex+VxSYjcae4viKSJ4hGGnu4LGwCWiIxEqdxd2PV825HiBdYRXlWSnPno3YMAaqfFesQ82iQyJKtDBRERev7fPO1nG1wuINnTpQOBbf9dj7ybB2pUyiVtkMJwZkssVEEew1lxEskQdWF0a4uySC5gTa5srSJqPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=InW/quMj; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2401b855635so6625575ad.2;
+        Mon, 28 Jul 2025 04:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753703866; x=1754308666; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7QH1fCvQmnSC89vnVLs/2ja8LbLIAQjyBUi34DkOfb0=;
+        b=InW/quMjeeIt00PMfihwSdl8pQ72/7y4YX1jpnjEfA74inPe+HHC0MWAw6TZKqgVwn
+         YsyhgOeWA1NMB/n6zXN6qZKN4FDw5mMnbELc5tsRFHotDIXLlYEgfczR6EhjPuob1eu3
+         rUSD7ZuKDZUnERA8l694cAjpaZXGytxDBHe/8UOBmfzf5xJ6UB3Bq1dKV7Uhq73fIr3y
+         g50zeOIP4gwNxosmuoVwKm324W41/K+xwpyHSNLKdt+d0IAwQsIQv8/ZXAAUwzlMnEd9
+         ELbA4j8B0D4XreANLE3DWebXmaxvSPrUjnUHWSfzBXOz2UqrL/X0dcD7G5o+reSRXrOh
+         0UpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753703866; x=1754308666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7QH1fCvQmnSC89vnVLs/2ja8LbLIAQjyBUi34DkOfb0=;
+        b=Ih4brr5vHByHeTxmqmMjh44wEKAtSL0yIMqbxCXgRbkH5zLcaF/J667vlEJcFWusb4
+         P7PbZ9ltBS78vOrHUGt/7wSaNv/kuOA2zede5Zr1aG3bM2NcQNMXIj7t7SsJd8rRsamR
+         5oAC+sGeIDtFzur5cJGyGVwkcejW9z9Hzb3Mpnh0rFPKZGFMumwapzHoKUEWkpju8k8Z
+         iIvszWfazyRVQ60zpePbI5Y7oGvXDrVc0LJGPPkn7bilTV9XwSJh2bXJPLpr8eMCWJSN
+         fGL08lKZtW/C/7MBH9dopxo2a927TzLcLxc5eVi76HKCKQocq6V0RnXXNnHxpEZ8QtCe
+         vHAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWFOvFHWoATZWFBpOzmeAwafhqECe8B863KXKquFNCapk0uhaVi+1WHJEJr2mpn9UCPSJeyGha+lJ7k3Hdi6hODaA==@vger.kernel.org, AJvYcCWLNpMjdpACN/lYQS+5i6MdjxLoZCe9CT9jiy7JOiovXAo114u8Fs4cm8uZbA89E5MVpkd9aqpnMQpJ@vger.kernel.org, AJvYcCXD976m6QtpLuuHUHOdgIE/YwaVj3f178hwpSLHTgkyz1y4FrdNp4JsS0iKOLBjUDAM17TokLFYZxh/TU5H@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWbPtwkgOYKI81P1n8oedMAKVpmuaCmMkm6ZA6qscZ548HTL8z
+	YEv5mpAHNkTJdnuVJSRusHIFDSHNXJg/Q0WWsVROPwP4tqVJmkDg4Wl8
+X-Gm-Gg: ASbGnctAMHapL4A8ULpYFIKDq6sPWg5cXaoiVm61FGRQ8kxh3mr2ktdY4MJ9X1TlnF3
+	IU2lZCQAai7D1yL+e9DBv+lJGN2bMoYNLjRx5hlFGi5I05tWg8kHu2PuxI5fGAAMnTVg1vKA1ow
+	+BwIynBZbXFPHwCCjNPjkHE0/Ufe4CTHBKyFAE1EvsjVO3z0lYcrPU74hSMs5DIzt1fLXtxUX0L
+	+foCpByku56cD2FHNhIoByspffw9ZTfHTN9I1ylYvNuBz5VgzQB3GQNFpTaxYXnDJwv7ifke83K
+	K1NxW1SFZQjDNWJlvwmqORaRozH/nvvXnrBpdxLWPVm82Jvxm0fZy42hTm4bOOpftsv7OpSFU/3
+	cueUUQsvUlpr0KGK+UfrS3jYgITfzQ+whobWaJ1z87T8+e7rZbLVlx/Q2
+X-Google-Smtp-Source: AGHT+IGVkxhzM4QAYwzySEvOd+NXUqVS/Jgx0EE1xymZXd3jvGCDUW6EzJ9xB7Zw08erZmtjmgDO+w==
+X-Received: by 2002:a17:902:f546:b0:240:44a6:5027 with SMTP id d9443c01a7336-24044a65233mr19422635ad.15.1753703865413;
+        Mon, 28 Jul 2025 04:57:45 -0700 (PDT)
+Received: from localhost.localdomain ([38.188.108.234])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24007d98b25sm30933685ad.97.2025.07.28.04.57.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Jul 2025 04:57:44 -0700 (PDT)
+From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	kan.liang@linux.intel.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	guoren@kernel.org,
+	atrajeev@linux.vnet.ibm.com,
+	kjain@linux.ibm.com,
+	linux-perf-users@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Subject: [PATCH] perf/util: make TYPE_STATE_MAX_REGS architecture-dependent
+Date: Mon, 28 Jul 2025 17:27:19 +0530
+Message-Id: <20250728115719.143372-1-suchitkarunakaran@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+Replace the fixed definition of TYPE_STATE_MAX_REGS with architecture-
+specific values for better accuracy across multiple CPU architectures
+including PowerPC, ARM, x86, RISC-V, MIPS, and others. This change ensures
+the type state registers array size matches the actual register count of
+the target platform.
 
-Please pull these execve updates for v6.17. Note that while the REGSET
-macro changes touch all the architectures, they are fairly mechanical
-and have been in linux-next for almost the entire development window.
+Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+---
+ tools/perf/util/annotate-data.h | 45 ++++++++++++++++++++++++++++++---
+ 1 file changed, 41 insertions(+), 4 deletions(-)
 
-Thanks!
-
--Kees
-
-The following changes since commit e04c78d86a9699d136910cfc0bdcf01087e3267e:
-
-  Linux 6.16-rc2 (2025-06-15 13:49:41 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.17
-
-for you to fetch changes up to 7f71195c15dcf5f34c4c7f056603659374e3a525:
-
-  fork: reorder function qualifiers for copy_clone_args_from_user (2025-07-17 16:37:05 -0700)
-
-----------------------------------------------------------------
-execve updates for v6.17
-
-- Introduce regular REGSET note macros arch-wide (Dave Martin)
-
-- Remove arbitrary 4K limitation of program header size (Yin Fengwei)
-
-- Reorder function qualifiers for copy_clone_args_from_user() (Dishank Jogi)
-
-----------------------------------------------------------------
-Dave Martin (23):
-      regset: Fix kerneldoc for struct regset_get() in user_regset
-      regset: Add explicit core note name in struct user_regset
-      binfmt_elf: Dump non-arch notes with strictly matching name and type
-      ARC: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      ARM: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      arm64: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      csky: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      hexagon: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      LoongArch: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      m68k: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      MIPS: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      nios2: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      openrisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      parisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      powerpc/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      riscv: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      s390/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      sh: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      sparc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      x86/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      um: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      xtensa: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      binfmt_elf: Warn on missing or suspicious regset note names
-
-Dishank Jogi (1):
-      fork: reorder function qualifiers for copy_clone_args_from_user
-
-Yin Fengwei (1):
-      binfmt_elf: remove the 4k limitation of program header size
-
- include/linux/regset.h                   | 12 +++++-
- arch/arc/kernel/ptrace.c                 |  4 +-
- arch/arm/kernel/ptrace.c                 |  6 +--
- arch/arm64/kernel/ptrace.c               | 52 +++++++++++-----------
- arch/csky/kernel/ptrace.c                |  4 +-
- arch/hexagon/kernel/ptrace.c             |  2 +-
- arch/loongarch/kernel/ptrace.c           | 16 +++----
- arch/m68k/kernel/ptrace.c                |  4 +-
- arch/mips/kernel/ptrace.c                | 20 ++++-----
- arch/nios2/kernel/ptrace.c               |  2 +-
- arch/openrisc/kernel/ptrace.c            |  4 +-
- arch/parisc/kernel/ptrace.c              |  8 ++--
- arch/powerpc/kernel/ptrace/ptrace-view.c | 74 ++++++++++++++++----------------
- arch/riscv/kernel/ptrace.c               | 12 +++---
- arch/s390/kernel/ptrace.c                | 42 +++++++++---------
- arch/sh/kernel/ptrace_32.c               |  4 +-
- arch/sparc/kernel/ptrace_32.c            |  4 +-
- arch/sparc/kernel/ptrace_64.c            |  8 ++--
- arch/x86/kernel/ptrace.c                 | 22 +++++-----
- arch/x86/um/ptrace.c                     | 10 ++---
- arch/xtensa/kernel/ptrace.c              |  4 +-
- fs/binfmt_elf.c                          | 38 ++++++++++------
- fs/binfmt_elf_fdpic.c                    | 17 ++++----
- kernel/fork.c                            |  2 +-
- 24 files changed, 196 insertions(+), 175 deletions(-)
-
+diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
+index 541fee1a5f0a..0dfb12a8f1cc 100644
+--- a/tools/perf/util/annotate-data.h
++++ b/tools/perf/util/annotate-data.h
+@@ -189,11 +189,48 @@ struct type_state_stack {
+ 	u8 kind;
+ };
+ 
+-/* FIXME: This should be arch-dependent */
+-#ifdef __powerpc__
+-#define TYPE_STATE_MAX_REGS  32
++#if defined(__powerpc__) || defined(__powerpc64__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__aarch64__)
++#define TYPE_STATE_MAX_REGS 31
++#elif defined(__arm__)
++#define TYPE_STATE_MAX_REGS 16
++#elif defined(__x86_64__)
++#define TYPE_STATE_MAX_REGS 16
++#elif defined(__i386__)
++#define TYPE_STATE_MAX_REGS 8
++#elif defined(__riscv)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__mips__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__sparc__) || defined(__sparc64__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__alpha__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__s390__) || defined(__s390x__)
++#define TYPE_STATE_MAX_REGS 16
++#elif defined(__sh__)
++#define TYPE_STATE_MAX_REGS 16
++#elif defined(__nios2__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__hexagon__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__openrisc__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__csky__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__loongarch__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__arc__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__microblaze__)
++#define TYPE_STATE_MAX_REGS 32
++#elif defined(__xtensa__)
++#define TYPE_STATE_MAX_REGS 16
++#elif defined(__m68k__)
++#define TYPE_STATE_MAX_REGS 16
+ #else
+-#define TYPE_STATE_MAX_REGS  16
++#define TYPE_STATE_MAX_REGS 16
+ #endif
+ 
+ /*
 -- 
-Kees Cook
+2.39.5
+
 
