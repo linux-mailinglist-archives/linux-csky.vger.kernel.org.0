@@ -1,182 +1,81 @@
-Return-Path: <linux-csky+bounces-2084-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2085-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8BCDB13A1F
-	for <lists+linux-csky@lfdr.de>; Mon, 28 Jul 2025 13:57:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B33EB14596
+	for <lists+linux-csky@lfdr.de>; Tue, 29 Jul 2025 03:11:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CD533A940B
-	for <lists+linux-csky@lfdr.de>; Mon, 28 Jul 2025 11:57:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E5EB1AA1F42
+	for <lists+linux-csky@lfdr.de>; Tue, 29 Jul 2025 01:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BC7526056E;
-	Mon, 28 Jul 2025 11:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1C351B0439;
+	Tue, 29 Jul 2025 01:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="InW/quMj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYacduDB"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BF3218858;
-	Mon, 28 Jul 2025 11:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACF21A3179;
+	Tue, 29 Jul 2025 01:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753703867; cv=none; b=GMCAN7ua93nqiJnR0f5eolZxIQNmJ7iC5hMGA4+B/IsPelgpX0N31uGCeYWScE7p2sqAGGctjGa+4FyTIOuWBXWbZgNPWW6A5kvUKRGOgcuTNsYByQN5lrDXr/jz22HVIdEEbaNZLuCCkkbzKMuXAcfEX0ZcPGSckyxMVgzeG+0=
+	t=1753751496; cv=none; b=RVpD+xGwXaZxurLmjchsBAqEqWExB29AytC+MKATHC3dkrWJfm+XLk8hquTlGPVQrzm8ez3C/PAOfOWiSghsacnHXw70RFlcBKY1e6FO+fhcIeI1rKCGCubn5Puh04Od3Wyuhnb7oBLlukmN8xrqV8qqHgmD5P95WYT4tyUtIS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753703867; c=relaxed/simple;
-	bh=ZtT1le3P289gYN9XnvFtj8YV9WSOW1LkgpFqykFEcqI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=G0MnipJg6fq2ex+VxSYjcae4viKSJ4hGGnu4LGwCWiIxEqdxd2PV825HiBdYRXlWSnPno3YMAaqfFesQ82iQyJKtDBRERev7fPO1nG1wuINnTpQOBbf9dj7ybB2pUyiVtkMJwZkssVEEew1lxEskQdWF0a4uySC5gTa5srSJqPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=InW/quMj; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2401b855635so6625575ad.2;
-        Mon, 28 Jul 2025 04:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753703866; x=1754308666; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7QH1fCvQmnSC89vnVLs/2ja8LbLIAQjyBUi34DkOfb0=;
-        b=InW/quMjeeIt00PMfihwSdl8pQ72/7y4YX1jpnjEfA74inPe+HHC0MWAw6TZKqgVwn
-         YsyhgOeWA1NMB/n6zXN6qZKN4FDw5mMnbELc5tsRFHotDIXLlYEgfczR6EhjPuob1eu3
-         rUSD7ZuKDZUnERA8l694cAjpaZXGytxDBHe/8UOBmfzf5xJ6UB3Bq1dKV7Uhq73fIr3y
-         g50zeOIP4gwNxosmuoVwKm324W41/K+xwpyHSNLKdt+d0IAwQsIQv8/ZXAAUwzlMnEd9
-         ELbA4j8B0D4XreANLE3DWebXmaxvSPrUjnUHWSfzBXOz2UqrL/X0dcD7G5o+reSRXrOh
-         0UpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753703866; x=1754308666;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7QH1fCvQmnSC89vnVLs/2ja8LbLIAQjyBUi34DkOfb0=;
-        b=Ih4brr5vHByHeTxmqmMjh44wEKAtSL0yIMqbxCXgRbkH5zLcaF/J667vlEJcFWusb4
-         P7PbZ9ltBS78vOrHUGt/7wSaNv/kuOA2zede5Zr1aG3bM2NcQNMXIj7t7SsJd8rRsamR
-         5oAC+sGeIDtFzur5cJGyGVwkcejW9z9Hzb3Mpnh0rFPKZGFMumwapzHoKUEWkpju8k8Z
-         iIvszWfazyRVQ60zpePbI5Y7oGvXDrVc0LJGPPkn7bilTV9XwSJh2bXJPLpr8eMCWJSN
-         fGL08lKZtW/C/7MBH9dopxo2a927TzLcLxc5eVi76HKCKQocq6V0RnXXNnHxpEZ8QtCe
-         vHAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWFOvFHWoATZWFBpOzmeAwafhqECe8B863KXKquFNCapk0uhaVi+1WHJEJr2mpn9UCPSJeyGha+lJ7k3Hdi6hODaA==@vger.kernel.org, AJvYcCWLNpMjdpACN/lYQS+5i6MdjxLoZCe9CT9jiy7JOiovXAo114u8Fs4cm8uZbA89E5MVpkd9aqpnMQpJ@vger.kernel.org, AJvYcCXD976m6QtpLuuHUHOdgIE/YwaVj3f178hwpSLHTgkyz1y4FrdNp4JsS0iKOLBjUDAM17TokLFYZxh/TU5H@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWbPtwkgOYKI81P1n8oedMAKVpmuaCmMkm6ZA6qscZ548HTL8z
-	YEv5mpAHNkTJdnuVJSRusHIFDSHNXJg/Q0WWsVROPwP4tqVJmkDg4Wl8
-X-Gm-Gg: ASbGnctAMHapL4A8ULpYFIKDq6sPWg5cXaoiVm61FGRQ8kxh3mr2ktdY4MJ9X1TlnF3
-	IU2lZCQAai7D1yL+e9DBv+lJGN2bMoYNLjRx5hlFGi5I05tWg8kHu2PuxI5fGAAMnTVg1vKA1ow
-	+BwIynBZbXFPHwCCjNPjkHE0/Ufe4CTHBKyFAE1EvsjVO3z0lYcrPU74hSMs5DIzt1fLXtxUX0L
-	+foCpByku56cD2FHNhIoByspffw9ZTfHTN9I1ylYvNuBz5VgzQB3GQNFpTaxYXnDJwv7ifke83K
-	K1NxW1SFZQjDNWJlvwmqORaRozH/nvvXnrBpdxLWPVm82Jvxm0fZy42hTm4bOOpftsv7OpSFU/3
-	cueUUQsvUlpr0KGK+UfrS3jYgITfzQ+whobWaJ1z87T8+e7rZbLVlx/Q2
-X-Google-Smtp-Source: AGHT+IGVkxhzM4QAYwzySEvOd+NXUqVS/Jgx0EE1xymZXd3jvGCDUW6EzJ9xB7Zw08erZmtjmgDO+w==
-X-Received: by 2002:a17:902:f546:b0:240:44a6:5027 with SMTP id d9443c01a7336-24044a65233mr19422635ad.15.1753703865413;
-        Mon, 28 Jul 2025 04:57:45 -0700 (PDT)
-Received: from localhost.localdomain ([38.188.108.234])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24007d98b25sm30933685ad.97.2025.07.28.04.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 04:57:44 -0700 (PDT)
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-To: peterz@infradead.org,
-	mingo@redhat.com,
-	acme@kernel.org,
-	namhyung@kernel.org,
-	mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	kan.liang@linux.intel.com,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	guoren@kernel.org,
-	atrajeev@linux.vnet.ibm.com,
-	kjain@linux.ibm.com,
-	linux-perf-users@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev,
-	skhan@linuxfoundation.org,
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Subject: [PATCH] perf/util: make TYPE_STATE_MAX_REGS architecture-dependent
-Date: Mon, 28 Jul 2025 17:27:19 +0530
-Message-Id: <20250728115719.143372-1-suchitkarunakaran@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1753751496; c=relaxed/simple;
+	bh=8ZaxoHBTEhVL12axKf/WX+LwUM3Y/BFGh5lAMOgD5zg=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=UTZZzhhFFmnHGy8MNxOlmms2pMURZYHdtKvwv0UpDYQU9lfj91GU3qIo4VDYcJfmG7+q2m2wUqDlVojK1TpJEpnTKKEb0HGqAlcx6jaBYhXwgwTaadWEtTRJRkhB8dzbDVX+NLY4i40IC+gcGsZ92xznkGXwsdEYHgAT+pMfZ24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYacduDB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A163C4CEE7;
+	Tue, 29 Jul 2025 01:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753751496;
+	bh=8ZaxoHBTEhVL12axKf/WX+LwUM3Y/BFGh5lAMOgD5zg=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=VYacduDBsz15Xg+SgB5nuf2LLCwR/ZQLnHAeY89QssQwJkwueQk+gOc3P9X3M8ERc
+	 StQHaCIjU+ApLe7jJ1kkQ1SZSrlnoE0XfZBTw8Yh+roL1ES9ZIfl3oMlPK7Nd5vIme
+	 keZEIUjTWzO7k+Xn5laz3kmccx4u/wXUQCxvKazPAkCcbgCoN5asGQOK49wsxNUWzg
+	 4V8Tr4vXYS3H1wOaKUIe57TRZzvYstxc8p2ZRo6fWA+RbWlSndzB3fEL4aGd9Fgn3b
+	 ZBNnQvFR6RJKhSTgEfjDhuJgvmCxPS2qK55MY85inxik6zCKjNO7RH2cHI8IhVIhst
+	 yOtThARlrGBsA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34A0C383BF5F;
+	Tue, 29 Jul 2025 01:11:54 +0000 (UTC)
+Subject: Re: [GIT PULL] execve updates for v6.17
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <202507261437.F2079B3B7@keescook>
+References: <202507261437.F2079B3B7@keescook>
+X-PR-Tracked-List-Id: <linux-sh.vger.kernel.org>
+X-PR-Tracked-Message-Id: <202507261437.F2079B3B7@keescook>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.17
+X-PR-Tracked-Commit-Id: 7f71195c15dcf5f34c4c7f056603659374e3a525
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d900c4ce638d707f09c7e5c2afa71e035c0bb33d
+Message-Id: <175375151288.918485.7118599213274098690.pr-tracker-bot@kernel.org>
+Date: Tue, 29 Jul 2025 01:11:52 +0000
+To: Kees Cook <kees@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, Akihiko Odaki <akihiko.odaki@daynix.com>, Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>, Albert Ou <aou@eecs.berkeley.edu>, Alexander Gordeev <agordeev@linux.ibm.com>, Alexandre Ghiti <alex@ghiti.fr>, Andreas Larsson <andreas@gaisler.com>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Chris Zankel <chris@zankel.net>, Dave Hansen <dave.hansen@linux.intel.com>, Dave Martin <Dave.Martin@arm.com>, David Hildenbrand <david@redhat.com>, "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Dishank Jogi <dishank.jogi@siqol.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, "H. Peter Anvin" <hpa@
+ zytor.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonas Bonn <jonas@southpole.se>, Kees Cook <kees@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org, loongarch@lists.linux.dev, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Oleg Nesterov
+  <oleg@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>, Russell King <linux@armlinux.org.uk>, sparclinux@vger.kernel.org, Stafford Horne <shorne@gmail.com>, Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Sven Schnelle <svens@linux.ibm.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>, x86@kernel.org, Yin Fengwei <fengwei_yin@linux.alibaba.com>, Yoshinori Sato <ysato@users.sourceforge.jp>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Replace the fixed definition of TYPE_STATE_MAX_REGS with architecture-
-specific values for better accuracy across multiple CPU architectures
-including PowerPC, ARM, x86, RISC-V, MIPS, and others. This change ensures
-the type state registers array size matches the actual register count of
-the target platform.
+The pull request you sent on Sat, 26 Jul 2025 14:39:20 -0700:
 
-Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
----
- tools/perf/util/annotate-data.h | 45 ++++++++++++++++++++++++++++++---
- 1 file changed, 41 insertions(+), 4 deletions(-)
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.17
 
-diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index 541fee1a5f0a..0dfb12a8f1cc 100644
---- a/tools/perf/util/annotate-data.h
-+++ b/tools/perf/util/annotate-data.h
-@@ -189,11 +189,48 @@ struct type_state_stack {
- 	u8 kind;
- };
- 
--/* FIXME: This should be arch-dependent */
--#ifdef __powerpc__
--#define TYPE_STATE_MAX_REGS  32
-+#if defined(__powerpc__) || defined(__powerpc64__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__aarch64__)
-+#define TYPE_STATE_MAX_REGS 31
-+#elif defined(__arm__)
-+#define TYPE_STATE_MAX_REGS 16
-+#elif defined(__x86_64__)
-+#define TYPE_STATE_MAX_REGS 16
-+#elif defined(__i386__)
-+#define TYPE_STATE_MAX_REGS 8
-+#elif defined(__riscv)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__mips__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__sparc__) || defined(__sparc64__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__alpha__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__s390__) || defined(__s390x__)
-+#define TYPE_STATE_MAX_REGS 16
-+#elif defined(__sh__)
-+#define TYPE_STATE_MAX_REGS 16
-+#elif defined(__nios2__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__hexagon__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__openrisc__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__csky__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__loongarch__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__arc__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__microblaze__)
-+#define TYPE_STATE_MAX_REGS 32
-+#elif defined(__xtensa__)
-+#define TYPE_STATE_MAX_REGS 16
-+#elif defined(__m68k__)
-+#define TYPE_STATE_MAX_REGS 16
- #else
--#define TYPE_STATE_MAX_REGS  16
-+#define TYPE_STATE_MAX_REGS 16
- #endif
- 
- /*
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d900c4ce638d707f09c7e5c2afa71e035c0bb33d
+
+Thank you!
+
 -- 
-2.39.5
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
