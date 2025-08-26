@@ -1,136 +1,149 @@
-Return-Path: <linux-csky+bounces-2147-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2148-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0665B34A44
-	for <lists+linux-csky@lfdr.de>; Mon, 25 Aug 2025 20:23:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9B91B35A62
+	for <lists+linux-csky@lfdr.de>; Tue, 26 Aug 2025 12:47:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 286651635D1
-	for <lists+linux-csky@lfdr.de>; Mon, 25 Aug 2025 18:23:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42A22A130A
+	for <lists+linux-csky@lfdr.de>; Tue, 26 Aug 2025 10:46:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C49EF2FE59A;
-	Mon, 25 Aug 2025 18:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PPsz0+wy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1EB318139;
+	Tue, 26 Aug 2025 10:46:26 +0000 (UTC)
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE463093D3;
-	Mon, 25 Aug 2025 18:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E1C327790;
+	Tue, 26 Aug 2025 10:46:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756146115; cv=none; b=Frhrevv+wSnDeX3cjlBJF3ySB5V3G4muy0LHdUGjqBZ9QdqZirpqqkYY/oPEvr5v1Tfsaf838QES5lJsjvdsajwRWowkiMOckcA7aY5zZxKQhyXr2znBjYYazE0zG9YDiDmhlhDdL3KAyLivjmFUnIurN99fidE3cpicWEouN1M=
+	t=1756205186; cv=none; b=r/NIMxaaXHdfaS6cJe8mD0qcxsnylRiSA/CnCAloga8Y6Tui2xtkTBc3y3sGUu8aXo4eCML1HsZ6/MZkRw/ps0JQpXDOSqwAbYdk/Ds1jqMuBx74lxDvheSSLmpj8F2V8A2zkt93rd6J3GVKsDULDwLYDchNP81Rfq3cttJR1u8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756146115; c=relaxed/simple;
-	bh=3ZrmaJQHNqz7zB3hYmPFkkTgMYcKXhVHt6LgmcyEGLM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sHa2JAgkwY3ZvpGtK3ME/L+o4JIXFHuJ1Tn8t5f8aVFCWfYzb4A0aloE5J68CLSfUPBu7uc3duZIoox6xaiT/86opt72efoszMCf4k57dZ5haQI/pEDQQL59gl5LTZcDY+MHmeiev/qzq1gi2QGOtnXbijdQ01FgT1Bn4AftQnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PPsz0+wy; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-61dc69c02d6so568957eaf.0;
-        Mon, 25 Aug 2025 11:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756146113; x=1756750913; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LBWcU3cSWIrOv8SEdohQlNa+9rh4cGJiQvp8mNokO0E=;
-        b=PPsz0+wyO8q3NLTkfoSOUGGoXKvLRMX6NFpw2K/Ub7gffZyH0P+BtaIg6nuwKQ64TO
-         mslfRTzIuS7VQdlIJQ92YJ1i2eYa0HeN4FwTzgnDCIjzbjkG5+25yDeCZyiVirGUG8+F
-         EMDoR6XuyTMizpBjUIXlNYdGB6NB2oGhg0c88/a8sq33jDa5nTi6+Cid/vRnMTuedPDJ
-         zUJm9yERL9dS9/4pQ11D0OhoDvmXRQpMWM3CPT0s69GxzgkvsMLAIn48qd8kTYREH0Bs
-         ay7V8NmB97lB3UvKSPOr8ioRiNTNn2XnkEvJL2q2PicH9Zh+teQ+OByjodM0xdpNb3zF
-         hN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756146113; x=1756750913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LBWcU3cSWIrOv8SEdohQlNa+9rh4cGJiQvp8mNokO0E=;
-        b=BdltmXo7yj7FAsDlaQPf8uo/AdGujxVb2dvILXIceWEU4N4NN+wkt37EWVqGx+slp3
-         WiQNd63FFv/nlB6kVDKYID0GKHBqHPFiIMX6lUbwmhriXzdqnHztoM4Gk2yWrtuAb6Xi
-         iOeO6+Qek7MqooJik8gZJr4aI6Smd5npFcaG3xiZoQX0dGq2HkdCWjbtYtSI4nqtrPe/
-         5cZ/nqhDhPJhJ445FsiAxLEyUot5cPs63u6w2pddumUCnzL8XGK3/7Y+6p9e9+TRmXck
-         uskiRFIB7BTYyTMmC1/1EMXhMnX0JURhZvapQjjlXkxbnzUhnhHLmeZJJoU7dzrKN3sb
-         Ijjw==
-X-Forwarded-Encrypted: i=1; AJvYcCVvk2SY1M4pfkAQ4lf9nq4IhBP0giG/GSwHFWleZUuFO4aCCrw55Ga+prCt6VK95b++dzS5AduKcgFeY6Bn@vger.kernel.org, AJvYcCWirtriPOos+45hm53cYN3TPxCuINL3qXwt2g7/KXzUAd9GzuHBkoL78M5BeEnxmjXjqvCdlBed0xOKrr7pcXy9lQ==@vger.kernel.org, AJvYcCWmREIckjYmgBFAOdeI6/+yeBYDyTJ8/QRaQbBb9Xudjo0PACLHho5wLQA6ar1HPupjDBu/dBktr3ay@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMixQmsHNYEA7zQLoOfoepV0O4odV4a0SvHXqq72XayNuN+Rax
-	G0SLmDpJ1Lp6OuYqryUyYM/lQmSTVMDLLMYhQpxRZ710AA7afn0gFVQrP7O/bMJxGnZFRAznpv+
-	2aRPnUHS/stkNUIqiOhPrkxmqRjmsfuw=
-X-Gm-Gg: ASbGncusXVz+w6qlq9hGeDMj/Ul1HIyUfi+l+qGiecd4ODsB9qShVMC0u+bUoXWS7Vr
-	gLzRxgJaUP6ZeoAdVODBpz1pePRzDOP08A3GneZEIDRz3GXyRrz6R98NgKSApAb8vcGdmSwPIJa
-	7c6Ta/K+r4zQv4A9R/0RqRWs07YjXEBjd7+xJ1X7s5oWBK56H+kx1GgDP8AoHGdNCvf8s1zio62
-	rbjuAUiqA==
-X-Google-Smtp-Source: AGHT+IFskHmvwXj8mMcFosVYtY+vw+7NM41X2/qi91Cw233062th5AEOuPmRoCdCeKroHQKACJ9/26YoouKPLyTBfJI=
-X-Received: by 2002:a05:6808:a586:10b0:437:b094:383c with SMTP id
- 5614622812f47-437b0944231mr1150598b6e.2.1756146112878; Mon, 25 Aug 2025
- 11:21:52 -0700 (PDT)
+	s=arc-20240116; t=1756205186; c=relaxed/simple;
+	bh=H3tVdYrDOxdRlNSFXF/jMCHZ3FgH+2UV7laTh6NYYEI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nFJYUOq5A6E9j+0qXg+Ldef6aZCGnKbnc0SsGAghEhfr2vzghjTVd9eRrciyq0/tY21xWTWZv5zWZQhY5nDMAvhPBHf4DlFMdkMxP4hsf9bNMfq18S3KUnlKfIgGej+7CwrG9+6vbewCThidWYRN4MqkSfKiHcAqqkLUqdPwbAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A06821A25;
+	Tue, 26 Aug 2025 03:46:15 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8000D3F694;
+	Tue, 26 Aug 2025 03:46:14 -0700 (PDT)
+Date: Tue, 26 Aug 2025 11:46:10 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Robin Murphy <robin.murphy@arm.com>
+Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+	acme@kernel.org, namhyung@kernel.org,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
+	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
+	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 01/19] perf/arm-cmn: Fix event validation
+Message-ID: <aK2QclH4jlHJ28EJ@J2N7QTR9R3>
+References: <cover.1755096883.git.robin.murphy@arm.com>
+ <0716da3e77065f005ef6ea0d10ddf67fc53e76cb.1755096883.git.robin.murphy@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250815182742.45541-1-suchitkarunakaran@gmail.com>
- <aJ-ScOp3ZCG6PQmD@google.com> <CAO9wTFj7S7G2bqbiuKbR+o7Y0u1EkYY5GsHasJZLmAo5ZuCx9w@mail.gmail.com>
- <CAO9wTFiJmi7YzeukT0VtnpqcJcE3sSueO3owYUAd+H4wjcYZeQ@mail.gmail.com> <CAP-5=fWCGa+R1O2sL1anJGznkprQyP2RrsUZfzmrPJ2y-WsEvA@mail.gmail.com>
-In-Reply-To: <CAP-5=fWCGa+R1O2sL1anJGznkprQyP2RrsUZfzmrPJ2y-WsEvA@mail.gmail.com>
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Date: Mon, 25 Aug 2025 23:51:40 +0530
-X-Gm-Features: Ac12FXzIW-t6fPYcoU6IlBmEWamOsApUN_OzhHIIlmzKU73aQg7rHJYgARuUrvY
-Message-ID: <CAO9wTFj6o=ESbFUZmk9xAoMfGfUcCX7rQmaBzLyaPr6wNEotfQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND] perf/util: make TYPE_STATE_MAX_REGS architecture-dependent
-To: Ian Rogers <irogers@google.com>
-Cc: Namhyung Kim <namhyung@kernel.org>, peterz@infradead.org, mingo@redhat.com, 
-	acme@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, adrian.hunter@intel.com, kan.liang@linux.intel.com, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	alex@ghiti.fr, guoren@kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-csky@vger.kernel.org, skhan@linuxfoundation.org, 
-	linux-kernel-mentees@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0716da3e77065f005ef6ea0d10ddf67fc53e76cb.1755096883.git.robin.murphy@arm.com>
 
-On Mon, 25 Aug 2025 at 22:54, Ian Rogers <irogers@google.com> wrote:
->
-> On Mon, Aug 25, 2025 at 7:17=E2=80=AFAM Suchit Karunakaran
-> <suchitkarunakaran@gmail.com> wrote:
-> >
-> > On Sat, 16 Aug 2025 at 12:16, Suchit Karunakaran
-> > <suchitkarunakaran@gmail.com> wrote:
-> > >
-> > > Hi Namhyung,
-> > > Thanks for reviewing the patch. I'd like to ask if there's anything
-> > > else I should do regarding this patch, given that it's supported only
-> > > for x86 and powerpc?
-> > >
-> > > Thanks,
-> > > Suchit
-> >
-> >
-> > Hi Namhyung,
-> > Following up on this patch. I would appreciate any guidance on further
-> > actions needed, considering its current support is only for x86 and
-> > PowerPC.
->
-> Can we just make  TYPE_STATE_MAX_REGS 32? There's no reason to assume
-> the architecture the perf binary is built on matches the perf.data
-> file being processed by perf annotate. Given 32 is bigger than 16 then
-> this can just be a maximum value (a comment to this effect in the code
-> would be grand). In general, the use of the arch directory and things
-> like "#ifdef __powerpc__" are code smells that are going to break with
-> cross-architecture profiling.
->
-> Thanks,
-> Ian
+Hi Robin,
 
-Yeah I agree that setting TYPE_STATE_MAX_REGS to 32 is a more
-reasonable approach. I will send a v2 patch incorporating this change.
-Thanks,
-Suchit
+On Wed, Aug 13, 2025 at 06:00:53PM +0100, Robin Murphy wrote:
+> In the hypothetical case where a CMN event is opened with a software
+> group leader that already has some other hardware sibling, currently
+> arm_cmn_val_add_event() could try to interpret the other event's data
+> as an arm_cmn_hw_event, which is not great since we dereference a
+> pointer from there... Thankfully the way to be more robust is to be
+> less clever - stop trying to special-case software events and simply
+> skip any event that isn't for our PMU.
+
+I think this is missing some important context w.r.t. how the core perf
+code behaves (and hence why this change doesn't cause other problems).
+I'd suggest that we give the first few patches a common preamble:
+
+| When opening a new perf event, the core perf code calls
+| pmu::event_init() before checking whether the new event would cause an
+| event group to span multiple hardware PMUs. Considering this:
+| 
+| (1) Any pmu::event_init() callback needs to be robust to cases where
+|     a non-software group_leader or sibling event targets a distinct
+|     PMU.
+| 
+| (2) Any pmu::event_init() callback doesn't need to explicitly reject
+|     groups that span multiple hardware PMUs, as the core code will
+|     reject this later.
+
+... and then spell out the specific issues in the driver, e.g.
+
+| The logic in arm_cmn_validate_group() doesn't account for cases where
+| a non-software sibling event targets a distinct PMU. In such cases,
+| arm_cmn_val_add_event() will erroneously interpret the sibling's
+| event::hw as as struct arm_cmn_hw_event, including dereferencing
+| pointers from potentially user-controlled fields.
+|
+| Fix this by skipping any events for distinct PMUs, and leaving it to
+| the core code to reject event groups that span multiple hardware PMUs.
+
+With that context, the patch itself looks good to me.
+
+This will need a Cc stable. I'm not sure what Fixes tag is necessary;
+has this been broken since its introduction?
+
+Mark.
+
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+>  drivers/perf/arm-cmn.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+> index 11fb2234b10f..f8c9be9fa6c0 100644
+> --- a/drivers/perf/arm-cmn.c
+> +++ b/drivers/perf/arm-cmn.c
+> @@ -1652,7 +1652,7 @@ static void arm_cmn_val_add_event(struct arm_cmn *cmn, struct arm_cmn_val *val,
+>  	enum cmn_node_type type;
+>  	int i;
+>  
+> -	if (is_software_event(event))
+> +	if (event->pmu != &cmn->pmu)
+>  		return;
+>  
+>  	type = CMN_EVENT_TYPE(event);
+> @@ -1693,9 +1693,6 @@ static int arm_cmn_validate_group(struct arm_cmn *cmn, struct perf_event *event)
+>  	if (leader == event)
+>  		return 0;
+>  
+> -	if (event->pmu != leader->pmu && !is_software_event(leader))
+> -		return -EINVAL;
+> -
+>  	val = kzalloc(sizeof(*val), GFP_KERNEL);
+>  	if (!val)
+>  		return -ENOMEM;
+> -- 
+> 2.39.2.101.g768bb238c484.dirty
+> 
 
