@@ -1,190 +1,497 @@
-Return-Path: <linux-csky+bounces-2516-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2517-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFEF1BBE7C7
-	for <lists+linux-csky@lfdr.de>; Mon, 06 Oct 2025 17:26:32 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE08FBBEE71
+	for <lists+linux-csky@lfdr.de>; Mon, 06 Oct 2025 20:19:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 86CB24EF41E
-	for <lists+linux-csky@lfdr.de>; Mon,  6 Oct 2025 15:26:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BF9114E1FC5
+	for <lists+linux-csky@lfdr.de>; Mon,  6 Oct 2025 18:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F83A2D73B9;
-	Mon,  6 Oct 2025 15:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FB1227FB05;
+	Mon,  6 Oct 2025 18:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CNUVnArq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HB5b2rNj"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012062.outbound.protection.outlook.com [52.101.48.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152252D59EF;
-	Mon,  6 Oct 2025 15:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759764388; cv=fail; b=jYn49+o5A3RBbHGIpZw25M1WD0St3PiclSevxEJzXLpyC94HW1Fc/sePzr9kZQtdmVLVAqEktxTEVQA715hjcyAuFPGuaVzrN6PFIQ65DMnvUnP8exkVVhMTFpuN4jhYS3WBFiXdv5H4l3mP00caTvBbqAP5X3u/VEmyXe75Tvg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759764388; c=relaxed/simple;
-	bh=FvtG4AsffTZPFD+0p1B4HawJgm6lC0L4GO1vw7jpxjs=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149B122A4E9;
+	Mon,  6 Oct 2025 18:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759774745; cv=none; b=guQhIdxqWF06wTdgC7gCEfcLWHThGcjD+IW2wS/JiofJ09TeUm6f1lD/a92vm1x99wqbjhDgHHWEJ02jjWdA7RNpxcXDUf35K493+g3fQE0aoQ7g9bzyznn371X/Qb+YpC+f37aFmf9JmlJKfvhk+NMWhjK/3XASIaWECwI0fOU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759774745; c=relaxed/simple;
+	bh=hTPMHRwx2FkDXzQPbE52gwh6AeK7/3UVto1k+Jd9+Ws=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D5eL3qt6RkSAR6sNqSUBxUbcJvf2beD6M6opYH7UjUhToCbilSmgRCxWNZMoxQRcImTqFCmWKw9wtQxFqFmVTMo+/e1sE4WkcjSQNUYfjmIY1cxiu0ZLw7xg/st27umzHSbeca5G4iDAcVjgqpMGYx8FNUOHV9/91lg29Uev2pA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CNUVnArq; arc=fail smtp.client-ip=52.101.48.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y5o8SM1Lwph/Mf2CuzQg4kZ340/GVuRuU8alCnMPI7ysfhpxpMljjgF9NnL35rp/6A4KaTpNDso2O1+uThjN13j6Q7QnH+jSGRzgdfI28CbsuCNe+r2iMH/C/cgAdzfFECupCMRF/GWNloAUuPz/UWFVeGfos7BRMzp0tfEjcz1/Jty0g7HjTVfYfxubTXtqeevwajrT8DnxIFfivQbOrcurb4bTTS5O3HZf3a7HVitZnavzc7Ork84B2dwHEHoUswQpbuTXg6fwIRAhdOfhay3DZtuPNvD2DPVpNdSsbrL/+wJ8QpI991scHga1ifhIhoeJ+wPELN3FWXSiHJmMyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FLZFaoEc4LF7YLYNEOb3wa1t0fVORzuZvsfnowTaB84=;
- b=Qn2n7Quv+BZ5SGP6KZ1w9rQrHdwjT/wIlouFcB+1EoSiZoRyS6qqdlMNiFsPJo8UZaNzHxFtwUDu1sfn2ZtcFKhdHpWbhqjUdC4n9+yGT75lJ1d+dxHmzdfFitShkL02Tg6Np7tNUQ25q0MEaAEuL1SjCs66tRvnHVHnKh3SUyHaqTteDOh5Yh8yVovmNJ7ao83j6e8zRY2FGt6H1WOWykHjKXVC2QaUTwjunrCt+5zTIm/FBl7qmOcR36IDE1Uah+QNKiRkwzES7+8+epKbluK/Q0aGjInLBeMNVI3c9YbwmXNX/lCBCbGkbBA6DqHzMtkoOp5/eFlFpxpgIyCTYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FLZFaoEc4LF7YLYNEOb3wa1t0fVORzuZvsfnowTaB84=;
- b=CNUVnArqhhnGKerU/NiPBt+078yjuYYIsYoWO0jc16PbdoCCXPaOTTAxmT8I1bBp4GoJCb8mVNTnyYxm+x917e1tN8JqvH38n2ZXUH2UgVgn+4wwufd6+EQNy6vvRxqlDI/c0Wdvezog32QPGN7Zub12anY4SlGnk7TYru+zQAbK5TdZUAZGVBKFG9K4IzkPDfcNcxgZ6PCyhaIVHQfG0gXvDwG0gfr7LBKvVAVETnUQJgCqyptgFfj2m//zwrbgI2bFfeKVMgCdFtvCSJ+GC+9mtdTPLo+MIg8DHbYLBZcWKRSh6EmlgWAp43aU3LQFoXhBe2Et2R6ei2pjI+feoA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- CY8PR12MB7562.namprd12.prod.outlook.com (2603:10b6:930:95::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9182.20; Mon, 6 Oct 2025 15:26:24 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::5189:ecec:d84a:133a%5]) with mapi id 15.20.9182.015; Mon, 6 Oct 2025
- 15:26:24 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Guo Ren <guoren@kernel.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>, linux-csky@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] csky: abiv2: Adapt to new folio flags field
-Date: Mon, 06 Oct 2025 11:26:21 -0400
-X-Mailer: MailMate (2.0r6283)
-Message-ID: <8CDB6C1C-5EFD-4B04-B232-4A90CD65849A@nvidia.com>
-In-Reply-To: <20251006-csky-folio-flags-v1-1-a91dcbdbf988@linutronix.de>
-References: <20251006-csky-folio-flags-v1-1-a91dcbdbf988@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BN9P222CA0001.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:408:10c::6) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	 MIME-Version:Content-Type; b=XoMjpyZj2FSSKxOt9ufQ3wbd2FWoYlTRx0UaneLs1V6yoXC08ESn5fhaTAXcBczVXO893HpEACy/vlhqqmgHl7kGBjvin+XU8DSWxETtW7iK5yvn8IM6Mdna7b7kv+f0DBEiLbg1oXyqL3C7Pi+whrAwkd4flh9+rO7dFLdjL7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HB5b2rNj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9779BC4CEF5;
+	Mon,  6 Oct 2025 18:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759774741;
+	bh=hTPMHRwx2FkDXzQPbE52gwh6AeK7/3UVto1k+Jd9+Ws=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HB5b2rNj+F+0oZgxCRiAb3k+43dXBRTrlw1xTsjMNFTK3MJVGF6y2rBip3JHAT20T
+	 sjtxdOsxU8EJhBLbKL4a+VNg+MbRPCFgDkIFz0WEzEvXRJq5h3jvSY3QVRq+W1z4El
+	 M3i7L9UKfcJ6pLm/tx2xwRHoifLeZgPd/rqTbK4kQrW2KRYeEeaEQpxq1H+hn+fa2K
+	 WFIVb00sIAhx/0VA4w5gbajnBiAfhAk+F7LfpdObL2+mMx5QYJh69V5P/a26+oKLug
+	 Y788qtkKUOwb5j1LX3N3zl/UTuiUcC5wCQHGNR1ryMFMwqda6NHvDmUapSIPtri2Vi
+	 oOxCV0Yko0/iA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Menglong Dong <menglong8.dong@gmail.com>,
+	Menglong Dong <dongml2@chinatelecom.cn>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Sasha Levin <sashal@kernel.org>,
+	guoren@kernel.org,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	macro@orcam.me.uk,
+	ink@unseen.parts,
+	mattst88@gmail.com,
+	thomas.weissschuh@linutronix.de,
+	tglx@linutronix.de,
+	namcao@linutronix.de,
+	catalin.marinas@arm.com,
+	mark.rutland@arm.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	puranjay@kernel.org,
+	anshuman.khandual@arm.com,
+	maz@kernel.org,
+	hca@linux.ibm.com,
+	maobibo@loongson.cn,
+	tsbogend@alpha.franken.de,
+	dragan.mladjenovic@syrmia.com,
+	paulburton@kernel.org,
+	arikalo@gmail.com,
+	mpe@ellerman.id.au,
+	christophe.leroy@csgroup.eu,
+	naveen@kernel.org,
+	alexghiti@rivosinc.com,
+	andybnac@gmail.com,
+	ruanjinjie@huawei.com,
+	ben.dooks@codethink.co.uk,
+	cyrilbur@tenstorrent.com,
+	zhangchunyan@iscas.ac.cn,
+	gor@linux.ibm.com,
+	agordeev@linux.ibm.com,
+	imbrenda@linux.ibm.com,
+	linux-csky@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.17-6.1] arch: Add the macro COMPILE_OFFSETS to all the asm-offsets.c
+Date: Mon,  6 Oct 2025 14:17:35 -0400
+Message-ID: <20251006181835.1919496-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251006181835.1919496-1-sashal@kernel.org>
+References: <20251006181835.1919496-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|CY8PR12MB7562:EE_
-X-MS-Office365-Filtering-Correlation-Id: d9b9f4c6-8df7-42ca-9aa7-08de04ecb59f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aSs0K0pQb1lyMnh4V0lKaWxmbzBUV1lRUEZFZFRzRTlLSmFoR2I1Zy93blJp?=
- =?utf-8?B?RmdmWDlTYTFVa2JEa3FpdC9FMlNlczdjWGxycWdiMmZ5U0dadHlKTzJZeWtr?=
- =?utf-8?B?OHRYWkNBQWhEbjk2QkdCM21jSU9YQzI4bEd1ZGxnYkFpbWF1clFKNk14ZG05?=
- =?utf-8?B?VUs1aGJqRmY1UG9yUEpHQlN2KzBpeDBXQVZTTklLNXJpOFlKbHFqTXl4Qloy?=
- =?utf-8?B?VVIxTkd5RjNLRGt0dWNnZGQ2Y1NwK3duem9mMFdwcEprRmlyRktmS1lKeHJG?=
- =?utf-8?B?T2NPSmpzSnIwVitVOHMvWU5LNDlUNFViNERhWWZZRFYrV0U4SVpFUjZ4K1dJ?=
- =?utf-8?B?dlZFbGluMzJZMzBLR1JWTVcxRFM5ZXR6dVpvUnlHN001NS8wSlVsRUdBY0tj?=
- =?utf-8?B?K2l1enU3WWhjTEU4dmpVQlNwRENBeU5GTnJtUVo0UTNPcHlKUHRZZ2JoQjFO?=
- =?utf-8?B?OGU2QUx1d1padHdIQks0OG54b2dybHhoUUxBUTJJTmxtbWpQVnpoZVlDNkZz?=
- =?utf-8?B?WDNLVk1pUGViRXFJKzJabnNZc2Uzbmpja3FBbFpnNmd1WU9DRjQrcXBiRGc2?=
- =?utf-8?B?WlV0Y1hIYnpmeDNnNjB2NEU4OWU4dUN0cDI1Ym1aTnZFQ29hWVJpZGhCNU1p?=
- =?utf-8?B?TUlMcnArTk9NTWNTdTFUU2MyWjZQMStscTYzMkhSMU9QU1JLZElZOUZCb2E4?=
- =?utf-8?B?Z1pzR01EL3M3TTkzc092a2diVDdDcUlpV2RHa1pIRTB3UlkzNGgyYk5YTGd5?=
- =?utf-8?B?UGhMV3dXM3B4bzlsQno0YU1TK2pkY2JHQVFDRHNwc1UvbEh1UXpqTjNENEZH?=
- =?utf-8?B?d2xic2xmdHVwSkRVZXd6Q210WVFKVU8rVlVyRysycG9ldmFlSHpKN3pCcXFN?=
- =?utf-8?B?VU9POFBKbE1kT1BMclhtNzNiL1RkTVBaRElIYnpwQUJZZTdDb0pzMVI4R2gr?=
- =?utf-8?B?SHBJemtJbGdwd2Flc0gvY0xMV0Z2ZHl4M1JTbkhiLzArbWYxUUFSRFJMS1VK?=
- =?utf-8?B?aGtOMHphU0ZodEVCYjhxTFFxK09XMW5OeS8xRWVpaTdOZmFBUHQxc2ZrQjZp?=
- =?utf-8?B?ZVYvNFhWTm9TQ0ljUElPUWFQVC9wSGt5ellIVUttNTQ4ZkJ5ZUdXWHJncXho?=
- =?utf-8?B?UU9EOE9lT0phL3hCL2R0Y3FORTN0TGFuRUhnKzh1SEdjaC9qR21NVHljN3Jj?=
- =?utf-8?B?UmZRN1FhTjM3akdoZ212L2RmMHhYeDBreVFMVlN5RTE4aGdqQjIwbGkvenhI?=
- =?utf-8?B?dU44VHltZjB5WG9mdXdjV01WWjhwWWU3MXVBbi9ZYU8xalZ1SXN5dWpYWlNp?=
- =?utf-8?B?UkIxTThrMDBmR0hLWnRqVXl5V2g1Mi9ORVZVYk5BS3lITjZmY0kzWU9xeXV5?=
- =?utf-8?B?ZTdGV25kVjN3Z1dMYy9idkZYckZzb0lYVitNVlhhSzk5VkxlRHZCU1htMHg0?=
- =?utf-8?B?b2dnZGVwUm4zdDZZMXRhVVpFMkNrU0FOVjNXaFphS09yOXo1enVoZVRaUzJ1?=
- =?utf-8?B?THFhMjMvSUNtS04ralBpWGtMcnA0ZUt2ZUkwSzVNaHNvWnVXeXUwNzFkV3B4?=
- =?utf-8?B?ZWhJM2IwTng4aE1YaEU4THRCdGJ5KzNabFUxUUw0QUdDZG9wUnpJWjQ2NlIz?=
- =?utf-8?B?MS8yUWp2bFg3cWc3YWtxUmthc3piN09RbTlZNXhKalExbDRSdXM0TWQvenRm?=
- =?utf-8?B?TkpkbUVuM3pmRTJUME80QnM5Z1V3M2x4VHNObm9XaDVvVkJGSThndWpkbXJM?=
- =?utf-8?B?Ym9sOTdKVXN0VG1qbjZyZWJ2WEcrK2hrVzN1Y1BweG9mMG9WRHR6OHFrRnJR?=
- =?utf-8?B?T2g4eTgrTEdCZWV1RitSRmZ4SWRmaWhXU2x3endPbzFZQ2M1SlhtQXIxNkRY?=
- =?utf-8?B?UnBIVXNpVDgyMmU2ai8vKytLUWxUbW5DN0l2M0p2ZEpkV084SHRySWNnZDJy?=
- =?utf-8?Q?aDX82j3sJaZ/xT5xkRnGESkpNJ2DwZ8d?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UC9LVnA4UTNyZW5zeTF6SzQwQ2MzbmF0aUVXVlZ5bXF5ZU1DMy9va0NVSSt3?=
- =?utf-8?B?Vk5MRi9JL1JvcUtvVnBSUHNMSEpuSFg5UXl4ZHdDeFpiaXdOSjFrY3p4eEJJ?=
- =?utf-8?B?WlVGQU5yOVlsOTRlQlA5SVZHREY4eFNuZjlxSGhnYzUrRXBmVzU3eERQdytq?=
- =?utf-8?B?Uk9WWUdHMXptaEx0N0d5cG8xdXhjdFNRdG9tVmZndU5UKzMvanN1MGNLbHVq?=
- =?utf-8?B?QVhLWkMwWDJ5Y0tiZjk1OHNtVTVpRFhKZ0hwditBMUowUkg3OStjcnVsSStz?=
- =?utf-8?B?UE1tNjRybmRQOXFRWXdMdzlYajViSXdoZCt5Zm9uNXF6Sm90cTdvaU5CeDFu?=
- =?utf-8?B?QUhCZ08zWXBrZGk0eExCeEgyS2pGTXhqSXE1a1I2ZjNkZGxQSnBQeTBqNlhR?=
- =?utf-8?B?a0hmdCtaeEludkFOT3VMWXFqZ01mVENyYWFWNDZpbUZkOXczK003Q2RoYS91?=
- =?utf-8?B?Z05sTUR0MDVBUGFQbTFOQWdKall2TG83K051aDZob0RNTVdUVWxwZjdTTWMw?=
- =?utf-8?B?U3VHNFgzdGtqaHJYeWdnVnVsbytnR1ZMV0VzSmM3NURCemR3SytjcU4xemZl?=
- =?utf-8?B?VEJXd0FtTk9CSHYvRllLNzV0clA0aWFVWnlmQVJuUG5Mb2FiVWpxei9FR1My?=
- =?utf-8?B?aTFSZXR4Mmt6SzZoRkNnK3paSUR2OHFQbUdmRjNPby8zdjY3NzBJaklWSlJL?=
- =?utf-8?B?cmxELzduS0lBY3J0NlBOcEt4K0t5bTY3dlZjUlBtYTlJREZiNTRVQU9McGFz?=
- =?utf-8?B?alFEa2hocmQ5RDJFOEljVWNkazdiTWJqTldWTXg5azlyM3puQTJJWFp1UmZF?=
- =?utf-8?B?Ny9MS01yelZkSm9SOWJ4d1UvbUYrTGc2L3JvTEVnN1FjMkpzcWJoUlN3NmVS?=
- =?utf-8?B?NjFMY3FVV0NtL1ZPSUsyS0NZcWJudG41bU16WWRSM0Q3R0xwTERQMDFncmNW?=
- =?utf-8?B?d0ZhM29Wdm1DUmpsNHM5OGZIbGNnY21aUEFQVlNYcGVFWVBWUkpRNFFyMjlk?=
- =?utf-8?B?R3hxVnVjRE9WdCszZHR2MnZWcmF3cGxxUW40Z2hFcWNxallyQVFRNTBkYkhj?=
- =?utf-8?B?UE1GalQrd0lRb1Q1U0IzdzBRcFFCWXJsSjAxWG5xNUF1NGhTd2haNm4wek1q?=
- =?utf-8?B?d210WXFMM0NBbmg3bys2eUlGM0JTeFFWbFdjTGFFZzJMQ1pVYjQyMmVVZkts?=
- =?utf-8?B?bUJtbXV5ckozbkhzT2lLbHdycW56OXBaQStqNXNDamVQNDJaYkIzdFVMcXZj?=
- =?utf-8?B?ODNpSmk3bUNrVXB6YTltaThIaWxBR3lYak5Halpxb0sxVFhZcS90VEl1cHpp?=
- =?utf-8?B?dnFFME5EcDAyZzZ2T2lEcWJ6VkZFU2wxTlB6VDBVOUowSEdGdENQdlQxdWxG?=
- =?utf-8?B?TmJUNXNPSm1DY0pPQnFBYWZqa1BFR0ROSThlZGhBbXkwbUpiL29SeG45M2tk?=
- =?utf-8?B?Wll1VzR0cjZWcXRqeDF2cTJmOHdEZUtHUitTY1Frc01BekhMSGk0cHk0aExZ?=
- =?utf-8?B?d1QwY2VFOFFuY3ZERUkySDR1dzdHQS83d2dxdTN5WjQyalNjRW1EZ0E3Mzlx?=
- =?utf-8?B?cWlaK1pCTWw5WkkvZ01PNkZmL0p4cURDdVFnN0REQ0wyNE9YaGhhSlVpNUtF?=
- =?utf-8?B?SXlyMGh6Sk82aTV5ZjNPV2ZQenNwcFZUbzd2UDAvWTdTZjQ5Tm1EODdMaGto?=
- =?utf-8?B?ejczbHFrWnRlTWlkRnlFNUNmampocUlTWnpHc0hsR1VBQ2ZkM3M0U1hZclV5?=
- =?utf-8?B?UEJYZlhneGdROC9XQlYwYm1SQlowNXpGVWJyVkRYTGRid2NSZ0dTRXN6WmZR?=
- =?utf-8?B?Rll6ZVkwU1lKWDVWUllvSFJ5ZVJxb2hoSy9ESllFL2h5UisveVc0c0FFREor?=
- =?utf-8?B?TkRJbXVrcXlibkRJSVA4cWxwZTN6NEQrZDNrWWRwVmpVNGxIMjJmSzIwNTBh?=
- =?utf-8?B?Rnkvd1UvUEdJajB0V0x3c0h5NHI1WVg5TjZaT0hBRGhWTU9RZlZ6anRXZFYz?=
- =?utf-8?B?NkFNSVJYRy83Unl6UzlhTEliR1o5WUZRSzVUanFoS2kzV21BZW1nVXNZY0ZK?=
- =?utf-8?B?ZzBSTGFTNVNneWdlZnIybDN2K050Rkp1N3N4a0VkNUpEMG9lVUI4R0NZQVJu?=
- =?utf-8?Q?tpEETBD1Txrgwe5HFjCwbXACk?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9b9f4c6-8df7-42ca-9aa7-08de04ecb59f
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2025 15:26:24.1114
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9goebwERFA7a4ucX7T0U0jeYO/M9RnpjrPVzdKL9RJoQo0cho+7MQLTrtCyr9eO1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7562
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 6 Oct 2025, at 8:13, Thomas Weißschuh wrote:
+From: Menglong Dong <menglong8.dong@gmail.com>
 
-> Recent changes require the raw folio flags to be accessed via ".f".
-> The merge commit introducing this change adapted most architecture code
-> but forgot the csky abiv2.
->
-> Fixes: 53fbef56e07d ("mm: introduce memdesc_flags_t")
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->  arch/csky/abiv2/inc/abi/cacheflush.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-Acked-by: Zi Yan <ziy@nvidia.com>
+[ Upstream commit 35561bab768977c9e05f1f1a9bc00134c85f3e28 ]
 
-Best Regards,
-Yan, Zi
+The include/generated/asm-offsets.h is generated in Kbuild during
+compiling from arch/SRCARCH/kernel/asm-offsets.c. When we want to
+generate another similar offset header file, circular dependency can
+happen.
+
+For example, we want to generate a offset file include/generated/test.h,
+which is included in include/sched/sched.h. If we generate asm-offsets.h
+first, it will fail, as include/sched/sched.h is included in asm-offsets.c
+and include/generated/test.h doesn't exist; If we generate test.h first,
+it can't success neither, as include/generated/asm-offsets.h is included
+by it.
+
+In x86_64, the macro COMPILE_OFFSETS is used to avoid such circular
+dependency. We can generate asm-offsets.h first, and if the
+COMPILE_OFFSETS is defined, we don't include the "generated/test.h".
+
+And we define the macro COMPILE_OFFSETS for all the asm-offsets.c for this
+purpose.
+
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+Based on my thorough investigation, I can now provide a comprehensive
+analysis of this commit.
+
+## **Backport Analysis: COMPILE_OFFSETS Commit**
+
+**Backport Status: YES** (with important conditions)
+
+### Summary
+
+This commit adds `#define COMPILE_OFFSETS` to all architecture-specific
+asm-offsets.c files. It is a **preparatory infrastructure patch** that
+enables the generation of additional offset header files while avoiding
+circular dependency issues during the kernel build process.
+
+### Critical Context
+
+This commit (upstream: 35561bab76897) is **inseparable** from its
+companion commit:
+- **378b7708194ff**: "sched: Make migrate_{en,dis}able() inline"
+
+These two commits form a **mandatory pair** where:
+1. The COMPILE_OFFSETS commit prepares the build infrastructure
+2. The migrate_enable/disable commit actually uses this infrastructure
+   to generate `include/generated/rq-offsets.h`
+
+### Why This Should Be Backported
+
+1. **Already being backported**: The companion commit (378b7708194ff) is
+   already tagged for stable backport (as commit d0e888caa43cc shows `[
+   Upstream commit 378b7708194fff77c9020392067329931c3fcc04 ]`)
+
+2. **Build dependency**: Without this COMPILE_OFFSETS commit, the
+   migrate_enable/disable backport will **fail to build** due to
+   circular dependency:
+   - `asm-offsets.c` includes `<linux/sched.h>`
+   - `<linux/sched.h>` will include `<generated/rq-offsets.h>`
+   - But `rq-offsets.h` doesn't exist yet when generating `asm-
+     offsets.h`
+   - The COMPILE_OFFSETS macro allows conditional inclusion to break
+     this cycle
+
+3. **Performance improvement for BPF**: The complete patch series
+   improves BPF FENTRY performance from ~113M/s to ~150M/s (27-32%
+   improvement) by inlining migrate_enable/disable functions
+
+4. **Low risk**: This commit only adds a simple `#define` to each asm-
+   offsets.c file with no functional changes to any existing code paths
+
+### Code Changes Analysis
+
+The changes are identical across all 23 architectures:
+- **alpha, arc, arm, arm64, csky, hexagon, loongarch, m68k, microblaze,
+  mips, nios2, openrisc, parisc, powerpc, riscv, s390, sh, sparc, um,
+  xtensa**
+
+Each file receives:
+```c
++#define COMPILE_OFFSETS
+```
+
+This macro is used in header files (specifically
+`include/linux/sched.h`) to conditionally guard includes:
+```c
+#ifndef COMPILE_OFFSETS
+#include <generated/rq-offsets.h>
+#endif
+```
+
+### Dependencies
+
+- **Must be backported together with**: commit 378b7708194ff
+- **Order matters**: COMPILE_OFFSETS must be applied first (or in same
+  merge)
+- **No standalone value**: This commit has no effect without the follow-
+  up changes
+
+### Risk Assessment
+
+- **Risk Level**: Low
+- **Regression Potential**: Minimal - only adds a preprocessor
+  definition
+- **Testing**: Should build-test on all architectures
+- **Compatibility**: X86_64 already had this pattern since 2011 (commit
+  b82fef82d567)
+
+### References
+
+- Upstream commits: 35561bab76897 (this one) → 378b7708194ff (migrate
+  inline)
+- Author: Menglong Dong <dongml2@chinatelecom.cn>
+- Maintainer: Peter Zijlstra (Intel) <peterz@infradead.org>
+- Subsystem: Scheduler / Build infrastructure
+
+**Conclusion**: This is a mandatory prerequisite patch that must be
+backported alongside its companion commit to avoid build breakage. The
+stable maintainers should ensure both patches are applied together in
+the correct order.
+
+ arch/alpha/kernel/asm-offsets.c      | 1 +
+ arch/arc/kernel/asm-offsets.c        | 1 +
+ arch/arm/kernel/asm-offsets.c        | 2 ++
+ arch/arm64/kernel/asm-offsets.c      | 1 +
+ arch/csky/kernel/asm-offsets.c       | 1 +
+ arch/hexagon/kernel/asm-offsets.c    | 1 +
+ arch/loongarch/kernel/asm-offsets.c  | 2 ++
+ arch/m68k/kernel/asm-offsets.c       | 1 +
+ arch/microblaze/kernel/asm-offsets.c | 1 +
+ arch/mips/kernel/asm-offsets.c       | 2 ++
+ arch/nios2/kernel/asm-offsets.c      | 1 +
+ arch/openrisc/kernel/asm-offsets.c   | 1 +
+ arch/parisc/kernel/asm-offsets.c     | 1 +
+ arch/powerpc/kernel/asm-offsets.c    | 1 +
+ arch/riscv/kernel/asm-offsets.c      | 1 +
+ arch/s390/kernel/asm-offsets.c       | 1 +
+ arch/sh/kernel/asm-offsets.c         | 1 +
+ arch/sparc/kernel/asm-offsets.c      | 1 +
+ arch/um/kernel/asm-offsets.c         | 2 ++
+ arch/xtensa/kernel/asm-offsets.c     | 1 +
+ 20 files changed, 24 insertions(+)
+
+diff --git a/arch/alpha/kernel/asm-offsets.c b/arch/alpha/kernel/asm-offsets.c
+index e9dad60b147f3..1ebb058904992 100644
+--- a/arch/alpha/kernel/asm-offsets.c
++++ b/arch/alpha/kernel/asm-offsets.c
+@@ -4,6 +4,7 @@
+  * This code generates raw asm output which is post-processed to extract
+  * and format the required data.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/types.h>
+ #include <linux/stddef.h>
+diff --git a/arch/arc/kernel/asm-offsets.c b/arch/arc/kernel/asm-offsets.c
+index f77deb7991757..2978da85fcb65 100644
+--- a/arch/arc/kernel/asm-offsets.c
++++ b/arch/arc/kernel/asm-offsets.c
+@@ -2,6 +2,7 @@
+ /*
+  * Copyright (C) 2004, 2007-2010, 2011-2012 Synopsys, Inc. (www.synopsys.com)
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/sched.h>
+ #include <linux/mm.h>
+diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
+index 123f4a8ef4466..2101938d27fcb 100644
+--- a/arch/arm/kernel/asm-offsets.c
++++ b/arch/arm/kernel/asm-offsets.c
+@@ -7,6 +7,8 @@
+  * This code generates raw asm output which is post-processed to extract
+  * and format the required data.
+  */
++#define COMPILE_OFFSETS
++
+ #include <linux/compiler.h>
+ #include <linux/sched.h>
+ #include <linux/mm.h>
+diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
+index 30d4bbe68661f..b6367ff3a49ca 100644
+--- a/arch/arm64/kernel/asm-offsets.c
++++ b/arch/arm64/kernel/asm-offsets.c
+@@ -6,6 +6,7 @@
+  *               2001-2002 Keith Owens
+  * Copyright (C) 2012 ARM Ltd.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/arm_sdei.h>
+ #include <linux/sched.h>
+diff --git a/arch/csky/kernel/asm-offsets.c b/arch/csky/kernel/asm-offsets.c
+index d1e9035794733..5525c8e7e1d9e 100644
+--- a/arch/csky/kernel/asm-offsets.c
++++ b/arch/csky/kernel/asm-offsets.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
++#define COMPILE_OFFSETS
+ 
+ #include <linux/sched.h>
+ #include <linux/kernel_stat.h>
+diff --git a/arch/hexagon/kernel/asm-offsets.c b/arch/hexagon/kernel/asm-offsets.c
+index 03a7063f94561..50eea9fa6f137 100644
+--- a/arch/hexagon/kernel/asm-offsets.c
++++ b/arch/hexagon/kernel/asm-offsets.c
+@@ -8,6 +8,7 @@
+  *
+  * Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/compat.h>
+ #include <linux/types.h>
+diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
+index db1e4bb26b6a0..3017c71576009 100644
+--- a/arch/loongarch/kernel/asm-offsets.c
++++ b/arch/loongarch/kernel/asm-offsets.c
+@@ -4,6 +4,8 @@
+  *
+  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+  */
++#define COMPILE_OFFSETS
++
+ #include <linux/types.h>
+ #include <linux/sched.h>
+ #include <linux/mm.h>
+diff --git a/arch/m68k/kernel/asm-offsets.c b/arch/m68k/kernel/asm-offsets.c
+index 906d732305374..67a1990f9d748 100644
+--- a/arch/m68k/kernel/asm-offsets.c
++++ b/arch/m68k/kernel/asm-offsets.c
+@@ -9,6 +9,7 @@
+  * #defines from the assembly-language output.
+  */
+ 
++#define COMPILE_OFFSETS
+ #define ASM_OFFSETS_C
+ 
+ #include <linux/stddef.h>
+diff --git a/arch/microblaze/kernel/asm-offsets.c b/arch/microblaze/kernel/asm-offsets.c
+index 104c3ac5f30c8..b4b67d58e7f6a 100644
+--- a/arch/microblaze/kernel/asm-offsets.c
++++ b/arch/microblaze/kernel/asm-offsets.c
+@@ -7,6 +7,7 @@
+  * License. See the file "COPYING" in the main directory of this archive
+  * for more details.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/init.h>
+ #include <linux/stddef.h>
+diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
+index 1e29efcba46e5..5debd9a3854a9 100644
+--- a/arch/mips/kernel/asm-offsets.c
++++ b/arch/mips/kernel/asm-offsets.c
+@@ -9,6 +9,8 @@
+  * Kevin Kissell, kevink@mips.com and Carsten Langgaard, carstenl@mips.com
+  * Copyright (C) 2000 MIPS Technologies, Inc.
+  */
++#define COMPILE_OFFSETS
++
+ #include <linux/compat.h>
+ #include <linux/types.h>
+ #include <linux/sched.h>
+diff --git a/arch/nios2/kernel/asm-offsets.c b/arch/nios2/kernel/asm-offsets.c
+index e3d9b7b6fb48a..88190b503ce5d 100644
+--- a/arch/nios2/kernel/asm-offsets.c
++++ b/arch/nios2/kernel/asm-offsets.c
+@@ -2,6 +2,7 @@
+ /*
+  * Copyright (C) 2011 Tobias Klauser <tklauser@distanz.ch>
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/stddef.h>
+ #include <linux/sched.h>
+diff --git a/arch/openrisc/kernel/asm-offsets.c b/arch/openrisc/kernel/asm-offsets.c
+index 710651d5aaae1..3cc826f2216b1 100644
+--- a/arch/openrisc/kernel/asm-offsets.c
++++ b/arch/openrisc/kernel/asm-offsets.c
+@@ -18,6 +18,7 @@
+  * compile this file to assembler, and then extract the
+  * #defines from the assembly-language output.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/signal.h>
+ #include <linux/sched.h>
+diff --git a/arch/parisc/kernel/asm-offsets.c b/arch/parisc/kernel/asm-offsets.c
+index 757816a7bd4b2..9abfe65492c65 100644
+--- a/arch/parisc/kernel/asm-offsets.c
++++ b/arch/parisc/kernel/asm-offsets.c
+@@ -13,6 +13,7 @@
+  *    Copyright (C) 2002 Randolph Chung <tausq with parisc-linux.org>
+  *    Copyright (C) 2003 James Bottomley <jejb at parisc-linux.org>
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/types.h>
+ #include <linux/sched.h>
+diff --git a/arch/powerpc/kernel/asm-offsets.c b/arch/powerpc/kernel/asm-offsets.c
+index b3048f6d3822c..a4bc80b30410a 100644
+--- a/arch/powerpc/kernel/asm-offsets.c
++++ b/arch/powerpc/kernel/asm-offsets.c
+@@ -8,6 +8,7 @@
+  * compile this file to assembler, and then extract the
+  * #defines from the assembly-language output.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/compat.h>
+ #include <linux/signal.h>
+diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+index 6e8c0d6feae9e..7d42d3b8a32a7 100644
+--- a/arch/riscv/kernel/asm-offsets.c
++++ b/arch/riscv/kernel/asm-offsets.c
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2012 Regents of the University of California
+  * Copyright (C) 2017 SiFive
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/kbuild.h>
+ #include <linux/mm.h>
+diff --git a/arch/s390/kernel/asm-offsets.c b/arch/s390/kernel/asm-offsets.c
+index 95ecad9c7d7d2..a8915663e917f 100644
+--- a/arch/s390/kernel/asm-offsets.c
++++ b/arch/s390/kernel/asm-offsets.c
+@@ -4,6 +4,7 @@
+  * This code generates raw asm output which is post-processed to extract
+  * and format the required data.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/kbuild.h>
+ #include <linux/sched.h>
+diff --git a/arch/sh/kernel/asm-offsets.c b/arch/sh/kernel/asm-offsets.c
+index a0322e8328456..429b6a7631468 100644
+--- a/arch/sh/kernel/asm-offsets.c
++++ b/arch/sh/kernel/asm-offsets.c
+@@ -8,6 +8,7 @@
+  * compile this file to assembler, and then extract the
+  * #defines from the assembly-language output.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/stddef.h>
+ #include <linux/types.h>
+diff --git a/arch/sparc/kernel/asm-offsets.c b/arch/sparc/kernel/asm-offsets.c
+index 3d9b9855dce91..6e660bde48dd8 100644
+--- a/arch/sparc/kernel/asm-offsets.c
++++ b/arch/sparc/kernel/asm-offsets.c
+@@ -10,6 +10,7 @@
+  *
+  * On sparc, thread_info data is static and TI_XXX offsets are computed by hand.
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <linux/sched.h>
+ #include <linux/mm_types.h>
+diff --git a/arch/um/kernel/asm-offsets.c b/arch/um/kernel/asm-offsets.c
+index 1fb12235ab9c8..a69873aa697f4 100644
+--- a/arch/um/kernel/asm-offsets.c
++++ b/arch/um/kernel/asm-offsets.c
+@@ -1 +1,3 @@
++#define COMPILE_OFFSETS
++
+ #include <sysdep/kernel-offsets.h>
+diff --git a/arch/xtensa/kernel/asm-offsets.c b/arch/xtensa/kernel/asm-offsets.c
+index da38de20ae598..cfbced95e944a 100644
+--- a/arch/xtensa/kernel/asm-offsets.c
++++ b/arch/xtensa/kernel/asm-offsets.c
+@@ -11,6 +11,7 @@
+  *
+  * Chris Zankel <chris@zankel.net>
+  */
++#define COMPILE_OFFSETS
+ 
+ #include <asm/processor.h>
+ #include <asm/coprocessor.h>
+-- 
+2.51.0
+
 
