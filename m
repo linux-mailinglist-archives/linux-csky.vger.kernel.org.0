@@ -1,121 +1,134 @@
-Return-Path: <linux-csky+bounces-2518-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2519-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3426ABC3297
-	for <lists+linux-csky@lfdr.de>; Wed, 08 Oct 2025 04:20:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03478BC7118
+	for <lists+linux-csky@lfdr.de>; Thu, 09 Oct 2025 03:08:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C03E1886E13
-	for <lists+linux-csky@lfdr.de>; Wed,  8 Oct 2025 02:20:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C187919E38D5
+	for <lists+linux-csky@lfdr.de>; Thu,  9 Oct 2025 01:09:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3758287505;
-	Wed,  8 Oct 2025 02:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6001DE4C4;
+	Thu,  9 Oct 2025 01:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FnIqH4cc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cq+QIuaS"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA8617D2
-	for <linux-csky@vger.kernel.org>; Wed,  8 Oct 2025 02:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC73D1DDC2C;
+	Thu,  9 Oct 2025 01:07:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759890003; cv=none; b=FUVbc4k6MmEa/YTRyFdnAQs/6L9MfYnmCmuRWkgueLubYxIjefsoHo58KHiURIw2ZAhPQPLjwaT9zloUYScc+wD0tE68VGDoa2o8iYY6HpNgVW10b3Tlck038T2mjjEP6Jl2At+ciDILQfGqw3ri2U7CQMk+JA8VxId4tSOB3wA=
+	t=1759972037; cv=none; b=mFtXMGQj3z6s1YvnbbhAXlPrhV1gAjiHBVF8XUGP4k9mv7v+3AD749g2mO7CEzjxq4mh4vrYWJHLVrBTkzQpP4e0OBtqvEUIj21fh99GoDyZpv3yFTeeHUEDfAEAtVcciQyFhTwyytG62/pgj5WruczmzNA++zsP+hwfUvyn8g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759890003; c=relaxed/simple;
-	bh=YCxQqeUyFhTrHt15C9RFmiynERMtcxKYfJ7HLF7B2xM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sUEFBLrX2I0X/kw9aGuS/sh9AXQiGU7BbYrX5r09uvoop0scJgSgoGrygq3WCBQQ9jmxJh0m5PyOV2W5qiQWjjsFyEtDje5O1vf9XkeJ1Q2yTrxWgeUjoyL7Qbra1u9ucpB/ff8P36zB3xhCYSTGfnKSZctiy2KI4xmR0WKKeYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FnIqH4cc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343C0C4CEF1
-	for <linux-csky@vger.kernel.org>; Wed,  8 Oct 2025 02:20:03 +0000 (UTC)
+	s=arc-20240116; t=1759972037; c=relaxed/simple;
+	bh=uICwW+7JjdNTrdwYOThDjo78WSe40MG6kD2tcS8UCr0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Fo7Kpe2CL+yvYEiZScBzdP4gg3L9w3+LujZctBmFPtTCIWuXxLcnFGRU5MpNhAoAFt3Rb+NPbdyvucoNz/iuFUpxkJMaONQR/fiQTAwFPEXSDi+SS7k7xkqDc/YBM5sM3JaMMzHxnFPTKcxKIQiknlmMPPOfVI//baVZyyg/OyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cq+QIuaS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90DF0C4CEE7;
+	Thu,  9 Oct 2025 01:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759890003;
-	bh=YCxQqeUyFhTrHt15C9RFmiynERMtcxKYfJ7HLF7B2xM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FnIqH4ccSanW/Wp1LRtkqe+nd8kUwBmtOYgk2Cta+xbfl7r151a00fPr776E6CxiC
-	 kqEKWFnPgVB+u0/FXeI8tcWmTEZ7qbnLdSydn7NrXhtlTPj/nGgmyNVW1REVTXnjhl
-	 kuDkkELxzMWesz4PaLQ4wYHc07g618yMJFJsamh5q/IIB3Rlz8jwZhfllCjvRv3KSF
-	 sQ1PpP69D18EBv+pldBxl2JKz1yNCfTVvMp9BNZIbBjbFFokn9x2je88vn69+eTiMN
-	 Ob3msLcQvko1n2qi7ucaA07vS8nx6bRMs9Q1OrJukaW9TfR1mNaE0EX/1K/zEJSmhK
-	 kQ00elWaFOR7A==
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3f0134ccc0cso4220836f8f.1
-        for <linux-csky@vger.kernel.org>; Tue, 07 Oct 2025 19:20:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXUhSRNJtF6MdejpfeqdGwDxSa/HWETEP4f02wXUlQngm/LfVyGKwyupgQZ6UuOrl8pl5/XNJe3YAh5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSrJPn25avs5fv0dtUKYDW8pPSBxO+ob+ESjCi/f0FjpvS7w1Q
-	sxtZJfgGwAot/3CAyMuCHK/9B89iuBU2wNeCJj5Z3Iadq7id7D/Dnk4y5Jv9rgGsOQdfqscL9k0
-	dZ4iLrKm+8iY6IN7oZeRwmxsZKNfObZ8=
-X-Google-Smtp-Source: AGHT+IE49Ut3K0iDJkRwoaA4pG+jQRbjMeKF3N1ZvxV56NRURvyQRm+OalScdRWTDPzbXy9freMthjrU3URoDPoL6dY=
-X-Received: by 2002:a05:6000:2410:b0:3da:e7d7:f1e0 with SMTP id
- ffacd0b85a97d-4266e7c61c6mr807123f8f.27.1759890001781; Tue, 07 Oct 2025
- 19:20:01 -0700 (PDT)
+	s=k20201202; t=1759972036;
+	bh=uICwW+7JjdNTrdwYOThDjo78WSe40MG6kD2tcS8UCr0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Cq+QIuaSsbZ85Bye4hA95eTz3hsHytAX1GTFc9YGto55OBTrhSQts03gyTHo2eSvn
+	 rNgYrFWU2souedJNKH6yF6ZCWEwY8jrNexNaitylW4ivlHpWVjhbYCAMV/nCTZ0CtL
+	 oShIr9D42WzY/SRFilbT1mqkl6x9++jWyPnFwByoyG/Cut3jUlY64GzGWuzLpebMQz
+	 w6uj0kRrCETVOXtVAqrz1jAM7/GJQA5bYn5s7PAlvZCkQNO3eOD7pPdDsew6svVkaE
+	 TtclXcV4dI7gawm5GYhlHGNy+cRg3zhyB0uCj+rKzY1KwQUV3/WZTj4Wp3vrhYv/Dt
+	 LmzPOKnu/WrKQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33DE73A41017;
+	Thu,  9 Oct 2025 01:07:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251006-csky-folio-flags-v1-1-a91dcbdbf988@linutronix.de>
-In-Reply-To: <20251006-csky-folio-flags-v1-1-a91dcbdbf988@linutronix.de>
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 8 Oct 2025 10:19:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTgbXgVcLeC9eJ2+Rf-+5Zq0tysEV5coZVai1mw+NZCuw@mail.gmail.com>
-X-Gm-Features: AS18NWA9kNLOnkhi6ozusphJKXdIh54LkYxnWdkc3Fqr_o4LAL9qKkGMioXiEeg
-Message-ID: <CAJF2gTTgbXgVcLeC9eJ2+Rf-+5Zq0tysEV5coZVai1mw+NZCuw@mail.gmail.com>
-Subject: Re: [PATCH] csky: abiv2: Adapt to new folio flags field
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, Zi Yan <ziy@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, linux-csky@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/17] Add __attribute_const__ to ffs()-family
+ implementations
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <175997202477.3661959.16005423815156173105.git-patchwork-notify@kernel.org>
+Date: Thu, 09 Oct 2025 01:07:04 +0000
+References: <20250804163910.work.929-kees@kernel.org>
+In-Reply-To: <20250804163910.work.929-kees@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, x86@kernel.org, linux-alpha@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, llvm@lists.linux.dev,
+ linux-hardening@vger.kernel.org
 
-On Mon, Oct 6, 2025 at 8:13=E2=80=AFPM Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
->
-> Recent changes require the raw folio flags to be accessed via ".f".
-> The merge commit introducing this change adapted most architecture code
-> but forgot the csky abiv2.
->
-> Fixes: 53fbef56e07d ("mm: introduce memdesc_flags_t")
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> ---
->  arch/csky/abiv2/inc/abi/cacheflush.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/csky/abiv2/inc/abi/cacheflush.h b/arch/csky/abiv2/inc/a=
-bi/cacheflush.h
-> index 6513ac5d257888fbd41385c9263305dfefd18de6..da51a0f02391f7d391ce26a2b=
-11ca82b8c0b6755 100644
-> --- a/arch/csky/abiv2/inc/abi/cacheflush.h
-> +++ b/arch/csky/abiv2/inc/abi/cacheflush.h
-> @@ -20,8 +20,8 @@
->
->  static inline void flush_dcache_folio(struct folio *folio)
->  {
-> -       if (test_bit(PG_dcache_clean, &folio->flags))
-> -               clear_bit(PG_dcache_clean, &folio->flags);
-> +       if (test_bit(PG_dcache_clean, &folio->flags.f))
-> +               clear_bit(PG_dcache_clean, &folio->flags.f);
->  }
->  #define flush_dcache_folio flush_dcache_folio
->
->
-> ---
-> base-commit: fd94619c43360eb44d28bd3ef326a4f85c600a07
-> change-id: 20251006-csky-folio-flags-1376908acbea
->
-> Best regards,
-> --
-> Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
->
-LGTM!
+Hello:
 
-Acked-by: Guo Ren <guoren@kernel.org>
+This series was applied to riscv/linux.git (for-next)
+by Kees Cook <kees@kernel.org>:
 
---=20
-Best Regards
- Guo Ren
+On Mon,  4 Aug 2025 09:43:56 -0700 you wrote:
+> Hi,
+> 
+> While tracking down a problem where constant expressions used by
+> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
+> initializer was convincing the compiler that it couldn't track the state
+> of the prior statically initialized value. Tracing this down found that
+> ffs() was used in the initializer macro, but since it wasn't marked with
+> __attribute_const__, the compiler had to assume the function might
+> change variable states as a side-effect (which is not true for ffs(),
+> which provides deterministic math results).
+> 
+> [...]
+
+Here is the summary with links:
+  - [01/17] KUnit: Introduce ffs()-family tests
+    (no matching commit)
+  - [02/17] bitops: Add __attribute_const__ to generic ffs()-family implementations
+    (no matching commit)
+  - [03/17] csky: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [04/17] x86: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [05/17] powerpc: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [06/17] sh: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [07/17] alpha: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [08/17] hexagon: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [09/17] riscv: Add __attribute_const__ to ffs()-family implementations
+    https://git.kernel.org/riscv/c/c51c26e687a6
+  - [10/17] openrisc: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [11/17] m68k: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [12/17] mips: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [13/17] parisc: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [14/17] s390: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [15/17] xtensa: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [16/17] sparc: Add __attribute_const__ to ffs()-family implementations
+    (no matching commit)
+  - [17/17] KUnit: ffs: Validate all the __attribute_const__ annotations
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
