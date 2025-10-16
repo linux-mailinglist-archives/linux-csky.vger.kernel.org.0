@@ -1,76 +1,97 @@
-Return-Path: <linux-csky+bounces-2529-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2530-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1FFDBDE682
-	for <lists+linux-csky@lfdr.de>; Wed, 15 Oct 2025 14:09:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17FF0BE1C9E
+	for <lists+linux-csky@lfdr.de>; Thu, 16 Oct 2025 08:42:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 10EBE4E3E56
-	for <lists+linux-csky@lfdr.de>; Wed, 15 Oct 2025 12:09:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81BD51A601A4
+	for <lists+linux-csky@lfdr.de>; Thu, 16 Oct 2025 06:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17A7E324B38;
-	Wed, 15 Oct 2025 12:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 892432DE1E3;
+	Thu, 16 Oct 2025 06:42:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fXrwPuT6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4bJPn/D"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7EC3233ED;
-	Wed, 15 Oct 2025 12:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639BC7494
+	for <linux-csky@vger.kernel.org>; Thu, 16 Oct 2025 06:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760530180; cv=none; b=S0y33D8jBeDzic/38ZTEygwXgdUFHcS14xIEEmA8YrQ/IeEGiaRKGf9LFSaIxr3tDzgOtV/uzyTPMWsr8psEvtQLIUKBr+xzB7+nR59iLwvSdSrx5bKx0yy6koy8fOkfNiXdGyr2nF6hsOz1N2gqvyzwc4XDBwcNQ47FXICFx3w=
+	t=1760596947; cv=none; b=sTpbaDH3aD9uZgYq6uXq6turSdXG4RHHgW7o7ihU5TFrsR6Q+ovKuMIhUtTaQhi6Q7tMCmL3lwSAd5cFg2WkQaHnZNfbLWrdxXDNm2X0qCm6Ht1yO+3zYPz+8tJvpvY0Upjrj8o9KAiREvAWl9f/xoKCvl3OHH12lO1+ezOksOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760530180; c=relaxed/simple;
-	bh=f9Fjl7F3VFzXC0O48M5wncgrl7psHc5HnBqdo1yCEm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dYGH7mHZhp6DgGDxRo7Pjz33WyNVIZ4I+lrhbcJ1S2bXqnNTev8F14kAqxoSnw90sDYofA83YCgKOXY2yORGrgbm1d9jmXrB0rWUb0AbTxTeoCtZmqm5zKI3B0sEDZZ0UKrJmfAycBpJWkFpR4vetXtc0lpj/P9iTfuuhsuZTok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fXrwPuT6; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=f9Fjl7F3VFzXC0O48M5wncgrl7psHc5HnBqdo1yCEm8=; b=fXrwPuT6D6NXjiEVl+QjBGjMhZ
-	AS1I9IN66rWe6YhNQDOmQ0rvfm8FzszVFXWhrLrz5IbriMPLxINEhtc5OimwSOCU5tzWqQ03V+IBP
-	F8OtuPSePY4QAxn9qo80PEAEZDZhO/+k6sHLjEfz4V3CG1wKodBvYTB5HiL4JarqvdRDE7OfJUfmt
-	qQaUOj+87E62ZC/sDwzNNjQVEu30qM2/bwdCDYsUzvSEebjJ9pFtqASBfSeAoyPQ3kLecj3amW0JF
-	0vgv7kuKoIH/k/hgcBhBFYP1UhHTeypycpIPuk0gyN3vM6N+h8+yfb3ypwP3zvjaI7fZpAppYRvox
-	ztMLJw8A==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v90Jz-0000000Elb2-34Jb;
-	Wed, 15 Oct 2025 12:09:35 +0000
-Date: Wed, 15 Oct 2025 13:09:35 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Guo Ren <guoren@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH] csky/mm: fix build errors cause by folio flags changes
-Message-ID: <aO-O_2lhxZ8I78cl@casper.infradead.org>
-References: <20251015064759.2993842-1-rppt@kernel.org>
- <CAJF2gTTgG2DhqLC2B6URsNusjzcwCaxi-k=MUZTc1FTEHbaf+g@mail.gmail.com>
+	s=arc-20240116; t=1760596947; c=relaxed/simple;
+	bh=Xwymle1RI5deN1YZysEWyTkaWWkdCc1UvMTlc0d69Rs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=krMKZMa+kltRRbsGIZW6e6vcq85rcapFLfYuyoPgeY6Ay5YtVJT5Y1L3YDExECbkamgx7/HL93mBcvRqkNX9Enzt6hwSKX1jIbiWBmFS42Vr4MjWY3HBu48XyWg0UjTE9BKj3QbR24Ua5JaGGoOwnsr22+9WtcYZHh1AP/L9kMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f4bJPn/D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8C1C116B1
+	for <linux-csky@vger.kernel.org>; Thu, 16 Oct 2025 06:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760596947;
+	bh=Xwymle1RI5deN1YZysEWyTkaWWkdCc1UvMTlc0d69Rs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=f4bJPn/DpnUgA7kotw1MXERFp/4DM7MKCgNaU6MFBEUIc0ONsK0C8ggnZbDxnGrgF
+	 tR2OtQxrBnPYCWinlOtBtwtDjSl020CPuvLETp5fANNiTf5Bfs6Hzdnoyl9CKyrtgQ
+	 NzrcYMsDv/UemkZFTBxEg8VFiAxfpttKdmCV8dC8nWl0zkkLZay3Yg35RkRyqRTkyT
+	 J85LosJyuWOck/ArSWO8v8f/gMj+bHLbA4LL5uK/xViAQyWaWRTYfCGAM5ZFR9Y3e9
+	 Sb9riU0oWUI9afqOU9oSYVjpwZxELTn2HusteZWC1lYj7dzuXvGR9k8oX05iQj5nt0
+	 9FsKAr7t4tSJQ==
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42421b1514fso168395f8f.2
+        for <linux-csky@vger.kernel.org>; Wed, 15 Oct 2025 23:42:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXCZF/2zlvar+Dmtc1RCYkncycl8EhgqO9mvBZWQ5+QQ3Zi5idKvxIsAyqPQq8H7XM8jrgwCuUi9oYy@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqEY9+3aI3cVsc5pnOQqy/RNP7MD81kS8UT/AMO1BwcU79q+dU
+	Nk4BpwIY7TUgIUKhOc+Zyv2WhHMY6JFzwP5LCErnkF6Iq8g1Xnnp9s/UNETeTsetvxa9jcsMSqx
+	2LW6l4lCf6LKbooNfwNmsOsxrDpf6WVU=
+X-Google-Smtp-Source: AGHT+IGMu6/5tkdwgl3TJA54YC+DSQnG+626+3ajWtF+4ixc5KZNJofj28aYCYE+Pd1fkwBRWHURZ3ViZoPyv4GSZyg=
+X-Received: by 2002:a05:6000:2385:b0:426:d57a:da9d with SMTP id
+ ffacd0b85a97d-426d57adaa3mr11257702f8f.59.1760596945568; Wed, 15 Oct 2025
+ 23:42:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTTgG2DhqLC2B6URsNusjzcwCaxi-k=MUZTc1FTEHbaf+g@mail.gmail.com>
+References: <20251015064759.2993842-1-rppt@kernel.org> <CAJF2gTTgG2DhqLC2B6URsNusjzcwCaxi-k=MUZTc1FTEHbaf+g@mail.gmail.com>
+ <aO-O_2lhxZ8I78cl@casper.infradead.org>
+In-Reply-To: <aO-O_2lhxZ8I78cl@casper.infradead.org>
+From: Guo Ren <guoren@kernel.org>
+Date: Thu, 16 Oct 2025 14:42:12 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ0mcU56XKFcXcxDPv0bXGWm5WXHHpTP9YE2GK67XF7Pg@mail.gmail.com>
+X-Gm-Features: AS18NWAu7sEuMJK-AO5mkdGBB98AzUtrOqZ7rI9LP75NnkmgevB_U4njX0yf2U0
+Message-ID: <CAJF2gTQ0mcU56XKFcXcxDPv0bXGWm5WXHHpTP9YE2GK67XF7Pg@mail.gmail.com>
+Subject: Re: [PATCH] csky/mm: fix build errors cause by folio flags changes
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 15, 2025 at 03:51:53PM +0800, Guo Ren wrote:
-> Thanks for the fixup. If you want to go through your tree, please add the tag:
-> Acked-by: Guo Ren <guoren@kernel.org>
+On Wed, Oct 15, 2025 at 8:09=E2=80=AFPM Matthew Wilcox <willy@infradead.org=
+> wrote:
+>
+> On Wed, Oct 15, 2025 at 03:51:53PM +0800, Guo Ren wrote:
+> > Thanks for the fixup. If you want to go through your tree, please add t=
+he tag:
+> > Acked-by: Guo Ren <guoren@kernel.org>
+>
+> Why haven't you merged the original patch from October 6th?
 
-Why haven't you merged the original patch from October 6th?
+Sorry, I didn't pick that patch up and just replied to the acked-by.
 
-Message-Id: <20251006-csky-folio-flags-v1-1-a91dcbdbf988@linutronix.de>
+I'll investigate it tonight.
 
+>
+> Message-Id: <20251006-csky-folio-flags-v1-1-a91dcbdbf988@linutronix.de>
+>
+
+
+--=20
+Best Regards
+ Guo Ren
 
