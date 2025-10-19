@@ -1,91 +1,107 @@
-Return-Path: <linux-csky+bounces-2535-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2536-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ADF7BEE377
-	for <lists+linux-csky@lfdr.de>; Sun, 19 Oct 2025 13:02:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90A34BEEDDC
+	for <lists+linux-csky@lfdr.de>; Sun, 19 Oct 2025 23:59:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4B8B44E0625
-	for <lists+linux-csky@lfdr.de>; Sun, 19 Oct 2025 11:02:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E4453E291C
+	for <lists+linux-csky@lfdr.de>; Sun, 19 Oct 2025 21:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637822E336F;
-	Sun, 19 Oct 2025 11:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B0423ED5B;
+	Sun, 19 Oct 2025 21:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rKwQGAx/"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kbEHeOa3"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BBC1E51FA;
-	Sun, 19 Oct 2025 11:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97C3238D52;
+	Sun, 19 Oct 2025 21:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760871750; cv=none; b=nyVaRkZB7IDaCAV+OetMOj96IUgT2JGlfAMaDoGBXeyektFHmN+AUrkYME3YB9quXwOpPArv+nKJzunU+atfbbfJKHsl44tDzO6apJuKQ6AKkS/w7g8M4e//saoR/old42A7lzEmw4kj0/lX7jJE+ukiDccJajMerWp6+007tSc=
+	t=1760911184; cv=none; b=SIAmMln3PB25iBuFwOxe3u9n+kbjY5WWhS+Y3VnzfwFrCiZx0oCzNh7VPbpe/EeiFa9MNPEPOxZGfcnxEyILGyNMqaSEB+Jc5nj6l8pmTZZH2Vuo3X0SCrSsMme+JH9YhGaeVqoEJHoX7zEFXHum/CN89cRxvOfSV4pJb1lqU+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760871750; c=relaxed/simple;
-	bh=CThnH2ArXxvqvI9FWX9AIdwSiaKRUpnSBMLyaBc58C8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JRR4qVdvxujaYiXLwDNsscGq6KP9KH6sR54C2lW7hgC8MJa0+mK5jGUEE9+W6jutCB1TpC16iK3hV28xj6+S/nFrOlq85mRiW+kVQN7tFpxocA20nl5fS3MWqOPdrfbl7MvVD7dCE6ep07WYebrS556QIz6VHc9W6DAtBMDHWWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rKwQGAx/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853C4C4CEE7;
-	Sun, 19 Oct 2025 11:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760871749;
-	bh=CThnH2ArXxvqvI9FWX9AIdwSiaKRUpnSBMLyaBc58C8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rKwQGAx/KsmhE3mZc1/j08WN3lyNtntPwDGe6+KzZ/Fbt68wejKZ7+300qA3F9UuQ
-	 jLu3HwgmItJd09+xndw5Gm5PZjdfke2lZkx4RSC11Fj6ik6XcOlF/Q7vyiujpvQEyI
-	 gfC1acfQAU0jFS2wKpEifjl3IwpqK408X8gdB0ZiUwLtxj+OoLHkOoH3z8Y5+BD3eq
-	 HIVNw2fvCeN2hWHiatd4iw8m8zM95YdEytUfqS8E87dzuA4BFBF9zn8sBKeZkJnsmo
-	 GCs0k+uifRs9gih69Bxj5riDC5xO5DfXf7XJIdqj/KcuCUwkJ1xqNWioxFwr5AbCCp
-	 gIzPUWIxKkcHQ==
-From: guoren@kernel.org
-To: guoren@kernel.org
-Cc: linux-csky@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	arnd@arndb.de,
-	linux-arch@vger.kernel.org
-Subject: [PATCH] csky: Remove compile warning for CONFIG_SMP
-Date: Sun, 19 Oct 2025 07:02:14 -0400
-Message-Id: <20251019110214.3392011-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.40.1
+	s=arc-20240116; t=1760911184; c=relaxed/simple;
+	bh=9gJD+/z6WMKuMzZ+vMbZPsjUTts/7SWAlnCvg+NXSBc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n44+KLZwpIfLRLo92mzWKSMr6LsbruvLMf/hvXQ6f+QWVMtx7A9HkQi/Z7tvGpFGVtWII6h+/U5LoRSfSH9Cefv71rOePnco4GAE0+JgKgLAaa3us5u2p9ro+3CNeWxtIj7B0oOJu+YAXDrDywdeI/hJjZqqmpIQ2lwzwy4FeNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kbEHeOa3; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=JSzkyJlxHWH5gCJ/x765U9+rz4V46GcyOEbOO4wKhNc=; b=kbEHeOa3BIhnDinxourF5kBpW/
+	QGJuTsj77UfC0Hmnbd6v9sPTa8DByiW8rJhowA3iULWWiBCOP26ZdZ3NbUvZkKQz3ORxJEjvK6YLk
+	o8MSkt/gAA6TjJ8kkhaXk33S4FnoxZtyljoz2N51vb9FwNn3MYoNp2hzHcSMNingo8nmJpTTLiUSN
+	5PTaI3PXs+I+41nF2BVXvCHJBKW696mVxa9p0TQPSfiNPC/gCPY/sd6RKQoMt/Kb7pmLd6+Y7AR0N
+	Tj+afTosjCTbC2kXTOBoEmBsTO+yA7B7oSxNDppPFwe7rSb5aMzq2nyt2BDpUPdTvS1eRqbqkNObL
+	twkeE0DQ==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vAbRG-0000000BU2M-1bb9;
+	Sun, 19 Oct 2025 21:59:42 +0000
+Message-ID: <1bf734c8-ca29-4ed6-a10a-9595b2c844b8@infradead.org>
+Date: Sun, 19 Oct 2025 14:59:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] csky: Remove compile warning for CONFIG_SMP
+To: guoren@kernel.org
+Cc: linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org, arnd@arndb.de,
+ linux-arch@vger.kernel.org
+References: <20251019110214.3392011-1-guoren@kernel.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20251019110214.3392011-1-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
 
-When CONFIG_SMP is enabled, there is a compile warning:
 
-arch/csky/kernel/smp.c:242:6: warning: no previous prototype for
-'csky_start_secondary' [-Wmissing-prototypes]
-  242 | void csky_start_secondary(void)
-      |      ^~~~~~~~~~~~~~~~~~~~
+On 10/19/25 4:02 AM, guoren@kernel.org wrote:
+> From: "Guo Ren (Alibaba DAMO Academy)" <guoren@kernel.org>
+> 
+> When CONFIG_SMP is enabled, there is a compile warning:
+> 
+> arch/csky/kernel/smp.c:242:6: warning: no previous prototype for
+> 'csky_start_secondary' [-Wmissing-prototypes]
+>   242 | void csky_start_secondary(void)
+>       |      ^~~~~~~~~~~~~~~~~~~~
+> 
+> Add a similar prototype with csky_start in sections.h.
+> 
+> Signed-off-by: Guo Ren (Alibaba DAMO Academy) <guoren@kernel.org>
 
-Add a similar prototype with csky_start in sections.h.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
-Signed-off-by: Guo Ren (Alibaba DAMO Academy) <guoren@kernel.org>
----
- arch/csky/include/asm/sections.h | 1 +
- 1 file changed, 1 insertion(+)
+Thanks.
 
-diff --git a/arch/csky/include/asm/sections.h b/arch/csky/include/asm/sections.h
-index 83e82b7c0f6c..ee5cdf226a9b 100644
---- a/arch/csky/include/asm/sections.h
-+++ b/arch/csky/include/asm/sections.h
-@@ -8,5 +8,6 @@
- extern char _start[];
- 
- asmlinkage void csky_start(unsigned int unused, void *dtb_start);
-+asmlinkage void csky_start_secondary(void);
- 
- #endif /* __ASM_SECTIONS_H */
+> ---
+>  arch/csky/include/asm/sections.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/csky/include/asm/sections.h b/arch/csky/include/asm/sections.h
+> index 83e82b7c0f6c..ee5cdf226a9b 100644
+> --- a/arch/csky/include/asm/sections.h
+> +++ b/arch/csky/include/asm/sections.h
+> @@ -8,5 +8,6 @@
+>  extern char _start[];
+>  
+>  asmlinkage void csky_start(unsigned int unused, void *dtb_start);
+> +asmlinkage void csky_start_secondary(void);
+>  
+>  #endif /* __ASM_SECTIONS_H */
+
 -- 
-2.40.1
-
+~Randy
 
