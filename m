@@ -1,116 +1,107 @@
-Return-Path: <linux-csky+bounces-2557-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2558-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FDE3BF2E58
-	for <lists+linux-csky@lfdr.de>; Mon, 20 Oct 2025 20:16:15 +0200 (CEST)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91D3618C14F2
-	for <lists+linux-csky@lfdr.de>; Mon, 20 Oct 2025 18:16:38 +0000 (UTC)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DA57CB1AB2
+	for <lists+linux-csky@lfdr.de>; Wed, 10 Dec 2025 02:55:36 +0100 (CET)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by tor.lore.kernel.org (Postfix) with ESMTP id 50BFA3003BF7
+	for <lists+linux-csky@lfdr.de>; Wed, 10 Dec 2025 01:55:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4D322C327D;
-	Mon, 20 Oct 2025 18:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81F61FBC8C;
+	Wed, 10 Dec 2025 01:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="SFAdAhGZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NAWBzTuF"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232FF242D76;
-	Mon, 20 Oct 2025 18:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB51529405;
+	Wed, 10 Dec 2025 01:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760984172; cv=none; b=WOV02KlHOmt5cPzHh6F6X9MJ3hN5/BQfsb7oxT9VrNtoSu8P6DfePedAhch6bFGN9ukWeV9DlwT9oDS5Q0GmNj1DguLrUVtyo06xB7IlvDjBMcNJLbA3kKf0UJZP7NQa49f5/CMC1z6dAjYxzvfFGh95GZO9RPwHhEtvwQLxLiw=
+	t=1765331734; cv=none; b=k0TNA1Kni8MXxfzVnWaiMAjUQQ3b69mIbzTGR0s/PaddG7u0KdC3KAC4c1PwVW9xH8dbrtIbZ2QllXmlEYEGk1bEBK6he7rYbvlWuzzTBmkCLfBivAuRabtd9CdeniY0XgG0+Fv3k1w+QMay3/Lt31w39lUEfihjbGinU3siBhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760984172; c=relaxed/simple;
-	bh=g+2VpaD+FlA761mradaWnF6yVcLyinIaa0PWYsivwMA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=AGlc17a/VBsgtVbSeMznYQkGOZZJFkid0lkXyHMzsZ1FyiuujDwGuW8HgOccooE5Hz9I53guz4XFpnW/RpVUVDb3RiRteCXcPbOwaZpbKnUa+BTHnYxj6QXRo7cq0cdwuujm+IVns/q4gG2ooUK5dHrID4J2bCn3OVaYACy88h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=SFAdAhGZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C732AC4CEF9;
-	Mon, 20 Oct 2025 18:16:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1760984171;
-	bh=g+2VpaD+FlA761mradaWnF6yVcLyinIaa0PWYsivwMA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SFAdAhGZ6XAI3/OSlRoUNUAwPSszkFJ5X78HTOFq1+uod1XbAgAQik0Ms/FVZwL8b
-	 s288oOWO3uGPngOYPSt2YpIWz3iBNwzxaqaJwbvYDnbDsjcDdrwTO7g030gpdL1GAy
-	 kdB06SO/8MeAHhERgECXjIJ5lY1Qda/IfEWb/rTg=
-Date: Mon, 20 Oct 2025 11:16:09 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
- Guo Ren <guoren@kernel.org>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, Vasily
- Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, Andreas
- Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Dan Williams
- <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Dave
- Jiang <dave.jiang@intel.com>, Nicolas Pitre <nico@fluxnic.net>, Muchun Song
- <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, David
- Hildenbrand <david@redhat.com>, Konstantin Komarov
- <almaz.alexandrovich@paragon-software.com>, Baoquan He <bhe@redhat.com>,
- Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>, Tony Luck
- <tony.luck@intel.com>, Reinette Chatre <reinette.chatre@intel.com>, Dave
- Martin <Dave.Martin@arm.com>, James Morse <james.morse@arm.com>, Alexander
- Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan
- Kara <jack@suse.cz>, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Hugh
- Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Uladzislau Rezki <urezki@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org,
- ntfs3@lists.linux.dev, kexec@lists.infradead.org,
- kasan-dev@googlegroups.com, Jason Gunthorpe <jgg@nvidia.com>,
- iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>, Will Deacon
- <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, Sumanth Korikkar
- <sumanthk@linux.ibm.com>
-Subject: Re: [PATCH v5 00/15] expand mmap_prepare functionality, port more
- users
-Message-Id: <20251020111609.cfafaa22c20ac33be573898f@linux-foundation.org>
-In-Reply-To: <cover.1760959441.git.lorenzo.stoakes@oracle.com>
-References: <cover.1760959441.git.lorenzo.stoakes@oracle.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1765331734; c=relaxed/simple;
+	bh=UwTVV0EFb7hR2zKy1cCUefzgbcs3rhxfqSYW9AiQ4iQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EohG7LFuus2+Aks1cEj+Wg08Zyqo7XHq/qGK1N72oxFgH3Fck2CTlo0kMvLAdBrY9zlbdzqymiBRjhl9u28OU8PaN8t8snBdfIcvwQqADGXvzrw2vcpZ9jEVgcNW7PWLmqY/pXd24TC4WewJCf8SVm6+QRaY/VYiNRV2U4MXr+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NAWBzTuF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C1FC4CEF5;
+	Wed, 10 Dec 2025 01:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765331734;
+	bh=UwTVV0EFb7hR2zKy1cCUefzgbcs3rhxfqSYW9AiQ4iQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NAWBzTuFe3psq0GAlEe2UtjfQY9AHgA+6/TfJvbJFr5fms/iz0mnOic70WPj+soD4
+	 IbRRgPEC4jHi5eXyXExQMHFshp/0mGfzoVe2RgqUOEIeBMYSAo35946DTd5TdophGa
+	 qe09I6Ne6nbPND6irHrN6jmFOU8PrcS/QoUYyjh/0jxLVD8SdEKE8ZWW2DsUO4qRyb
+	 Qx25dIh80CrtDZj2YWbG6MZc7hzK4MGQdKgbyYrELEAcDw2pUH58jubn7CkZZWo0iG
+	 0nDCtRgDKDAa1oUVeoiExeTVv1HLypEWpVrtyS8QxJKJq0tNmTBSAHCDx4IqaejywJ
+	 oF0YccowViTWg==
+From: guoren@kernel.org
+To: torvalds@linux-foundation.org
+Cc: arnd@arndb.de,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-csky@vger.kernel.org
+Subject: [GIT PULL] csky changes for v6.19
+Date: Tue,  9 Dec 2025 20:55:23 -0500
+Message-Id: <20251210015523.14737-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 20 Oct 2025 13:11:17 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+Hi Linus,
 
-> Since commit c84bf6dd2b83 ("mm: introduce new .mmap_prepare() file
-> callback"), The f_op->mmap hook has been deprecated in favour of
-> f_op->mmap_prepare.
-> 
-> This was introduced in order to make it possible for us to eventually
-> eliminate the f_op->mmap hook which is highly problematic as it allows
-> drivers and filesystems raw access to a VMA which is not yet correctly
-> initialised.
-> 
-> This hook also introduced complexity for the memory mapping operation, as
-> we must correctly unwind what we do should an error arises.
-> 
-> Overall this interface being so open has caused significant problems for
-> us, including security issues, it is important for us to simply eliminate
-> this as a source of problems.
-> 
-> Therefore this series continues what was established by extending the
-> functionality further to permit more drivers and filesystems to use
-> mmap_prepare.
+Please pull the updates for csky for v6.19.
 
-Thanks, I (re-)added this series to mm.git.  I suppressed the usual
-emails.
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+
+are available in the Git repository at:
+
+  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.19
+
+for you to fetch changes up to 817d21578d51e801df58ab012654486a71073074:
+
+  csky: Remove compile warning for CONFIG_SMP (2025-10-19 20:01:52 -0400)
+
+----------------------------------------------------------------
+csky 6.19 Release Notes
+
+ - Remove compile warning for CONFIG_SMP
+ - Fix __ASSEMBLER__ typo in headers
+ - Fix csky_cmpxchg_fixup
+
+----------------------------------------------------------------
+Guo Ren (Alibaba DAMO Academy) (1):
+      csky: Remove compile warning for CONFIG_SMP
+
+Thomas Huth (2):
+      csky: Replace __ASSEMBLY__ with __ASSEMBLER__ in non-uapi headers
+      csky: Replace __ASSEMBLY__ with __ASSEMBLER__ in uapi header
+
+Yang Li (1):
+      csky: fix csky_cmpxchg_fixup not working
+
+ arch/csky/abiv1/inc/abi/regdef.h    | 2 +-
+ arch/csky/abiv2/inc/abi/regdef.h    | 2 +-
+ arch/csky/include/asm/barrier.h     | 4 ++--
+ arch/csky/include/asm/cache.h       | 2 +-
+ arch/csky/include/asm/ftrace.h      | 4 ++--
+ arch/csky/include/asm/jump_label.h  | 4 ++--
+ arch/csky/include/asm/page.h        | 4 ++--
+ arch/csky/include/asm/ptrace.h      | 4 ++--
+ arch/csky/include/asm/sections.h    | 1 +
+ arch/csky/include/asm/string.h      | 2 +-
+ arch/csky/include/asm/thread_info.h | 4 ++--
+ arch/csky/include/uapi/asm/ptrace.h | 4 ++--
+ arch/csky/mm/fault.c                | 4 ++--
+ 13 files changed, 21 insertions(+), 20 deletions(-)
 
