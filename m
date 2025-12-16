@@ -1,213 +1,160 @@
-Return-Path: <linux-csky+bounces-2561-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2562-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE8FECB804E
-	for <lists+linux-csky@lfdr.de>; Fri, 12 Dec 2025 07:12:37 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB86ECC1284
+	for <lists+linux-csky@lfdr.de>; Tue, 16 Dec 2025 07:44:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0E2B7300A54C
-	for <lists+linux-csky@lfdr.de>; Fri, 12 Dec 2025 06:12:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DED2D300D498
+	for <lists+linux-csky@lfdr.de>; Tue, 16 Dec 2025 06:38:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D1E30E0F0;
-	Fri, 12 Dec 2025 06:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71185321442;
+	Tue, 16 Dec 2025 06:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+7pp50S"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XpOQ7fR4"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE57D30E0EF;
-	Fri, 12 Dec 2025 06:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC16241691;
+	Tue, 16 Dec 2025 06:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765519956; cv=none; b=KQo7gLYX5bkBguigYUvZQ9f2ffI2DglK4U3Fg1xBGEo/I1yCC8IhZuTVdBbUT7hQyU8o7SAFhT/ZvBwTZP4dz6elRddCuSZu8ITZaLxrZukkgTNwJ0MHNm+7/qPEtU+fx+Nb846lnBnNcLNiWJqTKTg59oisJS8nhm1iHW3mkV4=
+	t=1765867120; cv=none; b=cBcGGw36r3zBZiYiLpEvLPJipV8y0BQg/i1ix7dkfYGdXPQfUGrd3K/+D8YZZGYXaT6AMwjtHfdIpzKwOZg6owIDfLV2MPD+noIYX5ZEiUR6gGhte+U2hxLyj/bFc9kqdikR3m8XoDlyjCqJ/vwkD6gHvqKJaHQqugV0UQ6wEsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765519956; c=relaxed/simple;
-	bh=QKnyW1kaqGZM3cl5GXRxkv7auxKfqIJI2/A7d7lKwu4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ygf0a8rdj77X1NkafJoaP6T+ImV8oKx/5CEdQXZClwxrx/HkKd8eV6hH0NCIpDJr1ovvK+7WYAIdip87ZH4zCwwHH/pi2of6QbrzYMqKdnAxdMPEZWkluTRg8D4H1K5Nt8JABC1GClsyedQ3KFjsdFrYJKMELCjRCX+U/KOk/R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+7pp50S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D4C0C116B1;
-	Fri, 12 Dec 2025 06:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765519955;
-	bh=QKnyW1kaqGZM3cl5GXRxkv7auxKfqIJI2/A7d7lKwu4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V+7pp50Salcbdb/Sn4ifc2dyoQ8FMKZ+0NRksvj1m2Q2A0pRu25kVvqEbQAZpcD24
-	 UD9d8qQ8jReLsyJQSJLyhq00nAp8hCNIhM9s+1LLEyBx1dUxbjjZ/uJn25KEIUirmc
-	 bGTtca7HQRzGSuLPG+e3ucG8dsg+BLpLTcW2tuvuK4FiIWKY0uGpFXGJp6/bA15p1l
-	 cDq4all0cW9kR7To22p2ZZqoYB+V4NEnAIKEBg3OgmkvAL4Ik9GtKKZ7CQRPJ3t7qP
-	 FqK+0UmCMWjOvo4ZxRupX3ZgrKiFYdk1PSxiJZse2fniYzHVBW1OLiAF6Bcap4t6oi
-	 nJolenhQ2VjzQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Yang Li <yang.li85200@gmail.com>,
-	Guo Ren <guoren@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	viro@zeniv.linux.org.uk,
-	linux-csky@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-5.15] csky: fix csky_cmpxchg_fixup not working
-Date: Fri, 12 Dec 2025 01:12:13 -0500
-Message-ID: <20251212061223.305139-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251212061223.305139-1-sashal@kernel.org>
-References: <20251212061223.305139-1-sashal@kernel.org>
+	s=arc-20240116; t=1765867120; c=relaxed/simple;
+	bh=+m9ugDvP8DldppU+Xne3BpzGk7erpZucQQE5LNo8A2E=;
+	h=Message-ID:From:Subject:Date:To:Cc; b=RNU+7FsotGdNSDFaH/+tvbvUbCVkdp+3wUNoMJpNrPIXKhVyOmmUna49Wi0WuRlmqae4/13vUbNZvLKBtDqtRivBzAtjbPycX/Zcht5KCF7jo9kWQ1IuQcY8veQ3ZJ+JAgfn2LdRIeIKrbREFqw1zyoSImy0r+vR5TFvFjOYeZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XpOQ7fR4; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id CA7DB7A00FC;
+	Tue, 16 Dec 2025 01:38:25 -0500 (EST)
+Received: from phl-frontend-02 ([10.202.2.161])
+  by phl-compute-06.internal (MEProxy); Tue, 16 Dec 2025 01:38:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+	:feedback-id:from:from:in-reply-to:message-id:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1765867105; x=1765953505; bh=9AoWIhfivy4UOmlDhOIXxucmgxZr
+	f7I6w7HEi8HnW/4=; b=XpOQ7fR4p5tZHtVqK9hezAwN0iR7Ej3xwfmj6h2wl0PT
+	u9MuVU8odNVKLPmTejjbR9tm0tLsMfB2gQR4Y1taeNrLGJ4J9RmtfIa+EN/Ke2kf
+	mXVUOLpq287yxZR0HSgr0D3IdsmOTHe75czX6R5lkMHqw6RvbLHuDio2Y0gft2tB
+	R1bbXYMr1fDxRH2qSafqByoj2xw4jUxlLvsJON4NynBzSqjLrn4PO67T6a0T5frP
+	LTUCD3jDrT1pyDjgL38j5INN4ETiXILU3RLti2Sg9Ka1Ze34q7dzdCf4jyk+fHpw
+	KyLi88ojCydxBJ916IRT6r7PHahEgmz9gom0qrq8zA==
+X-ME-Sender: <xms:X_5Aaar7URYpNmvxdK7vDqbW6R6P7_oaHf2HJTdnCKikVNCUkPhVyQ>
+    <xme:X_5AaahLqfjIcpa1rNTqZg6H4cZP5ZQ9Ok8cEjBLC758rOxuczwaDz9ZT7ajmecQ9
+    m46yAMJ73rKxderSDT7kYnFjyEdwqJSNWgtxyLUB5ZsEYztcSf7Cw>
+X-ME-Received: <xmr:X_5AaT1jrnOfUKl0vjVSC-UvATqSRSGwo_-LnF1h1avenvg_DZBpj3eb0eHNLF0ckb1WWH-YzxUiQw7KkJKmdHzbv59Zdo0Sh80>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefkeellecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefkhffufffvveestddtredttddttdenucfhrhhomhephfhinhhnucfvhhgrihhnuceo
+    fhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvghrnhepud
+    evtdeiveefvdffteduheetieehtdekhfekiedvledvtdehkeetieeuuddufeeunecuffho
+    mhgrihhnpedujedrqdhnvgifnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepfhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghr
+    tghpthhtohepfeehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehpvghtvghrii
+    esihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
+    dprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghr
+    nhgusegrrhhnuggsrdguvgdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtghomhdprhgtphhtthhopegs
+    phhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrlhhirghssehlih
+    gstgdrohhrgh
+X-ME-Proxy: <xmx:X_5AaYZXDuSyF6P66w92xvicPXnobpN8Xpw5UGL-SoWpNjcJ6kN9xA>
+    <xmx:X_5AaZ4d0tEF2QN-dZ0E5ohtaW8NEzkP2qNW-oNMvzebmpvRD2rBDQ>
+    <xmx:X_5AaWIxt82httcCmTeewHLxbx1ppXqQb7IYiWVXXXYLltDHk8pHQg>
+    <xmx:X_5AacqnFu4MPU9Ce6YZ9yUpOSrR6jJZL6j6pWyYsLHxyd_SYhYKxg>
+    <xmx:Yf5AaboFQo-iNoPfBejvSJoR0jFweEV6XUdV6-NzhTGNDN6TTNAzEWwQ>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Dec 2025 01:38:21 -0500 (EST)
+Message-ID: <cover.1765866665.git.fthain@linux-m68k.org>
+From: Finn Thain <fthain@linux-m68k.org>
+Subject: [PATCH v5 0/4] Align atomic storage
+Date: Tue, 16 Dec 2025 17:31:05 +1100
+To: Peter Zijlstra <peterz@infradead.org>,
+    Will Deacon <will@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+    Andrii Nakryiko <andrii@kernel.org>,    Arnd Bergmann <arnd@arndb.de>,
+    Alexei Starovoitov <ast@kernel.org>,
+    Boqun Feng <boqun.feng@gmail.com>,    bpf@vger.kernel.org,
+    Rich Felker <dalias@libc.org>,
+    Daniel Borkmann <daniel@iogearbox.net>,
+    Dinh Nguyen <dinguyen@kernel.org>,
+    Eduard Zingerman <eddyz87@gmail.com>,    Gary Guo <gary@garyguo.net>,
+    Geert Uytterhoeven <geert@linux-m68k.org>,
+    John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+    Guo Ren <guoren@kernel.org>,    Hao Luo <haoluo@google.com>,
+    John Fastabend <john.fastabend@gmail.com>,
+    Jiri Olsa <jolsa@kernel.org>,    Jonas Bonn <jonas@southpole.se>,
+    KP Singh <kpsingh@kernel.org>,    linux-arch@vger.kernel.org,
+    linux-csky@vger.kernel.org,    linux-kernel@vger.kernel.org,
+    linux-m68k@lists.linux-m68k.org,    linux-openrisc@vger.kernel.org,
+    linux-sh@vger.kernel.org,    Mark Rutland <mark.rutland@arm.com>,
+    Martin KaFai Lau <martin.lau@linux.dev>,
+    Stanislav Fomichev <sdf@fomichev.me>,
+    Stafford Horne <shorne@gmail.com>,    Song Liu <song@kernel.org>,
+    Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+    Yonghong Song <yonghong.song@linux.dev>,
+    Yoshinori Sato <ysato@users.sourceforge.jp>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18
-Content-Transfer-Encoding: 8bit
 
-From: Yang Li <yang.li85200@gmail.com>
+This series adds the __aligned attribute to atomic_t and atomic64_t
+definitions in include/linux and include/asm-generic (respectively)
+to get natural alignment of both types on csky, m68k, microblaze,
+nios2, openrisc and sh.
 
-[ Upstream commit 809ef03d6d21d5fea016bbf6babeec462e37e68c ]
+This series also adds Kconfig options to enable a new run-time warning
+to help reveal misaligned atomic accesses on platforms which don't
+trap that.
 
-In the csky_cmpxchg_fixup function, it is incorrect to use the global
-variable csky_cmpxchg_stw to determine the address where the exception
-occurred.The global variable csky_cmpxchg_stw stores the opcode at the
-time of the exception, while &csky_cmpxchg_stw shows the address where
-the exception occurred.
+The performance impact is expected to vary across platforms and workloads.
+The measurements I made on m68k show that some workloads run faster and
+others slower.
 
-Signed-off-by: Yang Li <yang.li85200@gmail.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
-LLM Generated explanations, may be completely bogus:
+Changed since v4:
+ - Dropped parisc header file patch as it's been merged already.
+ - Submitted as PATCH instead of RFC.
 
-## Analysis of csky: fix csky_cmpxchg_fixup not working
+Changed since v3:
+ - Rebased on v6.17.
+ - New patch to resolve header dependency issue on parisc.
+ - Dropped documentation patch.
 
-### 1. COMMIT MESSAGE ANALYSIS
+Changed since v2:
+ - Specify natural alignment for atomic64_t.
+ - CONFIG_DEBUG_ATOMIC checks for natural alignment again.
+ - New patch to add weakened alignment check.
+ - New patch for explicit alignment in BPF header.
 
-**Subject**: "csky: fix csky_cmpxchg_fixup not working" - clearly
-indicates a bug fix
+---
 
-**Key issue explained**: The commit message describes a fundamental
-semantic error - the code was using the **value** of `csky_cmpxchg_stw`
-(which contains an opcode) when it should have been using the
-**address** of `csky_cmpxchg_stw` (where the instruction is located).
+Finn Thain (3):
+  bpf: Explicitly align bpf_res_spin_lock
+  atomic: Specify alignment for atomic_t and atomic64_t
+  atomic: Add option for weaker alignment check
 
-**Missing tags**: No "Cc: stable@vger.kernel.org" or "Fixes:" tag, but
-this doesn't preclude backporting if the fix is clearly warranted.
+Peter Zijlstra (1):
+  atomic: Add alignment check to instrumented atomic operations
 
-### 2. CODE CHANGE ANALYSIS
+ include/asm-generic/atomic64.h   |  2 +-
+ include/asm-generic/rqspinlock.h |  2 +-
+ include/linux/instrumented.h     | 15 +++++++++++++++
+ include/linux/types.h            |  2 +-
+ kernel/bpf/rqspinlock.c          |  1 -
+ lib/Kconfig.debug                | 18 ++++++++++++++++++
+ 6 files changed, 36 insertions(+), 4 deletions(-)
 
-The change is extremely surgical - only 2 lines modified:
-
-```c
-- if (instruction_pointer(regs) == csky_cmpxchg_stw)
-- instruction_pointer_set(regs, csky_cmpxchg_ldw);
-+       if (instruction_pointer(regs) == (unsigned
-long)&csky_cmpxchg_stw)
-+               instruction_pointer_set(regs, (unsigned
-long)&csky_cmpxchg_ldw);
-```
-
-**Technical explanation**:
-- `csky_cmpxchg_ldw` and `csky_cmpxchg_stw` are external symbols
-  declared as `extern unsigned long` - they represent labels/addresses
-  in the cmpxchg assembly implementation
-- The **value** stored at these symbols is the opcode of the instruction
-- The **address** (`&csky_cmpxchg_stw`) is where the instruction resides
-  in memory
-- The code compares against `instruction_pointer(regs)` which is an
-  address, so it must compare against an address, not an opcode value
-
-**Root cause**: Simple semantic error - using value instead of address
-
-**Why the bug is severe**: This function handles TLB modification faults
-during compare-and-exchange operations. When such a fault occurs at the
-store instruction, the handler should redirect execution back to the
-load instruction to retry the operation. With the bug, the comparison
-`instruction_pointer(regs) == csky_cmpxchg_stw` would almost never match
-(comparing an address to an opcode), so the fixup **never worked**.
-
-### 3. CLASSIFICATION
-
-- **Bug fix**: Yes, clearly fixing broken functionality
-- **Security impact**: Potentially - broken cmpxchg can lead to race
-  conditions
-- **Data corruption risk**: Yes - atomic operations that don't work
-  correctly can cause data races
-
-### 4. SCOPE AND RISK ASSESSMENT
-
-- **Lines changed**: 2 lines
-- **Files touched**: 1 file (arch/csky/mm/fault.c)
-- **Subsystem**: CSKY architecture-specific code
-- **Complexity**: Minimal - straightforward address-of fix
-- **Risk**: Very low - the fix is obviously correct and architecture-
-  specific
-
-### 5. USER IMPACT
-
-- **Affected users**: CSKY systems without LDSTEX instructions (when
-  `CONFIG_CPU_HAS_LDSTEX` is not defined)
-- **Severity**: High - broken compare-and-exchange atomic operations can
-  cause:
-  - Race conditions in concurrent code
-  - Data corruption
-  - Deadlocks
-  - Unpredictable behavior in any code using cmpxchg
-
-### 6. STABILITY INDICATORS
-
-- Signed-off by maintainer Guo Ren (CSKY maintainer)
-- The fix is logically obvious once understood
-
-### 7. DEPENDENCY CHECK
-
-- No dependencies on other commits
-- The affected code has existed since CSKY was added to the kernel
-- Should apply cleanly to stable trees that have CSKY support
-
-### CONCLUSION
-
-This commit clearly meets all stable kernel criteria:
-
-1. **Obviously correct**: The fix is a textbook case of using
-   `&variable` (address) instead of `variable` (value) when comparing
-   against an instruction pointer
-2. **Fixes a real bug**: The cmpxchg fixup mechanism was completely non-
-   functional
-3. **Important issue**: Broken atomic operations can cause data
-   corruption, race conditions, and system instability
-4. **Small and contained**: Only 2 lines changed in one file,
-   architecture-specific
-5. **No new features**: Just fixing existing functionality to actually
-   work
-
-The absence of stable tags appears to be an oversight. This is a
-critical fix for CSKY platforms - without it, the entire cmpxchg fixup
-path is dead code that never triggers when it should.
-
-**YES**
-
- arch/csky/mm/fault.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index a6ca7dff42153..7ff4011089850 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -45,8 +45,8 @@ static inline void csky_cmpxchg_fixup(struct pt_regs *regs)
- 	if (trap_no(regs) != VEC_TLBMODIFIED)
- 		return;
- 
--	if (instruction_pointer(regs) == csky_cmpxchg_stw)
--		instruction_pointer_set(regs, csky_cmpxchg_ldw);
-+	if (instruction_pointer(regs) == (unsigned long)&csky_cmpxchg_stw)
-+		instruction_pointer_set(regs, (unsigned long)&csky_cmpxchg_ldw);
- 	return;
- }
- #endif
 -- 
-2.51.0
-
+2.49.1
 
