@@ -1,57 +1,58 @@
-Return-Path: <linux-csky+bounces-2602-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2603-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A455CE5CC4
-	for <lists+linux-csky@lfdr.de>; Mon, 29 Dec 2025 04:14:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDC40CE5CCE
+	for <lists+linux-csky@lfdr.de>; Mon, 29 Dec 2025 04:15:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 666173017F07
-	for <lists+linux-csky@lfdr.de>; Mon, 29 Dec 2025 03:14:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5CB533006622
+	for <lists+linux-csky@lfdr.de>; Mon, 29 Dec 2025 03:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4313B274650;
-	Mon, 29 Dec 2025 03:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6E125A65B;
+	Mon, 29 Dec 2025 03:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V7SNNNpB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CsTctdZ8"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A40B272E63
-	for <linux-csky@vger.kernel.org>; Mon, 29 Dec 2025 03:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3367626056C
+	for <linux-csky@vger.kernel.org>; Mon, 29 Dec 2025 03:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766978053; cv=none; b=PMEsD7kN/rA5rQm5kRoiM6dvHdrKukQzxep6wWBA31FK+1m9v4y+fG4+Jbq+nkr1Mc3o7/SCAcIZrO1Q0OLgcEzPALnV1a5a7wSTt4zk2efo0mT4swx6GmInFw0PhIVk5NQfWsyZVag5AdwS/b57cZfXNBtVMxDWfddHd9sM0LA=
+	t=1766978070; cv=none; b=N+HvR5zi3ohHE0Kd0mVH7QfyEk6Q057+PaU3kRnWFtFJKOBheXolC3Jq1ezki3Ahm6ba+R4krFMNUwg+PewEQnZCgCgk0gotyWazSYeQ1coVBxJLQx+IGetdzqnP6cne6BMZqnYk7lKsj9sZA83l63RqQX0RHfc1RB2Hf7je/CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766978053; c=relaxed/simple;
-	bh=qBCFUDAWRsep9ypsogxegTTrnf54BXOIWdjTbE8EFCs=;
+	s=arc-20240116; t=1766978070; c=relaxed/simple;
+	bh=zJVh7Eiu9Qmqvv/80ZNMMMHzubfHqn+LQIj/Vkbafgs=;
 	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=MLGSQjgIqQWzXPVvKbFy4BvGkPlkEVG/2JAsry1Wzgdp1CsX5heXEg5JnLxlSvKq+LcvVG09rmdj5UtOhYGEWyxsuCATolBt1fN3ztokZxsoBdFdmJQSfRPn+Uc3zk4YH+a6rnAGGfyoUw8lVoCIdQjLi70OD/OvKqjZoUWU8Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V7SNNNpB; arc=none smtp.client-ip=91.218.175.188
+	 Message-Id:References:To; b=Z4IRYdXAW6/+9xdKAr1aQZQOynZ0IvPqveSjaWAuALRcuWFrZiHHaBXXpGtrG36CBhUl4R205+hiDsJJHZt5ZPl7g2T+3ogbgLL3iuURxsMiF2PLO86qIjqK7ESiWgCQ0710KHWbeYhDdBYLz6t4r8kZhdH8ivYFQ1529ugSKBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CsTctdZ8; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Content-Type: text/plain;
 	charset=us-ascii
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766978038;
+	t=1766978065;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=F1afDEBzhkrjAza00g4g2aJTxEIGJdJZw63+C1Fb5ZI=;
-	b=V7SNNNpBsYGA2qklZzdBaZNfC7/nBKX/4NyOPO1tnNJx5hQM9QLpkQX9kzLFRSuM3ibIwq
-	7jR2aveNyt5Zfsuz/R/iMbQL/x1sWvs2mbkhedncCx0OsNKVL/RASXUSpXQaMsdDanbQM/
-	J0REW/LMX1QgauBNDsImcrNeSpymDUQ=
+	bh=23WFVh4QD8EwOyb+DiEjMorTSabGcCdF0HCkzTj5UcI=;
+	b=CsTctdZ8U9pUZlVucTzftHHmp2gnI1r0CzZFlnpRDH9PaP1qXa4UPAYSva2HLine9CfV90
+	9W72CV4/QFwNiVWLYQ5mHLAgZrQcKb5qzwdX5woVQVU6YQn8JsHteRlat/Z+Spad7CIWaS
+	h++GDN5U6j2LdFzXpT0UvZYdzjPHOv4=
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.200.81.1.6\))
-Subject: Re: [PATCH 27/28] mm/hugetlb: drop hugetlb_cma_check()
+Subject: Re: [PATCH 28/28] Revert "mm/hugetlb: deal with multiple calls to
+ hugetlb_bootmem_alloc"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20251228124001.3624742-28-rppt@kernel.org>
-Date: Mon, 29 Dec 2025 11:13:03 +0800
+In-Reply-To: <20251228124001.3624742-29-rppt@kernel.org>
+Date: Mon, 29 Dec 2025 11:13:26 +0800
 Cc: Andrew Morton <akpm@linux-foundation.org>,
  Alex Shi <alexs@kernel.org>,
  Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -116,9 +117,9 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  loongarch@lists.linux.dev,
  sparclinux@vger.kernel.org
 Content-Transfer-Encoding: 7bit
-Message-Id: <2F5422EB-495E-4BC7-8174-13BED1147382@linux.dev>
+Message-Id: <C8C5C80F-BA99-445D-9711-2665B1262C66@linux.dev>
 References: <20251228124001.3624742-1-rppt@kernel.org>
- <20251228124001.3624742-28-rppt@kernel.org>
+ <20251228124001.3624742-29-rppt@kernel.org>
 To: Mike Rapoport <rppt@kernel.org>
 X-Migadu-Flow: FLOW_OUT
 
@@ -128,13 +129,15 @@ X-Migadu-Flow: FLOW_OUT
 > 
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> hugetlb_cma_check() was required when the ordering of hugetlb_cma_reserve()
-> and hugetlb_bootmem_alloc() was architecture depended.
+> hugetlb_bootmem_alloc() is called only once, no need to check if it was
+> called aready at its entry.
 > 
-> Since hugetlb_cma_reserve() is always called before hugetlb_bootmem_alloc()
-> there is no need to check whether hugetlb_cma_reserve() was already called.
+> Other checks performed during HVO initialization are also no longer
+> necessary because sparse_init() that calls hugetlb_vmemmap_init_early()
+> and hugetlb_vmemmap_init_late() is alaways called after
+> hugetlb_bootmem_alloc().
 > 
-> Drop unneeded hugetlb_cma_check() function.
+> This reverts commit d58b2498200724e4f8c12d71a5953da03c8c8bdf.
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
