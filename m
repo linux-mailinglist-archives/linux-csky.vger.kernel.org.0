@@ -1,44 +1,44 @@
-Return-Path: <linux-csky+bounces-2618-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2621-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0EF6CEDC76
-	for <lists+linux-csky@lfdr.de>; Fri, 02 Jan 2026 08:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CED1ACEDCCB
+	for <lists+linux-csky@lfdr.de>; Fri, 02 Jan 2026 08:06:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B250B301C90C
-	for <lists+linux-csky@lfdr.de>; Fri,  2 Jan 2026 07:02:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2483830213DA
+	for <lists+linux-csky@lfdr.de>; Fri,  2 Jan 2026 07:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040DE2D7DDD;
-	Fri,  2 Jan 2026 07:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E9E2D94A0;
+	Fri,  2 Jan 2026 07:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I50MNQ79"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFiMKhjq"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D7F2D23A5;
-	Fri,  2 Jan 2026 07:02:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32312D8DDF;
+	Fri,  2 Jan 2026 07:02:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767337325; cv=none; b=Q1UMWX8T4+AefSZDfxKrQWQD/jRNYDDxgElJQbI6p7PhD9jIxFIuQQVpvanCnpLymIJGDuojlPoMybA/ui1YpZnzwioRG1s/IEHKV6jT74lLxb3iutBiQ4c79qfw0kuhtk9FvT40oHV/Ft62MkfMypI4tZEv52ZFgJo1T/jyykM=
+	t=1767337369; cv=none; b=FAjHukJwQFHRDfzNJnGrb7kMivi4+kxeCHZs4bWk6lZmy0lXM+qcD0stuJggJr78oqIkJ1qQN3r6icUAXZrJxfV/S0ENkGSwAQROl6O6pYRqet13HU/kegfr9P41NfUELPDbm7CJSig/WhZpOEfaMg71exP5YHAzNjPsn+EH6C0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767337325; c=relaxed/simple;
-	bh=3bBcyNtfu29ffLXJ+V2J2og1TMjw9NsnHxGDp+htXro=;
+	s=arc-20240116; t=1767337369; c=relaxed/simple;
+	bh=es+FUCZqCY2a3nIkrdLdpQV/rxxtDtuUgA954vVF+nw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WhYfz3Ga+vKxT4/tKIoVWPBLIGbo8zR4TEpGMFu0cIGYp3lOZ6fiX7NmizBuFeVUGHofeM5kOzSD9Nd6VkmxxXB44JY05fX7MiJQenkFwkahOiiSsnms+a0GTdbttbcE2lrq8ZZruxLQ4aiuNH8kMIKafMHY4sRA8gWUbdptBes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I50MNQ79; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192F8C116D0;
-	Fri,  2 Jan 2026 07:01:50 +0000 (UTC)
+	 MIME-Version; b=UbKVbUTWj8vd8YI/fItBj8rQFvO0rsqTniPdbxnKoKtfjkbxSVpN+i/hRL6021swQtnKUTrRDjy2N7wss29QLiUZVMYFkIfWT1WR505ffWfUPpvgA42ICfIswz1Sr8U6d4OKugG+bHtIDU2sAfa/svF8Kxjcaqt4HexgsZJdYKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFiMKhjq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72BECC116D0;
+	Fri,  2 Jan 2026 07:02:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767337325;
-	bh=3bBcyNtfu29ffLXJ+V2J2og1TMjw9NsnHxGDp+htXro=;
+	s=k20201202; t=1767337368;
+	bh=es+FUCZqCY2a3nIkrdLdpQV/rxxtDtuUgA954vVF+nw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=I50MNQ790Zq95b8S0yQ0CXud0hBoT6XVttorK01jD4dcGhZcOfyErKBL9h+EZnFDK
-	 JHpZbgNFfrGqSCJsvV0SuvqTBSorWby5FN0AQbHPlcZFbXZg8iRp4E6Op8x8VrlW3g
-	 9NAxGlLvXsqDB9F2a65PIkUijJJKGfTVkxyw2aMxSTILIXs/q9wM+VKBXV3SjlSswf
-	 pQqujD2MT/xKyGZT/PmnUKYz5qbhZkyAKaa3W7rRWzAn7mVMvUA3plpREVkon38b5U
-	 e2uX7Gr1v3oz4QsDuUSPNQrfRFHFJmPdNoVSlmks4iPatW/a/34a2AYSRwM9QtV+LJ
-	 dAmwK3MJ/gIkQ==
+	b=dFiMKhjqyf+PfkCOMts11njbpfGwqQefsvvZvfGAgXrmmyP02aiCpmX8wvtgXmjh2
+	 JGcds5OsjQOsg8MVVqzy4zBA255m75qdXO1si07Ky/r2zB4hmu01u39hsqm0ewanZN
+	 LSjxiEoJP0frsXlr6bA5f68JZ0ShXcr0PT6HvGZ0JX23uSXRxwIaNc/T1RSWoD84TE
+	 DI6A7tJWLRiX8jI6Ss9SIxVHDO7YvahppzQZFaJQT4eHA/41c1EOHZ979ycVclWE56
+	 dcJdXB2lF+KLdNfaYQTsmd0q+sw9v0hQGXGsrYx/8NwnWCiyzXxykXpWhWDh/oVgy4
+	 FJ6eCa9gtAd0g==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alex Shi <alexs@kernel.org>,
@@ -105,9 +105,9 @@ Cc: Alex Shi <alexs@kernel.org>,
 	linuxppc-dev@lists.ozlabs.org,
 	loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org
-Subject: [PATCH v2 07/28] loongarch: introduce arch_zone_limits_init()
-Date: Fri,  2 Jan 2026 08:59:43 +0200
-Message-ID: <20260102070005.65328-8-rppt@kernel.org>
+Subject: [PATCH v2 10/28] mips: introduce arch_zone_limits_init()
+Date: Fri,  2 Jan 2026 08:59:46 +0200
+Message-ID: <20260102070005.65328-11-rppt@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260102070005.65328-1-rppt@kernel.org>
 References: <20260102070005.65328-1-rppt@kernel.org>
@@ -130,36 +130,92 @@ call free_area_init() from every architecture.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/loongarch/mm/init.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ arch/mips/loongson64/numa.c      |  9 +++++++--
+ arch/mips/mm/init.c              | 14 +++++++++-----
+ arch/mips/sgi-ip27/ip27-memory.c |  7 ++++++-
+ 3 files changed, 22 insertions(+), 8 deletions(-)
 
-diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-index 0946662afdd6..17235f87eafb 100644
---- a/arch/loongarch/mm/init.c
-+++ b/arch/loongarch/mm/init.c
-@@ -60,15 +60,19 @@ int __ref page_is_ram(unsigned long pfn)
- 	return memblock_is_memory(addr) && !memblock_is_reserved(addr);
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index 95d5f553ce19..f72a58f87878 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -154,13 +154,18 @@ static __init void prom_meminit(void)
+ 	}
  }
  
++void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
++{
++	max_zone_pfns[ZONE_DMA32] = MAX_DMA32_PFN;
++	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
++}
++
+ void __init paging_init(void)
+ {
+ 	unsigned long zones_size[MAX_NR_ZONES] = {0, };
+ 
+ 	pagetable_init();
+-	zones_size[ZONE_DMA32] = MAX_DMA32_PFN;
+-	zones_size[ZONE_NORMAL] = max_low_pfn;
++	arch_zone_limits_init(zones_size);
+ 	free_area_init(zones_size);
+ }
+ 
+diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
+index a673d3d68254..ab08249cfede 100644
+--- a/arch/mips/mm/init.c
++++ b/arch/mips/mm/init.c
+@@ -394,12 +394,8 @@ void maar_init(void)
+ }
+ 
+ #ifndef CONFIG_NUMA
 -void __init paging_init(void)
 +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
  {
 -	unsigned long max_zone_pfns[MAX_NR_ZONES];
 -
- #ifdef CONFIG_ZONE_DMA32
- 	max_zone_pfns[ZONE_DMA32] = MAX_DMA32_PFN;
+-	pagetable_init();
+-
+ #ifdef CONFIG_ZONE_DMA
+ 	max_zone_pfns[ZONE_DMA] = MAX_DMA_PFN;
  #endif
- 	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
+@@ -417,7 +413,15 @@ void __init paging_init(void)
+ 		max_zone_pfns[ZONE_HIGHMEM] = max_low_pfn;
+ 	}
+ #endif
 +}
 +
 +void __init paging_init(void)
 +{
 +	unsigned long max_zone_pfns[MAX_NR_ZONES];
++
++	pagetable_init();
  
 +	arch_zone_limits_init(max_zone_pfns);
  	free_area_init(max_zone_pfns);
  }
  
+diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+index 2b3e46e2e607..babeb0e07687 100644
+--- a/arch/mips/sgi-ip27/ip27-memory.c
++++ b/arch/mips/sgi-ip27/ip27-memory.c
+@@ -406,11 +406,16 @@ void __init prom_meminit(void)
+ 	}
+ }
+ 
++void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
++{
++	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
++}
++
+ void __init paging_init(void)
+ {
+ 	unsigned long zones_size[MAX_NR_ZONES] = {0, };
+ 
+ 	pagetable_init();
+-	zones_size[ZONE_NORMAL] = max_low_pfn;
++	arch_zone_limits_init(zones_size);
+ 	free_area_init(zones_size);
+ }
 -- 
 2.51.0
 
