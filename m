@@ -1,67 +1,67 @@
-Return-Path: <linux-csky+bounces-2720-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2722-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56A8BD38C9A
-	for <lists+linux-csky@lfdr.de>; Sat, 17 Jan 2026 06:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 063C6D38C9D
+	for <lists+linux-csky@lfdr.de>; Sat, 17 Jan 2026 06:31:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 08BB73082EDF
-	for <lists+linux-csky@lfdr.de>; Sat, 17 Jan 2026 05:29:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ACECE30409EE
+	for <lists+linux-csky@lfdr.de>; Sat, 17 Jan 2026 05:29:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBE8332E73D;
-	Sat, 17 Jan 2026 05:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A27C32FA3C;
+	Sat, 17 Jan 2026 05:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bqrvWrE8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mA56SJad"
 X-Original-To: linux-csky@vger.kernel.org
 Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3A132E13B
-	for <linux-csky@vger.kernel.org>; Sat, 17 Jan 2026 05:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90ACF32ED40
+	for <linux-csky@vger.kernel.org>; Sat, 17 Jan 2026 05:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768627791; cv=none; b=GDsWTGnTWEKJGzvsI1zfAhfnk+xAd2SpYrfVRj/dW/ROsnd0Ek7YZFelfOqGHN/eFr1VdAp0HEpvrfq/j5V9HlzZyuj7VhW8vRxklOb4LjyWwQFsdBgtLTsUpdCLpZoNgfXQv5weXqxkzkuh2J0TmsWXFxTGC81O72QLovFJHNc=
+	t=1768627798; cv=none; b=YJuIhr2HarUhfVQRL6H67uJB6LQ/3j5EqpKxAFyvWF8GxiQ2SzeswhatEKrfQe0Rrcyy1bsx6PqGCg0ZYg66QoaUpzgId8xx3kmC6eRvNRZ2aFMuZU2eTM/ukiBuK4t1fzRE3o/ZKZ/bflc9jF4pnu35sjkLl9YzeMuwLiC6nYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768627791; c=relaxed/simple;
-	bh=y+7xwECacuSecCHUYo0NfRyFbUfHA3IiYvvx0zQIYLg=;
+	s=arc-20240116; t=1768627798; c=relaxed/simple;
+	bh=xvrfmRGwN50DWc39nR8IudM0hWgXMsfj7kakQ4UFT3A=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=IH8spB08hjOJSeS7dDGjj602RAoKgIM8MnrL8+l3g+G+7iqBd15jBycYPXgIVFODSNUefed9rExbbDDGY3S7JT9sciCk1uKH7yPm6/AfH4Hp9m9DFWtKdwYHK6Wut/ic2bICQQPaoCYdjKJFdh/KSirhuRV3DqriiOChDrd9Kj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bqrvWrE8; arc=none smtp.client-ip=74.125.82.74
+	 To:Content-Type; b=j7I20ilKG1F/wD5u/USDG59yWpMkICRv+ydCErxZx4+HcCuKGDZgyKHamropu2pbu/na1TEqH3covwX+13dcE5DvADoLGZvedekunKOUWB6SI3E5DXBIrLODOas3MF/K1GaJVd7jr0AmeDDwTqqq2jhNs0+yWUzbQlccZdcdk78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mA56SJad; arc=none smtp.client-ip=74.125.82.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
-Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-123840bf029so6319094c88.1
-        for <linux-csky@vger.kernel.org>; Fri, 16 Jan 2026 21:29:49 -0800 (PST)
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-123349958b2so11311632c88.0
+        for <linux-csky@vger.kernel.org>; Fri, 16 Jan 2026 21:29:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768627789; x=1769232589; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1768627791; x=1769232591; darn=vger.kernel.org;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6lN+KscSViLQGaAIPX8L5X1lA4liB4Ix5iRxCo6bIiA=;
-        b=bqrvWrE8ZVN47imdOv26FYuG1P/Co382Zh+avN095lahKUODQItRD9u+n5dkO+tkem
-         7Y7hqULDi6TgiKMmnTKtFPgXZt0Ipd1zyitbgvfbApHk3g0eW9EgQ/vbOILJi9QFhS2S
-         rthK7l/h6kSTwW2o0zHY6dpB1r3/4DhGXtRXNdZocHR6WhOuAgHolV5UBkUsfXI5sBFt
-         PJHNw8iIW+Ap5yvvTm74dAB6M6f6i3gOz1pRVOU6t3a4oXap5cEDCLQ0kwXOIaPtABNx
-         nHkdoFrYZURr8idx7ofb4IXgSBNd3qWCtvVQtgt9FbE53yKwPdofq5k1TWHF2P6sMj8v
-         6DRA==
+        bh=iYVgloMaIeMWmcnEWxnIXuJDky8ZiRg8gWqhum1bLc0=;
+        b=mA56SJadBdtnWOFIURo+7nIIjZWkzNXrCee1UXz2Fq4eC2RpjTBT83NLssGMd5dnv+
+         iyL58PCPxjLpnq5UvIJ88z5HyoYumi4jfKlEGeHGx1HZz/ar841mihn+UwkmAkqyirOF
+         46rAZy7HiH+kYza3WLNnGaHrLQ5pHnL2eTQZt1lgbe7sQQdSwOjsJNg3Tf3jKQFuK6kl
+         5gkGpNJPKuwXrt0SoLDf3b7ZH4WmlL/81+MkQ+zhYX1AfdRvz/tDwbw5Mvj3Pczw3ljh
+         khe5n5b3y9a83pWEt5m1rWGhnc6KJ2jXj6O6oDz9nKq1t9SS56MWRH11lPYE8BNfEirB
+         rsbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768627789; x=1769232589;
+        d=1e100.net; s=20230601; t=1768627791; x=1769232591;
         h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6lN+KscSViLQGaAIPX8L5X1lA4liB4Ix5iRxCo6bIiA=;
-        b=Nd8iEvwuEJbkqB15JhlsOLofRqRacSsK88i8yTnn/mg+nHNYGO6grDrWTLri+VU1h0
-         q/PIvjMDguhVdtbm2VjlKUp1BJ6l3gRXt9PWd8xpfsoQNM3cEi5msjIIBYAfMH7cG9xx
-         e/fHlcZ+TxypQJ28uEoQ0iFCcdxvfwUGZJMSPLGx/ZCNjsgo0HiyElDCuSgs9YXxtyTD
-         tNLarsL19+6CuLVPhxDmdUDF9N3oMQwKUfXchEjZV2xBvm1Pi1i4kyN/8vK6qPCKZJ9c
-         HWiB8NxvGT2tbCMNhpEegWXv89ogRtpf/FCWxOIRW66NWwVdAW3qovNIreBiTDH8o5Ww
-         GTMg==
-X-Forwarded-Encrypted: i=1; AJvYcCXXUXTKAuEDBDhcWHGC8RUWkfbyGFEWbrTz899WhJL+fLk3hDEA19nRyWaIsv1FD/B54K3bU4XV+lQ0@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwZv46JS27nhV9FEfOWdWZ0GUyVjDaanMoYIBhPo4j9dGn9hHg
-	xU/EuxAlGUq9+VGxMW0UA1LH7+C2OWnI+Fc0AjXmMYa8urjvyzqbkPMoTYdVzbY4/7EEhny4ZWW
-	O3DrDeWEryA==
-X-Received: from dlad21.prod.google.com ([2002:a05:701b:2215:b0:119:49ca:6ba4])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:a82:b0:11e:f6ef:4988
- with SMTP id a92af1059eb24-1244a768b4fmr4946929c88.36.1768627788672; Fri, 16
- Jan 2026 21:29:48 -0800 (PST)
-Date: Fri, 16 Jan 2026 21:28:42 -0800
+        bh=iYVgloMaIeMWmcnEWxnIXuJDky8ZiRg8gWqhum1bLc0=;
+        b=MLVR+kvAODrj9m29MS7tnP71iNgsg4Hk/hPUrellBkjCQNK2HUOxHb25FIfa60zCsP
+         MYKxjKlNJwOcdsKF0CJyM7PoaVx+kjBacWVOwcNFkUMXzSHqOwweIkPVS813dVEcGriy
+         1gwN/Xi6s2kwlQXIpfXgdmef4PoZ0oUF0L1DnMBh2+r1CCsC/RyTWwACZZjpBfu9TIQQ
+         bs1O89ug4hy6UFM1pDnYuFNY23XtFe5u1NmjE0DB7FbwSFheVcYc7cSEHd8YRR15fnkX
+         lbDzRIMpAWTQXmuuFuHlJEtSx7TX239IcaQHQBHrOcTEsKTmFc0dVuKJh6MaEuJOJCyd
+         zpXg==
+X-Forwarded-Encrypted: i=1; AJvYcCX+qUpH5VTDduUfZuosOReoGso/lJXq97TYbuVRFmzMY1gZQMbWYq/d+IdxpX68Da/4650wj9LSJpXT@vger.kernel.org
+X-Gm-Message-State: AOJu0YwthvOlBuYin9bpeJUqqdQjuee8/aCF6DNNIgMDJTTSHJpXbnp/
+	0l8/99aNxYhqF7PhcXvdYXTE7nH6NPTTVYAf2rxq7Dpqqapt2vKoKVoAmVLErBpYFT/MAF+lCwb
+	BKdUV0NVNwg==
+X-Received: from dlaj19.prod.google.com ([2002:a05:701b:2813:b0:119:49ca:6bae])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6990:b0:11f:2c69:32
+ with SMTP id a92af1059eb24-1244a717f0amr3961097c88.7.1768627790635; Fri, 16
+ Jan 2026 21:29:50 -0800 (PST)
+Date: Fri, 16 Jan 2026 21:28:43 -0800
 In-Reply-To: <20260117052849.2205545-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
@@ -71,9 +71,9 @@ List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260117052849.2205545-1-irogers@google.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260117052849.2205545-17-irogers@google.com>
-Subject: [PATCH v1 16/23] perf dwarf-regs: Add loongarch perf to dwarf
- register number mapping functions
+Message-ID: <20260117052849.2205545-18-irogers@google.com>
+Subject: [PATCH v1 17/23] perf dwarf-regs: Add powerpc perf to dwarf register
+ number mapping functions
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
@@ -95,114 +95,186 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 
 These functions allow the generic initial register state code in
-unwind-libdw to be used.
+unwind-libdw to be used. Note, the link register was being coped to
+dwarf register 65 that the SysV ABI spec claims is FPSCR. It is
+corrected here to 108, but this is unlikely to matter as FPSCR has
+little to no impact on unwinding.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/dwarf-regs-arch/Build         |  1 +
- .../dwarf-regs-arch/dwarf-regs-loongarch.c    | 12 ++++
- tools/perf/util/dwarf-regs.c                  |  3 +
+ .../util/dwarf-regs-arch/dwarf-regs-powerpc.c | 77 ++++++++++++++++++-
+ tools/perf/util/dwarf-regs.c                  |  4 +
  tools/perf/util/include/dwarf-regs.h          |  1 +
  tools/perf/util/unwind-libdw-arch/Build       |  1 -
- .../unwind-libdw-loongarch.c                  | 57 -------------------
+ .../unwind-libdw-arch/unwind-libdw-powerpc.c  | 76 ------------------
  tools/perf/util/unwind-libdw.c                |  5 +-
  tools/perf/util/unwind-libdw.h                |  1 -
- 8 files changed, 18 insertions(+), 63 deletions(-)
- create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-loongarch.c
- delete mode 100644 tools/perf/util/unwind-libdw-arch/unwind-libdw-loongarch.c
+ 7 files changed, 82 insertions(+), 83 deletions(-)
+ delete mode 100644 tools/perf/util/unwind-libdw-arch/unwind-libdw-powerpc.c
 
-diff --git a/tools/perf/util/dwarf-regs-arch/Build b/tools/perf/util/dwarf-regs-arch/Build
-index 3f19a9ec47c7..188359376ea5 100644
---- a/tools/perf/util/dwarf-regs-arch/Build
-+++ b/tools/perf/util/dwarf-regs-arch/Build
-@@ -1,5 +1,6 @@
- perf-util-$(CONFIG_LIBDW) += dwarf-regs-arm64.o
- perf-util-$(CONFIG_LIBDW) += dwarf-regs-arm.o
- perf-util-$(CONFIG_LIBDW) += dwarf-regs-csky.o
-+perf-util-$(CONFIG_LIBDW) += dwarf-regs-loongarch.o
- perf-util-$(CONFIG_LIBDW) += dwarf-regs-powerpc.o
- perf-util-$(CONFIG_LIBDW) += dwarf-regs-x86.o
-diff --git a/tools/perf/util/dwarf-regs-arch/dwarf-regs-loongarch.c b/tools/perf/util/dwarf-regs-arch/dwarf-regs-loongarch.c
-new file mode 100644
-index 000000000000..203077b740a0
---- /dev/null
-+++ b/tools/perf/util/dwarf-regs-arch/dwarf-regs-loongarch.c
-@@ -0,0 +1,12 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/perf/util/dwarf-regs-arch/dwarf-regs-powerpc.c b/tools/perf/util/dwarf-regs-arch/dwarf-regs-powerpc.c
+index caf77a234c78..51892a09725b 100644
+--- a/tools/perf/util/dwarf-regs-arch/dwarf-regs-powerpc.c
++++ b/tools/perf/util/dwarf-regs-arch/dwarf-regs-powerpc.c
+@@ -4,8 +4,9 @@
+  *
+  * Copyright (C) 2010 Ian Munsie, IBM Corporation.
+  */
+-
 +#include <errno.h>
-+#include <dwarf-regs.h>
-+#include "../../../arch/loongarch/include/uapi/asm/perf_regs.h"
+ #include <dwarf-regs.h>
++#include "../../../arch/powerpc/include/uapi/asm/perf_regs.h"
+ 
+ #define PPC_OP(op)	(((op) >> 26) & 0x3F)
+ #define PPC_RA(a)	(((a) >> 16) & 0x1f)
+@@ -59,3 +60,77 @@ void get_powerpc_regs(u32 raw_insn, int is_source,
+ 	if ((op_loc->mem_ref) && (PPC_OP(raw_insn) != 31))
+ 		op_loc->offset = get_offset_opcode(raw_insn);
+ }
 +
-+int __get_dwarf_regnum_for_perf_regnum_loongarch(int perf_regnum)
++int __get_dwarf_regnum_for_perf_regnum_powerpc(int perf_regnum)
 +{
-+	if (perf_regnum < 0 || perf_regnum >= PERF_REG_LOONGARCH_MAX)
++	static const int dwarf_powerpc_regnums[] = {
++		[PERF_REG_POWERPC_R0] = 0,
++		[PERF_REG_POWERPC_R1] = 1,
++		[PERF_REG_POWERPC_R2] = 2,
++		[PERF_REG_POWERPC_R3] = 3,
++		[PERF_REG_POWERPC_R4] = 4,
++		[PERF_REG_POWERPC_R5] = 5,
++		[PERF_REG_POWERPC_R6] = 6,
++		[PERF_REG_POWERPC_R7] = 7,
++		[PERF_REG_POWERPC_R8] = 8,
++		[PERF_REG_POWERPC_R9] = 9,
++		[PERF_REG_POWERPC_R10] = 10,
++		[PERF_REG_POWERPC_R11] = 11,
++		[PERF_REG_POWERPC_R12] = 12,
++		[PERF_REG_POWERPC_R13] = 13,
++		[PERF_REG_POWERPC_R14] = 14,
++		[PERF_REG_POWERPC_R15] = 15,
++		[PERF_REG_POWERPC_R16] = 16,
++		[PERF_REG_POWERPC_R17] = 17,
++		[PERF_REG_POWERPC_R18] = 18,
++		[PERF_REG_POWERPC_R19] = 19,
++		[PERF_REG_POWERPC_R20] = 20,
++		[PERF_REG_POWERPC_R21] = 21,
++		[PERF_REG_POWERPC_R22] = 22,
++		[PERF_REG_POWERPC_R23] = 23,
++		[PERF_REG_POWERPC_R24] = 24,
++		[PERF_REG_POWERPC_R25] = 25,
++		[PERF_REG_POWERPC_R26] = 26,
++		[PERF_REG_POWERPC_R27] = 27,
++		[PERF_REG_POWERPC_R28] = 28,
++		[PERF_REG_POWERPC_R29] = 29,
++		[PERF_REG_POWERPC_R30] = 30,
++		[PERF_REG_POWERPC_R31] = 31,
++		/* TODO: PERF_REG_POWERPC_NIP */
++		[PERF_REG_POWERPC_MSR] = 66,
++		/* TODO: PERF_REG_POWERPC_ORIG_R3 */
++		[PERF_REG_POWERPC_CTR] = 109,
++		[PERF_REG_POWERPC_LINK] = 108, /* Note, previously in perf encoded as 65? */
++		[PERF_REG_POWERPC_XER] = 101,
++		/* TODO: PERF_REG_POWERPC_CCR */
++		/* TODO: PERF_REG_POWERPC_SOFTE */
++		/* TODO: PERF_REG_POWERPC_TRAP */
++		/* TODO: PERF_REG_POWERPC_DAR */
++		/* TODO: PERF_REG_POWERPC_DSISR */
++		/* TODO: PERF_REG_POWERPC_SIER */
++		/* TODO: PERF_REG_POWERPC_MMCRA */
++		/* TODO: PERF_REG_POWERPC_MMCR0 */
++		/* TODO: PERF_REG_POWERPC_MMCR1 */
++		/* TODO: PERF_REG_POWERPC_MMCR2 */
++		/* TODO: PERF_REG_POWERPC_MMCR3 */
++		/* TODO: PERF_REG_POWERPC_SIER2 */
++		/* TODO: PERF_REG_POWERPC_SIER3 */
++		/* TODO: PERF_REG_POWERPC_PMC1 */
++		/* TODO: PERF_REG_POWERPC_PMC2 */
++		/* TODO: PERF_REG_POWERPC_PMC3 */
++		/* TODO: PERF_REG_POWERPC_PMC4 */
++		/* TODO: PERF_REG_POWERPC_PMC5 */
++		/* TODO: PERF_REG_POWERPC_PMC6 */
++		/* TODO: PERF_REG_POWERPC_SDAR */
++		/* TODO: PERF_REG_POWERPC_SIAR */
++	};
++
++	if (perf_regnum == 0)
++		return 0;
++
++	if (perf_regnum <  0 || perf_regnum > (int)ARRAY_SIZE(dwarf_powerpc_regnums) ||
++	    dwarf_powerpc_regnums[perf_regnum] == 0)
 +		return -ENOENT;
 +
-+	return perf_regnum;
++	return dwarf_powerpc_regnums[perf_regnum];
 +}
 diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
-index 7fa0930fd298..033218f14b36 100644
+index 033218f14b36..3b1c2a436806 100644
 --- a/tools/perf/util/dwarf-regs.c
 +++ b/tools/perf/util/dwarf-regs.c
-@@ -205,6 +205,9 @@ int get_dwarf_regnum_for_perf_regnum(int perf_regnum, unsigned int machine,
+@@ -205,6 +205,10 @@ int get_dwarf_regnum_for_perf_regnum(int perf_regnum, unsigned int machine,
  	case EM_CSKY:
  		reg = __get_dwarf_regnum_for_perf_regnum_csky(perf_regnum, flags);
  		break;
-+	case EM_LOONGARCH:
-+		reg = __get_dwarf_regnum_for_perf_regnum_loongarch(perf_regnum);
++	case EM_PPC:
++	case EM_PPC64:
++		reg = __get_dwarf_regnum_for_perf_regnum_powerpc(perf_regnum);
 +		break;
- 	default:
- 		pr_err("ELF MACHINE %x is not supported.\n", machine);
- 		return -ENOENT;
+ 	case EM_LOONGARCH:
+ 		reg = __get_dwarf_regnum_for_perf_regnum_loongarch(perf_regnum);
+ 		break;
 diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/include/dwarf-regs.h
-index 7780bc07e70e..bec15fb53e73 100644
+index bec15fb53e73..9ebb3ba33fba 100644
 --- a/tools/perf/util/include/dwarf-regs.h
 +++ b/tools/perf/util/include/dwarf-regs.h
-@@ -109,6 +109,7 @@ int __get_dwarf_regnum_for_perf_regnum_arm(int perf_regnum);
- int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum);
+@@ -110,6 +110,7 @@ int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum);
  
  int __get_dwarf_regnum_for_perf_regnum_csky(int perf_regnum, unsigned int flags);
-+int __get_dwarf_regnum_for_perf_regnum_loongarch(int perf_regnum);
+ int __get_dwarf_regnum_for_perf_regnum_loongarch(int perf_regnum);
++int __get_dwarf_regnum_for_perf_regnum_powerpc(int perf_regnum);
  
  /*
   * get_dwarf_regnum - Returns DWARF regnum from register name
 diff --git a/tools/perf/util/unwind-libdw-arch/Build b/tools/perf/util/unwind-libdw-arch/Build
-index 5fa1754fca8d..62a4cbf2dca8 100644
+index 62a4cbf2dca8..e6c97e842cd6 100644
 --- a/tools/perf/util/unwind-libdw-arch/Build
 +++ b/tools/perf/util/unwind-libdw-arch/Build
-@@ -1,4 +1,3 @@
--perf-util-y += unwind-libdw-loongarch.o
- perf-util-y += unwind-libdw-powerpc.o
+@@ -1,3 +1,2 @@
+-perf-util-y += unwind-libdw-powerpc.o
  perf-util-y += unwind-libdw-riscv.o
  perf-util-y += unwind-libdw-s390.o
-diff --git a/tools/perf/util/unwind-libdw-arch/unwind-libdw-loongarch.c b/tools/perf/util/unwind-libdw-arch/unwind-libdw-loongarch.c
+diff --git a/tools/perf/util/unwind-libdw-arch/unwind-libdw-powerpc.c b/tools/perf/util/unwind-libdw-arch/unwind-libdw-powerpc.c
 deleted file mode 100644
-index 5fca673508be..000000000000
---- a/tools/perf/util/unwind-libdw-arch/unwind-libdw-loongarch.c
+index 1560db45e7b4..000000000000
+--- a/tools/perf/util/unwind-libdw-arch/unwind-libdw-powerpc.c
 +++ /dev/null
-@@ -1,57 +0,0 @@
+@@ -1,76 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0
--/* Copyright (C) 2020-2023 Loongson Technology Corporation Limited */
--
 -#include <elfutils/libdwfl.h>
--#include "../arch/loongarch/include/uapi/asm/perf_regs.h"
+-#include <linux/kernel.h>
+-#include "../arch/powerpc/include/uapi/asm/perf_regs.h"
 -#include "util/unwind-libdw.h"
 -#include "util/perf_regs.h"
 -#include "util/sample.h"
 -
--bool libdw_set_initial_registers_loongarch(Dwfl_Thread *thread, void *arg)
+-/* See backends/ppc_initreg.c and backends/ppc_regs.c in elfutils.  */
+-static const int special_regs[3][2] = {
+-	{ 65, PERF_REG_POWERPC_LINK },
+-	{ 101, PERF_REG_POWERPC_XER },
+-	{ 109, PERF_REG_POWERPC_CTR },
+-};
+-
+-bool libdw_set_initial_registers_powerpc(Dwfl_Thread *thread, void *arg)
 -{
 -	struct unwind_info *ui = arg;
 -	struct regs_dump *user_regs = perf_sample__user_regs(ui->sample);
--	Dwarf_Word dwarf_regs[PERF_REG_LOONGARCH_MAX];
+-	Dwarf_Word dwarf_regs[32], dwarf_nip;
+-	size_t i;
 -
--#define REG(r) ({							\
--	Dwarf_Word val = 0;						\
--	perf_reg_value(&val, user_regs, PERF_REG_LOONGARCH_##r);	\
--	val;								\
+-#define REG(r) ({						\
+-	Dwarf_Word val = 0;					\
+-	perf_reg_value(&val, user_regs, PERF_REG_POWERPC_##r);	\
+-	val;							\
 -})
 -
--	dwarf_regs[0]  = 0;
+-	dwarf_regs[0]  = REG(R0);
 -	dwarf_regs[1]  = REG(R1);
 -	dwarf_regs[2]  = REG(R2);
 -	dwarf_regs[3]  = REG(R3);
@@ -234,44 +306,55 @@ index 5fca673508be..000000000000
 -	dwarf_regs[29] = REG(R29);
 -	dwarf_regs[30] = REG(R30);
 -	dwarf_regs[31] = REG(R31);
--	dwfl_thread_state_register_pc(thread, REG(PC));
+-	if (!dwfl_thread_state_registers(thread, 0, 32, dwarf_regs))
+-		return false;
 -
--	return dwfl_thread_state_registers(thread, 0, PERF_REG_LOONGARCH_MAX, dwarf_regs);
+-	dwarf_nip = REG(NIP);
+-	dwfl_thread_state_register_pc(thread, dwarf_nip);
+-	for (i = 0; i < ARRAY_SIZE(special_regs); i++) {
+-		Dwarf_Word val = 0;
+-		perf_reg_value(&val, user_regs, special_regs[i][1]);
+-		if (!dwfl_thread_state_registers(thread,
+-						 special_regs[i][0], 1,
+-						 &val))
+-			return false;
+-	}
+-
+-	return true;
 -}
 diff --git a/tools/perf/util/unwind-libdw.c b/tools/perf/util/unwind-libdw.c
-index a193163da707..9c8dad643cd0 100644
+index 9c8dad643cd0..e9ba050e7ab1 100644
 --- a/tools/perf/util/unwind-libdw.c
 +++ b/tools/perf/util/unwind-libdw.c
-@@ -292,16 +292,13 @@ static const Dwfl_Thread_Callbacks callbacks_generic = {
+@@ -292,15 +292,12 @@ static const Dwfl_Thread_Callbacks callbacks_generic = {
  	.set_initial_registers = libdw_set_initial_registers_generic,
  };
  
--DEFINE_DWFL_THREAD_CALLBACKS(loongarch);
- DEFINE_DWFL_THREAD_CALLBACKS(powerpc);
+-DEFINE_DWFL_THREAD_CALLBACKS(powerpc);
  DEFINE_DWFL_THREAD_CALLBACKS(riscv);
  DEFINE_DWFL_THREAD_CALLBACKS(s390);
  
  static const Dwfl_Thread_Callbacks *get_thread_callbacks(const char *arch)
  {
--	if (!strcmp(arch, "loongarch"))
--		return &callbacks_loongarch;
--	else if (!strcmp(arch, "powerpc"))
-+	if (!strcmp(arch, "powerpc"))
- 		return &callbacks_powerpc;
- 	else if (!strcmp(arch, "riscv"))
+-	if (!strcmp(arch, "powerpc"))
+-		return &callbacks_powerpc;
+-	else if (!strcmp(arch, "riscv"))
++	if (!strcmp(arch, "riscv"))
  		return &callbacks_riscv;
+ 	else if (!strcmp(arch, "s390"))
+ 		return &callbacks_s390;
 diff --git a/tools/perf/util/unwind-libdw.h b/tools/perf/util/unwind-libdw.h
-index ee56f1e827e5..9d177d70f15c 100644
+index 9d177d70f15c..0ec1abdabbe7 100644
 --- a/tools/perf/util/unwind-libdw.h
 +++ b/tools/perf/util/unwind-libdw.h
-@@ -9,7 +9,6 @@ struct machine;
- struct perf_sample;
+@@ -10,7 +10,6 @@ struct perf_sample;
  struct thread;
  
--bool libdw_set_initial_registers_loongarch(Dwfl_Thread *thread, void *arg);
  bool libdw_set_initial_registers_mips(Dwfl_Thread *thread, void *arg);
- bool libdw_set_initial_registers_powerpc(Dwfl_Thread *thread, void *arg);
+-bool libdw_set_initial_registers_powerpc(Dwfl_Thread *thread, void *arg);
  bool libdw_set_initial_registers_riscv(Dwfl_Thread *thread, void *arg);
+ bool libdw_set_initial_registers_s390(Dwfl_Thread *thread, void *arg);
+ 
 -- 
 2.52.0.457.g6b5491de43-goog
 
