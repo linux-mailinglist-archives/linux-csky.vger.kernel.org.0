@@ -1,141 +1,240 @@
-Return-Path: <linux-csky+bounces-2704-lists+linux-csky=lfdr.de@vger.kernel.org>
+Return-Path: <linux-csky+bounces-2705-lists+linux-csky=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-csky@lfdr.de
 Delivered-To: lists+linux-csky@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E06E3D18BB6
-	for <lists+linux-csky@lfdr.de>; Tue, 13 Jan 2026 13:33:33 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58B82D38C7C
+	for <lists+linux-csky@lfdr.de>; Sat, 17 Jan 2026 06:29:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 506C83008144
-	for <lists+linux-csky@lfdr.de>; Tue, 13 Jan 2026 12:33:31 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5374330090EA
+	for <lists+linux-csky@lfdr.de>; Sat, 17 Jan 2026 05:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721F638F94B;
-	Tue, 13 Jan 2026 12:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219EA32694D;
+	Sat, 17 Jan 2026 05:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCrBvpZe"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1qquUJ6Y"
 X-Original-To: linux-csky@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-dl1-f74.google.com (mail-dl1-f74.google.com [74.125.82.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCB138BF9E
-	for <linux-csky@vger.kernel.org>; Tue, 13 Jan 2026 12:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BA7272E6A
+	for <linux-csky@vger.kernel.org>; Sat, 17 Jan 2026 05:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307610; cv=none; b=I7kU7grP24jErIpB7bszTZ0lzC5+bndnPIGbKyY/CKP1Nhghn9qaIYqPsQOTh81TVcCjskBTKK+Q46QBkrR3uo8lfVps9DzuOjXolY/P0ryvcS/KK71gCvzCoRQJA/6SQtroVWJPL10Ivp4wH+H6kLiITxN3phA3q9FSQFHIIq4=
+	t=1768627762; cv=none; b=cvjsU0Ix3C/9JGYsTIgvTVOMCtZTfxfSi//zuMzsSmVFFV0e0edrwPyXXPVbcsPqe0wWH+g0HEkyiCol27HeHXSDUTcJa2FkdQ8VwN0d5KTprak+2+5lzplRwSKB9MspjQtZYgXoClKPi46qVKL9Y8iWUuNclMHSRvCDw6LBMuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768307610; c=relaxed/simple;
-	bh=c2pQGNsmx4TXSTG4ks/OmiO2LMby6F7I6nhF1Yls93E=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
-	 MIME-Version:Content-Type; b=HZenKxVEGwtPIZUh5K9lNqSJ9Bj33kS0TMJJ4sjS0PxaGIjYUAOY/Ee+iWSMbOdEoUDWJRYUKugz+WhAUC4zGXt2SbUTdyjzKOg/Dh/f+j2iK2ifQN/8wpvg1ORh1dhow8RjmARw3WLM5vg2ruW/wu7pK+n+uA/gFKWe5jaEJ9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCrBvpZe; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34c27d14559so4255628a91.2
-        for <linux-csky@vger.kernel.org>; Tue, 13 Jan 2026 04:33:28 -0800 (PST)
+	s=arc-20240116; t=1768627762; c=relaxed/simple;
+	bh=A6QPYrbsRs/KOM3mVeCJxtH2VbPEjUyoEHwAM7sjrwM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=o3VixviAtddz2otk0XAkvby5w2rDZGizlF/uFZByRHv++zC9OwLJGx30PyG80pY9tykqUj/T89FXZ8N1IR5S8KcYFDFfFfGBEdThUYdqqZEmar+ViyP6kGYhVB6605Q4Vg5XbEdhIrR/qla2/z/TursCpctDaNKejRNe5W2Nw5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1qquUJ6Y; arc=none smtp.client-ip=74.125.82.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+Received: by mail-dl1-f74.google.com with SMTP id a92af1059eb24-1232dd9a256so3316701c88.1
+        for <linux-csky@vger.kernel.org>; Fri, 16 Jan 2026 21:29:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768307607; x=1768912407; darn=vger.kernel.org;
-        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4BCb4tuwUydlXX/lekB/MWAbo5xTWmBY98lhxIZgCk=;
-        b=GCrBvpZeucBOdNpJseUbRKNa77J3jEjSKSr2rQltUiOSzioURb4448Kr9GVdc4A4M6
-         EeRxRTsOfiRVNkUEGN4mkvBWr7+cqibFBBnbNCpse52V2sMsMNI9lEm95Cnlek63otZl
-         syjrb7MRSUA4zfswNNSYnSNoKl7QdqKysebTzPHBsCeNlTTSfvgjmp0e0FuW/B95Alst
-         oe/iuaWn7B8uGt+o/gTqlwZd0wTuqVGIQR6mFwzUCdAVrz2qHLtEl1u3M5lND7sa/YIo
-         WJVxnqKjY+DdRZteDSadMj1yuf/MI2IqhwEjkDmLAD+876PYUwT4dDvY2csrpor9dpk1
-         na4g==
+        d=google.com; s=20230601; t=1768627759; x=1769232559; darn=vger.kernel.org;
+        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1/DlDzZKFpcROxVmgO7qkeA6G7xHNFkkZDHlcU3Uce8=;
+        b=1qquUJ6Y2W2b8CzYstUZVxqNjnG/CXnpTBP4SJHy0aSwNeYlQVAkfy8nevE+dg8Yl7
+         4p/WiBVSaLTpUccLz6uZuIXNcsBKByIs5Q+03mC4VnUuBXNmhOVZ3WfbMzClmmh+WYE0
+         11licYGEpaOYcpQficcNjLQ3hZAwH0NzDHEyo0CY3iCjFTsVaJpjRvljFtJqchP12SBx
+         I0J4n+dRgHyhazPpikGmUm1ZiG76eLqMZitvrlkf3kSbyjyT1Pz6xZ/VVixSMIgRHfUg
+         7VNdN2/iUb4Eb+NzggzkJObedOznbNRv3sv93acDS/7Vfv8fEiPaUHwAnkVIIsaJD0TM
+         nBzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768307607; x=1768912407;
-        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4BCb4tuwUydlXX/lekB/MWAbo5xTWmBY98lhxIZgCk=;
-        b=pNTwv9jNawmw60xetqiQWnAOn3sBI3DIvBg2x66VdPC724uvH4hSDmbLOBnGvCjAYv
-         4hgViGCx70Hc0m/3sBzn309L2VU8J6CQp78X2dfaHI4tjlMC2aYW0U4Eihwx0A7fuRVu
-         eDfVvmqCwKAneeH/JCIpQNt1k72iAyfElyZxJoMBdrchl9IcJ3ZRtLBdTJN685Wi/bgs
-         C0cPjAB4sCVwCcZ5KQ3phsjDaTsFCebbVnlVQ4/1t5PYhef4QRV95/zrscdmbAZplWK7
-         44nHs2HefyKbRz5R5mWheUEOuUxYXQ0Vg1DR4kOZgKTNFzWTgYvitnTdP/rtygw3pKjB
-         GvhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVS93cF+YZ4Vxd7MYRGPOhJTHo8jU6GnYkgCl1ePg2mpzZZK+fh5LvPVz1Bia565e8oxt2D8MW1LICK@vger.kernel.org
-X-Gm-Message-State: AOJu0YxesUqtXRXxriLIBK5ehTzwm0dNtnGp0unebO7+o0LXj12jwuHo
-	VjoPfxbPLBRGwrKhD923bHUCdVgrQ8rgvYcF2kUWnAJT49n61IJZh8II
-X-Gm-Gg: AY/fxX7OoApAKkM3UiJpZf4MG7QxwqLSf1res1jzZ0Rksc2K4vz2By2NA4GlzyEj3so
-	bGlrtfXsNa7BLVCgYeykE6+kOI4P/PM40+HZbQ0286FwDv7YjgVDRWmxvjMwFkZo1keeRUESrPL
-	jaSN6mpcRQn77HpAAQh8NMvjlxtAzl1Zz7TDixt8pdaF/bv7Qldlr1E4atgoHS7YsdnAl5sk7xH
-	KbwINb+/SU8S0h2Abew7ETdrZ9utwbeQoie9SaG+7a7mACtzKqy0qA/IVBpISERyEiQEI/5Bm0m
-	+Wax/B/xZGGJMZ24NiU4GPn9B5ijJuxDEAuftucJm9ybklrzWDaKvVDLhwC+80m+iuldHZGqCtD
-	au/zDJrT+CloDil4ZOcvLWEQ2i+tKJkO/5cH9nIdi38DwZ4pr1spL5y48sqCO3L8OMgU3f0Z7Mu
-	fxHSe8
-X-Google-Smtp-Source: AGHT+IFw8NQUhXWsNFLNcy9VnhtaeqSccMp4bageDierszWlx1Kxyih6osyfD1+uAcqTN4o2oK4SYQ==
-X-Received: by 2002:a17:90b:3ccc:b0:340:9ba6:8af4 with SMTP id 98e67ed59e1d1-34f68c47f0amr18570023a91.35.1768307607428;
-        Tue, 13 Jan 2026 04:33:27 -0800 (PST)
-Received: from dw-tp ([49.205.216.49])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-350fd6e343bsm1428958a91.1.2026.01.13.04.33.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 04:33:26 -0800 (PST)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Alex Shi <alexs@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	"David S. Miller" <davem@davemloft.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonathan Corbet <corbet@lwn.net>, 
-	Klara Modin <klarasmodin@gmail.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Magnus Lindholm <linmag7@gmail.com>, 
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>, 
-	Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Richard Weinberger <richard@nod.at>, 
-	Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>, x86@kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
-	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v3 15/29] powerpc: introduce arch_zone_limits_init()
-In-Reply-To: <20260111082105.290734-16-rppt@kernel.org>
-Date: Tue, 13 Jan 2026 17:59:49 +0530
-Message-ID: <87zf6hu24i.ritesh.list@gmail.com>
-References: <20260111082105.290734-1-rppt@kernel.org> <20260111082105.290734-16-rppt@kernel.org>
+        d=1e100.net; s=20230601; t=1768627759; x=1769232559;
+        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1/DlDzZKFpcROxVmgO7qkeA6G7xHNFkkZDHlcU3Uce8=;
+        b=La4ZnPepROg1qW+MpgoCc8Dfpscq/BdiYZXZUy84vqq2BSU/9WW287UYPT9TLgot0z
+         G5zerNdeDJNwNjf6DSFnvnQpW8McV+Tbd1P/2TpPwsACJTs1NiFoh1xHUf/MqKh+QdGP
+         A+bw9GVrdbREKFaGFtbHc3vZDDbXTDnhm3150jPm8N/SO1WrooETGUB2g5j6C9+iMWZX
+         /K1RPtY7VRdOEldlvRTLp4q2lpTyLSGfj8B6UTAN+qGTU96xMXeZr8/L5rZRPfj2Xjar
+         +DrwAe0/wNITn6vYZAaWHwmTl7q7+wgSSf0VKsP3PfLwLvZtqCGO4JiRRSO6CbJvM4Kt
+         jJKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX4amT7uFglxfDlOd+LaXzy92GZO7hIq5iH8ShUE0ZkCYL60DTx93KU1wIvPudaEzVSV2b89xxn1Dgp@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrMEU1UZNNMoHmzOXdIntc9gsB2WOe+n4SAJ6N+HSNNIoCyhcA
+	yAnyoVHOkPH2JSltnSR0uw0Lh3sF1dIuoC3Mg3bKG1frALNvDksKs7dnW9YEpBCQnojZhDXl53K
+	TaSU+UCYyiA==
+X-Received: from dlbto2.prod.google.com ([2002:a05:7022:3b02:b0:119:9f33:34ae])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:458d:b0:123:3b91:fbe8
+ with SMTP id a92af1059eb24-1233ce7a8acmr9381417c88.0.1768627759274; Fri, 16
+ Jan 2026 21:29:19 -0800 (PST)
+Date: Fri, 16 Jan 2026 21:28:26 -0800
 Precedence: bulk
 X-Mailing-List: linux-csky@vger.kernel.org
 List-Id: <linux-csky.vger.kernel.org>
 List-Subscribe: <mailto:linux-csky+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-csky+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
+Message-ID: <20260117052849.2205545-1-irogers@google.com>
+Subject: [PATCH v1 00/23] perf dwarf/libdw extra support, speed and clean ups
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, John Garry <john.g.garry@oracle.com>, 
+	Will Deacon <will@kernel.org>, Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Shimin Guo <shimin.guo@skydio.com>, 
+	Athira Rajeev <atrajeev@linux.ibm.com>, Stephen Brennan <stephen.s.brennan@oracle.com>, 
+	Howard Chu <howardchu95@gmail.com>, Thomas Falcon <thomas.falcon@intel.com>, 
+	Andi Kleen <ak@linux.intel.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, 
+	Dmitry Vyukov <dvyukov@google.com>, 
+	"=?UTF-8?q?Krzysztof=20=C5=81opatowski?=" <krzysztof.m.lopatowski@gmail.com>, Chun-Tse Shao <ctshao@google.com>, 
+	Aditya Bodkhe <aditya.b1@linux.ibm.com>, Haibo Xu <haibo1.xu@intel.com>, 
+	Sergei Trofimovich <slyich@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	Mark Wielaard <mark@klomp.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Mike Rapoport <rppt@kernel.org> writes:
+The first 6 patches are minor tweaks addressing a memory leak,
+correctness and performance. Patch 5 incorportes the reviewed patch by
+Shimin Guo [1] that makes the libdw unwinding support cross
+architecture. The cross architecture files will be refactored in this
+series.
 
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->
-> Move calculations of zone limits to a dedicated arch_zone_limits_init()
-> function.
->
-> Later MM core will use this function as an architecture specific callback
-> during nodes and zones initialization and thus there won't be a need to
-> call free_area_init() from every architecture.
->
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  arch/powerpc/mm/mem.c | 22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
+Patch 7 unifies the dwfl for dsos and addr2line with that for the
+powerpc skip-callchain-idx. An issue described in:
+https://lore.kernel.org/lkml/CAP-5=fX+zw-CUEYEtrPA6vYUKqpp4LZp-p==QsbZaNwLcX0Whw@mail.gmail.com/
 
-This v2 looks good to me. 
-I have also done a basic bootup testing using Linux PPC CI.
+Patch 8 migrates the perf regs code away from using an architecture
+substring to using the ELF machine, which is both more efficient and
+more accurate.
 
-Please feel free to add:
+Patches 9 to 21 clean up the libdw and dwarf register code removing
+the need for different libdw dwarf register initialization routines by
+introducing a perf reg to dwarf register mapping function. This
+function is added for all perf register supporting architectures.
 
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Patch 22 avoids discarding the dwfl for every libdw unwind, it can
+speed up perf report by amounts like 18x.
+
+Patch 23 adds inline information for frame pointers, an issue
+described here:
+https://lore.kernel.org/lkml/CAP-5=fWh5=AWq_Mav7B9nsuZ0TS2qPMMAwYhQKpt_BYFJRnf2w@mail.gmail.com/
+
+[1] https://lore.kernel.org/lkml/20260107-cross-arch-unwind-v3-1-db0e37c8a652@skydio.com/
+
+Ian Rogers (22):
+  perf symbol-elf: Fix leak of ELF files with GNU debugdata
+  perf dso: Extra validity checks that e_machine is valid
+  perf record: Disable inline frames when marking build IDs
+  perf libdw_addr2line: Fixes to srcline memory allocation
+  perf unwind-libdw: Correct argument to dwfl_attach_state
+  perf powerpc: Unify the skip-callchain-idx libdw with that for
+    addr2line
+  perf perf_regs: Switch from arch string to int e_machine
+  perf dwarf-regs: Add util/dwarf-regs-arch for consistency with
+    perf-regs
+  perf dwarf-regs: Remove get_arch_regnum
+  perf dwarf-regs: Clean up x86 dwarf_regnum code
+  perf dwarf-regs: Add get_dwarf_regnum_for_perf_regnum and use for x86
+    unwinding
+  perf dwarf-regs: Add basic get_dwarf_regnum for most architectures
+  perf dwarf-regs: Add ARM perf to dwarf register number mapping
+    functions
+  perf dwarf-regs: Add csky perf to dwarf register number mapping
+    functions
+  perf dwarf-regs: Add loongarch perf to dwarf register number mapping
+    functions
+  perf dwarf-regs: Add powerpc perf to dwarf register number mapping
+    functions
+  perf dwarf-regs: Add RISC-V perf to dwarf register number mapping
+    functions
+  perf dwarf-regs: Add S390 perf to dwarf register number mapping
+    functions
+  perf dwarf-regs: Add MIPS perf to dwarf register number mapping
+    functions
+  perf build: Remove NO_LIBDW_DWARF_UNWIND option
+  perf unwind-libdw: Don't discard loaded ELF/Dwarf after every unwind
+  perf machine: Add inline information to frame pointer and LBR
+    callchains
+
+Shimin Guo (1):
+  perf unwind-libdw: fix a cross-arch unwinding bug
+
+ tools/perf/Makefile.config                    |  19 +-
+ tools/perf/arch/arm/util/Build                |   1 -
+ tools/perf/arch/arm/util/unwind-libdw.c       |  39 ---
+ tools/perf/arch/arm64/util/Build              |   1 -
+ tools/perf/arch/arm64/util/unwind-libdw.c     |  61 ----
+ tools/perf/arch/csky/util/Build               |   2 -
+ tools/perf/arch/csky/util/unwind-libdw.c      |  78 ------
+ tools/perf/arch/loongarch/util/unwind-libdw.c |  57 ----
+ tools/perf/arch/powerpc/util/Build            |   1 -
+ .../arch/powerpc/util/skip-callchain-idx.c    |  52 +---
+ tools/perf/arch/powerpc/util/unwind-libdw.c   |  76 -----
+ tools/perf/arch/riscv/util/Build              |   1 -
+ tools/perf/arch/riscv/util/unwind-libdw.c     |  58 ----
+ tools/perf/arch/s390/util/Build               |   2 -
+ tools/perf/arch/s390/util/unwind-libdw.c      |  65 -----
+ tools/perf/arch/x86/util/Build                |   1 -
+ tools/perf/arch/x86/util/unwind-libdw.c       |  54 ----
+ tools/perf/builtin-record.c                   |   3 +-
+ tools/perf/builtin-script.c                   |  17 +-
+ tools/perf/tests/make                         |   3 +-
+ tools/perf/tests/shell/addr2line_inlines.sh   |  31 ++-
+ tools/perf/util/Build                         |   6 +-
+ tools/perf/util/dso.c                         |  33 ++-
+ tools/perf/util/dso.h                         |  23 +-
+ tools/perf/util/dwarf-regs-arch/Build         |   9 +
+ .../util/dwarf-regs-arch/dwarf-regs-arm.c     |  12 +
+ .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  12 +
+ .../util/dwarf-regs-arch/dwarf-regs-csky.c    | 126 +++++++++
+ .../dwarf-regs-arch/dwarf-regs-loongarch.c    |  12 +
+ .../util/dwarf-regs-arch/dwarf-regs-mips.c    |  14 +
+ .../util/dwarf-regs-arch/dwarf-regs-powerpc.c | 136 +++++++++
+ .../util/dwarf-regs-arch/dwarf-regs-riscv.c   |  12 +
+ .../util/dwarf-regs-arch/dwarf-regs-s390.c    |  53 ++++
+ .../util/dwarf-regs-arch/dwarf-regs-x86.c     | 260 ++++++++++++++++++
+ tools/perf/util/dwarf-regs-csky.c             |  50 ----
+ tools/perf/util/dwarf-regs-powerpc.c          |  61 ----
+ tools/perf/util/dwarf-regs-x86.c              |  50 ----
+ tools/perf/util/dwarf-regs.c                  | 151 +++++++++-
+ tools/perf/util/evsel.c                       |  14 +-
+ tools/perf/util/include/dwarf-regs.h          |  28 +-
+ tools/perf/util/libdw.c                       | 115 ++++----
+ tools/perf/util/libdw.h                       |  12 +-
+ tools/perf/util/machine.c                     | 104 ++++---
+ tools/perf/util/maps.c                        |  36 ++-
+ tools/perf/util/maps.h                        |   4 +
+ tools/perf/util/perf_regs.c                   | 105 ++++---
+ tools/perf/util/perf_regs.h                   |  10 +-
+ .../scripting-engines/trace-event-python.c    |  21 +-
+ tools/perf/util/session.c                     |  65 +++--
+ tools/perf/util/session.h                     |   1 +
+ tools/perf/util/srcline.c                     |   2 +-
+ tools/perf/util/symbol-elf.c                  |   2 +-
+ tools/perf/util/unwind-libdw.c                | 154 +++++++++--
+ tools/perf/util/unwind-libdw.h                |  10 +-
+ tools/perf/util/unwind-libunwind-local.c      |   7 +-
+ 55 files changed, 1347 insertions(+), 985 deletions(-)
+ delete mode 100644 tools/perf/arch/arm/util/unwind-libdw.c
+ delete mode 100644 tools/perf/arch/arm64/util/unwind-libdw.c
+ delete mode 100644 tools/perf/arch/csky/util/unwind-libdw.c
+ delete mode 100644 tools/perf/arch/loongarch/util/unwind-libdw.c
+ delete mode 100644 tools/perf/arch/powerpc/util/unwind-libdw.c
+ delete mode 100644 tools/perf/arch/riscv/util/unwind-libdw.c
+ delete mode 100644 tools/perf/arch/s390/util/unwind-libdw.c
+ delete mode 100644 tools/perf/arch/x86/util/unwind-libdw.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/Build
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-arm.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-csky.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-loongarch.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-mips.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-powerpc.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-riscv.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-s390.c
+ create mode 100644 tools/perf/util/dwarf-regs-arch/dwarf-regs-x86.c
+ delete mode 100644 tools/perf/util/dwarf-regs-csky.c
+ delete mode 100644 tools/perf/util/dwarf-regs-powerpc.c
+ delete mode 100644 tools/perf/util/dwarf-regs-x86.c
+
+-- 
+2.52.0.457.g6b5491de43-goog
+
 
